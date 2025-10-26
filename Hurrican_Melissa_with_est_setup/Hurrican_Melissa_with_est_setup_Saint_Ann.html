@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    
+        <script>
+            L_NO_TOUCH = false;
+            L_DISABLE_3D = false;
+        </script>
+    
+    <style>html, body {width: 100%;height: 100%;margin: 0;padding: 0;}</style>
+    <style>#map {position:absolute;top:0;bottom:0;right:0;left:0;}</style>
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css"/>
+    
+            <meta name="viewport" content="width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+            <style>
+                #map_8eda2121b105edd4cab6cd630149344a {
+                    position: relative;
+                    width: 100.0%;
+                    height: 100.0%;
+                    left: 0.0%;
+                    top: 0.0%;
+                }
+                .leaflet-container { font-size: 1rem; }
+            </style>
+        
+    
+                    <style>
+                        .foliumtooltip {
+                            
+                        }
+                       .foliumtooltip table{
+                            margin: auto;
+                        }
+                        .foliumtooltip tr{
+                            text-align: left;
+                        }
+                        .foliumtooltip th{
+                            padding: 2px; padding-right: 8px;
+                        }
+                    </style>
+            
+    
+                    <style>
+                        .foliumpopup {
+                            background-color: white; font-size: 14px;
+                        }
+                       .foliumpopup table{
+                            margin: auto;
+                        }
+                        .foliumpopup tr{
+                            text-align: left;
+                        }
+                        .foliumpopup th{
+                            padding: 2px; padding-right: 8px;
+                        }
+                    </style>
+            
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/ljagis/leaflet-measure@2.1.7/dist/leaflet-measure.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/ljagis/leaflet-measure@2.1.7/dist/leaflet-measure.min.css"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-locatecontrol/0.66.2/L.Control.Locate.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet-locatecontrol/0.66.2/L.Control.Locate.min.css"/>
+</head>
+<body>
+    
+    <h3 align="center" style="font-size:18px"><b>Hurricane Melissa Estimated Surge and Wave Setup Saint Ann</b></h3>
+    
+            <div class="folium-map" id="map_8eda2121b105edd4cab6cd630149344a" ></div>
+        
+</body>
+<script>
+    
+    
+            var map_8eda2121b105edd4cab6cd630149344a = L.map(
+                "map_8eda2121b105edd4cab6cd630149344a",
+                {
+                    center: [18.315817340371634, -77.26592572212567],
+                    crs: L.CRS.EPSG3857,
+                    zoom: 11,
+                    zoomControl: true,
+                    preferCanvas: false,
+                }
+            );
+            L.control.scale().addTo(map_8eda2121b105edd4cab6cd630149344a);
+
+            
+
+        
+    
+            var tile_layer_8167656bf00613daa578b57476d4efe4 = L.tileLayer(
+                "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+                {"attribution": "\u0026copy; \u003ca href=\"https://www.openstreetmap.org/copyright\"\u003eOpenStreetMap\u003c/a\u003e contributors", "detectRetina": false, "maxNativeZoom": 19, "maxZoom": 19, "minZoom": 0, "noWrap": false, "opacity": 1, "subdomains": "abc", "tms": false}
+            );
+        
+    
+            tile_layer_8167656bf00613daa578b57476d4efe4.addTo(map_8eda2121b105edd4cab6cd630149344a);
+        
+    
+            var tile_layer_08c44d756acfe574d6b54a7b093cd293 = L.tileLayer(
+                "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+                {"attribution": "Esri Satellite", "detectRetina": false, "maxZoom": 18, "minZoom": 0, "noWrap": false, "opacity": 1, "subdomains": "abc", "tms": false}
+            );
+        
+    
+            tile_layer_08c44d756acfe574d6b54a7b093cd293.addTo(map_8eda2121b105edd4cab6cd630149344a);
+        
+    
+            var tile_layer_9d7b6541f4b7c66913d701e14c33bfde = L.tileLayer(
+                "http://{s}.google.com/vt/lyrs=y,h\u0026x={x}\u0026y={y}\u0026z={z}",
+                {"attribution": "Google Hybrid", "detectRetina": false, "maxZoom": 18, "minZoom": 0, "noWrap": false, "opacity": 1, "subdomains": ["mt0", "mt1", "mt2", "mt3"], "tms": false}
+            );
+        
+    
+            tile_layer_9d7b6541f4b7c66913d701e14c33bfde.addTo(map_8eda2121b105edd4cab6cd630149344a);
+        
+    
+        function geo_json_a84e41229fb19111d448e0838b2200b7_styler(feature) {
+            switch(feature.id) {
+                case "511152": 
+                    return {"color": "transparent", "fillColor": "#7db8da", "fillOpacity": 0.7, "weight": 1};
+                case "529560": case "529895": case "530168": case "530836": case "531276": case "531624": case "531625": 
+                    return {"color": "transparent", "fillColor": "#3787c0", "fillOpacity": 0.7, "weight": 1};
+                case "529561": case "529880": case "530835": case "531243": case "531275": case "531277": case "531623": case "531626": case "532341": case "539761": case "540101": case "540389": case "540718": case "541323": 
+                    return {"color": "transparent", "fillColor": "#08306b", "fillOpacity": 0.7, "weight": 1};
+                case "529563": 
+                    return {"color": "transparent", "fillColor": "#2575b7", "fillOpacity": 0.7, "weight": 1};
+                case "530166": 
+                    return {"color": "transparent", "fillColor": "#e7f0fa", "fillOpacity": 0.7, "weight": 1};
+                case "530167": case "533569": case "539426": 
+                    return {"color": "transparent", "fillColor": "#c7dcef", "fillOpacity": 0.7, "weight": 1};
+                case "530533": 
+                    return {"color": "transparent", "fillColor": "#e9f2fa", "fillOpacity": 0.7, "weight": 1};
+                case "530534": 
+                    return {"color": "transparent", "fillColor": "#4d99ca", "fillOpacity": 0.7, "weight": 1};
+                case "530535": 
+                    return {"color": "transparent", "fillColor": "#a4cce3", "fillOpacity": 0.7, "weight": 1};
+                case "530826": 
+                    return {"color": "transparent", "fillColor": "#89bedc", "fillOpacity": 0.7, "weight": 1};
+                case "530827": 
+                    return {"color": "transparent", "fillColor": "#135fa7", "fillOpacity": 0.7, "weight": 1};
+                case "533118": 
+                    return {"color": "transparent", "fillColor": "#d4e4f4", "fillOpacity": 0.7, "weight": 1};
+                case "533121": 
+                    return {"color": "transparent", "fillColor": "#c9ddf0", "fillOpacity": 0.7, "weight": 1};
+                case "533122": 
+                    return {"color": "transparent", "fillColor": "#bcd7eb", "fillOpacity": 0.7, "weight": 1};
+                case "533123": 
+                    return {"color": "transparent", "fillColor": "#f1f7fd", "fillOpacity": 0.7, "weight": 1};
+                case "533126": 
+                    return {"color": "transparent", "fillColor": "#dfecf7", "fillOpacity": 0.7, "weight": 1};
+                case "533937": 
+                    return {"color": "transparent", "fillColor": "#d6e6f4", "fillOpacity": 0.7, "weight": 1};
+                case "533938": 
+                    return {"color": "transparent", "fillColor": "#d1e2f3", "fillOpacity": 0.7, "weight": 1};
+                case "533939": 
+                    return {"color": "transparent", "fillColor": "#aacfe5", "fillOpacity": 0.7, "weight": 1};
+                case "533940": 
+                    return {"color": "transparent", "fillColor": "#a5cde3", "fillOpacity": 0.7, "weight": 1};
+                case "533941": 
+                    return {"color": "transparent", "fillColor": "#d6e5f4", "fillOpacity": 0.7, "weight": 1};
+                case "533942": 
+                    return {"color": "transparent", "fillColor": "#e3eef9", "fillOpacity": 0.7, "weight": 1};
+                case "539427": 
+                    return {"color": "transparent", "fillColor": "#08488e", "fillOpacity": 0.7, "weight": 1};
+                case "539759": case "539763": 
+                    return {"color": "transparent", "fillColor": "#e4eff9", "fillOpacity": 0.7, "weight": 1};
+                case "539760": 
+                    return {"color": "transparent", "fillColor": "#1e6db2", "fillOpacity": 0.7, "weight": 1};
+                case "540099": 
+                    return {"color": "transparent", "fillColor": "#cee0f2", "fillOpacity": 0.7, "weight": 1};
+                case "540100": 
+                    return {"color": "transparent", "fillColor": "#08509b", "fillOpacity": 0.7, "weight": 1};
+                case "540387": 
+                    return {"color": "transparent", "fillColor": "#dfebf7", "fillOpacity": 0.7, "weight": 1};
+                case "540388": 
+                    return {"color": "transparent", "fillColor": "#1966ad", "fillOpacity": 0.7, "weight": 1};
+                case "540717": 
+                    return {"color": "transparent", "fillColor": "#e1edf8", "fillOpacity": 0.7, "weight": 1};
+                default:
+                    return {"color": "transparent", "fillColor": "#2272b6", "fillOpacity": 0.7, "weight": 1};
+            }
+        }
+
+        function geo_json_a84e41229fb19111d448e0838b2200b7_onEachFeature(feature, layer) {
+            layer.on({
+            });
+        };
+        var geo_json_a84e41229fb19111d448e0838b2200b7 = L.geoJson(null, {
+                onEachFeature: geo_json_a84e41229fb19111d448e0838b2200b7_onEachFeature,
+            
+                style: geo_json_a84e41229fb19111d448e0838b2200b7_styler,
+        });
+
+        function geo_json_a84e41229fb19111d448e0838b2200b7_add (data) {
+            geo_json_a84e41229fb19111d448e0838b2200b7
+                .addData(data);
+        }
+            geo_json_a84e41229fb19111d448e0838b2200b7_add({"bbox": [-77.4565, 18.408, -77.10900000000001, 18.474], "features": [{"bbox": [-77.1095, 18.408, -77.10900000000001, 18.408018541862806], "geometry": {"coordinates": [[[-77.1095, 18.408018541862806], [-77.10900000000001, 18.408002334503824], [-77.10900000000001, 18.408], [-77.1095, 18.408], [-77.1095, 18.408018541862806]]], "type": "Polygon"}, "id": "511152", "properties": {"depth_m": 0.6803820729255676, "index_right": 0, "name": "Saint Ann"}, "type": "Feature"}, {"bbox": [-77.412, 18.458000000000002, -77.4115, 18.4585], "geometry": {"coordinates": [[[-77.412, 18.4585], [-77.4115, 18.4585], [-77.4115, 18.458000000000002], [-77.412, 18.458000000000002], [-77.412, 18.4585]]], "type": "Polygon"}, "id": "529560", "properties": {"depth_m": 1.000565528869629, "index_right": 0, "name": "Saint Ann"}, "type": "Feature"}, {"bbox": [-77.4115, 18.458000000000002, -77.411, 18.4585], "geometry": {"coordinates": [[[-77.4115, 18.4585], [-77.411, 18.4585], [-77.411, 18.458000000000002], [-77.4115, 18.458000000000002], [-77.4115, 18.4585]]], "type": "Polygon"}, "id": "529561", "properties": {"depth_m": 2.000565528869629, "index_right": 0, "name": "Saint Ann"}, "type": "Feature"}, {"bbox": [-77.41, 18.458000000000002, -77.40950000000001, 18.45833899546857], "geometry": {"coordinates": [[[-77.41, 18.45833899546857], [-77.40950000000001, 18.458050462925215], [-77.40950000000001, 18.458000000000002], [-77.41, 18.458000000000002], [-77.41, 18.45833899546857]]], "type": "Polygon"}, "id": "529563", "properties": {"depth_m": 1.1010016202926636, "index_right": 0, "name": "Saint Ann"}, "type": "Feature"}, {"bbox": [-77.4145, 18.4585, -77.414, 18.459000000000003], "geometry": {"coordinates": [[[-77.4145, 18.459000000000003], [-77.414, 18.459000000000003], [-77.414, 18.4585], [-77.4145, 18.4585], [-77.4145, 18.459000000000003]]], "type": "Polygon"}, "id": "529880", "properties": {"depth_m": 2.0001606941223145, "index_right": 0, "name": "Saint Ann"}, "type": "Feature"}, {"bbox": [-77.3545, 18.4585, -77.354, 18.459000000000003], "geometry": {"coordinates": [[[-77.3545, 18.459000000000003], [-77.354, 18.459000000000003], [-77.354, 18.4585], [-77.3545, 18.4585], [-77.3545, 18.459000000000003]]], "type": "Polygon"}, "id": "529895", "properties": {"depth_m": 1.0000001192092896, "index_right": 0, "name": "Saint Ann"}, "type": "Feature"}, {"bbox": [-77.3565, 18.459000000000003, -77.35600000000001, 18.459500000000002], "geometry": {"coordinates": [[[-77.3565, 18.459500000000002], [-77.35600000000001, 18.459500000000002], [-77.35600000000001, 18.459000000000003], [-77.3565, 18.459000000000003], [-77.3565, 18.459500000000002]]], "type": "Polygon"}, "id": "530166", "properties": {"depth_m": 0.12445396184921265, "index_right": 0, "name": "Saint Ann"}, "type": "Feature"}, {"bbox": [-77.35600000000001, 18.459000000000003, -77.3555, 18.459500000000002], "geometry": {"coordinates": [[[-77.35600000000001, 18.459500000000002], [-77.3555, 18.459500000000002], [-77.3555, 18.459000000000003], [-77.35600000000001, 18.459000000000003], [-77.35600000000001, 18.459500000000002]]], "type": "Polygon"}, "id": "530167", "properties": {"depth_m": 0.36756181716918945, "index_right": 0, "name": "Saint Ann"}, "type": "Feature"}, {"bbox": [-77.3535, 18.459000000000003, -77.35300000000001, 18.459500000000002], "geometry": {"coordinates": [[[-77.3535, 18.459500000000002], [-77.35300000000001, 18.459500000000002], [-77.35300000000001, 18.459000000000003], [-77.3535, 18.459000000000003], [-77.3535, 18.459500000000002]]], "type": "Polygon"}, "id": "530168", "properties": {"depth_m": 1.0000001192092896, "index_right": 0, "name": "Saint Ann"}, "type": "Feature"}, {"bbox": [-77.357, 18.459500000000002, -77.3565, 18.46], "geometry": {"coordinates": [[[-77.357, 18.46], [-77.3565, 18.46], [-77.3565, 18.459500000000002], [-77.357, 18.459500000000002], [-77.357, 18.46]]], "type": "Polygon"}, "id": "530533", "properties": {"depth_m": 0.10702317953109741, "index_right": 0, "name": "Saint Ann"}, "type": "Feature"}, {"bbox": [-77.3565, 18.459500000000002, -77.35600000000001, 18.46], "geometry": {"coordinates": [[[-77.3565, 18.46], [-77.35600000000001, 18.46], [-77.35600000000001, 18.459500000000002], [-77.3565, 18.459500000000002], [-77.3565, 18.46]]], "type": "Polygon"}, "id": "530534", "properties": {"depth_m": 0.8847660422325134, "index_right": 0, "name": "Saint Ann"}, "type": "Feature"}, {"bbox": [-77.35600000000001, 18.459500000000002, -77.3555, 18.46], "geometry": {"coordinates": [[[-77.35600000000001, 18.46], [-77.3555, 18.46], [-77.3555, 18.459500000000002], [-77.35600000000001, 18.459500000000002], [-77.35600000000001, 18.46]]], "type": "Polygon"}, "id": "530535", "properties": {"depth_m": 0.5387489795684814, "index_right": 0, "name": "Saint Ann"}, "type": "Feature"}, {"bbox": [-77.357, 18.46, -77.3565, 18.4605], "geometry": {"coordinates": [[[-77.357, 18.4605], [-77.3565, 18.4605], [-77.3565, 18.46], [-77.357, 18.46], [-77.357, 18.4605]]], "type": "Polygon"}, "id": "530826", "properties": {"depth_m": 0.6421322822570801, "index_right": 0, "name": "Saint Ann"}, "type": "Feature"}, {"bbox": [-77.3565, 18.46, -77.35600000000001, 18.4605], "geometry": {"coordinates": [[[-77.3565, 18.4605], [-77.35600000000001, 18.4605], [-77.35600000000001, 18.46], [-77.3565, 18.46], [-77.3565, 18.4605]]], "type": "Polygon"}, "id": "530827", "properties": {"depth_m": 1.2263630628585815, "index_right": 0, "name": "Saint Ann"}, "type": "Feature"}, {"bbox": [-77.3495, 18.46, -77.3485, 18.4605], "geometry": {"coordinates": [[[-77.3495, 18.4605], [-77.3485, 18.4605], [-77.3485, 18.46], [-77.3495, 18.46], [-77.3495, 18.4605]]], "type": "Polygon"}, "id": "530835", "properties": {"depth_m": 2.000000476837158, "index_right": 0, "name": "Saint Ann"}, "type": "Feature"}, {"bbox": [-77.3485, 18.46, -77.348, 18.4605], "geometry": {"coordinates": [[[-77.3485, 18.4605], [-77.348, 18.4605], [-77.348, 18.46], [-77.3485, 18.46], [-77.3485, 18.4605]]], "type": "Polygon"}, "id": "530836", "properties": {"depth_m": 1.0000003576278687, "index_right": 0, "name": "Saint Ann"}, "type": "Feature"}, {"bbox": [-77.416, 18.4605, -77.41550000000001, 18.461000000000002], "geometry": {"coordinates": [[[-77.416, 18.461000000000002], [-77.41550000000001, 18.461000000000002], [-77.41550000000001, 18.4605], [-77.416, 18.4605], [-77.416, 18.461000000000002]]], "type": "Polygon"}, "id": "531243", "properties": {"depth_m": 1.9993855953216553, "index_right": 0, "name": "Saint Ann"}, "type": "Feature"}, {"bbox": [-77.345, 18.4605, -77.3435, 18.461000000000002], "geometry": {"coordinates": [[[-77.345, 18.461000000000002], [-77.3435, 18.461000000000002], [-77.3435, 18.4605], [-77.345, 18.4605], [-77.345, 18.461000000000002]]], "type": "Polygon"}, "id": "531275", "properties": {"depth_m": 2.000000476837158, "index_right": 0, "name": "Saint Ann"}, "type": "Feature"}, {"bbox": [-77.3435, 18.4605, -77.343, 18.461000000000002], "geometry": {"coordinates": [[[-77.3435, 18.461000000000002], [-77.343, 18.461000000000002], [-77.343, 18.4605], [-77.3435, 18.4605], [-77.3435, 18.461000000000002]]], "type": "Polygon"}, "id": "531276", "properties": {"depth_m": 1.0000003576278687, "index_right": 0, "name": "Saint Ann"}, "type": "Feature"}, {"bbox": [-77.336, 18.4605, -77.33500000000001, 18.461000000000002], "geometry": {"coordinates": [[[-77.336, 18.461000000000002], [-77.33500000000001, 18.461000000000002], [-77.33500000000001, 18.4605], [-77.336, 18.4605], [-77.336, 18.461000000000002]]], "type": "Polygon"}, "id": "531277", "properties": {"depth_m": 2.0, "index_right": 0, "name": "Saint Ann"}, "type": "Feature"}, {"bbox": [-77.343, 18.461000000000002, -77.3425, 18.4615], "geometry": {"coordinates": [[[-77.343, 18.4615], [-77.3425, 18.4615], [-77.3425, 18.461000000000002], [-77.343, 18.461000000000002], [-77.343, 18.4615]]], "type": "Polygon"}, "id": "531623", "properties": {"depth_m": 2.000000476837158, "index_right": 0, "name": "Saint Ann"}, "type": "Feature"}, {"bbox": [-77.3425, 18.461000000000002, -77.342, 18.4615], "geometry": {"coordinates": [[[-77.3425, 18.4615], [-77.342, 18.4615], [-77.342, 18.461000000000002], [-77.3425, 18.461000000000002], [-77.3425, 18.4615]]], "type": "Polygon"}, "id": "531624", "properties": {"depth_m": 1.0000004768371582, "index_right": 0, "name": "Saint Ann"}, "type": "Feature"}, {"bbox": [-77.3375, 18.461000000000002, -77.337, 18.4615], "geometry": {"coordinates": [[[-77.3375, 18.4615], [-77.337, 18.4615], [-77.337, 18.461000000000002], [-77.3375, 18.461000000000002], [-77.3375, 18.4615]]], "type": "Polygon"}, "id": "531625", "properties": {"depth_m": 1.0000001192092896, "index_right": 0, "name": "Saint Ann"}, "type": "Feature"}, {"bbox": [-77.337, 18.461000000000002, -77.3365, 18.4615], "geometry": {"coordinates": [[[-77.337, 18.4615], [-77.3365, 18.4615], [-77.3365, 18.461000000000002], [-77.337, 18.461000000000002], [-77.337, 18.4615]]], "type": "Polygon"}, "id": "531626", "properties": {"depth_m": 2.0, "index_right": 0, "name": "Saint Ann"}, "type": "Feature"}, {"bbox": [-77.4175, 18.462, -77.417, 18.462500000000002], "geometry": {"coordinates": [[[-77.4175, 18.462500000000002], [-77.41721063295492, 18.462500000000002], [-77.417, 18.462378451075605], [-77.417, 18.462], [-77.4175, 18.462], [-77.4175, 18.462500000000002]]], "type": "Polygon"}, "id": "532341", "properties": {"depth_m": 2.999878406524658, "index_right": 0, "name": "Saint Ann"}, "type": "Feature"}, {"bbox": [-77.351, 18.463, -77.3505, 18.4635], "geometry": {"coordinates": [[[-77.351, 18.4635], [-77.3505, 18.4635], [-77.3505, 18.463], [-77.351, 18.463], [-77.351, 18.4635]]], "type": "Polygon"}, "id": "533118", "properties": {"depth_m": 0.26469945907592773, "index_right": 0, "name": "Saint Ann"}, "type": "Feature"}, {"bbox": [-77.3495, 18.463, -77.349, 18.4635], "geometry": {"coordinates": [[[-77.3495, 18.4635], [-77.349, 18.4635], [-77.349, 18.463], [-77.3495, 18.463], [-77.3495, 18.4635]]], "type": "Polygon"}, "id": "533121", "properties": {"depth_m": 0.35390955209732056, "index_right": 0, "name": "Saint Ann"}, "type": "Feature"}, {"bbox": [-77.349, 18.463, -77.3485, 18.4635], "geometry": {"coordinates": [[[-77.349, 18.4635], [-77.3485, 18.4635], [-77.3485, 18.463], [-77.349, 18.463], [-77.349, 18.4635]]], "type": "Polygon"}, "id": "533122", "properties": {"depth_m": 0.4244714379310608, "index_right": 0, "name": "Saint Ann"}, "type": "Feature"}, {"bbox": [-77.3485, 18.463, -77.348, 18.4635], "geometry": {"coordinates": [[[-77.3485, 18.4635], [-77.348, 18.4635], [-77.348, 18.463], [-77.3485, 18.463], [-77.3485, 18.4635]]], "type": "Polygon"}, "id": "533123", "properties": {"depth_m": 0.05131453275680542, "index_right": 0, "name": "Saint Ann"}, "type": "Feature"}, {"bbox": [-77.343, 18.463, -77.3425, 18.4635], "geometry": {"coordinates": [[[-77.343, 18.4635], [-77.3425, 18.4635], [-77.3425, 18.463], [-77.343, 18.463], [-77.343, 18.4635]]], "type": "Polygon"}, "id": "533126", "properties": {"depth_m": 0.17943799495697021, "index_right": 0, "name": "Saint Ann"}, "type": "Feature"}, {"bbox": [-77.3435, 18.4635, -77.343, 18.464000000000002], "geometry": {"coordinates": [[[-77.3435, 18.464000000000002], [-77.343, 18.464000000000002], [-77.343, 18.4635], [-77.3435, 18.4635], [-77.3435, 18.464000000000002]]], "type": "Polygon"}, "id": "533569", "properties": {"depth_m": 0.3662857413291931, "index_right": 0, "name": "Saint Ann"}, "type": "Feature"}, {"bbox": [-77.3255, 18.464000000000002, -77.325, 18.4645], "geometry": {"coordinates": [[[-77.3255, 18.4645], [-77.325, 18.4645], [-77.325, 18.464000000000002], [-77.3255, 18.464000000000002], [-77.3255, 18.4645]]], "type": "Polygon"}, "id": "533937", "properties": {"depth_m": 0.2483588457107544, "index_right": 0, "name": "Saint Ann"}, "type": "Feature"}, {"bbox": [-77.325, 18.464000000000002, -77.3245, 18.4645], "geometry": {"coordinates": [[[-77.325, 18.4645], [-77.3245, 18.4645], [-77.3245, 18.464000000000002], [-77.325, 18.464000000000002], [-77.325, 18.4645]]], "type": "Polygon"}, "id": "533938", "properties": {"depth_m": 0.2903590202331543, "index_right": 0, "name": "Saint Ann"}, "type": "Feature"}, {"bbox": [-77.3245, 18.464000000000002, -77.324, 18.4645], "geometry": {"coordinates": [[[-77.3245, 18.4645], [-77.324, 18.4645], [-77.324, 18.464000000000002], [-77.3245, 18.464000000000002], [-77.3245, 18.4645]]], "type": "Polygon"}, "id": "533939", "properties": {"depth_m": 0.5069712996482849, "index_right": 0, "name": "Saint Ann"}, "type": "Feature"}, {"bbox": [-77.324, 18.464000000000002, -77.3235, 18.4645], "geometry": {"coordinates": [[[-77.324, 18.4645], [-77.3235, 18.4645], [-77.3235, 18.464000000000002], [-77.324, 18.464000000000002], [-77.324, 18.4645]]], "type": "Polygon"}, "id": "533940", "properties": {"depth_m": 0.5282444357872009, "index_right": 0, "name": "Saint Ann"}, "type": "Feature"}, {"bbox": [-77.3235, 18.464000000000002, -77.32300000000001, 18.4645], "geometry": {"coordinates": [[[-77.3235, 18.4645], [-77.32300000000001, 18.4645], [-77.32300000000001, 18.464000000000002], [-77.3235, 18.464000000000002], [-77.3235, 18.4645]]], "type": "Polygon"}, "id": "533941", "properties": {"depth_m": 0.2557617425918579, "index_right": 0, "name": "Saint Ann"}, "type": "Feature"}, {"bbox": [-77.32300000000001, 18.464000000000002, -77.3225, 18.4645], "geometry": {"coordinates": [[[-77.32300000000001, 18.4645], [-77.3225, 18.4645], [-77.3225, 18.464000000000002], [-77.32300000000001, 18.464000000000002], [-77.32300000000001, 18.4645]]], "type": "Polygon"}, "id": "533942", "properties": {"depth_m": 0.14830946922302246, "index_right": 0, "name": "Saint Ann"}, "type": "Feature"}, {"bbox": [-77.453, 18.4705, -77.4525, 18.471], "geometry": {"coordinates": [[[-77.453, 18.471], [-77.4525, 18.471], [-77.4525, 18.4705], [-77.453, 18.4705], [-77.453, 18.471]]], "type": "Polygon"}, "id": "539426", "properties": {"depth_m": 0.363622784614563, "index_right": 0, "name": "Saint Ann"}, "type": "Feature"}, {"bbox": [-77.4525, 18.4705, -77.452, 18.471], "geometry": {"coordinates": [[[-77.4525, 18.471], [-77.452, 18.471], [-77.452, 18.4705], [-77.4525, 18.4705], [-77.4525, 18.471]]], "type": "Polygon"}, "id": "539427", "properties": {"depth_m": 1.363622784614563, "index_right": 0, "name": "Saint Ann"}, "type": "Feature"}, {"bbox": [-77.45400000000001, 18.471, -77.4535, 18.471500000000002], "geometry": {"coordinates": [[[-77.45400000000001, 18.471500000000002], [-77.4535, 18.471500000000002], [-77.4535, 18.471], [-77.45400000000001, 18.471], [-77.45400000000001, 18.471500000000002]]], "type": "Polygon"}, "id": "539759", "properties": {"depth_m": 0.14483106136322021, "index_right": 0, "name": "Saint Ann"}, "type": "Feature"}, {"bbox": [-77.4535, 18.471, -77.453, 18.471500000000002], "geometry": {"coordinates": [[[-77.4535, 18.471500000000002], [-77.453, 18.471500000000002], [-77.453, 18.471], [-77.4535, 18.471], [-77.4535, 18.471500000000002]]], "type": "Polygon"}, "id": "539760", "properties": {"depth_m": 1.1448310613632202, "index_right": 0, "name": "Saint Ann"}, "type": "Feature"}, {"bbox": [-77.453, 18.471, -77.4525, 18.471500000000002], "geometry": {"coordinates": [[[-77.453, 18.471500000000002], [-77.4525, 18.471500000000002], [-77.4525, 18.471], [-77.453, 18.471], [-77.453, 18.471500000000002]]], "type": "Polygon"}, "id": "539761", "properties": {"depth_m": 2.1478562355041504, "index_right": 0, "name": "Saint Ann"}, "type": "Feature"}, {"bbox": [-77.452, 18.471, -77.4515, 18.471500000000002], "geometry": {"coordinates": [[[-77.452, 18.471500000000002], [-77.4515, 18.471500000000002], [-77.4515, 18.471], [-77.452, 18.471], [-77.452, 18.471500000000002]]], "type": "Polygon"}, "id": "539763", "properties": {"depth_m": 0.14229285717010498, "index_right": 0, "name": "Saint Ann"}, "type": "Feature"}, {"bbox": [-77.455, 18.471500000000002, -77.4545, 18.472], "geometry": {"coordinates": [[[-77.455, 18.472], [-77.4545, 18.472], [-77.4545, 18.471500000000002], [-77.455, 18.471500000000002], [-77.455, 18.472]]], "type": "Polygon"}, "id": "540099", "properties": {"depth_m": 0.31478071212768555, "index_right": 0, "name": "Saint Ann"}, "type": "Feature"}, {"bbox": [-77.4545, 18.471500000000002, -77.45400000000001, 18.472], "geometry": {"coordinates": [[[-77.4545, 18.472], [-77.45400000000001, 18.472], [-77.45400000000001, 18.471500000000002], [-77.4545, 18.471500000000002], [-77.4545, 18.472]]], "type": "Polygon"}, "id": "540100", "properties": {"depth_m": 1.3147807121276855, "index_right": 0, "name": "Saint Ann"}, "type": "Feature"}, {"bbox": [-77.45400000000001, 18.471500000000002, -77.4535, 18.472], "geometry": {"coordinates": [[[-77.45400000000001, 18.472], [-77.4535, 18.472], [-77.4535, 18.471500000000002], [-77.45400000000001, 18.471500000000002], [-77.45400000000001, 18.472]]], "type": "Polygon"}, "id": "540101", "properties": {"depth_m": 2.1448311805725098, "index_right": 0, "name": "Saint Ann"}, "type": "Feature"}, {"bbox": [-77.456, 18.472, -77.4555, 18.4725], "geometry": {"coordinates": [[[-77.456, 18.4725], [-77.4555, 18.4725], [-77.4555, 18.472], [-77.456, 18.472], [-77.456, 18.4725]]], "type": "Polygon"}, "id": "540387", "properties": {"depth_m": 0.1855381727218628, "index_right": 0, "name": "Saint Ann"}, "type": "Feature"}, {"bbox": [-77.4555, 18.472, -77.455, 18.4725], "geometry": {"coordinates": [[[-77.4555, 18.4725], [-77.455, 18.4725], [-77.455, 18.472], [-77.4555, 18.472], [-77.4555, 18.4725]]], "type": "Polygon"}, "id": "540388", "properties": {"depth_m": 1.1855381727218628, "index_right": 0, "name": "Saint Ann"}, "type": "Feature"}, {"bbox": [-77.455, 18.472, -77.4545, 18.4725], "geometry": {"coordinates": [[[-77.455, 18.4725], [-77.4545, 18.4725], [-77.4545, 18.472], [-77.455, 18.472], [-77.455, 18.4725]]], "type": "Polygon"}, "id": "540389", "properties": {"depth_m": 2.122514247894287, "index_right": 0, "name": "Saint Ann"}, "type": "Feature"}, {"bbox": [-77.4565, 18.4725, -77.456, 18.473000000000003], "geometry": {"coordinates": [[[-77.4565, 18.473000000000003], [-77.456, 18.473000000000003], [-77.456, 18.4725], [-77.4565, 18.4725], [-77.4565, 18.473000000000003]]], "type": "Polygon"}, "id": "540717", "properties": {"depth_m": 0.16836953163146973, "index_right": 0, "name": "Saint Ann"}, "type": "Feature"}, {"bbox": [-77.456, 18.4725, -77.4555, 18.473000000000003], "geometry": {"coordinates": [[[-77.456, 18.473000000000003], [-77.4555, 18.473000000000003], [-77.4555, 18.4725], [-77.456, 18.4725], [-77.456, 18.473000000000003]]], "type": "Polygon"}, "id": "540718", "properties": {"depth_m": 2.1855382919311523, "index_right": 0, "name": "Saint Ann"}, "type": "Feature"}, {"bbox": [-77.4565, 18.473000000000003, -77.456, 18.4735], "geometry": {"coordinates": [[[-77.4565, 18.4735], [-77.456, 18.4735], [-77.456, 18.473000000000003], [-77.4565, 18.473000000000003], [-77.4565, 18.4735]]], "type": "Polygon"}, "id": "541003", "properties": {"depth_m": 1.1144622564315796, "index_right": 0, "name": "Saint Ann"}, "type": "Feature"}, {"bbox": [-77.4565, 18.4735, -77.456, 18.474], "geometry": {"coordinates": [[[-77.4565, 18.474], [-77.456, 18.474], [-77.456, 18.4735], [-77.4565, 18.4735], [-77.4565, 18.474]]], "type": "Polygon"}, "id": "541323", "properties": {"depth_m": 2.114462375640869, "index_right": 0, "name": "Saint Ann"}, "type": "Feature"}], "type": "FeatureCollection"});
+
+        
+    
+    geo_json_a84e41229fb19111d448e0838b2200b7.bindTooltip(
+    function(layer){
+    let div = L.DomUtil.create('div');
+    
+    let handleObject = feature=>typeof(feature)=='object' ? JSON.stringify(feature) : feature;
+    let fields = ["depth_m"];
+    let aliases = ["depth_m (m):"];
+    let table = '<table>' +
+        String(
+        fields.map(
+        (v,i)=>
+        `<tr>
+            <th>${aliases[i]}</th>
+            
+            <td>${handleObject(layer.feature.properties[v])}</td>
+        </tr>`).join(''))
+    +'</table>';
+    div.innerHTML=table;
+    
+    return div
+    }
+    ,{"className": "foliumtooltip", "sticky": true});
+                     
+    
+    geo_json_a84e41229fb19111d448e0838b2200b7.bindPopup(
+    function(layer){
+    let div = L.DomUtil.create('div');
+    
+    let handleObject = feature=>typeof(feature)=='object' ? JSON.stringify(feature) : feature;
+    let fields = ["depth_m"];
+    let aliases = ["depth_m (m):"];
+    let table = '<table>' +
+        String(
+        fields.map(
+        (v,i)=>
+        `<tr>
+            <th>${aliases[i].toLocaleString()}</th>
+            
+            <td>${handleObject(layer.feature.properties[v]).toLocaleString()}</td>
+        </tr>`).join(''))
+    +'</table>';
+    div.innerHTML=table;
+    
+    return div
+    }
+    ,{"className": "foliumpopup"});
+                     
+    
+            geo_json_a84e41229fb19111d448e0838b2200b7.addTo(map_8eda2121b105edd4cab6cd630149344a);
+        
+    
+        function geo_json_d9a71dc34fd44fd97c90db52b5d91ed9_styler(feature) {
+            switch(feature.id) {
+                default:
+                    return {"color": "red", "fillOpacity": 0.0, "weight": 4};
+            }
+        }
+
+        function geo_json_d9a71dc34fd44fd97c90db52b5d91ed9_onEachFeature(feature, layer) {
+            layer.on({
+            });
+        };
+        var geo_json_d9a71dc34fd44fd97c90db52b5d91ed9 = L.geoJson(null, {
+                onEachFeature: geo_json_d9a71dc34fd44fd97c90db52b5d91ed9_onEachFeature,
+            
+                style: geo_json_d9a71dc34fd44fd97c90db52b5d91ed9_styler,
+        });
+
+        function geo_json_d9a71dc34fd44fd97c90db52b5d91ed9_add (data) {
+            geo_json_d9a71dc34fd44fd97c90db52b5d91ed9
+                .addData(data);
+        }
+            geo_json_d9a71dc34fd44fd97c90db52b5d91ed9_add({"features": [{"geometry": {"coordinates": [[[[-77.46529226293714, 18.476054120549907], [-77.454986147625, 18.475327988493955], [-77.42886306726284, 18.469224213014385], [-77.40827390279557, 18.45734292503561], [-77.37653559667885, 18.465155229500937], [-77.32530676821968, 18.465033256130386], [-77.27261309409501, 18.45937741691786], [-77.23631752546471, 18.450507008065788], [-77.23184159502307, 18.44603094535419], [-77.22813879600689, 18.433661161016456], [-77.22329668519204, 18.429388787353865], [-77.21743728866855, 18.429347929268882], [-77.21202552579467, 18.431789500254368], [-77.20885168290863, 18.43496321200428], [-77.20962482258852, 18.436835173152403], [-77.16494707518736, 18.429388787353865], [-77.15941319760702, 18.42621477505491], [-77.14256749364236, 18.41209530142594], [-77.13735917544307, 18.408921589177485], [-77.10472572921215, 18.407863785221735], [-77.0703502905002, 18.413373618863606], [-77.06952794508149, 18.408850688372965], [-77.06089797946072, 18.37226376569352], [-77.0602778621241, 18.36707028038258], [-77.0583141713867, 18.359887365738423], [-77.0562471013062, 18.35634743155926], [-77.05100197793773, 18.351541797280447], [-77.04828895342712, 18.34789851592631], [-77.04645442969148, 18.344151887503408], [-77.04859901101328, 18.32172438936543], [-77.04823725937457, 18.3187011892809], [-77.04614439007148, 18.315006534062807], [-77.03374203379744, 18.301002113590037], [-77.02950457261055, 18.29464597192692], [-77.02642981451804, 18.285447486542648], [-77.02503453603713, 18.276946593037326], [-77.02343256767183, 18.271468900138295], [-77.02221819069331, 18.268833550861448], [-77.01557775386762, 18.260332656447034], [-76.99640581396652, 18.24196181826562], [-77.05642799074786, 18.209767406640957], [-77.0767626436073, 18.20229997980158], [-77.21086298637081, 18.18609942371979], [-77.30137428715328, 18.187262378852232], [-77.350441037722, 18.195840487065755], [-77.36969053231499, 18.203178730362982], [-77.37483233203714, 18.20397967018672], [-77.37896644571818, 18.204057180492025], [-77.41286616087234, 18.196718937234937], [-77.41529496075138, 18.195607956137824], [-77.4222712788053, 18.19036279135762], [-77.42601783462575, 18.18834752323589], [-77.43314916403546, 18.18555685152133], [-77.43787756336461, 18.184730074834448], [-77.4422183852798, 18.18454921743362], [-77.46764319754355, 18.188709238028803], [-77.49115596077984, 18.19609885476307], [-77.45146846503076, 18.376113740370194], [-77.45115840814276, 18.381023021239134], [-77.45149430997319, 18.385596424352535], [-77.45681697575374, 18.391900888702708], [-77.45821225670029, 18.394717393418244], [-77.45823806874658, 18.398308699726194], [-77.45555092533755, 18.4045876272246], [-77.45474993548824, 18.41040119282326], [-77.45555090651968, 18.417609941742175], [-77.46702309649466, 18.44592880015343], [-77.46782405914067, 18.454119342888983], [-77.46565365670541, 18.473988985350907], [-77.46529226293714, 18.476054120549907]]]], "type": "MultiPolygon"}, "id": "0", "type": "Feature"}], "type": "FeatureCollection"});
+
+        
+    
+            geo_json_d9a71dc34fd44fd97c90db52b5d91ed9.addTo(map_8eda2121b105edd4cab6cd630149344a);
+        
+    
+    var color_map_0710b7b3ded71ad7b3520094e9b5354f = {};
+
+    
+    color_map_0710b7b3ded71ad7b3520094e9b5354f.color = d3.scale.threshold()
+              .domain([0.0, 0.003006012024048096, 0.006012024048096192, 0.009018036072144289, 0.012024048096192385, 0.01503006012024048, 0.018036072144288578, 0.021042084168336674, 0.02404809619238477, 0.027054108216432865, 0.03006012024048096, 0.033066132264529056, 0.036072144288577156, 0.03907815631262525, 0.04208416833667335, 0.045090180360721446, 0.04809619238476954, 0.05110220440881764, 0.05410821643286573, 0.05711422845691383, 0.06012024048096192, 0.06312625250501001, 0.06613226452905811, 0.06913827655310621, 0.07214428857715431, 0.07515030060120241, 0.0781563126252505, 0.0811623246492986, 0.0841683366733467, 0.0871743486973948, 0.09018036072144289, 0.09318637274549098, 0.09619238476953908, 0.09919839679358718, 0.10220440881763528, 0.10521042084168336, 0.10821643286573146, 0.11122244488977956, 0.11422845691382766, 0.11723446893787576, 0.12024048096192384, 0.12324649298597194, 0.12625250501002003, 0.12925851703406813, 0.13226452905811623, 0.13527054108216433, 0.13827655310621242, 0.14128256513026052, 0.14428857715430862, 0.14729458917835672, 0.15030060120240482, 0.1533066132264529, 0.156312625250501, 0.1593186372745491, 0.1623246492985972, 0.1653306613226453, 0.1683366733466934, 0.1713426853707415, 0.1743486973947896, 0.17735470941883769, 0.18036072144288579, 0.18336673346693386, 0.18637274549098196, 0.18937875751503006, 0.19238476953907815, 0.19539078156312625, 0.19839679358717435, 0.20140280561122245, 0.20440881763527055, 0.20741482965931865, 0.21042084168336672, 0.21342685370741482, 0.21643286573146292, 0.21943887775551102, 0.22244488977955912, 0.22545090180360722, 0.22845691382765532, 0.23146292585170342, 0.23446893787575152, 0.2374749498997996, 0.24048096192384769, 0.24348697394789579, 0.24649298597194388, 0.24949899799599198, 0.25250501002004005, 0.25551102204408815, 0.25851703406813625, 0.26152304609218435, 0.26452905811623245, 0.26753507014028055, 0.27054108216432865, 0.27354709418837675, 0.27655310621242485, 0.27955911823647295, 0.28256513026052105, 0.28557114228456915, 0.28857715430861725, 0.29158316633266534, 0.29458917835671344, 0.29759519038076154, 0.30060120240480964, 0.30360721442885774, 0.3066132264529058, 0.3096192384769539, 0.312625250501002, 0.3156312625250501, 0.3186372745490982, 0.3216432865731463, 0.3246492985971944, 0.3276553106212425, 0.3306613226452906, 0.3336673346693387, 0.3366733466933868, 0.3396793587174349, 0.342685370741483, 0.3456913827655311, 0.3486973947895792, 0.3517034068136273, 0.35470941883767537, 0.35771543086172347, 0.36072144288577157, 0.3637274549098196, 0.3667334669338677, 0.3697394789579158, 0.3727454909819639, 0.375751503006012, 0.3787575150300601, 0.3817635270541082, 0.3847695390781563, 0.3877755511022044, 0.3907815631262525, 0.3937875751503006, 0.3967935871743487, 0.3997995991983968, 0.4028056112224449, 0.405811623246493, 0.4088176352705411, 0.4118236472945892, 0.4148296593186373, 0.41783567134268534, 0.42084168336673344, 0.42384769539078154, 0.42685370741482964, 0.42985971943887774, 0.43286573146292584, 0.43587174348697394, 0.43887775551102204, 0.44188376753507014, 0.44488977955911824, 0.44789579158316634, 0.45090180360721444, 0.45390781563126253, 0.45691382765531063, 0.45991983967935873, 0.46292585170340683, 0.46593186372745493, 0.46893787575150303, 0.47194388777555113, 0.4749498997995992, 0.4779559118236473, 0.48096192384769537, 0.48396793587174347, 0.48697394789579157, 0.48997995991983967, 0.49298597194388777, 0.49599198396793587, 0.49899799599198397, 0.5020040080160321, 0.5050100200400801, 0.5080160320641283, 0.5110220440881763, 0.5140280561122245, 0.5170340681362725, 0.5200400801603207, 0.5230460921843687, 0.5260521042084169, 0.5290581162324649, 0.5320641282565131, 0.5350701402805611, 0.5380761523046093, 0.5410821643286573, 0.5440881763527055, 0.5470941883767535, 0.5501002004008017, 0.5531062124248497, 0.5561122244488977, 0.5591182364729459, 0.5621242484969939, 0.5651302605210421, 0.5681362725450901, 0.5711422845691383, 0.5741482965931863, 0.5771543086172345, 0.5801603206412825, 0.5831663326653307, 0.5861723446893787, 0.5891783567134269, 0.5921843687374749, 0.5951903807615231, 0.5981963927855711, 0.6012024048096193, 0.6042084168336673, 0.6072144288577155, 0.6102204408817635, 0.6132264529058116, 0.6162324649298597, 0.6192384769539078, 0.6222444889779559, 0.625250501002004, 0.6282565130260521, 0.6312625250501002, 0.6342685370741483, 0.6372745490981964, 0.6402805611222445, 0.6432865731462926, 0.6462925851703407, 0.6492985971943888, 0.6523046092184369, 0.655310621242485, 0.6583166332665331, 0.6613226452905812, 0.6643286573146293, 0.6673346693386774, 0.6703406813627254, 0.6733466933867736, 0.6763527054108216, 0.6793587174348698, 0.6823647294589178, 0.685370741482966, 0.688376753507014, 0.6913827655310621, 0.6943887775551102, 0.6973947895791583, 0.7004008016032064, 0.7034068136272545, 0.7064128256513026, 0.7094188376753507, 0.7124248496993988, 0.7154308617234469, 0.718436873747495, 0.7214428857715431, 0.7244488977955912, 0.7274549098196392, 0.7304609218436874, 0.7334669338677354, 0.7364729458917836, 0.7394789579158316, 0.7424849699398798, 0.7454909819639278, 0.748496993987976, 0.751503006012024, 0.7545090180360722, 0.7575150300601202, 0.7605210420841684, 0.7635270541082164, 0.7665330661322646, 0.7695390781563126, 0.7725450901803608, 0.7755511022044088, 0.7785571142284569, 0.781563126252505, 0.7845691382765531, 0.7875751503006012, 0.7905811623246493, 0.7935871743486974, 0.7965931863727455, 0.7995991983967936, 0.8026052104208417, 0.8056112224448898, 0.8086172344689379, 0.811623246492986, 0.814629258517034, 0.8176352705410822, 0.8206412825651302, 0.8236472945891784, 0.8266533066132264, 0.8296593186372746, 0.8326653306613226, 0.8356713426853707, 0.8386773547094188, 0.8416833667334669, 0.844689378757515, 0.8476953907815631, 0.8507014028056112, 0.8537074148296593, 0.8567134268537074, 0.8597194388777555, 0.8627254509018036, 0.8657314629258517, 0.8687374749498998, 0.8717434869739479, 0.874749498997996, 0.8777555110220441, 0.8807615230460922, 0.8837675350701403, 0.8867735470941884, 0.8897795591182365, 0.8927855711422845, 0.8957915831663327, 0.8987975951903807, 0.9018036072144289, 0.9048096192384769, 0.9078156312625251, 0.9108216432865731, 0.9138276553106213, 0.9168336673346693, 0.9198396793587175, 0.9228456913827655, 0.9258517034068137, 0.9288577154308617, 0.9318637274549099, 0.9348697394789579, 0.9378757515030061, 0.9408817635270541, 0.9438877755511023, 0.9468937875751503, 0.9498997995991983, 0.9529058116232465, 0.9559118236472945, 0.9589178356713427, 0.9619238476953907, 0.9649298597194389, 0.9679358717434869, 0.9709418837675351, 0.9739478957915831, 0.9769539078156313, 0.9799599198396793, 0.9829659318637275, 0.9859719438877755, 0.9889779559118237, 0.9919839679358717, 0.9949899799599199, 0.9979959919839679, 1.001002004008016, 1.0040080160320641, 1.0070140280561122, 1.0100200400801602, 1.0130260521042085, 1.0160320641282565, 1.0190380761523046, 1.0220440881763526, 1.0250501002004009, 1.028056112224449, 1.031062124248497, 1.034068136272545, 1.0370741482965933, 1.0400801603206413, 1.0430861723446894, 1.0460921843687374, 1.0490981963927857, 1.0521042084168337, 1.0551102204408818, 1.0581162324649298, 1.0611222444889779, 1.0641282565130261, 1.0671342685370742, 1.0701402805611222, 1.0731462925851702, 1.0761523046092185, 1.0791583166332666, 1.0821643286573146, 1.0851703406813626, 1.088176352705411, 1.091182364729459, 1.094188376753507, 1.097194388777555, 1.1002004008016033, 1.1032064128256514, 1.1062124248496994, 1.1092184368737474, 1.1122244488977955, 1.1152304609218437, 1.1182364729458918, 1.1212424849699398, 1.1242484969939879, 1.1272545090180361, 1.1302605210420842, 1.1332665330661322, 1.1362725450901803, 1.1392785571142285, 1.1422845691382766, 1.1452905811623246, 1.1482965931863727, 1.151302605210421, 1.154308617234469, 1.157314629258517, 1.160320641282565, 1.1633266533066133, 1.1663326653306614, 1.1693386773547094, 1.1723446893787575, 1.1753507014028055, 1.1783567134268538, 1.1813627254509018, 1.1843687374749499, 1.187374749498998, 1.1903807615230462, 1.1933867735470942, 1.1963927855711423, 1.1993987975951903, 1.2024048096192386, 1.2054108216432866, 1.2084168336673347, 1.2114228456913827, 1.214428857715431, 1.217434869739479, 1.220440881763527, 1.223446893787575, 1.2264529058116231, 1.2294589178356714, 1.2324649298597194, 1.2354709418837675, 1.2384769539078155, 1.2414829659318638, 1.2444889779559118, 1.24749498997996, 1.250501002004008, 1.2535070140280562, 1.2565130260521042, 1.2595190380761523, 1.2625250501002003, 1.2655310621242486, 1.2685370741482966, 1.2715430861723447, 1.2745490981963927, 1.277555110220441, 1.280561122244489, 1.283567134268537, 1.2865731462925851, 1.2895791583166332, 1.2925851703406814, 1.2955911823647295, 1.2985971943887775, 1.3016032064128256, 1.3046092184368738, 1.3076152304609219, 1.31062124248497, 1.313627254509018, 1.3166332665330662, 1.3196392785571143, 1.3226452905811623, 1.3256513026052104, 1.3286573146292586, 1.3316633266533067, 1.3346693386773547, 1.3376753507014028, 1.3406813627254508, 1.343687374749499, 1.346693386773547, 1.3496993987975952, 1.3527054108216432, 1.3557114228456915, 1.3587174348697395, 1.3617234468937875, 1.3647294589178356, 1.3677354709418839, 1.370741482965932, 1.37374749498998, 1.376753507014028, 1.3797595190380763, 1.3827655310621243, 1.3857715430861723, 1.3887775551102204, 1.3917835671342684, 1.3947895791583167, 1.3977955911823647, 1.4008016032064128, 1.4038076152304608, 1.406813627254509, 1.4098196392785571, 1.4128256513026052, 1.4158316633266532, 1.4188376753507015, 1.4218436873747495, 1.4248496993987976, 1.4278557114228456, 1.4308617234468939, 1.433867735470942, 1.43687374749499, 1.439879759519038, 1.4428857715430863, 1.4458917835671343, 1.4488977955911824, 1.4519038076152304, 1.4549098196392785, 1.4579158316633267, 1.4609218436873748, 1.4639278557114228, 1.4669338677354709, 1.4699398797595191, 1.4729458917835672, 1.4759519038076152, 1.4789579158316633, 1.4819639278557115, 1.4849699398797596, 1.4879759519038076, 1.4909819639278556, 1.493987975951904, 1.496993987975952, 1.5])
+              .range(['#f7fbffff', '#f7fbffff', '#f7fbffff', '#f6fbffff', '#f6faffff', '#f5faffff', '#f5faffff', '#f5faffff', '#f4f9feff', '#f4f9feff', '#f4f9feff', '#f3f9feff', '#f3f8feff', '#f2f8feff', '#f2f8feff', '#f2f8feff', '#f1f7fdff', '#f1f7fdff', '#f0f7fdff', '#f0f7fdff', '#f0f6fdff', '#eff6fdff', '#eff6fdff', '#eef6fdff', '#eef5fcff', '#eef5fcff', '#edf5fcff', '#edf5fcff', '#ecf4fcff', '#ecf4fcff', '#ecf4fcff', '#ebf4fcff', '#ebf3fbff', '#eaf3fbff', '#eaf3fbff', '#eaf2fbff', '#e9f2fbff', '#e9f2fbff', '#e8f2fbff', '#e8f1faff', '#e8f1faff', '#e7f1faff', '#e7f1faff', '#e7f0faff', '#e6f0faff', '#e6f0faff', '#e5f0faff', '#e5eff9ff', '#e5eff9ff', '#e4eff9ff', '#e4eff9ff', '#e3eef9ff', '#e3eef9ff', '#e3eef9ff', '#e2eef9ff', '#e2edf8ff', '#e1edf8ff', '#e1edf8ff', '#e1edf8ff', '#e0ecf8ff', '#e0ecf8ff', '#dfecf8ff', '#dfecf8ff', '#dfebf7ff', '#deebf7ff', '#deebf7ff', '#ddeaf7ff', '#ddeaf7ff', '#ddeaf7ff', '#dceaf7ff', '#dce9f6ff', '#dbe9f6ff', '#dbe9f6ff', '#dbe9f6ff', '#dae8f6ff', '#dae8f6ff', '#d9e8f6ff', '#d9e8f6ff', '#d9e7f5ff', '#d8e7f5ff', '#d8e7f5ff', '#d8e7f5ff', '#d7e6f5ff', '#d7e6f5ff', '#d6e6f5ff', '#d6e6f5ff', '#d6e5f4ff', '#d5e5f4ff', '#d5e5f4ff', '#d4e5f4ff', '#d4e4f4ff', '#d4e4f4ff', '#d3e4f4ff', '#d3e4f4ff', '#d2e3f3ff', '#d2e3f3ff', '#d2e3f3ff', '#d1e3f3ff', '#d1e2f3ff', '#d0e2f3ff', '#d0e2f3ff', '#d0e1f2ff', '#cfe1f2ff', '#cfe1f2ff', '#cee1f2ff', '#cee0f2ff', '#cee0f2ff', '#cde0f2ff', '#cde0f2ff', '#ccdff1ff', '#ccdff1ff', '#ccdff1ff', '#cbdff1ff', '#cbdef1ff', '#cbdef1ff', '#cadef1ff', '#cadef1ff', '#c9ddf0ff', '#c9ddf0ff', '#c9ddf0ff', '#c8ddf0ff', '#c8dcf0ff', '#c7dcf0ff', '#c7dcf0ff', '#c7dcf0ff', '#c6dbefff', '#c5dbefff', '#c5dbefff', '#c4daefff', '#c3daefff', '#c2d9eeff', '#c2d9eeff', '#c1d9eeff', '#c0d8eeff', '#bfd8eeff', '#bfd8edff', '#bed7edff', '#bdd7edff', '#bcd7edff', '#bcd6edff', '#bbd6ecff', '#bad5ecff', '#bad5ecff', '#b9d5ecff', '#b8d4ecff', '#b7d4ebff', '#b7d4ebff', '#b6d3ebff', '#b5d3ebff', '#b4d3ebff', '#b4d2eaff', '#b3d2eaff', '#b2d1eaff', '#b1d1eaff', '#b1d1eaff', '#b0d0e9ff', '#afd0e9ff', '#aed0e9ff', '#aecfe9ff', '#adcfe9ff', '#accfe8ff', '#abcee8ff', '#abcee8ff', '#aacee8ff', '#a9cde8ff', '#a8cde7ff', '#a8cce7ff', '#a7cce7ff', '#a6cce7ff', '#a6cbe7ff', '#a5cbe6ff', '#a4cbe6ff', '#a3cae6ff', '#a3cae6ff', '#a2cae6ff', '#a1c9e5ff', '#a0c9e5ff', '#a0c8e5ff', '#9fc8e5ff', '#9ec8e5ff', '#9dc7e4ff', '#9dc7e4ff', '#9cc7e4ff', '#9bc6e4ff', '#9ac6e4ff', '#9ac6e3ff', '#99c5e3ff', '#98c5e3ff', '#97c4e3ff', '#97c4e3ff', '#96c4e2ff', '#95c3e2ff', '#94c3e2ff', '#94c3e2ff', '#93c2e2ff', '#92c2e1ff', '#92c2e1ff', '#91c1e1ff', '#90c1e1ff', '#8fc0e0ff', '#8fc0e0ff', '#8ec0e0ff', '#8dbfe0ff', '#8cbfe0ff', '#8cbfdfff', '#8bbedfff', '#8abedfff', '#89bedfff', '#89bddfff', '#88bddeff', '#87bcdeff', '#86bcdeff', '#86bcdeff', '#85bbdeff', '#84bbddff', '#83bbddff', '#83baddff', '#82baddff', '#81baddff', '#80b9dcff', '#80b9dcff', '#7fb9dcff', '#7eb8dcff', '#7eb8dcff', '#7db7dbff', '#7cb7dbff', '#7bb7dbff', '#7bb6dbff', '#7ab6dbff', '#79b6daff', '#78b5daff', '#78b5daff', '#77b5daff', '#76b4daff', '#75b4d9ff', '#75b3d9ff', '#74b3d9ff', '#73b3d9ff', '#72b2d9ff', '#72b2d8ff', '#71b2d8ff', '#70b1d8ff', '#6fb1d8ff', '#6fb1d8ff', '#6eb0d7ff', '#6db0d7ff', '#6dafd7ff', '#6cafd7ff', '#6bafd7ff', '#6aaed6ff', '#6aaed6ff', '#69add6ff', '#68add6ff', '#68acd5ff', '#67acd5ff', '#67abd5ff', '#66abd5ff', '#65aad4ff', '#65aad4ff', '#64a9d4ff', '#64a9d3ff', '#63a8d3ff', '#62a8d3ff', '#62a7d3ff', '#61a7d2ff', '#61a6d2ff', '#60a6d2ff', '#5fa5d2ff', '#5fa5d1ff', '#5ea4d1ff', '#5ea4d1ff', '#5da3d0ff', '#5da3d0ff', '#5ca2d0ff', '#5ba2d0ff', '#5ba1cfff', '#5aa1cfff', '#5aa0cfff', '#59a0cfff', '#589fceff', '#589fceff', '#579eceff', '#579ecdff', '#569dcdff', '#559dcdff', '#559ccdff', '#549cccff', '#549bccff', '#539bccff', '#529accff', '#529acbff', '#5199cbff', '#5199cbff', '#5098caff', '#4f98caff', '#4f97caff', '#4e97caff', '#4e96c9ff', '#4d96c9ff', '#4c95c9ff', '#4c95c9ff', '#4b94c8ff', '#4b94c8ff', '#4a93c8ff', '#4993c7ff', '#4992c7ff', '#4892c7ff', '#4891c7ff', '#4791c6ff', '#4690c6ff', '#4690c6ff', '#458fc6ff', '#458fc5ff', '#448ec5ff', '#448ec5ff', '#438ec4ff', '#428dc4ff', '#428dc4ff', '#418cc4ff', '#418cc3ff', '#408bc3ff', '#3f8bc3ff', '#3f8ac3ff', '#3e8ac2ff', '#3e89c2ff', '#3d89c2ff', '#3c88c1ff', '#3c88c1ff', '#3b87c1ff', '#3b87c1ff', '#3a86c0ff', '#3986c0ff', '#3985c0ff', '#3885bfff', '#3884bfff', '#3784bfff', '#3683bfff', '#3683beff', '#3582beff', '#3582beff', '#3481beff', '#3381bdff', '#3380bdff', '#3280bdff', '#327fbcff', '#317fbcff', '#307ebcff', '#307ebcff', '#2f7dbbff', '#2f7dbbff', '#2e7cbbff', '#2d7cbbff', '#2d7bbaff', '#2c7bbaff', '#2c7abaff', '#2b7ab9ff', '#2a79b9ff', '#2a79b9ff', '#2978b9ff', '#2978b8ff', '#2877b8ff', '#2877b8ff', '#2776b8ff', '#2676b7ff', '#2675b7ff', '#2575b7ff', '#2574b6ff', '#2474b6ff', '#2373b6ff', '#2373b6ff', '#2272b5ff', '#2272b5ff', '#2171b5ff', '#2071b5ff', '#2070b4ff', '#2171b5ff', '#2372b5ff', '#2473b6ff', '#2674b6ff', '#2875b7ff', '#2a76b8ff', '#2b77b8ff', '#2d79b9ff', '#2f7ab9ff', '#307bbaff', '#327cbbff', '#347dbbff', '#367ebcff', '#377fbdff', '#3980bdff', '#3b81beff', '#3c83beff', '#3e84bfff', '#4085c0ff', '#4286c0ff', '#4387c1ff', '#4588c1ff', '#4789c2ff', '#498ac3ff', '#4a8bc3ff', '#4c8dc4ff', '#4e8ec4ff', '#4f8fc5ff', '#5190c6ff', '#5391c6ff', '#5592c7ff', '#5693c7ff', '#5894c8ff', '#5a95c9ff', '#5b97c9ff', '#5d98caff', '#5f99caff', '#619acbff', '#629bccff', '#649cccff', '#669dcdff', '#689ecdff', '#699fceff', '#6ba1cfff', '#6da2cfff', '#6ea3d0ff', '#70a4d0ff', '#72a5d1ff', '#74a6d2ff', '#75a7d2ff', '#77a8d3ff', '#79a9d3ff', '#7aabd4ff', '#7cacd5ff', '#7eadd5ff', '#80aed6ff', '#81afd6ff', '#83b0d7ff', '#85b1d8ff', '#87b2d8ff', '#88b3d9ff', '#8ab5d9ff', '#8cb6daff', '#8db7dbff', '#8fb8dbff', '#91b9dcff', '#93badcff', '#94bbddff', '#96bcdeff', '#98bddeff', '#99bfdfff', '#9bc0e0ff', '#9dc1e0ff', '#9fc2e1ff', '#a0c3e1ff', '#a2c4e2ff', '#a4c5e3ff', '#a6c6e3ff', '#a7c7e4ff', '#a9c9e4ff', '#abcae5ff', '#accbe6ff', '#aecce6ff', '#b0cde7ff', '#b2cee7ff', '#b3cfe8ff', '#b5d0e9ff', '#b7d1e9ff', '#b8d3eaff', '#bad4eaff', '#bcd5ebff', '#bed6ecff', '#bfd7ecff', '#c1d8edff', '#c3d9edff', '#c5daeeff', '#c6dbefff', '#c8dcefff', '#cadef0ff', '#cbdff0ff', '#cde0f1ff', '#cfe1f2ff', '#d1e2f2ff', '#d2e3f3ff', '#d4e4f3ff', '#d6e5f4ff', '#d7e6f5ff', '#d9e8f5ff', '#dbe9f6ff', '#ddeaf6ff', '#deebf7ff', '#e0ecf8ff', '#e2edf8ff', '#e4eef9ff', '#e5eff9ff', '#e7f0faff', '#e9f2fbff', '#eaf3fbff', '#ecf4fcff', '#eef5fcff', '#f0f6fdff', '#f1f7feff', '#f3f8feff', '#f5f9ffff', '#f6faffff']);
+    
+
+    color_map_0710b7b3ded71ad7b3520094e9b5354f.x = d3.scale.linear()
+              .domain([0.0, 1.5])
+              .range([0, 450 - 50]);
+
+    color_map_0710b7b3ded71ad7b3520094e9b5354f.legend = L.control({position: 'topright'});
+    color_map_0710b7b3ded71ad7b3520094e9b5354f.legend.onAdd = function (map) {var div = L.DomUtil.create('div', 'legend'); return div};
+    color_map_0710b7b3ded71ad7b3520094e9b5354f.legend.addTo(map_8eda2121b105edd4cab6cd630149344a);
+
+    color_map_0710b7b3ded71ad7b3520094e9b5354f.xAxis = d3.svg.axis()
+        .scale(color_map_0710b7b3ded71ad7b3520094e9b5354f.x)
+        .orient("top")
+        .tickSize(1)
+        .tickValues([0.0, 0.375, 0.75, 1.125, 1.5]);
+
+    color_map_0710b7b3ded71ad7b3520094e9b5354f.svg = d3.select(".legend.leaflet-control").append("svg")
+        .attr("id", 'legend')
+        .attr("width", 450)
+        .attr("height", 40);
+
+    color_map_0710b7b3ded71ad7b3520094e9b5354f.g = color_map_0710b7b3ded71ad7b3520094e9b5354f.svg.append("g")
+        .attr("class", "key")
+        .attr("transform", "translate(25,16)");
+
+    color_map_0710b7b3ded71ad7b3520094e9b5354f.g.selectAll("rect")
+        .data(color_map_0710b7b3ded71ad7b3520094e9b5354f.color.range().map(function(d, i) {
+          return {
+            x0: i ? color_map_0710b7b3ded71ad7b3520094e9b5354f.x(color_map_0710b7b3ded71ad7b3520094e9b5354f.color.domain()[i - 1]) : color_map_0710b7b3ded71ad7b3520094e9b5354f.x.range()[0],
+            x1: i < color_map_0710b7b3ded71ad7b3520094e9b5354f.color.domain().length ? color_map_0710b7b3ded71ad7b3520094e9b5354f.x(color_map_0710b7b3ded71ad7b3520094e9b5354f.color.domain()[i]) : color_map_0710b7b3ded71ad7b3520094e9b5354f.x.range()[1],
+            z: d
+          };
+        }))
+      .enter().append("rect")
+        .attr("height", 40 - 30)
+        .attr("x", function(d) { return d.x0; })
+        .attr("width", function(d) { return d.x1 - d.x0; })
+        .style("fill", function(d) { return d.z; });
+
+    color_map_0710b7b3ded71ad7b3520094e9b5354f.g.call(color_map_0710b7b3ded71ad7b3520094e9b5354f.xAxis).append("text")
+        .attr("class", "caption")
+        .attr("y", 21)
+        .text("depth_m (m)");
+    
+            var measure_control_51aba811c952513c08aaa3f3c6f8b7bf = new L.Control.Measure(
+                {"position": "topright", "primaryAreaUnit": "sqmeters", "primaryLengthUnit": "meters", "secondaryAreaUnit": "acres", "secondaryLengthUnit": "miles"});
+            map_8eda2121b105edd4cab6cd630149344a.addControl(measure_control_51aba811c952513c08aaa3f3c6f8b7bf);
+
+            // Workaround for using this plugin with Leaflet>=1.8.0
+            // https://github.com/ljagis/leaflet-measure/issues/171
+            L.Control.Measure.include({
+                _setCaptureMarkerIcon: function () {
+                    // disable autopan
+                    this._captureMarker.options.autoPanOnFocus = false;
+                    // default function
+                    this._captureMarker.setIcon(
+                        L.divIcon({
+                            iconSize: this._map.getSize().multiplyBy(2)
+                        })
+                    );
+                },
+            });
+
+        
+    
+            var locate_control_fceb2c6a8ae54e666214677ca976d956 = L.control.locate(
+                {"flyTo": true, "keepCurrentZoom": false}
+            ).addTo(map_8eda2121b105edd4cab6cd630149344a);
+            
+        
+    
+            var layer_control_f525f78ee5a6d3f95982932be013b4e9_layers = {
+                base_layers : {
+                    "openstreetmap" : tile_layer_8167656bf00613daa578b57476d4efe4,
+                    "Satellite" : tile_layer_08c44d756acfe574d6b54a7b093cd293,
+                    "Google Hybrid" : tile_layer_9d7b6541f4b7c66913d701e14c33bfde,
+                },
+                overlays :  {
+                    "Flood_Depths (Saint Ann)" : geo_json_a84e41229fb19111d448e0838b2200b7,
+                    "Saint Ann Border" : geo_json_d9a71dc34fd44fd97c90db52b5d91ed9,
+                },
+            };
+            let layer_control_f525f78ee5a6d3f95982932be013b4e9 = L.control.layers(
+                layer_control_f525f78ee5a6d3f95982932be013b4e9_layers.base_layers,
+                layer_control_f525f78ee5a6d3f95982932be013b4e9_layers.overlays,
+                {"autoZIndex": true, "collapsed": false, "position": "topright"}
+            ).addTo(map_8eda2121b105edd4cab6cd630149344a);
+
+        
+    
+            map_8eda2121b105edd4cab6cd630149344a.fitBounds(
+                [[18.13454921743362, -77.54115596077983], [18.526054120549908, -76.94640581396652]],
+                {}
+            );
+        
+</script>
+</html>
