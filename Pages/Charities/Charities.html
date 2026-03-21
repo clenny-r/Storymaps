@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Charities | Transformational Worship Centre</title>
+  <meta name="description" content="TWC Ministries charity work — street feeding, disaster relief, community outreach, and back-to-school drives serving Jamaica.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --clr-blue-deep:  #1e2a6e;
+      --clr-blue-mid:   #3b3fa0;
+      --clr-purple:     #6b3db5;
+      --clr-crimson:    #c0213c;
+      --grad-brand:     linear-gradient(135deg, #1e2a6e 0%, #6b3db5 50%, #c0213c 100%);
+      --grad-brand-h:   linear-gradient(90deg,  #1e2a6e 0%, #6b3db5 50%, #c0213c 100%);
+      --clr-off-white:  #f7f5f2;
+      --clr-light:      #ede9e4;
+      --clr-dark:       #131228;
+      --clr-text:       #1c1c2e;
+      --clr-muted:      #5a5870;
+      --font-display:   'Cormorant Garamond', Georgia, serif;
+      --font-body:      'DM Sans', sans-serif;
+      --container-w:    1160px;
+      --nav-h:          84px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--font-body); background: var(--clr-off-white); color: var(--clr-text); line-height: 1.7; overflow-x: hidden; }
+    a { color: inherit; text-decoration: none; transition: opacity .2s; }
+    a:hover { opacity: .72; }
+    img { display: block; max-width: 100%; }
+    .container { width: min(var(--container-w), 100% - 2.5rem); margin-inline: auto; }
+
+    /* BANNER */
+    #banner {
+      background: var(--grad-brand-h); color: #fff; text-align: center;
+      padding: .6rem 3rem .6rem 1rem; font-size: .76rem; font-weight: 600;
+      letter-spacing: .1em; text-transform: uppercase; position: relative; z-index: 1100;
+    }
+    #banner a { text-decoration: underline; }
+    .banner-x { position: absolute; right: 1.2rem; top: 50%; transform: translateY(-50%); background: none; border: none; color: rgba(255,255,255,.7); font-size: 1.15rem; cursor: pointer; line-height: 1; }
+    .banner-x:hover { color: #fff; }
+
+    /* TOPBAR */
+    #topbar { position: fixed; left: 0; width: 100%; height: var(--nav-h); display: flex; align-items: center; padding-inline: 2.5rem; z-index: 1000; transition: background .35s, box-shadow .35s; }
+    #topbar.transparent { background: linear-gradient(to bottom, rgba(19,18,40,.78) 0%, transparent 100%); }
+    #topbar.solid { background: var(--clr-dark); box-shadow: 0 2px 32px rgba(0,0,0,.5); }
+    .topbar-inner { width: 100%; display: flex; align-items: center; justify-content: space-between; }
+    .logo { display: flex; align-items: center; gap: .7rem; }
+    .logo-img { height: 50px; width: auto; }
+    .logo-fallback { display: none; flex-direction: column; line-height: 1.1; }
+    .logo-wordmark { font-family: var(--font-display); font-weight: 700; font-size: 1.7rem; background: var(--grad-brand-h); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .logo-sub { font-size: .56rem; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; color: rgba(255,255,255,.55); }
+    .main-nav { display: flex; align-items: center; gap: 1.75rem; }
+    .nav-link { font-size: .73rem; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: rgba(255,255,255,.85); position: relative; padding-block: .3rem; }
+    .nav-link::after { content: ''; position: absolute; bottom: -2px; left: 0; width: 0; height: 2px; background: var(--grad-brand-h); transition: width .25s; }
+    .nav-link:hover { opacity: 1; }
+    .nav-link:hover::after, .nav-link.active::after { width: 100%; }
+    .nav-donate { font-size: .72rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; padding: .55rem 1.4rem; background: var(--grad-brand-h); color: #fff !important; position: relative; overflow: hidden; transition: opacity .2s; }
+    .nav-donate::before { content: ''; position: absolute; inset: 0; background: rgba(255,255,255,.14); opacity: 0; transition: opacity .2s; }
+    .nav-donate:hover { opacity: 1; }
+    .nav-donate:hover::before { opacity: 1; }
+    .hamburger { display: none; flex-direction: column; gap: 5px; background: none; border: none; cursor: pointer; padding: .4rem; }
+    .hamburger span { display: block; width: 24px; height: 2px; background: #fff; transition: transform .25s, opacity .2s; }
+    .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+    #drawer { position: fixed; top: var(--nav-h); left: 0; right: 0; background: var(--clr-dark); border-top: 1px solid rgba(255,255,255,.08); padding: 1.5rem 2rem 2rem; transform: translateY(-110%); transition: transform .35s cubic-bezier(.4,0,.2,1); z-index: 999; }
+    #drawer.open { transform: translateY(0); }
+    .drawer-link { display: block; color: rgba(255,255,255,.8); font-size: .8rem; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; padding: .78rem 0; border-bottom: 1px solid rgba(255,255,255,.08); }
+    .drawer-donate { display: block; margin-top: 1rem; text-align: center; background: var(--grad-brand-h); color: #fff !important; padding: .78rem; font-weight: 700; font-size: .76rem; letter-spacing: .14em; text-transform: uppercase; }
+
+    /* HERO */
+    #hero { position: relative; height: 62vh; min-height: 460px; display: flex; align-items: center; justify-content: center; text-align: center; overflow: hidden; }
+    .hero-bg { position: absolute; inset: 0; background-image: url('https://www.twcministries.net/church_photos/hero.jpg'); background-size: cover; background-position: center 40%; animation: zoomBg 22s ease-in-out infinite alternate; }
+    @keyframes zoomBg { from { transform: scale(1.06); } to { transform: scale(1); } }
+    .hero-overlay { position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(19,18,40,.6) 0%, rgba(19,18,40,.88) 100%); }
+    .hero-tint { position: absolute; inset: 0; background: linear-gradient(135deg, rgba(30,42,110,.28) 0%, transparent 55%, rgba(192,33,60,.2) 100%); }
+    .hero-content { position: relative; z-index: 2; max-width: 820px; padding-inline: 1.5rem; }
+    .hero-eyebrow { display: inline-flex; align-items: center; gap: .65rem; font-size: .68rem; font-weight: 700; letter-spacing: .28em; text-transform: uppercase; color: rgba(255,255,255,.6); margin-bottom: 1.1rem; animation: fadeUp .8s ease both; }
+    .hero-eyebrow::before, .hero-eyebrow::after { content: ''; display: block; width: 28px; height: 1px; background: rgba(255,255,255,.3); }
+    .hero-h1 { font-family: var(--font-display); font-size: clamp(3rem, 9vw, 6.5rem); font-weight: 700; color: #fff; line-height: 1; text-transform: uppercase; animation: fadeUp .9s .1s ease both; }
+    .hero-h1 em { display: block; font-style: normal; background: var(--grad-brand-h); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .hero-sub { margin-top: 1.2rem; font-size: 1rem; font-weight: 300; color: rgba(255,255,255,.72); animation: fadeUp .9s .2s ease both; }
+
+    /* SHARED */
+    .eyebrow { font-size: .66rem; font-weight: 700; letter-spacing: .26em; text-transform: uppercase; color: var(--clr-crimson); display: block; margin-bottom: .7rem; }
+    .section-h2 { font-family: var(--font-display); font-size: clamp(2rem, 4.5vw, 3rem); font-weight: 700; color: var(--clr-blue-deep); line-height: 1.1; }
+    .grad-line { width: 50px; height: 3px; background: var(--grad-brand-h); margin: 1.1rem 0 1.4rem; }
+    .section-body { font-size: .9rem; color: var(--clr-muted); line-height: 1.85; }
+
+    /* ===== PHOTO SLIDER ===== */
+    #slider-section { background: var(--clr-dark); padding: 0; position: relative; overflow: hidden; }
+    .slider-wrap { position: relative; width: 100%; aspect-ratio: 16/7; overflow: hidden; }
+    .slide { position: absolute; inset: 0; opacity: 0; transition: opacity .8s ease; }
+    .slide.active { opacity: 1; }
+    .slide img, .slide video { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .slide-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(19,18,40,.75) 0%, transparent 50%); }
+    .slide-caption {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      padding: 2rem 3rem; z-index: 2;
+      display: flex; align-items: flex-end; justify-content: space-between;
+    }
+    .caption-text { font-size: .78rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: rgba(255,255,255,.7); }
+    .slider-controls {
+      position: absolute; bottom: 1.6rem; left: 50%; transform: translateX(-50%);
+      display: flex; align-items: center; gap: .5rem; z-index: 10;
+    }
+    .slider-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: rgba(255,255,255,.3); border: none; cursor: pointer;
+      transition: background .25s, transform .25s; padding: 0;
+    }
+    .slider-dot.active { background: #fff; transform: scale(1.3); }
+    .slider-arrow {
+      position: absolute; top: 50%; transform: translateY(-50%);
+      width: 46px; height: 46px;
+      background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.2);
+      color: #fff; font-size: 1.1rem; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: background .2s; z-index: 10; backdrop-filter: blur(6px);
+    }
+    .slider-arrow:hover { background: rgba(255,255,255,.25); }
+    .slider-arrow.prev { left: 1.2rem; }
+    .slider-arrow.next { right: 1.2rem; }
+    .slider-arrow svg { width: 16px; height: 16px; fill: #fff; }
+
+    /* ===== INITIATIVE CARDS ===== */
+    #initiatives { background: var(--clr-off-white); padding: 7rem 0 8rem; }
+    .init-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; margin-top: 3.5rem; }
+    .init-card { background: #fff; box-shadow: 0 2px 24px rgba(30,42,110,.07); overflow: hidden; transition: transform .22s, box-shadow .22s; }
+    .init-card:hover { transform: translateY(-6px); box-shadow: 0 12px 48px rgba(30,42,110,.13); }
+    .init-card-top { height: 6px; background: var(--grad-brand-h); }
+    .init-card-body { padding: 1.8rem 2rem 2rem; }
+    .init-icon { width: 46px; height: 46px; background: var(--grad-brand); display: flex; align-items: center; justify-content: center; margin-bottom: 1.1rem; }
+    .init-icon svg { width: 20px; height: 20px; fill: #fff; }
+    .init-card h3 { font-family: var(--font-display); font-size: 1.45rem; font-weight: 700; color: var(--clr-blue-deep); line-height: 1.2; margin-bottom: .6rem; }
+    .init-card p { font-size: .85rem; color: var(--clr-muted); line-height: 1.8; }
+    .init-tag { display: inline-block; margin-top: 1.1rem; font-size: .62rem; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; padding: .28rem .72rem; background: rgba(192,33,60,.1); color: var(--clr-crimson); border: 1px solid rgba(192,33,60,.25); }
+
+    /* ===== SPOTLIGHT ARTICLE ===== */
+    #spotlight { background: var(--clr-light); padding: 7rem 0 8rem; }
+    .spotlight-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: start; }
+    .spotlight-copy { position: sticky; top: calc(var(--nav-h) + 2rem); }
+    .quote-block { margin-top: 2rem; padding: 1.6rem 1.8rem; border-left: 3px solid var(--clr-crimson); background: rgba(192,33,60,.05); }
+    .quote-block p { font-family: var(--font-display); font-size: 1.1rem; font-style: italic; font-weight: 600; color: var(--clr-blue-deep); line-height: 1.6; }
+    .article-cols { display: flex; flex-direction: column; gap: 1.8rem; }
+    .article-block { }
+    .article-block h4 { font-family: var(--font-display); font-size: 1.2rem; font-weight: 700; color: var(--clr-blue-deep); margin-bottom: .5rem; }
+    .article-block p { font-size: .87rem; color: var(--clr-muted); line-height: 1.85; }
+
+    /* ===== DISASTER RELIEF ===== */
+    #disaster { background: var(--clr-dark); padding: 7rem 0 8rem; position: relative; overflow: hidden; }
+    #disaster::before { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(30,42,110,.4) 0%, rgba(107,61,181,.3) 50%, rgba(192,33,60,.35) 100%); pointer-events: none; }
+    .disaster-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; position: relative; z-index: 1; }
+    .disaster-copy .eyebrow { color: rgba(255,255,255,.5); }
+    .disaster-copy .section-h2 { color: #fff; }
+    .disaster-copy .section-body { color: rgba(255,255,255,.6); margin-top: .6rem; }
+    .need-items { display: grid; grid-template-columns: 1fr 1fr; gap: .9rem; margin-top: 2rem; }
+    .need-item { display: flex; align-items: center; gap: .7rem; font-size: .83rem; color: rgba(255,255,255,.65); padding: .9rem 1rem; background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.08); }
+    .need-item svg { width: 18px; height: 18px; fill: var(--clr-crimson); flex-shrink: 0; }
+    .disaster-bank { background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.1); padding: 2.2rem 2.4rem; position: relative; }
+    .disaster-bank::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px; background: var(--grad-brand-h); }
+    .disaster-bank h4 { font-family: var(--font-display); font-size: 1.3rem; font-weight: 700; color: #fff; margin-bottom: 1.2rem; }
+    .bank-row { display: flex; justify-content: space-between; align-items: flex-start; padding: .55rem 0; border-bottom: 1px solid rgba(255,255,255,.07); font-size: .82rem; }
+    .bank-row:last-of-type { border-bottom: none; }
+    .bank-label { color: rgba(255,255,255,.4); font-weight: 600; letter-spacing: .06em; text-transform: uppercase; font-size: .72rem; }
+    .bank-value { color: rgba(255,255,255,.75); font-weight: 600; text-align: right; }
+    .disaster-contacts { margin-top: 1.6rem; display: flex; flex-direction: column; gap: .5rem; }
+    .dc-row { display: flex; align-items: center; gap: .6rem; font-size: .83rem; color: rgba(255,255,255,.6); }
+    .dc-row svg { width: 14px; height: 14px; fill: var(--clr-crimson); flex-shrink: 0; }
+    .dc-row a { color: rgba(255,255,255,.75); }
+    .disaster-credit { margin-top: 1.4rem; padding-top: 1.2rem; border-top: 1px solid rgba(255,255,255,.1); display: flex; justify-content: space-between; flex-wrap: wrap; gap: .5rem; font-size: .72rem; color: rgba(255,255,255,.35); font-style: italic; }
+
+    /* ===== COMMUNITY OUTREACH ===== */
+    #outreach { background: var(--clr-off-white); padding: 7rem 0 8rem; }
+    .outreach-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: start; }
+    .outreach-panel { background: var(--clr-dark); padding: 2.8rem; position: relative; overflow: hidden; }
+    .outreach-panel::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px; background: var(--grad-brand-h); }
+    .outreach-panel .event-badge { display: inline-flex; align-items: center; gap: .5rem; margin-bottom: 1.4rem; font-size: .64rem; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; padding: .32rem .82rem; background: rgba(192,33,60,.2); color: #e05470; border: 1px solid rgba(192,33,60,.35); }
+    .outreach-panel h3 { font-family: var(--font-display); font-size: 1.9rem; font-weight: 700; color: #fff; line-height: 1.15; margin-bottom: 1rem; }
+    .outreach-panel .announce { font-family: var(--font-display); font-size: 1rem; font-style: italic; color: rgba(255,255,255,.65); line-height: 1.7; margin-bottom: 1.6rem; }
+    .event-detail { display: flex; align-items: flex-start; gap: .7rem; margin-bottom: .75rem; font-size: .84rem; color: rgba(255,255,255,.6); }
+    .event-detail svg { width: 15px; height: 15px; fill: var(--clr-crimson); flex-shrink: 0; margin-top: .2rem; }
+    .event-detail strong { color: rgba(255,255,255,.85); }
+    .outreach-panel .tagline { margin-top: 1.8rem; padding: 1.2rem 1.4rem; background: rgba(255,255,255,.05); border-left: 3px solid var(--clr-crimson); font-size: .82rem; font-style: italic; color: rgba(255,255,255,.5); }
+
+    /* ===== BACK TO SCHOOL ===== */
+    #backtoschool { background: var(--clr-light); padding: 7rem 0 8rem; }
+    .bts-layout { display: grid; grid-template-columns: 1fr 2fr; gap: 5rem; align-items: start; }
+    .bts-meta { position: sticky; top: calc(var(--nav-h) + 2rem); }
+    .bts-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
+    .bts-card { background: #fff; padding: 1.6rem 1.8rem; box-shadow: 0 2px 20px rgba(30,42,110,.06); border-bottom: 3px solid transparent; transition: border-color .22s, transform .2s; }
+    .bts-card:hover { border-bottom-color: var(--clr-crimson); transform: translateY(-4px); }
+    .bts-card .bc-icon { width: 40px; height: 40px; background: var(--grad-brand); display: flex; align-items: center; justify-content: center; margin-bottom: .9rem; }
+    .bts-card .bc-icon svg { width: 17px; height: 17px; fill: #fff; }
+    .bts-card h4 { font-family: var(--font-display); font-size: 1.1rem; font-weight: 700; color: var(--clr-blue-deep); margin-bottom: .3rem; }
+    .bts-card p { font-size: .82rem; color: var(--clr-muted); line-height: 1.75; }
+
+    /* ===== DONATE CTA ===== */
+    #donate-cta { background: var(--clr-dark); padding: 6rem 0; text-align: center; }
+    .donate-cta-inner { max-width: 680px; margin-inline: auto; }
+    .donate-cta-inner .eyebrow { color: rgba(255,255,255,.45); }
+    .donate-cta-inner .section-h2 { color: #fff; margin-bottom: .5rem; }
+    .donate-cta-inner .section-body { color: rgba(255,255,255,.55); margin-top: .6rem; }
+    .cta-btns { display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap; margin-top: 2.4rem; }
+    .btn-solid { font-size: .72rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; padding: .78rem 2rem; background: var(--grad-brand-h); color: #fff; transition: opacity .2s; }
+    .btn-solid:hover { opacity: .87; }
+    .btn-outline-light { font-size: .72rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; padding: .78rem 2rem; border: 1.5px solid rgba(255,255,255,.3); color: #fff; transition: background .2s, border-color .2s; }
+    .btn-outline-light:hover { background: rgba(255,255,255,.1); border-color: rgba(255,255,255,.7); opacity: 1; }
+
+    /* FOOTER */
+    footer { background: var(--clr-dark); color: rgba(255,255,255,.55); padding: 5rem 0 2.5rem; }
+    .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 4rem; padding-bottom: 3.5rem; border-bottom: 1px solid rgba(255,255,255,.08); }
+    .f-wordmark { font-family: var(--font-display); font-size: 1.8rem; font-weight: 700; background: var(--grad-brand-h); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; display: block; margin-bottom: .2rem; }
+    .f-sub { font-size: .58rem; font-weight: 700; letter-spacing: .22em; text-transform: uppercase; color: rgba(255,255,255,.3); display: block; margin-bottom: 1rem; }
+    .f-tagline { font-size: .83rem; color: rgba(255,255,255,.4); line-height: 1.8; max-width: 310px; }
+    .f-social { display: flex; gap: .55rem; margin-top: 1.5rem; }
+    .s-btn { width: 36px; height: 36px; border: 1px solid rgba(255,255,255,.16); display: flex; align-items: center; justify-content: center; transition: background .2s, border-color .2s; }
+    .s-btn:hover { background: var(--grad-brand); border-color: transparent; opacity: 1; }
+    .s-btn svg { width: 14px; height: 14px; fill: rgba(255,255,255,.7); }
+    .footer-col h5 { font-size: .64rem; font-weight: 700; letter-spacing: .22em; text-transform: uppercase; background: var(--grad-brand-h); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 1.2rem; }
+    .footer-col ul { list-style: none; }
+    .footer-col ul li { margin-bottom: .55rem; font-size: .8rem; color: rgba(255,255,255,.45); }
+    .footer-col ul li a:hover { color: rgba(255,255,255,.9); opacity: 1; }
+    .footer-bottom { padding-top: 2.2rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
+    .f-copy { font-size: .73rem; color: rgba(255,255,255,.26); letter-spacing: .05em; }
+
+    /* REVEAL */
+    .reveal { opacity: 0; transform: translateY(26px); transition: opacity .7s ease, transform .7s ease; }
+    .reveal.in { opacity: 1; transform: none; }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(22px); } to { opacity: 1; transform: none; } }
+
+    /* RESPONSIVE */
+    @media (max-width: 960px) {
+      .spotlight-layout  { grid-template-columns: 1fr; }
+      .spotlight-copy    { position: static; }
+      .disaster-layout   { grid-template-columns: 1fr; }
+      .outreach-layout   { grid-template-columns: 1fr; }
+      .bts-layout        { grid-template-columns: 1fr; }
+      .bts-meta          { position: static; }
+      .footer-grid       { grid-template-columns: 1fr 1fr; }
+      .footer-brand      { grid-column: 1 / -1; }
+      .slider-wrap       { aspect-ratio: 16/9; }
+    }
+    @media (max-width: 640px) {
+      :root { --nav-h: 70px; }
+      .main-nav  { display: none; }
+      .hamburger { display: flex; }
+      .bts-cards { grid-template-columns: 1fr; }
+      .need-items { grid-template-columns: 1fr; }
+      .footer-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+      .footer-bottom { flex-direction: column; text-align: center; }
+      .slide-caption { padding: 1rem 1.4rem; }
+      .slider-wrap { aspect-ratio: 4/3; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- BANNER -->
+  <div id="banner">
+    Help us serve Jamaica &nbsp;|&nbsp;
+    <a href="https://www.twcministries.net/Pages/Donations/twc-ministries-foreign-account.html" target="_blank">Donate to our charities &rarr;</a>
+    <button class="banner-x" onclick="this.parentElement.style.display='none'" aria-label="Dismiss">&times;</button>
+  </div>
+
+  <!-- TOPBAR -->
+  <header id="topbar" class="transparent">
+    <div class="topbar-inner">
+      <a href="/" class="logo" aria-label="TWC Ministries Home">
+        <img class="logo-img" src="https://www.twcministries.net/church_photos/Image1-transparent.gif" alt="Transformational Worship Centre logo"
+          onerror="this.style.display='none'; document.querySelector('.logo-fallback').style.display='flex';">
+        <span class="logo-fallback">
+          <span class="logo-wordmark">TWC</span>
+          <span class="logo-sub">Transformational Worship Centre</span>
+        </span>
+      </a>
+      <nav class="main-nav" aria-label="Primary">
+        <a href="https://www.twcministries.net"        class="nav-link">Home</a>
+        <a href="/Pages/About/About.html"              class="nav-link">About</a>
+        <a href="/Pages/Connect/Connect.html"          class="nav-link">Connect</a>
+        <a href="/Pages/Charities/Charities.html"      class="nav-link">Charities</a>
+        <a href="/Pages/Events/Events.html"            class="nav-link">Events</a>
+        <a href="/Pages/Live/Live.html"                class="nav-link active">Watch Live</a>
+        <a href="https://www.twcministries.net/Pages/Donations/twc-ministries-foreign-account.html" target="_blank" class="nav-donate">Donate</a>
+      </nav>
+      <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Mobile Drawer -->
+  <nav id="drawer" aria-hidden="true" aria-label="Mobile navigation">
+    <a href="https://www.twcministries.net"        class="drawer-link">Home</a>
+    <a href="/Pages/About/About.html"              class="drawer-link">About</a>
+    <a href="/Pages/Connect/Connect.html"          class="drawer-link">Connect</a>
+    <a href="/Pages/Charities/Charities.html"      class="drawer-link">Charities</a>
+    <a href="/Pages/Events/Events.html"            class="drawer-link">Events</a>
+    <a href="/Pages/Live/Live.html"                class="drawer-link">Watch Live</a>
+    <a href="https://www.twcministries.net/Pages/Donations/twc-ministries-foreign-account.html" target="_blank" class="drawer-donate">&#9829; Donate &rarr;</a>
+  </nav>
+
+  <main>
+
+    <!-- HERO -->
+    <section id="hero" aria-label="Charities hero">
+      <div class="hero-bg" role="img" aria-label="TWC charity work"></div>
+      <div class="hero-overlay"></div>
+      <div class="hero-tint"></div>
+      <div class="hero-content">
+        <span class="hero-eyebrow">TWC Ministries</span>
+        <h1 class="hero-h1">
+          Charity &amp;
+          <em>Outreach</em>
+        </h1>
+        <p class="hero-sub">Being the hands and feet of God in Spanish Town, Jamaica, and beyond.</p>
+      </div>
+    </section>
+
+    <!-- PHOTO / VIDEO SLIDER -->
+    <section id="slider-section" aria-label="Charity photo gallery">
+      <div class="slider-wrap" id="sliderWrap">
+
+        <!-- Slides are built from the charity_photos directory.
+             Filenames follow the pattern TWC uses on the server. -->
+        <div class="slide active" data-caption="Street Feeding — Spanish Town">
+          <img src="https://www.twcministries.net/Pages/church_photos/charity_photos/street_feeding1.jpg"
+               onerror="this.src='https://www.twcministries.net/church_photos/hero.jpg'"
+               alt="TWC Street Feeding Spanish Town" loading="lazy">
+          <div class="slide-overlay"></div>
+          <div class="slide-caption"><span class="caption-text">Street Feeding &mdash; Spanish Town</span></div>
+        </div>
+
+        <div class="slide" data-caption="Volunteers loading meals">
+          <img src="https://www.twcministries.net/Pages/church_photos/charity_photos/street_feeding2.jpg"
+               onerror="this.src='https://www.twcministries.net/church_photos/hero.jpg'"
+               alt="TWC volunteers loading meals" loading="lazy">
+          <div class="slide-overlay"></div>
+          <div class="slide-caption"><span class="caption-text">Volunteers loading meals</span></div>
+        </div>
+
+        <div class="slide" data-caption="Meal preparation">
+          <img src="https://www.twcministries.net/Pages/church_photos/charity_photos/street_feeding3.jpg"
+               onerror="this.src='https://www.twcministries.net/church_photos/hero.jpg'"
+               alt="TWC meal preparation" loading="lazy">
+          <div class="slide-overlay"></div>
+          <div class="slide-caption"><span class="caption-text">Meal preparation</span></div>
+        </div>
+
+        <div class="slide" data-caption="Serving the community">
+          <img src="https://www.twcministries.net/Pages/church_photos/charity_photos/street_feeding4.jpg"
+               onerror="this.src='https://www.twcministries.net/church_photos/hero.jpg'"
+               alt="Serving the community" loading="lazy">
+          <div class="slide-overlay"></div>
+          <div class="slide-caption"><span class="caption-text">Serving the community</span></div>
+        </div>
+
+        <div class="slide" data-caption="Hurricane Disaster Relief Drive">
+          <img src="https://www.twcministries.net/Pages/church_photos/charity_photos/disaster_relief1.jpg"
+               onerror="this.src='https://www.twcministries.net/church_photos/hero.jpg'"
+               alt="Hurricane Disaster Relief" loading="lazy">
+          <div class="slide-overlay"></div>
+          <div class="slide-caption"><span class="caption-text">Hurricane Disaster Relief Drive</span></div>
+        </div>
+
+        <div class="slide" data-caption="Community Outreach — Rock of Hope Manor">
+          <img src="https://www.twcministries.net/Pages/church_photos/charity_photos/community_outreach1.jpg"
+               onerror="this.src='https://www.twcministries.net/church_photos/hero.jpg'"
+               alt="Community Outreach Rock of Hope Manor" loading="lazy">
+          <div class="slide-overlay"></div>
+          <div class="slide-caption"><span class="caption-text">Community Outreach &mdash; Rock of Hope Manor</span></div>
+        </div>
+
+        <div class="slide" data-caption="Back-to-School Drive">
+          <img src="https://www.twcministries.net/Pages/church_photos/charity_photos/back_to_school1.jpg"
+               onerror="this.src='https://www.twcministries.net/church_photos/hero.jpg'"
+               alt="Back to School Drive" loading="lazy">
+          <div class="slide-overlay"></div>
+          <div class="slide-caption"><span class="caption-text">Back-to-School Drive</span></div>
+        </div>
+
+        <div class="slide" data-caption="Back-to-School — supplies distributed">
+          <img src="https://www.twcministries.net/Pages/church_photos/charity_photos/back_to_school2.jpg"
+               onerror="this.src='https://www.twcministries.net/church_photos/hero.jpg'"
+               alt="Back to School supplies" loading="lazy">
+          <div class="slide-overlay"></div>
+          <div class="slide-caption"><span class="caption-text">Back-to-School &mdash; supplies distributed</span></div>
+        </div>
+
+        <!-- Arrow controls -->
+        <button class="slider-arrow prev" id="sliderPrev" aria-label="Previous slide">
+          <svg viewBox="0 0 320 512"><path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l192 192c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L77.3 256 246.6 86.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-192 192z"/></svg>
+        </button>
+        <button class="slider-arrow next" id="sliderNext" aria-label="Next slide">
+          <svg viewBox="0 0 320 512"><path d="M310.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-192 192c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L242.7 256 73.4 86.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l192 192z"/></svg>
+        </button>
+      </div>
+
+      <!-- Dots -->
+      <div class="slider-controls" id="sliderDots"></div>
+    </section>
+
+    <!-- INITIATIVE OVERVIEW CARDS -->
+    <section id="initiatives" aria-labelledby="init-h">
+      <div class="container">
+        <div style="text-align:center; max-width:640px; margin-inline:auto;" class="reveal">
+          <span class="eyebrow">Our Work</span>
+          <h2 class="section-h2" id="init-h">Serving with Love, Faith &amp; Dedication</h2>
+          <div class="grad-line" style="margin-inline:auto;"></div>
+          <p class="section-body">From feeding the homeless to rebuilding after disasters, TWC Charity answers the call to be God's hands and feet in the community.</p>
+        </div>
+
+        <div class="init-grid">
+
+          <div class="init-card reveal">
+            <div class="init-card-top"></div>
+            <div class="init-card-body">
+              <div class="init-icon">
+                <svg viewBox="0 0 512 512"><path d="M0 192c0-35.3 28.7-64 64-64c.5 0 1.1 0 1.6 0C73 91.5 105.3 64 144 64c15 0 29 4.4 40.6 12C198.1 49.5 225.5 32 256 32s57.9 17.5 71.4 44C339 68.4 353 64 368 64c38.7 0 71 27.5 78.4 64c.5 0 1.1 0 1.6 0c35.3 0 64 28.7 64 64c0 11.7-3.1 22.6-8.6 32H8.6C3.1 214.6 0 203.7 0 192zm0 91.4C0 268.3 12.3 256 27.4 256H484.6c15.1 0 27.4 12.3 27.4 27.4c0 70.5-44.4 130.7-106.7 154.1L403.5 452c-2 16-15.6 28-31.8 28H140.3c-16.1 0-29.8-12-31.8-28l-1.8-14.4C44.4 414.1 0 353.9 0 283.4z"/></svg>
+              </div>
+              <h3>Street Feeding</h3>
+              <p>Regular street feeding drives in Spanish Town bring hot meals, warmth, and dignity to the homeless and vulnerable in our community.</p>
+              <span class="init-tag">Active Programme</span>
+            </div>
+          </div>
+
+          <div class="init-card reveal" style="transition-delay:.1s">
+            <div class="init-card-top"></div>
+            <div class="init-card-body">
+              <div class="init-icon">
+                <svg viewBox="0 0 640 512"><path d="M96 64c0-17.7 14.3-32 32-32H448h64c70.7 0 128 57.3 128 128s-57.3 128-128 128H480c0 53-43 96-96 96H192c-53 0-96-43-96-96V64zM480 256h32c35.3 0 64-28.7 64-64s-28.7-64-64-64H480V256zM32 416H544c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32z"/></svg>
+              </div>
+              <h3>Hurricane Disaster Relief</h3>
+              <p>When Hurricane Melissa struck Jamaica, TWC mobilised a Disaster Relief Drive collecting food, water, hygiene items, clothing, and financial aid for affected families.</p>
+              <span class="init-tag">Relief Drive</span>
+            </div>
+          </div>
+
+          <div class="init-card reveal" style="transition-delay:.2s">
+            <div class="init-card-top"></div>
+            <div class="init-card-body">
+              <div class="init-icon">
+                <svg viewBox="0 0 640 512"><path d="M96 128a128 128 0 1 1 256 0A128 128 0 1 1 96 128zM0 482.3C0 383.8 79.8 304 178.3 304h91.4C368.2 304 448 383.8 448 482.3c0 16.4-13.3 29.7-29.7 29.7H29.7C13.3 512 0 498.7 0 482.3zM609.3 512H471.4c5.4-9.4 8.6-20.3 8.6-32v-8c0-60.7-27.1-115.2-69.8-151.8c2.4-.1 4.7-.2 7.1-.2h61.4C567.8 320 640 392.2 640 481.3c0 17-13.8 30.7-30.7 30.7zM432 256c-31 0-59-12.6-79.3-32.9C372.4 196.5 384 163.6 384 128c0-26.8-6.6-52.1-18.3-74.3C384.3 40.1 407.2 32 432 32c61.9 0 112 50.1 112 112s-50.1 112-112 112z"/></svg>
+              </div>
+              <h3>Community Outreach</h3>
+              <p>TWC visits elderly care homes, hospitals, and community centres to extend care, prayer, and practical support to those who need it most.</p>
+              <span class="init-tag">Ongoing</span>
+            </div>
+          </div>
+
+          <div class="init-card reveal" style="transition-delay:.3s">
+            <div class="init-card-top"></div>
+            <div class="init-card-body">
+              <div class="init-icon">
+                <svg viewBox="0 0 512 512"><path d="M160 96a96 96 0 1 1 192 0A96 96 0 1 1 160 96zm80 152V512l-48.4-24.2c-20.9-10.4-43.5-17-66.8-19.3l-96-9.6C12.5 457.2 0 443.5 0 427V224c0-17.7 14.3-32 32-32H62.3c63.6 0 125.6 19.6 177.7 56zm32 264V248c52.1-36.4 114.1-56 177.7-56H480c17.7 0 32 14.3 32 32V427c0 16.5-12.5 30.2-28.8 31.9l-96 9.6c-23.2 2.3-45.9 8.9-66.8 19.3L272 512z"/></svg>
+              </div>
+              <h3>Back-to-School Drive</h3>
+              <p>Each year TWC equips children from low-income families with school supplies, uniforms, and bags so they can start the academic year with confidence and dignity.</p>
+              <span class="init-tag">Annual Drive</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- SPOTLIGHT ARTICLE (Community spotlight Dec 2025) -->
+    <section id="spotlight" aria-labelledby="spotlight-h">
+      <div class="container">
+        <div class="spotlight-layout">
+
+          <div class="spotlight-copy reveal">
+            <span class="eyebrow">TWC Magazine &mdash; 14.12.25</span>
+            <h2 class="section-h2" id="spotlight-h">TWC's Community<br>Spotlight</h2>
+            <div class="grad-line"></div>
+            <p class="section-body">A special report on the December 2025 Street Feeding in Spanish Town &mdash; a day that showed the true heart of TWC Charity.</p>
+            <div class="quote-block">
+              <p>"It was truly amazing to witness the joy and hope that a simple act of kindness could bring."</p>
+            </div>
+          </div>
+
+          <div class="article-cols reveal" style="transition-delay:.15s">
+            <div class="article-block">
+              <h4>A Mission of Compassion</h4>
+              <p>TWC Charity's street feeding in Spanish Town was a powerful expression of love and service to the homeless community. Volunteers came together with one purpose: to help those in need. The atmosphere was filled with warmth as meals were shared, conversations were had, and eager faces lit up with gratitude.</p>
+            </div>
+            <div class="article-block">
+              <h4>Gratitude for Dedicated Servants</h4>
+              <p>This meaningful outreach would not have been possible without the strong leadership of the TWC Charity leader and the unwavering support of the committee members. Heartfelt thanks go out to every volunteer, donor, and supporter who contributed their time, resources, and effort. Each person played an important role, and their selfless service reflected true unity and compassion in action.</p>
+            </div>
+            <div class="article-block">
+              <h4>Giving God the Glory</h4>
+              <p>Above all, we give God all the glory for making this event a success. We believe this is God's work, and we are honored to be His hands and feet in the community. The experience has left us eager and excited to do it again, continuing to serve with love, faith, and dedication as we answer the call to help those in need.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- DISASTER RELIEF -->
+    <section id="disaster" aria-labelledby="disaster-h">
+      <div class="container">
+        <div class="disaster-layout">
+
+          <div class="disaster-copy reveal">
+            <span class="eyebrow">Emergency Response</span>
+            <h2 class="section-h2" id="disaster-h">Hurricane<br>Disaster Relief</h2>
+            <div class="grad-line"></div>
+            <p class="section-body">Hurricane Melissa left many families in Jamaica homeless and without food, water, or shelter. TWC Ministries organised a Disaster Relief Drive to bring help and hope to those affected.</p>
+            <p class="section-body" style="margin-top:.8rem;">We are seeking local and overseas donors and partners. Every gift counts.</p>
+            <div class="need-items">
+              <div class="need-item">
+                <svg viewBox="0 0 512 512"><path d="M0 192c0-35.3 28.7-64 64-64c.5 0 1.1 0 1.6 0C73 91.5 105.3 64 144 64c15 0 29 4.4 40.6 12C198.1 49.5 225.5 32 256 32s57.9 17.5 71.4 44C339 68.4 353 64 368 64c38.7 0 71 27.5 78.4 64c.5 0 1.1 0 1.6 0c35.3 0 64 28.7 64 64c0 11.7-3.1 22.6-8.6 32H8.6C3.1 214.6 0 203.7 0 192zm0 91.4C0 268.3 12.3 256 27.4 256H484.6c15.1 0 27.4 12.3 27.4 27.4c0 70.5-44.4 130.7-106.7 154.1L403.5 452c-2 16-15.6 28-31.8 28H140.3c-16.1 0-29.8-12-31.8-28l-1.8-14.4C44.4 414.1 0 353.9 0 283.4z"/></svg>
+                Food &amp; Water
+              </div>
+              <div class="need-item">
+                <svg viewBox="0 0 512 512"><path d="M512 80c8.8 0 16 7.2 16 16l0 32L48 128l0-32c0-8.8 7.2-16 16-16l448 0zm16 144l0 192c0 8.8-7.2 16-16 16L64 432c-8.8 0-16-7.2-16-16l0-192 480 0z"/></svg>
+                Financial Aid
+              </div>
+              <div class="need-item">
+                <svg viewBox="0 0 448 512"><path d="M160 112c0-35.3 28.7-64 64-64s64 28.7 64 64v48H160V112zm-48 48H48c-26.5 0-48 21.5-48 48v32c0 8.8 7.2 16 16 16h416c8.8 0 16-7.2 16-16V208c0-26.5-21.5-48-48-48H336V112C336 50.1 285.9 0 224 0S112 50.1 112 112v48zM0 320v128c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V320H0z"/></svg>
+                Hygiene &amp; Baby Items
+              </div>
+              <div class="need-item">
+                <svg viewBox="0 0 640 512"><path d="M96 64c0-17.7 14.3-32 32-32H448h64c70.7 0 128 57.3 128 128s-57.3 128-128 128H480c0 53-43 96-96 96H192c-53 0-96-43-96-96V64zM480 256h32c35.3 0 64-28.7 64-64s-28.7-64-64-64H480V256z"/></svg>
+                Clothing &amp; Bedding
+              </div>
+            </div>
+          </div>
+
+          <div class="disaster-bank reveal" style="transition-delay:.15s">
+            <h4>Donate via Bank Transfer</h4>
+            <div class="bank-row"><span class="bank-label">Bank</span><span class="bank-value">Scotiabank</span></div>
+            <div class="bank-row"><span class="bank-label">Account Name</span><span class="bank-value">TWC Ministries</span></div>
+            <div class="bank-row"><span class="bank-label">Branch</span><span class="bank-value">Spanish Town</span></div>
+            <div class="bank-row"><span class="bank-label">Account Number</span><span class="bank-value">602619</span></div>
+            <div class="bank-row"><span class="bank-label">Account Type</span><span class="bank-value">Chequing Account</span></div>
+            <div class="bank-row"><span class="bank-label">Currency</span><span class="bank-value">JMD</span></div>
+
+            <div class="disaster-contacts">
+              <div class="dc-row">
+                <svg viewBox="0 0 512 512"><path d="M164.9 24.6c-7.7-18.6-28-28.5-47.4-23.2l-88 24C12.1 30.2 0 46 0 64C0 311.4 200.6 512 448 512c18 0 33.8-12.1 38.6-29.5l24-88c5.3-19.4-4.6-39.7-23.2-47.4l-96-40c-16.3-6.8-35.2-2.1-46.3 11.6L304.7 368C234.3 334.7 177.3 277.7 144 207.3L193.3 167c13.7-11.2 18.4-30 11.6-46.3l-40-96z"/></svg>
+                <a href="tel:+18763246884">+1 (876) 324-6884</a> &nbsp;/&nbsp; <a href="tel:+18762276525">876-227-6525</a>
+              </div>
+              <div class="dc-row">
+                <svg viewBox="0 0 512 512"><path d="M48 64C21.5 64 0 85.5 0 112c0 15.1 7.1 29.3 19.2 38.4L236.8 313.6c11.4 8.5 27 8.5 38.4 0L492.8 150.4c12.1-9.1 19.2-23.3 19.2-38.4c0-26.5-21.5-48-48-48L48 64zM0 176L0 384c0 35.3 28.7 64 64 64l384 0c35.3 0 64-28.7 64-64l0-208L294.4 339.2c-22.8 17.1-54 17.1-76.8 0L0 176z"/></svg>
+                <a href="mailto:twccentre@gmail.com">twccentre@gmail.com</a>
+              </div>
+            </div>
+            <div class="disaster-credit">
+              <span>Pastor Miguel N. Graham, JP, MO</span>
+              <span>Charity Leader: Marsha Shaw-Ellis</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- COMMUNITY OUTREACH -->
+    <section id="outreach" aria-labelledby="outreach-h">
+      <div class="container">
+        <div class="outreach-layout">
+
+          <div class="reveal">
+            <span class="eyebrow">Community Outreach</span>
+            <h2 class="section-h2" id="outreach-h">Caring for the<br>Most Vulnerable</h2>
+            <div class="grad-line"></div>
+            <p class="section-body">
+              TWC Ministries extends its arms beyond the church walls to visit elderly care homes,
+              bring donations, and share the love of Christ with those who are often forgotten.
+            </p>
+            <p class="section-body" style="margin-top:.9rem;">
+              Church family members and partners are always welcome to join these outreach visits.
+              Together we make a meaningful impact in the lives of others.
+            </p>
+          </div>
+
+          <div class="outreach-panel reveal" style="transition-delay:.15s">
+            <span class="event-badge">
+              <svg style="width:12px;height:12px;fill:#e05470" viewBox="0 0 448 512"><path d="M152 24c0-13.3-10.7-24-24-24s-24 10.7-24 24V64H48C21.5 64 0 85.5 0 112v16 48V448c0 26.5 21.5 48 48 48H400c26.5 0 48-21.5 48-48V176 128 112c0-26.5-21.5-48-48-48H344V24c0-13.3-10.7-24-24-24s-24 10.7-24 24V64H152V24z"/></svg>
+              Past Event
+            </span>
+            <h3>Rock of Hope<br>Residential Manor</h3>
+            <p class="announce">
+              TWC Ministries was pleased to make a special donation to Rock of Hope Residential Manor,
+              an elderly care home, extending care and support to the residents and staff.
+            </p>
+            <div class="event-detail">
+              <svg viewBox="0 0 448 512"><path d="M152 24c0-13.3-10.7-24-24-24s-24 10.7-24 24V64H48C21.5 64 0 85.5 0 112v16 48V448c0 26.5 21.5 48 48 48H400c26.5 0 48-21.5 48-48V176 128 112c0-26.5-21.5-48-48-48H344V24c0-13.3-10.7-24-24-24s-24 10.7-24 24V64H152V24z"/></svg>
+              <span><strong>Date:</strong> Friday, February 20, 2026</span>
+            </div>
+            <div class="event-detail">
+              <svg viewBox="0 0 384 512"><path d="M215.7 499.2C267 435 384 279.4 384 192C384 86 298 0 192 0S0 86 0 192c0 87.4 117 243 168.3 307.2c12.3 15.3 35.1 15.3 47.4 0zM192 128a64 64 0 1 1 0 128 64 64 0 1 1 0-128z"/></svg>
+              <span><strong>Location:</strong> Lot 48 Bellevue Heights, St. Catherine</span>
+            </div>
+            <p class="tagline">"Thank you for being a part of our mission to make a meaningful impact in the lives of others."</p>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- BACK TO SCHOOL -->
+    <section id="backtoschool" aria-labelledby="bts-h">
+      <div class="container">
+        <div class="bts-layout">
+
+          <div class="bts-meta reveal">
+            <span class="eyebrow">Annual Initiative</span>
+            <h2 class="section-h2" id="bts-h">Back-to-School<br>Drive</h2>
+            <div class="grad-line"></div>
+            <p class="section-body">
+              Every year, TWC Charities equips children from low-income families with everything
+              they need to start school with confidence. No child should miss out on education
+              because of what they lack.
+            </p>
+          </div>
+
+          <div class="bts-cards reveal" style="transition-delay:.15s">
+
+            <div class="bts-card">
+              <div class="bc-icon"><svg viewBox="0 0 512 512"><path d="M160 96a96 96 0 1 1 192 0A96 96 0 1 1 160 96zm80 152V512l-48.4-24.2c-20.9-10.4-43.5-17-66.8-19.3l-96-9.6C12.5 457.2 0 443.5 0 427V224c0-17.7 14.3-32 32-32H62.3c63.6 0 125.6 19.6 177.7 56zm32 264V248c52.1-36.4 114.1-56 177.7-56H480c17.7 0 32 14.3 32 32V427c0 16.5-12.5 30.2-28.8 31.9l-96 9.6c-23.2 2.3-45.9 8.9-66.8 19.3L272 512z"/></svg></div>
+              <h4>School Supplies</h4>
+              <p>Notebooks, pens, pencils, rulers, and all the tools children need to learn and thrive in the classroom.</p>
+            </div>
+
+            <div class="bts-card">
+              <div class="bc-icon"><svg viewBox="0 0 448 512"><path d="M349.4 44.6c5.9-13.7 1.5-29.7-10.6-38.5s-28.6-8-39.9 1.8l-256 224c-10 8.8-13.6 22.9-8.9 35.3S50.7 288 64 288H175.5L98.6 467.4c-5.9 13.7-1.5 29.7 10.6 38.5s28.6 8 39.9-1.8l256-224c10-8.8 13.6-22.9 8.9-35.3s-16.6-20.7-30-20.7H272.5L349.4 44.6z"/></svg></div>
+              <h4>School Bags</h4>
+              <p>Durable backpacks so every child can carry their books and supplies with pride on their first day of school.</p>
+            </div>
+
+            <div class="bts-card">
+              <div class="bc-icon"><svg viewBox="0 0 512 512"><path d="M258.6 0c-1.7 0-3.4 .1-5.1 .5L100 32H96C60.7 32 32 60.7 32 96V448c0 35.3 28.7 64 64 64H416c35.3 0 64-28.7 64-64V96c0-35.3-28.7-64-64-64H261.3C260.4 .1 259.5 0 258.6 0zM304 168c0 8.8-7.2 16-16 16H224c-8.8 0-16-7.2-16-16s7.2-16 16-16h64c8.8 0 16 7.2 16 16zm0 80c0 8.8-7.2 16-16 16H224c-8.8 0-16-7.2-16-16s7.2-16 16-16h64c8.8 0 16 7.2 16 16zm0 80c0 8.8-7.2 16-16 16H224c-8.8 0-16-7.2-16-16s7.2-16 16-16h64c8.8 0 16 7.2 16 16z"/></svg></div>
+              <h4>Uniforms</h4>
+              <p>School uniforms provided so children can attend school looking their best, removing the stigma of poverty from the classroom.</p>
+            </div>
+
+            <div class="bts-card">
+              <div class="bc-icon"><svg viewBox="0 0 512 512"><path d="M512 80c8.8 0 16 7.2 16 16l0 32L48 128l0-32c0-8.8 7.2-16 16-16l448 0zm16 144l0 192c0 8.8-7.2 16-16 16L64 432c-8.8 0-16-7.2-16-16l0-192 480 0z"/></svg></div>
+              <h4>How to Give</h4>
+              <p>Donate supplies, funds, or your time. Contact us at <a href="mailto:twccentre@gmail.com" style="color:var(--clr-crimson)">twccentre@gmail.com</a> or <a href="tel:+18763246884" style="color:var(--clr-crimson)">1 (876) 324-6884</a> to get involved.</p>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- DONATE CTA -->
+    <section id="donate-cta">
+      <div class="container">
+        <div class="donate-cta-inner reveal">
+          <span class="eyebrow">Make a Difference</span>
+          <h2 class="section-h2">Your Gift Changes Lives</h2>
+          <p class="section-body">
+            Every donation &mdash; no matter how small &mdash; goes directly to feeding families, educating children,
+            and rebuilding communities. Join us in serving Jamaica.
+          </p>
+          <div class="cta-btns">
+            <a href="https://www.twcministries.net/Pages/Donations/twc-ministries-local-account.html" target="_blank" class="btn-solid">Give Locally (JMD)</a>
+            <a href="https://www.twcministries.net/Pages/Donations/twc-ministries-foreign-account.html" target="_blank" class="btn-outline-light">Give from Overseas (USD)</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <span class="f-wordmark">TWC</span>
+          <span class="f-sub">Transformational Worship Centre</span>
+          <p class="f-tagline">A community transformed by the Word, united in Sabbath worship, and empowered to reach the world for God.</p>
+          <div class="f-social">
+            <a href="https://www.facebook.com/TransformCenter" target="_blank" rel="noopener" class="s-btn" aria-label="Facebook"><svg viewBox="0 0 320 512"><path d="M80 299.3V512H196V299.3h86.5l18-97.8H196V166.9c0-51.7 20.3-71.5 72.7-71.5c16.3 0 29.4 .4 37 1.2V7.9C291.4 4 256.4 0 236.2 0C129.3 0 80 50.5 80 159.4v42.1H14v97.8H80z"/></svg></a>
+            <a href="https://www.instagram.com/twc_Ministries" target="_blank" rel="noopener" class="s-btn" aria-label="Instagram"><svg viewBox="0 0 448 512"><path d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9s51.3 114.9 114.9 114.9S339 319.5 339 255.9 287.7 141 224.1 141zm0 189.6c-41.1 0-74.7-33.5-74.7-74.7s33.5-74.7 74.7-74.7 74.7 33.5 74.7 74.7-33.6 74.7-74.7 74.7zm146.4-194.3c0 14.9-12 26.8-26.8 26.8-14.9 0-26.8-12-26.8-26.8s12-26.8 26.8-26.8 26.8 12 26.8 26.8zm76.1 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.4 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9 1.7 35.9 9.9 67.7 36.2 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.8 0-184.8zM398.8 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5-9 132.1-9s102.7-2.6 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1z"/></svg></a>
+            <a href="https://www.tiktok.com/@twc_fam" target="_blank" rel="noopener" class="s-btn" aria-label="TikTok"><svg viewBox="0 0 448 512"><path d="M448 209.9a210.1 210.1 0 0 1 -122.8-39.3V349.4A162.6 162.6 0 1 1 185 188.3V278.2a74.6 74.6 0 1 0 52.2 71.2V0l88 0a121.2 121.2 0 0 0 1.9 22.2h0A122.2 122.2 0 0 0 381 102.4a121.4 121.4 0 0 0 67 20.1z"/></svg></a>
+          </div>
+        </div>
+        <div class="footer-col">
+          <h5>Navigate</h5>
+          <ul>
+            <li><a href="https://www.twcministries.net">Home</a></li>
+            <li><a href="/Pages/About/About.html">About TWC</a></li>
+            <li><a href="/Pages/Charities/Charities.html">Charities</a></li>
+            <li><a href="/Pages/Events/Events.html">Events</a></li>
+            <li><a href="/Pages/Live/Live.html">Watch Live</a></li>
+            <li><a href="https://www.twcministries.net/Pages/Donations/twc-ministries-foreign-account.html" target="_blank">Donate</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>Connect</h5>
+          <ul>
+            <li><a href="/Connect/connect.html">Connect</a></li>
+            <li><a href="https://meet.google.com/tve-ymrn-yta" target="_blank">Sabbath Service Online</a></li>
+            <li><a href="https://meet.google.com/kau-rihj-mrs" target="_blank">Bible Studies Online</a></li>
+            <li><a href="mailto:twccentre@gmail.com">Email Us</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p class="f-copy">&copy; 2026 Transformational Worship Centre &mdash; TWC Ministries. All rights reserved.</p>
+        <p class="f-copy">Worshipping on the Sabbath &mdash; Every Saturday.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    /* NAV */
+    const topbar = document.getElementById('topbar');
+    const banner = document.getElementById('banner');
+    function syncNav() {
+      const bh = (banner && banner.style.display !== 'none') ? banner.offsetHeight : 0;
+      topbar.style.top = bh + 'px';
+      topbar.classList.toggle('solid',       window.scrollY > 80);
+      topbar.classList.toggle('transparent', window.scrollY <= 80);
+    }
+    syncNav();
+    window.addEventListener('scroll', syncNav, { passive: true });
+    window.addEventListener('resize', syncNav);
+    const ham = document.getElementById('hamburger');
+    const drawer = document.getElementById('drawer');
+    ham.addEventListener('click', () => {
+      const open = ham.classList.toggle('open');
+      drawer.classList.toggle('open', open);
+      ham.setAttribute('aria-expanded', open);
+      drawer.setAttribute('aria-hidden', !open);
+    });
+    drawer.querySelectorAll('a').forEach(a => a.addEventListener('click', () => { ham.classList.remove('open'); drawer.classList.remove('open'); }));
+
+    /* SCROLL REVEAL */
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+    }, { threshold: 0.08 });
+    document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+    /* SLIDER */
+    const slides   = Array.from(document.querySelectorAll('.slide'));
+    const dotsWrap = document.getElementById('sliderDots');
+    let current = 0;
+    let timer;
+
+    // Build dots
+    slides.forEach((_, i) => {
+      const dot = document.createElement('button');
+      dot.className = 'slider-dot' + (i === 0 ? ' active' : '');
+      dot.setAttribute('aria-label', 'Go to slide ' + (i + 1));
+      dot.addEventListener('click', () => goTo(i));
+      dotsWrap.appendChild(dot);
+    });
+
+    function goTo(n) {
+      slides[current].classList.remove('active');
+      dotsWrap.children[current].classList.remove('active');
+      current = (n + slides.length) % slides.length;
+      slides[current].classList.add('active');
+      dotsWrap.children[current].classList.add('active');
+      resetTimer();
+    }
+
+    function resetTimer() {
+      clearInterval(timer);
+      timer = setInterval(() => goTo(current + 1), 5000);
+    }
+
+    document.getElementById('sliderPrev').addEventListener('click', () => goTo(current - 1));
+    document.getElementById('sliderNext').addEventListener('click', () => goTo(current + 1));
+
+    // Pause on hover
+    document.getElementById('sliderWrap').addEventListener('mouseenter', () => clearInterval(timer));
+    document.getElementById('sliderWrap').addEventListener('mouseleave', resetTimer);
+
+    // Touch swipe
+    let touchStartX = 0;
+    document.getElementById('sliderWrap').addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, { passive: true });
+    document.getElementById('sliderWrap').addEventListener('touchend', e => {
+      const dx = e.changedTouches[0].clientX - touchStartX;
+      if (Math.abs(dx) > 40) goTo(dx < 0 ? current + 1 : current - 1);
+    });
+
+    resetTimer();
+  </script>
+</body>
+</html>

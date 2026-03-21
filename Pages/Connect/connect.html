@@ -4,684 +4,320 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Connect | Transformational Worship Centre</title>
-  <meta name="description" content="Connect with TWC Ministries — find us, reach out, and book your One-on-One Spiritual Development session.">
-
+  <meta name="description" content="Connect with TWC Ministries &mdash; find us, reach out, and book your One-on-One Spiritual Development session.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
   <style>
-    :root {
-      --clr-blue-deep:  #1e2a6e;
-      --clr-blue-mid:   #3b3fa0;
-      --clr-purple:     #6b3db5;
-      --clr-crimson:    #c0213c;
-      --grad-brand:     linear-gradient(135deg, #1e2a6e 0%, #6b3db5 50%, #c0213c 100%);
-      --grad-brand-h:   linear-gradient(90deg,  #1e2a6e 0%, #6b3db5 50%, #c0213c 100%);
-      --clr-off-white:  #f7f5f2;
-      --clr-light:      #ede9e4;
-      --clr-dark:       #131228;
-      --clr-text:       #1c1c2e;
-      --clr-muted:      #5a5870;
-      --font-display:   'Cormorant Garamond', Georgia, serif;
-      --font-body:      'DM Sans', sans-serif;
-      --container-w:    1160px;
-      --nav-h:          84px;
-    }
-
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
-    body { font-family: var(--font-body); background: var(--clr-off-white); color: var(--clr-text); line-height: 1.7; overflow-x: hidden; }
-    a { color: inherit; text-decoration: none; transition: opacity .2s; }
-    a:hover { opacity: .72; }
-    img { display: block; max-width: 100%; }
-    .container { width: min(var(--container-w), 100% - 2.5rem); margin-inline: auto; }
-
-    /* BANNER */
-    #banner {
-      background: var(--grad-brand-h); color: #fff; text-align: center;
-      padding: .6rem 3rem .6rem 1rem; font-size: .76rem; font-weight: 600;
-      letter-spacing: .1em; text-transform: uppercase; position: relative; z-index: 1100;
-    }
-    #banner a { text-decoration: underline; }
-    .banner-x {
-      position: absolute; right: 1.2rem; top: 50%; transform: translateY(-50%);
-      background: none; border: none; color: rgba(255,255,255,.7); font-size: 1.15rem; cursor: pointer; line-height: 1;
-    }
-    .banner-x:hover { color: #fff; }
-
-    /* TOPBAR */
-    #topbar {
-      position: fixed; left: 0; width: 100%; height: var(--nav-h);
-      display: flex; align-items: center; padding-inline: 2.5rem;
-      z-index: 1000; transition: background .35s, box-shadow .35s;
-    }
-    #topbar.transparent { background: linear-gradient(to bottom, rgba(19,18,40,.78) 0%, transparent 100%); }
-    #topbar.solid { background: var(--clr-dark); box-shadow: 0 2px 32px rgba(0,0,0,.5); }
-    .topbar-inner { width: 100%; display: flex; align-items: center; justify-content: space-between; }
-    .logo { display: flex; align-items: center; gap: .7rem; }
-    .logo-img { height: 50px; width: auto; }
-    .logo-fallback { display: none; flex-direction: column; line-height: 1.1; }
-    .logo-wordmark {
-      font-family: var(--font-display); font-weight: 700; font-size: 1.7rem;
-      background: var(--grad-brand-h); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-    }
-    .logo-sub { font-size: .56rem; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; color: rgba(255,255,255,.55); }
-    .main-nav { display: flex; align-items: center; gap: 1.75rem; }
-    .nav-link {
-      font-size: .73rem; font-weight: 600; letter-spacing: .14em; text-transform: uppercase;
-      color: rgba(255,255,255,.85); position: relative; padding-block: .3rem;
-    }
-    .nav-link::after {
-      content: ''; position: absolute; bottom: -2px; left: 0;
-      width: 0; height: 2px; background: var(--grad-brand-h); transition: width .25s;
-    }
-    .nav-link:hover { opacity: 1; }
-    .nav-link:hover::after, .nav-link.active::after { width: 100%; }
-    .nav-donate {
-      font-size: .72rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase;
-      padding: .55rem 1.4rem; background: var(--grad-brand-h); color: #fff !important;
-      position: relative; overflow: hidden; transition: opacity .2s;
-    }
-    .nav-donate::before { content: ''; position: absolute; inset: 0; background: rgba(255,255,255,.14); opacity: 0; transition: opacity .2s; }
-    .nav-donate:hover { opacity: 1; }
-    .nav-donate:hover::before { opacity: 1; }
-    .hamburger { display: none; flex-direction: column; gap: 5px; background: none; border: none; cursor: pointer; padding: .4rem; }
-    .hamburger span { display: block; width: 24px; height: 2px; background: #fff; transition: transform .25s, opacity .2s; }
-    .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
-    .hamburger.open span:nth-child(2) { opacity: 0; }
-    .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
-    #drawer {
-      position: fixed; top: var(--nav-h); left: 0; right: 0; background: var(--clr-dark);
-      border-top: 1px solid rgba(255,255,255,.08); padding: 1.5rem 2rem 2rem;
-      transform: translateY(-110%); transition: transform .35s cubic-bezier(.4,0,.2,1); z-index: 999;
-    }
-    #drawer.open { transform: translateY(0); }
-    .drawer-link {
-      display: block; color: rgba(255,255,255,.8); font-size: .8rem; font-weight: 600;
-      letter-spacing: .12em; text-transform: uppercase; padding: .78rem 0; border-bottom: 1px solid rgba(255,255,255,.08);
-    }
-    .drawer-donate {
-      display: block; margin-top: 1rem; text-align: center; background: var(--grad-brand-h);
-      color: #fff !important; padding: .78rem; font-weight: 700; font-size: .76rem; letter-spacing: .14em; text-transform: uppercase;
-    }
-
+    :root{--clr-blue-deep:#1e2a6e;--clr-crimson:#c0213c;--grad-brand:linear-gradient(135deg,#1e2a6e 0%,#6b3db5 50%,#c0213c 100%);--grad-brand-h:linear-gradient(90deg,#1e2a6e 0%,#6b3db5 50%,#c0213c 100%);--clr-off-white:#f7f5f2;--clr-light:#ede9e4;--clr-dark:#131228;--clr-text:#1c1c2e;--clr-muted:#5a5870;--font-display:"Cormorant Garamond",Georgia,serif;--font-body:"DM Sans",sans-serif;--container-w:1160px;--nav-h:84px}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{font-family:var(--font-body);background:var(--clr-off-white);color:var(--clr-text);line-height:1.7;overflow-x:hidden}
+    a{color:inherit;text-decoration:none;transition:opacity .2s}
+    a:hover{opacity:.72}
+    img{display:block;max-width:100%}
+    .container{width:min(var(--container-w),100% - 2.5rem);margin-inline:auto}
+    #banner{background:var(--grad-brand-h);color:#fff;text-align:center;padding:.6rem 3rem .6rem 1rem;font-size:.76rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;position:relative;z-index:1100}
+    #banner a{text-decoration:underline}
+    .banner-x{position:absolute;right:1.2rem;top:50%;transform:translateY(-50%);background:none;border:none;color:rgba(255,255,255,.7);font-size:1.15rem;cursor:pointer;line-height:1}
+    #topbar{position:fixed;left:0;width:100%;height:var(--nav-h);display:flex;align-items:center;padding-inline:2.5rem;z-index:1000;transition:background .35s,box-shadow .35s}
+    #topbar.transparent{background:linear-gradient(to bottom,rgba(19,18,40,.78) 0%,transparent 100%)}
+    #topbar.solid{background:var(--clr-dark);box-shadow:0 2px 32px rgba(0,0,0,.5)}
+    .topbar-inner{width:100%;display:flex;align-items:center;justify-content:space-between}
+    .logo{display:flex;align-items:center;gap:.7rem}
+    .logo-img{height:50px;width:auto}
+    .logo-fallback{display:none;flex-direction:column;line-height:1.1}
+    .logo-wordmark{font-family:var(--font-display);font-weight:700;font-size:1.7rem;background:var(--grad-brand-h);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+    .logo-sub{font-size:.56rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.55)}
+    .main-nav{display:flex;align-items:center;gap:1.75rem}
+    .nav-link{font-size:.73rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.85);position:relative;padding-block:.3rem}
+    .nav-link::after{content:"";position:absolute;bottom:-2px;left:0;width:0;height:2px;background:var(--grad-brand-h);transition:width .25s}
+    .nav-link:hover{opacity:1}
+    .nav-link:hover::after,.nav-link.active::after{width:100%}
+    .nav-donate{font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:.55rem 1.4rem;background:var(--grad-brand-h);color:#fff !important;position:relative;overflow:hidden;transition:opacity .2s}
+    .nav-donate:hover{opacity:1}
+    .hamburger{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:.4rem}
+    .hamburger span{display:block;width:24px;height:2px;background:#fff;transition:transform .25s,opacity .2s}
+    .hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+    .hamburger.open span:nth-child(2){opacity:0}
+    .hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+    #drawer{position:fixed;top:var(--nav-h);left:0;right:0;background:var(--clr-dark);border-top:1px solid rgba(255,255,255,.08);padding:1.5rem 2rem 2rem;transform:translateY(-110%);transition:transform .35s cubic-bezier(.4,0,.2,1);z-index:999}
+    #drawer.open{transform:translateY(0)}
+    .drawer-link{display:block;color:rgba(255,255,255,.8);font-size:.8rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;padding:.78rem 0;border-bottom:1px solid rgba(255,255,255,.08)}
+    .drawer-donate{display:block;margin-top:1rem;text-align:center;background:var(--grad-brand-h);color:#fff !important;padding:.78rem;font-weight:700;font-size:.76rem;letter-spacing:.14em;text-transform:uppercase}
     /* HERO */
-    #hero {
-      position: relative; height: 62vh; min-height: 460px;
-      display: flex; align-items: center; justify-content: center; text-align: center; overflow: hidden;
-    }
-    .hero-bg {
-      position: absolute; inset: 0;
-      background-image: url('https://www.twcministries.net/church_photos/hero.jpg');
-      background-size: cover; background-position: center 35%;
-      animation: zoomBg 22s ease-in-out infinite alternate;
-    }
-    @keyframes zoomBg { from { transform: scale(1.06); } to { transform: scale(1); } }
-    .hero-overlay { position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(19,18,40,.6) 0%, rgba(19,18,40,.85) 100%); }
-    .hero-tint { position: absolute; inset: 0; background: linear-gradient(135deg, rgba(30,42,110,.28) 0%, transparent 55%, rgba(192,33,60,.18) 100%); }
-    .hero-content { position: relative; z-index: 2; max-width: 820px; padding-inline: 1.5rem; }
-    .hero-eyebrow {
-      display: inline-flex; align-items: center; gap: .65rem;
-      font-size: .68rem; font-weight: 700; letter-spacing: .28em; text-transform: uppercase;
-      color: rgba(255,255,255,.6); margin-bottom: 1.1rem; animation: fadeUp .8s ease both;
-    }
-    .hero-eyebrow::before, .hero-eyebrow::after { content: ''; display: block; width: 28px; height: 1px; background: rgba(255,255,255,.3); }
-    .hero-h1 {
-      font-family: var(--font-display); font-size: clamp(3rem, 9vw, 6.5rem);
-      font-weight: 700; color: #fff; line-height: 1; text-transform: uppercase;
-      animation: fadeUp .9s .1s ease both;
-    }
-    .hero-h1 em {
-      display: block; font-style: normal;
-      background: var(--grad-brand-h); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-    }
-    .hero-sub {
-      margin-top: 1.2rem; font-size: 1rem; font-weight: 300; color: rgba(255,255,255,.72);
-      animation: fadeUp .9s .2s ease both;
-    }
-
+    #hero{position:relative;height:62vh;min-height:460px;display:flex;align-items:center;justify-content:center;text-align:center;overflow:hidden}
+    .hero-bg{position:absolute;inset:0;background-image:url("https://www.twcministries.net/church_photos/hero.jpg");background-size:cover;background-position:center 35%;animation:zoomBg 22s ease-in-out infinite alternate}
+    @keyframes zoomBg{from{transform:scale(1.06)}to{transform:scale(1)}}
+    .hero-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(19,18,40,.6) 0%,rgba(19,18,40,.85) 100%)}
+    .hero-tint{position:absolute;inset:0;background:linear-gradient(135deg,rgba(30,42,110,.28) 0%,transparent 55%,rgba(192,33,60,.18) 100%)}
+    .hero-content{position:relative;z-index:2;max-width:820px;padding-inline:1.5rem}
+    .hero-eyebrow{display:inline-flex;align-items:center;gap:.65rem;font-size:.68rem;font-weight:700;letter-spacing:.28em;text-transform:uppercase;color:rgba(255,255,255,.6);margin-bottom:1.1rem;animation:fadeUp .8s ease both}
+    .hero-eyebrow::before,.hero-eyebrow::after{content:"";display:block;width:28px;height:1px;background:rgba(255,255,255,.3)}
+    .hero-h1{font-family:var(--font-display);font-size:clamp(3rem,9vw,6.5rem);font-weight:700;color:#fff;line-height:1;text-transform:uppercase;animation:fadeUp .9s .1s ease both}
+    .hero-h1 em{display:block;font-style:normal;background:var(--grad-brand-h);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+    .hero-sub{margin-top:1.2rem;font-size:1rem;font-weight:300;color:rgba(255,255,255,.72);animation:fadeUp .9s .2s ease both}
     /* SHARED */
-    .eyebrow { font-size: .66rem; font-weight: 700; letter-spacing: .26em; text-transform: uppercase; color: var(--clr-crimson); display: block; margin-bottom: .7rem; }
-    .section-h2 { font-family: var(--font-display); font-size: clamp(2rem, 4.5vw, 3rem); font-weight: 700; color: var(--clr-blue-deep); line-height: 1.1; }
-    .grad-line { width: 50px; height: 3px; background: var(--grad-brand-h); margin: 1.1rem 0 1.4rem; }
-    .section-body { font-size: .9rem; color: var(--clr-muted); line-height: 1.85; }
-
-    /* SPIRITUAL DEVELOPMENT SPOTLIGHT */
-    #spiritual { background: var(--clr-dark); padding: 6rem 0; position: relative; overflow: hidden; }
-    #spiritual::before {
-      content: '🙏'; position: absolute; font-size: 22rem; opacity: .04;
-      top: -3rem; right: -1rem; line-height: 1; pointer-events: none;
-    }
-    .spiritual-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; }
-    .spiritual-copy .eyebrow { color: rgba(255,255,255,.45); }
-    .spiritual-copy .section-h2 { color: #fff; }
-    .spiritual-copy .section-body { color: rgba(255,255,255,.6); margin-top: .6rem; }
-    .spiritual-card {
-      background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.1);
-      padding: 2.8rem; position: relative;
-    }
-    .spiritual-card::before {
-      content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px;
-      background: var(--grad-brand-h);
-    }
-    .spiritual-card .pastor-msg {
-      font-family: var(--font-display); font-size: 1.08rem; font-style: italic;
-      font-weight: 600; color: rgba(255,255,255,.8); line-height: 1.75; margin-bottom: 1.8rem;
-    }
-    .spiritual-card .pastor-msg strong {
-      font-style: normal; background: var(--grad-brand-h);
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-    }
-    .book-btn {
-      display: inline-flex; align-items: center; gap: .6rem;
-      padding: .85rem 2rem; background: var(--grad-brand-h);
-      color: #fff !important; font-size: .73rem; font-weight: 700;
-      letter-spacing: .14em; text-transform: uppercase; transition: opacity .2s;
-      width: 100%; justify-content: center; text-align: center;
-    }
-    .book-btn:hover { opacity: .87; }
-    .book-btn svg { width: 16px; height: 16px; fill: #fff; flex-shrink: 0; }
-    .mandatory-tag {
-      display: inline-block; margin-bottom: 1.4rem;
-      font-size: .62rem; font-weight: 700; letter-spacing: .18em; text-transform: uppercase;
-      padding: .3rem .8rem; background: rgba(192,33,60,.22); color: #e05470;
-      border: 1px solid rgba(192,33,60,.35);
-    }
-
-    /* CONTACT CARDS */
-    #contact { background: var(--clr-off-white); padding: 7rem 0 8rem; }
-    .contact-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: start; }
-    .contact-meta { position: sticky; top: calc(var(--nav-h) + 2rem); }
-    .contact-grid { display: flex; flex-direction: column; gap: 1.2rem; }
-    .contact-card {
-      background: #fff; padding: 1.6rem 1.8rem;
-      display: flex; align-items: flex-start; gap: 1.2rem;
-      box-shadow: 0 2px 20px rgba(30,42,110,.06);
-      border-left: 3px solid transparent;
-      transition: border-color .22s, transform .2s, box-shadow .2s;
-    }
-    .contact-card:hover { border-left-color: var(--clr-crimson); transform: translateX(5px); box-shadow: 0 6px 28px rgba(30,42,110,.1); }
-    .cc-icon-sq {
-      width: 44px; height: 44px; flex-shrink: 0;
-      background: var(--grad-brand);
-      display: flex; align-items: center; justify-content: center;
-    }
-    .cc-icon-sq svg { width: 18px; height: 18px; fill: #fff; }
-    .contact-card h4 {
-      font-family: var(--font-display); font-size: .75rem; font-weight: 700;
-      letter-spacing: .12em; text-transform: uppercase; color: var(--clr-blue-deep); margin-bottom: .3rem;
-    }
-    .contact-card p, .contact-card a { font-size: .85rem; color: var(--clr-muted); line-height: 1.7; }
-    .contact-card a:hover { color: var(--clr-crimson); opacity: 1; }
-
-    /* SERVICE TIMES */
-    #services { background: var(--clr-light); padding: 7rem 0 8rem; }
-    .services-layout { display: grid; grid-template-columns: 1fr 2fr; gap: 5rem; align-items: start; }
-    .services-meta { position: sticky; top: calc(var(--nav-h) + 2rem); }
-    .service-cards { display: flex; flex-direction: column; gap: 1.2rem; }
-    .service-card {
-      background: #fff; padding: 1.8rem 2rem;
-      display: flex; align-items: center; gap: 1.6rem;
-      box-shadow: 0 2px 20px rgba(30,42,110,.06);
-      border-bottom: 3px solid transparent;
-      transition: border-color .22s, transform .2s;
-    }
-    .service-card:hover { border-bottom-color: var(--clr-crimson); transform: translateY(-4px); }
-    .sc-icon {
-      width: 52px; height: 52px; flex-shrink: 0;
-      background: var(--grad-brand);
-      display: flex; align-items: center; justify-content: center;
-    }
-    .sc-icon svg { width: 20px; height: 20px; fill: #fff; }
-    .sc-info { flex: 1; }
-    .sc-info h4 {
-      font-family: var(--font-display); font-size: 1.15rem; font-weight: 700;
-      color: var(--clr-blue-deep); margin-bottom: .2rem;
-    }
-    .sc-info p { font-size: .83rem; color: var(--clr-muted); }
-    .sc-time {
-      font-family: var(--font-display); font-size: 1.5rem; font-weight: 700;
-      line-height: 1; text-align: right; flex-shrink: 0;
-      background: var(--grad-brand-h); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-    }
-    .sc-time span { display: block; font-family: var(--font-body); font-size: .6rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--clr-muted); margin-top: .2rem; -webkit-text-fill-color: var(--clr-muted); }
-    .sc-join {
-      display: inline-flex; align-items: center; gap: .4rem; margin-top: .5rem;
-      font-size: .68rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
-      color: var(--clr-crimson);
-    }
-    .sc-join:hover { opacity: .75; }
-
-    /* MAP CTA */
-    #location { background: var(--clr-dark); padding: 5rem 0; }
-    .location-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
-    .location-copy .eyebrow { color: rgba(255,255,255,.45); }
-    .location-copy .section-h2 { color: #fff; }
-    .location-copy .section-body { color: rgba(255,255,255,.55); margin-top: .6rem; }
-    .location-details { margin-top: 1.8rem; display: flex; flex-direction: column; gap: .9rem; }
-    .loc-row { display: flex; align-items: flex-start; gap: .8rem; font-size: .85rem; color: rgba(255,255,255,.55); }
-    .loc-row svg { width: 16px; height: 16px; fill: var(--clr-crimson); flex-shrink: 0; margin-top: .2rem; }
-    .loc-row a { color: rgba(255,255,255,.7); }
-    .loc-row a:hover { color: #fff; opacity: 1; }
-    .map-btn {
-      display: inline-flex; align-items: center; gap: .5rem; margin-top: 1.8rem;
-      padding: .78rem 1.8rem; border: 1.5px solid rgba(255,255,255,.25);
-      color: #fff; font-size: .72rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase;
-      transition: background .2s, border-color .2s;
-    }
-    .map-btn:hover { background: rgba(255,255,255,.1); border-color: rgba(255,255,255,.6); opacity: 1; }
-    .map-btn svg { width: 14px; height: 14px; fill: #fff; }
-    .map-embed { position: relative; padding-top: 56.25%; box-shadow: 0 4px 40px rgba(0,0,0,.4); }
-    .map-embed iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: none; }
-
+    .eyebrow{font-size:.66rem;font-weight:700;letter-spacing:.26em;text-transform:uppercase;color:var(--clr-crimson);display:block;margin-bottom:.7rem}
+    .section-h2{font-family:var(--font-display);font-size:clamp(2rem,4.5vw,3rem);font-weight:700;color:var(--clr-blue-deep);line-height:1.1}
+    .grad-line{width:50px;height:3px;background:var(--grad-brand-h);margin:1.1rem 0 1.4rem}
+    .section-body{font-size:.9rem;color:var(--clr-muted);line-height:1.85}
+    /* SPIRITUAL */
+    #spiritual{background:var(--clr-dark);padding:6rem 0;position:relative;overflow:hidden}
+    .spiritual-layout{display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:center}
+    .spiritual-copy .eyebrow{color:rgba(255,255,255,.45)}
+    .spiritual-copy .section-h2{color:#fff}
+    .spiritual-copy .section-body{color:rgba(255,255,255,.6);margin-top:.6rem}
+    .spiritual-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);padding:2.8rem;position:relative}
+    .spiritual-card::before{content:"";position:absolute;top:0;left:0;width:100%;height:4px;background:var(--grad-brand-h)}
+    .pastor-msg{font-family:var(--font-display);font-size:1.08rem;font-style:italic;font-weight:600;color:rgba(255,255,255,.8);line-height:1.75;margin-bottom:1.8rem}
+    .pastor-msg strong{font-style:normal;background:var(--grad-brand-h);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+    .book-btn{display:inline-flex;align-items:center;gap:.6rem;padding:.85rem 2rem;background:var(--grad-brand-h);color:#fff !important;font-size:.73rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;transition:opacity .2s;width:100%;justify-content:center;text-align:center}
+    .book-btn:hover{opacity:.87}
+    .book-btn svg{width:16px;height:16px;fill:#fff;flex-shrink:0}
+    .mandatory-tag{display:inline-block;margin-bottom:1.4rem;font-size:.62rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;padding:.3rem .8rem;background:rgba(192,33,60,.22);color:#e05470;border:1px solid rgba(192,33,60,.35)}
+    /* CONTACT */
+    #contact{background:var(--clr-off-white);padding:7rem 0 8rem}
+    .contact-layout{display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:start}
+    .contact-meta{position:sticky;top:calc(var(--nav-h) + 2rem)}
+    .contact-grid{display:flex;flex-direction:column;gap:1.2rem}
+    .contact-card{background:#fff;padding:1.6rem 1.8rem;display:flex;align-items:flex-start;gap:1.2rem;box-shadow:0 2px 20px rgba(30,42,110,.06);border-left:3px solid transparent;transition:border-color .22s,transform .2s}
+    .contact-card:hover{border-left-color:var(--clr-crimson);transform:translateX(5px)}
+    .cc-icon-sq{width:44px;height:44px;flex-shrink:0;background:var(--grad-brand);display:flex;align-items:center;justify-content:center}
+    .cc-icon-sq svg{width:18px;height:18px;fill:#fff}
+    .contact-card h4{font-family:var(--font-display);font-size:.75rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--clr-blue-deep);margin-bottom:.3rem}
+    .contact-card p,.contact-card a{font-size:.85rem;color:var(--clr-muted);line-height:1.7}
+    .contact-card a:hover{color:var(--clr-crimson);opacity:1}
+    /* SERVICES */
+    #services{background:var(--clr-light);padding:7rem 0 8rem}
+    .services-layout{display:grid;grid-template-columns:1fr 2fr;gap:5rem;align-items:start}
+    .services-meta{position:sticky;top:calc(var(--nav-h) + 2rem)}
+    .service-cards{display:flex;flex-direction:column;gap:1.2rem}
+    .service-card{background:#fff;padding:1.8rem 2rem;display:flex;align-items:center;gap:1.6rem;box-shadow:0 2px 20px rgba(30,42,110,.06);border-bottom:3px solid transparent;transition:border-color .22s,transform .2s}
+    .service-card:hover{border-bottom-color:var(--clr-crimson);transform:translateY(-4px)}
+    .sc-icon{width:52px;height:52px;flex-shrink:0;background:var(--grad-brand);display:flex;align-items:center;justify-content:center}
+    .sc-icon svg{width:20px;height:20px;fill:#fff}
+    .sc-info{flex:1}
+    .sc-info h4{font-family:var(--font-display);font-size:1.15rem;font-weight:700;color:var(--clr-blue-deep);margin-bottom:.2rem}
+    .sc-info p{font-size:.83rem;color:var(--clr-muted)}
+    .sc-time{font-family:var(--font-display);font-size:1.5rem;font-weight:700;line-height:1;text-align:right;flex-shrink:0;background:var(--grad-brand-h);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+    .sc-time span{display:block;font-family:var(--font-body);font-size:.6rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--clr-muted);margin-top:.2rem;-webkit-text-fill-color:var(--clr-muted)}
+    .sc-join{display:inline-flex;align-items:center;gap:.4rem;margin-top:.5rem;font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--clr-crimson)}
+    /* LOCATION */
+    #location{background:var(--clr-dark);padding:5rem 0}
+    .location-inner{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center}
+    .location-copy .eyebrow{color:rgba(255,255,255,.45)}
+    .location-copy .section-h2{color:#fff}
+    .location-copy .section-body{color:rgba(255,255,255,.55);margin-top:.6rem}
+    .location-details{margin-top:1.8rem;display:flex;flex-direction:column;gap:.9rem}
+    .loc-row{display:flex;align-items:flex-start;gap:.8rem;font-size:.85rem;color:rgba(255,255,255,.55)}
+    .loc-row svg{width:16px;height:16px;fill:var(--clr-crimson);flex-shrink:0;margin-top:.2rem}
+    .loc-row a{color:rgba(255,255,255,.7)}
+    .loc-row a:hover{color:#fff;opacity:1}
+    .map-btn{display:inline-flex;align-items:center;gap:.5rem;margin-top:1.8rem;padding:.78rem 1.8rem;border:1.5px solid rgba(255,255,255,.25);color:#fff;font-size:.72rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;transition:background .2s,border-color .2s}
+    .map-btn:hover{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.6);opacity:1}
+    .map-btn svg{width:14px;height:14px;fill:#fff}
+    .map-embed{position:relative;padding-top:56.25%;box-shadow:0 4px 40px rgba(0,0,0,.4)}
+    .map-embed iframe{position:absolute;inset:0;width:100%;height:100%;border:none}
     /* SOCIAL */
-    #social { background: var(--clr-off-white); padding: 5rem 0; }
-    .social-inner { text-align: center; }
-    .social-inner .section-h2 { margin-bottom: .5rem; }
-    .social-grid { display: flex; justify-content: center; gap: 1.2rem; flex-wrap: wrap; margin-top: 2.4rem; }
-    .social-card {
-      display: flex; align-items: center; gap: .9rem;
-      padding: 1rem 1.6rem; background: #fff;
-      box-shadow: 0 2px 20px rgba(30,42,110,.07);
-      border-bottom: 3px solid transparent;
-      font-size: .8rem; font-weight: 600; color: var(--clr-blue-deep);
-      transition: border-color .22s, transform .2s;
-    }
-    .social-card:hover { border-bottom-color: var(--clr-crimson); transform: translateY(-3px); opacity: 1; }
-    .social-card svg { width: 20px; height: 20px; fill: var(--clr-blue-deep); }
-
+    #social{background:var(--clr-off-white);padding:5rem 0;text-align:center}
+    .social-grid{display:flex;justify-content:center;gap:1.2rem;flex-wrap:wrap;margin-top:2.4rem}
+    .social-card{display:flex;align-items:center;gap:.9rem;padding:1rem 1.6rem;background:#fff;box-shadow:0 2px 20px rgba(30,42,110,.07);border-bottom:3px solid transparent;font-size:.8rem;font-weight:600;color:var(--clr-blue-deep);transition:border-color .22s,transform .2s}
+    .social-card:hover{border-bottom-color:var(--clr-crimson);transform:translateY(-3px);opacity:1}
+    .social-card svg{width:20px;height:20px;fill:var(--clr-blue-deep)}
     /* FOOTER */
-    footer { background: var(--clr-dark); color: rgba(255,255,255,.55); padding: 5rem 0 2.5rem; }
-    .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 4rem; padding-bottom: 3.5rem; border-bottom: 1px solid rgba(255,255,255,.08); }
-    .f-wordmark { font-family: var(--font-display); font-size: 1.8rem; font-weight: 700; background: var(--grad-brand-h); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; display: block; margin-bottom: .2rem; }
-    .f-sub { font-size: .58rem; font-weight: 700; letter-spacing: .22em; text-transform: uppercase; color: rgba(255,255,255,.3); display: block; margin-bottom: 1rem; }
-    .f-tagline { font-size: .83rem; color: rgba(255,255,255,.4); line-height: 1.8; max-width: 310px; }
-    .f-social { display: flex; gap: .55rem; margin-top: 1.5rem; }
-    .s-btn { width: 36px; height: 36px; border: 1px solid rgba(255,255,255,.16); display: flex; align-items: center; justify-content: center; transition: background .2s, border-color .2s; }
-    .s-btn:hover { background: var(--grad-brand); border-color: transparent; opacity: 1; }
-    .s-btn svg { width: 14px; height: 14px; fill: rgba(255,255,255,.7); }
-    .footer-col h5 { font-size: .64rem; font-weight: 700; letter-spacing: .22em; text-transform: uppercase; background: var(--grad-brand-h); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 1.2rem; }
-    .footer-col ul { list-style: none; }
-    .footer-col ul li { margin-bottom: .55rem; font-size: .8rem; color: rgba(255,255,255,.45); }
-    .footer-col ul li a:hover { color: rgba(255,255,255,.9); opacity: 1; }
-    .footer-bottom { padding-top: 2.2rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
-    .f-copy { font-size: .73rem; color: rgba(255,255,255,.26); letter-spacing: .05em; }
-
-    /* SCROLL REVEAL */
-    .reveal { opacity: 0; transform: translateY(26px); transition: opacity .7s ease, transform .7s ease; }
-    .reveal.in { opacity: 1; transform: none; }
-    @keyframes fadeUp { from { opacity: 0; transform: translateY(22px); } to { opacity: 1; transform: none; } }
-
-    /* RESPONSIVE */
-    @media (max-width: 960px) {
-      .spiritual-layout  { grid-template-columns: 1fr; }
-      .contact-layout    { grid-template-columns: 1fr; }
-      .contact-meta      { position: static; }
-      .services-layout   { grid-template-columns: 1fr; }
-      .services-meta     { position: static; }
-      .location-inner    { grid-template-columns: 1fr; }
-      .footer-grid       { grid-template-columns: 1fr 1fr; }
-      .footer-brand      { grid-column: 1 / -1; }
-    }
-    @media (max-width: 640px) {
-      :root { --nav-h: 70px; }
-      .main-nav  { display: none; }
-      .hamburger { display: flex; }
-      .footer-grid { grid-template-columns: 1fr; gap: 2.5rem; }
-      .footer-bottom { flex-direction: column; text-align: center; }
-      .service-card { flex-wrap: wrap; }
-    }
+    footer{background:var(--clr-dark);color:rgba(255,255,255,.55);padding:5rem 0 2.5rem}
+    .footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr;gap:4rem;padding-bottom:3.5rem;border-bottom:1px solid rgba(255,255,255,.08)}
+    .f-wordmark{font-family:var(--font-display);font-size:1.8rem;font-weight:700;background:var(--grad-brand-h);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;display:block;margin-bottom:.2rem}
+    .f-sub{font-size:.58rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:rgba(255,255,255,.3);display:block;margin-bottom:1rem}
+    .f-tagline{font-size:.83rem;color:rgba(255,255,255,.4);line-height:1.8;max-width:310px}
+    .f-social{display:flex;gap:.55rem;margin-top:1.5rem}
+    .s-btn{width:36px;height:36px;border:1px solid rgba(255,255,255,.16);display:flex;align-items:center;justify-content:center;transition:background .2s,border-color .2s}
+    .s-btn:hover{background:var(--grad-brand);border-color:transparent;opacity:1}
+    .s-btn svg{width:14px;height:14px;fill:rgba(255,255,255,.7)}
+    .footer-col h5{font-size:.64rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;background:var(--grad-brand-h);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:1.2rem}
+    .footer-col ul{list-style:none}
+    .footer-col ul li{margin-bottom:.55rem;font-size:.8rem;color:rgba(255,255,255,.45)}
+    .footer-col ul li a:hover{color:rgba(255,255,255,.9);opacity:1}
+    .footer-bottom{padding-top:2.2rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem}
+    .f-copy{font-size:.73rem;color:rgba(255,255,255,.26);letter-spacing:.05em}
+    .reveal{opacity:0;transform:translateY(26px);transition:opacity .7s ease,transform .7s ease}
+    .reveal.in{opacity:1;transform:none}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:none}}
+    @media(max-width:960px){.spiritual-layout,.contact-layout,.location-inner{grid-template-columns:1fr}.contact-meta,.services-meta{position:static}.services-layout{grid-template-columns:1fr}.footer-grid{grid-template-columns:1fr 1fr}.footer-brand{grid-column:1/-1}}
+    @media(max-width:640px){:root{--nav-h:70px}.main-nav{display:none}.hamburger{display:flex}.footer-grid{grid-template-columns:1fr;gap:2.5rem}.footer-bottom{flex-direction:column;text-align:center}}
   </style>
 </head>
 <body>
-
-  <!-- BANNER -->
-  <div id="banner">
-    Book your Spiritual Development session &nbsp;|&nbsp;
-    <a href="https://calendar.app.google/nzdFs5bLRuuc7apq7" target="_blank">Reserve your spot &rarr;</a>
-    <button class="banner-x" onclick="this.parentElement.style.display='none'" aria-label="Dismiss">&times;</button>
-  </div>
-
-  <!-- TOPBAR -->
+  <div id="banner">Book your Spiritual Development session &nbsp;|&nbsp;<a href="https://calendar.app.google/nzdFs5bLRuuc7apq7" target="_blank">Reserve your spot &rarr;</a><button class="banner-x" onclick="this.parentElement.style.display='none'" aria-label="Dismiss">&times;</button></div>
   <header id="topbar" class="transparent">
     <div class="topbar-inner">
-      <a href="/" class="logo" aria-label="TWC Ministries Home">
-        <img class="logo-img" src="https://www.twcministries.net/church_photos/Image1-transparent.gif" alt="Transformational Worship Centre logo"
-          onerror="this.style.display='none'; document.querySelector('.logo-fallback').style.display='flex';">
-        <span class="logo-fallback">
-          <span class="logo-wordmark">TWC</span>
-          <span class="logo-sub">Transformational Worship Centre</span>
-        </span>
+      <a href="https://www.twcministries.net" class="logo" aria-label="TWC Home">
+        <img class="logo-img" src="https://www.twcministries.net/church_photos/Image1-transparent.gif" alt="TWC logo" onerror="this.style.display='none';document.querySelector('.logo-fallback').style.display='flex'">
+        <span class="logo-fallback"><span class="logo-wordmark">TWC</span><span class="logo-sub">Transformational Worship Centre</span></span>
       </a>
-
       <nav class="main-nav" aria-label="Primary">
-        <a href="https://www.twcministries.net"   class="nav-link">Home</a>
-        <a href="/About/About.html"               class="nav-link">About</a>
-        <a href="/Connect/connect.html"           class="nav-link active">Connect</a>
-        <a href="/Charities/charities.html"       class="nav-link">Charities</a>
-        <a href="/Events/events.html"             class="nav-link">Events</a>
-        <a href="/live"                           class="nav-link">Watch Live</a>
-        <a href="live.html#donations"             class="nav-donate">Donate</a>
+        <a href="https://www.twcministries.net"        class="nav-link">Home</a>
+        <a href="/Pages/About/About.html"              class="nav-link">About</a>
+        <a href="/Pages/Connect/Connect.html"          class="nav-link">Connect</a>
+        <a href="/Pages/Charities/Charities.html"      class="nav-link">Charities</a>
+        <a href="/Pages/Events/Events.html"            class="nav-link">Events</a>
+        <a href="/Pages/Live/Live.html"                class="nav-link active">Watch Live</a>
+        <a href="https://www.twcministries.net/Pages/Donations/twc-ministries-foreign-account.html" target="_blank" class="nav-donate">Donate</a>
       </nav>
-
-      <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false">
-        <span></span><span></span><span></span>
-      </button>
+      <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button>
     </div>
   </header>
-
-  <!-- Mobile Drawer -->
   <nav id="drawer" aria-hidden="true" aria-label="Mobile navigation">
-    <a href="https://www.twcministries.net"   class="drawer-link">Home</a>
-    <a href="/About/about.html"               class="drawer-link">About</a>
-    <a href="/Connect/connect.html"           class="drawer-link">Connect</a>
-    <a href="/Charities/charities.html"       class="drawer-link">Charities</a>
-    <a href="/Events/events.html"             class="drawer-link">Events</a>
-    <a href="/live"                           class="drawer-link">Watch Live</a>
-    <a href="live.html#donations"             class="drawer-donate">&#9829; Donate &rarr;</a>
+    <a href="https://www.twcministries.net"        class="drawer-link">Home</a>
+    <a href="/Pages/About/About.html"              class="drawer-link">About</a>
+    <a href="/Pages/Connect/Connect.html"          class="drawer-link">Connect</a>
+    <a href="/Pages/Charities/Charities.html"      class="drawer-link">Charities</a>
+    <a href="/Pages/Events/Events.html"            class="drawer-link">Events</a>
+    <a href="/Pages/Live/Live.html"                class="drawer-link">Watch Live</a>
+    <a href="https://www.twcministries.net/Pages/Donations/twc-ministries-foreign-account.html" target="_blank" class="drawer-donate">&#9829; Donate &rarr;</a>
   </nav>
-
   <main>
-
-    <!-- HERO -->
     <section id="hero" aria-label="Connect hero">
-      <div class="hero-bg" role="img" aria-label="TWC congregation"></div>
-      <div class="hero-overlay"></div>
-      <div class="hero-tint"></div>
+      <div class="hero-bg"></div><div class="hero-overlay"></div><div class="hero-tint"></div>
       <div class="hero-content">
         <span class="hero-eyebrow">Transformational Worship Centre</span>
-        <h1 class="hero-h1">
-          Get
-          <em>Connected</em>
-        </h1>
-        <p class="hero-sub">
-          Whether online or in person &mdash; you belong here. Reach out, show up, and grow with us.
-        </p>
+        <h1 class="hero-h1">Get<em>Connected</em></h1>
+        <p class="hero-sub">Whether online or in person &mdash; you belong here. Reach out, show up, and grow with us.</p>
       </div>
     </section>
 
-    <!-- SPIRITUAL DEVELOPMENT SPOTLIGHT -->
     <section id="spiritual" aria-labelledby="spiritual-h">
       <div class="container">
         <div class="spiritual-layout">
-
           <div class="spiritual-copy reveal">
             <span class="eyebrow">Pastor's Message</span>
             <h2 class="section-h2" id="spiritual-h">One-on-One<br>Spiritual Development</h2>
             <div class="grad-line"></div>
-            <p class="section-body">
-              Our pastor is dedicating personal time to meet with every member of the TWC family.
-              These sessions offer biblical guidance, prayer, and encouragement tailored to
-              where you are on your spiritual journey.
-            </p>
+            <p class="section-body">Our pastor is dedicating personal time to meet with every member of the TWC family. These sessions offer biblical guidance, prayer, and encouragement tailored to where you are on your spiritual journey.</p>
           </div>
-
           <div class="spiritual-card reveal" style="transition-delay:.15s">
             <span class="mandatory-tag">Mandatory for All Members</span>
-            <p class="pastor-msg">
-              "Hi TWC Family! There will be mandatory <strong>One-on-One Spiritual Development</strong>
-              sessions to provide biblical guidance and encouragement on your spiritual journey.
-              This will allow me to meet with all of TWC's members over some time.
-              Book a session using the link below. Looking forward to
-              <strong>growing in faith together!</strong> &#x1F64F;&#x2728;"
-            </p>
+            <p class="pastor-msg">"Hi TWC Family! There will be mandatory <strong>One-on-One Spiritual Development</strong> sessions to provide biblical guidance and encouragement on your spiritual journey. This will allow me to meet with all of TWC's members over some time. Book a session using the link below. Looking forward to <strong>growing in faith together!</strong> &#x1F64F;&#x2728;"</p>
             <a href="https://calendar.app.google/nzdFs5bLRuuc7apq7" target="_blank" rel="noopener" class="book-btn">
               <svg viewBox="0 0 448 512"><path d="M152 24c0-13.3-10.7-24-24-24s-24 10.7-24 24V64H48C21.5 64 0 85.5 0 112v16 48V448c0 26.5 21.5 48 48 48H400c26.5 0 48-21.5 48-48V176 128 112c0-26.5-21.5-48-48-48H344V24c0-13.3-10.7-24-24-24s-24 10.7-24 24V64H152V24z"/></svg>
               Book Your Session Now
             </a>
           </div>
-
         </div>
       </div>
     </section>
 
-    <!-- CONTACT DETAILS -->
     <section id="contact" aria-labelledby="contact-h">
       <div class="container">
         <div class="contact-layout">
-
           <div class="contact-meta reveal">
             <span class="eyebrow">Get In Touch</span>
             <h2 class="section-h2" id="contact-h">We'd Love<br>To Hear From You</h2>
             <div class="grad-line"></div>
-            <p class="section-body">
-              Have a question, prayer request, or just want to introduce yourself?
-              Reach out through any of the channels below &mdash; we are here for you.
-            </p>
+            <p class="section-body">Have a question, prayer request, or just want to introduce yourself? Reach out through any of the channels below &mdash; we are here for you.</p>
           </div>
-
           <div class="contact-grid reveal" style="transition-delay:.15s">
-
             <div class="contact-card">
-              <div class="cc-icon-sq">
-                <svg viewBox="0 0 512 512"><path d="M48 64C21.5 64 0 85.5 0 112c0 15.1 7.1 29.3 19.2 38.4L236.8 313.6c11.4 8.5 27 8.5 38.4 0L492.8 150.4c12.1-9.1 19.2-23.3 19.2-38.4c0-26.5-21.5-48-48-48L48 64zM0 176L0 384c0 35.3 28.7 64 64 64l384 0c35.3 0 64-28.7 64-64l0-208L294.4 339.2c-22.8 17.1-54 17.1-76.8 0L0 176z"/></svg>
-              </div>
-              <div>
-                <h4>Email</h4>
-                <p><a href="mailto:twccentre@gmail.com">twccentre@gmail.com</a></p>
-              </div>
+              <div class="cc-icon-sq"><svg viewBox="0 0 512 512"><path d="M48 64C21.5 64 0 85.5 0 112c0 15.1 7.1 29.3 19.2 38.4L236.8 313.6c11.4 8.5 27 8.5 38.4 0L492.8 150.4c12.1-9.1 19.2-23.3 19.2-38.4c0-26.5-21.5-48-48-48L48 64zM0 176L0 384c0 35.3 28.7 64 64 64l384 0c35.3 0 64-28.7 64-64l0-208L294.4 339.2c-22.8 17.1-54 17.1-76.8 0L0 176z"/></svg></div>
+              <div><h4>Email</h4><p><a href="mailto:twccentre@gmail.com">twccentre@gmail.com</a></p></div>
             </div>
-
             <div class="contact-card">
-              <div class="cc-icon-sq">
-                <svg viewBox="0 0 512 512"><path d="M164.9 24.6c-7.7-18.6-28-28.5-47.4-23.2l-88 24C12.1 30.2 0 46 0 64C0 311.4 200.6 512 448 512c18 0 33.8-12.1 38.6-29.5l24-88c5.3-19.4-4.6-39.7-23.2-47.4l-96-40c-16.3-6.8-35.2-2.1-46.3 11.6L304.7 368C234.3 334.7 177.3 277.7 144 207.3L193.3 167c13.7-11.2 18.4-30 11.6-46.3l-40-96z"/></svg>
-              </div>
-              <div>
-                <h4>Phone</h4>
-                <p><a href="tel:+18763246884">1 (876) 324-6884</a></p>
-              </div>
+              <div class="cc-icon-sq"><svg viewBox="0 0 512 512"><path d="M164.9 24.6c-7.7-18.6-28-28.5-47.4-23.2l-88 24C12.1 30.2 0 46 0 64C0 311.4 200.6 512 448 512c18 0 33.8-12.1 38.6-29.5l24-88c5.3-19.4-4.6-39.7-23.2-47.4l-96-40c-16.3-6.8-35.2-2.1-46.3 11.6L304.7 368C234.3 334.7 177.3 277.7 144 207.3L193.3 167c13.7-11.2 18.4-30 11.6-46.3l-40-96z"/></svg></div>
+              <div><h4>Phone</h4><p><a href="tel:+18763246884">1 (876) 324-6884</a></p></div>
             </div>
-
             <div class="contact-card">
-              <div class="cc-icon-sq">
-                <svg viewBox="0 0 384 512"><path d="M215.7 499.2C267 435 384 279.4 384 192C384 86 298 0 192 0S0 86 0 192c0 87.4 117 243 168.3 307.2c12.3 15.3 35.1 15.3 47.4 0zM192 128a64 64 0 1 1 0 128 64 64 0 1 1 0-128z"/></svg>
-              </div>
-              <div>
-                <h4>Physical Location</h4>
-                <p>
-                  <a href="https://maps.app.goo.gl/D1Q6NEo1CvQj4n8BA" target="_blank">
-                    The Media Room, Innswood High School<br>
-                    Spanish Town, St. Catherine, Jamaica
-                  </a>
-                </p>
-              </div>
+              <div class="cc-icon-sq"><svg viewBox="0 0 384 512"><path d="M215.7 499.2C267 435 384 279.4 384 192C384 86 298 0 192 0S0 86 0 192c0 87.4 117 243 168.3 307.2c12.3 15.3 35.1 15.3 47.4 0zM192 128a64 64 0 1 1 0 128 64 64 0 1 1 0-128z"/></svg></div>
+              <div><h4>Physical Location</h4><p><a href="https://maps.app.goo.gl/D1Q6NEo1CvQj4n8BA" target="_blank">The Media Room, Innswood High School<br>Spanish Town, St. Catherine, Jamaica</a></p></div>
             </div>
-
             <div class="contact-card">
-              <div class="cc-icon-sq">
-                <svg viewBox="0 0 512 512"><path d="M352 256c0 22.2-1.2 43.6-3.3 64H163.3c-2.2-20.4-3.3-41.8-3.3-64s1.2-43.6 3.3-64H348.7c2.2 20.4 3.3 41.8 3.3 64zm28.8-64H503.9c5.3 20.5 8.1 41.9 8.1 64s-2.8 43.5-8.1 64H380.8c2.1-20.6 3.2-42 3.2-64s-1.1-43.4-3.2-64zm112.6-32H376.7c-10-63.9-29.8-117.4-55.3-151.6c78.3 20.7 142 77.5 171.9 151.6zm-149.1 0H167.7c6.1-36.4 15.5-68.6 27-94.7c10.5-23.6 22.2-40.7 33.5-51.5C239.4 3.2 248.7 0 256 0s16.6 3.2 27.8 13.8c11.3 10.8 23 27.9 33.5 51.5c11.6 26 21 58.2 27 94.7zm-209 0H18.6C48.6 85.9 112.2 29.1 190.6 8.4C165.1 42.6 145.3 96.1 135.3 160zM8.1 192H131.2c-2.1 20.6-3.2 42-3.2 64s1.1 43.4 3.2 64H8.1C2.8 299.5 0 278.1 0 256s2.8-43.5 8.1-64zM194.7 446.6c-11.6-26-20.9-58.2-27-94.6H344.3c-6.1 36.4-15.5 68.6-27 94.6c-10.5 23.6-22.2 40.7-33.5 51.5C272.6 508.8 263.3 512 256 512s-16.6-3.2-27.8-13.8c-11.3-10.8-23-27.9-33.5-51.5zM135.3 352c10 63.9 29.8 117.4 55.3 151.6C112.2 482.9 48.6 426.1 18.6 352H135.3zm358.1 0c-30 74.1-93.6 130.9-171.9 151.6c25.5-34.2 45.2-87.7 55.3-151.6H493.4z"/></svg>
-              </div>
-              <div>
-                <h4>Online Services</h4>
-                <p>
-                  <a href="https://meet.google.com/tve-ymrn-yta" target="_blank">Google Meet &mdash; Sabbath Service</a><br>
-                  <a href="https://meet.google.com/kau-rihj-mrs" target="_blank">Google Meet &mdash; Bible Study &amp; Prayer</a>
-                </p>
-              </div>
+              <div class="cc-icon-sq"><svg viewBox="0 0 512 512"><path d="M352 256c0 22.2-1.2 43.6-3.3 64H163.3c-2.2-20.4-3.3-41.8-3.3-64s1.2-43.6 3.3-64H348.7c2.2 20.4 3.3 41.8 3.3 64zm28.8-64H503.9c5.3 20.5 8.1 41.9 8.1 64s-2.8 43.5-8.1 64H380.8c2.1-20.6 3.2-42 3.2-64s-1.1-43.4-3.2-64zm112.6-32H376.7c-10-63.9-29.8-117.4-55.3-151.6c78.3 20.7 142 77.5 171.9 151.6zm-149.1 0H167.7c6.1-36.4 15.5-68.6 27-94.7c10.5-23.6 22.2-40.7 33.5-51.5C239.4 3.2 248.7 0 256 0s16.6 3.2 27.8 13.8c11.3 10.8 23 27.9 33.5 51.5c11.6 26 21 58.2 27 94.7zm-209 0H18.6C48.6 85.9 112.2 29.1 190.6 8.4C165.1 42.6 145.3 96.1 135.3 160zM8.1 192H131.2c-2.1 20.6-3.2 42-3.2 64s1.1 43.4 3.2 64H8.1C2.8 299.5 0 278.1 0 256s2.8-43.5 8.1-64z"/></svg></div>
+              <div><h4>Online Services</h4><p><a href="https://meet.google.com/tve-ymrn-yta" target="_blank">Google Meet &mdash; Sabbath Service</a><br><a href="https://meet.google.com/kau-rihj-mrs" target="_blank">Google Meet &mdash; Bible Study &amp; Prayer</a></p></div>
             </div>
-
           </div>
         </div>
       </div>
     </section>
 
-    <!-- SERVICE TIMES -->
     <section id="services" aria-labelledby="services-h">
       <div class="container">
         <div class="services-layout">
-
           <div class="services-meta reveal">
             <span class="eyebrow">Join Us</span>
             <h2 class="section-h2" id="services-h">Service<br>Times</h2>
             <div class="grad-line"></div>
-            <p class="section-body">
-              All times are Jamaica time (EST). Online services stream via Google Meet &mdash; click any service to join directly.
-            </p>
+            <p class="section-body">All times are Jamaica time (EST). Online services stream via Google Meet &mdash; click any service to join directly.</p>
           </div>
-
           <div class="service-cards reveal" style="transition-delay:.15s">
-
             <div class="service-card">
-              <div class="sc-icon">
-                <svg viewBox="0 0 448 512"><path d="M152 24c0-13.3-10.7-24-24-24s-24 10.7-24 24V64H48C21.5 64 0 85.5 0 112v16 48V448c0 26.5 21.5 48 48 48H400c26.5 0 48-21.5 48-48V176 128 112c0-26.5-21.5-48-48-48H344V24c0-13.3-10.7-24-24-24s-24 10.7-24 24V64H152V24z"/></svg>
-              </div>
-              <div class="sc-info">
-                <h4>Sabbath Worship Service</h4>
-                <p>Every Saturday &mdash; in person &amp; online</p>
-                <a href="https://meet.google.com/tve-ymrn-yta" target="_blank" class="sc-join">
-                  Join online &rarr;
-                </a>
-              </div>
+              <div class="sc-icon"><svg viewBox="0 0 448 512"><path d="M152 24c0-13.3-10.7-24-24-24s-24 10.7-24 24V64H48C21.5 64 0 85.5 0 112v16 48V448c0 26.5 21.5 48 48 48H400c26.5 0 48-21.5 48-48V176 128 112c0-26.5-21.5-48-48-48H344V24c0-13.3-10.7-24-24-24s-24 10.7-24 24V64H152V24z"/></svg></div>
+              <div class="sc-info"><h4>Sabbath Worship Service</h4><p>Every Saturday &mdash; in person &amp; online</p><a href="https://meet.google.com/tve-ymrn-yta" target="_blank" class="sc-join">Join online &rarr;</a></div>
               <div class="sc-time">10:00 AM<span>Saturday</span></div>
             </div>
-
             <div class="service-card">
-              <div class="sc-icon">
-                <svg viewBox="0 0 448 512"><path d="M96 0C43 0 0 43 0 96V416c0 53 43 96 96 96H384h32c17.7 0 32-14.3 32-32s-14.3-32-32-32V384c17.7 0 32-14.3 32-32V32c0-17.7-14.3-32-32-32H384 96zm0 384H352v64H96c-17.7 0-32-14.3-32-32s14.3-32 32-32zm32-240c0-8.8 7.2-16 16-16H336c8.8 0 16 7.2 16 16s-7.2 16-16 16H144c-8.8 0-16-7.2-16-16zm16 48H336c8.8 0 16 7.2 16 16s-7.2 16-16 16H144c-8.8 0-16-7.2-16-16s7.2-16 16-16z"/></svg>
-              </div>
-              <div class="sc-info">
-                <h4>Bible Studies</h4>
-                <p>Every Tuesday &mdash; online via Google Meet</p>
-                <a href="https://meet.google.com/kau-rihj-mrs" target="_blank" class="sc-join">
-                  Join online &rarr;
-                </a>
-              </div>
+              <div class="sc-icon"><svg viewBox="0 0 448 512"><path d="M96 0C43 0 0 43 0 96V416c0 53 43 96 96 96H384h32c17.7 0 32-14.3 32-32s-14.3-32-32-32V384c17.7 0 32-14.3 32-32V32c0-17.7-14.3-32-32-32H384 96zm0 384H352v64H96c-17.7 0-32-14.3-32-32s14.3-32 32-32zm32-240c0-8.8 7.2-16 16-16H336c8.8 0 16 7.2 16 16s-7.2 16-16 16H144c-8.8 0-16-7.2-16-16zm16 48H336c8.8 0 16 7.2 16 16s-7.2 16-16 16H144c-8.8 0-16-7.2-16-16s7.2-16 16-16z"/></svg></div>
+              <div class="sc-info"><h4>Bible Studies</h4><p>Every Tuesday &mdash; online via Google Meet</p><a href="https://meet.google.com/kau-rihj-mrs" target="_blank" class="sc-join">Join online &rarr;</a></div>
               <div class="sc-time">7:30 PM<span>Tuesday</span></div>
             </div>
-
             <div class="service-card">
-              <div class="sc-icon">
-                <svg viewBox="0 0 576 512"><path d="M288 0C129 0 0 103.3 0 232c0 64.4 31.4 122.2 82.1 165.3C73.8 417.2 61.2 432 45.3 442.6C34.7 449.3 29.4 462.2 33.1 474.3S48.6 496 61.3 496c61.5 0 110-25.7 139.5-46.3C217.1 455.8 252.4 464 288 464c159 0 288-103.3 288-232S447 0 288 0zM176 240c-17.7 0-32-14.3-32-32s14.3-32 32-32s32 14.3 32 32s-14.3 32-32 32zm112 0c-17.7 0-32-14.3-32-32s14.3-32 32-32s32 14.3 32 32s-14.3 32-32 32zm112 0c-17.7 0-32-14.3-32-32s14.3-32 32-32s32 14.3 32 32s-14.3 32-32 32z"/></svg>
-              </div>
-              <div class="sc-info">
-                <h4>Prayer Meeting</h4>
-                <p>Every Wednesday &mdash; online via Google Meet</p>
-                <a href="https://meet.google.com/kau-rihj-mrs" target="_blank" class="sc-join">
-                  Join online &rarr;
-                </a>
-              </div>
+              <div class="sc-icon"><svg viewBox="0 0 576 512"><path d="M288 0C129 0 0 103.3 0 232c0 64.4 31.4 122.2 82.1 165.3C73.8 417.2 61.2 432 45.3 442.6C34.7 449.3 29.4 462.2 33.1 474.3S48.6 496 61.3 496c61.5 0 110-25.7 139.5-46.3C217.1 455.8 252.4 464 288 464c159 0 288-103.3 288-232S447 0 288 0z"/></svg></div>
+              <div class="sc-info"><h4>Prayer Meeting</h4><p>Every Wednesday &mdash; online via Google Meet</p><a href="https://meet.google.com/kau-rihj-mrs" target="_blank" class="sc-join">Join online &rarr;</a></div>
               <div class="sc-time">7:30 PM<span>Wednesday</span></div>
             </div>
-
           </div>
         </div>
       </div>
     </section>
 
-    <!-- LOCATION MAP -->
     <section id="location" aria-labelledby="location-h">
       <div class="container">
         <div class="location-inner">
-
           <div class="location-copy reveal">
             <span class="eyebrow">Find Us</span>
             <h2 class="section-h2" id="location-h">Visit Us<br>In Person</h2>
             <div class="grad-line"></div>
             <div class="location-details">
-              <div class="loc-row">
-                <svg viewBox="0 0 384 512"><path d="M215.7 499.2C267 435 384 279.4 384 192C384 86 298 0 192 0S0 86 0 192c0 87.4 117 243 168.3 307.2c12.3 15.3 35.1 15.3 47.4 0zM192 128a64 64 0 1 1 0 128 64 64 0 1 1 0-128z"/></svg>
-                <span>The Media Room, Innswood High School<br>Spanish Town, St. Catherine, Jamaica</span>
-              </div>
-              <div class="loc-row">
-                <svg viewBox="0 0 512 512"><path d="M256 0a256 256 0 1 1 0 512A256 256 0 1 1 256 0zM232 120V256c0 8 4 15.5 10.7 20l96 64c11 7.4 25.9 4.5 33.3-6.5s4.5-25.9-6.5-33.3L280 243.2V120c0-13.3-10.7-24-24-24s-24 10.7-24 24z"/></svg>
-                <span>Every Saturday at <strong style="color:rgba(255,255,255,.8)">10:00 AM</strong></span>
-              </div>
-              <div class="loc-row">
-                <svg viewBox="0 0 512 512"><path d="M164.9 24.6c-7.7-18.6-28-28.5-47.4-23.2l-88 24C12.1 30.2 0 46 0 64C0 311.4 200.6 512 448 512c18 0 33.8-12.1 38.6-29.5l24-88c5.3-19.4-4.6-39.7-23.2-47.4l-96-40c-16.3-6.8-35.2-2.1-46.3 11.6L304.7 368C234.3 334.7 177.3 277.7 144 207.3L193.3 167c13.7-11.2 18.4-30 11.6-46.3l-40-96z"/></svg>
-                <span><a href="tel:+18763246884">1 (876) 324-6884</a></span>
-              </div>
-              <div class="loc-row">
-                <svg viewBox="0 0 512 512"><path d="M48 64C21.5 64 0 85.5 0 112c0 15.1 7.1 29.3 19.2 38.4L236.8 313.6c11.4 8.5 27 8.5 38.4 0L492.8 150.4c12.1-9.1 19.2-23.3 19.2-38.4c0-26.5-21.5-48-48-48L48 64zM0 176L0 384c0 35.3 28.7 64 64 64l384 0c35.3 0 64-28.7 64-64l0-208L294.4 339.2c-22.8 17.1-54 17.1-76.8 0L0 176z"/></svg>
-                <span><a href="mailto:twccentre@gmail.com">twccentre@gmail.com</a></span>
-              </div>
+              <div class="loc-row"><svg viewBox="0 0 384 512"><path d="M215.7 499.2C267 435 384 279.4 384 192C384 86 298 0 192 0S0 86 0 192c0 87.4 117 243 168.3 307.2c12.3 15.3 35.1 15.3 47.4 0zM192 128a64 64 0 1 1 0 128 64 64 0 1 1 0-128z"/></svg><span>The Media Room, Innswood High School<br>Spanish Town, St. Catherine, Jamaica</span></div>
+              <div class="loc-row"><svg viewBox="0 0 512 512"><path d="M256 0a256 256 0 1 1 0 512A256 256 0 1 1 256 0zM232 120V256c0 8 4 15.5 10.7 20l96 64c11 7.4 25.9 4.5 33.3-6.5s4.5-25.9-6.5-33.3L280 243.2V120c0-13.3-10.7-24-24-24s-24 10.7-24 24z"/></svg><span>Every Saturday at <strong style="color:rgba(255,255,255,.8)">10:00 AM</strong></span></div>
+              <div class="loc-row"><svg viewBox="0 0 512 512"><path d="M164.9 24.6c-7.7-18.6-28-28.5-47.4-23.2l-88 24C12.1 30.2 0 46 0 64C0 311.4 200.6 512 448 512c18 0 33.8-12.1 38.6-29.5l24-88c5.3-19.4-4.6-39.7-23.2-47.4l-96-40c-16.3-6.8-35.2-2.1-46.3 11.6L304.7 368C234.3 334.7 177.3 277.7 144 207.3L193.3 167c13.7-11.2 18.4-30 11.6-46.3l-40-96z"/></svg><span><a href="tel:+18763246884">1 (876) 324-6884</a></span></div>
+              <div class="loc-row"><svg viewBox="0 0 512 512"><path d="M48 64C21.5 64 0 85.5 0 112c0 15.1 7.1 29.3 19.2 38.4L236.8 313.6c11.4 8.5 27 8.5 38.4 0L492.8 150.4c12.1-9.1 19.2-23.3 19.2-38.4c0-26.5-21.5-48-48-48L48 64zM0 176L0 384c0 35.3 28.7 64 64 64l384 0c35.3 0 64-28.7 64-64l0-208L294.4 339.2c-22.8 17.1-54 17.1-76.8 0L0 176z"/></svg><span><a href="mailto:twccentre@gmail.com">twccentre@gmail.com</a></span></div>
             </div>
-            <a href="https://maps.app.goo.gl/D1Q6NEo1CvQj4n8BA" target="_blank" rel="noopener" class="map-btn">
-              <svg viewBox="0 0 384 512"><path d="M215.7 499.2C267 435 384 279.4 384 192C384 86 298 0 192 0S0 86 0 192c0 87.4 117 243 168.3 307.2c12.3 15.3 35.1 15.3 47.4 0zM192 128a64 64 0 1 1 0 128 64 64 0 1 1 0-128z"/></svg>
-              Open in Google Maps
-            </a>
+            <a href="https://maps.app.goo.gl/D1Q6NEo1CvQj4n8BA" target="_blank" rel="noopener" class="map-btn"><svg viewBox="0 0 384 512"><path d="M215.7 499.2C267 435 384 279.4 384 192C384 86 298 0 192 0S0 86 0 192c0 87.4 117 243 168.3 307.2c12.3 15.3 35.1 15.3 47.4 0zM192 128a64 64 0 1 1 0 128 64 64 0 1 1 0-128z"/></svg>Open in Google Maps</a>
           </div>
-
           <div class="map-embed reveal" style="transition-delay:.15s">
-            <iframe
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3793.6!2d-76.9!3d17.99!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTfCsDU5JzI0LjAiTiA3NsKwNTQnMDAuMCJX!5e0!3m2!1sen!2sjm!4v1234567890!5m2!1sen!2sjm"
-              allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"
-              title="Innswood High School, Spanish Town, Jamaica">
-            </iframe>
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3793.2!2d-76.9601!3d17.9926!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8eddb100ced4a4c3%3A0x0!2sInnswood+High+School%2C+Spanish+Town%2C+Jamaica!5e0!3m2!1sen!2sjm!4v1234567890" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Innswood High School, Spanish Town, Jamaica"></iframe>
           </div>
-
         </div>
       </div>
     </section>
 
-    <!-- SOCIAL MEDIA -->
     <section id="social">
       <div class="container">
-        <div class="social-inner reveal">
-          <span class="eyebrow">Follow Along</span>
-          <h2 class="section-h2">Find Us on Social Media</h2>
-          <p class="section-body" style="margin-top:.5rem;">Stay updated with worship highlights, announcements, and community moments.</p>
-          <div class="social-grid">
-            <a href="https://www.facebook.com/TransformCenter" target="_blank" rel="noopener" class="social-card">
-              <svg viewBox="0 0 320 512"><path d="M80 299.3V512H196V299.3h86.5l18-97.8H196V166.9c0-51.7 20.3-71.5 72.7-71.5c16.3 0 29.4 .4 37 1.2V7.9C291.4 4 256.4 0 236.2 0C129.3 0 80 50.5 80 159.4v42.1H14v97.8H80z"/></svg>
-              Facebook
-            </a>
-            <a href="https://www.instagram.com/twc_Ministries" target="_blank" rel="noopener" class="social-card">
-              <svg viewBox="0 0 448 512"><path d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9s51.3 114.9 114.9 114.9S339 319.5 339 255.9 287.7 141 224.1 141zm0 189.6c-41.1 0-74.7-33.5-74.7-74.7s33.5-74.7 74.7-74.7 74.7 33.5 74.7 74.7-33.6 74.7-74.7 74.7zm146.4-194.3c0 14.9-12 26.8-26.8 26.8-14.9 0-26.8-12-26.8-26.8s12-26.8 26.8-26.8 26.8 12 26.8 26.8zm76.1 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.4 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9 1.7 35.9 9.9 67.7 36.2 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.8 0-184.8zM398.8 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5-9 132.1-9s102.7-2.6 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1z"/></svg>
-              Instagram
-            </a>
-            <a href="https://www.tiktok.com/@twc_fam" target="_blank" rel="noopener" class="social-card">
-              <svg viewBox="0 0 448 512"><path d="M448 209.9a210.1 210.1 0 0 1 -122.8-39.3V349.4A162.6 162.6 0 1 1 185 188.3V278.2a74.6 74.6 0 1 0 52.2 71.2V0l88 0a121.2 121.2 0 0 0 1.9 22.2h0A122.2 122.2 0 0 0 381 102.4a121.4 121.4 0 0 0 67 20.1z"/></svg>
-              TikTok
-            </a>
-          </div>
+        <span class="eyebrow" style="text-align:center;display:block">Follow Along</span>
+        <h2 class="section-h2" style="text-align:center">Find Us on Social Media</h2>
+        <div class="social-grid reveal">
+          <a href="https://www.facebook.com/TransformCenter" target="_blank" rel="noopener" class="social-card"><svg viewBox="0 0 320 512"><path d="M80 299.3V512H196V299.3h86.5l18-97.8H196V166.9c0-51.7 20.3-71.5 72.7-71.5c16.3 0 29.4 .4 37 1.2V7.9C291.4 4 256.4 0 236.2 0C129.3 0 80 50.5 80 159.4v42.1H14v97.8H80z"/></svg>Facebook</a>
+          <a href="https://www.instagram.com/twc_Ministries" target="_blank" rel="noopener" class="social-card"><svg viewBox="0 0 448 512"><path d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9s51.3 114.9 114.9 114.9S339 319.5 339 255.9 287.7 141 224.1 141zm0 189.6c-41.1 0-74.7-33.5-74.7-74.7s33.5-74.7 74.7-74.7 74.7 33.5 74.7 74.7-33.6 74.7-74.7 74.7zm146.4-194.3c0 14.9-12 26.8-26.8 26.8-14.9 0-26.8-12-26.8-26.8s12-26.8 26.8-26.8 26.8 12 26.8 26.8zm76.1 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.4 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9 1.7 35.9 9.9 67.7 36.2 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.8 0-184.8zM398.8 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5-9 132.1-9s102.7-2.6 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1z"/></svg>Instagram</a>
+          <a href="https://www.tiktok.com/@twc_fam" target="_blank" rel="noopener" class="social-card"><svg viewBox="0 0 448 512"><path d="M448 209.9a210.1 210.1 0 0 1 -122.8-39.3V349.4A162.6 162.6 0 1 1 185 188.3V278.2a74.6 74.6 0 1 0 52.2 71.2V0l88 0a121.2 121.2 0 0 0 1.9 22.2h0A122.2 122.2 0 0 0 381 102.4a121.4 121.4 0 0 0 67 20.1z"/></svg>TikTok</a>
         </div>
       </div>
     </section>
-
   </main>
 
-  <!-- FOOTER -->
   <footer>
     <div class="container">
       <div class="footer-grid">
         <div class="footer-brand">
-          <span class="f-wordmark">TWC</span>
-          <span class="f-sub">Transformational Worship Centre</span>
+          <span class="f-wordmark">TWC</span><span class="f-sub">Transformational Worship Centre</span>
           <p class="f-tagline">A community transformed by the Word, united in Sabbath worship, and empowered to reach the world for God.</p>
           <div class="f-social">
-            <a href="https://www.facebook.com/TransformCenter" target="_blank" rel="noopener" class="s-btn" aria-label="Facebook">
-              <svg viewBox="0 0 320 512"><path d="M80 299.3V512H196V299.3h86.5l18-97.8H196V166.9c0-51.7 20.3-71.5 72.7-71.5c16.3 0 29.4 .4 37 1.2V7.9C291.4 4 256.4 0 236.2 0C129.3 0 80 50.5 80 159.4v42.1H14v97.8H80z"/></svg>
-            </a>
-            <a href="https://www.instagram.com/twc_Ministries" target="_blank" rel="noopener" class="s-btn" aria-label="Instagram">
-              <svg viewBox="0 0 448 512"><path d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9s51.3 114.9 114.9 114.9S339 319.5 339 255.9 287.7 141 224.1 141zm0 189.6c-41.1 0-74.7-33.5-74.7-74.7s33.5-74.7 74.7-74.7 74.7 33.5 74.7 74.7-33.6 74.7-74.7 74.7zm146.4-194.3c0 14.9-12 26.8-26.8 26.8-14.9 0-26.8-12-26.8-26.8s12-26.8 26.8-26.8 26.8 12 26.8 26.8zm76.1 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.4 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9 1.7 35.9 9.9 67.7 36.2 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.8 0-184.8zM398.8 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5-9 132.1-9s102.7-2.6 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1z"/></svg>
-            </a>
-            <a href="https://www.tiktok.com/@twc_fam" target="_blank" rel="noopener" class="s-btn" aria-label="TikTok">
-              <svg viewBox="0 0 448 512"><path d="M448 209.9a210.1 210.1 0 0 1 -122.8-39.3V349.4A162.6 162.6 0 1 1 185 188.3V278.2a74.6 74.6 0 1 0 52.2 71.2V0l88 0a121.2 121.2 0 0 0 1.9 22.2h0A122.2 122.2 0 0 0 381 102.4a121.4 121.4 0 0 0 67 20.1z"/></svg>
-            </a>
+            <a href="https://www.facebook.com/TransformCenter" target="_blank" rel="noopener" class="s-btn" aria-label="Facebook"><svg viewBox="0 0 320 512"><path d="M80 299.3V512H196V299.3h86.5l18-97.8H196V166.9c0-51.7 20.3-71.5 72.7-71.5c16.3 0 29.4 .4 37 1.2V7.9C291.4 4 256.4 0 236.2 0C129.3 0 80 50.5 80 159.4v42.1H14v97.8H80z"/></svg></a>
+            <a href="https://www.instagram.com/twc_Ministries" target="_blank" rel="noopener" class="s-btn" aria-label="Instagram"><svg viewBox="0 0 448 512"><path d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9s51.3 114.9 114.9 114.9S339 319.5 339 255.9 287.7 141 224.1 141zm0 189.6c-41.1 0-74.7-33.5-74.7-74.7s33.5-74.7 74.7-74.7 74.7 33.5 74.7 74.7-33.6 74.7-74.7 74.7zm146.4-194.3c0 14.9-12 26.8-26.8 26.8-14.9 0-26.8-12-26.8-26.8s12-26.8 26.8-26.8 26.8 12 26.8 26.8zm76.1 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.4 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9 1.7 35.9 9.9 67.7 36.2 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.8 0-184.8zM398.8 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5-9 132.1-9s102.7-2.6 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1z"/></svg></a>
+            <a href="https://www.tiktok.com/@twc_fam" target="_blank" rel="noopener" class="s-btn" aria-label="TikTok"><svg viewBox="0 0 448 512"><path d="M448 209.9a210.1 210.1 0 0 1 -122.8-39.3V349.4A162.6 162.6 0 1 1 185 188.3V278.2a74.6 74.6 0 1 0 52.2 71.2V0l88 0a121.2 121.2 0 0 0 1.9 22.2h0A122.2 122.2 0 0 0 381 102.4a121.4 121.4 0 0 0 67 20.1z"/></svg></a>
           </div>
         </div>
-        <div class="footer-col">
-          <h5>Navigate</h5>
-          <ul>
-            <li><a href="https://www.twcministries.net">Home</a></li>
-            <li><a href="/About/About.html">About TWC</a></li>
-            <li><a href="/Charities/charities.html">Charities</a></li>
-            <li><a href="/Events/events.html">Events</a></li>
-            <li><a href="/live">Watch Live</a></li>
-            <li><a href="live.html#donations">Donate</a></li>
-          </ul>
-        </div>
-        <div class="footer-col">
-          <h5>Connect</h5>
-          <ul>
-            <li><a href="/Connect/connect.html">Connect</a></li>
-            <li><a href="https://meet.google.com/tve-ymrn-yta" target="_blank">Sabbath Service Online</a></li>
-            <li><a href="https://meet.google.com/kau-rihj-mrs" target="_blank">Bible Studies Online</a></li>
-            <li><a href="https://meet.google.com/kau-rihj-mrs" target="_blank">Prayer Meeting Online</a></li>
-            <li><a href="mailto:twccentre@gmail.com">Email Us</a></li>
-          </ul>
-        </div>
+        <div class="footer-col"><h5>Navigate</h5><ul><li><a href="https://www.twcministries.net">Home</a></li><li><a href="/Pages/About/About.html">About TWC</a></li><li><a href="/Pages/Charities/Charities.html">Charities</a></li><li><a href="/Pages/Events/Events.html">Events</a></li><li><a href="/Pages/Live/Live.html">Watch Live</a></li><li><a href="/Pages/Live/Live.html#donations">Donate</a></li></ul></div>
+        <div class="footer-col"><h5>Connect</h5><ul><li><a href="/Pages/Connect/Connect.html">Connect</a></li><li><a href="https://meet.google.com/tve-ymrn-yta" target="_blank">Sabbath Service Online</a></li><li><a href="https://meet.google.com/kau-rihj-mrs" target="_blank">Bible Studies Online</a></li><li><a href="mailto:twccentre@gmail.com">Email Us</a></li></ul></div>
       </div>
       <div class="footer-bottom">
         <p class="f-copy">&copy; 2026 Transformational Worship Centre &mdash; TWC Ministries. All rights reserved.</p>
@@ -689,40 +325,15 @@
       </div>
     </div>
   </footer>
-
   <script>
-    const topbar = document.getElementById('topbar');
-    const banner = document.getElementById('banner');
-    function syncNav() {
-      const bh = (banner && banner.style.display !== 'none') ? banner.offsetHeight : 0;
-      topbar.style.top = bh + 'px';
-      topbar.classList.toggle('solid',       window.scrollY > 80);
-      topbar.classList.toggle('transparent', window.scrollY <= 80);
-    }
-    syncNav();
-    window.addEventListener('scroll', syncNav, { passive: true });
-    window.addEventListener('resize', syncNav);
-    const ham = document.getElementById('hamburger');
-    const drawer = document.getElementById('drawer');
-    ham.addEventListener('click', () => {
-      const open = ham.classList.toggle('open');
-      drawer.classList.toggle('open', open);
-      ham.setAttribute('aria-expanded', open);
-      drawer.setAttribute('aria-hidden', !open);
-    });
-    drawer.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
-      ham.classList.remove('open'); drawer.classList.remove('open');
-    }));
-    const io = new IntersectionObserver(entries => {
-      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
-    }, { threshold: 0.1 });
-    document.querySelectorAll('.reveal').forEach(el => io.observe(el));
-    document.querySelectorAll('a[href^="#"]').forEach(a => {
-      a.addEventListener('click', e => {
-        const t = document.querySelector(a.getAttribute('href'));
-        if (t) { e.preventDefault(); window.scrollTo({ top: t.getBoundingClientRect().top + window.scrollY - topbar.offsetHeight - 16, behavior: 'smooth' }); }
-      });
-    });
+    const topbar=document.getElementById("topbar"),banner=document.getElementById("banner");
+    function syncNav(){const bh=(banner&&banner.style.display!=="none")?banner.offsetHeight:0;topbar.style.top=bh+"px";topbar.classList.toggle("solid",window.scrollY>80);topbar.classList.toggle("transparent",window.scrollY<=80)}
+    syncNav();window.addEventListener("scroll",syncNav,{passive:true});window.addEventListener("resize",syncNav);
+    const ham=document.getElementById("hamburger"),drawer=document.getElementById("drawer");
+    ham.addEventListener("click",()=>{const open=ham.classList.toggle("open");drawer.classList.toggle("open",open);ham.setAttribute("aria-expanded",open);drawer.setAttribute("aria-hidden",!open)});
+    drawer.querySelectorAll("a").forEach(a=>a.addEventListener("click",()=>{ham.classList.remove("open");drawer.classList.remove("open")}));
+    const io=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add("in");io.unobserve(e.target)}})},{threshold:0.08});
+    document.querySelectorAll(".reveal").forEach(el=>io.observe(el));
   </script>
 </body>
 </html>
