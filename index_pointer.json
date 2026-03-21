@@ -1,0 +1,50 @@
+{
+  "slider": {
+    "title": "TWC Charities & Outreach",
+    "subtitle": "Serving with Love, Faith & Dedication",
+    "cta_label": "View all charity work",
+    "cta_url": "/Pages/Charities/Charities.html",
+    "photos": [
+      {
+        "src": "/Pages/church_photos/charity_photos/street_feeding1.jpg",
+        "alt": "TWC Street Feeding Spanish Town",
+        "caption": "Street Feeding — Spanish Town"
+      },
+      {
+        "src": "/Pages/church_photos/charity_photos/street_feeding2.jpg",
+        "alt": "TWC volunteers loading meals",
+        "caption": "Volunteers loading meals"
+      },
+      {
+        "src": "/Pages/church_photos/charity_photos/street_feeding3.jpg",
+        "alt": "TWC meal preparation",
+        "caption": "Meal preparation"
+      },
+      {
+        "src": "/Pages/church_photos/charity_photos/street_feeding4.jpg",
+        "alt": "Serving the community",
+        "caption": "Serving the community"
+      },
+      {
+        "src": "/Pages/church_photos/charity_photos/disaster_relief1.jpg",
+        "alt": "Hurricane Disaster Relief Drive",
+        "caption": "Hurricane Disaster Relief Drive"
+      },
+      {
+        "src": "/Pages/church_photos/charity_photos/community_outreach1.jpg",
+        "alt": "Community Outreach Rock of Hope Manor",
+        "caption": "Community Outreach — Rock of Hope Manor"
+      },
+      {
+        "src": "/Pages/church_photos/charity_photos/back_to_school1.jpg",
+        "alt": "Back-to-School Drive",
+        "caption": "Back-to-School Drive"
+      },
+      {
+        "src": "/Pages/church_photos/charity_photos/back_to_school2.jpg",
+        "alt": "Back-to-School supplies distributed",
+        "caption": "Back-to-School — supplies distributed"
+      }
+    ]
+  }
+}
