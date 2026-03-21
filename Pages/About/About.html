@@ -11,7 +11,6 @@
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
   <style>
-    /* ── VARIABLES (identical to live.html) ───────────────── */
     :root {
       --clr-blue-deep:  #1e2a6e;
       --clr-blue-mid:   #3b3fa0;
@@ -30,383 +29,163 @@
       --container-w:    1160px;
       --nav-h:          84px;
     }
-
-    /* ── RESET ────────────────────────────────────────────── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
-    body {
-      font-family: var(--font-body);
-      background: var(--clr-off-white);
-      color: var(--clr-text);
-      line-height: 1.7;
-      overflow-x: hidden;
-    }
+    body { font-family: var(--font-body); background: var(--clr-off-white); color: var(--clr-text); line-height: 1.7; overflow-x: hidden; }
     a { color: inherit; text-decoration: none; transition: opacity .2s; }
     a:hover { opacity: .72; }
     img { display: block; max-width: 100%; }
-    .container {
-      width: min(var(--container-w), 100% - 2.5rem);
-      margin-inline: auto;
-    }
+    .container { width: min(var(--container-w), 100% - 2.5rem); margin-inline: auto; }
 
-    /* ── BANNER ───────────────────────────────────────────── */
-    #banner {
-      background: var(--grad-brand-h);
-      color: #fff;
-      text-align: center;
-      padding: .6rem 3rem .6rem 1rem;
-      font-size: .76rem; font-weight: 600;
-      letter-spacing: .1em; text-transform: uppercase;
-      position: relative; z-index: 1100;
-    }
+    /* BANNER */
+    #banner { background: var(--grad-brand-h); color: #fff; text-align: center; padding: .6rem 3rem .6rem 1rem; font-size: .76rem; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; position: relative; z-index: 1100; }
     #banner a { text-decoration: underline; }
-    .banner-x {
-      position: absolute; right: 1.2rem; top: 50%;
-      transform: translateY(-50%);
-      background: none; border: none;
-      color: rgba(255,255,255,.7); font-size: 1.15rem;
-      cursor: pointer; line-height: 1;
-    }
+    .banner-x { position: absolute; right: 1.2rem; top: 50%; transform: translateY(-50%); background: none; border: none; color: rgba(255,255,255,.7); font-size: 1.15rem; cursor: pointer; line-height: 1; }
     .banner-x:hover { color: #fff; }
 
-    /* ── TOPBAR ───────────────────────────────────────────── */
-    #topbar {
-      position: fixed; left: 0; width: 100%;
-      height: var(--nav-h);
-      display: flex; align-items: center;
-      padding-inline: 2.5rem;
-      z-index: 1000;
-      transition: background .35s, box-shadow .35s;
-    }
-    #topbar.transparent {
-      background: linear-gradient(to bottom, rgba(19,18,40,.78) 0%, transparent 100%);
-    }
-    #topbar.solid {
-      background: var(--clr-dark);
-      box-shadow: 0 2px 32px rgba(0,0,0,.5);
-    }
+    /* TOPBAR */
+    #topbar { position: fixed; left: 0; width: 100%; height: var(--nav-h); display: flex; align-items: center; padding-inline: 2.5rem; z-index: 1000; transition: background .35s, box-shadow .35s; }
+    #topbar.transparent { background: linear-gradient(to bottom, rgba(19,18,40,.78) 0%, transparent 100%); }
+    #topbar.solid { background: var(--clr-dark); box-shadow: 0 2px 32px rgba(0,0,0,.5); }
     .topbar-inner { width: 100%; display: flex; align-items: center; justify-content: space-between; }
     .logo { display: flex; align-items: center; gap: .7rem; }
     .logo-img { height: 50px; width: auto; }
     .logo-fallback { display: none; flex-direction: column; line-height: 1.1; }
-    .logo-wordmark {
-      font-family: var(--font-display); font-weight: 700; font-size: 1.7rem;
-      background: var(--grad-brand-h);
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-    }
-    .logo-sub {
-      font-size: .56rem; font-weight: 700; letter-spacing: .18em; text-transform: uppercase;
-      color: rgba(255,255,255,.55);
-    }
+    .logo-wordmark { font-family: var(--font-display); font-weight: 700; font-size: 1.7rem; background: var(--grad-brand-h); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .logo-sub { font-size: .56rem; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; color: rgba(255,255,255,.55); }
     .main-nav { display: flex; align-items: center; gap: 1.75rem; }
-    .nav-link {
-      font-size: .73rem; font-weight: 600; letter-spacing: .14em; text-transform: uppercase;
-      color: rgba(255,255,255,.85); position: relative; padding-block: .3rem;
-    }
-    .nav-link::after {
-      content: ''; position: absolute; bottom: -2px; left: 0;
-      width: 0; height: 2px; background: var(--grad-brand-h); transition: width .25s;
-    }
+    .nav-link { font-size: .73rem; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: rgba(255,255,255,.85); position: relative; padding-block: .3rem; }
+    .nav-link::after { content: ''; position: absolute; bottom: -2px; left: 0; width: 0; height: 2px; background: var(--grad-brand-h); transition: width .25s; }
     .nav-link:hover { opacity: 1; }
     .nav-link:hover::after, .nav-link.active::after { width: 100%; }
-    .nav-donate {
-      font-size: .72rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase;
-      padding: .55rem 1.4rem; background: var(--grad-brand-h); color: #fff !important;
-      position: relative; overflow: hidden; transition: opacity .2s;
-    }
-    .nav-donate::before {
-      content: ''; position: absolute; inset: 0;
-      background: rgba(255,255,255,.14); opacity: 0; transition: opacity .2s;
-    }
+    .nav-donate { font-size: .72rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; padding: .55rem 1.4rem; background: var(--grad-brand-h); color: #fff !important; position: relative; overflow: hidden; transition: opacity .2s; }
+    .nav-donate::before { content: ''; position: absolute; inset: 0; background: rgba(255,255,255,.14); opacity: 0; transition: opacity .2s; }
     .nav-donate:hover { opacity: 1; }
     .nav-donate:hover::before { opacity: 1; }
-    .hamburger {
-      display: none; flex-direction: column; gap: 5px;
-      background: none; border: none; cursor: pointer; padding: .4rem;
-    }
+    .hamburger { display: none; flex-direction: column; gap: 5px; background: none; border: none; cursor: pointer; padding: .4rem; }
     .hamburger span { display: block; width: 24px; height: 2px; background: #fff; transition: transform .25s, opacity .2s; }
     .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
     .hamburger.open span:nth-child(2) { opacity: 0; }
     .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
-    #drawer {
-      position: fixed; top: var(--nav-h); left: 0; right: 0;
-      background: var(--clr-dark); border-top: 1px solid rgba(255,255,255,.08);
-      padding: 1.5rem 2rem 2rem;
-      transform: translateY(-110%); transition: transform .35s cubic-bezier(.4,0,.2,1); z-index: 999;
-    }
+    #drawer { position: fixed; top: var(--nav-h); left: 0; right: 0; background: var(--clr-dark); border-top: 1px solid rgba(255,255,255,.08); padding: 1.5rem 2rem 2rem; transform: translateY(-110%); transition: transform .35s cubic-bezier(.4,0,.2,1); z-index: 999; }
     #drawer.open { transform: translateY(0); }
-    .drawer-link {
-      display: block; color: rgba(255,255,255,.8); font-size: .8rem; font-weight: 600;
-      letter-spacing: .12em; text-transform: uppercase; padding: .78rem 0;
-      border-bottom: 1px solid rgba(255,255,255,.08);
-    }
-    .drawer-donate {
-      display: block; margin-top: 1rem; text-align: center;
-      background: var(--grad-brand-h); color: #fff !important;
-      padding: .78rem; font-weight: 700; font-size: .76rem; letter-spacing: .14em; text-transform: uppercase;
-    }
+    .drawer-link { display: block; color: rgba(255,255,255,.8); font-size: .8rem; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; padding: .78rem 0; border-bottom: 1px solid rgba(255,255,255,.08); }
+    .drawer-donate { display: block; margin-top: 1rem; text-align: center; background: var(--grad-brand-h); color: #fff !important; padding: .78rem; font-weight: 700; font-size: .76rem; letter-spacing: .14em; text-transform: uppercase; }
 
-    /* ── HERO ─────────────────────────────────────────────── */
-    #hero {
-      position: relative;
-      height: 62vh; min-height: 480px;
-      display: flex; align-items: center; justify-content: center;
-      text-align: center; overflow: hidden;
-    }
-    .hero-bg {
-      position: absolute; inset: 0;
-      background-image: url('https://www.twcministries.net/church_photos/hero.jpg');
-      background-size: cover; background-position: center 30%;
-      animation: zoomBg 22s ease-in-out infinite alternate;
-    }
+    /* HERO */
+    #hero { position: relative; height: 62vh; min-height: 480px; display: flex; align-items: center; justify-content: center; text-align: center; overflow: hidden; }
+    .hero-bg { position: absolute; inset: 0; background-image: url('https://www.twcministries.net/church_photos/hero.jpg'); background-size: cover; background-position: center 30%; animation: zoomBg 22s ease-in-out infinite alternate; }
     @keyframes zoomBg { from { transform: scale(1.06); } to { transform: scale(1); } }
-    .hero-overlay {
-      position: absolute; inset: 0;
-      background: linear-gradient(to bottom, rgba(19,18,40,.65) 0%, rgba(19,18,40,.82) 100%);
-    }
-    .hero-tint {
-      position: absolute; inset: 0;
-      background: linear-gradient(135deg, rgba(30,42,110,.3) 0%, transparent 55%, rgba(192,33,60,.18) 100%);
-    }
+    .hero-overlay { position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(19,18,40,.65) 0%, rgba(19,18,40,.82) 100%); }
+    .hero-tint { position: absolute; inset: 0; background: linear-gradient(135deg, rgba(30,42,110,.3) 0%, transparent 55%, rgba(192,33,60,.18) 100%); }
     .hero-content { position: relative; z-index: 2; max-width: 820px; padding-inline: 1.5rem; }
-    .hero-eyebrow {
-      display: inline-flex; align-items: center; gap: .65rem;
-      font-size: .68rem; font-weight: 700; letter-spacing: .28em; text-transform: uppercase;
-      color: rgba(255,255,255,.6); margin-bottom: 1.1rem;
-      animation: fadeUp .8s ease both;
-    }
-    .hero-eyebrow::before, .hero-eyebrow::after {
-      content: ''; display: block; width: 28px; height: 1px; background: rgba(255,255,255,.3);
-    }
-    .hero-h1 {
-      font-family: var(--font-display);
-      font-size: clamp(3rem, 9vw, 6.5rem);
-      font-weight: 700; color: #fff; line-height: 1; text-transform: uppercase;
-      animation: fadeUp .9s .1s ease both;
-    }
-    .hero-h1 em {
-      display: block; font-style: normal;
-      background: var(--grad-brand-h);
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-    }
-    .hero-sub {
-      margin-top: 1.2rem; font-size: 1.1rem; font-weight: 300;
-      color: rgba(255,255,255,.75);
-      animation: fadeUp .9s .2s ease both;
-    }
-    .hero-sub strong {
-      font-weight: 600;
-      background: var(--grad-brand-h);
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-    }
-    .hero-cta {
-      margin-top: 2rem;
-      display: inline-flex; align-items: center; gap: .65rem;
-      animation: fadeUp .9s .35s ease both;
-    }
-    .hero-cta-btn {
-      display: inline-flex; align-items: center; gap: .55rem;
-      font-family: var(--font-body); font-size: .76rem; font-weight: 700;
-      letter-spacing: .16em; text-transform: uppercase;
-      padding: .82rem 2.2rem;
-      background: var(--grad-brand-h);
-      color: #fff !important;
-      position: relative; overflow: hidden;
-      transition: transform .2s, box-shadow .2s;
-      box-shadow: 0 4px 24px rgba(107,61,181,.45);
-      text-decoration: none;
-    }
-    .hero-cta-btn::before {
-      content: ''; position: absolute; inset: 0;
-      background: rgba(255,255,255,.12); opacity: 0; transition: opacity .2s;
-    }
-    .hero-cta-btn:hover { opacity: 1; transform: translateY(-2px); box-shadow: 0 8px 32px rgba(107,61,181,.6); }
-    .hero-cta-btn:hover::before { opacity: 1; }
-    .hero-cta-btn svg {
-      width: 15px; height: 15px; stroke: #fff; stroke-width: 2.2;
-      stroke-linecap: round; stroke-linejoin: round; fill: none; flex-shrink: 0;
-    }
+    .hero-eyebrow { display: inline-flex; align-items: center; gap: .65rem; font-size: .68rem; font-weight: 700; letter-spacing: .28em; text-transform: uppercase; color: rgba(255,255,255,.6); margin-bottom: 1.1rem; animation: fadeUp .8s ease both; }
+    .hero-eyebrow::before, .hero-eyebrow::after { content: ''; display: block; width: 28px; height: 1px; background: rgba(255,255,255,.3); }
+    .hero-h1 { font-family: var(--font-display); font-size: clamp(3rem, 9vw, 6.5rem); font-weight: 700; color: #fff; line-height: 1; text-transform: uppercase; animation: fadeUp .9s .1s ease both; }
+    .hero-h1 em { display: block; font-style: normal; background: var(--grad-brand-h); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .hero-sub { margin-top: 1.2rem; font-size: 1.1rem; font-weight: 300; color: rgba(255,255,255,.75); animation: fadeUp .9s .2s ease both; }
+    .hero-sub strong { font-weight: 600; background: var(--grad-brand-h); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
 
-    /* ── MISSION / VISION STRIP ───────────────────────────── */
+    /* MINISTRIES BUTTON */
+    .hero-min-btn-wrap { margin-top: 2rem; animation: fadeUp .9s .35s ease both; }
+    .hero-min-btn { display: inline-flex; align-items: center; gap: .6rem; font-family: var(--font-body); font-size: .76rem; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; padding: .88rem 2.4rem; background: var(--grad-brand-h); color: #fff !important; position: relative; overflow: hidden; box-shadow: 0 4px 28px rgba(107,61,181,.5); transition: transform .2s, box-shadow .2s, opacity .2s; }
+    .hero-min-btn::before { content: ''; position: absolute; inset: 0; background: rgba(255,255,255,.13); opacity: 0; transition: opacity .2s; }
+    .hero-min-btn:hover { opacity: 1; transform: translateY(-3px); box-shadow: 0 10px 36px rgba(107,61,181,.65); }
+    .hero-min-btn:hover::before { opacity: 1; }
+    .hero-min-btn svg { width: 15px; height: 15px; stroke: #fff; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; fill: none; flex-shrink: 0; }
+
+    /* MISSION / VISION */
     #mv-strip { background: var(--clr-dark); padding: 5rem 0; }
-    .mv-grid {
-      display: grid; grid-template-columns: 1fr 1fr; gap: 3rem;
-    }
+    .mv-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; }
     .mv-card { padding: 2.5rem 2.8rem; position: relative; overflow: hidden; }
-    .mv-card::before {
-      content: ''; position: absolute; inset: 0;
-      border: 1px solid rgba(255,255,255,.08);
-      pointer-events: none;
-    }
-    .mv-card::after {
-      content: ''; position: absolute; top: 0; left: 0;
-      width: 4px; height: 100%;
-    }
+    .mv-card::before { content: ''; position: absolute; inset: 0; border: 1px solid rgba(255,255,255,.08); pointer-events: none; }
+    .mv-card::after { content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%; }
     .mv-card.mission::after { background: var(--grad-brand); }
     .mv-card.vision::after  { background: linear-gradient(to bottom, var(--clr-crimson), var(--clr-blue-mid)); }
-    .mv-label {
-      font-size: .62rem; font-weight: 700; letter-spacing: .26em; text-transform: uppercase;
-      background: var(--grad-brand-h);
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-      display: block; margin-bottom: .7rem;
-    }
-    .mv-title {
-      font-family: var(--font-display); font-size: clamp(1.6rem, 3vw, 2.2rem);
-      font-weight: 700; color: #fff; line-height: 1.15; margin-bottom: 1rem;
-    }
+    .mv-label { font-size: .62rem; font-weight: 700; letter-spacing: .26em; text-transform: uppercase; background: var(--grad-brand-h); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; display: block; margin-bottom: .7rem; }
+    .mv-title { font-family: var(--font-display); font-size: clamp(1.6rem, 3vw, 2.2rem); font-weight: 700; color: #fff; line-height: 1.15; margin-bottom: 1rem; }
     .mv-body { font-size: .92rem; color: rgba(255,255,255,.62); line-height: 1.85; }
 
-    /* ── SHARED SECTION STYLES ────────────────────────────── */
-    .eyebrow {
-      font-size: .66rem; font-weight: 700; letter-spacing: .26em; text-transform: uppercase;
-      color: var(--clr-crimson); display: block; margin-bottom: .7rem;
-    }
-    .section-h2 {
-      font-family: var(--font-display); font-size: clamp(2rem, 4.5vw, 3rem);
-      font-weight: 700; color: var(--clr-blue-deep); line-height: 1.1;
-    }
+    /* SHARED */
+    .eyebrow { font-size: .66rem; font-weight: 700; letter-spacing: .26em; text-transform: uppercase; color: var(--clr-crimson); display: block; margin-bottom: .7rem; }
+    .section-h2 { font-family: var(--font-display); font-size: clamp(2rem, 4.5vw, 3rem); font-weight: 700; color: var(--clr-blue-deep); line-height: 1.1; }
     .grad-line { width: 50px; height: 3px; background: var(--grad-brand-h); margin: 1.1rem 0 1.4rem; }
     .section-body { font-size: .9rem; color: var(--clr-muted); line-height: 1.85; }
 
-    /* ── OBJECTIVES ───────────────────────────────────────── */
+    /* OBJECTIVES */
     #objectives { background: var(--clr-off-white); padding: 7rem 0 8rem; }
     .objectives-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: start; }
     .objectives-meta { position: sticky; top: calc(var(--nav-h) + 2rem); }
     .obj-list { margin-top: 2.8rem; display: flex; flex-direction: column; gap: 1.4rem; }
-    .obj-item {
-      display: flex; gap: 1.4rem; align-items: flex-start;
-      padding: 1.6rem 1.8rem;
-      background: #fff;
-      box-shadow: 0 2px 20px rgba(30,42,110,.06);
-      border-left: 3px solid transparent;
-      transition: border-color .22s, transform .2s, box-shadow .2s;
-    }
+    .obj-item { display: flex; gap: 1.4rem; align-items: flex-start; padding: 1.6rem 1.8rem; background: #fff; box-shadow: 0 2px 20px rgba(30,42,110,.06); border-left: 3px solid transparent; transition: border-color .22s, transform .2s, box-shadow .2s; }
     .obj-item:hover { border-left-color: var(--clr-crimson); transform: translateX(6px); box-shadow: 0 6px 32px rgba(30,42,110,.1); }
-    .obj-letter {
-      font-family: var(--font-display); font-size: 2.6rem; font-weight: 700; line-height: 1;
-      background: var(--grad-brand);
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-      flex-shrink: 0; min-width: 2rem;
-    }
+    .obj-letter { font-family: var(--font-display); font-size: 2.6rem; font-weight: 700; line-height: 1; background: var(--grad-brand); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; flex-shrink: 0; min-width: 2rem; }
     .obj-text { font-size: .9rem; color: var(--clr-muted); line-height: 1.75; padding-top: .35rem; }
 
-    /* ── TEACHINGS ────────────────────────────────────────── */
+    /* TEACHINGS */
     #teachings { background: var(--clr-dark); padding: 7rem 0 8rem; position: relative; overflow: hidden; }
-    #teachings::before {
-      content: '\201C';
-      position: absolute; font-family: var(--font-display); font-size: 32rem;
-      color: rgba(255,255,255,.018); top: -6rem; right: 2rem; line-height: 1; pointer-events: none;
-    }
+    #teachings::before { content: '\201C'; position: absolute; font-family: var(--font-display); font-size: 32rem; color: rgba(255,255,255,.018); top: -6rem; right: 2rem; line-height: 1; pointer-events: none; }
     .teachings-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; }
     .teachings-copy .eyebrow { color: rgba(255,255,255,.45); }
     .teachings-copy .section-h2 { color: #fff; }
     .teachings-copy .section-body { color: rgba(255,255,255,.6); margin-top: .6rem; }
-    .teachings-panel {
-      background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.09);
-      padding: 2.8rem;
-    }
-    .teachings-panel p {
-      font-size: .92rem; color: rgba(255,255,255,.58); line-height: 1.9;
-    }
+    .teachings-panel { background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.09); padding: 2.8rem; }
+    .teachings-panel p { font-size: .92rem; color: rgba(255,255,255,.58); line-height: 1.9; }
     .teachings-panel p + p { margin-top: 1.2rem; }
-    .scripture-pull {
-      margin-top: 2rem; padding: 1.6rem 1.8rem;
-      border-left: 3px solid var(--clr-crimson);
-      background: rgba(192,33,60,.06);
-    }
-    .scripture-pull p {
-      font-family: var(--font-display); font-size: 1.15rem; font-style: italic;
-      font-weight: 600; color: rgba(255,255,255,.75) !important; line-height: 1.5;
-    }
-    .scripture-pull cite {
-      display: block; margin-top: .6rem;
-      font-size: .65rem; font-weight: 700; letter-spacing: .2em; text-transform: uppercase;
-      font-style: normal;
-      background: var(--grad-brand-h);
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-    }
+    .scripture-pull { margin-top: 2rem; padding: 1.6rem 1.8rem; border-left: 3px solid var(--clr-crimson); background: rgba(192,33,60,.06); }
+    .scripture-pull p { font-family: var(--font-display); font-size: 1.15rem; font-style: italic; font-weight: 600; color: rgba(255,255,255,.75) !important; line-height: 1.5; }
+    .scripture-pull cite { display: block; margin-top: .6rem; font-size: .65rem; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; font-style: normal; background: var(--grad-brand-h); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
 
-    /* ── CONTACT CTA ──────────────────────────────────────── */
+    /* CTA */
     #cta { background: var(--clr-light); padding: 6rem 0; }
     .cta-inner { text-align: center; max-width: 680px; margin-inline: auto; }
     .cta-inner .section-h2 { margin-bottom: .5rem; }
     .cta-inner .section-body { margin-top: .6rem; }
     .cta-btns { display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap; margin-top: 2.4rem; }
-    .btn-solid {
-      font-size: .72rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase;
-      padding: .78rem 2rem; background: var(--grad-brand-h); color: #fff; transition: opacity .2s;
-    }
+    .btn-solid { font-size: .72rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; padding: .78rem 2rem; background: var(--grad-brand-h); color: #fff; transition: opacity .2s; }
     .btn-solid:hover { opacity: .87; }
-    .btn-outline {
-      font-size: .72rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase;
-      padding: .78rem 2rem; border: 1.5px solid var(--clr-blue-deep); color: var(--clr-blue-deep);
-      transition: background .2s, color .2s;
-    }
+    .btn-outline { font-size: .72rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; padding: .78rem 2rem; border: 1.5px solid var(--clr-blue-deep); color: var(--clr-blue-deep); transition: background .2s, color .2s; }
     .btn-outline:hover { background: var(--clr-blue-deep); color: #fff; opacity: 1; }
 
-    /* ── FOOTER ───────────────────────────────────────────── */
+    /* FOOTER */
     footer { background: var(--clr-dark); color: rgba(255,255,255,.55); padding: 5rem 0 2.5rem; }
-    .footer-grid {
-      display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 4rem;
-      padding-bottom: 3.5rem; border-bottom: 1px solid rgba(255,255,255,.08);
-    }
-    .f-wordmark {
-      font-family: var(--font-display); font-size: 1.8rem; font-weight: 700;
-      background: var(--grad-brand-h);
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-      display: block; margin-bottom: .2rem;
-    }
-    .f-sub {
-      font-size: .58rem; font-weight: 700; letter-spacing: .22em; text-transform: uppercase;
-      color: rgba(255,255,255,.3); display: block; margin-bottom: 1rem;
-    }
+    .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 4rem; padding-bottom: 3.5rem; border-bottom: 1px solid rgba(255,255,255,.08); }
+    .f-wordmark { font-family: var(--font-display); font-size: 1.8rem; font-weight: 700; background: var(--grad-brand-h); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; display: block; margin-bottom: .2rem; }
+    .f-sub { font-size: .58rem; font-weight: 700; letter-spacing: .22em; text-transform: uppercase; color: rgba(255,255,255,.3); display: block; margin-bottom: 1rem; }
     .f-tagline { font-size: .83rem; color: rgba(255,255,255,.4); line-height: 1.8; max-width: 310px; }
     .f-social { display: flex; gap: .55rem; margin-top: 1.5rem; }
-    .s-btn {
-      width: 36px; height: 36px; border: 1px solid rgba(255,255,255,.16);
-      display: flex; align-items: center; justify-content: center;
-      transition: background .2s, border-color .2s;
-    }
+    .s-btn { width: 36px; height: 36px; border: 1px solid rgba(255,255,255,.16); display: flex; align-items: center; justify-content: center; transition: background .2s, border-color .2s; }
     .s-btn:hover { background: var(--grad-brand); border-color: transparent; opacity: 1; }
     .s-btn svg { width: 14px; height: 14px; fill: rgba(255,255,255,.7); }
-    .footer-col h5 {
-      font-size: .64rem; font-weight: 700; letter-spacing: .22em; text-transform: uppercase;
-      background: var(--grad-brand-h);
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-      margin-bottom: 1.2rem;
-    }
-    .footer-col ul { list-style: none; }
-    .footer-col ul li { margin-bottom: .55rem; font-size: .8rem; color: rgba(255,255,255,.45); }
-    .footer-col ul li a:hover { color: rgba(255,255,255,.9); opacity: 1; }
-    .footer-bottom {
-      padding-top: 2.2rem; display: flex; align-items: center;
-      justify-content: space-between; flex-wrap: wrap; gap: 1rem;
-    }
-    .f-copy { font-size: .73rem; color: rgba(255,255,255,.26); letter-spacing: .05em; }
+    .footer-col h5 { font-size: .64rem; font-weight: 700; letter-spacing: .22em; text-transform: uppercase; background: var(--grad-brand-h); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 1.2rem; }
+    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: .65rem; }
+    .footer-col li a { font-size: .8rem; color: rgba(255,255,255,.45); transition: color .2s; }
+    .footer-col li a:hover { color: #fff; opacity: 1; }
+    .footer-bottom { padding-top: 2rem; display: flex; justify-content: space-between; flex-wrap: wrap; gap: .5rem; }
+    .f-copy { font-size: .72rem; color: rgba(255,255,255,.28); }
 
-    /* ── SCROLL REVEAL ────────────────────────────────────── */
+    /* REVEAL */
     .reveal { opacity: 0; transform: translateY(26px); transition: opacity .7s ease, transform .7s ease; }
     .reveal.in { opacity: 1; transform: none; }
-
     @keyframes fadeUp { from { opacity: 0; transform: translateY(22px); } to { opacity: 1; transform: none; } }
     @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-    /* ── RESPONSIVE ───────────────────────────────────────── */
+    /* RESPONSIVE */
     @media (max-width: 960px) {
-      .mv-grid             { grid-template-columns: 1fr; }
-      .objectives-layout   { grid-template-columns: 1fr; }
-      .objectives-meta     { position: static; }
-      .teachings-layout    { grid-template-columns: 1fr; }
-      .footer-grid         { grid-template-columns: 1fr 1fr; }
-      .footer-brand        { grid-column: 1 / -1; }
+      .mv-grid           { grid-template-columns: 1fr; }
+      .objectives-layout { grid-template-columns: 1fr; }
+      .objectives-meta   { position: static; }
+      .teachings-layout  { grid-template-columns: 1fr; }
+      .footer-grid       { grid-template-columns: 1fr 1fr; }
+      .footer-brand      { grid-column: 1 / -1; }
     }
     @media (max-width: 640px) {
       :root { --nav-h: 70px; }
-      .main-nav   { display: none; }
-      .hamburger  { display: flex; }
+      .main-nav    { display: none; }
+      .hamburger   { display: flex; }
       .footer-grid { grid-template-columns: 1fr; gap: 2.5rem; }
       .footer-bottom { flex-direction: column; text-align: center; }
-      .obj-letter { font-size: 2rem; }
+      .obj-letter  { font-size: 2rem; }
     }
   </style>
 </head>
@@ -415,7 +194,7 @@
   <!-- BANNER -->
   <div id="banner">
     Join us every Saturday at 10:00 AM &nbsp;|&nbsp;
-    <a href="live.html">Watch Live &rarr;</a>
+    <a href="/Pages/Live/Live.html">Watch Live &rarr;</a>
     <button class="banner-x" onclick="this.parentElement.style.display='none'" aria-label="Dismiss">&times;</button>
   </div>
 
@@ -437,11 +216,11 @@
 
       <nav class="main-nav" aria-label="Primary">
         <a href="https://www.twcministries.net"        class="nav-link">Home</a>
-        <a href="/Pages/About/About.html"              class="nav-link">About</a>
+        <a href="/Pages/About/About.html"              class="nav-link active">About</a>
         <a href="/Pages/Connect/Connect.html"          class="nav-link">Connect</a>
         <a href="/Pages/Charities/Charities.html"      class="nav-link">Charities</a>
         <a href="/Pages/Events/Events.html"            class="nav-link">Events</a>
-        <a href="/Pages/Live/Live.html"                class="nav-link active">Watch Live</a>
+        <a href="/Pages/Live/Live.html"                class="nav-link">Watch Live</a>
         <a href="https://www.twcministries.net/Pages/Donations/twc-ministries-foreign-account.html" target="_blank" class="nav-donate">Donate</a>
       </nav>
 
@@ -464,7 +243,7 @@
 
   <main>
 
-    <!-- ===== HERO ===== -->
+    <!-- HERO -->
     <section id="hero" aria-label="About hero">
       <div class="hero-bg" role="img" aria-label="TWC congregation in worship"></div>
       <div class="hero-overlay"></div>
@@ -479,66 +258,44 @@
           <strong>Transforming minds, changing lives.</strong><br>
           A kingdom-building community serving Jamaica and the world.
         </p>
-        <div class="hero-cta">
-          <a href="/Pages/Ministries/Our_Ministries.html" class="hero-cta-btn">
+        <div class="hero-min-btn-wrap">
+          <a href="/Pages/Ministries/Our_Ministries.html" class="hero-min-btn">
             Explore Our Ministries
-            <svg viewBox="0 0 24 24"><polyline points="5 12 19 12"/><polyline points="13 6 19 12 13 18"/></svg>
+            <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg>
           </a>
         </div>
       </div>
     </section>
 
-    <!-- ===== MISSION & VISION ===== -->
+    <!-- MISSION & VISION -->
     <section id="mv-strip" aria-label="Mission and Vision">
       <div class="container">
         <div class="mv-grid">
-
           <div class="mv-card mission reveal">
             <span class="mv-label">Our Mission</span>
             <h2 class="mv-title">Transform Lives Through<br>Worship &amp; Empowerment</h2>
-            <p class="mv-body">
-              TWC seeks to transform lives through worship and empowerment, seeking
-              interventions in communities. We believe that genuine encounter with God
-              changes people from the inside out.
-            </p>
+            <p class="mv-body">TWC seeks to transform lives through worship and empowerment, seeking interventions in communities. We believe that genuine encounter with God changes people from the inside out.</p>
           </div>
-
           <div class="mv-card vision reveal" style="transition-delay:.15s">
             <span class="mv-label">Our Vision</span>
             <h2 class="mv-title">A Kingdom Building<br>Organisation</h2>
-            <p class="mv-body">
-              We are a kingdom-building organisation making lasting Christ-like disciples.
-              Every programme, every service, and every outreach effort flows from this
-              singular vision.
-            </p>
+            <p class="mv-body">We are a kingdom-building organisation making lasting Christ-like disciples. Every programme, every service, and every outreach effort flows from this singular vision.</p>
           </div>
-
         </div>
       </div>
     </section>
 
-    <!-- ===== OBJECTIVES ===== -->
+    <!-- OBJECTIVES -->
     <section id="objectives" aria-labelledby="obj-h">
       <div class="container">
         <div class="objectives-layout">
-
-          <!-- Left: sticky heading -->
           <div class="objectives-meta reveal">
             <span class="eyebrow">Article 2</span>
-            <h2 class="section-h2" id="obj-h">
-              Our<br>Objectives
-            </h2>
+            <h2 class="section-h2" id="obj-h">Our<br>Objectives</h2>
             <div class="grad-line"></div>
-            <p class="section-body">
-              Rooted in Scripture and led by the Spirit, the objectives of the church
-              guide everything we do — from Sunday worship to community outreach and
-              every ministry in between.
-            </p>
+            <p class="section-body">Rooted in Scripture and led by the Spirit, the objectives of the church guide everything we do — from Sabbath worship to community outreach and every ministry in between.</p>
           </div>
-
-          <!-- Right: objective cards -->
           <div class="obj-list reveal" style="transition-delay:.15s">
-
             <div class="obj-item">
               <span class="obj-letter">a</span>
               <p class="obj-text">
@@ -546,7 +303,6 @@
                 Make disciples of Jesus the Christ; spread the word about the Kingdom of God, baptize and teach.
               </p>
             </div>
-
             <div class="obj-item">
               <span class="obj-letter">b</span>
               <p class="obj-text">
@@ -554,7 +310,6 @@
                 Facilitate the worship of God in Spirit and in truth, creating spaces for genuine encounter.
               </p>
             </div>
-
             <div class="obj-item">
               <span class="obj-letter">c</span>
               <p class="obj-text">
@@ -562,7 +317,6 @@
                 Promote the communion of the saints and assist the needy within and beyond our congregation.
               </p>
             </div>
-
             <div class="obj-item">
               <span class="obj-letter">d</span>
               <p class="obj-text">
@@ -570,65 +324,43 @@
                 Foster the holistic development of individuals and the community through Spirit-led programmes.
               </p>
             </div>
-
           </div>
         </div>
       </div>
     </section>
 
-    <!-- ===== TEACHINGS ===== -->
+    <!-- TEACHINGS -->
     <section id="teachings" aria-labelledby="teach-h">
       <div class="container">
         <div class="teachings-layout">
-
           <div class="teachings-copy reveal">
             <span class="eyebrow">Article 4</span>
-            <h2 class="section-h2" id="teach-h">
-              Our<br>Teachings
-            </h2>
+            <h2 class="section-h2" id="teach-h">Our<br>Teachings</h2>
             <div class="grad-line"></div>
-            <p class="section-body">
-              Grounded in the Word of God. Guided by the Holy Spirit.
-              Lived out in community.
-            </p>
+            <p class="section-body">Grounded in the Word of God. Guided by the Holy Spirit. Lived out in community.</p>
           </div>
-
           <div class="teachings-panel reveal" style="transition-delay:.15s">
-            <p>
-              The core teachings of the church are Biblical principles of the Scriptures.
-              Members follow our teachings based on their Spirit-led conscience.
-            </p>
-            <p>
-              Our doctrinal positions are found in our By-Laws listed under the title
-              <em>"Church Teachings"</em>, which we encourage all members and
-              visitors to read as they grow in their faith journey with us.
-            </p>
+            <p>The core teachings of the church are Biblical principles of the Scriptures. Members follow our teachings based on their Spirit-led conscience.</p>
+            <p>Our doctrinal positions are found in our By-Laws listed under the title <em>"Church Teachings"</em>, which we encourage all members and visitors to read as they grow in their faith journey with us.</p>
             <div class="scripture-pull">
-              <p>
-                "All Scripture is God-breathed and is useful for teaching, rebuking,
-                correcting and training in righteousness."
-              </p>
+              <p>"All Scripture is God-breathed and is useful for teaching, rebuking, correcting and training in righteousness."</p>
               <cite>2 Timothy 3:16</cite>
             </div>
           </div>
-
         </div>
       </div>
     </section>
 
-    <!-- ===== CTA ===== -->
+    <!-- CTA -->
     <section id="cta">
       <div class="container">
         <div class="cta-inner reveal">
           <span class="eyebrow">Join the Family</span>
           <h2 class="section-h2">Come Worship With Us</h2>
-          <p class="section-body">
-            Whether online or in person, you are welcome at TWC. Every Saturday at 10:00 AM
-            we gather to worship, grow, and serve together.
-          </p>
+          <p class="section-body">Whether online or in person, you are welcome at TWC. Every Saturday at 10:00 AM we gather to worship, grow, and serve together.</p>
           <div class="cta-btns">
-            <a href="live.html" class="btn-solid">Watch Live</a>
-            <a href="/Connect/connect.html" class="btn-outline">Connect With Us</a>
+            <a href="/Pages/Live/Live.html" class="btn-solid">Watch Live</a>
+            <a href="/Pages/Connect/Connect.html" class="btn-outline">Connect With Us</a>
           </div>
         </div>
       </div>
@@ -636,7 +368,7 @@
 
   </main>
 
-  <!-- ===== FOOTER ===== -->
+  <!-- FOOTER -->
   <footer>
     <div class="container">
       <div class="footer-grid">
@@ -644,10 +376,7 @@
         <div class="footer-brand">
           <span class="f-wordmark">TWC</span>
           <span class="f-sub">Transformational Worship Centre</span>
-          <p class="f-tagline">
-            A community transformed by the Word, united in Sabbath worship,
-            and empowered to reach the world for God.
-          </p>
+          <p class="f-tagline">A community transformed by the Word, united in Sabbath worship, and empowered to reach the world for God.</p>
           <div class="f-social">
             <a href="https://www.facebook.com/TransformCenter" target="_blank" rel="noopener" class="s-btn" aria-label="Facebook">
               <svg viewBox="0 0 320 512"><path d="M80 299.3V512H196V299.3h86.5l18-97.8H196V166.9c0-51.7 20.3-71.5 72.7-71.5c16.3 0 29.4 .4 37 1.2V7.9C291.4 4 256.4 0 236.2 0C129.3 0 80 50.5 80 159.4v42.1H14v97.8H80z"/></svg>
@@ -666,6 +395,7 @@
           <ul>
             <li><a href="https://www.twcministries.net">Home</a></li>
             <li><a href="/Pages/About/About.html">About TWC</a></li>
+            <li><a href="/Pages/Ministries/Our_Ministries.html">Our Ministries</a></li>
             <li><a href="/Pages/Charities/Charities.html">Charities</a></li>
             <li><a href="/Pages/Events/Events.html">Events</a></li>
             <li><a href="/Pages/Live/Live.html">Watch Live</a></li>
@@ -676,16 +406,15 @@
         <div class="footer-col">
           <h5>Connect</h5>
           <ul>
-            <li><a href="/Connect/connect.html">Connect</a></li>
+            <li><a href="/Pages/Connect/Connect.html">Connect</a></li>
             <li><a href="https://meet.google.com/tve-ymrn-yta" target="_blank">Sabbath Service Online</a></li>
             <li><a href="https://meet.google.com/kau-rihj-mrs" target="_blank">Bible Studies Online</a></li>
             <li><a href="https://meet.google.com/kau-rihj-mrs" target="_blank">Prayer Meeting Online</a></li>
-            <li><a href="/cdn-cgi/l/email-protection#7e0a091d1d1b100a0c1b3e19131f1712501d1113">Email Us</a></li>
+            <li><a href="mailto:info@twcministries.net">Email Us</a></li>
           </ul>
         </div>
 
       </div>
-
       <div class="footer-bottom">
         <p class="f-copy">&copy; 2026 Transformational Worship Centre &mdash; TWC Ministries. All rights reserved.</p>
         <p class="f-copy">Worshipping on the Sabbath &mdash; Every Saturday.</p>
@@ -693,7 +422,7 @@
     </div>
   </footer>
 
-  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+  <script>
     const topbar = document.getElementById('topbar');
     const banner = document.getElementById('banner');
 
@@ -735,4 +464,11 @@
         if (t) {
           e.preventDefault();
           const offset = topbar.offsetHeight + 16;
-          window.sc
+          window.scrollTo({ top: t.getBoundingClientRect().top + window.scrollY - offset, behavior: 'smooth' });
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>
