@@ -147,49 +147,6 @@
     .d-stat-num{font-family:var(--font-display);font-size:2.4rem;font-weight:700;background:var(--grad-brand-h);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1}
     .d-stat-lbl{font-size:.65rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.38);margin-top:.3rem}
     .donate-info-box blockquote{margin-top:2rem;padding-left:1.2rem;border-left:3px solid var(--clr-crimson);font-style:italic;font-size:.84rem;color:rgba(255,255,255,.55)}
-
-    /* ===================== PHOTO SLIDER ===================== */
-    #photo-slider{background:var(--clr-dark);padding:3.5rem 0 3rem;overflow:hidden;position:relative}
-    .slider-header{text-align:center;margin-bottom:2rem}
-    .slider-header span{font-size:.62rem;font-weight:700;letter-spacing:.28em;text-transform:uppercase;color:rgba(255,255,255,.3)}
-    .slider-header strong{display:block;font-family:var(--font-display);font-size:clamp(1.4rem,3vw,2rem);font-weight:700;color:#fff;margin-top:.3rem}
-    .slider-header strong em{font-style:normal;background:var(--grad-brand-h);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-    .slider-outer{position:relative}
-    /* fade-out edges */
-    .slider-outer::before,.slider-outer::after{content:'';position:absolute;top:0;bottom:0;width:120px;z-index:2;pointer-events:none}
-    .slider-outer::before{left:0;background:linear-gradient(to right,var(--clr-dark) 0%,transparent 100%)}
-    .slider-outer::after{right:0;background:linear-gradient(to left,var(--clr-dark) 0%,transparent 100%)}
-    /* infinite scroll track */
-    .slider-track{display:flex;gap:1.4rem;width:max-content;animation:slideLeft 38s linear infinite}
-    .slider-track:hover{animation-play-state:paused}
-    @keyframes slideLeft{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
-    /* individual photo items */
-    .slide-item{position:relative;flex-shrink:0;width:310px;height:220px;overflow:hidden}
-    .slide-item img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s ease,filter .4s ease}
-    .slide-item:hover img{transform:scale(1.07);filter:brightness(1.08)}
-    /* caption overlay */
-    .slide-caption{position:absolute;inset:0;display:flex;align-items:flex-end;background:linear-gradient(to top,rgba(19,18,40,.85) 0%,rgba(19,18,40,.1) 55%,transparent 100%);padding:.85rem 1rem;opacity:0;transition:opacity .35s}
-    .slide-item:hover .slide-caption{opacity:1}
-    .slide-caption-text{font-size:.7rem;font-weight:600;letter-spacing:.07em;color:#fff;line-height:1.4}
-    /* brand accent bar */
-    .slide-item::after{content:'';position:absolute;bottom:0;left:0;width:0;height:3px;background:var(--grad-brand-h);transition:width .4s ease}
-    .slide-item:hover::after{width:100%}
-    /* arrow buttons */
-    .slider-arrow{position:absolute;top:50%;transform:translateY(-50%);z-index:3;width:40px;height:40px;background:rgba(19,18,40,.75);border:1px solid rgba(255,255,255,.15);color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background .2s,border-color .2s;backdrop-filter:blur(6px)}
-    .slider-arrow:hover{background:var(--clr-crimson);border-color:transparent}
-    .slider-arrow svg{width:14px;height:14px;fill:#fff;pointer-events:none}
-    .slider-arrow.prev{left:1rem}
-    .slider-arrow.next{right:1rem}
-    /* dot indicators */
-    .slider-dots{display:flex;justify-content:center;gap:.55rem;margin-top:1.6rem}
-    .slider-dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.18);border:none;padding:0;cursor:pointer;transition:background .25s,transform .25s}
-    .slider-dot.active{background:var(--clr-crimson);transform:scale(1.4)}
-    /* charity link */
-    .slider-cta{text-align:center;margin-top:1.8rem}
-    .slider-cta a{font-size:.7rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.45);border-bottom:1px solid rgba(255,255,255,.18);padding-bottom:.15rem;transition:color .2s,border-color .2s}
-    .slider-cta a:hover{color:#fff;border-color:rgba(255,255,255,.6);opacity:1}
-    /* ===================== END PHOTO SLIDER ===================== */
-
     /* CONTACT CARDS */
     #contact-cards{background:#fff;padding:5rem 0}
     .cc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:2.5rem}
@@ -222,8 +179,8 @@
     .reveal.in{opacity:1;transform:none}
     @keyframes fadeUp{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:none}}
     @keyframes fadeIn{from{opacity:0}to{opacity:1}}
-    @media(max-width:960px){.live-layout{grid-template-columns:1fr;gap:3rem}.live-meta{position:static}.donate-layout{grid-template-columns:1fr}.footer-grid{grid-template-columns:1fr 1fr}.footer-brand{grid-column:1/-1}.slide-item{width:240px;height:175px}}
-    @media(max-width:640px){:root{--nav-h:70px}.main-nav{display:none}.hamburger{display:flex}.footer-grid{grid-template-columns:1fr;gap:2.5rem}.footer-bottom{flex-direction:column;text-align:center}.strip-sep{display:none}.slide-item{width:190px;height:140px}.slider-outer::before,.slider-outer::after{width:50px}}
+    @media(max-width:960px){.live-layout{grid-template-columns:1fr;gap:3rem}.live-meta{position:static}.donate-layout{grid-template-columns:1fr}.footer-grid{grid-template-columns:1fr 1fr}.footer-brand{grid-column:1/-1}}
+    @media(max-width:640px){:root{--nav-h:70px}.main-nav{display:none}.hamburger{display:flex}.footer-grid{grid-template-columns:1fr;gap:2.5rem}.footer-bottom{flex-direction:column;text-align:center}.strip-sep{display:none}}
   </style>
 </head>
 <body>
@@ -305,57 +262,6 @@
       </div>
     </div>
 
-    <!-- DONATIONS -->
-    <!-- ===================== PHOTO SLIDER ===================== -->
-    <section id="photo-slider" aria-label="TWC community photos">
-      <div class="slider-header">
-        <span>TWC Charities &amp; Outreach</span>
-        <strong>Serving with Love, <em>Faith &amp; Dedication</em></strong>
-      </div>
-      <div class="slider-outer">
-        <button class="slider-arrow prev" aria-label="Previous photos" id="sliderPrev">
-          <svg viewBox="0 0 448 512"><path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.2 288H432c17.7 0 32-14.3 32-32s-14.3-32-32-32H109.2L214.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg>
-        </button>
-        <button class="slider-arrow next" aria-label="Next photos" id="sliderNext">
-          <svg viewBox="0 0 448 512"><path d="M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l306.7 0L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z"/></svg>
-        </button>
-        <div class="slider-track" id="sliderTrack">
-          <!-- SET 1 -->
-          <div class="slide-item"><img src="https://www.twcministries.net/Pages/church_photos/charity_photos/street_feeding1.jpg" alt="Street Feeding Spanish Town" loading="lazy"><div class="slide-caption"><div class="slide-caption-text">Street Feeding &mdash; Spanish Town</div></div></div>
-          <div class="slide-item"><img src="https://www.twcministries.net/Pages/church_photos/charity_photos/street_feeding2.jpg" alt="Volunteers loading meals" loading="lazy"><div class="slide-caption"><div class="slide-caption-text">Volunteers loading meals</div></div></div>
-          <div class="slide-item"><img src="https://www.twcministries.net/Pages/church_photos/charity_photos/street_feeding3.jpg" alt="Meal preparation" loading="lazy"><div class="slide-caption"><div class="slide-caption-text">Meal preparation</div></div></div>
-          <div class="slide-item"><img src="https://www.twcministries.net/Pages/church_photos/charity_photos/street_feeding4.jpg" alt="Serving the community" loading="lazy"><div class="slide-caption"><div class="slide-caption-text">Serving the community</div></div></div>
-          <div class="slide-item"><img src="https://www.twcministries.net/Pages/church_photos/charity_photos/disaster_relief1.jpg" alt="Hurricane Disaster Relief Drive" loading="lazy"><div class="slide-caption"><div class="slide-caption-text">Hurricane Disaster Relief Drive</div></div></div>
-          <div class="slide-item"><img src="https://www.twcministries.net/Pages/church_photos/charity_photos/community_outreach1.jpg" alt="Community Outreach Rock of Hope Manor" loading="lazy"><div class="slide-caption"><div class="slide-caption-text">Community Outreach &mdash; Rock of Hope Manor</div></div></div>
-          <div class="slide-item"><img src="https://www.twcministries.net/Pages/church_photos/charity_photos/back_to_school1.jpg" alt="Back to School Drive" loading="lazy"><div class="slide-caption"><div class="slide-caption-text">Back-to-School Drive</div></div></div>
-          <div class="slide-item"><img src="https://www.twcministries.net/Pages/church_photos/charity_photos/back_to_school2.jpg" alt="Back to School supplies" loading="lazy"><div class="slide-caption"><div class="slide-caption-text">Back-to-School &mdash; supplies distributed</div></div></div>
-          <!-- SET 2 (duplicate for seamless infinite loop) -->
-          <div class="slide-item"><img src="https://www.twcministries.net/Pages/church_photos/charity_photos/street_feeding1.jpg" alt="Street Feeding Spanish Town" loading="lazy"><div class="slide-caption"><div class="slide-caption-text">Street Feeding &mdash; Spanish Town</div></div></div>
-          <div class="slide-item"><img src="https://www.twcministries.net/Pages/church_photos/charity_photos/street_feeding2.jpg" alt="Volunteers loading meals" loading="lazy"><div class="slide-caption"><div class="slide-caption-text">Volunteers loading meals</div></div></div>
-          <div class="slide-item"><img src="https://www.twcministries.net/Pages/church_photos/charity_photos/street_feeding3.jpg" alt="Meal preparation" loading="lazy"><div class="slide-caption"><div class="slide-caption-text">Meal preparation</div></div></div>
-          <div class="slide-item"><img src="https://www.twcministries.net/Pages/church_photos/charity_photos/street_feeding4.jpg" alt="Serving the community" loading="lazy"><div class="slide-caption"><div class="slide-caption-text">Serving the community</div></div></div>
-          <div class="slide-item"><img src="https://www.twcministries.net/Pages/church_photos/charity_photos/disaster_relief1.jpg" alt="Hurricane Disaster Relief Drive" loading="lazy"><div class="slide-caption"><div class="slide-caption-text">Hurricane Disaster Relief Drive</div></div></div>
-          <div class="slide-item"><img src="https://www.twcministries.net/Pages/church_photos/charity_photos/community_outreach1.jpg" alt="Community Outreach Rock of Hope Manor" loading="lazy"><div class="slide-caption"><div class="slide-caption-text">Community Outreach &mdash; Rock of Hope Manor</div></div></div>
-          <div class="slide-item"><img src="https://www.twcministries.net/Pages/church_photos/charity_photos/back_to_school1.jpg" alt="Back to School Drive" loading="lazy"><div class="slide-caption"><div class="slide-caption-text">Back-to-School Drive</div></div></div>
-          <div class="slide-item"><img src="https://www.twcministries.net/Pages/church_photos/charity_photos/back_to_school2.jpg" alt="Back to School supplies" loading="lazy"><div class="slide-caption"><div class="slide-caption-text">Back-to-School &mdash; supplies distributed</div></div></div>
-        </div>
-      </div>
-      <div class="slider-dots" id="sliderDots">
-        <button class="slider-dot active" aria-label="Photo 1"></button>
-        <button class="slider-dot" aria-label="Photo 2"></button>
-        <button class="slider-dot" aria-label="Photo 3"></button>
-        <button class="slider-dot" aria-label="Photo 4"></button>
-        <button class="slider-dot" aria-label="Photo 5"></button>
-        <button class="slider-dot" aria-label="Photo 6"></button>
-        <button class="slider-dot" aria-label="Photo 7"></button>
-        <button class="slider-dot" aria-label="Photo 8"></button>
-      </div>
-      <div class="slider-cta">
-        <a href="/Pages/Charities/Charities.html">View all charity work &rarr;</a>
-      </div>
-
-    <!-- ===================== END PHOTO SLIDER ===================== -->
-
     <section id="live" aria-labelledby="live-h">
       <div class="container">
         <div class="live-layout">
@@ -390,7 +296,7 @@
           </div>
         </div>
       </div>
-
+    </section>
 
     <section id="scripture">
       <div class="container">
@@ -401,7 +307,6 @@
       </div>
     </section>
 
-    <!-- DONATIONS -->
     <section id="donations" aria-labelledby="donate-h">
       <div class="container">
         <div class="donate-layout">
@@ -439,7 +344,7 @@
           </div>
         </div>
       </div>
-
+    </section>
 
     <section id="contact-cards">
       <div class="container">
@@ -515,110 +420,16 @@
     </div>
   </footer>
 
-  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
-  <script>
-    /* NAV */
+  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
     const topbar=document.getElementById('topbar'),banner=document.getElementById('banner');
     function syncNav(){const bh=(banner&&banner.style.display!=='none')?banner.offsetHeight:0;topbar.style.top=bh+'px';topbar.classList.toggle('solid',window.scrollY>80);topbar.classList.toggle('transparent',window.scrollY<=80)}
     syncNav();window.addEventListener('scroll',syncNav,{passive:true});window.addEventListener('resize',syncNav);
-
-    /* HAMBURGER */
     const ham=document.getElementById('hamburger'),drawer=document.getElementById('drawer');
     ham.addEventListener('click',()=>{const open=ham.classList.toggle('open');drawer.classList.toggle('open',open);ham.setAttribute('aria-expanded',open);drawer.setAttribute('aria-hidden',!open)});
     drawer.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{ham.classList.remove('open');drawer.classList.remove('open')}));
-
-    /* REVEAL */
     const io=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{threshold:0.1});
     document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
-
-    /* SMOOTH SCROLL */
     document.querySelectorAll('a[href^="#"]').forEach(a=>a.addEventListener('click',e=>{const t=document.querySelector(a.getAttribute('href'));if(t){e.preventDefault();t.scrollIntoView({behavior:'smooth'})}}));
-
-    /* ===================== SLIDER ===================== */
-    (function(){
-      const track  = document.getElementById('sliderTrack');
-      const dots   = Array.from(document.querySelectorAll('#sliderDots .slider-dot'));
-      const TOTAL  = 8;
-      const GAP    = 19; // matches CSS gap 1.4rem ~= 22px but we measure live
-      let manualMode   = false;
-      let manualOffset = 0;
-      let resumeTimer;
-
-      function itemWidth(){
-        const item = track.querySelector('.slide-item');
-        return item ? item.offsetWidth + GAP : 329;
-      }
-
-      function getTranslateX(){
-        const mat = new DOMMatrix(window.getComputedStyle(track).transform);
-        return mat.m41;
-      }
-
-      function setDot(idx){
-        const i = ((idx % TOTAL) + TOTAL) % TOTAL;
-        dots.forEach((d,j) => d.classList.toggle('active', j === i));
-      }
-
-      function freezeAndShift(deltaItems){
-        if(!manualMode){
-          manualOffset = getTranslateX();
-          track.style.animation = 'none';
-          track.style.transform = 'translateX('+manualOffset+'px)';
-          manualMode = true;
-        }
-        const w = itemWidth();
-        manualOffset += deltaItems * -w;
-        // wrap within the duplicated set
-        const loopWidth = w * TOTAL;
-        if(manualOffset < -loopWidth) manualOffset += loopWidth;
-        if(manualOffset > 0)          manualOffset -= loopWidth;
-        track.style.transition = 'transform .42s cubic-bezier(.4,0,.2,1)';
-        track.style.transform  = 'translateX('+manualOffset+'px)';
-        setDot(Math.round(-manualOffset / w));
-        clearTimeout(resumeTimer);
-        resumeTimer = setTimeout(()=>{
-          track.style.transition = '';
-          track.style.transform  = '';
-          track.style.animation  = 'slideLeft 38s linear infinite';
-          manualMode = false;
-        }, 5500);
-      }
-
-      document.getElementById('sliderPrev').addEventListener('click', ()=>freezeAndShift(-1));
-      document.getElementById('sliderNext').addEventListener('click', ()=>freezeAndShift(1));
-
-      dots.forEach((dot,i)=>{
-        dot.addEventListener('click',()=>{
-          if(!manualMode){
-            manualOffset = getTranslateX();
-            track.style.animation = 'none';
-            track.style.transform = 'translateX('+manualOffset+'px)';
-            manualMode = true;
-          }
-          const w = itemWidth();
-          manualOffset = -(w * i);
-          track.style.transition = 'transform .42s cubic-bezier(.4,0,.2,1)';
-          track.style.transform  = 'translateX('+manualOffset+'px)';
-          setDot(i);
-          clearTimeout(resumeTimer);
-          resumeTimer = setTimeout(()=>{
-            track.style.transition = '';
-            track.style.transform  = '';
-            track.style.animation  = 'slideLeft 38s linear infinite';
-            manualMode = false;
-          }, 5500);
-        });
-      });
-
-      // passive dot sync during auto-scroll
-      setInterval(()=>{
-        if(manualMode) return;
-        const x = getTranslateX();
-        const w = itemWidth();
-        setDot(Math.round(-x / w));
-      }, 600);
-    })();
-    /* ===================== END SLIDER ===================== */
   </script>
 </body>
 </html>
