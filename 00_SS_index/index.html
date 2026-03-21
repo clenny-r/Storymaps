@@ -313,23 +313,47 @@
         <strong>Serving with Love, <em>Faith &amp; Dedication</em></strong>
       </div>
       <div class="slider-outer">
-        <button class="slider-arrow prev" id="sliderPrev" aria-label="Previous photos">
+        <button class="slider-arrow prev" aria-label="Previous photos" id="sliderPrev">
           <svg viewBox="0 0 448 512"><path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.2 288H432c17.7 0 32-14.3 32-32s-14.3-32-32-32H109.2L214.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg>
         </button>
-        <button class="slider-arrow next" id="sliderNext" aria-label="Next photos">
+        <button class="slider-arrow next" aria-label="Next photos" id="sliderNext">
           <svg viewBox="0 0 448 512"><path d="M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l306.7 0L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z"/></svg>
         </button>
         <div class="slider-track" id="sliderTrack">
-          <!-- Photos loaded from index_pointer.json -->
+          <!-- SET 1 -->
+          <div class="slide-item"><img src="https://www.twcministries.net/Pages/church_photos/charity_photos/street_feeding1.jpg" alt="Street Feeding Spanish Town" loading="lazy"><div class="slide-caption"><div class="slide-caption-text">Street Feeding &mdash; Spanish Town</div></div></div>
+          <div class="slide-item"><img src="https://www.twcministries.net/Pages/church_photos/charity_photos/street_feeding2.jpg" alt="Volunteers loading meals" loading="lazy"><div class="slide-caption"><div class="slide-caption-text">Volunteers loading meals</div></div></div>
+          <div class="slide-item"><img src="https://www.twcministries.net/Pages/church_photos/charity_photos/street_feeding3.jpg" alt="Meal preparation" loading="lazy"><div class="slide-caption"><div class="slide-caption-text">Meal preparation</div></div></div>
+          <div class="slide-item"><img src="https://www.twcministries.net/Pages/church_photos/charity_photos/street_feeding4.jpg" alt="Serving the community" loading="lazy"><div class="slide-caption"><div class="slide-caption-text">Serving the community</div></div></div>
+          <div class="slide-item"><img src="https://www.twcministries.net/Pages/church_photos/charity_photos/disaster_relief1.jpg" alt="Hurricane Disaster Relief Drive" loading="lazy"><div class="slide-caption"><div class="slide-caption-text">Hurricane Disaster Relief Drive</div></div></div>
+          <div class="slide-item"><img src="https://www.twcministries.net/Pages/church_photos/charity_photos/community_outreach1.jpg" alt="Community Outreach Rock of Hope Manor" loading="lazy"><div class="slide-caption"><div class="slide-caption-text">Community Outreach &mdash; Rock of Hope Manor</div></div></div>
+          <div class="slide-item"><img src="https://www.twcministries.net/Pages/church_photos/charity_photos/back_to_school1.jpg" alt="Back to School Drive" loading="lazy"><div class="slide-caption"><div class="slide-caption-text">Back-to-School Drive</div></div></div>
+          <div class="slide-item"><img src="https://www.twcministries.net/Pages/church_photos/charity_photos/back_to_school2.jpg" alt="Back to School supplies" loading="lazy"><div class="slide-caption"><div class="slide-caption-text">Back-to-School &mdash; supplies distributed</div></div></div>
+          <!-- SET 2 (duplicate for seamless infinite loop) -->
+          <div class="slide-item"><img src="https://www.twcministries.net/Pages/church_photos/charity_photos/street_feeding1.jpg" alt="Street Feeding Spanish Town" loading="lazy"><div class="slide-caption"><div class="slide-caption-text">Street Feeding &mdash; Spanish Town</div></div></div>
+          <div class="slide-item"><img src="https://www.twcministries.net/Pages/church_photos/charity_photos/street_feeding2.jpg" alt="Volunteers loading meals" loading="lazy"><div class="slide-caption"><div class="slide-caption-text">Volunteers loading meals</div></div></div>
+          <div class="slide-item"><img src="https://www.twcministries.net/Pages/church_photos/charity_photos/street_feeding3.jpg" alt="Meal preparation" loading="lazy"><div class="slide-caption"><div class="slide-caption-text">Meal preparation</div></div></div>
+          <div class="slide-item"><img src="https://www.twcministries.net/Pages/church_photos/charity_photos/street_feeding4.jpg" alt="Serving the community" loading="lazy"><div class="slide-caption"><div class="slide-caption-text">Serving the community</div></div></div>
+          <div class="slide-item"><img src="https://www.twcministries.net/Pages/church_photos/charity_photos/disaster_relief1.jpg" alt="Hurricane Disaster Relief Drive" loading="lazy"><div class="slide-caption"><div class="slide-caption-text">Hurricane Disaster Relief Drive</div></div></div>
+          <div class="slide-item"><img src="https://www.twcministries.net/Pages/church_photos/charity_photos/community_outreach1.jpg" alt="Community Outreach Rock of Hope Manor" loading="lazy"><div class="slide-caption"><div class="slide-caption-text">Community Outreach &mdash; Rock of Hope Manor</div></div></div>
+          <div class="slide-item"><img src="https://www.twcministries.net/Pages/church_photos/charity_photos/back_to_school1.jpg" alt="Back to School Drive" loading="lazy"><div class="slide-caption"><div class="slide-caption-text">Back-to-School Drive</div></div></div>
+          <div class="slide-item"><img src="https://www.twcministries.net/Pages/church_photos/charity_photos/back_to_school2.jpg" alt="Back to School supplies" loading="lazy"><div class="slide-caption"><div class="slide-caption-text">Back-to-School &mdash; supplies distributed</div></div></div>
         </div>
       </div>
       <div class="slider-dots" id="sliderDots">
-        <!-- Dots built by JS -->
+        <button class="slider-dot active" aria-label="Photo 1"></button>
+        <button class="slider-dot" aria-label="Photo 2"></button>
+        <button class="slider-dot" aria-label="Photo 3"></button>
+        <button class="slider-dot" aria-label="Photo 4"></button>
+        <button class="slider-dot" aria-label="Photo 5"></button>
+        <button class="slider-dot" aria-label="Photo 6"></button>
+        <button class="slider-dot" aria-label="Photo 7"></button>
+        <button class="slider-dot" aria-label="Photo 8"></button>
       </div>
       <div class="slider-cta">
         <a href="/Pages/Charities/Charities.html">View all charity work &rarr;</a>
       </div>
-    </section>
+
     <!-- ===================== END PHOTO SLIDER ===================== -->
 
     <section id="live" aria-labelledby="live-h">
@@ -366,7 +390,7 @@
           </div>
         </div>
       </div>
-    </section>
+
 
     <section id="scripture">
       <div class="container">
@@ -415,7 +439,7 @@
           </div>
         </div>
       </div>
-    </section>
+
 
     <section id="contact-cards">
       <div class="container">
@@ -511,123 +535,88 @@
     document.querySelectorAll('a[href^="#"]').forEach(a=>a.addEventListener('click',e=>{const t=document.querySelector(a.getAttribute('href'));if(t){e.preventDefault();t.scrollIntoView({behavior:'smooth'})}}));
 
     /* ===================== SLIDER ===================== */
-    (function () {
-      var GAP = 22;
-      var track    = document.getElementById('sliderTrack');
-      var dotsWrap = document.getElementById('sliderDots');
-      var manualMode   = false;
-      var manualOffset = 0;
-      var resumeTimer;
-      var TOTAL = 0;
-      var dots  = [];
+    (function(){
+      const track  = document.getElementById('sliderTrack');
+      const dots   = Array.from(document.querySelectorAll('#sliderDots .slider-dot'));
+      const TOTAL  = 8;
+      const GAP    = 19; // matches CSS gap 1.4rem ~= 22px but we measure live
+      let manualMode   = false;
+      let manualOffset = 0;
+      let resumeTimer;
 
-      function makeSlide(p) {
-        var raw = p.src.startsWith('http') ? p.src : 'https://twcministries.net' + p.src;
-        var src = raw.replace(/ /g, '%20');
-        return '<div class="slide-item">'
-          + '<img src="' + src + '" alt="' + (p.alt || '') + '" loading="lazy">'
-          + '<div class="slide-caption"><div class="slide-caption-text">' + (p.caption || '') + '</div></div>'
-          + '</div>';
+      function itemWidth(){
+        const item = track.querySelector('.slide-item');
+        return item ? item.offsetWidth + GAP : 329;
       }
 
-      function initSlider(photos, meta) {
-        TOTAL = photos.length;
-        track.innerHTML = photos.map(makeSlide).join('') + photos.map(makeSlide).join('');
-        dotsWrap.innerHTML = photos.map(function (_, i) {
-          return '<button class="slider-dot' + (i === 0 ? ' active' : '') + '" aria-label="Photo ' + (i + 1) + '"></button>';
-        }).join('');
-        dots = Array.from(dotsWrap.querySelectorAll('.slider-dot'));
-        dots.forEach(function (d, i) { d.addEventListener('click', function () { dotClick(i); }); });
-        if (meta) {
-          var labelEl = document.querySelector('.slider-header span');
-          var ctaEl   = document.querySelector('.slider-cta a');
-          if (meta.title && labelEl)    labelEl.textContent = meta.title;
-          if (meta.cta_url && ctaEl)    ctaEl.href          = meta.cta_url;
-          if (meta.cta_label && ctaEl)  ctaEl.textContent   = meta.cta_label + ' →';
-        }
-        track.style.animation = 'slideLeft 38s linear infinite';
-        setInterval(function () {
-          if (manualMode) return;
-          var x = getX(); var w = itemWidth();
-          if (w > 0) setDot(Math.round(-x / w));
-        }, 600);
-      }
-
-      function itemWidth() {
-        var item = track.querySelector('.slide-item');
-        return item ? item.offsetWidth + GAP : 332;
-      }
-      function getX() {
-        var mat = new DOMMatrix(window.getComputedStyle(track).transform);
+      function getTranslateX(){
+        const mat = new DOMMatrix(window.getComputedStyle(track).transform);
         return mat.m41;
       }
-      function setDot(idx) {
-        var i = ((idx % TOTAL) + TOTAL) % TOTAL;
-        dots.forEach(function (d, j) { d.classList.toggle('active', j === i); });
+
+      function setDot(idx){
+        const i = ((idx % TOTAL) + TOTAL) % TOTAL;
+        dots.forEach((d,j) => d.classList.toggle('active', j === i));
       }
-      function freeze() {
-        if (!manualMode) {
-          manualOffset = getX();
+
+      function freezeAndShift(deltaItems){
+        if(!manualMode){
+          manualOffset = getTranslateX();
           track.style.animation = 'none';
-          track.style.transform = 'translateX(' + manualOffset + 'px)';
+          track.style.transform = 'translateX('+manualOffset+'px)';
           manualMode = true;
         }
-      }
-      function resume() {
-        track.style.transition = '';
-        track.style.transform  = '';
-        track.style.animation  = 'slideLeft 38s linear infinite';
-        manualMode = false;
-      }
-      function shift(delta) {
-        freeze();
-        var w = itemWidth();
-        manualOffset += delta * -w;
-        var loop = w * TOTAL;
-        if (manualOffset < -loop) manualOffset += loop;
-        if (manualOffset > 0)     manualOffset -= loop;
+        const w = itemWidth();
+        manualOffset += deltaItems * -w;
+        // wrap within the duplicated set
+        const loopWidth = w * TOTAL;
+        if(manualOffset < -loopWidth) manualOffset += loopWidth;
+        if(manualOffset > 0)          manualOffset -= loopWidth;
         track.style.transition = 'transform .42s cubic-bezier(.4,0,.2,1)';
-        track.style.transform  = 'translateX(' + manualOffset + 'px)';
+        track.style.transform  = 'translateX('+manualOffset+'px)';
         setDot(Math.round(-manualOffset / w));
         clearTimeout(resumeTimer);
-        resumeTimer = setTimeout(resume, 5500);
-      }
-      function dotClick(i) {
-        freeze();
-        var w = itemWidth();
-        manualOffset = -(w * i);
-        track.style.transition = 'transform .42s cubic-bezier(.4,0,.2,1)';
-        track.style.transform  = 'translateX(' + manualOffset + 'px)';
-        setDot(i);
-        clearTimeout(resumeTimer);
-        resumeTimer = setTimeout(resume, 5500);
+        resumeTimer = setTimeout(()=>{
+          track.style.transition = '';
+          track.style.transform  = '';
+          track.style.animation  = 'slideLeft 38s linear infinite';
+          manualMode = false;
+        }, 5500);
       }
 
-      document.getElementById('sliderPrev').addEventListener('click', function () { shift(-1); });
-      document.getElementById('sliderNext').addEventListener('click', function () { shift(1); });
+      document.getElementById('sliderPrev').addEventListener('click', ()=>freezeAndShift(-1));
+      document.getElementById('sliderNext').addEventListener('click', ()=>freezeAndShift(1));
 
-      var FALLBACK = [
-        { src: '/Pages/church_photos/charity_photos/street_feeding1.jpg',     alt: 'Street Feeding',          caption: 'Street Feeding — Spanish Town' },
-        { src: '/Pages/church_photos/charity_photos/street_feeding2.jpg',     alt: 'Volunteers',              caption: 'Volunteers loading meals' },
-        { src: '/Pages/church_photos/charity_photos/street_feeding3.jpg',     alt: 'Meal preparation',        caption: 'Meal preparation' },
-        { src: '/Pages/church_photos/charity_photos/street_feeding4.jpg',     alt: 'Serving community',       caption: 'Serving the community' },
-        { src: '/Pages/church_photos/charity_photos/disaster_relief1.jpg',    alt: 'Disaster Relief',         caption: 'Hurricane Disaster Relief Drive' },
-        { src: '/Pages/church_photos/charity_photos/community_outreach1.jpg', alt: 'Community Outreach',      caption: 'Community Outreach — Rock of Hope Manor' },
-        { src: '/Pages/church_photos/charity_photos/back_to_school1.jpg',     alt: 'Back to School',          caption: 'Back-to-School Drive' },
-        { src: '/Pages/church_photos/charity_photos/back_to_school2.jpg',     alt: 'Back to School supplies', caption: 'Back-to-School — supplies distributed' }
-      ];
-
-      fetch('https://twcministries.net/index_pointer.json')
-        .then(function (r) { return r.ok ? r.json() : Promise.reject('HTTP ' + r.status); })
-        .then(function (json) {
-          var s = json && json.slider;
-          initSlider((s && s.photos && s.photos.length) ? s.photos : FALLBACK, s || null);
-        })
-        .catch(function (err) {
-          console.warn('Slider: falling back to hardcoded photos. Reason:', err);
-          initSlider(FALLBACK, null);
+      dots.forEach((dot,i)=>{
+        dot.addEventListener('click',()=>{
+          if(!manualMode){
+            manualOffset = getTranslateX();
+            track.style.animation = 'none';
+            track.style.transform = 'translateX('+manualOffset+'px)';
+            manualMode = true;
+          }
+          const w = itemWidth();
+          manualOffset = -(w * i);
+          track.style.transition = 'transform .42s cubic-bezier(.4,0,.2,1)';
+          track.style.transform  = 'translateX('+manualOffset+'px)';
+          setDot(i);
+          clearTimeout(resumeTimer);
+          resumeTimer = setTimeout(()=>{
+            track.style.transition = '';
+            track.style.transform  = '';
+            track.style.animation  = 'slideLeft 38s linear infinite';
+            manualMode = false;
+          }, 5500);
         });
+      });
 
+      // passive dot sync during auto-scroll
+      setInterval(()=>{
+        if(manualMode) return;
+        const x = getTranslateX();
+        const w = itemWidth();
+        setDot(Math.round(-x / w));
+      }, 600);
     })();
     /* ===================== END SLIDER ===================== */
   </script>
