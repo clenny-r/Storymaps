@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Live | Worship Stream | Transformational Worship Centre</title>
   <link rel="icon" type="image/x-icon" href="https://www.twcministries.net/favicon.ico">
   <meta name="description" content="Join our live Sabbath worship stream at Transformational Worship Centre — TWC Ministries.">
@@ -69,8 +69,8 @@
     .drawer-link{display:block;color:rgba(255,255,255,.8);font-size:.8rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;padding:.78rem 0;border-bottom:1px solid rgba(255,255,255,.08)}
     .drawer-donate{display:block;margin-top:1rem;text-align:center;background:var(--grad-brand-h);color:#fff !important;padding:.78rem;font-weight:700;font-size:.76rem;letter-spacing:.14em;text-transform:uppercase}
     /* HERO */
-    #hero{position:relative;height:100vh;min-height:580px;display:flex;align-items:center;justify-content:center;text-align:center;overflow:hidden}
-    .hero-bg{position:absolute;inset:0;background-image:url('https://www.twcministries.net/church_photos/hero.jpg');background-size:cover;background-position:center 25%;animation:zoomBg 20s ease-in-out infinite alternate;will-change:transform}
+    #hero{position:relative;height:100svh;min-height:600px;display:flex;align-items:center;justify-content:center;text-align:center;overflow:hidden}
+    .hero-bg{position:absolute;inset:0;background-image:url('https://www.twcministries.net/church_photos/hero.jpg');background-size:cover;background-position:center 25%;animation:zoomBg 20s ease-in-out infinite alternate}
     @keyframes zoomBg{from{transform:scale(1.06)}to{transform:scale(1)}}
     .hero-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(19,18,40,.72) 0%,rgba(19,18,40,.55) 45%,rgba(19,18,40,.9) 100%)}
     .hero-tint{position:absolute;inset:0;background:linear-gradient(135deg,rgba(30,42,110,.28) 0%,transparent 60%,rgba(192,33,60,.2) 100%)}
@@ -154,13 +154,13 @@
     .slider-header span{font-size:.62rem;font-weight:700;letter-spacing:.28em;text-transform:uppercase;color:rgba(255,255,255,.3)}
     .slider-header strong{display:block;font-family:var(--font-display);font-size:clamp(1.4rem,3vw,2rem);font-weight:700;color:#fff;margin-top:.3rem}
     .slider-header strong em{font-style:normal;background:var(--grad-brand-h);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-    .slider-outer{position:relative;overflow:hidden;touch-action:pan-y}
+    .slider-outer{position:relative}
     /* fade-out edges */
     .slider-outer::before,.slider-outer::after{content:'';position:absolute;top:0;bottom:0;width:120px;z-index:2;pointer-events:none}
     .slider-outer::before{left:0;background:linear-gradient(to right,var(--clr-dark) 0%,transparent 100%)}
     .slider-outer::after{right:0;background:linear-gradient(to left,var(--clr-dark) 0%,transparent 100%)}
     /* infinite scroll track */
-    .slider-track{display:flex;gap:1.4rem;width:max-content;will-change:transform;touch-action:pan-y}
+    .slider-track{display:flex;gap:1.4rem;width:max-content;animation:slideLeft 38s linear infinite}
     .slider-track:hover{animation-play-state:paused}
     @keyframes slideLeft{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
     /* individual photo items */
@@ -168,22 +168,22 @@
     .slide-item img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s ease,filter .4s ease}
     .slide-item:hover img{transform:scale(1.07);filter:brightness(1.08)}
     /* caption overlay */
-    .slide-caption{position:absolute;inset:0;display:flex;align-items:flex-end;background:linear-gradient(to top,rgba(19,18,40,.85) 0%,rgba(19,18,40,.1) 55%,transparent 100%);padding:.85rem 1rem;opacity:1;transition:opacity .35s}
-    .slide-item:hover .slide-caption{opacity:1}/* always visible on mobile */
+    .slide-caption{position:absolute;inset:0;display:flex;align-items:flex-end;background:linear-gradient(to top,rgba(19,18,40,.85) 0%,rgba(19,18,40,.1) 55%,transparent 100%);padding:.85rem 1rem;opacity:0;transition:opacity .35s}
+    .slide-item:hover .slide-caption{opacity:1}
     .slide-caption-text{font-size:.7rem;font-weight:600;letter-spacing:.07em;color:#fff;line-height:1.4}
     /* brand accent bar */
     .slide-item::after{content:'';position:absolute;bottom:0;left:0;width:0;height:3px;background:var(--grad-brand-h);transition:width .4s ease}
     .slide-item:hover::after{width:100%}
     /* arrow buttons */
-    .slider-arrow{position:absolute;top:50%;transform:translateY(-50%);z-index:3;width:48px;height:48px;background:rgba(19,18,40,.82);border:1px solid rgba(255,255,255,.2);color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background .2s,border-color .2s;backdrop-filter:blur(6px);-webkit-tap-highlight-color:transparent}
+    .slider-arrow{position:absolute;top:50%;transform:translateY(-50%);z-index:3;width:40px;height:40px;background:rgba(19,18,40,.75);border:1px solid rgba(255,255,255,.15);color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background .2s,border-color .2s;backdrop-filter:blur(6px)}
     .slider-arrow:hover{background:var(--clr-crimson);border-color:transparent}
     .slider-arrow svg{width:14px;height:14px;fill:#fff;pointer-events:none}
     .slider-arrow.prev{left:1rem}
     .slider-arrow.next{right:1rem}
     /* dot indicators */
     .slider-dots{display:flex;justify-content:center;gap:.55rem;margin-top:1.6rem}
-    .slider-dot{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,.18);border:none;padding:0;cursor:pointer;transition:background .25s,transform .25s;-webkit-tap-highlight-color:transparent}
-    .slider-dot.active{background:var(--clr-crimson);transform:scale(1.3)}
+    .slider-dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.18);border:none;padding:0;cursor:pointer;transition:background .25s,transform .25s}
+    .slider-dot.active{background:var(--clr-crimson);transform:scale(1.4)}
     /* charity link */
     .slider-cta{text-align:center;margin-top:1.8rem}
     .slider-cta a{font-size:.7rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.45);border-bottom:1px solid rgba(255,255,255,.18);padding-bottom:.15rem;transition:color .2s,border-color .2s}
@@ -222,50 +222,8 @@
     .reveal.in{opacity:1;transform:none}
     @keyframes fadeUp{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:none}}
     @keyframes fadeIn{from{opacity:0}to{opacity:1}}
-    @media(max-width:960px){
-      .live-layout{grid-template-columns:1fr;gap:3rem}
-      .live-meta{position:static}
-      .donate-layout{grid-template-columns:1fr}
-      .footer-grid{grid-template-columns:1fr 1fr}
-      .footer-brand{grid-column:1/-1}
-      .slide-item{width:240px;height:175px}
-    }
-    @media(max-width:640px){
-      :root{--nav-h:70px}
-      /* Hero — stable height on mobile, no animation jank */
-      #hero{height:100svh;min-height:500px}
-      .hero-bg{animation:none}
-      .hero-h1{font-size:clamp(2.6rem,14vw,4.5rem)}
-      .hero-sub{font-size:.88rem}
-      /* Nav */
-      .main-nav{display:none}
-      .hamburger{display:flex}
-      /* Sabbath strip */
-      .strip-sep{display:none}
-      #sabbath-strip{padding:.8rem 0}
-      .strip-item{font-size:.7rem}
-      /* Slider */
-      .slide-item{width:75vw;max-width:280px;height:52vw;max-height:200px}
-      .slider-outer::before,.slider-outer::after{width:24px}
-      .slider-arrow{width:40px;height:40px}
-      .slider-dots{gap:.7rem;margin-top:1.2rem}
-      /* Sections */
-      #live{padding:4rem 0 5rem}
-      #scripture{padding:4rem 0}
-      #donations{padding:4rem 0 5rem}
-      #contact-cards{padding:3rem 0}
-      /* Footer */
-      .footer-grid{grid-template-columns:1fr;gap:2.5rem}
-      .footer-bottom{flex-direction:column;text-align:center}
-      /* Donate cards — prevent translateX jank */
-      .donate-card:hover{transform:none}
-    }
-    @media(hover:none){
-      /* Touch devices — remove hover transforms that cause layout jitter */
-      .donate-card:hover{transform:none;border-left-color:transparent}
-      .slide-item:hover img{transform:none;filter:none}
-      a:hover{opacity:1}
-    }
+    @media(max-width:960px){.live-layout{grid-template-columns:1fr;gap:3rem}.live-meta{position:static}.donate-layout{grid-template-columns:1fr}.footer-grid{grid-template-columns:1fr 1fr}.footer-brand{grid-column:1/-1}.slide-item{width:240px;height:175px}}
+    @media(max-width:640px){:root{--nav-h:70px}.main-nav{display:none}.hamburger{display:flex}.footer-grid{grid-template-columns:1fr;gap:2.5rem}.footer-bottom{flex-direction:column;text-align:center}.strip-sep{display:none}.slide-item{width:190px;height:140px}.slider-outer::before,.slider-outer::after{width:50px}}
   </style>
 </head>
 <body>
@@ -587,14 +545,7 @@
           if (meta.cta_url && ctaEl)    ctaEl.href          = meta.cta_url;
           if (meta.cta_label && ctaEl)  ctaEl.textContent   = meta.cta_label + ' →';
         }
-        /* Wait for images to load so track has correct width for -50% */
-        waitForImages(function () {
-          requestAnimationFrame(function () {
-            requestAnimationFrame(function () {
-              track.style.animation = 'slideLeft 38s linear infinite';
-            });
-          });
-        });
+        track.style.animation = 'slideLeft 38s linear infinite';
         setInterval(function () {
           if (manualMode) return;
           var x = getX(); var w = itemWidth();
@@ -625,12 +576,8 @@
       function resume() {
         track.style.transition = '';
         track.style.transform  = '';
-        requestAnimationFrame(function () {
-          requestAnimationFrame(function () {
-            track.style.animation = 'slideLeft 38s linear infinite';
-            manualMode = false;
-          });
-        });
+        track.style.animation  = 'slideLeft 38s linear infinite';
+        manualMode = false;
       }
       function shift(delta) {
         freeze();
@@ -659,21 +606,6 @@
       document.getElementById('sliderPrev').addEventListener('click', function () { shift(-1); });
       document.getElementById('sliderNext').addEventListener('click', function () { shift(1); });
 
-      /* Touch swipe support */
-      var touchStartX = 0;
-      var touchStartY = 0;
-      track.addEventListener('touchstart', function (e) {
-        touchStartX = e.touches[0].clientX;
-        touchStartY = e.touches[0].clientY;
-      }, { passive: true });
-      track.addEventListener('touchend', function (e) {
-        var dx = e.changedTouches[0].clientX - touchStartX;
-        var dy = e.changedTouches[0].clientY - touchStartY;
-        if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 40) {
-          shift(dx < 0 ? 1 : -1);
-        }
-      }, { passive: true });
-
       var FALLBACK = [
         { src: '/Pages/church_photos/charity_photos/street_feeding1.jpg',     alt: 'Street Feeding',          caption: 'Street Feeding — Spanish Town' },
         { src: '/Pages/church_photos/charity_photos/street_feeding2.jpg',     alt: 'Volunteers',              caption: 'Volunteers loading meals' },
@@ -684,18 +616,6 @@
         { src: '/Pages/church_photos/charity_photos/back_to_school1.jpg',     alt: 'Back to School',          caption: 'Back-to-School Drive' },
         { src: '/Pages/church_photos/charity_photos/back_to_school2.jpg',     alt: 'Back to School supplies', caption: 'Back-to-School — supplies distributed' }
       ];
-
-      /* Pause animation until images in the track have loaded */
-      function waitForImages(callback) {
-        var imgs = Array.from(track.querySelectorAll('img'));
-        if (!imgs.length) { callback(); return; }
-        var loaded = 0;
-        imgs.forEach(function (img) {
-          if (img.complete) { loaded++; if (loaded === imgs.length) callback(); }
-          else { img.addEventListener('load',  function () { loaded++; if (loaded === imgs.length) callback(); });
-                 img.addEventListener('error', function () { loaded++; if (loaded === imgs.length) callback(); }); }
-        });
-      }
 
       fetch('https://twcministries.net/index_pointer.json')
         .then(function (r) { return r.ok ? r.json() : Promise.reject('HTTP ' + r.status); })
