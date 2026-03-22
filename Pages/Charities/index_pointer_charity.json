@@ -1,0 +1,53 @@
+{
+  "slider": {
+    "title": "TWC Charities & Outreach",
+    "subtitle": "Being the Hands and Feet of God",
+    "photos": [
+      {
+        "src": "/Pages/church_photos/index_pointer/health_fair_doc.jpeg",
+        "alt": "Health Fair",
+        "caption": "We serve our community by organizing annual health fairs"
+      },
+      {
+        "src": "/Pages/church_photos/index_pointer/Men of Courage fishing.jpeg",
+        "alt": "Men of Courage - Fishing",
+        "caption": "Our men of courage are not only fishers of men, but also fishermen"
+      },
+      {
+        "src": "/Pages/church_photos/index_pointer/Back to school.jpeg",
+        "alt": "Back-to-School supplies distributed",
+        "caption": "Back-to-School — supplies distributed"
+      },
+      {
+        "src": "/Pages/church_photos/index_pointer/Goofy Service.jpeg",
+        "alt": "Goofy Family",
+        "caption": "We can be ourselves when we're together"
+      },
+      {
+        "src": "/Pages/church_photos/index_pointer/homeless feeding.jpeg",
+        "alt": "TWC Street Feeding Spanish Town",
+        "caption": "Street Feeding — Spanish Town"
+      },
+      {
+        "src": "/Pages/church_photos/index_pointer/Lords Supper Washing feet.jpeg",
+        "alt": "Lords Supper",
+        "caption": "Lords Supper - We show love like Jesus taught"
+      },
+      {
+        "src": "/Pages/church_photos/index_pointer/Anniversary.jpeg",
+        "alt": "TWC Anniversary",
+        "caption": "TWC Anniversary"
+      },
+      {
+        "src": "/Pages/church_photos/index_pointer/Hurricane Relief.jpeg",
+        "alt": "Hurricane Disaster Relief Drive",
+        "caption": "Hurricane Disaster Relief Drive"
+      },
+      {
+        "src": "/Pages/church_photos/index_pointer/ellis baptism.jpeg",
+        "alt": "TWC Baptisms",
+        "caption": "TWC Baptisms"
+      }
+    ]
+  }
+}
