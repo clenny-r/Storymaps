@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<title>Squish!</title>
+<style>
+  * {
+    margin: 0; padding: 0; box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
+    touch-action: none;
+  }
+
+  html, body {
+    width: 100%; height: 100%;
+    overflow: hidden;
+    background: #1a0a2e;
+    font-family: 'Fredoka One', 'Comic Sans MS', cursive;
+  }
+
+  #game {
+    width: 100vw;
+    height: 100vh;
+    position: relative;
+    overflow: hidden;
+    cursor: none;
+  }
+
+  /* Animated background gradient */
+  #bg {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 20% 30%, #3b1068 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 70%, #0d2b6b 0%, transparent 60%),
+                #0f0520;
+    transition: background 0.5s ease;
+  }
+
+  /* Stars/sparkles in background */
+  .star {
+    position: absolute;
+    border-radius: 50%;
+    background: white;
+    opacity: 0;
+    animation: twinkle 3s infinite;
+  }
+
+  @keyframes twinkle {
+    0%, 100% { opacity: 0; transform: scale(0.5); }
+    50% { opacity: 0.8; transform: scale(1); }
+  }
+
+  /* Blob character */
+  .blob {
+    position: absolute;
+    border-radius: 50%;
+    cursor: pointer;
+    transform: translate(-50%, -50%) scale(1);
+    transition: transform 0.1s cubic-bezier(0.34, 1.56, 0.64, 1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.5em;
+    will-change: transform;
+    filter: drop-shadow(0 8px 24px rgba(0,0,0,0.4));
+    animation: float linear infinite;
+  }
+
+  .blob::before {
+    content: '';
+    position: absolute;
+    inset: 8%;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.25);
+    top: 8%;
+    left: 15%;
+    width: 35%;
+    height: 30%;
+  }
+
+  .blob.squished {
+    animation: squish 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  }
+
+  @keyframes squish {
+    0%   { transform: translate(-50%, -50%) scale(1); }
+    20%  { transform: translate(-50%, -50%) scaleX(1.6) scaleY(0.5); }
+    50%  { transform: translate(-50%, -50%) scaleX(0.8) scaleY(1.4); }
+    75%  { transform: translate(-50%, -50%) scaleX(1.15) scaleY(0.9); }
+    100% { transform: translate(-50%, -50%) scale(1); }
+  }
+
+  @keyframes float {
+    0%   { margin-top: 0px; }
+    50%  { margin-top: -18px; }
+    100% { margin-top: 0px; }
+  }
+
+  /* Eyes on blobs */
+  .eye {
+    width: 18%;
+    height: 22%;
+    background: white;
+    border-radius: 50%;
+    position: absolute;
+    top: 28%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+  .eye.left  { left: 25%; }
+  .eye.right { right: 25%; }
+  .pupil {
+    width: 55%;
+    height: 55%;
+    background: #111;
+    border-radius: 50%;
+  }
+
+  .smile {
+    position: absolute;
+    bottom: 25%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 40%;
+    height: 20%;
+    border-bottom: 4px solid rgba(255,255,255,0.7);
+    border-radius: 0 0 50px 50px;
+  }
+
+  /* Pop burst particles */
+  .particle {
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+    animation: pop 0.6s ease-out forwards;
+  }
+
+  @keyframes pop {
+    0%   { transform: translate(0,0) scale(1); opacity: 1; }
+    100% { transform: translate(var(--tx), var(--ty)) scale(0); opacity: 0; }
+  }
+
+  /* Score / label display */
+  #score-display {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: clamp(2rem, 6vw, 4rem);
+    color: white;
+    text-shadow: 0 4px 12px rgba(0,0,0,0.5);
+    pointer-events: none;
+    z-index: 10;
+    letter-spacing: 2px;
+  }
+
+  /* Big emoji pop */
+  .emoji-pop {
+    position: absolute;
+    font-size: clamp(3rem, 12vw, 8rem);
+    pointer-events: none;
+    animation: emojiFloat 1.2s ease-out forwards;
+    z-index: 20;
+    transform: translate(-50%, -50%);
+  }
+
+  @keyframes emojiFloat {
+    0%   { opacity: 1; transform: translate(-50%, -50%) scale(0.5); }
+    40%  { opacity: 1; transform: translate(-50%, -80%) scale(1.3); }
+    100% { opacity: 0; transform: translate(-50%, -160%) scale(0.8); }
+  }
+
+  /* Ripple on touch */
+  .ripple {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.3);
+    pointer-events: none;
+    transform: translate(-50%, -50%) scale(0);
+    animation: rippleOut 0.6s ease-out forwards;
+  }
+
+  @keyframes rippleOut {
+    to { transform: translate(-50%, -50%) scale(4); opacity: 0; }
+  }
+
+  /* Fullscreen button */
+  #fs-btn {
+    position: absolute;
+    bottom: 24px;
+    right: 24px;
+    z-index: 100;
+    background: rgba(255,255,255,0.15);
+    border: 2px solid rgba(255,255,255,0.3);
+    color: white;
+    border-radius: 50px;
+    padding: 10px 20px;
+    font-size: 1.1rem;
+    font-family: inherit;
+    cursor: pointer;
+    backdrop-filter: blur(6px);
+    transition: background 0.2s;
+  }
+  #fs-btn:active { background: rgba(255,255,255,0.3); }
+
+  /* Color word display */
+  #color-word {
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: clamp(1.5rem, 5vw, 3rem);
+    color: white;
+    text-shadow: 0 4px 16px rgba(0,0,0,0.6);
+    pointer-events: none;
+    z-index: 10;
+    opacity: 0;
+    transition: opacity 0.3s;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+  }
+
+  /* Sound indicator */
+  #sound-indicator {
+    position: absolute;
+    top: 20px;
+    right: 24px;
+    font-size: 2rem;
+    cursor: pointer;
+    z-index: 100;
+    filter: drop-shadow(0 2px 6px rgba(0,0,0,0.4));
+  }
+</style>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<div id="game">
+  <div id="bg"></div>
+  <div id="score-display">✨ 0</div>
+  <div id="color-word"></div>
+  <button id="fs-btn" onclick="goFullscreen()">⛶ Full Screen</button>
+  <div id="sound-indicator" onclick="toggleSound()" title="Toggle sound">🔊</div>
+</div>
+
+<script>
+// ── CONFIG ──────────────────────────────────────────────────────────
+const COLORS = [
+  { name: "Red",    bg: "#ff3b5c", shadow: "#a5001c" },
+  { name: "Orange", bg: "#ff7c2a", shadow: "#a54400" },
+  { name: "Yellow", bg: "#ffe03a", shadow: "#a58c00" },
+  { name: "Green",  bg: "#3de87a", shadow: "#008c38" },
+  { name: "Blue",   bg: "#3ab8ff", shadow: "#005fa5" },
+  { name: "Purple", bg: "#b86bff", shadow: "#5a00a5" },
+  { name: "Pink",   bg: "#ff70d4", shadow: "#a5006a" },
+  { name: "Teal",   bg: "#2ef5d0", shadow: "#009c7a" },
+];
+
+const EMOJIS = ["⭐","🌟","💥","🎉","🎊","✨","🌈","💫","🦄","🐸","🐥","🍭","🍬","🎈"];
+const SOUNDS_ON = { current: true };
+
+let score = 0;
+let blobs = [];
+let soundCtx = null;
+
+// ── AUDIO ────────────────────────────────────────────────────────────
+function getAudioCtx() {
+  if (!soundCtx) soundCtx = new (window.AudioContext || window.webkitAudioContext)();
+  return soundCtx;
+}
+
+function playSquishSound(color) {
+  if (!SOUNDS_ON.current) return;
+  try {
+    const ctx = getAudioCtx();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain); gain.connect(ctx.destination);
+    const freqs = { Red:260, Orange:300, Yellow:360, Green:420, Blue:480, Purple:380, Pink:520, Teal:440 };
+    osc.frequency.setValueAtTime(freqs[color] || 400, ctx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime((freqs[color] || 400) * 1.5, ctx.currentTime + 0.15);
+    osc.frequency.exponentialRampToValueAtTime((freqs[color] || 400) * 0.7, ctx.currentTime + 0.4);
+    osc.type = 'sine';
+    gain.gain.setValueAtTime(0.4, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.5);
+    osc.start(ctx.currentTime);
+    osc.stop(ctx.currentTime + 0.5);
+  } catch(e) {}
+}
+
+function toggleSound() {
+  SOUNDS_ON.current = !SOUNDS_ON.current;
+  document.getElementById('sound-indicator').textContent = SOUNDS_ON.current ? '🔊' : '🔇';
+}
+
+// ── FULLSCREEN ───────────────────────────────────────────────────────
+function goFullscreen() {
+  const el = document.documentElement;
+  const req = el.requestFullscreen || el.webkitRequestFullscreen || el.mozRequestFullScreen;
+  if (req) req.call(el);
+  // Hide button after entering fullscreen
+  setTimeout(() => {
+    document.getElementById('fs-btn').style.opacity = '0';
+    document.getElementById('fs-btn').style.pointerEvents = 'none';
+  }, 1000);
+}
+
+document.addEventListener('fullscreenchange', () => {
+  if (!document.fullscreenElement) {
+    document.getElementById('fs-btn').style.opacity = '1';
+    document.getElementById('fs-btn').style.pointerEvents = 'auto';
+  }
+});
+
+// ── BACKGROUND STARS ─────────────────────────────────────────────────
+function createStars() {
+  const game = document.getElementById('game');
+  for (let i = 0; i < 40; i++) {
+    const s = document.createElement('div');
+    s.className = 'star';
+    const size = Math.random() * 4 + 2;
+    s.style.cssText = `
+      width:${size}px; height:${size}px;
+      left:${Math.random()*100}%;
+      top:${Math.random()*100}%;
+      animation-delay:${Math.random()*4}s;
+      animation-duration:${2 + Math.random()*3}s;
+    `;
+    game.appendChild(s);
+  }
+}
+
+// ── BLOB CREATION ────────────────────────────────────────────────────
+function createBlob() {
+  const game = document.getElementById('game');
+  const color = COLORS[Math.floor(Math.random() * COLORS.length)];
+  const size = Math.min(window.innerWidth, window.innerHeight) * (0.15 + Math.random() * 0.15);
+
+  const margin = size;
+  const x = margin + Math.random() * (window.innerWidth  - margin * 2);
+  const y = margin + Math.random() * (window.innerHeight - margin * 2 - 80);
+
+  const blob = document.createElement('div');
+  blob.className = 'blob';
+  blob.dataset.color = color.name;
+  blob.style.cssText = `
+    width:${size}px; height:${size}px;
+    left:${x}px; top:${y}px;
+    background: radial-gradient(circle at 35% 35%, ${lighten(color.bg)}, ${color.bg} 60%, ${color.shadow});
+    box-shadow: 0 ${size*0.1}px ${size*0.3}px ${color.shadow}88, inset 0 -${size*0.05}px ${size*0.1}px rgba(0,0,0,0.2);
+    animation-duration: ${2.5 + Math.random() * 2}s;
+    animation-delay: ${Math.random() * 2}s;
+  `;
+
+  // Eyes
+  const eyeL = document.createElement('div');
+  eyeL.className = 'eye left';
+  eyeL.innerHTML = '<div class="pupil"></div>';
+
+  const eyeR = document.createElement('div');
+  eyeR.className = 'eye right';
+  eyeR.innerHTML = '<div class="pupil"></div>';
+
+  const smile = document.createElement('div');
+  smile.className = 'smile';
+
+  blob.appendChild(eyeL);
+  blob.appendChild(eyeR);
+  blob.appendChild(smile);
+
+  // Touch/click handler
+  const squishHandler = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const touch = e.touches ? e.touches[0] : e;
+    onSquish(blob, color, touch.clientX, touch.clientY);
+  };
+
+  blob.addEventListener('touchstart', squishHandler, { passive: false });
+  blob.addEventListener('mousedown', squishHandler);
+
+  game.appendChild(blob);
+
+  // Drift animation
+  driftBlob(blob, x, y, size);
+
+  return { el: blob, color, x, y, size };
+}
+
+function lighten(hex) {
+  const num = parseInt(hex.slice(1), 16);
+  const r = Math.min(255, (num >> 16) + 80);
+  const g = Math.min(255, ((num >> 8) & 0xff) + 80);
+  const b = Math.min(255, (num & 0xff) + 80);
+  return `rgb(${r},${g},${b})`;
+}
+
+// ── BLOB DRIFT ───────────────────────────────────────────────────────
+function driftBlob(blob, startX, startY, size) {
+  let x = startX, y = startY;
+  let vx = (Math.random() - 0.5) * 0.6;
+  let vy = (Math.random() - 0.5) * 0.6;
+  const margin = size * 0.6;
+
+  function step() {
+    if (!blob.isConnected) return;
+    x += vx; y += vy;
+    if (x < margin || x > window.innerWidth  - margin) { vx *= -1; x = Math.max(margin, Math.min(window.innerWidth  - margin, x)); }
+    if (y < margin || y > window.innerHeight - margin - 60) { vy *= -1; y = Math.max(margin, Math.min(window.innerHeight - margin - 60, y)); }
+    blob.style.left = x + 'px';
+    blob.style.top  = y + 'px';
+    requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+
+// ── SQUISH HANDLER ───────────────────────────────────────────────────
+function onSquish(blob, color, cx, cy) {
+  if (blob.dataset.squishing) return;
+  blob.dataset.squishing = '1';
+
+  // Squish animation
+  blob.classList.add('squished');
+  blob.addEventListener('animationend', () => {
+    blob.classList.remove('squished');
+    delete blob.dataset.squishing;
+  }, { once: true });
+
+  // Sound
+  playSquishSound(color.name);
+
+  // Score
+  score++;
+  document.getElementById('score-display').textContent = `✨ ${score}`;
+
+  // Color word
+  showColorWord(color.name, color.bg);
+
+  // Background flash
+  flashBackground(color.bg);
+
+  // Particles
+  spawnParticles(cx, cy, color.bg);
+
+  // Emoji
+  spawnEmoji(cx, cy);
+
+  // Ripple
+  spawnRipple(cx, cy);
+
+  // Add a new blob occasionally
+  const game = document.getElementById('game');
+  const currentBlobs = game.querySelectorAll('.blob');
+  if (currentBlobs.length < 6) {
+    setTimeout(createBlob, 400);
+  }
+}
+
+function showColorWord(name, color) {
+  const el = document.getElementById('color-word');
+  el.textContent = name;
+  el.style.color = color;
+  el.style.opacity = '1';
+  clearTimeout(el._timeout);
+  el._timeout = setTimeout(() => { el.style.opacity = '0'; }, 1500);
+}
+
+function flashBackground(color) {
+  const bg = document.getElementById('bg');
+  bg.style.background = `radial-gradient(ellipse at 50% 50%, ${color}55, transparent 70%), radial-gradient(ellipse at 20% 30%, #3b1068 0%, transparent 60%), #0f0520`;
+  setTimeout(() => {
+    bg.style.background = `radial-gradient(ellipse at 20% 30%, #3b1068 0%, transparent 60%), radial-gradient(ellipse at 80% 70%, #0d2b6b 0%, transparent 60%), #0f0520`;
+  }, 400);
+}
+
+function spawnParticles(cx, cy, color) {
+  const game = document.getElementById('game');
+  for (let i = 0; i < 14; i++) {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    const size = 8 + Math.random() * 16;
+    const angle = (Math.PI * 2 * i) / 14 + (Math.random() - 0.5) * 0.5;
+    const dist = 60 + Math.random() * 80;
+    const tx = Math.cos(angle) * dist;
+    const ty = Math.sin(angle) * dist;
+    p.style.cssText = `
+      left:${cx}px; top:${cy}px;
+      width:${size}px; height:${size}px;
+      background:${color};
+      --tx:${tx}px; --ty:${ty}px;
+      box-shadow: 0 0 ${size}px ${color};
+    `;
+    game.appendChild(p);
+    p.addEventListener('animationend', () => p.remove());
+  }
+}
+
+function spawnEmoji(cx, cy) {
+  const game = document.getElementById('game');
+  const em = document.createElement('div');
+  em.className = 'emoji-pop';
+  em.textContent = EMOJIS[Math.floor(Math.random() * EMOJIS.length)];
+  em.style.left = cx + 'px';
+  em.style.top  = cy + 'px';
+  game.appendChild(em);
+  em.addEventListener('animationend', () => em.remove());
+}
+
+function spawnRipple(cx, cy) {
+  const game = document.getElementById('game');
+  const r = document.createElement('div');
+  r.className = 'ripple';
+  r.style.left = cx + 'px';
+  r.style.top  = cy + 'px';
+  r.style.width = r.style.height = '80px';
+  game.appendChild(r);
+  r.addEventListener('animationend', () => r.remove());
+}
+
+// ── PREVENT BROWSER DEFAULTS ─────────────────────────────────────────
+document.addEventListener('contextmenu',   e => e.preventDefault());
+document.addEventListener('touchmove',     e => e.preventDefault(), { passive: false });
+document.addEventListener('gesturestart',  e => e.preventDefault());
+document.addEventListener('gesturechange', e => e.preventDefault());
+document.addEventListener('gestureend',    e => e.preventDefault());
+
+// Prevent double-tap zoom
+let lastTap = 0;
+document.addEventListener('touchend', e => {
+  const now = Date.now();
+  if (now - lastTap < 300) e.preventDefault();
+  lastTap = now;
+});
+
+// ── INIT ─────────────────────────────────────────────────────────────
+createStars();
+// Spawn initial blobs
+for (let i = 0; i < 4; i++) {
+  setTimeout(createBlob, i * 200);
+}
+
+// Resume AudioContext on first touch (iOS)
+document.addEventListener('touchstart', () => {
+  try { getAudioCtx().resume(); } catch(e) {}
+}, { once: true });
+</script>
+</body>
+</html>
