@@ -1,7 +1,6 @@
 export default {
   async fetch(request, env) {
     const GITHUB_TOKEN = env.GITHUB_TOKEN;
-    const ACCESS_CODE = env.ACCESS_CODE;
     const ADMIN_PASSWORD = env.ADMIN_PASSWORD;
 
     const repoOwner = "Clenmar";
@@ -17,74 +16,94 @@ export default {
     const url = new URL(request.url);
     const path = url.pathname;
 
-    // Helper: fetch existing testimonies from GitHub
-    async function getTestimonies() {
+    async function getData() {
       const resp = await fetch(apiBase, { headers });
       const data = await resp.json();
       const content = atob(data.content);
-      return { list: JSON.parse(content), sha: data.sha };
+      return { users: JSON.parse(content), sha: data.sha };
     }
 
-    // Helper: save updated testimonies to GitHub
-    async function saveTestimonies(testimonies, sha) {
+    async function saveData(users, sha) {
       const body = JSON.stringify({
         message: "Update testimonies",
-        content: btoa(JSON.stringify(testimonies, null, 2)),
+        content: btoa(JSON.stringify(users, null, 2)),
         sha
       });
-      const resp = await fetch(apiBase, {
-        method: "PUT",
-        headers,
-        body
-      });
+      const resp = await fetch(apiBase, { method: "PUT", headers, body });
       return resp.json();
     }
 
-    // GET /api/testimonies → returns all testimonies
-    if (request.method === "GET") {
-      const { list } = await getTestimonies();
-      return new Response(JSON.stringify(list), {
-        headers: { "Content-Type": "application/json" }
-      });
+    function jsonResponse(data, status = 200) {
+      return new Response(JSON.stringify(data), { status, headers: { "Content-Type": "application/json" } });
     }
 
-    // POST /api/testimonies → add a new testimony (requires access code)
-    if (request.method === "POST") {
-      const body = await request.json();
-      if (body.accessCode !== ACCESS_CODE) {
-        return new Response("Invalid access code", { status: 403 });
-      }
+    // GET /api/db → full users db
+    if (request.method === "GET" && path.endsWith("/db")) {
+      const { users } = await getData();
+      return jsonResponse({ users });
+    }
 
-      const { list, sha } = await getTestimonies();
-      const newEntry = {
-        id: Date.now(),
-        name: body.name,
-        message: body.message
+    // POST /api/auth/login → login via access code
+    if (request.method === "POST" && path.endsWith("/auth/login")) {
+      const body = await request.json();
+      if (!body.name || !body.accessCode) return jsonResponse({ error: "Name and access code required" }, 400);
+
+      const { users, sha } = await getData();
+      if (!users[body.name]) users[body.name] = { entries: [], created: new Date().toISOString() };
+
+      return jsonResponse({ success: true });
+    }
+
+    // POST /api/entries → add a new entry
+    if (request.method === "POST" && path.endsWith("/entries")) {
+      const body = await request.json();
+      if (!body.text || body.text.length < 1) return jsonResponse({ error: "Text required" }, 400);
+
+      const { users, sha } = await getData();
+      // Assume session user is in body.name
+      const name = body.name;
+      if (!users[name]) users[name] = { entries: [], created: new Date().toISOString() };
+      const seq = (users[name].entries.length || 0) + 1;
+      const now = new Date();
+      const entry = {
+        id: Date.now().toString(),
+        seq,
+        text: body.text,
+        date: now.toLocaleDateString(),
+        time: now.toLocaleTimeString(),
+        iso: now.toISOString()
       };
-      list.push(newEntry);
-      await saveTestimonies(list, sha);
-
-      return new Response(JSON.stringify(newEntry), {
-        headers: { "Content-Type": "application/json" }
-      });
+      users[name].entries.push(entry);
+      await saveData(users, sha);
+      return jsonResponse({ message: "Entry recorded", entry });
     }
 
-    // DELETE /api/testimonies?id=123 → remove testimony (requires admin password)
-    if (request.method === "DELETE") {
-      const id = Number(url.searchParams.get("id"));
+    // DELETE /api/entries/:id → delete entry
+    if (request.method === "DELETE" && path.startsWith("/api/entries/")) {
+      const id = path.split("/").pop();
       const body = await request.json();
+      if (body.adminPassword !== ADMIN_PASSWORD) return jsonResponse({ error: "Unauthorized" }, 403);
 
-      if (body.adminPassword !== ADMIN_PASSWORD) {
-        return new Response("Unauthorized", { status: 403 });
+      const { users, sha } = await getData();
+      for (const user of Object.values(users)) {
+        user.entries = user.entries.filter(e => e.id !== id);
       }
+      await saveData(users, sha);
+      return jsonResponse({ success: true });
+    }
 
-      const { list, sha } = await getTestimonies();
-      const updated = list.filter(t => t.id !== id);
-      await saveTestimonies(updated, sha);
+    // POST /api/admin/login → verify admin password
+    if (request.method === "POST" && path.endsWith("/admin/login")) {
+      const body = await request.json();
+      if (body.password !== ADMIN_PASSWORD) return jsonResponse({ error: "Incorrect password" }, 403);
+      return jsonResponse({ success: true });
+    }
 
-      return new Response(JSON.stringify({ success: true }), {
-        headers: { "Content-Type": "application/json" }
-      });
+    // GET /api/admin/stats → return usage stats
+    if (request.method === "GET" && path.endsWith("/admin/stats")) {
+      const { users } = await getData();
+      const stats = { users };
+      return jsonResponse(stats);
     }
 
     return new Response("Not found", { status: 404 });
