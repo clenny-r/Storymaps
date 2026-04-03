@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>404 – The Lost Sheep</title>
+
+<style>
+
+body{
+margin:0;
+overflow:hidden;
+font-family:Georgia,serif;
+background:#e6d8a3;
+color:#3a2c1d;
+text-align:center;
+}
+
+/* PARALLAX */
+
+.layer{
+position:absolute;
+width:200%;
+height:100%;
+animation:scroll linear infinite;
+}
+
+.sky{
+background:linear-gradient(#8ecaff,#eaf6ff);
+z-index:-3;
+animation-duration:200s;
+}
+
+.hills{
+background:
+radial-gradient(circle at 20% 90%, #7dbd74 160px, transparent 161px),
+radial-gradient(circle at 60% 95%, #6aa865 180px, transparent 181px);
+z-index:-2;
+animation-duration:160s;
+}
+
+.ground{
+background:#c9b373;
+height:40%;
+bottom:0;
+z-index:-1;
+animation-duration:80s;
+}
+
+@keyframes scroll{
+0%{transform:translateX(0)}
+100%{transform:translateX(-50%)}
+}
+
+/* TEXT */
+
+.container{
+position:relative;
+z-index:10;
+margin-top:110px;
+max-width:700px;
+margin-left:auto;
+margin-right:auto;
+}
+
+h1{
+font-size:72px;
+margin-bottom:10px;
+}
+
+.quote{
+font-style:italic;
+margin:12px auto;
+}
+
+a{
+color:#7a4f2a;
+font-weight:bold;
+text-decoration:none;
+}
+
+a:hover{
+text-decoration:underline;
+}
+
+/* SHEEP */
+
+.sheep{
+position:absolute;
+width:120px;
+height:80px;
+transition:transform linear;
+pointer-events:none;
+}
+
+.sheep svg{
+animation:bounce .4s infinite alternate;
+}
+
+@keyframes bounce{
+from{transform:translateY(0)}
+to{transform:translateY(-4px)}
+}
+
+/* SHEPHERD */
+
+.shepherd{
+position:absolute;
+bottom:70px;
+left:-150px;
+width:110px;
+animation:shepherdWalk 45s linear infinite;
+}
+
+@keyframes shepherdWalk{
+0%{left:-150px}
+100%{left:110%}
+}
+
+.lanternGlow{
+animation:glow 1.5s infinite alternate;
+}
+
+@keyframes glow{
+from{opacity:.7}
+to{opacity:1}
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="layer sky"></div>
+<div class="layer hills"></div>
+<div class="layer ground"></div>
+
+<div class="container">
+
+<h1>404</h1>
+<h2>This Page Has Gone Astray</h2>
+
+<p class="quote">
+“All we like sheep have gone astray; we have turned every one to his own way.”
+</p>
+
+<p class="quote">
+“But now you have returned to the Shepherd and Overseer of your souls.”
+</p>
+
+<p style="font-size:14px;opacity:.8;">
+Isaiah 53:6 • 1 Peter 2:25
+</p>
+
+<p>The page you seek has wandered into the wilderness.</p>
+
+<p><a href="/">Return to the fold</a></p>
+
+</div>
+
+<!-- SHEPHERD -->
+
+<div class="shepherd">
+
+<svg viewBox="0 0 120 160">
+
+<!-- robe -->
+<path d="M40 70 L80 70 L95 150 L25 150 Z" fill="#7a5a3a"/>
+
+<!-- head -->
+<circle cx="60" cy="45" r="14" fill="#e6c19c"/>
+
+<!-- beard -->
+<path d="M48 55 Q60 70 72 55" fill="#4b3621"/>
+
+<!-- staff -->
+<rect x="92" y="30" width="4" height="120" fill="#5c3b1e"/>
+
+<!-- arm -->
+<rect x="70" y="80" width="20" height="6" fill="#e6c19c"/>
+
+<!-- lantern -->
+<g class="lanternGlow">
+<rect x="85" y="90" width="12" height="16" fill="#ffd66b"/>
+</g>
+
+</svg>
+
+</div>
+
+<script>
+
+/* REALISTIC SHEEP SVG */
+
+function sheepSVG(){
+return `
+<svg viewBox="0 0 120 80">
+
+<g fill="#f3f3f3" stroke="#444" stroke-width="1.5">
+<circle cx="40" cy="35" r="18"/>
+<circle cx="55" cy="30" r="18"/>
+<circle cx="70" cy="35" r="18"/>
+<circle cx="55" cy="45" r="18"/>
+</g>
+
+<ellipse cx="55" cy="40" rx="32" ry="22" fill="#f3f3f3" stroke="#444" stroke-width="2"/>
+
+<ellipse cx="95" cy="42" rx="14" ry="12" fill="#444"/>
+
+<ellipse cx="92" cy="30" rx="6" ry="4" fill="#444"/>
+
+<circle cx="100" cy="40" r="2.5" fill="white"/>
+<circle cx="101" cy="40" r="1.2" fill="black"/>
+
+<rect x="38" y="58" width="6" height="16" fill="#444"/>
+<rect x="52" y="58" width="6" height="16" fill="#444"/>
+<rect x="66" y="58" width="6" height="16" fill="#444"/>
+<rect x="80" y="58" width="6" height="16" fill="#444"/>
+
+</svg>
+`
+}
+
+/* CREATE WANDERING SHEEP */
+
+const sheepCount=6
+const sheepList=[]
+
+function createSheep(){
+
+let s=document.createElement("div")
+s.className="sheep"
+s.innerHTML=sheepSVG()
+
+document.body.appendChild(s)
+
+s.style.left=Math.random()*window.innerWidth+"px"
+s.style.top=(window.innerHeight-180-Math.random()*200)+"px"
+
+sheepList.push(s)
+
+wander(s)
+
+}
+
+for(let i=0;i<sheepCount;i++) createSheep()
+
+/* WANDER */
+
+function wander(s){
+
+let x=Math.random()*window.innerWidth
+let y=(window.innerHeight-180-Math.random()*200)
+
+let duration=4000+Math.random()*4000
+
+s.style.transition="transform "+duration+"ms linear"
+
+let dx=x-s.offsetLeft
+let dy=y-s.offsetTop
+
+s.style.transform=`translate(${dx}px,${dy}px)`
+
+setTimeout(()=>{
+
+/* confused sheep flip */
+
+if(Math.random()<0.4){
+s.style.transform+=" scaleX(-1)"
+}
+
+wander(s)
+
+},duration)
+
+}
+
+/* MOUSE FOLLOWING SHEEP */
+
+let follower=document.createElement("div")
+follower.className="sheep"
+follower.innerHTML=sheepSVG()
+document.body.appendChild(follower)
+
+document.addEventListener("mousemove",e=>{
+follower.style.left=(e.clientX-60)+"px"
+follower.style.top=(e.clientY-40)+"px"
+})
+
+</script>
+
+</body>
+</html>
+```
