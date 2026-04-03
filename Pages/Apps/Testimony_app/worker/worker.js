@@ -1,12 +1,23 @@
 export default {
   async fetch(request, env) {
     const GITHUB_TOKEN = env.GITHUB_TOKEN;
+    const ACCESS_CODE = env.ACCESS_CODE;
     const ADMIN_PASSWORD = env.ADMIN_PASSWORD;
 
     const repoOwner = "Clenmar";
     const repoName = "Storymaps";
     const filePath = "Pages/Apps/Testimony_app/testimonies.json";
     const apiBase = `https://api.github.com/repos/${repoOwner}/${repoName}/contents/${filePath}`;
+
+    const corsHeaders = {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "GET, POST, DELETE, OPTIONS",
+      "Access-Control-Allow-Headers": "Content-Type",
+    };
+
+    if (request.method === "OPTIONS") {
+      return new Response(null, { headers: corsHeaders });
+    }
 
     const headers = {
       "Authorization": `token ${GITHUB_TOKEN}`,
@@ -16,96 +27,126 @@ export default {
     const url = new URL(request.url);
     const path = url.pathname;
 
+    // Helper: fetch data from GitHub
     async function getData() {
       const resp = await fetch(apiBase, { headers });
       const data = await resp.json();
       const content = atob(data.content);
-      return { users: JSON.parse(content), sha: data.sha };
+      return { db: JSON.parse(content), sha: data.sha };
     }
 
-    async function saveData(users, sha) {
+    // Helper: save data to GitHub
+    async function saveData(db, sha) {
       const body = JSON.stringify({
         message: "Update testimonies",
-        content: btoa(JSON.stringify(users, null, 2)),
+        content: btoa(JSON.stringify(db, null, 2)),
         sha
       });
       const resp = await fetch(apiBase, { method: "PUT", headers, body });
       return resp.json();
     }
 
-    function jsonResponse(data, status = 200) {
-      return new Response(JSON.stringify(data), { status, headers: { "Content-Type": "application/json" } });
-    }
-
-    // GET /api/db → full users db
+    // GET /api/db → return all testimonies
     if (request.method === "GET" && path.endsWith("/db")) {
-      const { users } = await getData();
-      return jsonResponse({ users });
+      try {
+        const { db } = await getData();
+        return new Response(JSON.stringify(db), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
+      } catch (e) {
+        return new Response("Error fetching DB", { status: 500, headers: corsHeaders });
+      }
     }
 
-    // POST /api/auth/login → login via access code
+    // POST /api/auth/login → check access code
     if (request.method === "POST" && path.endsWith("/auth/login")) {
-      const body = await request.json();
-      if (!body.name || !body.accessCode) return jsonResponse({ error: "Name and access code required" }, 400);
+      try {
+        const body = await request.json();
+        if (body.accessCode !== ACCESS_CODE) {
+          return new Response(JSON.stringify({ error: "Invalid access code" }), { status: 403, headers: corsHeaders });
+        }
 
-      const { users, sha } = await getData();
-      if (!users[body.name]) users[body.name] = { entries: [], created: new Date().toISOString() };
+        // Ensure user exists
+        const { db, sha } = await getData();
+        if (!db.users[body.name]) {
+          db.users[body.name] = { entries: [], created: new Date().toISOString() };
+          await saveData(db, sha);
+        }
 
-      return jsonResponse({ success: true });
+        return new Response(JSON.stringify({ ok: true }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
+      } catch {
+        return new Response(JSON.stringify({ error: "Login failed" }), { status: 500, headers: corsHeaders });
+      }
     }
 
-    // POST /api/entries → add a new entry
+    // POST /api/entries → add testimony
     if (request.method === "POST" && path.endsWith("/entries")) {
-      const body = await request.json();
-      if (!body.text || body.text.length < 1) return jsonResponse({ error: "Text required" }, 400);
+      try {
+        const body = await request.json();
+        if (!body.text) return new Response(JSON.stringify({ error: "No text provided" }), { status: 400, headers: corsHeaders });
 
-      const { users, sha } = await getData();
-      // Assume session user is in body.name
-      const name = body.name;
-      if (!users[name]) users[name] = { entries: [], created: new Date().toISOString() };
-      const seq = (users[name].entries.length || 0) + 1;
-      const now = new Date();
-      const entry = {
-        id: Date.now().toString(),
-        seq,
-        text: body.text,
-        date: now.toLocaleDateString(),
-        time: now.toLocaleTimeString(),
-        iso: now.toISOString()
-      };
-      users[name].entries.push(entry);
-      await saveData(users, sha);
-      return jsonResponse({ message: "Entry recorded", entry });
+        const { db, sha } = await getData();
+        const user = body.user || "Anonymous";
+        if (!db.users[user]) db.users[user] = { entries: [], created: new Date().toISOString() };
+
+        const entry = {
+          id: Date.now().toString(),
+          seq: (db.users[user].entries.length || 0) + 1,
+          text: body.text,
+          date: new Date().toLocaleDateString(),
+          time: new Date().toLocaleTimeString(),
+          iso: new Date().toISOString()
+        };
+
+        db.users[user].entries.push(entry);
+        await saveData(db, sha);
+
+        return new Response(JSON.stringify({ message: "Saved", entry }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
+      } catch (e) {
+        return new Response(JSON.stringify({ error: "Save failed" }), { status: 500, headers: corsHeaders });
+      }
     }
 
     // DELETE /api/entries/:id → delete entry
-    if (request.method === "DELETE" && path.startsWith("/api/entries/")) {
-      const id = path.split("/").pop();
-      const body = await request.json();
-      if (body.adminPassword !== ADMIN_PASSWORD) return jsonResponse({ error: "Unauthorized" }, 403);
+    if (request.method === "DELETE" && path.startsWith("/api/entries")) {
+      try {
+        const id = path.split("/").pop();
+        const body = await request.json();
+        if (body.adminPassword !== ADMIN_PASSWORD) {
+          return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 403, headers: corsHeaders });
+        }
 
-      const { users, sha } = await getData();
-      for (const user of Object.values(users)) {
-        user.entries = user.entries.filter(e => e.id !== id);
+        const { db, sha } = await getData();
+        for (const u of Object.values(db.users)) {
+          u.entries = u.entries.filter(e => e.id !== id);
+        }
+
+        await saveData(db, sha);
+        return new Response(JSON.stringify({ success: true }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
+      } catch {
+        return new Response(JSON.stringify({ error: "Delete failed" }), { status: 500, headers: corsHeaders });
       }
-      await saveData(users, sha);
-      return jsonResponse({ success: true });
     }
 
-    // POST /api/admin/login → verify admin password
+    // POST /api/admin/login → admin login
     if (request.method === "POST" && path.endsWith("/admin/login")) {
-      const body = await request.json();
-      if (body.password !== ADMIN_PASSWORD) return jsonResponse({ error: "Incorrect password" }, 403);
-      return jsonResponse({ success: true });
+      try {
+        const body = await request.json();
+        if (body.password !== ADMIN_PASSWORD) return new Response(JSON.stringify({ error: "Invalid password" }), { status: 403, headers: corsHeaders });
+        return new Response(JSON.stringify({ ok: true }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
+      } catch {
+        return new Response(JSON.stringify({ error: "Admin login failed" }), { status: 500, headers: corsHeaders });
+      }
     }
 
-    // GET /api/admin/stats → return usage stats
+    // GET /api/admin/stats → usage stats
     if (request.method === "GET" && path.endsWith("/admin/stats")) {
-      const { users } = await getData();
-      const stats = { users };
-      return jsonResponse(stats);
+      try {
+        const { db } = await getData();
+        return new Response(JSON.stringify(db), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
+      } catch {
+        return new Response(JSON.stringify({ error: "Stats failed" }), { status: 500, headers: corsHeaders });
+      }
     }
 
-    return new Response("Not found", { status: 404 });
+    return new Response(JSON.stringify({ error: "Not found" }), { status: 404, headers: corsHeaders });
   }
 };
