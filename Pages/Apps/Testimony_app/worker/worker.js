@@ -9,16 +9,6 @@ export default {
     const filePath = "Pages/Apps/Testimony_app/testimonies.json";
     const apiBase = `https://api.github.com/repos/${repoOwner}/${repoName}/contents/${filePath}`;
 
-    const corsHeaders = {
-      "Access-Control-Allow-Origin": "*",
-      "Access-Control-Allow-Methods": "GET, POST, DELETE, OPTIONS",
-      "Access-Control-Allow-Headers": "Content-Type",
-    };
-
-    if (request.method === "OPTIONS") {
-      return new Response(null, { headers: corsHeaders });
-    }
-
     const headers = {
       "Authorization": `token ${GITHUB_TOKEN}`,
       "Accept": "application/vnd.github.v3+json"
@@ -27,126 +17,117 @@ export default {
     const url = new URL(request.url);
     const path = url.pathname;
 
-    // Helper: fetch data from GitHub
-    async function getData() {
-      const resp = await fetch(apiBase, { headers });
-      const data = await resp.json();
-      const content = atob(data.content);
-      return { db: JSON.parse(content), sha: data.sha };
+    // Handle CORS preflight
+    if (request.method === "OPTIONS") {
+      return new Response(null, {
+        status: 204,
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Methods": "GET, POST, DELETE, OPTIONS",
+          "Access-Control-Allow-Headers": "Content-Type"
+        }
+      });
     }
 
-    // Helper: save data to GitHub
-    async function saveData(db, sha) {
+    // Helper: fetch existing testimonies from GitHub
+    async function getTestimonies() {
+      const resp = await fetch(apiBase, { headers });
+      if (!resp.ok) throw new Error("Failed to fetch from GitHub");
+      const data = await resp.json();
+      const content = atob(data.content);
+      return { list: JSON.parse(content), sha: data.sha };
+    }
+
+    // Helper: save updated testimonies to GitHub
+    async function saveTestimonies(testimonies, sha) {
       const body = JSON.stringify({
         message: "Update testimonies",
-        content: btoa(JSON.stringify(db, null, 2)),
+        content: btoa(JSON.stringify(testimonies, null, 2)),
         sha
       });
       const resp = await fetch(apiBase, { method: "PUT", headers, body });
+      if (!resp.ok) throw new Error("Failed to save to GitHub");
       return resp.json();
     }
 
-    // GET /api/db → return all testimonies
-    if (request.method === "GET" && path.endsWith("/db")) {
+    // API endpoints
+    if (path === "/api/db" && request.method === "GET") {
       try {
-        const { db } = await getData();
-        return new Response(JSON.stringify(db), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
+        const { list } = await getTestimonies();
+        return new Response(JSON.stringify({ users: list }), {
+          headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" }
+        });
       } catch (e) {
-        return new Response("Error fetching DB", { status: 500, headers: corsHeaders });
+        return new Response(JSON.stringify({ error: e.message }), {
+          status: 500,
+          headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" }
+        });
       }
     }
 
-    // POST /api/auth/login → check access code
-    if (request.method === "POST" && path.endsWith("/auth/login")) {
+    if (path === "/api/entries" && request.method === "POST") {
       try {
         const body = await request.json();
-        if (body.accessCode !== ACCESS_CODE) {
-          return new Response(JSON.stringify({ error: "Invalid access code" }), { status: 403, headers: corsHeaders });
+        if (!body.accessCode || body.accessCode !== ACCESS_CODE) {
+          return new Response(JSON.stringify({ error: "Invalid access code" }), {
+            status: 403,
+            headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" }
+          });
         }
 
-        // Ensure user exists
-        const { db, sha } = await getData();
-        if (!db.users[body.name]) {
-          db.users[body.name] = { entries: [], created: new Date().toISOString() };
-          await saveData(db, sha);
-        }
-
-        return new Response(JSON.stringify({ ok: true }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
-      } catch {
-        return new Response(JSON.stringify({ error: "Login failed" }), { status: 500, headers: corsHeaders });
-      }
-    }
-
-    // POST /api/entries → add testimony
-    if (request.method === "POST" && path.endsWith("/entries")) {
-      try {
-        const body = await request.json();
-        if (!body.text) return new Response(JSON.stringify({ error: "No text provided" }), { status: 400, headers: corsHeaders });
-
-        const { db, sha } = await getData();
-        const user = body.user || "Anonymous";
-        if (!db.users[user]) db.users[user] = { entries: [], created: new Date().toISOString() };
-
-        const entry = {
-          id: Date.now().toString(),
-          seq: (db.users[user].entries.length || 0) + 1,
+        const { list, sha } = await getTestimonies();
+        const newEntry = {
+          id: Date.now(),
+          seq: list.length + 1,
           text: body.text,
+          name: body.name || "Anonymous",
           date: new Date().toLocaleDateString(),
           time: new Date().toLocaleTimeString(),
           iso: new Date().toISOString()
         };
+        list.push(newEntry);
+        await saveTestimonies(list, sha);
 
-        db.users[user].entries.push(entry);
-        await saveData(db, sha);
-
-        return new Response(JSON.stringify({ message: "Saved", entry }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
+        return new Response(JSON.stringify({ message: "Saved", entry: newEntry }), {
+          headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" }
+        });
       } catch (e) {
-        return new Response(JSON.stringify({ error: "Save failed" }), { status: 500, headers: corsHeaders });
+        return new Response(JSON.stringify({ error: e.message }), {
+          status: 500,
+          headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" }
+        });
       }
     }
 
-    // DELETE /api/entries/:id → delete entry
-    if (request.method === "DELETE" && path.startsWith("/api/entries")) {
+    if (path.startsWith("/api/entries/") && request.method === "DELETE") {
       try {
-        const id = path.split("/").pop();
+        const id = Number(path.split("/").pop());
         const body = await request.json();
-        if (body.adminPassword !== ADMIN_PASSWORD) {
-          return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 403, headers: corsHeaders });
+        if (!body.adminPassword || body.adminPassword !== ADMIN_PASSWORD) {
+          return new Response(JSON.stringify({ error: "Unauthorized" }), {
+            status: 403,
+            headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" }
+          });
         }
 
-        const { db, sha } = await getData();
-        for (const u of Object.values(db.users)) {
-          u.entries = u.entries.filter(e => e.id !== id);
-        }
+        const { list, sha } = await getTestimonies();
+        const updated = list.filter(e => e.id !== id);
+        await saveTestimonies(updated, sha);
 
-        await saveData(db, sha);
-        return new Response(JSON.stringify({ success: true }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
-      } catch {
-        return new Response(JSON.stringify({ error: "Delete failed" }), { status: 500, headers: corsHeaders });
+        return new Response(JSON.stringify({ success: true }), {
+          headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" }
+        });
+      } catch (e) {
+        return new Response(JSON.stringify({ error: e.message }), {
+          status: 500,
+          headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" }
+        });
       }
     }
 
-    // POST /api/admin/login → admin login
-    if (request.method === "POST" && path.endsWith("/admin/login")) {
-      try {
-        const body = await request.json();
-        if (body.password !== ADMIN_PASSWORD) return new Response(JSON.stringify({ error: "Invalid password" }), { status: 403, headers: corsHeaders });
-        return new Response(JSON.stringify({ ok: true }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
-      } catch {
-        return new Response(JSON.stringify({ error: "Admin login failed" }), { status: 500, headers: corsHeaders });
-      }
-    }
-
-    // GET /api/admin/stats → usage stats
-    if (request.method === "GET" && path.endsWith("/admin/stats")) {
-      try {
-        const { db } = await getData();
-        return new Response(JSON.stringify(db), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
-      } catch {
-        return new Response(JSON.stringify({ error: "Stats failed" }), { status: 500, headers: corsHeaders });
-      }
-    }
-
-    return new Response(JSON.stringify({ error: "Not found" }), { status: 404, headers: corsHeaders });
+    return new Response(JSON.stringify({ error: "Not found" }), {
+      status: 404,
+      headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" }
+    });
   }
 };
