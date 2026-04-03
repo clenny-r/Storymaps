@@ -379,15 +379,18 @@ textarea:disabled{opacity:.55;cursor:not-allowed}
 <script>
 /* ======================================================
    CONFIG
-   Backend endpoints (Cloudflare Worker):
-   GET    /api/db              - Fetch all testimonies
-   POST   /api/entries         - Create new testimony entry
-   DELETE /api/entries/:id     - Delete testimony entry (admin)
-   POST   /admin/login         - Admin authentication
-   GET    /admin/stats         - Admin statistics
+   Backend expects these endpoints:
+   GET    /api/db
+   POST   /api/auth/login
+   POST   /api/auth/logout
+   POST   /api/entries
+   DELETE /api/entries/:id
+   POST   /api/admin/login
+   GET    /api/admin/stats
+   POST   /api/admin/export
    ====================================================== */
 const CFG = {
-  API_BASE: 'https://twc-testimony-api2.kd7bgn7q2z.workers.dev',
+  API_BASE: 'https://f946e7c2-twc-testimony-api2.kd7bgn7q2z.workers.dev',
   SITE_NAME: 'TWC Ministries',
   APP_NAME: 'Testimony Log',
   MAX_TEXT: 5000,
@@ -489,7 +492,7 @@ async function api(path, opts={}) {
 
 async function loadDB() {
   try {
-    const data = await api('/api/db', { method: 'GET', headers: {} });
+    const data = await api('/db', { method: 'GET', headers: {} });
     STATE.db = dbShape(data);
     cSave(STATE.db);
     return true;
@@ -505,7 +508,7 @@ async function restoreSession() {
   const sess = sessionStorage.getItem(CFG.SESSION_KEY);
   if (!sess) return;
   try {
-    const db = await api('/api/db', { method: 'GET', headers: {} });
+    const db = await api('/db', { method: 'GET', headers: {} });
     STATE.db = dbShape(db);
     if (sess && STATE.db.users?.[sess]) {
       STATE.user = sess;
@@ -589,7 +592,10 @@ async function doSignIn() {
   setBusyButton(true, 'Signing in...');
 
   try {
-    // Store credentials and load existing data
+    await api('/auth/login', {
+      method: 'POST',
+      body: JSON.stringify({ name, accessCode: code })
+    });
     STATE.user = name;
     STATE.accessCode = code;
     STATE.view = 'dash';
@@ -720,13 +726,9 @@ async function submitEntry() {
 
   setBusy('subBtn', true, '<span class="spin"></span> Saving...');
   try {
-    const res = await api('/api/entries', {
+    const res = await api('/entries', {
       method: 'POST',
-      body: JSON.stringify({ 
-        text, 
-        name: STATE.user,
-        accessCode: STATE.accessCode 
-      })
+      body: JSON.stringify({ text })
     });
 
     await loadDB();
@@ -756,37 +758,9 @@ function confirmDel(id) {
 }
 
 async function doDel(id) {
-  // Prompt for admin password before deletion
-  showDlg(`
-    <div class="dialog no-print">
-      <div class="dialog-title" style="color:var(--gold);">Admin Authentication Required</div>
-      <div class="dialog-body">Enter the admin password to delete this entry.</div>
-      <div class="fg" style="margin-bottom:18px;">
-        <label for="del-pass">Admin Password</label>
-        <input type="password" id="del-pass" placeholder="Enter admin password" autocomplete="off"/>
-      </div>
-      <div class="btn-row">
-        <button class="btn btn-danger" onclick="execDel('${esc(id)}')">Delete Entry</button>
-        <button class="btn btn-ghost" onclick="closeDlg()">Cancel</button>
-      </div>
-    </div>
-  `);
-  setTimeout(() => document.getElementById('del-pass')?.focus(), 100);
-}
-
-async function execDel(id) {
-  const pass = document.getElementById('del-pass')?.value.trim();
-  if (!pass) return toast('Enter admin password', true);
-  
   closeDlg();
   try {
-    await api('/api/entries/' + encodeURIComponent(id), { 
-      method: 'DELETE', 
-      body: JSON.stringify({ 
-        adminPassword: pass,
-        userName: STATE.user 
-      }) 
-    });
+    await api('/entries/' + encodeURIComponent(id), { method: 'DELETE', body: JSON.stringify({}) });
     await loadDB();
     toast('Entry deleted.', false, true);
     render();
