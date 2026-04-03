@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Testimony Log | TWC Ministries</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Cinzel:wght@400;600;700&family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --gold: #C9A84C;
+    --gold-light: #E8C97A;
+    --gold-dim: #7a6130;
+    --deep: #0D0A06;
+    --dark: #16120C;
+    --panel: #1E1810;
+    --panel2: #261E13;
+    --border: #3a2e1a;
+    --text: #EDE3C8;
+    --text-dim: #a89060;
+    --red: #8B2020;
+    --cream: #FAF3E0;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--deep);
+    color: var(--text);
+    font-family: 'EB Garamond', Georgia, serif;
+    font-size: 17px;
+    min-height: 100vh;
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  /* Parchment texture overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      radial-gradient(ellipse at 20% 20%, rgba(201,168,76,0.04) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 80%, rgba(201,168,76,0.03) 0%, transparent 60%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Decorative cross pattern */
+  body::after {
+    content: '';
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 600px;
+    height: 600px;
+    background-image:
+      radial-gradient(circle, rgba(201,168,76,0.015) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .wrapper {
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 0 20px 60px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ── HEADER ── */
+  .site-header {
+    text-align: center;
+    padding: 40px 0 30px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 40px;
+    position: relative;
+  }
+
+  .site-header::after {
+    content: '';
+    display: block;
+    width: 120px;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    margin: 16px auto 0;
+  }
+
+  .logo-cross {
+    font-size: 28px;
+    color: var(--gold);
+    letter-spacing: 8px;
+    margin-bottom: 10px;
+    display: block;
+  }
+
+  .site-title {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: clamp(18px, 4vw, 28px);
+    color: var(--gold);
+    letter-spacing: 3px;
+    text-shadow: 0 0 40px rgba(201,168,76,0.3);
+    line-height: 1.3;
+  }
+
+  .site-subtitle {
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    letter-spacing: 4px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    margin-top: 8px;
+  }
+
+  .verse-banner {
+    font-style: italic;
+    color: var(--text-dim);
+    font-size: 14px;
+    margin-top: 14px;
+    letter-spacing: 0.5px;
+  }
+
+  /* ── PANELS ── */
+  .panel {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    padding: 36px 40px;
+    position: relative;
+    margin-bottom: 28px;
+  }
+
+  .panel::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold-dim), transparent);
+  }
+
+  .panel-title {
+    font-family: 'Cinzel', serif;
+    font-size: 13px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .panel-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* ── FORMS ── */
+  label {
+    display: block;
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 8px;
+  }
+
+  input[type="text"], textarea {
+    width: 100%;
+    background: var(--deep);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-family: 'EB Garamond', serif;
+    font-size: 16px;
+    padding: 12px 16px;
+    border-radius: 2px;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    resize: vertical;
+  }
+
+  input[type="text"]:focus, textarea:focus {
+    border-color: var(--gold-dim);
+    box-shadow: 0 0 0 2px rgba(201,168,76,0.08);
+  }
+
+  input[type="text"]::placeholder, textarea::placeholder {
+    color: #4a3e28;
+    font-style: italic;
+  }
+
+  textarea {
+    min-height: 150px;
+    line-height: 1.7;
+  }
+
+  .form-group {
+    margin-bottom: 22px;
+  }
+
+  /* ── BUTTONS ── */
+  .btn {
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    padding: 13px 28px;
+    border: none;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: all 0.2s;
+    display: inline-block;
+  }
+
+  .btn-primary {
+    background: var(--gold);
+    color: var(--deep);
+    width: 100%;
+  }
+
+  .btn-primary:hover {
+    background: var(--gold-light);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(201,168,76,0.25);
+  }
+
+  .btn-secondary {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+  }
+
+  .btn-secondary:hover {
+    border-color: var(--gold-dim);
+    color: var(--gold);
+  }
+
+  .btn-outline-gold {
+    background: transparent;
+    border: 1px solid var(--gold-dim);
+    color: var(--gold);
+  }
+
+  .btn-outline-gold:hover {
+    background: rgba(201,168,76,0.08);
+  }
+
+  .btn-row {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  /* ── USER BADGE ── */
+  .user-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--panel2);
+    border: 1px solid var(--border);
+    padding: 12px 20px;
+    border-radius: 2px;
+    margin-bottom: 28px;
+    font-size: 14px;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .user-bar-name {
+    font-family: 'Cinzel', serif;
+    font-size: 12px;
+    color: var(--gold);
+    letter-spacing: 1.5px;
+  }
+
+  .user-bar-meta {
+    color: var(--text-dim);
+    font-size: 13px;
+  }
+
+  /* ── ENTRY CARDS ── */
+  .entry-card {
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    padding: 24px 28px;
+    margin-bottom: 16px;
+    background: var(--dark);
+    position: relative;
+    transition: border-color 0.2s;
+    animation: fadeUp 0.3s ease both;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .entry-card:hover {
+    border-color: var(--gold-dim);
+  }
+
+  .entry-card::before {
+    content: '\2767';
+    position: absolute;
+    top: 22px;
+    right: 24px;
+    color: var(--gold-dim);
+    font-size: 14px;
+    opacity: 0.5;
+  }
+
+  .entry-meta {
+    display: flex;
+    gap: 18px;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+  }
+
+  .entry-seq {
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: var(--gold);
+    background: rgba(201,168,76,0.08);
+    border: 1px solid var(--gold-dim);
+    padding: 3px 10px;
+    border-radius: 2px;
+  }
+
+  .entry-date {
+    font-size: 13px;
+    color: var(--text-dim);
+    font-style: italic;
+  }
+
+  .entry-body {
+    font-size: 16px;
+    line-height: 1.75;
+    color: var(--text);
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+
+  .entries-empty {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--text-dim);
+    font-style: italic;
+  }
+
+  .entries-empty span {
+    font-size: 28px;
+    display: block;
+    margin-bottom: 12px;
+    opacity: 0.4;
+  }
+
+  /* ── DIVIDER ── */
+  .divider {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin: 28px 0;
+    color: var(--text-dim);
+    font-size: 13px;
+    font-style: italic;
+  }
+  .divider::before, .divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* ── TABS ── */
+  .tab-row {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 28px;
+  }
+
+  .tab-btn {
+    font-family: 'Cinzel', serif;
+    font-size: 10px;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    padding: 10px 20px;
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+    cursor: pointer;
+    border-radius: 2px;
+    transition: all 0.2s;
+  }
+
+  .tab-btn.active {
+    background: var(--gold);
+    color: var(--deep);
+    border-color: var(--gold);
+  }
+
+  /* ── CHAR COUNTER ── */
+  .char-counter {
+    text-align: right;
+    font-size: 12px;
+    color: var(--text-dim);
+    margin-top: 4px;
+    font-family: 'Cinzel', serif;
+    letter-spacing: 1px;
+  }
+
+  /* ── TOAST ── */
+  .toast {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: var(--gold);
+    color: var(--deep);
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 12px 28px;
+    border-radius: 2px;
+    opacity: 0;
+    transition: all 0.3s ease;
+    z-index: 999;
+    white-space: nowrap;
+    pointer-events: none;
+  }
+
+  .toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  /* ── PRINT ── */
+  @media print {
+    body { background: white; color: black; }
+    .no-print { display: none !important; }
+    .site-header { border-bottom: 2px solid #ccc; }
+    .entry-card { border: 1px solid #ccc; break-inside: avoid; }
+    .entry-body { color: #222; }
+    .entry-date, .user-bar-meta { color: #555; }
+    .site-title { color: #333; }
+    .gold-rule { background: #ccc !important; }
+    .user-bar { border: 1px solid #ccc; }
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 560px) {
+    .panel { padding: 24px 20px; }
+    .btn-row { flex-direction: column; }
+  }
+
+  /* Ornamental rule */
+  .gold-rule {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold-dim), transparent);
+    margin: 32px 0;
+  }
+
+  .count-badge {
+    font-family: 'Cinzel', serif;
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    background: rgba(201,168,76,0.12);
+    border: 1px solid var(--gold-dim);
+    color: var(--gold);
+    padding: 2px 8px;
+    border-radius: 20px;
+    vertical-align: middle;
+    margin-left: 8px;
+  }
+</style>
+</head>
+<body>
+
+<div class="wrapper">
+
+  <!-- HEADER -->
+  <header class="site-header">
+    <span class="logo-cross">✝</span>
+    <div class="site-title">TWC Ministries</div>
+    <div class="site-subtitle">Transformational Worship Centre</div>
+    <div class="verse-banner">
+      "They triumphed over him by the blood of the Lamb and by the word of their testimony." — Revelation 12:11
+    </div>
+  </header>
+
+  <!-- MAIN APP -->
+  <div id="app"></div>
+
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ─────────────────────────────────────────────
+// STORAGE KEY
+// ─────────────────────────────────────────────
+const STORAGE_KEY = 'twc_testimony_log_v1';
+
+// ─────────────────────────────────────────────
+// DATA LAYER — localStorage as persistent store
+// ─────────────────────────────────────────────
+function loadData() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    return raw ? JSON.parse(raw) : { users: {} };
+  } catch(e) { return { users: {} }; }
+}
+
+function saveData(data) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+}
+
+function getEntries(username) {
+  const data = loadData();
+  return data.users[username] ? data.users[username].entries : [];
+}
+
+function addEntry(username, text) {
+  const data = loadData();
+  if (!data.users[username]) data.users[username] = { entries: [] };
+  const entries = data.users[username].entries;
+  const now = new Date();
+  entries.push({
+    seq: entries.length + 1,
+    date: now.toLocaleDateString('en-US', {weekday:'long', year:'numeric', month:'long', day:'numeric'}),
+    time: now.toLocaleTimeString('en-US', {hour:'2-digit', minute:'2-digit'}),
+    iso: now.toISOString(),
+    text: text.trim()
+  });
+  saveData(data);
+  return entries[entries.length - 1];
+}
+
+function userExists(username) {
+  const data = loadData();
+  return !!data.users[username];
+}
+
+// ─────────────────────────────────────────────
+// STATE
+// ─────────────────────────────────────────────
+let currentUser = null;
+
+// ─────────────────────────────────────────────
+// TOAST
+// ─────────────────────────────────────────────
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+// ─────────────────────────────────────────────
+// RENDER HELPERS
+// ─────────────────────────────────────────────
+const app = () => document.getElementById('app');
+
+function renderAuth() {
+  app().innerHTML = `
+    <div class="panel">
+      <div class="panel-title">✦ Enter Your Name</div>
+      <p style="color:var(--text-dim);font-size:15px;margin-bottom:24px;line-height:1.7;font-style:italic;">
+        Welcome, beloved. Enter your name to sign in or create your testimony record. Your entries are stored securely in this browser.
+      </p>
+      <div class="form-group">
+        <label for="usernameInput">Your Name</label>
+        <input type="text" id="usernameInput" placeholder="e.g. Mary Magdalene" maxlength="60" autocomplete="off"/>
+      </div>
+      <button class="btn btn-primary" onclick="handleAuth()">Enter the Sanctuary</button>
+      <div class="divider">or</div>
+      <p style="text-align:center;color:var(--text-dim);font-size:13px;font-style:italic;">
+        Already have entries? Enter your exact name to retrieve them.
+      </p>
+    </div>
+    <div style="text-align:center;margin-top:20px;">
+      <p style="font-size:13px;color:var(--text-dim);font-style:italic;line-height:1.8;">
+        "Come to me, all you who are weary and burdened, and I will give you rest." — Matthew 11:28
+      </p>
+    </div>
+  `;
+  const input = document.getElementById('usernameInput');
+  input.focus();
+  input.addEventListener('keydown', e => { if (e.key === 'Enter') handleAuth(); });
+}
+
+function handleAuth() {
+  const input = document.getElementById('usernameInput');
+  const name = input.value.trim();
+  if (!name) { showToast('Please enter your name'); return; }
+  const exists = userExists(name);
+  currentUser = name;
+  if (exists) {
+    showToast('Welcome back, ' + name + '!');
+  } else {
+    // create user
+    const data = loadData();
+    data.users[name] = { entries: [] };
+    saveData(data);
+    showToast('Testimony record created for ' + name);
+  }
+  renderDashboard();
+}
+
+function renderDashboard() {
+  const entries = getEntries(currentUser);
+  const count = entries.length;
+
+  app().innerHTML = `
+    <div class="user-bar no-print">
+      <div>
+        <div class="user-bar-name">✦ ${escHtml(currentUser)}</div>
+        <div class="user-bar-meta">${count} testimon${count === 1 ? 'y' : 'ies'} recorded</div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-outline-gold no-print" onclick="printLog()">🖨 Print</button>
+        <button class="btn btn-outline-gold no-print" onclick="downloadLog()">⤓ Download</button>
+        <button class="btn btn-secondary no-print" onclick="signOut()">Sign Out</button>
+      </div>
+    </div>
+
+    <!-- NEW ENTRY PANEL -->
+    <div class="panel no-print">
+      <div class="panel-title">✦ Record a New Testimony</div>
+      <div class="form-group">
+        <label for="entryText">Your Testimony</label>
+        <textarea id="entryText" placeholder="Share what God has done in your life… a healing, a breakthrough, an answered prayer, a word received…" maxlength="4000" oninput="updateCounter()"></textarea>
+        <div class="char-counter"><span id="charCount">0</span> / 4000</div>
+      </div>
+      <button class="btn btn-primary" onclick="submitEntry()">Record My Testimony</button>
+    </div>
+
+    <!-- HISTORY -->
+    <div class="panel" id="historyPanel">
+      <div class="panel-title">✦ Testimony History <span class="count-badge">${count}</span></div>
+      <div id="entriesList">
+        ${renderEntries(entries)}
+      </div>
+    </div>
+
+    <div style="text-align:center;margin-top:10px;">
+      <p style="font-size:13px;color:var(--text-dim);font-style:italic;line-height:1.8;">
+        "Give thanks to the Lord, for He is good; His love endures forever." — Psalm 107:1
+      </p>
+    </div>
+  `;
+}
+
+function renderEntries(entries) {
+  if (!entries.length) {
+    return `<div class="entries-empty">
+      <span>✦</span>
+      No testimonies yet. Be the first to record what God has done!
+    </div>`;
+  }
+  // Newest first
+  return [...entries].reverse().map(e => `
+    <div class="entry-card">
+      <div class="entry-meta">
+        <span class="entry-seq">Entry #${e.seq}</span>
+        <span class="entry-date">${e.date} &nbsp;·&nbsp; ${e.time}</span>
+      </div>
+      <div class="entry-body">${escHtml(e.text)}</div>
+    </div>
+  `).join('');
+}
+
+function updateCounter() {
+  const ta = document.getElementById('entryText');
+  document.getElementById('charCount').textContent = ta.value.length;
+}
+
+function submitEntry() {
+  const ta = document.getElementById('entryText');
+  const text = ta.value.trim();
+  if (!text) { showToast('Please write your testimony first'); return; }
+  if (text.length < 10) { showToast('Please share a bit more'); return; }
+
+  addEntry(currentUser, text);
+  ta.value = '';
+  document.getElementById('charCount').textContent = '0';
+  showToast('Glory to God! Testimony recorded.');
+
+  // Refresh entries list and count
+  const entries = getEntries(currentUser);
+  document.getElementById('entriesList').innerHTML = renderEntries(entries);
+  document.querySelector('.user-bar-meta').textContent =
+    entries.length + ' testimon' + (entries.length === 1 ? 'y' : 'ies') + ' recorded';
+  document.querySelector('.count-badge').textContent = entries.length;
+
+  // Scroll to history
+  document.getElementById('historyPanel').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function signOut() {
+  currentUser = null;
+  showToast('Signed out. God bless you!');
+  renderAuth();
+}
+
+// ─────────────────────────────────────────────
+// PRINT
+// ─────────────────────────────────────────────
+function printLog() {
+  window.print();
+}
+
+// ─────────────────────────────────────────────
+// DOWNLOAD AS TXT
+// ─────────────────────────────────────────────
+function downloadLog() {
+  const entries = getEntries(currentUser);
+  if (!entries.length) { showToast('No testimonies to download yet'); return; }
+
+  const lines = [];
+  lines.push('TWC MINISTRIES — TESTIMONY LOG');
+  lines.push('Transformational Worship Centre | twcministries.net');
+  lines.push('Name: ' + currentUser);
+  lines.push('Downloaded: ' + new Date().toLocaleString());
+  lines.push('');
+  lines.push('"They triumphed over him by the blood of the Lamb and by the word of their testimony."');
+  lines.push('— Revelation 12:11');
+  lines.push('');
+  lines.push('═'.repeat(60));
+  lines.push('');
+
+  [...entries].reverse().forEach(e => {
+    lines.push(`ENTRY #${e.seq}`);
+    lines.push(`Date: ${e.date}`);
+    lines.push(`Time: ${e.time}`);
+    lines.push('');
+    lines.push(e.text);
+    lines.push('');
+    lines.push('─'.repeat(60));
+    lines.push('');
+  });
+
+  lines.push('');
+  lines.push('Total entries: ' + entries.length);
+  lines.push('');
+  lines.push('To God be the glory, great things He has done!');
+
+  const blob = new Blob([lines.join('\n')], { type: 'text/plain;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  const safeName = currentUser.replace(/[^a-z0-9]/gi, '_').toLowerCase();
+  a.href = url;
+  a.download = `TWC_Testimony_Log_${safeName}.txt`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  showToast('Downloaded!');
+}
+
+// ─────────────────────────────────────────────
+// UTIL
+// ─────────────────────────────────────────────
+function escHtml(str) {
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+// ─────────────────────────────────────────────
+// INIT
+// ─────────────────────────────────────────────
+renderAuth();
+</script>
+</body>
+</html>
