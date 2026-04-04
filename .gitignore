@@ -6,7 +6,7 @@
 # ============================================
 # The wrangler.toml file contains sensitive credentials (GitHub token, passwords)
 # This file must NEVER be committed to the repository
-Pages/Apps/Testimony_app/twc-testimony-worker/wrangler.toml
+Pages/Apps/Testimony_app/worker/twc-testimony-worker/wrangler.toml
 
 # ============================================
 # Project-Specific Folders
