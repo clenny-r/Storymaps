@@ -1257,20 +1257,28 @@ async function sendBibleQuestion() {
       }
       
     } else {
-      // Handle regular JSON response (pattern matching or fallback)
+      // Handle regular JSON response (pattern matching, AI, or fallback)
       const data = await response.json();
       
       document.getElementById(typingId)?.remove();
       addChatMessage('assistant', data.answer);
       
-      // Add source tag for pattern matching
-      if (data.source === 'pattern') {
-        const messages = document.getElementById('chatMessages');
-        const lastMsg = messages?.lastElementChild;
-        if (lastMsg) {
-          const sourceTag = document.createElement('div');
-          sourceTag.style.cssText = 'margin-top:8px;font-size:10px;color:var(--blue-light);font-family:Cinzel,serif;letter-spacing:1px;';
+      // Add source tag
+      const messages = document.getElementById('chatMessages');
+      const lastMsg = messages?.lastElementChild;
+      if (lastMsg) {
+        const sourceTag = document.createElement('div');
+        sourceTag.style.cssText = 'margin-top:8px;font-size:10px;font-family:Cinzel,serif;letter-spacing:1px;';
+        
+        if (data.source === 'pattern') {
+          sourceTag.style.color = 'var(--blue-light)';
           sourceTag.textContent = '[Knowledge Base]';
+        } else if (data.source === 'ai') {
+          sourceTag.style.color = 'var(--purple)';
+          sourceTag.textContent = '[AI]';
+        }
+        
+        if (data.source === 'pattern' || data.source === 'ai') {
           lastMsg.querySelector('[data-message-content]')?.parentElement.appendChild(sourceTag);
         }
       }
