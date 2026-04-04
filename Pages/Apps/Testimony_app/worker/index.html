@@ -1179,21 +1179,114 @@ async function sendBibleQuestion() {
     
     if (!response.ok) throw new Error('AI service unavailable');
     
-    const data = await response.json();
+    const contentType = response.headers.get('content-type');
     
-    document.getElementById(typingId)?.remove();
-    addChatMessage('assistant', data.answer);
-    
-    chatHistory.push(
-      { role: 'user', content: question },
-      { role: 'assistant', content: data.answer }
-    );
-    
-    if (chatHistory.length > 10) {
-      chatHistory = chatHistory.slice(-10);
+    // Check if response is streaming (SSE) or regular JSON
+    if (contentType?.includes('text/event-stream')) {
+      // Remove thinking indicator
+      document.getElementById(typingId)?.remove();
+      
+      // Handle streaming response
+      const msgId = addChatMessage('assistant', '');
+      const messageDiv = document.getElementById(msgId)?.querySelector('[data-message-content]');
+      let fullText = '';
+      let hasError = false;
+
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+
+        const chunk = decoder.decode(value);
+        const lines = chunk.split('\n');
+
+        for (const line of lines) {
+          if (line.startsWith('data: ')) {
+            const data = line.slice(6);
+            if (data === '[DONE]') continue;
+
+            try {
+              const parsed = JSON.parse(data);
+              
+              if (parsed.error && parsed.fallback) {
+                // AI failed, show fallback message
+                hasError = true;
+                break;
+              }
+              
+              if (parsed.content) {
+                fullText += parsed.content;
+                if (messageDiv) {
+                  messageDiv.textContent = fullText;
+                  messageDiv.scrollIntoView({ behavior: 'smooth', block: 'end' });
+                }
+              }
+            } catch (e) {
+              // Skip parse errors
+            }
+          }
+        }
+        
+        if (hasError) break;
+      }
+      
+      if (hasError || !fullText) {
+        // Fallback if stream failed
+        document.getElementById(msgId)?.remove();
+        addChatMessage('assistant', `❌ The AI service is currently unavailable. For "${question}", I encourage you to explore relevant Scripture passages. Try asking about: faith, love, prayer, salvation, Jesus Christ, forgiveness, the Holy Spirit, or spiritual growth.`);
+      } else {
+        // Add AI source tag
+        if (messageDiv && messageDiv.parentElement) {
+          const sourceTag = document.createElement('div');
+          sourceTag.style.cssText = 'margin-top:8px;font-size:10px;color:var(--purple);font-family:Cinzel,serif;letter-spacing:1px;';
+          sourceTag.textContent = '[AI]';
+          messageDiv.parentElement.appendChild(sourceTag);
+        }
+        
+        // Save to history
+        chatHistory.push(
+          { role: 'user', content: question },
+          { role: 'assistant', content: fullText }
+        );
+        
+        if (chatHistory.length > 10) {
+          chatHistory = chatHistory.slice(-10);
+        }
+      }
+      
+    } else {
+      // Handle regular JSON response (pattern matching or fallback)
+      const data = await response.json();
+      
+      document.getElementById(typingId)?.remove();
+      addChatMessage('assistant', data.answer);
+      
+      // Add source tag for pattern matching
+      if (data.source === 'pattern') {
+        const messages = document.getElementById('chatMessages');
+        const lastMsg = messages?.lastElementChild;
+        if (lastMsg) {
+          const sourceTag = document.createElement('div');
+          sourceTag.style.cssText = 'margin-top:8px;font-size:10px;color:var(--blue-light);font-family:Cinzel,serif;letter-spacing:1px;';
+          sourceTag.textContent = '[Knowledge Base]';
+          lastMsg.querySelector('[data-message-content]')?.parentElement.appendChild(sourceTag);
+        }
+      }
+      
+      chatHistory.push(
+        { role: 'user', content: question },
+        { role: 'assistant', content: data.answer }
+      );
+      
+      if (chatHistory.length > 10) {
+        chatHistory = chatHistory.slice(-10);
+      }
     }
     
   } catch (error) {
+    console.error('Chat error:', error);
     document.getElementById(typingId)?.remove();
     addChatMessage('assistant', '❌ Sorry, I encountered an error. Please try again.');
   } finally {
@@ -1247,7 +1340,7 @@ function addChatMessage(role, content) {
       word-wrap: break-word;
       ${isUser ? 'border-bottom-right-radius: 4px;' : 'border-bottom-left-radius: 4px;'}
     ">
-      ${esc(content)}
+      <div data-message-content style="white-space: pre-wrap;">${esc(content)}</div>
     </div>
   `;
   
@@ -1628,9 +1721,19 @@ function confirmDeleteUser(userName, entryCount, storageMB) {
           <li>All associated images</li>
           <li>All associated audio files</li>
         </ul>
-        <p style="color:var(--red-light);font-size:12px;font-style:italic;">
+        <p style="color:var(--red-light);font-size:12px;font-style:italic;margin-bottom:16px;">
           This action cannot be undone. Media files will be deleted from GitHub.
         </p>
+        <div class="fg">
+          <label for="deletePassword">Admin Password (required)</label>
+          <input 
+            type="password" 
+            id="deletePassword" 
+            placeholder="Enter admin password to confirm" 
+            autocomplete="off"
+            onkeypress="if(event.key==='Enter') deleteUser('${esc(userName)}')"
+          />
+        </div>
       </div>
       <div class="btn-row" style="margin-top:20px;">
         <button class="btn btn-ghost" onclick="closeDlg()" style="flex:1;">Cancel</button>
@@ -1638,15 +1741,23 @@ function confirmDeleteUser(userName, entryCount, storageMB) {
       </div>
     </div>
   `);
+  
+  // Focus the password field
+  setTimeout(() => document.getElementById('deletePassword')?.focus(), 100);
 }
 
 async function deleteUser(userName) {
+  // Get password from the dialog input field
+  const pwdInput = document.getElementById('deletePassword');
+  const pwd = pwdInput?.value?.trim();
+  
+  if (!pwd) {
+    toast('Admin password is required', true);
+    pwdInput?.focus();
+    return;
+  }
+  
   closeDlg();
-  
-  // Re-prompt for admin password
-  const pwd = prompt('Enter admin password to confirm deletion:');
-  if (!pwd) return;
-  
   setBusy('app', true, 'Deleting user and media files...');
   
   try {
