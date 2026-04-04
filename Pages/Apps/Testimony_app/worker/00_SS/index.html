@@ -894,6 +894,48 @@ function renderAdmin(app) {
   const thisM = ul.reduce((s,[,u]) => s + (u.entries || []).filter(e => e.iso?.startsWith(month)).length, 0);
   const avg = total ? (totalE / total).toFixed(1) : '0';
 
+  // Calculate growth metrics
+  const last30Days = ul.reduce((s,[,u]) => {
+    const cutoff = Date.now() - (30 * 24 * 60 * 60 * 1000);
+    return s + (u.entries || []).filter(e => new Date(e.iso).getTime() > cutoff).length;
+  }, 0);
+
+  const last7Days = ul.reduce((s,[,u]) => {
+    const cutoff = Date.now() - (7 * 24 * 60 * 60 * 1000);
+    return s + (u.entries || []).filter(e => new Date(e.iso).getTime() > cutoff).length;
+  }, 0);
+
+  // Most active user
+  const topUser = ul.length > 0 ? ul.reduce((top, [name, u]) => {
+    const cnt = (u.entries || []).length;
+    return cnt > top.cnt ? {name, cnt} : top;
+  }, {name: '—', cnt: 0}) : {name: '—', cnt: 0};
+
+  // Activity by day of week
+  const dayActivity = [0,0,0,0,0,0,0];
+  ul.forEach(([,u]) => {
+    (u.entries || []).forEach(e => {
+      const day = new Date(e.iso).getDay();
+      dayActivity[day]++;
+    });
+  });
+  const dayNames = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+
+  // Monthly trend (last 6 months)
+  const monthlyData = [];
+  for (let i = 5; i >= 0; i--) {
+    const d = new Date();
+    d.setMonth(d.getMonth() - i);
+    const monthKey = d.toISOString().slice(0,7);
+    const count = ul.reduce((s,[,u]) => s + (u.entries || []).filter(e => e.iso?.startsWith(monthKey)).length, 0);
+    monthlyData.push({
+      month: d.toLocaleDateString('en-US', {month:'short'}),
+      count
+    });
+  }
+
+  const maxMonthly = Math.max(...monthlyData.map(m => m.count), 1);
+
   const rows = ul.map(([name,u]) => ({
     name,
     cnt: (u.entries || []).length,
@@ -907,19 +949,134 @@ function renderAdmin(app) {
         <div class="avatar" style="background:linear-gradient(135deg,#6b1515,#a02020);font-size:20px;">⚙</div>
         <div>
           <div class="ub-name">Admin Dashboard</div>
-          <div class="ub-meta">TWC Testimony Log - Usage Overview</div>
+          <div class="ub-meta">TWC Testimony Log - Analytics & Insights</div>
         </div>
       </div>
       <button class="btn btn-ghost no-print" onclick="exitAdmin()">← Exit</button>
     </div>
 
-    <div class="stats-grid">
-      <div class="stat-card"><span class="stat-num">${total}</span><span class="stat-lbl">Users</span></div>
-      <div class="stat-card"><span class="stat-num">${totalE}</span><span class="stat-lbl">Entries</span></div>
-      <div class="stat-card"><span class="stat-num">${thisM}</span><span class="stat-lbl">This Month</span></div>
-      <div class="stat-card"><span class="stat-num">${avg}</span><span class="stat-lbl">Avg / User</span></div>
+    <div class="stats-grid" style="grid-template-columns:repeat(auto-fit, minmax(140px,1fr));gap:14px;margin-bottom:24px;">
+      <div class="stat-card">
+        <span class="stat-num">${total}</span>
+        <span class="stat-lbl">Total Users</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-num">${totalE}</span>
+        <span class="stat-lbl">All Entries</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-num">${thisM}</span>
+        <span class="stat-lbl">This Month</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-num">${last7Days}</span>
+        <span class="stat-lbl">Last 7 Days</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-num">${avg}</span>
+        <span class="stat-lbl">Avg Per User</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-num">${topUser.cnt}</span>
+        <span class="stat-lbl">Top Contributor</span>
+        <div style="font-size:10px;color:var(--text-dim);margin-top:4px;text-overflow:ellipsis;overflow:hidden;">${esc(topUser.name)}</div>
+      </div>
     </div>
 
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:18px;margin-bottom:22px;">
+      
+      <!-- Monthly Trend Chart -->
+      <div class="panel">
+        <div class="panel-title">📈 Monthly Trend</div>
+        <div style="padding:10px 0;">
+          <div style="display:flex;align-items:flex-end;justify-content:space-around;height:160px;gap:8px;">
+            ${monthlyData.map(m => {
+              const height = maxMonthly > 0 ? (m.count / maxMonthly) * 100 : 0;
+              return `
+                <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;">
+                  <div style="font-size:11px;color:var(--gold);font-family:'Cinzel',serif;font-weight:600;">${m.count}</div>
+                  <div style="width:100%;background:linear-gradient(180deg, var(--gold), var(--gold-dim));height:${height}%;min-height:${m.count > 0 ? '4px' : '2px'};border-radius:3px 3px 0 0;transition:all .3s;"></div>
+                  <div style="font-size:9px;color:var(--text-dim);font-family:'Cinzel',serif;letter-spacing:1px;">${m.month}</div>
+                </div>
+              `;
+            }).join('')}
+          </div>
+        </div>
+      </div>
+
+      <!-- Day of Week Activity -->
+      <div class="panel">
+        <div class="panel-title">📊 Activity by Day</div>
+        <div style="padding:10px 0;">
+          ${dayNames.map((day, i) => {
+            const count = dayActivity[i];
+            const maxDay = Math.max(...dayActivity, 1);
+            const width = (count / maxDay) * 100;
+            return `
+              <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+                <div style="min-width:32px;font-size:10px;color:var(--text-dim);font-family:'Cinzel',serif;letter-spacing:1px;">${day}</div>
+                <div style="flex:1;background:var(--navy-card);height:24px;border-radius:3px;position:relative;overflow:hidden;">
+                  <div style="background:linear-gradient(90deg, var(--gold-dim), var(--gold));width:${width}%;height:100%;transition:all .3s;"></div>
+                </div>
+                <div style="min-width:28px;text-align:right;font-size:11px;color:var(--gold);font-family:'Cinzel',serif;font-weight:600;">${count}</div>
+              </div>
+            `;
+          }).join('')}
+        </div>
+      </div>
+    </div>
+
+    <!-- Engagement Metrics -->
+    <div class="panel" style="margin-bottom:22px;">
+      <div class="panel-title">💡 Engagement Insights</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px;padding:10px 0;">
+        <div style="text-align:center;">
+          <div style="font-size:11px;color:var(--text-dim);margin-bottom:8px;font-family:'Cinzel',serif;letter-spacing:1.5px;text-transform:uppercase;">Growth Rate</div>
+          <div style="font-size:28px;color:var(--gold);font-family:'Cinzel',serif;font-weight:700;">${last30Days > 0 ? '+' + last30Days : '0'}</div>
+          <div style="font-size:11px;color:var(--text-dim);margin-top:4px;">entries in 30 days</div>
+        </div>
+        <div style="text-align:center;">
+          <div style="font-size:11px;color:var(--text-dim);margin-bottom:8px;font-family:'Cinzel',serif;letter-spacing:1.5px;text-transform:uppercase;">Active Users</div>
+          <div style="font-size:28px;color:var(--gold);font-family:'Cinzel',serif;font-weight:700;">${ul.filter(([,u]) => (u.entries||[]).some(e => Date.now() - new Date(e.iso).getTime() < 30*24*60*60*1000)).length}</div>
+          <div style="font-size:11px;color:var(--text-dim);margin-top:4px;">posted in 30 days</div>
+        </div>
+        <div style="text-align:center;">
+          <div style="font-size:11px;color:var(--text-dim);margin-bottom:8px;font-family:'Cinzel',serif;letter-spacing:1.5px;text-transform:uppercase;">Avg Length</div>
+          <div style="font-size:28px;color:var(--gold);font-family:'Cinzel',serif;font-weight:700;">${totalE > 0 ? Math.round(ul.reduce((s,[,u]) => s + (u.entries||[]).reduce((t,e) => t + e.text.length, 0), 0) / totalE) : 0}</div>
+          <div style="font-size:11px;color:var(--text-dim);margin-top:4px;">characters per entry</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Top Contributors -->
+    <div class="panel" style="margin-bottom:22px;">
+      <div class="panel-title">🏆 Top Contributors</div>
+      ${rows.slice(0,5).length === 0 ? '<div class="empty-state"><span class="empty-icon">✦</span>No users yet.</div>' : `
+        <div style="padding:10px 0;">
+          ${rows.slice(0,5).map((r, idx) => {
+            const maxCount = rows[0].cnt;
+            const width = maxCount > 0 ? (r.cnt / maxCount) * 100 : 0;
+            const medals = ['🥇','🥈','🥉'];
+            return `
+              <div style="margin-bottom:12px;">
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+                  <div style="display:flex;align-items:center;gap:8px;">
+                    <span style="font-size:16px;">${medals[idx] || '✦'}</span>
+                    <span style="color:var(--text);font-size:13px;font-weight:500;">${esc(r.name)}</span>
+                  </div>
+                  <span style="color:var(--gold);font-family:'Cinzel',serif;font-size:12px;font-weight:700;">${r.cnt} ${r.cnt === 1 ? 'entry' : 'entries'}</span>
+                </div>
+                <div style="background:var(--navy-card);height:8px;border-radius:4px;overflow:hidden;">
+                  <div style="background:linear-gradient(90deg, var(--gold-dim), var(--gold));width:${width}%;height:100%;transition:all .4s;"></div>
+                </div>
+              </div>
+            `;
+          }).join('')}
+        </div>
+      `}
+    </div>
+
+    <!-- All Users Table -->
     <div class="panel">
       <div class="panel-title">✦ All Users</div>
       ${rows.length === 0 ? '<div class="empty-state"><span class="empty-icon">✦</span>No users yet.</div>' : `
@@ -942,18 +1099,18 @@ function renderAdmin(app) {
       `}
     </div>
 
-    <div class="panel">
-      <div class="panel-title">✦ JSON Backup</div>
+    <div class="panel" style="margin-top:22px;">
+      <div class="panel-title">💾 Data Management</div>
       <p style="color:var(--text-dim);font-size:13px;margin-bottom:16px;line-height:1.7;">
         Download or copy the complete database for backup and migration purposes.
       </p>
       <div class="btn-row">
         <button class="btn btn-outline" onclick="dlJson()">⤓ Download JSON</button>
-        <button class="btn btn-ghost" onclick="copyJson()">Copy JSON</button>
+        <button class="btn btn-ghost" onclick="copyJson()">📋 Copy JSON</button>
       </div>
     </div>
 
-    <div style="text-align:center;margin-top:8px;">
+    <div style="text-align:center;margin-top:24px;">
       <p style="font-size:12px;color:var(--text-dim);font-style:italic;">"And the Lord added to their number daily those who were being saved." - Acts 2:47</p>
     </div>
   `;
