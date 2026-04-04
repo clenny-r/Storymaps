@@ -397,6 +397,19 @@
           "imageUrl": "https://raw.githubusercontent.com/Clenmar/Storymaps/main/Pages/Apps/Testimony_app/media/images/Clenmarreal_1775326512092.jpg"
         }
       ]
+    },
+    "Rickytest": {
+      "created": "2026-04-04T18:47:34.457Z",
+      "entries": [
+        {
+          "id": 1775328454457,
+          "seq": 1,
+          "text": "The only way I could be a better player than you are right here in this situation would have",
+          "date": "2026-04-04",
+          "time": "3:47:34 PM",
+          "iso": "2026-04-04T18:47:34.317Z"
+        }
+      ]
     }
   }
 }
