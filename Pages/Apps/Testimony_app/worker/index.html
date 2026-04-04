@@ -1168,7 +1168,7 @@ async function sendBibleQuestion() {
   }
   
   try {
-    const response = await fetch(`${CFG.API}/api/bible-chat`, {
+    const response = await fetch(`${CFG.API_BASE}/api/bible-chat`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
