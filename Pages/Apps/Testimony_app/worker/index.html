@@ -716,6 +716,7 @@ function renderDash(app) {
         </div>
       </div>
       <div class="btn-row">
+        <button class="btn btn-outline no-print" onclick="openBibleChat()">💬 Ask AI</button>
         <button class="btn btn-outline no-print" onclick="doPrint()">🖨 Print</button>
         <button class="btn btn-outline no-print" onclick="doDownload()">⤓ Download</button>
         <button class="btn btn-ghost no-print" onclick="doSignOut()">Sign Out</button>
@@ -1108,6 +1109,154 @@ function doSignOut() {
   render();
 }
 
+// Biblical AI Chatbot
+let chatHistory = [];
+
+function openBibleChat() {
+  chatHistory = [];
+  showDlg(`
+    <div class="dialog" style="max-width:700px;height:80vh;display:flex;flex-direction:column;">
+      <div class="dialog-title" style="color:var(--blue-light);display:flex;align-items:center;justify-content:space-between;">
+        <span>📖 Biblical AI Assistant</span>
+        <button class="btn btn-ghost" onclick="closeDlg()" style="padding:4px 10px;font-size:10px;">✕</button>
+      </div>
+      <div style="font-size:12px;color:var(--text-dim);margin-bottom:16px;line-height:1.6;">
+        Ask questions about the Bible, theology, Christian living, or spiritual guidance. This AI is trained to provide biblically-grounded answers.
+      </div>
+      <div id="chatMessages" style="flex:1;overflow-y:auto;background:var(--navy-card);border:1px solid var(--border);border-radius:4px;padding:16px;margin-bottom:14px;">
+        <div style="text-align:center;color:var(--text-dim);font-style:italic;padding:40px 20px;">
+          👋 Hello! I'm here to help answer your biblical questions. Try asking:
+          <ul style="text-align:left;margin:20px auto;max-width:400px;line-height:2;">
+            <li>"What does the Bible say about faith?"</li>
+            <li>"Explain the parable of the lost sheep"</li>
+            <li>"How can I grow spiritually?"</li>
+            <li>"What is God's love?"</li>
+          </ul>
+        </div>
+      </div>
+      <div style="display:flex;gap:10px;">
+        <input 
+          type="text" 
+          id="chatInput" 
+          placeholder="Ask a biblical question..." 
+          style="flex:1;"
+          onkeypress="if(event.key==='Enter') sendBibleQuestion()"
+        />
+        <button class="btn btn-gold" onclick="sendBibleQuestion()" id="sendBtn">Send</button>
+      </div>
+    </div>
+  `);
+  
+  setTimeout(() => document.getElementById('chatInput')?.focus(), 100);
+}
+
+async function sendBibleQuestion() {
+  const input = document.getElementById('chatInput');
+  const question = input.value.trim();
+  
+  if (!question) return;
+  
+  input.value = '';
+  addChatMessage('user', question);
+  
+  const typingId = addChatMessage('assistant', '💭 Thinking...');
+  
+  const sendBtn = document.getElementById('sendBtn');
+  if (sendBtn) {
+    sendBtn.disabled = true;
+    sendBtn.textContent = '...';
+  }
+  
+  try {
+    const response = await fetch(`${CFG.API}/api/bible-chat`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        question,
+        history: chatHistory
+      })
+    });
+    
+    if (!response.ok) throw new Error('AI service unavailable');
+    
+    const data = await response.json();
+    
+    document.getElementById(typingId)?.remove();
+    addChatMessage('assistant', data.answer);
+    
+    chatHistory.push(
+      { role: 'user', content: question },
+      { role: 'assistant', content: data.answer }
+    );
+    
+    if (chatHistory.length > 10) {
+      chatHistory = chatHistory.slice(-10);
+    }
+    
+  } catch (error) {
+    document.getElementById(typingId)?.remove();
+    addChatMessage('assistant', '❌ Sorry, I encountered an error. Please try again.');
+  } finally {
+    if (sendBtn) {
+      sendBtn.disabled = false;
+      sendBtn.textContent = 'Send';
+    }
+  }
+}
+
+function addChatMessage(role, content) {
+  const messagesDiv = document.getElementById('chatMessages');
+  if (!messagesDiv) return;
+  
+  const msgId = `msg-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+  const isUser = role === 'user';
+  
+  const msgDiv = document.createElement('div');
+  msgDiv.id = msgId;
+  msgDiv.style.cssText = `
+    display: flex;
+    gap: 12px;
+    margin-bottom: 16px;
+    ${isUser ? 'flex-direction: row-reverse;' : ''}
+  `;
+  
+  msgDiv.innerHTML = `
+    <div style="
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: ${isUser ? 'linear-gradient(135deg, var(--red), var(--blue))' : 'var(--navy-mid)'};
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      flex-shrink: 0;
+    ">
+      ${isUser ? (STATE.user?.[0]?.toUpperCase() || '👤') : '📖'}
+    </div>
+    <div style="
+      flex: 1;
+      background: ${isUser ? 'var(--blue-glow)' : 'var(--navy-mid)'};
+      border: 1px solid ${isUser ? 'var(--blue)' : 'var(--border)'};
+      border-radius: 12px;
+      padding: 12px 16px;
+      color: var(--text);
+      line-height: 1.7;
+      font-size: 14px;
+      max-width: 80%;
+      word-wrap: break-word;
+      ${isUser ? 'border-bottom-right-radius: 4px;' : 'border-bottom-left-radius: 4px;'}
+    ">
+      ${esc(content)}
+    </div>
+  `;
+  
+  messagesDiv.appendChild(msgDiv);
+  messagesDiv.scrollTop = messagesDiv.scrollHeight;
+  
+  return msgId;
+}
+
 function promptAdmin() {
   showDlg(`
     <div class="dialog no-print">
@@ -1200,12 +1349,49 @@ function renderAdmin(app) {
 
   const maxMonthly = Math.max(...monthlyData.map(m => m.count), 1);
 
-  const rows = ul.map(([name,u]) => ({
-    name,
-    cnt: (u.entries || []).length,
-    created: u.created ? new Date(u.created).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}) : '—',
-    last: (u.entries || []).length ? new Date([...u.entries].reverse()[0].iso).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}) : '—'
-  })).sort((a,b) => b.cnt - a.cnt);
+  const rows = ul.map(([name,u]) => {
+    const entries = u.entries || [];
+    
+    // Calculate storage space
+    let storageBytes = 0;
+    entries.forEach(e => {
+      // Text (2 bytes per character for UTF-8)
+      storageBytes += (e.text || '').length * 2;
+      
+      // Old base64 images/audio (if they exist)
+      if (e.image && e.image.startsWith('data:')) {
+        storageBytes += e.image.length * 0.75; // base64 is ~1.33x, so divide by 1.33
+      }
+      if (e.audio && e.audio.startsWith('data:')) {
+        storageBytes += e.audio.length * 0.75;
+      }
+      
+      // New URLs (estimate file sizes: images ~500KB, audio ~2MB)
+      if (e.imageUrl) storageBytes += 500 * 1024;
+      if (e.audioUrl) storageBytes += 2 * 1024 * 1024;
+    });
+    
+    // Calculate total time spent (time between first and last entry)
+    let totalDays = 0;
+    if (entries.length > 1) {
+      const first = new Date(entries[0].iso).getTime();
+      const last = new Date(entries[entries.length - 1].iso).getTime();
+      totalDays = Math.floor((last - first) / (1000 * 60 * 60 * 24));
+    }
+    
+    return {
+      name,
+      cnt: entries.length,
+      created: u.created ? new Date(u.created).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}) : '—',
+      last: entries.length ? new Date([...entries].reverse()[0].iso).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}) : '—',
+      storage: storageBytes,
+      storageMB: (storageBytes / 1024 / 1024).toFixed(2),
+      days: totalDays
+    };
+  }).sort((a,b) => b.cnt - a.cnt);
+
+  // Calculate total storage across all users
+  const totalStorageMB = rows.reduce((sum, r) => sum + parseFloat(r.storageMB), 0).toFixed(2);
 
   app.innerHTML = `
     <div class="user-bar no-print">
@@ -1220,30 +1406,29 @@ function renderAdmin(app) {
     </div>
 
     <div class="stats-grid" style="grid-template-columns:repeat(auto-fit, minmax(140px,1fr));gap:14px;margin-bottom:24px;">
-      <div class="stat-card">
-        <span class="stat-num">${total}</span>
+      <div class="stat-card" style="border-left:3px solid var(--info);">
+        <span class="stat-num" style="color:var(--info);">${total}</span>
         <span class="stat-lbl">Total Users</span>
       </div>
-      <div class="stat-card">
-        <span class="stat-num">${totalE}</span>
-        <span class="stat-lbl">All Entries</span>
+      <div class="stat-card" style="border-left:3px solid var(--success);">
+        <span class="stat-num" style="color:var(--success);">${totalE}</span>
+        <span class="stat-lbl">All Testimonies</span>
       </div>
-      <div class="stat-card">
-        <span class="stat-num">${thisM}</span>
+      <div class="stat-card" style="border-left:3px solid var(--purple);">
+        <span class="stat-num" style="color:var(--purple);">${totalStorageMB}</span>
+        <span class="stat-lbl">Total Storage (MB)</span>
+      </div>
+      <div class="stat-card" style="border-left:3px solid var(--gold);">
+        <span class="stat-num" style="color:var(--gold);">${thisM}</span>
         <span class="stat-lbl">This Month</span>
       </div>
-      <div class="stat-card">
-        <span class="stat-num">${last7Days}</span>
+      <div class="stat-card" style="border-left:3px solid var(--warning);">
+        <span class="stat-num" style="color:var(--warning);">${last7Days}</span>
         <span class="stat-lbl">Last 7 Days</span>
       </div>
-      <div class="stat-card">
-        <span class="stat-num">${avg}</span>
+      <div class="stat-card" style="border-left:3px solid var(--ok);">
+        <span class="stat-num" style="color:var(--ok);">${avg}</span>
         <span class="stat-lbl">Avg Per User</span>
-      </div>
-      <div class="stat-card">
-        <span class="stat-num">${topUser.cnt}</span>
-        <span class="stat-lbl">Top Contributor</span>
-        <div style="font-size:10px;color:var(--text-dim);margin-top:4px;text-overflow:ellipsis;overflow:hidden;">${esc(topUser.name)}</div>
       </div>
     </div>
 
@@ -1346,15 +1531,31 @@ function renderAdmin(app) {
       ${rows.length === 0 ? '<div class="empty-state"><span class="empty-icon">✦</span>No users yet.</div>' : `
         <div style="overflow-x:auto;">
           <table class="admin-table">
-            <thead><tr><th>Name</th><th>Entries</th><th>Joined</th><th>Last Entry</th><th></th></tr></thead>
+            <thead><tr><th>Name</th><th>Entries</th><th>Storage</th><th>Time Span</th><th>Joined</th><th>Last Entry</th><th>Actions</th></tr></thead>
             <tbody>
               ${rows.map(r => `
                 <tr>
                   <td style="color:var(--text);">${esc(r.name)}</td>
                   <td><span class="e-seq">${r.cnt}</span></td>
+                  <td>
+                    <div style="display:flex;align-items:center;gap:6px;">
+                      <span style="color:${r.storage > 5*1024*1024 ? 'var(--warning)' : 'var(--blue-light)'};font-weight:600;font-size:13px;">${r.storageMB}</span>
+                      <span style="color:var(--text-dim);font-size:11px;">MB</span>
+                    </div>
+                  </td>
+                  <td>
+                    <span style="color:var(--text-dim);font-size:13px;">
+                      ${r.days > 0 ? `${r.days} day${r.days !== 1 ? 's' : ''}` : '—'}
+                    </span>
+                  </td>
                   <td style="color:var(--text-dim);font-size:13px;">${r.created}</td>
                   <td style="color:var(--text-dim);font-size:13px;">${r.last}</td>
-                  <td><button class="btn btn-ghost" style="padding:6px 12px;font-size:9px;" onclick="adminView('${esc(r.name)}')">View</button></td>
+                  <td>
+                    <div style="display:flex;gap:6px;">
+                      <button class="btn btn-ghost" style="padding:6px 12px;font-size:9px;" onclick="adminView('${esc(r.name)}')">View</button>
+                      <button class="btn btn-danger" style="padding:6px 12px;font-size:9px;" onclick="confirmDeleteUser('${esc(r.name)}', ${r.cnt}, '${r.storageMB}')">Delete</button>
+                    </div>
+                  </td>
                 </tr>
               `).join('')}
             </tbody>
@@ -1392,7 +1593,7 @@ function adminView(name) {
   const preview = ents.length
     ? [...ents].reverse().slice(0,3).map(e => `
         <div style="margin-top:12px;padding:14px 16px;background:var(--navy-card);border-radius:4px;border:1px solid var(--border);">
-          <div style="font-family:'Cinzel',serif;font-size:10px;color:var(--gold);margin-bottom:7px;">Entry #${e.seq} · ${esc(e.date)}</div>
+          <div style="font-family:'Cinzel',serif;font-size:10px;color:var(--blue-light);margin-bottom:7px;">Entry #${e.seq} · ${esc(e.date)} ${esc(e.time)}</div>
           <div style="font-size:14px;color:var(--text);line-height:1.75;white-space:pre-wrap;">${esc(e.text.slice(0,300))}${e.text.length > 300 ? '...' : ''}</div>
         </div>
       `).join('')
@@ -1400,7 +1601,7 @@ function adminView(name) {
 
   showDlg(`
     <div class="dialog" style="max-width:560px;">
-      <div class="dialog-title" style="color:var(--gold);">✦ ${esc(name)}</div>
+      <div class="dialog-title" style="color:var(--blue-light);">✦ ${esc(name)}</div>
       <div class="dialog-body">
         <strong style="color:var(--text);">${ents.length}</strong> testimon${ents.length === 1 ? 'y' : 'ies'} recorded.
         Joined: ${ud.created ? new Date(ud.created).toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'}) : 'Unknown'}.
@@ -1411,6 +1612,60 @@ function adminView(name) {
       </div>
     </div>
   `);
+}
+
+function confirmDeleteUser(userName, entryCount, storageMB) {
+  showDlg(`
+    <div class="dialog" style="max-width:480px;">
+      <div class="dialog-title" style="color:var(--red);">⚠️ Delete User</div>
+      <div class="dialog-body">
+        <p style="margin-bottom:14px;line-height:1.7;">
+          You are about to permanently delete <strong style="color:var(--text);">${esc(userName)}</strong> and all their data:
+        </p>
+        <ul style="margin:0 0 16px 20px;color:var(--text-dim);line-height:2;">
+          <li><strong style="color:var(--text);">${entryCount}</strong> testimon${entryCount === 1 ? 'y' : 'ies'}</li>
+          <li><strong style="color:var(--text);">${storageMB} MB</strong> of storage</li>
+          <li>All associated images</li>
+          <li>All associated audio files</li>
+        </ul>
+        <p style="color:var(--red-light);font-size:12px;font-style:italic;">
+          This action cannot be undone. Media files will be deleted from GitHub.
+        </p>
+      </div>
+      <div class="btn-row" style="margin-top:20px;">
+        <button class="btn btn-ghost" onclick="closeDlg()" style="flex:1;">Cancel</button>
+        <button class="btn btn-danger" onclick="deleteUser('${esc(userName)}')" style="flex:1;">Delete User</button>
+      </div>
+    </div>
+  `);
+}
+
+async function deleteUser(userName) {
+  closeDlg();
+  
+  // Re-prompt for admin password
+  const pwd = prompt('Enter admin password to confirm deletion:');
+  if (!pwd) return;
+  
+  setBusy('app', true, 'Deleting user and media files...');
+  
+  try {
+    const res = await api('/admin/delete-user', {
+      method: 'POST',
+      body: JSON.stringify({
+        userName,
+        adminPassword: pwd
+      })
+    });
+    
+    await loadDB();
+    toast(res.message || 'User deleted successfully', false, true);
+    render();
+  } catch (e) {
+    toast(e.message || 'Delete failed', true);
+  } finally {
+    setBusy('app', false);
+  }
 }
 
 function dlJson() {
