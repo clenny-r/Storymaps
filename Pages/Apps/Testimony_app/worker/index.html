@@ -2,7 +2,10 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 <title>Testimony Log | TWC Ministries</title>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet"/>
 <style>
@@ -336,15 +339,49 @@ textarea:disabled{opacity:.55;cursor:not-allowed}
   .btn-row .btn{flex:1;min-width:0;justify-content:center}
 }
 @media print{
-  body{background:white;color:#111}
+  body{background:white;color:#111;font-size:12pt}
   .no-print{display:none !important}
   body::before{display:none}
-  .panel{background:white;border:1px solid #ccc;break-inside:avoid}
+  .wrapper{max-width:100%;padding:10mm}
+  .panel{
+    background:white;
+    border:1px solid #ccc;
+    page-break-inside:avoid;
+    break-inside:avoid;
+    margin-bottom:5mm;
+    padding:5mm;
+  }
   .panel::before{display:none}
-  .entry-card{background:white;border:1px solid #ccc;break-inside:avoid}
-  .e-body{color:#222}
+  .entry-card{
+    background:white;
+    border:1px solid #ccc;
+    page-break-inside:avoid;
+    break-inside:avoid;
+    margin-bottom:4mm;
+    padding:4mm;
+  }
+  .entry-card img{
+    max-width:100%;
+    max-height:150mm;
+    page-break-inside:avoid;
+  }
+  .e-body{
+    color:#222;
+    orphans:3;
+    widows:3;
+  }
   .e-date{color:#666}
-  .user-bar{background:#f5f5f5;border:1px solid #ccc}
+  .user-bar{
+    background:#f5f5f5;
+    border:1px solid #ccc;
+    page-break-after:avoid;
+  }
+  .site-header{
+    page-break-after:avoid;
+    margin-bottom:5mm;
+  }
+  .page-title{font-size:14pt}
+  .header-verse{font-size:10pt}
 }
 </style>
 </head>
@@ -352,7 +389,9 @@ textarea:disabled{opacity:.55;cursor:not-allowed}
 <div class="wrapper">
   <header class="site-header">
     <div class="header-logo-row">
-      <img class="header-logo" src="https://www.twcministries.net/Pages/church_photos/Image1-transparent.gif" alt="TWC Logo" onerror="this.style.display='none'"/>
+      <a href="https://twcministries.net" style="display:flex;align-items:center;text-decoration:none;cursor:pointer;">
+        <img class="header-logo" src="https://www.twcministries.net/Pages/church_photos/Image1-transparent.gif" alt="TWC Logo" onerror="this.style.display='none'"/>
+      </a>
       <div>
         <div class="header-brand-title">TWC Ministries</div>
         <div class="header-brand-sub">Transformational Worship Centre</div>
@@ -545,9 +584,14 @@ function renderAuth(app) {
         Enter your name and your access code to open your personal testimony record.
       </p>
 
+      <div class="notice" style="margin-bottom:22px;">
+        <strong>Privacy Tip:</strong> For your security, consider using a memorable nickname or pseudonym instead of your real name. 
+        For example: "Sister Joy", "Brother David", or "Thankful Heart". You'll use the same name each time you return.
+      </div>
+
       <div class="fg">
-        <label for="ni">Your Name</label>
-        <input type="text" id="ni" placeholder="e.g. Sister Mary Johnson" maxlength="80" autocomplete="name"/>
+        <label for="ni">Your Name (or Nickname)</label>
+        <input type="text" id="ni" placeholder="e.g. Sister Joy, Brother David, or Faithful Servant" maxlength="80" autocomplete="off"/>
       </div>
 
       <div class="fg">
@@ -636,6 +680,8 @@ function renderEntries(entries) {
       </div>
       <div class="e-divider"></div>
       <div class="e-body">${esc(e.text)}</div>
+      ${e.image ? `<div style="margin-top:14px;"><img src="${e.image}" style="max-width:100%;border-radius:4px;border:1px solid var(--border);cursor:pointer;" onclick="viewFullImage('${e.image}')" alt="Testimony photo"/></div>` : ''}
+      ${e.audio ? `<div style="margin-top:14px;"><audio controls style="width:100%;max-width:400px;"><source src="${e.audio}" type="audio/webm">Your browser does not support audio playback.</audio></div>` : ''}
     </div>
   `).join('')}</div>`;
 }
@@ -671,6 +717,35 @@ function renderDash(app) {
         <label for="et">Your Testimony</label>
         <textarea id="et" maxlength="${CFG.MAX_TEXT}" ${ro ? 'disabled' : ''} placeholder="Share what the Lord has done - a healing, a breakthrough, an answered prayer..." oninput="updateCnt(this)"></textarea>
         <div class="char-cnt"><span id="cc">0</span> / ${CFG.MAX_TEXT}</div>
+      </div>
+      <div class="fg">
+        <label for="imgUpload">Add Photo (Optional)</label>
+        <input type="file" id="imgUpload" accept="image/*" ${ro ? 'disabled' : ''} onchange="previewImage(this)" style="display:none"/>
+        <button class="btn btn-outline" onclick="document.getElementById('imgUpload').click()" ${ro ? 'disabled' : ''} style="width:100%;">📷 Choose Photo</button>
+        <div id="imgPreview" style="margin-top:10px;display:none;">
+          <img id="imgPreviewImg" style="max-width:100%;max-height:200px;border-radius:4px;border:1px solid var(--border);"/>
+          <button class="btn btn-ghost" onclick="clearImage()" style="margin-top:8px;font-size:9px;padding:4px 10px;">✕ Remove Photo</button>
+        </div>
+      </div>
+      <div class="fg">
+        <label>Add Voice Memo (Optional - Max 60 seconds)</label>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;">
+          <button class="btn btn-outline" id="recordBtn" onclick="toggleRecording()" ${ro ? 'disabled' : ''} style="flex:1;min-width:150px;">
+            🎤 <span id="recordBtnText">Record Audio</span>
+          </button>
+          <button class="btn btn-ghost" id="playBtn" onclick="playRecording()" disabled style="flex:1;min-width:150px;">▶ Play</button>
+        </div>
+        <div id="audioStatus" style="margin-top:8px;font-size:11px;color:var(--text-dim);font-family:'Cinzel',serif;text-align:center;"></div>
+        <div id="audioPreview" style="margin-top:10px;display:none;">
+          <div style="display:flex;align-items:center;gap:10px;background:var(--navy-card);padding:10px;border-radius:4px;border:1px solid var(--border);">
+            <span style="font-size:20px;">🎵</span>
+            <div style="flex:1;">
+              <div style="font-size:12px;color:var(--gold);">Voice memo recorded</div>
+              <div id="audioDuration" style="font-size:11px;color:var(--text-dim);"></div>
+            </div>
+            <button class="btn btn-ghost" onclick="clearAudio()" style="font-size:9px;padding:4px 10px;">✕ Remove</button>
+          </div>
+        </div>
       </div>
       <button class="btn btn-gold btn-full" id="subBtn" onclick="submitEntry()" ${ro ? 'disabled' : ''}>Record My Testimony</button>
     </div>
@@ -709,9 +784,149 @@ function clearFilter() {
   render();
 }
 
+function previewImage(input) {
+  const preview = document.getElementById('imgPreview');
+  const previewImg = document.getElementById('imgPreviewImg');
+  
+  if (input.files && input.files[0]) {
+    const file = input.files[0];
+    
+    // Check file size (max 2MB)
+    if (file.size > 2 * 1024 * 1024) {
+      toast('Image too large. Please choose an image under 2MB.', true);
+      input.value = '';
+      return;
+    }
+    
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      previewImg.src = e.target.result;
+      preview.style.display = 'block';
+    };
+    reader.readAsDataURL(file);
+  }
+}
+
+function clearImage() {
+  const input = document.getElementById('imgUpload');
+  const preview = document.getElementById('imgPreview');
+  input.value = '';
+  preview.style.display = 'none';
+}
+
+// Voice recording state
+let mediaRecorder = null;
+let audioChunks = [];
+let recordedAudioBlob = null;
+let recordingStartTime = 0;
+let recordingTimer = null;
+
+async function toggleRecording() {
+  if (mediaRecorder && mediaRecorder.state === 'recording') {
+    stopRecording();
+  } else {
+    await startRecording();
+  }
+}
+
+async function startRecording() {
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    mediaRecorder = new MediaRecorder(stream);
+    audioChunks = [];
+    recordingStartTime = Date.now();
+    
+    mediaRecorder.ondataavailable = (event) => {
+      audioChunks.push(event.data);
+    };
+    
+    mediaRecorder.onstop = () => {
+      const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+      recordedAudioBlob = audioBlob;
+      const duration = Math.round((Date.now() - recordingStartTime) / 1000);
+      
+      // Show preview
+      document.getElementById('audioPreview').style.display = 'block';
+      document.getElementById('audioDuration').textContent = `${duration} second${duration !== 1 ? 's' : ''}`;
+      document.getElementById('playBtn').disabled = false;
+      document.getElementById('audioStatus').textContent = '';
+      
+      // Stop all tracks
+      stream.getTracks().forEach(track => track.stop());
+    };
+    
+    mediaRecorder.start();
+    
+    // Update UI
+    document.getElementById('recordBtnText').textContent = 'Stop Recording';
+    document.getElementById('recordBtn').style.background = 'var(--danger)';
+    document.getElementById('recordBtn').style.borderColor = 'var(--danger)';
+    
+    // Start timer display
+    recordingTimer = setInterval(() => {
+      const elapsed = Math.round((Date.now() - recordingStartTime) / 1000);
+      document.getElementById('audioStatus').textContent = `Recording... ${elapsed}s / 60s`;
+      
+      // Auto-stop at 60 seconds
+      if (elapsed >= 60) {
+        stopRecording();
+      }
+    }, 100);
+    
+  } catch (err) {
+    toast('Microphone access denied. Please allow microphone access to record audio.', true);
+    console.error('Error accessing microphone:', err);
+  }
+}
+
+function stopRecording() {
+  if (mediaRecorder && mediaRecorder.state === 'recording') {
+    mediaRecorder.stop();
+    clearInterval(recordingTimer);
+    
+    // Reset UI
+    document.getElementById('recordBtnText').textContent = 'Record Audio';
+    document.getElementById('recordBtn').style.background = '';
+    document.getElementById('recordBtn').style.borderColor = '';
+  }
+}
+
+function playRecording() {
+  if (recordedAudioBlob) {
+    const audioUrl = URL.createObjectURL(recordedAudioBlob);
+    const audio = new Audio(audioUrl);
+    audio.play();
+  }
+}
+
+function clearAudio() {
+  recordedAudioBlob = null;
+  audioChunks = [];
+  document.getElementById('audioPreview').style.display = 'none';
+  document.getElementById('playBtn').disabled = true;
+  document.getElementById('audioStatus').textContent = '';
+  
+  if (mediaRecorder && mediaRecorder.state === 'recording') {
+    stopRecording();
+  }
+}
+
+function viewFullImage(src) {
+  showDlg(`
+    <div class="dialog" style="max-width:90vw;max-height:90vh;overflow:auto;">
+      <div class="dialog-title" style="color:var(--gold);">Testimony Photo</div>
+      <div style="text-align:center;padding:10px 0;">
+        <img src="${src}" style="max-width:100%;max-height:70vh;border-radius:4px;"/>
+      </div>
+      <button class="btn btn-ghost btn-full" onclick="closeDlg()">Close</button>
+    </div>
+  `);
+}
+
 async function submitEntry() {
   const ta = document.getElementById('et');
   const text = ta.value.trim();
+  const imgInput = document.getElementById('imgUpload');
 
   if (!text || text.length < CFG.MIN_TEXT) {
     toast('Please write a bit more', true);
@@ -720,12 +935,47 @@ async function submitEntry() {
 
   setBusy('subBtn', true, '<span class="spin"></span> Saving...');
   try {
+    let imageData = null;
+    let audioData = null;
+    
+    // Convert image to base64 if present
+    if (imgInput.files && imgInput.files[0]) {
+      const file = imgInput.files[0];
+      imageData = await new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = (e) => resolve(e.target.result);
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+    }
+    
+    // Convert audio to base64 if present
+    if (recordedAudioBlob) {
+      audioData = await new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = (e) => resolve(e.target.result);
+        reader.onerror = reject;
+        reader.readAsDataURL(recordedAudioBlob);
+      });
+    }
+    
+    // Use device local time
+    const now = new Date();
+    const timestamp = {
+      date: now.toLocaleDateString(),
+      time: now.toLocaleTimeString(),
+      iso: now.toISOString()
+    };
+    
     const res = await api('/api/entries', {
       method: 'POST',
       body: JSON.stringify({ 
         text, 
         name: STATE.user,
-        accessCode: STATE.accessCode 
+        accessCode: STATE.accessCode,
+        image: imageData,
+        audio: audioData,
+        timestamp: timestamp
       })
     });
 
@@ -733,6 +983,8 @@ async function submitEntry() {
     ta.value = '';
     const cc = document.getElementById('cc');
     if (cc) cc.textContent = '0';
+    clearImage();
+    clearAudio();
     toast(res.message || 'Testimony recorded.', false, true);
     render();
   } catch (e) {
@@ -1180,11 +1432,52 @@ document.addEventListener('keydown', e => {
 });
 
 async function boot() {
-  render();
-  await loadDB();
-  await restoreSession();
-  render();
+  try {
+    // Show a basic loading state
+    render();
+    
+    try {
+      await loadDB();
+    } catch (dbError) {
+      console.error('Failed to load DB:', dbError);
+      // Continue anyway - app can work with cached data
+    }
+    
+    try {
+      await restoreSession();
+    } catch (sessionError) {
+      console.error('Failed to restore session:', sessionError);
+      // Continue anyway - user can sign in manually
+    }
+    
+    render();
+  } catch (error) {
+    console.error('Boot failed:', error);
+    // Show error to user
+    const app = document.getElementById('app');
+    if (app) {
+      app.innerHTML = `
+        <div class="panel" style="margin-top:40px;">
+          <div style="color:var(--danger);text-align:center;padding:20px;">
+            <div style="font-size:32px;margin-bottom:12px;">⚠️</div>
+            <div style="font-size:16px;margin-bottom:8px;">App Failed to Load</div>
+            <div style="font-size:13px;color:var(--text-dim);margin-bottom:16px;">${error.message || 'Unknown error'}</div>
+            <button class="btn btn-gold" onclick="location.reload()">Reload Page</button>
+          </div>
+        </div>
+      `;
+    }
+  }
 }
+
+// Add global error handler for mobile debugging
+window.addEventListener('error', function(e) {
+  console.error('Global error:', e.error, e.message);
+});
+
+window.addEventListener('unhandledrejection', function(e) {
+  console.error('Unhandled promise rejection:', e.reason);
+});
 
 boot();
 </script>
