@@ -348,6 +348,20 @@
           "iso": "2026-04-04T11:23:09.142Z"
         }
       ]
+    },
+    "clennyRr": {
+      "created": "2026-04-04T12:42:45.318Z",
+      "entries": [
+        {
+          "id": 1775306565318,
+          "seq": 1,
+          "text": "Hellos said he had a lot to do in his time with you guys",
+          "date": "4/4/2026",
+          "time": "9:42:42 AM",
+          "iso": "2026-04-04T12:42:42.591Z",
+          "imageUrl": "https://raw.githubusercontent.com/Clenmar/Storymaps/main/Pages/Apps/Testimony_app/media/images/clennyRr_1775306565318.jpg"
+        }
+      ]
     }
   }
 }
