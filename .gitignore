@@ -1,2 +1,73 @@
+# TWC Ministries - Storymaps Repository
+# Git Ignore File
+
+# ============================================
+# CRITICAL: Protect Worker Credentials
+# ============================================
+# The wrangler.toml file contains sensitive credentials (GitHub token, passwords)
+# This file must NEVER be committed to the repository
+Pages/Apps/Testimony_app/twc-testimony-worker/wrangler.toml
+
+# ============================================
+# Project-Specific Folders
+# ============================================
 rose_figs/
 figs/
+
+# ============================================
+# Development Files
+# ============================================
+# Node modules (if you ever use npm in this repo)
+node_modules/
+package-lock.json
+
+# Wrangler cache and logs
+.wrangler/
+wrangler.toml.backup
+
+# ============================================
+# Operating System Files
+# ============================================
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# ============================================
+# Editor Files
+# ============================================
+# Visual Studio Code
+.vscode/
+*.code-workspace
+
+# JetBrains IDEs
+.idea/
+*.iml
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# ============================================
+# Temporary Files
+# ============================================
+*.log
+*.tmp
+*.temp
+*.bak
+*.swp
+*~
+
+# ============================================
+# Build Outputs (if needed later)
+# ============================================
+dist/
+build/
+*.min.js
+*.min.css

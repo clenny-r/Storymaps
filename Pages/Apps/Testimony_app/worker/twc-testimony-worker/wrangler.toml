@@ -1,0 +1,12 @@
+name = "twc-testimony-api2"
+main = "index.js"
+compatibility_date = "2024-01-15"
+
+# Environment variables - replace with your actual values
+# SECURITY NOTE: These will be visible in your wrangler.toml file
+# Do NOT commit this file to a public Git repository after adding your credentials
+
+[vars]
+GITHUB_TOKEN = "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"
+ACCESS_CODE = "twc2026"
+ADMIN_PASSWORD = "twccouncil"
