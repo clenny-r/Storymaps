@@ -359,7 +359,7 @@ body::before{
         <div class="add-who">
           <label>From:</label>
           <button class="who-btn active" data-who="Clenmar" id="who-clenmar">Clenmar</button>
-          <button class="who-btn" data-who="Wife" id="who-wife">Wife</button>
+          <button class="who-btn" data-who="Shadene" id="who-Shadene">Shadene</button>
         </div>
       </div>
       <div class="add-err" id="add-err"></div>
@@ -374,7 +374,7 @@ body::before{
       <button class="filter-btn" data-f="medium">🟡 Med</button>
       <button class="filter-btn" data-f="low">🟢 Low</button>
       <button class="filter-btn" data-f="by-clenmar">👤 Clenmar</button>
-      <button class="filter-btn" data-f="by-wife">👤 Wife</button>
+      <button class="filter-btn" data-f="by-Shadene">👤 Shadene</button>
     </div>
 
     <!-- Task list -->
@@ -425,7 +425,7 @@ document.getElementById('lock-form').addEventListener('submit', e => {
 
 // ── User switcher ──────────────────────────────────────────────────────────
 document.getElementById('user-badge').addEventListener('click', () => {
-  currentUser = currentUser === 'Clenmar' ? 'Wife' : 'Clenmar';
+  currentUser = currentUser === 'Clenmar' ? 'Shadene' : 'Clenmar';
   document.getElementById('badge-name').textContent = currentUser;
   // sync who buttons
   document.querySelectorAll('.who-btn').forEach(b => {
@@ -729,7 +729,7 @@ function getFiltered() {
     if (filter === 'medium')     return t.priority === 'medium' && !t.completed;
     if (filter === 'low')        return t.priority === 'low'    && !t.completed;
     if (filter === 'by-clenmar') return (t.addedBy || '').toLowerCase() === 'clenmar';
-    if (filter === 'by-wife')    return (t.addedBy || '').toLowerCase() === 'wife';
+    if (filter === 'by-Shadene')    return (t.addedBy || '').toLowerCase() === 'Shadene';
     return true;
   });
 }
