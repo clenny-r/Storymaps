@@ -153,7 +153,7 @@ export default {
         const { data } = await readDB();
         const room = data.rooms[token];
         if (!room) return err('Invalid password', 401);
-        return json({ tasks: room.tasks, name: room.name, members: room.members });
+        return json({ tasks: room.tasks, name: room.name, members: room.members, isAdmin: token === ADMIN });
       } catch (e) {
         return err(e.message, 500);
       }

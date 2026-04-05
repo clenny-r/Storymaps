@@ -492,14 +492,17 @@ document.getElementById('lock-form').addEventListener('submit', async e => {
   submitBtn.disabled = true;
   submitBtn.innerHTML = '<span class="spinner"></span>';
   try {
-    const res = await fetch(CFG.API_BASE + '/api/auth', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ password: val }),
+    // Use GET /api/tasks as the auth check — password sent as Bearer token.
+    // On success it returns tasks + room info in one call.
+    const res = await fetch(CFG.API_BASE + '/api/tasks', {
+      headers: {
+        'Authorization': 'Bearer ' + val,
+        'Content-Type': 'application/json',
+      },
     });
     const data = await res.json();
     if (!res.ok) {
-      lockErr.textContent = data.error || 'Incorrect password — try again.';
+      lockErr.textContent = data.error === 'Invalid password' ? 'Incorrect password — try again.' : (data.error || 'Incorrect password — try again.');
       document.getElementById('pw-input').value = '';
     } else {
       roomPassword = val;
@@ -514,9 +517,12 @@ document.getElementById('lock-form').addEventListener('submit', async e => {
         loadFamilyList();
         setupAdminForm();
       }
+      // Tasks already loaded — use them directly
+      tasks = (data.tasks || []).sort((a, b) => a.order - b.order);
       lockEl.style.display = 'none';
       mainEl.style.display = 'block';
-      loadTasks();
+      renderTasks();
+      updateStats();
     }
   } catch(err) {
     lockErr.textContent = 'Connection error — please try again.';
