@@ -8,27 +8,27 @@
       "order": 0,
       "addedBy": "Clenmar",
       "createdAt": "2026-04-05T14:46:10.248Z",
-      "updatedAt": "2026-04-05T14:46:21.480Z"
+      "updatedAt": "2026-04-05T15:17:03.798Z"
     },
     {
       "id": 1775400405434,
       "text": "take out the garbage",
       "completed": false,
       "priority": "low",
-      "order": 1,
+      "order": 2,
       "addedBy": "Wife",
       "createdAt": "2026-04-05T14:46:45.434Z",
-      "updatedAt": "2026-04-05T14:46:45.434Z"
+      "updatedAt": "2026-04-05T15:17:03.798Z"
     },
     {
       "id": 1775402200991,
       "text": "Book communauto",
       "completed": false,
       "priority": "high",
-      "order": 2,
+      "order": 1,
       "addedBy": "Wife",
       "createdAt": "2026-04-05T15:16:40.991Z",
-      "updatedAt": "2026-04-05T15:16:40.991Z"
+      "updatedAt": "2026-04-05T15:17:03.798Z"
     }
   ]
 }
