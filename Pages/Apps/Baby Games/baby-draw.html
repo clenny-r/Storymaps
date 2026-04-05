@@ -5,441 +5,640 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 <title>God's Rainbow Drawing</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;700;800&display=swap');
 
-  * { margin:0; padding:0; box-sizing:border-box; touch-action:none; }
+*{margin:0;padding:0;box-sizing:border-box;touch-action:none;}
 
-  body {
-    font-family:'Nunito',sans-serif;
-    background:linear-gradient(160deg,#fff9c4 0%,#ffe0f0 40%,#d0f0ff 100%);
-    height:100vh; width:100vw;
-    overflow:hidden;
-    display:flex; flex-direction:column; align-items:center;
-  }
+body{
+  font-family:'Nunito',sans-serif;
+  background:linear-gradient(160deg,#fff9c4 0%,#ffe0f0 40%,#d0f0ff 100%);
+  height:100vh;width:100vw;overflow:hidden;
+  display:flex;flex-direction:row;align-items:stretch;
+}
+body::before{
+  content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:
+    radial-gradient(2px 2px at 10% 15%,#ffb3d9 0%,transparent 100%),
+    radial-gradient(3px 3px at 30% 5%,#b3e5fc 0%,transparent 100%),
+    radial-gradient(2px 2px at 60% 10%,#c8e6c9 0%,transparent 100%),
+    radial-gradient(3px 3px at 80% 20%,#fff9c4 0%,transparent 100%),
+    radial-gradient(2px 2px at 50% 25%,#f8bbd0 0%,transparent 100%),
+    radial-gradient(2px 2px at 90% 8%,#e1bee7 0%,transparent 100%);
+}
 
-  body::before {
-    content:''; position:fixed; inset:0;
-    background-image:
-      radial-gradient(2px 2px at 10% 15%,#ffb3d9 0%,transparent 100%),
-      radial-gradient(3px 3px at 30% 5%, #b3e5fc 0%,transparent 100%),
-      radial-gradient(2px 2px at 60% 10%,#c8e6c9 0%,transparent 100%),
-      radial-gradient(3px 3px at 80% 20%,#fff9c4 0%,transparent 100%),
-      radial-gradient(2px 2px at 50% 25%,#f8bbd0 0%,transparent 100%),
-      radial-gradient(2px 2px at 90% 8%, #e1bee7 0%,transparent 100%);
-    pointer-events:none; z-index:0;
-  }
+/* ── SIDEBAR ── */
+#sidebar{
+  position:relative;z-index:10;
+  width:82px;min-width:72px;
+  display:flex;flex-direction:column;align-items:center;
+  gap:8px;padding:10px 6px 10px;
+  background:rgba(255,255,255,0.55);
+  backdrop-filter:blur(8px);
+  border-right:3px solid rgba(255,180,220,0.5);
+  box-shadow:4px 0 18px rgba(200,100,160,0.08);
+}
+#sideTitle{
+  font-family:'Fredoka One',cursive;
+  font-size:clamp(0.55rem,1.8vw,0.75rem);
+  color:#e91e8c;
+  text-shadow:1px 1px 0 #fff;
+  text-align:center;line-height:1.2;
+  letter-spacing:0.5px;
+  margin-bottom:2px;
+}
+#verse{
+  font-size:0.5rem;color:#7c5295;font-weight:700;
+  writing-mode:vertical-rl;text-orientation:mixed;
+  transform:rotate(180deg);
+  letter-spacing:0.3px;transition:opacity 0.6s;
+  max-height:140px;overflow:hidden;
+  text-overflow:ellipsis;
+  margin:4px 0;line-height:1.3;
+  text-align:center;
+}
+.sidebar-divider{
+  width:60%;height:2px;border-radius:2px;
+  background:linear-gradient(90deg,transparent,#ffb3d9,transparent);
+  margin:2px 0;
+}
 
-  #header {
-    position:relative; z-index:10;
-    text-align:center; padding:10px 20px 6px; width:100%;
-  }
-  #title {
-    font-family:'Fredoka One',cursive;
-    font-size:clamp(1.4rem,5vw,2.2rem);
-    color:#e91e8c;
-    text-shadow:3px 3px 0 #fff,5px 5px 0 #ffd6ec;
-    letter-spacing:1px; line-height:1.1;
-  }
-  #verse {
-    font-size:clamp(0.6rem,2.5vw,0.85rem);
-    color:#7c5295; font-weight:700;
-    margin-top:2px; letter-spacing:0.3px;
-    transition:opacity 0.6s;
-  }
+/* ── MAIN AREA ── */
+#main{
+  flex:1;display:flex;flex-direction:column;
+  overflow:hidden;
+}
 
-  #canvas-wrap {
-    position:relative; flex:1; width:100%;
-    display:flex; align-items:center; justify-content:center;
-    z-index:5; padding:0 6px 6px;
-  }
-  #drawCanvas {
-    border-radius:24px;
-    box-shadow:0 8px 32px rgba(0,0,0,0.12),0 0 0 4px #fff,0 0 0 7px #ffb3d9;
-    background:#fffdf8; display:block;
-    cursor:crosshair; touch-action:none;
-    width:100%; height:100%;
-  }
+/* ── CANVAS ── */
+#canvas-wrap{
+  position:relative;flex:1;
+  display:flex;align-items:center;justify-content:center;
+  z-index:5;padding:8px 8px 8px 8px;
+}
+#drawCanvas{
+  border-radius:20px;background:#fffdf8;display:block;
+  cursor:crosshair;touch-action:none;width:100%;height:100%;
+  box-shadow:0 8px 32px rgba(0,0,0,.12),0 0 0 4px #fff,0 0 0 7px #ffb3d9;
+}
 
-  #controls {
-    position:relative; z-index:10;
-    display:flex; align-items:center; justify-content:center;
-    gap:10px; padding:8px 12px 12px; width:100%; flex-wrap:wrap;
-  }
-  .btn {
-    font-family:'Fredoka One',cursive;
-    border:none; border-radius:50px; cursor:pointer;
-    font-size:clamp(0.75rem,3vw,1rem);
-    padding:8px 18px;
-    transition:transform 0.15s,box-shadow 0.15s;
-    box-shadow:0 4px 0 rgba(0,0,0,0.15);
-    -webkit-tap-highlight-color:transparent;
-    user-select:none;
-  }
-  .btn:active { transform:translateY(3px); box-shadow:0 1px 0 rgba(0,0,0,0.15); }
-  #clearBtn   { background:linear-gradient(135deg,#ff6eb4,#e91e8c); color:#fff; }
-  #brushBig   { background:linear-gradient(135deg,#81d4fa,#0288d1); color:#fff; }
-  #brushSmall { background:linear-gradient(135deg,#a5d6a7,#388e3c); color:#fff; }
-  #eraser     { background:linear-gradient(135deg,#ffe082,#ffa000); color:#fff; }
+/* ── BOTTOM BAR (song HUD only) ── */
+#bottomBar{
+  position:relative;z-index:10;
+  display:flex;align-items:center;justify-content:center;
+  padding:4px 10px 6px;gap:8px;
+}
 
-  #affirmation {
-    position:fixed; bottom:80px; left:50%;
-    transform:translateX(-50%) scale(0);
-    background:linear-gradient(135deg,#fff9c4,#ffe0b2);
-    border:3px solid #ffb74d; border-radius:20px;
-    padding:10px 20px;
-    font-family:'Fredoka One',cursive;
-    font-size:clamp(1rem,4vw,1.4rem);
-    color:#e65100; text-align:center;
-    z-index:100; box-shadow:0 6px 20px rgba(0,0,0,0.15);
-    pointer-events:none;
-    transition:transform 0.3s cubic-bezier(0.34,1.56,0.64,1),opacity 0.3s;
-    opacity:0; white-space:nowrap;
-  }
-  #affirmation.show { transform:translateX(-50%) scale(1); opacity:1; }
+/* ── SIDEBAR BUTTONS ── */
+.btn{
+  font-family:'Fredoka One',cursive;border:none;border-radius:16px;cursor:pointer;
+  font-size:clamp(0.55rem,1.5vw,0.75rem);
+  padding:8px 4px 6px;
+  width:66px;
+  display:flex;flex-direction:column;align-items:center;gap:3px;
+  transition:transform .15s,box-shadow .15s;
+  box-shadow:0 4px 0 rgba(0,0,0,.15);
+  -webkit-tap-highlight-color:transparent;user-select:none;
+  line-height:1;
+}
+.btn .btn-icon{font-size:1.4rem;display:block;}
+.btn:active{transform:translateY(3px);box-shadow:0 1px 0 rgba(0,0,0,.15);}
+#clearBtn  {background:linear-gradient(160deg,#ff5252,#c62828);color:#fff;}
+#brushBig  {background:linear-gradient(160deg,#81d4fa,#0288d1);color:#fff;}
+#brushSmall{background:linear-gradient(160deg,#a5d6a7,#388e3c);color:#fff;}
+#eraser    {background:linear-gradient(160deg,#ffe082,#ffa000);color:#fff;}
+#musicBtn  {background:linear-gradient(160deg,#ce93d8,#7b1fa2);color:#fff;}
+#lockBtn   {background:linear-gradient(160deg,#ef9a9a,#c62828);color:#fff;}
 
-  #speakingDots {
-    display:none; gap:5px; align-items:center;
-    position:fixed; bottom:120px; left:50%;
-    transform:translateX(-50%);
-    z-index:101;
-  }
-  #speakingDots.active { display:flex; }
-  #speakingDots span {
-    width:8px; height:8px; border-radius:50%; background:#e91e8c;
-    animation:dotBounce 0.6s infinite alternate;
-  }
-  #speakingDots span:nth-child(2){animation-delay:0.15s;background:#ff9800;}
-  #speakingDots span:nth-child(3){animation-delay:0.3s; background:#4caf50;}
-  @keyframes dotBounce {
-    from{transform:translateY(0);opacity:0.5;}
-    to  {transform:translateY(-6px);opacity:1;}
-  }
+/* ── AFFIRMATION BUBBLE ── */
+#affirmation{
+  position:fixed;bottom:20px;left:calc(82px + 50%);
+  transform:translateX(-50%) scale(0);
+  background:linear-gradient(135deg,#fff9c4,#ffe0b2);
+  border:3px solid #ffb74d;border-radius:20px;
+  padding:9px 18px;font-family:'Fredoka One',cursive;
+  font-size:clamp(0.9rem,3.5vw,1.3rem);color:#e65100;text-align:center;
+  z-index:100;box-shadow:0 6px 20px rgba(0,0,0,.15);
+  pointer-events:none;
+  transition:transform .3s cubic-bezier(.34,1.56,.64,1),opacity .3s;
+  opacity:0;white-space:nowrap;
+}
+#affirmation.show{transform:translateX(-50%) scale(1);opacity:1;}
 
-  .sparkle {
-    position:fixed; border-radius:50%; pointer-events:none;
-    animation:sparkleAnim 0.8s ease-out forwards; z-index:200;
-  }
-  @keyframes sparkleAnim {
-    0%  {transform:scale(1) translateY(0);opacity:1;}
-    100%{transform:scale(0) translateY(-40px);opacity:0;}
-  }
+/* ── SPEAKING DOTS ── */
+#speakingDots{
+  display:none;gap:5px;align-items:center;
+  position:fixed;bottom:62px;left:calc(82px + 50%);transform:translateX(-50%);z-index:101;
+}
+#speakingDots.active{display:flex;}
+#speakingDots span{
+  width:8px;height:8px;border-radius:50%;background:#e91e8c;
+  animation:dotBounce .6s infinite alternate;
+}
+#speakingDots span:nth-child(2){animation-delay:.15s;background:#ff9800;}
+#speakingDots span:nth-child(3){animation-delay:.3s;background:#4caf50;}
+@keyframes dotBounce{from{transform:translateY(0);opacity:.5;}to{transform:translateY(-6px);opacity:1;}}
 
-  @keyframes colorPop {
-    0%  {transform:scale(1);}
-    50% {transform:scale(1.25);}
-    100%{transform:scale(1);}
-  }
-  .pop{animation:colorPop 0.3s ease;}
+/* ── MUSIC PLAYER HUD ── */
+#musicHud{
+  z-index:300;
+  background:rgba(255,255,255,.88);backdrop-filter:blur(6px);
+  border:2px solid #ce93d8;border-radius:16px;
+  padding:5px 12px;font-family:'Fredoka One',cursive;
+  font-size:clamp(0.6rem,1.8vw,0.82rem);color:#6a1b9a;
+  display:none;align-items:center;gap:8px;
+  box-shadow:0 4px 14px rgba(0,0,0,.1);
+}
+#musicHud.visible{display:flex;}
+#musicHud .note{animation:noteWiggle .5s infinite alternate;}
+@keyframes noteWiggle{from{transform:rotate(-8deg);}to{transform:rotate(8deg);}}
+#songTitle{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:38vw;}
+#nextSongBtn{
+  background:none;border:none;cursor:pointer;font-size:1.1rem;
+  padding:0;line-height:1;-webkit-tap-highlight-color:transparent;
+}
 
-  /* Unlock / splash screen */
-  #unlockScreen {
-    position:fixed; inset:0;
-    background:linear-gradient(160deg,#fff9c4 0%,#ffe0f0 40%,#d0f0ff 100%);
-    z-index:1000;
-    display:flex; flex-direction:column;
-    align-items:center; justify-content:center; gap:20px;
-  }
-  #unlockScreen h1 {
-    font-family:'Fredoka One',cursive;
-    font-size:clamp(1.8rem,6vw,3rem);
-    color:#e91e8c;
-    text-shadow:3px 3px 0 #fff,5px 5px 0 #ffd6ec;
-    text-align:center; padding:0 20px;
-  }
-  #unlockScreen p {
-    font-size:clamp(0.9rem,3vw,1.2rem);
-    color:#7c5295; font-weight:700; text-align:center; padding:0 20px;
-  }
-  #startBtn {
-    font-family:'Fredoka One',cursive;
-    font-size:clamp(1.2rem,4vw,1.8rem);
-    background:linear-gradient(135deg,#ff6eb4,#e91e8c);
-    color:#fff; border:none; border-radius:50px;
-    padding:16px 48px;
-    box-shadow:0 6px 0 #b0116e;
-    cursor:pointer;
-    animation:btnPulse 1.5s infinite;
-  }
-  @keyframes btnPulse {
-    0%,100%{transform:scale(1);}
-    50%    {transform:scale(1.06);}
-  }
+/* ── SPARKLES ── */
+.sparkle{
+  position:fixed;border-radius:50%;pointer-events:none;
+  animation:sparkleAnim .8s ease-out forwards;z-index:200;
+}
+@keyframes sparkleAnim{0%{transform:scale(1) translateY(0);opacity:1;}100%{transform:scale(0) translateY(-40px);opacity:0;}}
+
+@keyframes colorPop{0%{transform:scale(1);}50%{transform:scale(1.25);}100%{transform:scale(1);}}
+.pop{animation:colorPop .3s ease;}
+
+/* ── SPLASH / START SCREEN ── */
+#splashScreen{
+  position:fixed;inset:0;z-index:1000;
+  background:linear-gradient(160deg,#fff9c4 0%,#ffe0f0 40%,#d0f0ff 100%);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;
+}
+#splashScreen h1{
+  font-family:'Fredoka One',cursive;font-size:clamp(1.8rem,6vw,3rem);
+  color:#e91e8c;text-shadow:3px 3px 0 #fff,5px 5px 0 #ffd6ec;
+  text-align:center;padding:0 20px;
+}
+#splashScreen p{font-size:clamp(.9rem,3vw,1.2rem);color:#7c5295;font-weight:700;text-align:center;padding:0 24px;}
+#startBtn{
+  font-family:'Fredoka One',cursive;font-size:clamp(1.2rem,4vw,1.8rem);
+  background:linear-gradient(135deg,#ff6eb4,#e91e8c);color:#fff;
+  border:none;border-radius:50px;padding:16px 48px;
+  box-shadow:0 6px 0 #b0116e;cursor:pointer;animation:btnPulse 1.5s infinite;
+}
+@keyframes btnPulse{0%,100%{transform:scale(1);}50%{transform:scale(1.06);}}
+
+/* ── PIN OVERLAY ── */
+#pinOverlay{
+  position:fixed;inset:0;z-index:2000;
+  background:rgba(30,20,60,.92);backdrop-filter:blur(8px);
+  display:none;flex-direction:column;
+  align-items:center;justify-content:center;gap:18px;
+}
+#pinOverlay.show{display:flex;}
+#pinOverlay h2{
+  font-family:'Fredoka One',cursive;font-size:clamp(1.4rem,5vw,2.2rem);
+  color:#fff;text-align:center;
+}
+#pinDots{display:flex;gap:14px;}
+.pin-dot{
+  width:22px;height:22px;border-radius:50%;
+  border:3px solid #ce93d8;background:transparent;
+  transition:background .15s;
+}
+.pin-dot.filled{background:#ce93d8;}
+#pinPad{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:6px;}
+.pin-key{
+  font-family:'Fredoka One',cursive;font-size:1.6rem;
+  width:68px;height:68px;border-radius:50%;border:none;
+  background:rgba(255,255,255,.15);color:#fff;cursor:pointer;
+  transition:background .1s;-webkit-tap-highlight-color:transparent;
+}
+.pin-key:active{background:rgba(255,255,255,.35);}
+#pinError{color:#ff8a80;font-family:'Fredoka One',cursive;font-size:1rem;min-height:1.4rem;}
+#pinOverlay .hint{color:rgba(255,255,255,.5);font-size:.75rem;text-align:center;}
 </style>
 </head>
 <body>
 
-<div id="unlockScreen">
+<!-- SPLASH -->
+<div id="splashScreen">
   <h1>🌈 God's Rainbow Drawing 🌈</h1>
-  <p>Draw with your fingers and hear<br>God's love spoken over you!</p>
+  <p>Draw with your fingers &amp;<br>hear God's love!</p>
   <button id="startBtn">▶ Tap to Start!</button>
 </div>
 
-<div id="header">
-  <div id="title">🌈 God's Rainbow Drawing 🌈</div>
+<!-- PIN OVERLAY -->
+<div id="pinOverlay">
+  <h2>🔐 Parent PIN</h2>
+  <div id="pinDots">
+    <div class="pin-dot" id="d0"></div>
+    <div class="pin-dot" id="d1"></div>
+    <div class="pin-dot" id="d2"></div>
+    <div class="pin-dot" id="d3"></div>
+  </div>
+  <div id="pinPad">
+    <button class="pin-key" data-n="1">1</button>
+    <button class="pin-key" data-n="2">2</button>
+    <button class="pin-key" data-n="3">3</button>
+    <button class="pin-key" data-n="4">4</button>
+    <button class="pin-key" data-n="5">5</button>
+    <button class="pin-key" data-n="6">6</button>
+    <button class="pin-key" data-n="7">7</button>
+    <button class="pin-key" data-n="8">8</button>
+    <button class="pin-key" data-n="9">9</button>
+    <button class="pin-key" data-n="back">⌫</button>
+    <button class="pin-key" data-n="0">0</button>
+    <button class="pin-key" data-n="cancel" style="font-size:1rem;">✕</button>
+  </div>
+  <div id="pinError"></div>
+  <div class="hint">Default PIN: 1234 — change in the code</div>
+</div>
+
+<!-- SIDEBAR -->
+<div id="sidebar">
+  <div id="sideTitle">🌈 God's<br>Rainbow</div>
   <div id="verse">"I have set my rainbow in the clouds." — Genesis 9:13</div>
+  <div class="sidebar-divider"></div>
+  <button class="btn" id="brushBig"><span class="btn-icon">🖌️</span>Big</button>
+  <button class="btn" id="brushSmall"><span class="btn-icon">✏️</span>Small</button>
+  <button class="btn" id="eraser"><span class="btn-icon">🙏</span>Erase</button>
+  <div class="sidebar-divider"></div>
+  <button class="btn" id="clearBtn"><span class="btn-icon">🗑️</span>Clear</button>
+  <div class="sidebar-divider"></div>
+  <button class="btn" id="musicBtn"><span class="btn-icon">🎵</span>Songs</button>
+  <button class="btn" id="lockBtn"><span class="btn-icon">🔒</span>Lock</button>
 </div>
 
-<div id="canvas-wrap">
-  <canvas id="drawCanvas"></canvas>
-</div>
-
-<div id="controls">
-  <button class="btn" id="brushBig">🖌️ Big</button>
-  <button class="btn" id="brushSmall">✏️ Small</button>
-  <button class="btn" id="eraser">🙏 Erase</button>
-  <button class="btn" id="clearBtn">✨ New</button>
+<!-- MAIN AREA -->
+<div id="main">
+  <div id="canvas-wrap">
+    <canvas id="drawCanvas"></canvas>
+  </div>
+  <div id="bottomBar">
+    <div id="musicHud">
+      <span class="note">🎵</span>
+      <span id="songTitle">Joy in My Heart</span>
+      <button id="nextSongBtn" title="Next song">⏭</button>
+    </div>
+  </div>
 </div>
 
 <div id="affirmation"></div>
 <div id="speakingDots"><span></span><span></span><span></span></div>
 
 <script>
-// ════════════════════════════════════════
+// ═══════════════════════════════════════════════════════
+//  PIN CONFIG  — change PARENT_PIN to whatever you like
+// ═══════════════════════════════════════════════════════
+const PARENT_PIN = '1234';
+
+// ═══════════════════════════════════════════════════════
 //  WEB AUDIO ENGINE
-// ════════════════════════════════════════
+// ═══════════════════════════════════════════════════════
 let audioCtx = null;
-
-function ensureAudio() {
-  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-  if (audioCtx.state === 'suspended') audioCtx.resume();
+function ensureAudio(){
+  if(!audioCtx) audioCtx=new(window.AudioContext||window.webkitAudioContext)();
+  if(audioCtx.state==='suspended') audioCtx.resume();
 }
 
-function playTone(freq, type, duration, vol=0.15, delay=0) {
-  if (!audioCtx) return;
-  const o = audioCtx.createOscillator();
-  const g = audioCtx.createGain();
-  o.connect(g); g.connect(audioCtx.destination);
-  o.type = type; o.frequency.value = freq;
-  const t = audioCtx.currentTime + delay;
-  g.gain.setValueAtTime(0, t);
-  g.gain.linearRampToValueAtTime(vol, t+0.02);
-  g.gain.exponentialRampToValueAtTime(0.001, t+duration);
-  o.start(t); o.stop(t+duration);
+function playTone(freq,type,dur,vol=0.14,delay=0){
+  if(!audioCtx)return;
+  const o=audioCtx.createOscillator(),g=audioCtx.createGain();
+  o.connect(g);g.connect(audioCtx.destination);
+  o.type=type;o.frequency.value=freq;
+  const t=audioCtx.currentTime+delay;
+  g.gain.setValueAtTime(0,t);
+  g.gain.linearRampToValueAtTime(vol,t+.02);
+  g.gain.exponentialRampToValueAtTime(.001,t+dur);
+  o.start(t);o.stop(t+dur);
 }
-
-function playChime(freqs, spacing=0.08) {
-  freqs.forEach((f,i) => playTone(f,'sine',0.5,0.13,i*spacing));
+function playChime(freqs,spacing=.08){freqs.forEach((f,i)=>playTone(f,'sine',.5,.13,i*spacing));}
+function playPop(freq=500){
+  if(!audioCtx)return;
+  const o=audioCtx.createOscillator(),g=audioCtx.createGain();
+  o.connect(g);g.connect(audioCtx.destination);o.type='sine';
+  o.frequency.setValueAtTime(freq,audioCtx.currentTime);
+  o.frequency.exponentialRampToValueAtTime(freq*.3,audioCtx.currentTime+.12);
+  g.gain.setValueAtTime(.18,audioCtx.currentTime);
+  g.gain.exponentialRampToValueAtTime(.001,audioCtx.currentTime+.14);
+  o.start();o.stop(audioCtx.currentTime+.14);
 }
-
-function playPop(freq=500) {
-  if (!audioCtx) return;
-  const o = audioCtx.createOscillator();
-  const g = audioCtx.createGain();
-  o.connect(g); g.connect(audioCtx.destination);
-  o.type='sine';
-  o.frequency.setValueAtTime(freq, audioCtx.currentTime);
-  o.frequency.exponentialRampToValueAtTime(freq*0.3, audioCtx.currentTime+0.12);
-  g.gain.setValueAtTime(0.18, audioCtx.currentTime);
-  g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime+0.14);
-  o.start(); o.stop(audioCtx.currentTime+0.14);
+function playButtonClick(){playTone(523,'triangle',.12,.18);playTone(659,'triangle',.12,.14,.07);}
+function playClearWhoosh(){
+  if(!audioCtx)return;
+  const o=audioCtx.createOscillator(),g=audioCtx.createGain();
+  o.connect(g);g.connect(audioCtx.destination);o.type='sine';
+  o.frequency.setValueAtTime(900,audioCtx.currentTime);
+  o.frequency.exponentialRampToValueAtTime(200,audioCtx.currentTime+.22);
+  o.frequency.exponentialRampToValueAtTime(1400,audioCtx.currentTime+.44);
+  g.gain.setValueAtTime(.18,audioCtx.currentTime);
+  g.gain.exponentialRampToValueAtTime(.001,audioCtx.currentTime+.5);
+  o.start();o.stop(audioCtx.currentTime+.5);
 }
+function playSparkleSound(){playChime([880,1046,1318,1568,2093],.055);}
 
-// Soft crayon-scratch texture while drawing
-let scratchNode = null;
-function startScratch() {
-  if (!audioCtx || scratchNode) return;
-  const sr = audioCtx.sampleRate;
-  const buf = audioCtx.createBuffer(1, Math.floor(sr*0.05), sr);
-  const d = buf.getChannelData(0);
-  for (let i=0;i<d.length;i++) d[i]=(Math.random()*2-1)*0.035;
-  const src = audioCtx.createBufferSource();
-  src.buffer=buf; src.loop=true;
-  const filt = audioCtx.createBiquadFilter();
-  filt.type='bandpass'; filt.frequency.value=3200; filt.Q.value=0.6;
-  const gain = audioCtx.createGain();
-  gain.gain.value=0.9;
-  src.connect(filt); filt.connect(gain); gain.connect(audioCtx.destination);
-  src.start();
-  scratchNode = {src,gain};
+// Crayon scratch
+let scratchNode=null;
+function startScratch(){
+  if(!audioCtx||scratchNode)return;
+  const sr=audioCtx.sampleRate;
+  const buf=audioCtx.createBuffer(1,Math.floor(sr*.05),sr);
+  const d=buf.getChannelData(0);
+  for(let i=0;i<d.length;i++)d[i]=(Math.random()*2-1)*.032;
+  const src=audioCtx.createBufferSource();src.buffer=buf;src.loop=true;
+  const filt=audioCtx.createBiquadFilter();filt.type='bandpass';filt.frequency.value=3200;filt.Q.value=.6;
+  const gain=audioCtx.createGain();gain.gain.value=.9;
+  src.connect(filt);filt.connect(gain);gain.connect(audioCtx.destination);
+  src.start();scratchNode=src;
 }
-function stopScratch() {
-  if (!scratchNode) return;
-  try { scratchNode.src.stop(); } catch(e){}
-  scratchNode = null;
-}
+function stopScratch(){if(!scratchNode)return;try{scratchNode.stop();}catch(e){}scratchNode=null;}
 
-function playSparkleSound() {
-  // Ascending fairy-like arpeggio
-  playChime([880,1046,1318,1568,2093],0.055);
-}
+// ═══════════════════════════════════════════════════════
+//  BIBLE SONGS  (synthesised with Web Audio)
+//  Each song is an array of [midiNote, durationBeats] pairs
+//  BPM is set per song. Rest = note 0.
+// ═══════════════════════════════════════════════════════
+function midiToHz(m){return 440*Math.pow(2,(m-69)/12);}
 
-function playButtonClick() {
-  playTone(523,'triangle',0.12,0.18);
-  playTone(659,'triangle',0.12,0.14,0.07);
-}
+const SONGS = [
+  {
+    title: 'Joy in My Heart',
+    bpm: 112,
+    // "I've got the joy joy joy joy down in my heart"
+    notes:[
+      [64,1],[64,.5],[64,.5],[64,1],[62,.5],[60,.5],
+      [62,1],[62,.5],[60,.5],[62,1.5],[0,.5],
+      [64,1],[64,.5],[64,.5],[64,1],[62,.5],[60,.5],
+      [60,3],[0,1],
+      [67,1],[67,.5],[67,.5],[67,1],[65,.5],[64,.5],
+      [65,1],[64,.5],[62,.5],[64,1.5],[0,.5],
+      [64,1],[62,.5],[60,.5],[62,1],[64,.5],[62,.5],
+      [60,3],[0,1],
+    ]
+  },
+  {
+    title: 'This Little Light of Mine',
+    bpm: 108,
+    // Classic melody
+    notes:[
+      [64,1],[64,1],[64,.5],[62,.5],[64,1],
+      [67,1.5],[67,.5],[67,1],[67,1],
+      [67,.5],[65,.5],[67,1],[64,1.5],[0,.5],
+      [64,1],[64,.5],[62,.5],[64,1],[67,1],
+      [69,1.5],[69,.5],[69,1],[67,.5],[65,.5],
+      [64,3],[0,1],
+      [72,1],[72,.5],[71,.5],[72,1],[71,.5],[69,.5],
+      [67,3],[0,1],
+    ]
+  },
+  {
+    title: 'Jesus Loves Me',
+    bpm: 96,
+    notes:[
+      [64,1],[64,.5],[67,.5],[69,1],[67,1],
+      [64,1.5],[62,.5],[60,2],[0,.5],
+      [64,1],[64,.5],[67,.5],[69,1],[67,1],
+      [64,1.5],[62,.5],[64,2],[0,.5],
+      // "Yes Jesus loves me..."
+      [67,1],[67,.5],[69,.5],[71,1],[69,1],
+      [67,1.5],[65,.5],[64,2],[0,.5],
+      [64,1],[62,.5],[60,.5],[62,1],[64,1],
+      [60,3],[0,1],
+    ]
+  },
+  {
+    title: 'He\'s Got the Whole World',
+    bpm: 100,
+    notes:[
+      [60,1],[62,1],[64,1],[65,1],
+      [64,1.5],[62,.5],[60,1],[62,1],
+      [60,3],[0,1],
+      [60,1],[62,1],[64,1],[65,1],
+      [67,1.5],[65,.5],[64,2],[0,.5],
+      [67,1],[67,.5],[65,.5],[64,1],[62,1],
+      [60,1.5],[62,.5],[60,2],[0,1],
+    ]
+  },
+  {
+    title: 'Hallelu Hallelujah',
+    bpm: 120,
+    notes:[
+      [64,1],[64,1],[67,1],[67,1],
+      [69,1],[69,1],[67,2],
+      [65,1],[65,1],[64,1],[64,1],
+      [62,1],[62,1],[60,2],[0,1],
+      [67,1],[67,1],[69,1],[69,1],
+      [71,1],[71,1],[69,2],
+      [67,1],[65,1],[64,1],[62,1],
+      [60,4],[0,1],
+    ]
+  },
+  {
+    title: 'My God is So Big',
+    bpm: 108,
+    notes:[
+      [60,1],[64,1],[67,1],[64,1],
+      [65,1.5],[64,.5],[62,2],[0,.5],
+      [60,1],[64,1],[67,1],[69,1],
+      [67,3],[0,1],
+      [72,1],[71,1],[69,1],[67,1],
+      [65,1.5],[67,.5],[64,2],[0,.5],
+      [60,1],[62,1],[64,1],[65,1],
+      [60,4],[0,1],
+    ]
+  },
+];
 
-function playClearWhoosh() {
-  if (!audioCtx) return;
-  const o = audioCtx.createOscillator();
-  const g = audioCtx.createGain();
-  o.connect(g); g.connect(audioCtx.destination);
-  o.type='sine';
-  o.frequency.setValueAtTime(900, audioCtx.currentTime);
-  o.frequency.exponentialRampToValueAtTime(200, audioCtx.currentTime+0.22);
-  o.frequency.exponentialRampToValueAtTime(1400, audioCtx.currentTime+0.44);
-  g.gain.setValueAtTime(0.18, audioCtx.currentTime);
-  g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime+0.5);
-  o.start(); o.stop(audioCtx.currentTime+0.5);
-}
+let songIndex    = 0;
+let songPlaying  = false;
+let songStopFlag = false;
+let songTimeouts = [];
 
-// ════════════════════════════════════════
-//  VOICE — best human-sounding TTS
-// ════════════════════════════════════════
-let isSpeaking = false;
-const speakQueue = [];
-const dots = document.getElementById('speakingDots');
+function clearSongTimeouts(){songTimeouts.forEach(t=>clearTimeout(t));songTimeouts=[];}
 
-// Pre-warm voice list
-if (window.speechSynthesis) {
-  window.speechSynthesis.getVoices();
-  speechSynthesis.addEventListener('voiceschanged', ()=>speechSynthesis.getVoices());
-}
+async function playSong(idx){
+  clearSongTimeouts();
+  songStopFlag=false;
+  songPlaying=true;
+  const song=SONGS[idx];
+  const beatMs=60000/song.bpm;
+  document.getElementById('songTitle').textContent=song.title;
+  document.getElementById('musicHud').classList.add('visible');
 
-function getBestVoice() {
-  const voices = window.speechSynthesis.getVoices();
-  // Ranked preference: natural/neural > named warm female > any English
-  const prefs = [
-    'Samantha','Karen','Moira','Tessa','Fiona',
-    'Google UK English Female',
-    'Microsoft Aria Online (Natural)',
-    'Microsoft Jenny Online (Natural)',
-    'Microsoft Sonia Online (Natural)',
-    'Microsoft Zira',
-    'Google US English',
-    'en-US-AriaNeural','en-GB-SoniaNeural','en-AU-NatashaNeural',
-  ];
-  for (const name of prefs) {
-    const v = voices.find(v => v.name.includes(name));
-    if (v) return v;
+  let timeMs=0;
+  for(const [midi,beats] of song.notes){
+    if(songStopFlag)break;
+    const dur=beats*beatMs/1000;
+    if(midi>0){
+      const hz=midiToHz(midi);
+      const delayS=timeMs/1000;
+      // schedule note
+      (function(f,d,dS){
+        const t=setTimeout(()=>{
+          if(songStopFlag)return;
+          if(!audioCtx)return;
+          const o=audioCtx.createOscillator();
+          const g=audioCtx.createGain();
+          // Add a little reverb feel with a tiny delay node
+          o.connect(g);g.connect(audioCtx.destination);
+          o.type='triangle';
+          o.frequency.value=f;
+          const now=audioCtx.currentTime;
+          g.gain.setValueAtTime(0,now);
+          g.gain.linearRampToValueAtTime(.12,now+.03);
+          g.gain.setValueAtTime(.12,now+d*.8);
+          g.gain.exponentialRampToValueAtTime(.001,now+d+.05);
+          o.start(now);o.stop(now+d+.1);
+        },dS*1000);
+        songTimeouts.push(t);
+      })(hz,dur,timeMs/1000);
+    }
+    timeMs+=beats*beatMs;
   }
-  return voices.find(v=>v.lang.startsWith('en') && /female/i.test(v.name))
-      || voices.find(v=>v.lang.startsWith('en-US'))
-      || voices.find(v=>v.lang.startsWith('en'))
-      || null;
+
+  // loop song after it finishes
+  const totalMs=song.notes.reduce((a,[,b])=>a+b*beatMs,0)+400;
+  const loopT=setTimeout(()=>{
+    if(!songStopFlag) playSong(songIndex);
+  },totalMs);
+  songTimeouts.push(loopT);
 }
 
-function speakText(text) {
-  return new Promise(resolve => {
-    if (!window.speechSynthesis) { resolve(); return; }
+function stopSong(){
+  songStopFlag=true;
+  clearSongTimeouts();
+  songPlaying=false;
+  document.getElementById('musicHud').classList.remove('visible');
+}
+
+function nextSong(){
+  songIndex=(songIndex+1)%SONGS.length;
+  if(songPlaying) playSong(songIndex);
+  else{
+    document.getElementById('songTitle').textContent=SONGS[songIndex].title;
+  }
+}
+
+// ═══════════════════════════════════════════════════════
+//  VOICE / TTS
+// ═══════════════════════════════════════════════════════
+let isSpeaking=false;
+const speakQueue=[];
+const dots=document.getElementById('speakingDots');
+if(window.speechSynthesis){
+  speechSynthesis.getVoices();
+  speechSynthesis.addEventListener('voiceschanged',()=>speechSynthesis.getVoices());
+}
+function getBestVoice(){
+  const voices=window.speechSynthesis.getVoices();
+  const prefs=['Samantha','Karen','Moira','Tessa','Fiona',
+    'Google UK English Female','Microsoft Aria Online (Natural)',
+    'Microsoft Jenny Online (Natural)','Microsoft Sonia Online (Natural)',
+    'Microsoft Zira','Google US English'];
+  for(const n of prefs){const v=voices.find(v=>v.name.includes(n));if(v)return v;}
+  return voices.find(v=>v.lang.startsWith('en')&&/female/i.test(v.name))
+      ||voices.find(v=>v.lang.startsWith('en-US'))
+      ||voices.find(v=>v.lang.startsWith('en'))||null;
+}
+function speakText(text){
+  return new Promise(res=>{
+    if(!window.speechSynthesis){res();return;}
     speechSynthesis.cancel();
-    const utter = new SpeechSynthesisUtterance(text);
-    utter.rate   = 0.86;
-    utter.pitch  = 1.18;
-    utter.volume = 1;
-    const voice = getBestVoice();
-    if (voice) utter.voice = voice;
-    utter.onend   = resolve;
-    utter.onerror = resolve;
-    speechSynthesis.speak(utter);
+    const u=new SpeechSynthesisUtterance(text);
+    u.rate=.86;u.pitch=1.18;u.volume=1;
+    const v=getBestVoice();if(v)u.voice=v;
+    u.onend=res;u.onerror=res;
+    speechSynthesis.speak(u);
   });
 }
-
-async function speakAffirmation(sayText) {
-  if (isSpeaking) { speakQueue.push(sayText); return; }
-  isSpeaking = true;
-  dots.classList.add('active');
-  try {
-    // Use Claude to rephrase into warm, natural delivery phrasing
-    let finalText = sayText;
-    try {
-      const res = await fetch('https://api.anthropic.com/v1/messages', {
+async function speakAffirmation(sayText){
+  if(isSpeaking){speakQueue.push(sayText);return;}
+  isSpeaking=true;dots.classList.add('active');
+  try{
+    let final=sayText;
+    try{
+      const res=await fetch('https://api.anthropic.com/v1/messages',{
         method:'POST',
         headers:{'Content-Type':'application/json'},
         body:JSON.stringify({
-          model:'claude-sonnet-4-20250514',
-          max_tokens:80,
-          messages:[{
-            role:'user',
-            content:`You are a warm, joyful narrator speaking to a baby or toddler.
-Rephrase the following affirmation so it sounds like a loving parent or grandparent saying it out loud — natural, tender, and full of warmth. Keep it short (under 10 words). Return ONLY the rephrased text, nothing else.
+          model:'claude-sonnet-4-20250514',max_tokens:80,
+          messages:[{role:'user',content:`You are a warm, joyful narrator speaking to a baby or toddler.
+Rephrase this affirmation so it sounds like a loving parent saying it out loud — natural, tender, full of warmth. Under 10 words. Return ONLY the rephrased text.
 
-Affirmation: "${sayText}"`
-          }]
+Affirmation: "${sayText}"`}]
         })
       });
-      const data = await res.json();
-      const rephrased = data?.content?.[0]?.text?.trim();
-      if (rephrased && rephrased.length > 2) finalText = rephrased;
-    } catch(e) { /* fall back to original text */ }
-
-    await speakText(finalText);
-  } finally {
-    isSpeaking = false;
-    dots.classList.remove('active');
-    if (speakQueue.length > 0) speakAffirmation(speakQueue.shift());
+      const data=await res.json();
+      const r=data?.content?.[0]?.text?.trim();
+      if(r&&r.length>2)final=r;
+    }catch(e){}
+    await speakText(final);
+  }finally{
+    isSpeaking=false;dots.classList.remove('active');
+    if(speakQueue.length>0)speakAffirmation(speakQueue.shift());
   }
 }
 
-// ════════════════════════════════════════
-//  CANVAS
-// ════════════════════════════════════════
-const canvas = document.getElementById('drawCanvas');
-const ctx    = canvas.getContext('2d');
-const wrap   = document.getElementById('canvas-wrap');
-
-function resize() {
-  const r = wrap.getBoundingClientRect();
-  canvas.width  = Math.floor(r.width);
-  canvas.height = Math.floor(r.height);
+// ═══════════════════════════════════════════════════════
+//  CANVAS SETUP
+// ═══════════════════════════════════════════════════════
+const canvas=document.getElementById('drawCanvas');
+const ctx=canvas.getContext('2d');
+const wrap=document.getElementById('canvas-wrap');
+function resize(){
+  const r=wrap.getBoundingClientRect();
+  canvas.width=Math.floor(r.width);canvas.height=Math.floor(r.height);
 }
-resize();
-window.addEventListener('resize', resize);
+resize();window.addEventListener('resize',resize);
 
-const colors = [
+const colors=[
   '#FF3D00','#FF6D00','#FFD600','#00C853',
   '#0091EA','#6200EA','#D500F9','#FF4081',
   '#00BFA5','#FFAB00','#29B6F6','#F06292',
   '#AED581','#FF7043','#26C6DA','#CE93D8',
 ];
-
-const affirmations = [
-  { show:"God loves you! ❤️",         say:"God loves you so much!" },
-  { show:"Wonderfully made! 🌟",       say:"You are wonderfully made!" },
-  { show:"Jesus loves me! ✝️",         say:"Jesus loves you, precious one!" },
-  { show:"God's little child! 👑",     say:"You are God's precious little child!" },
-  { show:"Blessed & loved! 🌈",        say:"You are so blessed and so loved!" },
-  { show:"God made you! 🌻",           say:"God made you, and you are beautiful!" },
-  { show:"Be joyful! 😊",              say:"Be joyful! God is always with you!" },
-  { show:"God is so good! 🙌",         say:"God is so good, all the time!" },
-  { show:"Chosen by God! ⭐",          say:"You are chosen by God!" },
-  { show:"You are a blessing! 🦋",     say:"You are such a beautiful blessing!" },
-  { show:"God's masterpiece! 🎨",      say:"You are God's beautiful masterpiece!" },
-  { show:"Heaven loves you! 🕊️",       say:"All of heaven rejoices over you!" },
+const affirmations=[
+  {show:"God loves you! ❤️",         say:"God loves you so much!"},
+  {show:"Wonderfully made! 🌟",       say:"You are wonderfully made!"},
+  {show:"Jesus loves me! ✝️",         say:"Jesus loves you, precious one!"},
+  {show:"God's little child! 👑",     say:"You are God's precious little child!"},
+  {show:"Blessed & loved! 🌈",        say:"You are so blessed and so loved!"},
+  {show:"God made you! 🌻",           say:"God made you and you are beautiful!"},
+  {show:"Be joyful! 😊",              say:"Be joyful! God is always with you!"},
+  {show:"God is so good! 🙌",         say:"God is so good, all the time!"},
+  {show:"Chosen by God! ⭐",          say:"You are chosen by God!"},
+  {show:"You are a blessing! 🦋",     say:"You are such a beautiful blessing!"},
+  {show:"God's masterpiece! 🎨",      say:"You are God's beautiful masterpiece!"},
+  {show:"Heaven loves you! 🕊️",       say:"All of heaven rejoices over you!"},
 ];
 
-let colorIndex=0, drawing=false, erasing=false;
-let brushSize=28, lastX=0, lastY=0;
-let strokeCount=0, affirmTimer=null, lastPopTime=0;
+let colorIndex=0,drawing=false,erasing=false;
+let brushSize=28,lastX=0,lastY=0;
+let strokeCount=0,affirmTimer=null,lastPopTime=0;
 
-function currentColor(){ return erasing?'#fffdf8':colors[colorIndex%colors.length]; }
-
+function currentColor(){return erasing?'#fffdf8':colors[colorIndex%colors.length];}
 function getPos(e){
   const r=canvas.getBoundingClientRect();
-  if(e.touches) return{x:e.touches[0].clientX-r.left,y:e.touches[0].clientY-r.top};
+  if(e.touches)return{x:e.touches[0].clientX-r.left,y:e.touches[0].clientY-r.top};
   return{x:e.clientX-r.left,y:e.clientY-r.top};
 }
-
 function startDraw(e){
-  e.preventDefault(); drawing=true;
-  const p=getPos(e); lastX=p.x; lastY=p.y;
-  ctx.beginPath();
-  ctx.arc(lastX,lastY,(erasing?brushSize*1.5:brushSize)/2,0,Math.PI*2);
-  ctx.fillStyle=currentColor(); ctx.fill();
-  if(!erasing){ startScratch(); spawnSparkles(p.x,p.y,currentColor()); }
+  e.preventDefault();drawing=true;
+  const p=getPos(e);lastX=p.x;lastY=p.y;
+  ctx.beginPath();ctx.arc(lastX,lastY,(erasing?brushSize*1.5:brushSize)/2,0,Math.PI*2);
+  ctx.fillStyle=currentColor();ctx.fill();
+  if(!erasing){startScratch();spawnSparkles(p.x,p.y,currentColor());}
 }
-
 function doDraw(e){
-  if(!drawing) return; e.preventDefault();
+  if(!drawing)return;e.preventDefault();
   const p=getPos(e);
-  ctx.beginPath(); ctx.moveTo(lastX,lastY); ctx.lineTo(p.x,p.y);
+  ctx.beginPath();ctx.moveTo(lastX,lastY);ctx.lineTo(p.x,p.y);
   ctx.strokeStyle=currentColor();
   ctx.lineWidth=erasing?brushSize*1.5:brushSize;
-  ctx.lineCap='round'; ctx.lineJoin='round'; ctx.stroke();
-  lastX=p.x; lastY=p.y;
-
+  ctx.lineCap='round';ctx.lineJoin='round';ctx.stroke();
+  lastX=p.x;lastY=p.y;
   if(!erasing){
     strokeCount++;
-    if(strokeCount%8===0) colorIndex++;
+    if(strokeCount%8===0)colorIndex++;
     const now=Date.now();
     if(now-lastPopTime>150){
       lastPopTime=now;
@@ -448,70 +647,81 @@ function doDraw(e){
     }
   }
 }
-
 function endDraw(e){
-  if(!drawing) return; drawing=false;
-  stopScratch();
-  if(!erasing){ playSparkleSound(); showAffirmation(); }
+  if(!drawing)return;drawing=false;stopScratch();
+  if(!erasing){playSparkleSound();showAffirmation();}
 }
-
-canvas.addEventListener('mousedown', startDraw);
-canvas.addEventListener('mousemove', doDraw);
-canvas.addEventListener('mouseup',   endDraw);
+canvas.addEventListener('mousedown',startDraw);
+canvas.addEventListener('mousemove',doDraw);
+canvas.addEventListener('mouseup',endDraw);
 canvas.addEventListener('mouseleave',endDraw);
 canvas.addEventListener('touchstart',startDraw,{passive:false});
-canvas.addEventListener('touchmove', doDraw,   {passive:false});
-canvas.addEventListener('touchend',  endDraw);
+canvas.addEventListener('touchmove',doDraw,{passive:false});
+canvas.addEventListener('touchend',endDraw);
 
 function spawnSparkles(cx,cy,color){
   const rect=canvas.getBoundingClientRect();
-  const ax=cx+rect.left, ay=cy+rect.top;
+  const ax=cx+rect.left,ay=cy+rect.top;
   for(let i=0;i<4;i++){
-    const s=document.createElement('div');
-    s.className='sparkle';
+    const s=document.createElement('div');s.className='sparkle';
     const sz=5+Math.random()*10;
-    s.style.cssText=`width:${sz}px;height:${sz}px;background:${color};`+
-      `left:${ax+(Math.random()-0.5)*44}px;top:${ay+(Math.random()-0.5)*44}px;`;
-    document.body.appendChild(s);
-    setTimeout(()=>s.remove(),850);
+    s.style.cssText=`width:${sz}px;height:${sz}px;background:${color};left:${ax+(Math.random()-.5)*44}px;top:${ay+(Math.random()-.5)*44}px;`;
+    document.body.appendChild(s);setTimeout(()=>s.remove(),850);
   }
 }
 
 const affDiv=document.getElementById('affirmation');
 function showAffirmation(){
-  if(affirmTimer) return;
+  if(affirmTimer)return;
   const aff=affirmations[Math.floor(Math.random()*affirmations.length)];
-  affDiv.textContent=aff.show;
-  affDiv.classList.add('show');
+  affDiv.textContent=aff.show;affDiv.classList.add('show');
   speakAffirmation(aff.say);
-  affirmTimer=setTimeout(()=>{ affDiv.classList.remove('show'); affirmTimer=null; },3200);
+  affirmTimer=setTimeout(()=>{affDiv.classList.remove('show');affirmTimer=null;},3200);
 }
-
-// Controls
-document.getElementById('brushBig').addEventListener('click',()=>{
-  ensureAudio(); erasing=false; brushSize=36; playButtonClick(); pop('brushBig');
-});
-document.getElementById('brushSmall').addEventListener('click',()=>{
-  ensureAudio(); erasing=false; brushSize=12; playButtonClick(); pop('brushSmall');
-});
-document.getElementById('eraser').addEventListener('click',()=>{
-  ensureAudio(); erasing=!erasing; brushSize=32; playButtonClick(); pop('eraser');
-});
-document.getElementById('clearBtn').addEventListener('click',()=>{
-  ensureAudio();
-  ctx.clearRect(0,0,canvas.width,canvas.height);
-  colorIndex=0; strokeCount=0; erasing=false;
-  playClearWhoosh(); pop('clearBtn');
-  setTimeout(showAffirmation,450);
-});
 
 function pop(id){
   const el=document.getElementById(id);
-  el.classList.remove('pop'); void el.offsetWidth; el.classList.add('pop');
+  el.classList.remove('pop');void el.offsetWidth;el.classList.add('pop');
   setTimeout(()=>el.classList.remove('pop'),300);
 }
 
-// Rotating verse
+// ─── Toolbar buttons ───────────────────────
+document.getElementById('brushBig').addEventListener('click',()=>{
+  ensureAudio();erasing=false;brushSize=36;playButtonClick();pop('brushBig');
+});
+document.getElementById('brushSmall').addEventListener('click',()=>{
+  ensureAudio();erasing=false;brushSize=12;playButtonClick();pop('brushSmall');
+});
+document.getElementById('eraser').addEventListener('click',()=>{
+  ensureAudio();erasing=!erasing;brushSize=32;playButtonClick();pop('eraser');
+});
+document.getElementById('clearBtn').addEventListener('click',()=>{
+  ensureAudio();
+  // Burst sparkles all over canvas then wipe
+  const rect=canvas.getBoundingClientRect();
+  for(let i=0;i<28;i++){
+    setTimeout(()=>{
+      const rx=Math.random()*rect.width;
+      const ry=Math.random()*rect.height;
+      spawnSparkles(rx,ry,colors[Math.floor(Math.random()*colors.length)]);
+    },i*30);
+  }
+  setTimeout(()=>{
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    colorIndex=0;strokeCount=0;erasing=false;
+  },350);
+  playClearWhoosh();pop('clearBtn');
+  setTimeout(showAffirmation,600);
+});
+document.getElementById('musicBtn').addEventListener('click',()=>{
+  ensureAudio();playButtonClick();pop('musicBtn');
+  if(songPlaying){stopSong();}else{playSong(songIndex);}
+});
+document.getElementById('nextSongBtn').addEventListener('click',()=>{
+  ensureAudio();playButtonClick();nextSong();
+});
+
+// ─── Rotating verse ───────────────────────
 const verses=[
   '"I have set my rainbow in the clouds." \u2014 Genesis 9:13',
   '"For God so loved the world." \u2014 John 3:16',
@@ -523,18 +733,91 @@ const verses=[
 let vi=0;
 const verseEl=document.getElementById('verse');
 setInterval(()=>{
-  vi=(vi+1)%verses.length;
-  verseEl.style.opacity=0;
-  setTimeout(()=>{ verseEl.textContent=verses[vi]; verseEl.style.opacity=1; },400);
+  vi=(vi+1)%verses.length;verseEl.style.opacity=0;
+  setTimeout(()=>{verseEl.textContent=verses[vi];verseEl.style.opacity=1;},400);
 },30000);
 
-// ── Start button ─────────────────────────────
+// ═══════════════════════════════════════════════════════
+//  LOCK / FULLSCREEN + PIN
+// ═══════════════════════════════════════════════════════
+let locked=false;
+let pinEntry='';
+
+function enterFullscreen(){
+  const el=document.documentElement;
+  if(el.requestFullscreen)el.requestFullscreen();
+  else if(el.webkitRequestFullscreen)el.webkitRequestFullscreen();
+}
+function exitFullscreen(){
+  if(document.exitFullscreen)document.exitFullscreen();
+  else if(document.webkitExitFullscreen)document.webkitExitFullscreen();
+}
+
+document.getElementById('lockBtn').addEventListener('click',()=>{
+  ensureAudio();playButtonClick();
+  if(!locked){
+    locked=true;
+    enterFullscreen();
+    document.getElementById('lockBtn').innerHTML='<span class="btn-icon">🔓</span>Unlock';
+    history.pushState(null,null,location.href);
+  } else {
+    showPinOverlay();
+  }
+});
+
+// Trap back-button while locked
+window.addEventListener('popstate',()=>{
+  if(locked) history.pushState(null,null,location.href);
+});
+
+function showPinOverlay(){
+  pinEntry='';updatePinDots();
+  document.getElementById('pinError').textContent='';
+  document.getElementById('pinOverlay').classList.add('show');
+}
+function hidePinOverlay(){
+  document.getElementById('pinOverlay').classList.remove('show');
+}
+function updatePinDots(){
+  for(let i=0;i<4;i++){
+    document.getElementById('d'+i).classList.toggle('filled',i<pinEntry.length);
+  }
+}
+
+document.querySelectorAll('.pin-key').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    const n=btn.dataset.n;
+    if(n==='cancel'){hidePinOverlay();return;}
+    if(n==='back'){pinEntry=pinEntry.slice(0,-1);updatePinDots();return;}
+    if(pinEntry.length>=4)return;
+    pinEntry+=n;updatePinDots();
+    if(pinEntry.length===4){
+      if(pinEntry===PARENT_PIN){
+        hidePinOverlay();
+        locked=false;
+        exitFullscreen();
+        document.getElementById('lockBtn').innerHTML='<span class="btn-icon">🔒</span>Lock';
+        playChime([523,659,784],0.08);
+      }else{
+        document.getElementById('pinError').textContent='Wrong PIN, try again!';
+        pinEntry='';updatePinDots();
+        playTone(200,'sawtooth',.3,.15);
+      }
+    }
+  });
+});
+
+// ═══════════════════════════════════════════════════════
+//  START BUTTON
+// ═══════════════════════════════════════════════════════
 document.getElementById('startBtn').addEventListener('click',()=>{
   ensureAudio();
-  document.getElementById('unlockScreen').style.display='none';
-  playChime([523,659,784,1046,1318],0.1);
+  document.getElementById('splashScreen').style.display='none';
+  playChime([523,659,784,1046,1318],.1);
+  // Auto-start first song after a moment
   setTimeout(()=>{
-    speakAffirmation('Welcome, little one! Let us make something beautiful together for God!');
+    playSong(songIndex);
+    speakAffirmation('Welcome, little one! Let us make something beautiful for God!');
   },900);
 });
 </script>
