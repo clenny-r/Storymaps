@@ -303,6 +303,52 @@ body::before{
   .add-row{flex-direction:column}
   .add-submit{width:100%}
 }
+
+/* ── Admin panel ──────────────────────────────────────────────────── */
+#admin-panel{
+  background:var(--bg2);border:1px solid rgba(251,191,36,.25);
+  border-radius:var(--radius);padding:20px;margin-bottom:24px;
+}
+.admin-title{
+  display:flex;align-items:center;gap:8px;
+  font-size:.72rem;font-weight:700;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--amber);margin-bottom:16px;
+}
+.admin-section{margin-bottom:16px}
+.admin-section h3{font-size:.78rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+.admin-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px}
+.admin-input{
+  flex:1;min-width:120px;background:var(--bg3);border:1px solid var(--border);
+  border-radius:8px;padding:10px 12px;color:var(--text);
+  font-family:var(--font-body);font-size:.88rem;outline:none;
+  transition:border-color .2s;
+}
+.admin-input:focus{border-color:var(--amber)}
+.admin-input::placeholder{color:var(--muted)}
+.admin-btn{
+  background:rgba(251,191,36,.15);color:var(--amber);border:1px solid rgba(251,191,36,.4);
+  border-radius:8px;padding:10px 16px;font-family:var(--font-body);font-size:.78rem;
+  font-weight:700;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;
+  transition:background .2s;white-space:nowrap;flex-shrink:0;
+}
+.admin-btn:hover{background:rgba(251,191,36,.28)}
+.admin-btn:disabled{opacity:.45;cursor:not-allowed}
+.admin-err{color:var(--crimson-l);font-size:.78rem;min-height:14px;margin-top:4px}
+.family-list{display:flex;flex-direction:column;gap:6px}
+.family-row{
+  display:flex;align-items:center;justify-content:space-between;
+  background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:10px 14px;
+  font-size:.88rem;
+}
+.family-info{display:flex;flex-direction:column;gap:2px}
+.family-name{font-weight:600}
+.family-pass{font-size:.72rem;color:var(--muted);letter-spacing:.08em}
+.family-del{
+  background:none;border:none;cursor:pointer;color:var(--muted);padding:4px 8px;
+  border-radius:6px;font-size:.72rem;transition:color .18s,background .18s;
+}
+.family-del:hover{color:var(--crimson-l);background:var(--red-bg)}
+
 </style>
 </head>
 <body>
@@ -312,7 +358,7 @@ body::before{
   <img class="lock-logo" src="https://www.twcministries.net/Pages/church_photos/Image1-transparent.gif" alt="TWC logo"
        onerror="this.style.display='none'">
   <h1 class="lock-title">Family <span>Tasks</span></h1>
-  <p class="lock-sub">Rowe Family · TWC Ministries</p>
+  <p class="lock-sub" id="lock-sub-line">TWC Ministries · Family Tasks</p>
   <form class="lock-form" id="lock-form" autocomplete="off">
     <input class="lock-input" type="password" id="pw-input" placeholder="Enter password" autocomplete="new-password"/>
     <button class="lock-btn" type="submit">Unlock</button>
@@ -327,10 +373,10 @@ body::before{
       <img class="header-logo" src="https://www.twcministries.net/Pages/church_photos/Image1-transparent.gif" alt="TWC logo"
            onerror="this.style.display='none'">
       <h1 class="app-title">Family <span>Tasks</span></h1>
-      <p class="app-sub">Shared task list for the Rowe family</p>
+      <p class="app-sub" id="app-sub">Shared task list</p>
       <button class="user-badge" id="user-badge" title="Tap to switch">
         <span class="user-dot"></span>
-        <span id="badge-name">Clenmar</span>
+        <span id="badge-name">…</span>
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
       </button>
     </header>
@@ -356,13 +402,40 @@ body::before{
           <button class="p-btn active-medium" data-p="medium">Med</button>
           <button class="p-btn" data-p="low">Low</button>
         </div>
-        <div class="add-who">
+        <div class="add-who" id="who-wrap">
           <label>From:</label>
-          <button class="who-btn active" data-who="Clenmar" id="who-clenmar">Clenmar</button>
-          <button class="who-btn" data-who="Shadene" id="who-Shadene">Shadene</button>
+          <!-- Member buttons injected dynamically -->
         </div>
       </div>
       <div class="add-err" id="add-err"></div>
+    </div>
+
+
+    <!-- Admin panel (only shown to admin) -->
+    <div id="admin-panel" style="display:none">
+      <div class="admin-title">⭐ Admin — Family Manager</div>
+
+      <!-- Create family -->
+      <div class="admin-section">
+        <h3>Register New Family</h3>
+        <div class="admin-row">
+          <input class="admin-input" type="text" id="admin-fname" placeholder="Family name (e.g. Graham Family)" maxlength="60"/>
+          <input class="admin-input" type="text" id="admin-fpass" placeholder="Password (e.g. graham2026)" maxlength="60"/>
+        </div>
+        <div class="admin-row">
+          <input class="admin-input" type="text" id="admin-fmembers" placeholder="Members (comma-separated, e.g. John, Mary)" maxlength="120"/>
+          <button class="admin-btn" id="admin-add-btn">Create</button>
+        </div>
+        <div class="admin-err" id="admin-err"></div>
+      </div>
+
+      <!-- Existing families -->
+      <div class="admin-section">
+        <h3>Registered Families</h3>
+        <div class="family-list" id="family-list">
+          <div style="color:var(--muted);font-size:.82rem">Loading…</div>
+        </div>
+      </div>
     </div>
 
     <!-- Filter bar -->
@@ -373,8 +446,7 @@ body::before{
       <button class="filter-btn" data-f="high">🔴 High</button>
       <button class="filter-btn" data-f="medium">🟡 Med</button>
       <button class="filter-btn" data-f="low">🟢 Low</button>
-      <button class="filter-btn" data-f="by-clenmar">👤 Clenmar</button>
-      <button class="filter-btn" data-f="by-Shadene">👤 Shadene</button>
+      <!-- Member filter buttons injected dynamically -->
     </div>
 
     <!-- Task list -->
@@ -394,53 +466,119 @@ body::before{
 // ── Config ─────────────────────────────────────────────────────────────────
 const CFG = {
   API_BASE: 'https://twc-family-tasks.kd7bgn7q2z.workers.dev',
-  PASSWORD: 'rowe 2026',
 };
 
 // ── State ──────────────────────────────────────────────────────────────────
 let tasks = [];
 let filter = 'all';
-let currentUser = 'Clenmar';
+let currentUser = '';
 let selectedPriority = 'medium';
 let dragSrc = null;
+let roomPassword = '';
+let roomMembers = [];
+let isAdmin = false;
 
 // ── Lock screen ────────────────────────────────────────────────────────────
 const lockEl  = document.getElementById('lock');
 const mainEl  = document.getElementById('main');
 const lockErr = document.getElementById('lock-err');
 
-document.getElementById('lock-form').addEventListener('submit', e => {
+document.getElementById('lock-form').addEventListener('submit', async e => {
   e.preventDefault();
   const val = document.getElementById('pw-input').value.trim();
-  if (val === CFG.PASSWORD) {
-    lockEl.style.display = 'none';
-    mainEl.style.display = 'block';
-    loadTasks();
-  } else {
-    lockErr.textContent = 'Incorrect password — try again.';
-    document.getElementById('pw-input').value = '';
-    setTimeout(() => lockErr.textContent = '', 3000);
+  if (!val) return;
+  lockErr.textContent = '';
+  const submitBtn = e.target.querySelector('.lock-btn');
+  submitBtn.disabled = true;
+  submitBtn.innerHTML = '<span class="spinner"></span>';
+  try {
+    const res = await fetch(CFG.API_BASE + '/api/auth', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ password: val }),
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      lockErr.textContent = data.error || 'Incorrect password — try again.';
+      document.getElementById('pw-input').value = '';
+    } else {
+      roomPassword = val;
+      roomMembers  = data.members || [];
+      isAdmin      = data.isAdmin || false;
+      const roomName = data.name || 'Your Family';
+      // Update UI for this room
+      document.getElementById('app-sub').textContent = `Shared task list · ${roomName}`;
+      buildMemberUI(roomMembers);
+      if (isAdmin) {
+        document.getElementById('admin-panel').style.display = 'block';
+        loadFamilyList();
+        setupAdminForm();
+      }
+      lockEl.style.display = 'none';
+      mainEl.style.display = 'block';
+      loadTasks();
+    }
+  } catch(err) {
+    lockErr.textContent = 'Connection error — please try again.';
+  } finally {
+    submitBtn.disabled = false;
+    submitBtn.textContent = 'Unlock';
   }
 });
 
-// ── User switcher ──────────────────────────────────────────────────────────
-document.getElementById('user-badge').addEventListener('click', () => {
-  currentUser = currentUser === 'Clenmar' ? 'Shadene' : 'Clenmar';
+// ── Build member WHO buttons and filter buttons ────────────────────────────
+function buildMemberUI(members) {
+  // Set first member as default
+  currentUser = members[0] || 'Me';
   document.getElementById('badge-name').textContent = currentUser;
-  // sync who buttons
-  document.querySelectorAll('.who-btn').forEach(b => {
+
+  // WHO buttons in add panel
+  const whoWrap = document.getElementById('who-wrap');
+  // Remove old dynamic buttons (keep the <label>)
+  [...whoWrap.querySelectorAll('.who-btn')].forEach(b => b.remove());
+  members.forEach((m, i) => {
+    const b = document.createElement('button');
+    b.className = 'who-btn' + (i === 0 ? ' active' : '');
+    b.dataset.who = m;
+    b.textContent = m;
+    b.addEventListener('click', () => {
+      currentUser = m;
+      document.getElementById('badge-name').textContent = m;
+      whoWrap.querySelectorAll('.who-btn').forEach(x => x.classList.remove('active'));
+      b.classList.add('active');
+    });
+    whoWrap.appendChild(b);
+  });
+
+  // Member filter buttons
+  const filterBar = document.querySelector('.filter-bar');
+  // Remove existing member filter buttons
+  filterBar.querySelectorAll('[data-member-filter]').forEach(b => b.remove());
+  members.forEach(m => {
+    const b = document.createElement('button');
+    b.className = 'filter-btn';
+    b.dataset.f = 'by-' + m.toLowerCase();
+    b.dataset.memberFilter = '1';
+    b.textContent = '👤 ' + m;
+    b.addEventListener('click', () => {
+      filter = b.dataset.f;
+      filterBar.querySelectorAll('.filter-btn').forEach(x => x.classList.remove('active'));
+      b.classList.add('active');
+      renderTasks();
+    });
+    filterBar.appendChild(b);
+  });
+}
+
+// ── User badge click (cycle through members) ──────────────────────────────
+document.getElementById('user-badge').addEventListener('click', () => {
+  const idx = (roomMembers.indexOf(currentUser) + 1) % roomMembers.length;
+  currentUser = roomMembers[idx] || currentUser;
+  document.getElementById('badge-name').textContent = currentUser;
+  document.getElementById('who-wrap').querySelectorAll('.who-btn').forEach(b => {
     b.classList.toggle('active', b.dataset.who === currentUser);
   });
   showToast(`Switched to ${currentUser}`, 'ok');
-});
-
-document.querySelectorAll('.who-btn').forEach(b => {
-  b.addEventListener('click', () => {
-    currentUser = b.dataset.who;
-    document.getElementById('badge-name').textContent = currentUser;
-    document.querySelectorAll('.who-btn').forEach(x => x.classList.remove('active'));
-    b.classList.add('active');
-  });
 });
 
 // ── Priority buttons ───────────────────────────────────────────────────────
@@ -470,7 +608,7 @@ async function apiFetch(path, opts = {}) {
     ...opts,
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${CFG.PASSWORD}`,
+      'Authorization': `Bearer ${roomPassword}`,
       ...(opts.headers || {}),
     },
   });
@@ -484,9 +622,7 @@ async function apiFetch(path, opts = {}) {
 // ── Load tasks ─────────────────────────────────────────────────────────────
 async function loadTasks() {
   try {
-    const data = await fetch(CFG.API_BASE + '/api/tasks', {
-      headers: { 'Authorization': `Bearer ${CFG.PASSWORD}` }
-    }).then(r => r.json());
+    const data = await apiFetch('/api/tasks');
     tasks = (data.tasks || []).sort((a, b) => a.order - b.order);
     renderTasks();
     updateStats();
@@ -728,8 +864,10 @@ function getFiltered() {
     if (filter === 'high')       return t.priority === 'high'   && !t.completed;
     if (filter === 'medium')     return t.priority === 'medium' && !t.completed;
     if (filter === 'low')        return t.priority === 'low'    && !t.completed;
-    if (filter === 'by-clenmar') return (t.addedBy || '').toLowerCase() === 'clenmar';
-    if (filter === 'by-Shadene')    return (t.addedBy || '').toLowerCase() === 'Shadene';
+    if (filter.startsWith('by-')) {
+      const name = filter.slice(3);
+      return (t.addedBy || '').toLowerCase() === name;
+    }
     return true;
   });
 }
@@ -818,10 +956,93 @@ function showToast(msg, type = 'ok') {
   toastTimer = setTimeout(() => { t.classList.remove('show'); }, 2800);
 }
 
+
+// ── Admin: load family list ─────────────────────────────────────────────────
+async function loadFamilyList() {
+  const listEl = document.getElementById('family-list');
+  listEl.innerHTML = '<div style="color:var(--muted);font-size:.82rem">Loading…</div>';
+  try {
+    const data = await apiFetch('/api/admin/rooms');
+    const rooms = data.rooms || [];
+    if (!rooms.length) {
+      listEl.innerHTML = '<div style="color:var(--muted);font-size:.82rem">No other families yet.</div>';
+      return;
+    }
+    listEl.innerHTML = '';
+    rooms.forEach(r => {
+      const row = document.createElement('div');
+      row.className = 'family-row';
+      const isMe = r.password === roomPassword;
+      row.innerHTML = `
+        <div class="family-info">
+          <span class="family-name">${escHtml(r.name)}${isMe ? ' <span style="color:var(--green);font-size:.7rem">(you)</span>' : ''}</span>
+          <span class="family-pass">🔑 ${escHtml(r.password)} · ${r.taskCount} task${r.taskCount !== 1 ? 's' : ''} · ${(r.members || []).join(', ')}</span>
+        </div>
+        ${!isMe ? `<button class="family-del" data-pass="${escHtml(r.password)}" title="Remove family">✕ Remove</button>` : ''}`;
+      const delBtn = row.querySelector('.family-del');
+      if (delBtn) {
+        delBtn.addEventListener('click', async () => {
+          if (!confirm(`Remove "${r.name}"? All their tasks will be deleted.`)) return;
+          delBtn.disabled = true;
+          try {
+            await apiFetch('/api/admin/rooms', {
+              method: 'DELETE',
+              body: JSON.stringify({ password: r.password }),
+            });
+            showToast(`${r.name} removed`, 'ok');
+            loadFamilyList();
+          } catch(e) {
+            showToast('Error: ' + e.message, 'err');
+            delBtn.disabled = false;
+          }
+        });
+      }
+      listEl.appendChild(row);
+    });
+  } catch(e) {
+    listEl.innerHTML = `<div style="color:var(--crimson-l);font-size:.82rem">Error: ${escHtml(e.message)}</div>`;
+  }
+}
+
+// ── Admin: create family form ───────────────────────────────────────────────
+function setupAdminForm() {
+  document.getElementById('admin-add-btn').addEventListener('click', async () => {
+    const nameVal    = document.getElementById('admin-fname').value.trim();
+    const passVal    = document.getElementById('admin-fpass').value.trim();
+    const membersVal = document.getElementById('admin-fmembers').value.trim();
+    const errEl      = document.getElementById('admin-err');
+    errEl.textContent = '';
+
+    if (!nameVal) { errEl.textContent = 'Family name is required.'; return; }
+    if (!passVal) { errEl.textContent = 'Password is required.'; return; }
+    if (!membersVal) { errEl.textContent = 'At least one member is required.'; return; }
+
+    const members = membersVal.split(',').map(m => m.trim()).filter(Boolean);
+    const btn = document.getElementById('admin-add-btn');
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner"></span>';
+
+    try {
+      await apiFetch('/api/admin/rooms', {
+        method: 'POST',
+        body: JSON.stringify({ name: nameVal, password: passVal, members }),
+      });
+      document.getElementById('admin-fname').value = '';
+      document.getElementById('admin-fpass').value = '';
+      document.getElementById('admin-fmembers').value = '';
+      showToast(`${nameVal} registered!`, 'ok');
+      loadFamilyList();
+    } catch(e) {
+      errEl.textContent = e.message;
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Create';
+    }
+  });
+}
+
 // ── Utility ────────────────────────────────────────────────────────────────
 function escHtml(s) {
   return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
-</script>
-</body>
-</html>
+</

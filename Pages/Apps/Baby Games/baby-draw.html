@@ -276,7 +276,7 @@ body::before{
   <div id="bottomBar">
     <div id="musicHud">
       <span class="note">🎵</span>
-      <span id="songTitle">Joy in My Heart</span>
+      <span id="songTitle">God's Way Is The Recipe</span>
       <button id="nextSongBtn" title="Next song">⏭</button>
     </div>
   </div>
@@ -284,6 +284,9 @@ body::before{
 
 <div id="affirmation"></div>
 <div id="speakingDots"><span></span><span></span><span></span></div>
+
+<!-- Background music player (MP3 rotation) -->
+<audio id="songAudio" preload="none"></audio>
 
 <script>
 // ═══════════════════════════════════════════════════════
@@ -458,185 +461,68 @@ function playHat(t, vol=0.06){
   src.start(t); src.stop(t+0.08);
 }
 
-// ── SONGS ─────────────────────────────────────────────
-// Notes: [midiPitch, durationBeats, bassOverride(optional)]
-// Rest = midi 0
+// ── SONGS (MP3 rotation) ─────────────────────────────
+const BASE = 'https://twcministries.net/Pages/Apps/Sound%20effects/Baby%20Bible%20Songs/';
 const SONGS = [
-  {
-    title:'Joy in My Heart',
-    bpm:114, key:60,
-    notes:[
-      [64,1],[64,.5],[64,.5],[64,1],[62,.5],[60,.5],
-      [62,1],[62,.5],[60,.5],[62,2],
-      [64,1],[64,.5],[64,.5],[64,1],[62,.5],[60,.5],
-      [60,3],[0,1],
-      [67,1],[67,.5],[67,.5],[67,1],[65,.5],[64,.5],
-      [65,1],[64,.5],[62,.5],[64,2],
-      [64,1],[62,.5],[60,.5],[62,1],[64,.5],[62,.5],
-      [60,4],
-    ],
-    bass:[60,55,57,60, 60,55,57,60],
-    beats:[1,1,1,1]
-  },
-  {
-    title:'This Little Light of Mine',
-    bpm:110, key:60,
-    notes:[
-      [64,1],[64,1],[64,.5],[62,.5],[64,1.5],[0,.5],
-      [67,1],[67,1],[67,.5],[65,.5],[67,1.5],[0,.5],
-      [64,1],[64,.5],[62,.5],[64,1],[67,1],
-      [69,2],[0,1],
-      [72,1],[72,.5],[71,.5],[72,1],[71,.5],[69,.5],
-      [67,1],[65,1],[64,1],[62,1],
-      [60,4],
-    ],
-    bass:[60,55,57,60],
-    beats:[1,1,1,1]
-  },
-  {
-    title:'Jesus Loves Me',
-    bpm:96, key:60,
-    notes:[
-      [64,1],[64,.5],[67,.5],[69,1.5],[67,.5],
-      [64,1.5],[62,.5],[60,2],
-      [64,1],[64,.5],[67,.5],[69,1.5],[67,.5],
-      [64,1.5],[62,.5],[64,2],
-      [67,1],[67,.5],[69,.5],[71,1.5],[69,.5],
-      [67,1.5],[65,.5],[64,2],
-      [64,1],[62,.5],[60,.5],[62,1],[64,1],
-      [60,4],
-    ],
-    bass:[60,55,57,60],
-    beats:[1,1,1,1]
-  },
-  {
-    title:"He's Got the Whole World",
-    bpm:100, key:60,
-    notes:[
-      [60,1],[62,1],[64,1.5],[65,.5],
-      [64,1.5],[62,.5],[60,1],[62,1],
-      [60,3],[0,1],
-      [60,1],[62,1],[64,1.5],[65,.5],
-      [67,2],[64,2],
-      [67,1],[67,.5],[65,.5],[64,1],[62,1],
-      [60,1.5],[62,.5],[60,3],
-    ],
-    bass:[60,55,57,60],
-    beats:[1,1,1,1]
-  },
-  {
-    title:'Hallelu Hallelujah',
-    bpm:124, key:60,
-    notes:[
-      [64,1],[64,1],[67,1],[67,1],
-      [69,1],[69,1],[67,2],
-      [65,1],[65,1],[64,1],[64,1],
-      [62,2],[60,2],
-      [67,1],[67,1],[69,1],[69,1],
-      [71,1],[71,1],[69,2],
-      [67,1],[65,1],[64,1],[62,1],
-      [60,4],
-    ],
-    bass:[60,55,57,60],
-    beats:[1,.5,.5,1]
-  },
-  {
-    title:'My God is So Big',
-    bpm:110, key:60,
-    notes:[
-      [60,1],[64,1],[67,1],[64,1],
-      [65,1.5],[64,.5],[62,2],
-      [60,1],[64,1],[67,1],[69,1],
-      [67,4],
-      [72,1],[71,1],[69,1],[67,1],
-      [65,1.5],[67,.5],[64,2],
-      [60,1],[62,1],[64,1],[65,1],
-      [60,4],
-    ],
-    bass:[60,55,57,60],
-    beats:[1,1,1,1]
-  },
+  { title: "God's Way Is The Recipe",           src: BASE + "God's%20Way%20Is%20The%20Recipe.mp3" },
+  { title: "Gumballs Can Wait",                 src: BASE + "Gumballs%20Can%20Wait.mp3" },
+  { title: "Jelly's Not The End",               src: BASE + "Jelly's%20Not%20The%20End.mp3" },
+  { title: "Jesus Loves Me",                    src: BASE + "Jesus%20Loves%20Me.mp3" },
+  { title: "Little Stone Big Win!",             src: BASE + "Little%20Stone%20Big%20Win!.mp3" },
+  { title: "Macaroni for the Lord",             src: BASE + "Macaroni%20for%20the%20Lord.mp3" },
+  { title: "Muffins Can't Pray (But I Can!)",   src: BASE + "Muffins%20Can't%20Pray%20(But%20I%20Can!).mp3" },
+  { title: "Pass The Picnic",                   src: BASE + "Pass%20The%20Picnic.mp3" },
+  { title: "The Taco Tumble",                   src: BASE + "The%20Taco%20Tumble.mp3" },
+  { title: "This Tiny Light Of Mine",           src: BASE + "This%20Tiny%20Light%20Of%20Mine.mp3" },
+  { title: "Two By Two They Boarded The Boat!", src: BASE + "Two%20By%20Two%20They%20Boarded%20The%20Boat!.mp3" },
+  { title: "Wait For The Sandwich",             src: BASE + "Wait%20For%20The%20Sandwich.mp3" },
 ];
 
-// ── Scheduler ─────────────────────────────────────────
+// Shuffle playlist on each load for variety
+(function shuffle(a){
+  for(let i=a.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [a[i],a[j]]=[a[j],a[i]];
+  }
+})(SONGS);
+
+const songAudio = document.getElementById('songAudio');
 let songIndex   = 0;
 let songPlaying = false;
-let schedId     = null;   // requestAnimationFrame id
-let schedPos    = 0;      // position in notes array
-let schedTime   = 0;      // AudioContext time for next note
-let schedSong   = null;   // reference to current song object
-let beatPos     = 0;      // beat counter for drums/bass
-let beatTime    = 0;      // AudioContext time for next beat
-
-const LOOK_AHEAD = 0.12;  // schedule this far ahead (seconds)
 
 function startSongScheduler(idx){
-  if(schedId) cancelAnimationFrame(schedId);
-  reverbNode = null; // reset reverb for new song
-  songIndex  = idx;
-  schedSong  = SONGS[idx];
-  schedPos   = 0;
-  schedTime  = audioCtx.currentTime + 0.1;
-  beatPos    = 0;
-  beatTime   = audioCtx.currentTime + 0.1;
-  songPlaying= true;
-  document.getElementById('songTitle').textContent = schedSong.title;
+  songIndex   = idx % SONGS.length;
+  songPlaying = true;
+  const song  = SONGS[songIndex];
+  songAudio.src    = song.src;
+  songAudio.volume = 0.55;
+  document.getElementById('songTitle').textContent = song.title;
   document.getElementById('musicHud').classList.add('visible');
-  schedulerTick();
+  songAudio.play().catch(()=>{});
 }
 
-function schedulerTick(){
-  if(!songPlaying || !audioCtx) return;
-  const beatSec = 60 / schedSong.bpm;
-
-  // ── Schedule melody notes ──
-  while(schedTime < audioCtx.currentTime + LOOK_AHEAD){
-    if(schedPos >= schedSong.notes.length){
-      // Loop: restart
-      schedPos = 0;
-      beatPos  = 0;
-    }
-    const [midi, beats] = schedSong.notes[schedPos];
-    const dur = beats * beatSec;
-    if(midi > 0) playMelodyNote(midiToHz(midi), schedTime, dur * 0.92);
-    schedTime += dur;
-    schedPos++;
+// Auto-advance to next song when current one ends
+songAudio.addEventListener('ended', ()=>{
+  if(songPlaying){
+    startSongScheduler((songIndex + 1) % SONGS.length);
   }
-
-  // ── Schedule drums + bass on a separate beat clock ──
-  while(beatTime < audioCtx.currentTime + LOOK_AHEAD){
-    const bi = beatPos % 4;
-    // kick on beats 1 and 3
-    if(bi===0||bi===2) playKick(beatTime);
-    // hihat every beat
-    playHat(beatTime, bi===0||bi===2 ? 0.05 : 0.08);
-    // half-beat hihat
-    playHat(beatTime + beatSec*0.5, 0.04);
-    // bass note from pattern
-    const bassNotes = schedSong.bass || [60,55,57,60];
-    const bassHz = midiToHz(bassNotes[bi % bassNotes.length]);
-    playBassNote(bassHz, beatTime, beatSec);
-    beatTime += beatSec;
-    beatPos++;
-  }
-
-  schedId = requestAnimationFrame(schedulerTick);
-}
+});
 
 function stopSong(){
   songPlaying = false;
-  if(schedId){ cancelAnimationFrame(schedId); schedId=null; }
+  songAudio.pause();
+  songAudio.currentTime = 0;
   document.getElementById('musicHud').classList.remove('visible');
 }
 
 function nextSong(){
   const wasPlaying = songPlaying;
-  stopSong();
-  songIndex = (songIndex+1) % SONGS.length;
+  const next = (songIndex + 1) % SONGS.length;
   if(wasPlaying){
-    setTimeout(()=>startSongScheduler(songIndex), 80);
+    startSongScheduler(next);
   } else {
-    document.getElementById('songTitle').textContent = SONGS[songIndex].title;
+    songIndex = next;
+    document.getElementById('songTitle').textContent = SONGS[next].title;
   }
 }
 

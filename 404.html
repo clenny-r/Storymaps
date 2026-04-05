@@ -43,14 +43,12 @@
     92%  { background:#050913; }
     100% { background:#050913; }
   }
-  }
 
   .scene{
     position:relative;
     width:100vw;
     height:100vh;
     overflow:hidden;
-    background:#050913;
     animation: sceneTone 14s linear infinite;
   }
 
@@ -66,18 +64,10 @@
     90%  { filter:brightness(.20) contrast(1.14) saturate(1.03); }
     100% { filter:brightness(.18) contrast(1.14) saturate(1.05); }
   }
-  }
 
-  .sky-fill{
-    position:absolute;
-    inset:0;
-    background:linear-gradient(to bottom, rgba(255,255,255,0.02) 0%, rgba(255,255,255,0.02) 65%, rgba(0,0,0,0.06) 100%);
-    z-index:0;
-    pointer-events:none;
-  }
-
+  /* ── Stars ─────────────────────────────────────── */
   .stars{
-    position:fixed;
+    position:absolute;
     inset:0;
     pointer-events:none;
     z-index:1;
@@ -100,6 +90,7 @@
     100%    { opacity:0; }
   }
 
+  /* ── Sun & Moon orbit layer ─────────────────────── */
   .sky-orbit{
     position:absolute;
     inset:0;
@@ -159,6 +150,7 @@
     100% { left:110%; top:75%; opacity:0; }
   }
 
+  /* ── Hills & ground ─────────────────────────────── */
   .layers{
     position:absolute;
     inset:0;
@@ -203,281 +195,222 @@
 
   @keyframes drift1{ from{ transform:translateX(0); } to{ transform:translateX(-25%); } }
   @keyframes drift2{ from{ transform:translateX(0); } to{ transform:translateX(-35%); } }
-  @keyframes drift3{ from{ transform:translateX(0); } to{ transform:translateX(-12%); } }
+  @keyframes drift3{ from{ transform:translateX(0); } to{ transform:translateX(-50%); } }
 
-  .container{
-    position:relative;
-    z-index:10;
-    max-width:760px;
-    margin:8vh auto 0;
-    background:var(--panel);
-    padding:30px;
-    border-radius:16px;
-    box-shadow:0 0 20px rgba(0,0,0,.2);
-    backdrop-filter:blur(4px);
+  /* ── Sheep ──────────────────────────────────────── */
+  .sheep-wrap{
+    position:absolute;
+    bottom:14%;
+    z-index:6;
+    animation: sheepWander 22s ease-in-out infinite;
+    transform-origin:center bottom;
   }
 
-  h1{ font-size:70px; margin:0; }
-  h2{ margin:6px 0 14px; font-weight:normal; }
-  .quote{ font-style:italic; margin:8px auto; max-width:600px; }
-
-  .controls{
-    margin-top:18px;
-    display:flex;
-    gap:12px;
-    justify-content:center;
-    flex-wrap:wrap;
+  @keyframes sheepWander{
+    0%   { left:10%;  }
+    15%  { left:22%;  }
+    30%  { left:15%;  }
+    45%  { left:38%;  }
+    60%  { left:28%;  }
+    75%  { left:55%;  }
+    88%  { left:42%;  }
+    100% { left:10%;  }
   }
-
-  button{
-    padding:12px 20px;
-    font-size:15px;
-    border:none;
-    border-radius:8px;
-    background:var(--wood);
-    color:white;
-    cursor:pointer;
-  }
-
-  button:hover{ background:var(--wood-dark); }
 
   .sheep{
+    font-size: clamp(2.5rem, 7vw, 4.5rem);
+    display:block;
+    animation: sheepBob 0.55s ease-in-out infinite alternate;
+    filter:drop-shadow(0 4px 8px rgba(0,0,0,.25));
+    cursor:pointer;
+    user-select:none;
+    -webkit-tap-highlight-color:transparent;
+  }
+
+  @keyframes sheepBob{
+    from{ transform:translateY(0) rotate(-2deg) scaleX(1); }
+    to  { transform:translateY(-5px) rotate(2deg) scaleX(-1); }
+  }
+
+  /* ── Panel ──────────────────────────────────────── */
+  .panel{
     position:absolute;
-    width:120px;
-    height:80px;
-    z-index:5;
-    pointer-events:none;
-    will-change:transform;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
+    z-index:8;
+    background:var(--panel);
+    backdrop-filter:blur(12px);
+    -webkit-backdrop-filter:blur(12px);
+    border-radius:20px;
+    padding:2.2rem 2.8rem 2rem;
+    box-shadow:0 8px 40px rgba(0,0,0,.35), 0 0 0 1.5px rgba(255,255,255,0.3) inset;
+    max-width:480px;
+    width:88vw;
+    pointer-events:auto;
   }
 
-  .shepherd{
-    position:absolute;
-    bottom:70px;
-    left:-160px;
-    width:120px;
-    animation:shepherdWalk 42s linear infinite;
-    z-index:6;
+  .panel h1{
+    font-size:clamp(3.5rem,14vw,7rem);
+    line-height:1;
+    margin:0 0 .1em;
+    color:var(--wood);
+    text-shadow:0 3px 0 rgba(0,0,0,.18);
+    letter-spacing:-2px;
   }
 
-  @keyframes shepherdWalk{
-    0%{ left:-160px; }
-    100%{ left:110%; }
+  .panel .subtitle{
+    font-size:clamp(1rem,3.5vw,1.4rem);
+    font-style:italic;
+    color:var(--wood-dark);
+    margin-bottom:.5rem;
   }
 
-  .lanternLight{
-    position:absolute;
-    width:260px;
-    height:260px;
-    border-radius:50%;
-    background:radial-gradient(circle, rgba(255,230,150,.6), rgba(255,230,150,0) 70%);
-    pointer-events:none;
-    z-index:4;
+  .panel .verse{
+    font-size:clamp(.7rem,2vw,.9rem);
+    color:#5c4020;
+    margin:.5rem 0 1.2rem;
+    line-height:1.5;
   }
 
-  .firefly{
-    position:absolute;
-    width:6px;
-    height:6px;
-    border-radius:50%;
-    background:#ffe88a;
-    box-shadow:0 0 10px rgba(255,232,138,.9);
-    animation:fly 5s infinite alternate ease-in-out;
-    z-index:5;
-    pointer-events:none;
+  .btn-home{
+    display:inline-block;
+    background:var(--wood);
+    color:#fff;
+    text-decoration:none;
+    border-radius:40px;
+    padding:.6rem 2rem;
+    font-size:clamp(.85rem,2.5vw,1rem);
+    font-family:Georgia,serif;
+    letter-spacing:.5px;
+    transition:background .2s, transform .15s;
+    box-shadow:0 4px 0 var(--wood-dark);
+    cursor:pointer;
   }
+  .btn-home:hover{ background:var(--wood-dark); transform:translateY(-2px); }
+  .btn-home:active{ transform:translateY(1px); box-shadow:0 2px 0 var(--wood-dark); }
 
-  @keyframes fly{
-    from{ transform:translate(0,0); opacity:.6; }
-    to{ transform:translate(18px,-55px); opacity:1; }
-  }
-
-  body:before{
-    content:"";
+  /* ── Mute toggle ────────────────────────────────── */
+  #muteBtn{
     position:fixed;
-    inset:0;
-    border:18px solid rgba(100,70,30,.35);
-    pointer-events:none;
+    bottom:18px;
+    right:18px;
     z-index:20;
+    background:rgba(0,0,0,.38);
+    border:none;
+    border-radius:50%;
+    width:42px;
+    height:42px;
+    font-size:1.1rem;
+    cursor:pointer;
+    color:#fff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    transition:background .2s;
+    backdrop-filter:blur(4px);
   }
-
-  @media (max-width:700px){
-    h1{ font-size:54px; }
-    .container{ margin-top:6vh; padding:24px 18px 20px; }
-  }
+  #muteBtn:hover{ background:rgba(0,0,0,.6); }
 </style>
 </head>
 <body>
-  <div class="scene">
-    <div class="sky-fill"></div>
-    <div class="stars" id="stars"></div>
 
-    <div class="sky-orbit">
-      <div class="celestial sun"></div>
-      <div class="celestial moon"></div>
-    </div>
+<!-- Sheep bleat audio -->
+<audio id="bleatAudio" preload="auto">
+  <source src="https://twcministries.net/Pages/Apps/Sound%20effects/sheep%20bleats.mp3" type="audio/mpeg">
+</audio>
 
-    <div class="layers">
-      <div class="hill hill1"></div>
-      <div class="hill hill2"></div>
-      <div class="hill ground"></div>
-    </div>
+<div class="scene">
 
-    <div class="container">
-      <h1>404</h1>
-      <h2>This Page Has Gone Astray</h2>
+  <!-- Stars -->
+  <div class="stars" id="stars"></div>
 
-      <p class="quote">All we like sheep have gone astray.</p>
-      <p class="quote">But now you have returned to the Shepherd.</p>
-
-      <div class="controls">
-        <button onclick="location.href='https://twcministries.net'">Return to the Flock</button>
-        <button id="soundBtn" type="button">Turn Sheep Sounds On</button>
-      </div>
-    </div>
-
-    <div class="shepherd" id="shepherd">
-      <svg viewBox="0 0 120 160" width="120" height="160" aria-hidden="true">
-        <path d="M40 70 L80 70 L95 150 L25 150 Z" fill="#000000"/>
-        <path d="M46 72 L74 72 L86 146 L34 146 Z" fill="#000000" opacity="0.22"/>
-        <circle cx="60" cy="45" r="14" fill="#8a5a39"/>
-        <rect x="92" y="30" width="4" height="120" fill="#2a1b10"/>
-        <rect x="86" y="92" width="12" height="16" fill="#ffd66b"/>
-      </svg>
-    </div>
-
-    <div class="lanternLight" id="lantern"></div>
+  <!-- Sun & Moon -->
+  <div class="sky-orbit">
+    <div class="celestial sun"></div>
+    <div class="celestial moon"></div>
   </div>
 
+  <!-- Hills & ground -->
+  <div class="layers">
+    <div class="hill hill1"></div>
+    <div class="hill hill2"></div>
+    <div class="hill ground"></div>
+  </div>
+
+  <!-- Wandering sheep -->
+  <div class="sheep-wrap" id="sheepWrap">
+    <span class="sheep" id="sheep" title="Click me!">🐑</span>
+  </div>
+
+  <!-- Main panel -->
+  <div class="panel">
+    <h1>404</h1>
+    <p class="subtitle">One sheep has gone astray…</p>
+    <p class="verse">"Suppose one of you has a hundred sheep and loses one of them — does he not leave the ninety-nine in the open country and go after the lost sheep until he finds it?" — Luke 15:4</p>
+    <a class="btn-home" href="/">← Go back home</a>
+  </div>
+
+</div>
+
+<!-- Mute button -->
+<button id="muteBtn" title="Toggle sound">🔊</button>
+
 <script>
-  const starsHost = document.getElementById('stars');
-  for (let i = 0; i < 140; i++) {
+// ── Stars ────────────────────────────────────────────
+(function(){
+  const c = document.getElementById('stars');
+  const cycle = 14; // seconds (matches CSS)
+  for(let i=0;i<80;i++){
     const s = document.createElement('div');
     s.className = 'star';
-    s.style.left = Math.random() * window.innerWidth + 'px';
-    s.style.top = Math.random() * window.innerHeight * 0.7 + 'px';
-    s.style.animationDelay = (Math.random() * 14).toFixed(2) + 's';
-    starsHost.appendChild(s);
+    s.style.left = Math.random()*100 + '%';
+    s.style.top  = Math.random()*65  + '%';
+    const delay = (Math.random() * cycle).toFixed(2);
+    s.style.animationDelay = '-' + delay + 's';
+    const sz = (.8 + Math.random()*2.2).toFixed(1);
+    s.style.width = sz + 'px';
+    s.style.height= sz + 'px';
+    c.appendChild(s);
   }
+})();
 
-  function sheepSVG() {
-    return `
-      <svg viewBox="0 0 120 80" width="120" height="80" aria-hidden="true">
-        <g fill="#f2f2f2" stroke="#444" stroke-width="1.5">
-          <circle cx="40" cy="35" r="18"/>
-          <circle cx="55" cy="30" r="18"/>
-          <circle cx="70" cy="35" r="18"/>
-          <circle cx="55" cy="45" r="18"/>
-        </g>
-        <ellipse cx="55" cy="40" rx="32" ry="22" fill="#f2f2f2" stroke="#444" stroke-width="2"/>
-        <ellipse cx="95" cy="42" rx="14" ry="12" fill="#444"/>
-        <circle cx="101" cy="40" r="2" fill="white"/>
-        <rect x="38" y="58" width="6" height="16" fill="#444"/>
-        <rect x="52" y="58" width="6" height="16" fill="#444"/>
-        <rect x="66" y="58" width="6" height="16" fill="#444"/>
-        <rect x="80" y="58" width="6" height="16" fill="#444"/>
-      </svg>
-    `;
-  }
+// ── Sheep bleat ──────────────────────────────────────
+const bleat    = document.getElementById('bleatAudio');
+const muteBtn  = document.getElementById('muteBtn');
+const sheep    = document.getElementById('sheep');
+let   muted    = false;
 
-  function createSheep() {
-    const s = document.createElement('div');
-    s.className = 'sheep';
-    s.innerHTML = sheepSVG();
-    document.body.appendChild(s);
-    s.style.left = Math.random() * window.innerWidth + 'px';
-    s.style.top = (window.innerHeight - 190 - Math.random() * 120) + 'px';
-    wanderSheep(s);
-  }
+function tryBleat(){
+  if(muted) return;
+  bleat.currentTime = 0;
+  bleat.play().catch(()=>{});
+}
 
-  function wanderSheep(s) {
-    const targetX = Math.random() * window.innerWidth;
-    const targetY = window.innerHeight - 200 - Math.random() * 120;
-    const duration = 3200 + Math.random() * 3600;
-    const dx = targetX - s.offsetLeft;
-    const dy = targetY - s.offsetTop;
-    s.style.transition = 'transform ' + duration + 'ms linear';
-    s.style.transform = Math.random() < 0.28 ? `translate(${dx}px, ${dy}px) scaleX(-1)` : `translate(${dx}px, ${dy}px)`;
-    setTimeout(() => {
-      if (Math.random() < 0.25) {
-        setTimeout(() => wanderSheep(s), 700 + Math.random() * 900);
-      } else {
-        wanderSheep(s);
-      }
-    }, duration);
-  }
+// Auto-bleat every 8-14 seconds
+function scheduleBleat(){
+  const delay = 8000 + Math.random() * 6000;
+  setTimeout(()=>{
+    tryBleat();
+    scheduleBleat();
+  }, delay);
+}
+// Delay first bleat until user has been on page a moment
+setTimeout(scheduleBleat, 3500);
 
-  for (let i = 0; i < 6; i++) createSheep();
+// Click sheep to bleat immediately
+sheep.addEventListener('click', () => {
+  tryBleat();
+  sheep.style.transform = 'scale(1.35) rotate(-8deg)';
+  setTimeout(()=>{ sheep.style.transform=''; }, 300);
+});
 
-  const follower = document.createElement('div');
-  follower.className = 'sheep';
-  follower.innerHTML = sheepSVG();
-  document.body.appendChild(follower);
-
-  document.addEventListener('mousemove', (e) => {
-    follower.style.left = (e.clientX - 60) + 'px';
-    follower.style.top = (e.clientY - 40) + 'px';
-  });
-
-  const lantern = document.getElementById('lantern');
-  const shepherd = document.getElementById('shepherd');
-  function updateLantern() {
-    const rect = shepherd.getBoundingClientRect();
-    lantern.style.left = (rect.left + 54) + 'px';
-    lantern.style.top = (rect.top + 62) + 'px';
-    requestAnimationFrame(updateLantern);
-  }
-  updateLantern();
-
-  for (let i = 0; i < 14; i++) {
-    const f = document.createElement('div');
-    f.className = 'firefly';
-    f.style.left = (180 + Math.random() * 420) + 'px';
-    f.style.bottom = (70 + Math.random() * 180) + 'px';
-    f.style.animationDelay = (Math.random() * 4).toFixed(2) + 's';
-    document.body.appendChild(f);
-  }
-
-  const sheepAudio = new Audio('https://www.twcministries.net/Pages/Apps/Sound%20effects/sheep%20bleats.mp3');
-  sheepAudio.preload = 'auto';
-  sheepAudio.loop = false;
-  sheepAudio.volume = 0.9;
-
-  let enabled = false;
-  let timer = null;
-  const btn = document.getElementById('soundBtn');
-
-  function chorus() {
-    const delays = [0, 240, 520];
-    delays.forEach((delay) => {
-      setTimeout(() => {
-        const clip = sheepAudio.cloneNode(true);
-        clip.volume = enabled ? 0.9 : 0;
-        clip.play().catch(() => {});
-      }, delay);
-    });
-  }
-
-  function schedule() {
-    if (!enabled) return;
-    chorus();
-    timer = setTimeout(schedule, 5000 + Math.random() * 6000);
-  }
-
-  btn.onclick = async () => {
-    enabled = !enabled;
-    btn.textContent = enabled ? 'Turn Sheep Sounds Off' : 'Turn Sheep Sounds On';
-
-    if (enabled) {
-      sheepAudio.play().catch(() => {});
-      sheepAudio.pause();
-      schedule();
-    } else {
-      clearTimeout(timer);
-      timer = null;
-      sheepAudio.pause();
-      sheepAudio.currentTime = 0;
-    }
-  };
+// Mute toggle
+muteBtn.addEventListener('click', ()=>{
+  muted = !muted;
+  muteBtn.textContent = muted ? '🔇' : '🔊';
+  if(muted){ bleat.pause(); bleat.currentTime=0; }
+});
 </script>
 </body>
 </html>
