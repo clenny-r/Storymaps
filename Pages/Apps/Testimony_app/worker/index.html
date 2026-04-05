@@ -490,6 +490,16 @@ function esc(s) {
     .replace(/"/g,'&quot;');
 }
 
+// Escape for use in JavaScript strings (onclick attributes)
+function escJS(s) {
+  return String(s)
+    .replace(/\\/g, '\\\\')  // Backslash
+    .replace(/'/g, "\\'")    // Single quote
+    .replace(/"/g, '\\"')    // Double quote
+    .replace(/\n/g, '\\n')   // Newline
+    .replace(/\r/g, '\\r');  // Carriage return
+}
+
 function setBusy(id, busy, label) {
   const btn = document.getElementById(id);
   if (!btn) return;
@@ -693,7 +703,7 @@ function renderEntries(entries) {
       <div class="e-divider"></div>
       <div class="e-body">${esc(e.text)}</div>
       ${e.image || e.imageUrl ? `<div style="margin-top:14px;"><img src="${e.imageUrl || e.image}" style="max-width:100%;border-radius:4px;border:1px solid var(--border);cursor:pointer;" onclick="viewFullImage('${e.imageUrl || e.image}')" alt="Testimony photo"/></div>` : ''}
-      ${e.audio || e.audioUrl ? `<div style="margin-top:14px;"><audio controls style="width:100%;max-width:400px;"><source src="${e.audioUrl || e.audio}" type="audio/webm">Your browser does not support audio playback.</audio></div>` : ''}
+      ${e.audio || e.audioUrl ? `<div style="margin-top:14px;"><audio controls preload="metadata" playsinline style="width:100%;max-width:400px;"><source src="${e.audioUrl || e.audio}" type="audio/webm">Your browser does not support audio playback.</audio></div>` : ''}
     </div>
   `).join('')}</div>`;
 }
@@ -908,7 +918,36 @@ function playRecording() {
   if (recordedAudioBlob) {
     const audioUrl = URL.createObjectURL(recordedAudioBlob);
     const audio = new Audio(audioUrl);
-    audio.play();
+    
+    // Mobile browsers require user gesture and proper handling
+    const playPromise = audio.play();
+    
+    if (playPromise !== undefined) {
+      playPromise
+        .then(() => {
+          console.log('Audio playback started');
+        })
+        .catch(error => {
+          console.error('Audio playback failed:', error);
+          // Fallback: show message to user
+          toast('Tap the audio controls below to play', false, true);
+          
+          // Create a visible audio element instead
+          const existingAudio = document.querySelector('#tempAudioPlayer');
+          if (existingAudio) existingAudio.remove();
+          
+          const audioElement = document.createElement('audio');
+          audioElement.id = 'tempAudioPlayer';
+          audioElement.controls = true;
+          audioElement.style.cssText = 'width:100%;max-width:400px;margin-top:10px;';
+          audioElement.src = audioUrl;
+          
+          const audioPreview = document.getElementById('audioPreview');
+          if (audioPreview) {
+            audioPreview.appendChild(audioElement);
+          }
+        });
+    }
   }
 }
 
@@ -918,6 +957,10 @@ function clearAudio() {
   document.getElementById('audioPreview').style.display = 'none';
   document.getElementById('playBtn').disabled = true;
   document.getElementById('audioStatus').textContent = '';
+  
+  // Remove temp audio player if it exists
+  const tempAudio = document.querySelector('#tempAudioPlayer');
+  if (tempAudio) tempAudio.remove();
   
   if (mediaRecorder && mediaRecorder.state === 'recording') {
     stopRecording();
@@ -1653,8 +1696,8 @@ function renderAdmin(app) {
                   <td style="color:var(--text-dim);font-size:13px;">${r.last}</td>
                   <td>
                     <div style="display:flex;gap:6px;">
-                      <button class="btn btn-ghost" style="padding:6px 12px;font-size:9px;" onclick="adminView('${esc(r.name)}')">View</button>
-                      <button class="btn btn-danger" style="padding:6px 12px;font-size:9px;" onclick="confirmDeleteUser('${esc(r.name)}', ${r.cnt}, '${r.storageMB}')">Delete</button>
+                      <button class="btn btn-ghost" style="padding:6px 12px;font-size:9px;" onclick="adminView('${escJS(r.name)}')">View</button>
+                      <button class="btn btn-danger" style="padding:6px 12px;font-size:9px;" onclick="confirmDeleteUser('${escJS(r.name)}', ${r.cnt}, '${r.storageMB}')">Delete</button>
                     </div>
                   </td>
                 </tr>
@@ -1739,13 +1782,13 @@ function confirmDeleteUser(userName, entryCount, storageMB) {
             id="deletePassword" 
             placeholder="Enter admin password to confirm" 
             autocomplete="off"
-            onkeypress="if(event.key==='Enter') deleteUser('${esc(userName)}')"
+            onkeypress="if(event.key==='Enter') deleteUser('${escJS(userName)}')"
           />
         </div>
       </div>
       <div class="btn-row" style="margin-top:20px;">
         <button class="btn btn-ghost" onclick="closeDlg()" style="flex:1;">Cancel</button>
-        <button class="btn btn-danger" onclick="deleteUser('${esc(userName)}')" style="flex:1;">Delete User</button>
+        <button class="btn btn-danger" onclick="deleteUser('${escJS(userName)}')" style="flex:1;">Delete User</button>
       </div>
     </div>
   `);
