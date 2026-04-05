@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>God's Rainbow Drawing</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;700;800&display=swap');
+
+  * { margin:0; padding:0; box-sizing:border-box; touch-action:none; }
+
+  body {
+    font-family:'Nunito',sans-serif;
+    background:linear-gradient(160deg,#fff9c4 0%,#ffe0f0 40%,#d0f0ff 100%);
+    height:100vh; width:100vw;
+    overflow:hidden;
+    display:flex; flex-direction:column; align-items:center;
+  }
+
+  body::before {
+    content:''; position:fixed; inset:0;
+    background-image:
+      radial-gradient(2px 2px at 10% 15%,#ffb3d9 0%,transparent 100%),
+      radial-gradient(3px 3px at 30% 5%, #b3e5fc 0%,transparent 100%),
+      radial-gradient(2px 2px at 60% 10%,#c8e6c9 0%,transparent 100%),
+      radial-gradient(3px 3px at 80% 20%,#fff9c4 0%,transparent 100%),
+      radial-gradient(2px 2px at 50% 25%,#f8bbd0 0%,transparent 100%),
+      radial-gradient(2px 2px at 90% 8%, #e1bee7 0%,transparent 100%);
+    pointer-events:none; z-index:0;
+  }
+
+  #header {
+    position:relative; z-index:10;
+    text-align:center; padding:10px 20px 6px; width:100%;
+  }
+  #title {
+    font-family:'Fredoka One',cursive;
+    font-size:clamp(1.4rem,5vw,2.2rem);
+    color:#e91e8c;
+    text-shadow:3px 3px 0 #fff,5px 5px 0 #ffd6ec;
+    letter-spacing:1px; line-height:1.1;
+  }
+  #verse {
+    font-size:clamp(0.6rem,2.5vw,0.85rem);
+    color:#7c5295; font-weight:700;
+    margin-top:2px; letter-spacing:0.3px;
+    transition:opacity 0.6s;
+  }
+
+  #canvas-wrap {
+    position:relative; flex:1; width:100%;
+    display:flex; align-items:center; justify-content:center;
+    z-index:5; padding:0 6px 6px;
+  }
+  #drawCanvas {
+    border-radius:24px;
+    box-shadow:0 8px 32px rgba(0,0,0,0.12),0 0 0 4px #fff,0 0 0 7px #ffb3d9;
+    background:#fffdf8; display:block;
+    cursor:crosshair; touch-action:none;
+    width:100%; height:100%;
+  }
+
+  #controls {
+    position:relative; z-index:10;
+    display:flex; align-items:center; justify-content:center;
+    gap:10px; padding:8px 12px 12px; width:100%; flex-wrap:wrap;
+  }
+  .btn {
+    font-family:'Fredoka One',cursive;
+    border:none; border-radius:50px; cursor:pointer;
+    font-size:clamp(0.75rem,3vw,1rem);
+    padding:8px 18px;
+    transition:transform 0.15s,box-shadow 0.15s;
+    box-shadow:0 4px 0 rgba(0,0,0,0.15);
+    -webkit-tap-highlight-color:transparent;
+    user-select:none;
+  }
+  .btn:active { transform:translateY(3px); box-shadow:0 1px 0 rgba(0,0,0,0.15); }
+  #clearBtn   { background:linear-gradient(135deg,#ff6eb4,#e91e8c); color:#fff; }
+  #brushBig   { background:linear-gradient(135deg,#81d4fa,#0288d1); color:#fff; }
+  #brushSmall { background:linear-gradient(135deg,#a5d6a7,#388e3c); color:#fff; }
+  #eraser     { background:linear-gradient(135deg,#ffe082,#ffa000); color:#fff; }
+
+  #affirmation {
+    position:fixed; bottom:80px; left:50%;
+    transform:translateX(-50%) scale(0);
+    background:linear-gradient(135deg,#fff9c4,#ffe0b2);
+    border:3px solid #ffb74d; border-radius:20px;
+    padding:10px 20px;
+    font-family:'Fredoka One',cursive;
+    font-size:clamp(1rem,4vw,1.4rem);
+    color:#e65100; text-align:center;
+    z-index:100; box-shadow:0 6px 20px rgba(0,0,0,0.15);
+    pointer-events:none;
+    transition:transform 0.3s cubic-bezier(0.34,1.56,0.64,1),opacity 0.3s;
+    opacity:0; white-space:nowrap;
+  }
+  #affirmation.show { transform:translateX(-50%) scale(1); opacity:1; }
+
+  #speakingDots {
+    display:none; gap:5px; align-items:center;
+    position:fixed; bottom:120px; left:50%;
+    transform:translateX(-50%);
+    z-index:101;
+  }
+  #speakingDots.active { display:flex; }
+  #speakingDots span {
+    width:8px; height:8px; border-radius:50%; background:#e91e8c;
+    animation:dotBounce 0.6s infinite alternate;
+  }
+  #speakingDots span:nth-child(2){animation-delay:0.15s;background:#ff9800;}
+  #speakingDots span:nth-child(3){animation-delay:0.3s; background:#4caf50;}
+  @keyframes dotBounce {
+    from{transform:translateY(0);opacity:0.5;}
+    to  {transform:translateY(-6px);opacity:1;}
+  }
+
+  .sparkle {
+    position:fixed; border-radius:50%; pointer-events:none;
+    animation:sparkleAnim 0.8s ease-out forwards; z-index:200;
+  }
+  @keyframes sparkleAnim {
+    0%  {transform:scale(1) translateY(0);opacity:1;}
+    100%{transform:scale(0) translateY(-40px);opacity:0;}
+  }
+
+  @keyframes colorPop {
+    0%  {transform:scale(1);}
+    50% {transform:scale(1.25);}
+    100%{transform:scale(1);}
+  }
+  .pop{animation:colorPop 0.3s ease;}
+
+  /* Unlock / splash screen */
+  #unlockScreen {
+    position:fixed; inset:0;
+    background:linear-gradient(160deg,#fff9c4 0%,#ffe0f0 40%,#d0f0ff 100%);
+    z-index:1000;
+    display:flex; flex-direction:column;
+    align-items:center; justify-content:center; gap:20px;
+  }
+  #unlockScreen h1 {
+    font-family:'Fredoka One',cursive;
+    font-size:clamp(1.8rem,6vw,3rem);
+    color:#e91e8c;
+    text-shadow:3px 3px 0 #fff,5px 5px 0 #ffd6ec;
+    text-align:center; padding:0 20px;
+  }
+  #unlockScreen p {
+    font-size:clamp(0.9rem,3vw,1.2rem);
+    color:#7c5295; font-weight:700; text-align:center; padding:0 20px;
+  }
+  #startBtn {
+    font-family:'Fredoka One',cursive;
+    font-size:clamp(1.2rem,4vw,1.8rem);
+    background:linear-gradient(135deg,#ff6eb4,#e91e8c);
+    color:#fff; border:none; border-radius:50px;
+    padding:16px 48px;
+    box-shadow:0 6px 0 #b0116e;
+    cursor:pointer;
+    animation:btnPulse 1.5s infinite;
+  }
+  @keyframes btnPulse {
+    0%,100%{transform:scale(1);}
+    50%    {transform:scale(1.06);}
+  }
+</style>
+</head>
+<body>
+
+<div id="unlockScreen">
+  <h1>🌈 God's Rainbow Drawing 🌈</h1>
+  <p>Draw with your fingers and hear<br>God's love spoken over you!</p>
+  <button id="startBtn">▶ Tap to Start!</button>
+</div>
+
+<div id="header">
+  <div id="title">🌈 God's Rainbow Drawing 🌈</div>
+  <div id="verse">"I have set my rainbow in the clouds." — Genesis 9:13</div>
+</div>
+
+<div id="canvas-wrap">
+  <canvas id="drawCanvas"></canvas>
+</div>
+
+<div id="controls">
+  <button class="btn" id="brushBig">🖌️ Big</button>
+  <button class="btn" id="brushSmall">✏️ Small</button>
+  <button class="btn" id="eraser">🙏 Erase</button>
+  <button class="btn" id="clearBtn">✨ New</button>
+</div>
+
+<div id="affirmation"></div>
+<div id="speakingDots"><span></span><span></span><span></span></div>
+
+<script>
+// ════════════════════════════════════════
+//  WEB AUDIO ENGINE
+// ════════════════════════════════════════
+let audioCtx = null;
+
+function ensureAudio() {
+  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  if (audioCtx.state === 'suspended') audioCtx.resume();
+}
+
+function playTone(freq, type, duration, vol=0.15, delay=0) {
+  if (!audioCtx) return;
+  const o = audioCtx.createOscillator();
+  const g = audioCtx.createGain();
+  o.connect(g); g.connect(audioCtx.destination);
+  o.type = type; o.frequency.value = freq;
+  const t = audioCtx.currentTime + delay;
+  g.gain.setValueAtTime(0, t);
+  g.gain.linearRampToValueAtTime(vol, t+0.02);
+  g.gain.exponentialRampToValueAtTime(0.001, t+duration);
+  o.start(t); o.stop(t+duration);
+}
+
+function playChime(freqs, spacing=0.08) {
+  freqs.forEach((f,i) => playTone(f,'sine',0.5,0.13,i*spacing));
+}
+
+function playPop(freq=500) {
+  if (!audioCtx) return;
+  const o = audioCtx.createOscillator();
+  const g = audioCtx.createGain();
+  o.connect(g); g.connect(audioCtx.destination);
+  o.type='sine';
+  o.frequency.setValueAtTime(freq, audioCtx.currentTime);
+  o.frequency.exponentialRampToValueAtTime(freq*0.3, audioCtx.currentTime+0.12);
+  g.gain.setValueAtTime(0.18, audioCtx.currentTime);
+  g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime+0.14);
+  o.start(); o.stop(audioCtx.currentTime+0.14);
+}
+
+// Soft crayon-scratch texture while drawing
+let scratchNode = null;
+function startScratch() {
+  if (!audioCtx || scratchNode) return;
+  const sr = audioCtx.sampleRate;
+  const buf = audioCtx.createBuffer(1, Math.floor(sr*0.05), sr);
+  const d = buf.getChannelData(0);
+  for (let i=0;i<d.length;i++) d[i]=(Math.random()*2-1)*0.035;
+  const src = audioCtx.createBufferSource();
+  src.buffer=buf; src.loop=true;
+  const filt = audioCtx.createBiquadFilter();
+  filt.type='bandpass'; filt.frequency.value=3200; filt.Q.value=0.6;
+  const gain = audioCtx.createGain();
+  gain.gain.value=0.9;
+  src.connect(filt); filt.connect(gain); gain.connect(audioCtx.destination);
+  src.start();
+  scratchNode = {src,gain};
+}
+function stopScratch() {
+  if (!scratchNode) return;
+  try { scratchNode.src.stop(); } catch(e){}
+  scratchNode = null;
+}
+
+function playSparkleSound() {
+  // Ascending fairy-like arpeggio
+  playChime([880,1046,1318,1568,2093],0.055);
+}
+
+function playButtonClick() {
+  playTone(523,'triangle',0.12,0.18);
+  playTone(659,'triangle',0.12,0.14,0.07);
+}
+
+function playClearWhoosh() {
+  if (!audioCtx) return;
+  const o = audioCtx.createOscillator();
+  const g = audioCtx.createGain();
+  o.connect(g); g.connect(audioCtx.destination);
+  o.type='sine';
+  o.frequency.setValueAtTime(900, audioCtx.currentTime);
+  o.frequency.exponentialRampToValueAtTime(200, audioCtx.currentTime+0.22);
+  o.frequency.exponentialRampToValueAtTime(1400, audioCtx.currentTime+0.44);
+  g.gain.setValueAtTime(0.18, audioCtx.currentTime);
+  g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime+0.5);
+  o.start(); o.stop(audioCtx.currentTime+0.5);
+}
+
+// ════════════════════════════════════════
+//  VOICE — best human-sounding TTS
+// ════════════════════════════════════════
+let isSpeaking = false;
+const speakQueue = [];
+const dots = document.getElementById('speakingDots');
+
+// Pre-warm voice list
+if (window.speechSynthesis) {
+  window.speechSynthesis.getVoices();
+  speechSynthesis.addEventListener('voiceschanged', ()=>speechSynthesis.getVoices());
+}
+
+function getBestVoice() {
+  const voices = window.speechSynthesis.getVoices();
+  // Ranked preference: natural/neural > named warm female > any English
+  const prefs = [
+    'Samantha','Karen','Moira','Tessa','Fiona',
+    'Google UK English Female',
+    'Microsoft Aria Online (Natural)',
+    'Microsoft Jenny Online (Natural)',
+    'Microsoft Sonia Online (Natural)',
+    'Microsoft Zira',
+    'Google US English',
+    'en-US-AriaNeural','en-GB-SoniaNeural','en-AU-NatashaNeural',
+  ];
+  for (const name of prefs) {
+    const v = voices.find(v => v.name.includes(name));
+    if (v) return v;
+  }
+  return voices.find(v=>v.lang.startsWith('en') && /female/i.test(v.name))
+      || voices.find(v=>v.lang.startsWith('en-US'))
+      || voices.find(v=>v.lang.startsWith('en'))
+      || null;
+}
+
+function speakText(text) {
+  return new Promise(resolve => {
+    if (!window.speechSynthesis) { resolve(); return; }
+    speechSynthesis.cancel();
+    const utter = new SpeechSynthesisUtterance(text);
+    utter.rate   = 0.86;
+    utter.pitch  = 1.18;
+    utter.volume = 1;
+    const voice = getBestVoice();
+    if (voice) utter.voice = voice;
+    utter.onend   = resolve;
+    utter.onerror = resolve;
+    speechSynthesis.speak(utter);
+  });
+}
+
+async function speakAffirmation(sayText) {
+  if (isSpeaking) { speakQueue.push(sayText); return; }
+  isSpeaking = true;
+  dots.classList.add('active');
+  try {
+    // Use Claude to rephrase into warm, natural delivery phrasing
+    let finalText = sayText;
+    try {
+      const res = await fetch('https://api.anthropic.com/v1/messages', {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({
+          model:'claude-sonnet-4-20250514',
+          max_tokens:80,
+          messages:[{
+            role:'user',
+            content:`You are a warm, joyful narrator speaking to a baby or toddler.
+Rephrase the following affirmation so it sounds like a loving parent or grandparent saying it out loud — natural, tender, and full of warmth. Keep it short (under 10 words). Return ONLY the rephrased text, nothing else.
+
+Affirmation: "${sayText}"`
+          }]
+        })
+      });
+      const data = await res.json();
+      const rephrased = data?.content?.[0]?.text?.trim();
+      if (rephrased && rephrased.length > 2) finalText = rephrased;
+    } catch(e) { /* fall back to original text */ }
+
+    await speakText(finalText);
+  } finally {
+    isSpeaking = false;
+    dots.classList.remove('active');
+    if (speakQueue.length > 0) speakAffirmation(speakQueue.shift());
+  }
+}
+
+// ════════════════════════════════════════
+//  CANVAS
+// ════════════════════════════════════════
+const canvas = document.getElementById('drawCanvas');
+const ctx    = canvas.getContext('2d');
+const wrap   = document.getElementById('canvas-wrap');
+
+function resize() {
+  const r = wrap.getBoundingClientRect();
+  canvas.width  = Math.floor(r.width);
+  canvas.height = Math.floor(r.height);
+}
+resize();
+window.addEventListener('resize', resize);
+
+const colors = [
+  '#FF3D00','#FF6D00','#FFD600','#00C853',
+  '#0091EA','#6200EA','#D500F9','#FF4081',
+  '#00BFA5','#FFAB00','#29B6F6','#F06292',
+  '#AED581','#FF7043','#26C6DA','#CE93D8',
+];
+
+const affirmations = [
+  { show:"God loves you! ❤️",         say:"God loves you so much!" },
+  { show:"Wonderfully made! 🌟",       say:"You are wonderfully made!" },
+  { show:"Jesus loves me! ✝️",         say:"Jesus loves you, precious one!" },
+  { show:"God's little child! 👑",     say:"You are God's precious little child!" },
+  { show:"Blessed & loved! 🌈",        say:"You are so blessed and so loved!" },
+  { show:"God made you! 🌻",           say:"God made you, and you are beautiful!" },
+  { show:"Be joyful! 😊",              say:"Be joyful! God is always with you!" },
+  { show:"God is so good! 🙌",         say:"God is so good, all the time!" },
+  { show:"Chosen by God! ⭐",          say:"You are chosen by God!" },
+  { show:"You are a blessing! 🦋",     say:"You are such a beautiful blessing!" },
+  { show:"God's masterpiece! 🎨",      say:"You are God's beautiful masterpiece!" },
+  { show:"Heaven loves you! 🕊️",       say:"All of heaven rejoices over you!" },
+];
+
+let colorIndex=0, drawing=false, erasing=false;
+let brushSize=28, lastX=0, lastY=0;
+let strokeCount=0, affirmTimer=null, lastPopTime=0;
+
+function currentColor(){ return erasing?'#fffdf8':colors[colorIndex%colors.length]; }
+
+function getPos(e){
+  const r=canvas.getBoundingClientRect();
+  if(e.touches) return{x:e.touches[0].clientX-r.left,y:e.touches[0].clientY-r.top};
+  return{x:e.clientX-r.left,y:e.clientY-r.top};
+}
+
+function startDraw(e){
+  e.preventDefault(); drawing=true;
+  const p=getPos(e); lastX=p.x; lastY=p.y;
+  ctx.beginPath();
+  ctx.arc(lastX,lastY,(erasing?brushSize*1.5:brushSize)/2,0,Math.PI*2);
+  ctx.fillStyle=currentColor(); ctx.fill();
+  if(!erasing){ startScratch(); spawnSparkles(p.x,p.y,currentColor()); }
+}
+
+function doDraw(e){
+  if(!drawing) return; e.preventDefault();
+  const p=getPos(e);
+  ctx.beginPath(); ctx.moveTo(lastX,lastY); ctx.lineTo(p.x,p.y);
+  ctx.strokeStyle=currentColor();
+  ctx.lineWidth=erasing?brushSize*1.5:brushSize;
+  ctx.lineCap='round'; ctx.lineJoin='round'; ctx.stroke();
+  lastX=p.x; lastY=p.y;
+
+  if(!erasing){
+    strokeCount++;
+    if(strokeCount%8===0) colorIndex++;
+    const now=Date.now();
+    if(now-lastPopTime>150){
+      lastPopTime=now;
+      spawnSparkles(p.x,p.y,currentColor());
+      playPop(280+Math.random()*420);
+    }
+  }
+}
+
+function endDraw(e){
+  if(!drawing) return; drawing=false;
+  stopScratch();
+  if(!erasing){ playSparkleSound(); showAffirmation(); }
+}
+
+canvas.addEventListener('mousedown', startDraw);
+canvas.addEventListener('mousemove', doDraw);
+canvas.addEventListener('mouseup',   endDraw);
+canvas.addEventListener('mouseleave',endDraw);
+canvas.addEventListener('touchstart',startDraw,{passive:false});
+canvas.addEventListener('touchmove', doDraw,   {passive:false});
+canvas.addEventListener('touchend',  endDraw);
+
+function spawnSparkles(cx,cy,color){
+  const rect=canvas.getBoundingClientRect();
+  const ax=cx+rect.left, ay=cy+rect.top;
+  for(let i=0;i<4;i++){
+    const s=document.createElement('div');
+    s.className='sparkle';
+    const sz=5+Math.random()*10;
+    s.style.cssText=`width:${sz}px;height:${sz}px;background:${color};`+
+      `left:${ax+(Math.random()-0.5)*44}px;top:${ay+(Math.random()-0.5)*44}px;`;
+    document.body.appendChild(s);
+    setTimeout(()=>s.remove(),850);
+  }
+}
+
+const affDiv=document.getElementById('affirmation');
+function showAffirmation(){
+  if(affirmTimer) return;
+  const aff=affirmations[Math.floor(Math.random()*affirmations.length)];
+  affDiv.textContent=aff.show;
+  affDiv.classList.add('show');
+  speakAffirmation(aff.say);
+  affirmTimer=setTimeout(()=>{ affDiv.classList.remove('show'); affirmTimer=null; },3200);
+}
+
+// Controls
+document.getElementById('brushBig').addEventListener('click',()=>{
+  ensureAudio(); erasing=false; brushSize=36; playButtonClick(); pop('brushBig');
+});
+document.getElementById('brushSmall').addEventListener('click',()=>{
+  ensureAudio(); erasing=false; brushSize=12; playButtonClick(); pop('brushSmall');
+});
+document.getElementById('eraser').addEventListener('click',()=>{
+  ensureAudio(); erasing=!erasing; brushSize=32; playButtonClick(); pop('eraser');
+});
+document.getElementById('clearBtn').addEventListener('click',()=>{
+  ensureAudio();
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  colorIndex=0; strokeCount=0; erasing=false;
+  playClearWhoosh(); pop('clearBtn');
+  setTimeout(showAffirmation,450);
+});
+
+function pop(id){
+  const el=document.getElementById(id);
+  el.classList.remove('pop'); void el.offsetWidth; el.classList.add('pop');
+  setTimeout(()=>el.classList.remove('pop'),300);
+}
+
+// Rotating verse
+const verses=[
+  '"I have set my rainbow in the clouds." \u2014 Genesis 9:13',
+  '"For God so loved the world." \u2014 John 3:16',
+  '"I am wonderfully made." \u2014 Psalm 139:14',
+  '"The Lord bless you and keep you." \u2014 Numbers 6:24',
+  '"Children are a gift from the Lord." \u2014 Psalm 127:3',
+  '"Let the little children come to me." \u2014 Matthew 19:14',
+];
+let vi=0;
+const verseEl=document.getElementById('verse');
+setInterval(()=>{
+  vi=(vi+1)%verses.length;
+  verseEl.style.opacity=0;
+  setTimeout(()=>{ verseEl.textContent=verses[vi]; verseEl.style.opacity=1; },400);
+},30000);
+
+// ── Start button ─────────────────────────────
+document.getElementById('startBtn').addEventListener('click',()=>{
+  ensureAudio();
+  document.getElementById('unlockScreen').style.display='none';
+  playChime([523,659,784,1046,1318],0.1);
+  setTimeout(()=>{
+    speakAffirmation('Welcome, little one! Let us make something beautiful together for God!');
+  },900);
+});
+</script>
+</body>
+</html>
