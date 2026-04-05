@@ -23,12 +23,12 @@
     {
       "id": 1775402200991,
       "text": "Book communauto",
-      "completed": false,
+      "completed": true,
       "priority": "high",
       "order": 1,
       "addedBy": "Wife",
       "createdAt": "2026-04-05T15:16:40.991Z",
-      "updatedAt": "2026-04-05T15:17:03.798Z"
+      "updatedAt": "2026-04-05T15:17:08.503Z"
     }
   ]
 }
