@@ -353,168 +353,290 @@ function startScratch(){
 function stopScratch(){if(!scratchNode)return;try{scratchNode.stop();}catch(e){}scratchNode=null;}
 
 // ═══════════════════════════════════════════════════════
-//  BIBLE SONGS  (synthesised with Web Audio)
-//  Each song is an array of [midiNote, durationBeats] pairs
-//  BPM is set per song. Rest = note 0.
+//  RICH MUSIC ENGINE
+//  Uses AudioContext scheduler (not setTimeout) for tight
+//  timing, plus: layered oscillators, reverb, vibrato,
+//  walking bass, and a simple kick+hihat pattern.
 // ═══════════════════════════════════════════════════════
 function midiToHz(m){return 440*Math.pow(2,(m-69)/12);}
 
+// ── Reverb convolver ──────────────────────────────────
+let reverbNode = null;
+function getReverb(){
+  if(reverbNode) return reverbNode;
+  if(!audioCtx) return null;
+  const len = audioCtx.sampleRate * 1.8;
+  const buf = audioCtx.createBuffer(2, len, audioCtx.sampleRate);
+  for(let c=0;c<2;c++){
+    const d=buf.getChannelData(c);
+    for(let i=0;i<len;i++) d[i]=(Math.random()*2-1)*Math.pow(1-i/len,2.5);
+  }
+  const conv = audioCtx.createConvolver();
+  conv.buffer = buf;
+  const wet = audioCtx.createGain(); wet.gain.value = 0.22;
+  conv.connect(wet); wet.connect(audioCtx.destination);
+  reverbNode = conv;
+  return conv;
+}
+
+// ── Play one melodic note (rich layered tone) ─────────
+function playMelodyNote(hz, startTime, dur, vol=0.18){
+  if(!audioCtx||hz<=0) return;
+  const rev = getReverb();
+
+  // Layer 1: main sine
+  const o1=audioCtx.createOscillator(), g1=audioCtx.createGain();
+  o1.type='sine'; o1.frequency.value=hz;
+  // Layer 2: soft triangle one octave up (shimmer)
+  const o2=audioCtx.createOscillator(), g2=audioCtx.createGain();
+  o2.type='triangle'; o2.frequency.value=hz*2; g2.gain.value=0.18;
+  // Layer 3: very soft sub
+  const o3=audioCtx.createOscillator(), g3=audioCtx.createGain();
+  o3.type='sine'; o3.frequency.value=hz*0.5; g3.gain.value=0.12;
+  // Vibrato LFO
+  const lfo=audioCtx.createOscillator(), lfoG=audioCtx.createGain();
+  lfo.frequency.value=5.2; lfoG.gain.value=hz*0.012;
+  lfo.connect(lfoG);
+  lfoG.connect(o1.frequency); lfoG.connect(o2.frequency);
+
+  const master=audioCtx.createGain();
+  o1.connect(g1); g1.connect(master);
+  o2.connect(g2); g2.connect(master);
+  o3.connect(g3); g3.connect(master);
+  master.connect(audioCtx.destination);
+  if(rev) master.connect(rev);
+
+  // ADSR envelope
+  const atk=0.04, dec=0.08, sus=vol*0.75, rel=Math.min(0.3,dur*0.35);
+  master.gain.setValueAtTime(0, startTime);
+  master.gain.linearRampToValueAtTime(vol, startTime+atk);
+  master.gain.linearRampToValueAtTime(sus, startTime+atk+dec);
+  master.gain.setValueAtTime(sus, startTime+dur-rel);
+  master.gain.exponentialRampToValueAtTime(0.0001, startTime+dur);
+
+  [o1,o2,o3,lfo].forEach(o=>{o.start(startTime);o.stop(startTime+dur+0.05);});
+}
+
+// ── Bass note ─────────────────────────────────────────
+function playBassNote(hz, startTime, dur){
+  if(!audioCtx||hz<=0) return;
+  const o=audioCtx.createOscillator(), g=audioCtx.createGain();
+  o.type='triangle'; o.frequency.value=hz*0.5;
+  o.connect(g); g.connect(audioCtx.destination);
+  g.gain.setValueAtTime(0,startTime);
+  g.gain.linearRampToValueAtTime(0.13,startTime+0.03);
+  g.gain.exponentialRampToValueAtTime(0.0001,startTime+dur*0.7);
+  o.start(startTime); o.stop(startTime+dur);
+}
+
+// ── Kick drum ─────────────────────────────────────────
+function playKick(t){
+  if(!audioCtx) return;
+  const o=audioCtx.createOscillator(), g=audioCtx.createGain();
+  o.type='sine';
+  o.frequency.setValueAtTime(150,t);
+  o.frequency.exponentialRampToValueAtTime(30,t+0.15);
+  g.gain.setValueAtTime(0.55,t);
+  g.gain.exponentialRampToValueAtTime(0.0001,t+0.25);
+  o.connect(g); g.connect(audioCtx.destination);
+  o.start(t); o.stop(t+0.3);
+}
+
+// ── Hi-hat ────────────────────────────────────────────
+function playHat(t, vol=0.06){
+  if(!audioCtx) return;
+  const buf=audioCtx.createBuffer(1,audioCtx.sampleRate*0.05,audioCtx.sampleRate);
+  const d=buf.getChannelData(0);
+  for(let i=0;i<d.length;i++) d[i]=(Math.random()*2-1);
+  const src=audioCtx.createBufferSource(), g=audioCtx.createGain();
+  const filt=audioCtx.createBiquadFilter();
+  filt.type='highpass'; filt.frequency.value=8000;
+  src.buffer=buf;
+  src.connect(filt); filt.connect(g); g.connect(audioCtx.destination);
+  g.gain.setValueAtTime(vol,t);
+  g.gain.exponentialRampToValueAtTime(0.0001,t+0.05);
+  src.start(t); src.stop(t+0.08);
+}
+
+// ── SONGS ─────────────────────────────────────────────
+// Notes: [midiPitch, durationBeats, bassOverride(optional)]
+// Rest = midi 0
 const SONGS = [
   {
-    title: 'Joy in My Heart',
-    bpm: 112,
-    // "I've got the joy joy joy joy down in my heart"
+    title:'Joy in My Heart',
+    bpm:114, key:60,
     notes:[
       [64,1],[64,.5],[64,.5],[64,1],[62,.5],[60,.5],
-      [62,1],[62,.5],[60,.5],[62,1.5],[0,.5],
+      [62,1],[62,.5],[60,.5],[62,2],
       [64,1],[64,.5],[64,.5],[64,1],[62,.5],[60,.5],
       [60,3],[0,1],
       [67,1],[67,.5],[67,.5],[67,1],[65,.5],[64,.5],
-      [65,1],[64,.5],[62,.5],[64,1.5],[0,.5],
+      [65,1],[64,.5],[62,.5],[64,2],
       [64,1],[62,.5],[60,.5],[62,1],[64,.5],[62,.5],
-      [60,3],[0,1],
-    ]
+      [60,4],
+    ],
+    bass:[60,55,57,60, 60,55,57,60],
+    beats:[1,1,1,1]
   },
   {
-    title: 'This Little Light of Mine',
-    bpm: 108,
-    // Classic melody
+    title:'This Little Light of Mine',
+    bpm:110, key:60,
     notes:[
-      [64,1],[64,1],[64,.5],[62,.5],[64,1],
-      [67,1.5],[67,.5],[67,1],[67,1],
-      [67,.5],[65,.5],[67,1],[64,1.5],[0,.5],
+      [64,1],[64,1],[64,.5],[62,.5],[64,1.5],[0,.5],
+      [67,1],[67,1],[67,.5],[65,.5],[67,1.5],[0,.5],
       [64,1],[64,.5],[62,.5],[64,1],[67,1],
-      [69,1.5],[69,.5],[69,1],[67,.5],[65,.5],
-      [64,3],[0,1],
+      [69,2],[0,1],
       [72,1],[72,.5],[71,.5],[72,1],[71,.5],[69,.5],
-      [67,3],[0,1],
-    ]
+      [67,1],[65,1],[64,1],[62,1],
+      [60,4],
+    ],
+    bass:[60,55,57,60],
+    beats:[1,1,1,1]
   },
   {
-    title: 'Jesus Loves Me',
-    bpm: 96,
+    title:'Jesus Loves Me',
+    bpm:96, key:60,
     notes:[
-      [64,1],[64,.5],[67,.5],[69,1],[67,1],
-      [64,1.5],[62,.5],[60,2],[0,.5],
-      [64,1],[64,.5],[67,.5],[69,1],[67,1],
-      [64,1.5],[62,.5],[64,2],[0,.5],
-      // "Yes Jesus loves me..."
-      [67,1],[67,.5],[69,.5],[71,1],[69,1],
-      [67,1.5],[65,.5],[64,2],[0,.5],
+      [64,1],[64,.5],[67,.5],[69,1.5],[67,.5],
+      [64,1.5],[62,.5],[60,2],
+      [64,1],[64,.5],[67,.5],[69,1.5],[67,.5],
+      [64,1.5],[62,.5],[64,2],
+      [67,1],[67,.5],[69,.5],[71,1.5],[69,.5],
+      [67,1.5],[65,.5],[64,2],
       [64,1],[62,.5],[60,.5],[62,1],[64,1],
-      [60,3],[0,1],
-    ]
+      [60,4],
+    ],
+    bass:[60,55,57,60],
+    beats:[1,1,1,1]
   },
   {
-    title: 'He\'s Got the Whole World',
-    bpm: 100,
+    title:"He's Got the Whole World",
+    bpm:100, key:60,
     notes:[
-      [60,1],[62,1],[64,1],[65,1],
+      [60,1],[62,1],[64,1.5],[65,.5],
       [64,1.5],[62,.5],[60,1],[62,1],
       [60,3],[0,1],
-      [60,1],[62,1],[64,1],[65,1],
-      [67,1.5],[65,.5],[64,2],[0,.5],
+      [60,1],[62,1],[64,1.5],[65,.5],
+      [67,2],[64,2],
       [67,1],[67,.5],[65,.5],[64,1],[62,1],
-      [60,1.5],[62,.5],[60,2],[0,1],
-    ]
+      [60,1.5],[62,.5],[60,3],
+    ],
+    bass:[60,55,57,60],
+    beats:[1,1,1,1]
   },
   {
-    title: 'Hallelu Hallelujah',
-    bpm: 120,
+    title:'Hallelu Hallelujah',
+    bpm:124, key:60,
     notes:[
       [64,1],[64,1],[67,1],[67,1],
       [69,1],[69,1],[67,2],
       [65,1],[65,1],[64,1],[64,1],
-      [62,1],[62,1],[60,2],[0,1],
+      [62,2],[60,2],
       [67,1],[67,1],[69,1],[69,1],
       [71,1],[71,1],[69,2],
       [67,1],[65,1],[64,1],[62,1],
-      [60,4],[0,1],
-    ]
+      [60,4],
+    ],
+    bass:[60,55,57,60],
+    beats:[1,.5,.5,1]
   },
   {
-    title: 'My God is So Big',
-    bpm: 108,
+    title:'My God is So Big',
+    bpm:110, key:60,
     notes:[
       [60,1],[64,1],[67,1],[64,1],
-      [65,1.5],[64,.5],[62,2],[0,.5],
+      [65,1.5],[64,.5],[62,2],
       [60,1],[64,1],[67,1],[69,1],
-      [67,3],[0,1],
+      [67,4],
       [72,1],[71,1],[69,1],[67,1],
-      [65,1.5],[67,.5],[64,2],[0,.5],
+      [65,1.5],[67,.5],[64,2],
       [60,1],[62,1],[64,1],[65,1],
-      [60,4],[0,1],
-    ]
+      [60,4],
+    ],
+    bass:[60,55,57,60],
+    beats:[1,1,1,1]
   },
 ];
 
-let songIndex    = 0;
-let songPlaying  = false;
-let songStopFlag = false;
-let songTimeouts = [];
+// ── Scheduler ─────────────────────────────────────────
+let songIndex   = 0;
+let songPlaying = false;
+let schedId     = null;   // requestAnimationFrame id
+let schedPos    = 0;      // position in notes array
+let schedTime   = 0;      // AudioContext time for next note
+let schedSong   = null;   // reference to current song object
+let beatPos     = 0;      // beat counter for drums/bass
+let beatTime    = 0;      // AudioContext time for next beat
 
-function clearSongTimeouts(){songTimeouts.forEach(t=>clearTimeout(t));songTimeouts=[];}
+const LOOK_AHEAD = 0.12;  // schedule this far ahead (seconds)
 
-async function playSong(idx){
-  clearSongTimeouts();
-  songStopFlag=false;
-  songPlaying=true;
-  const song=SONGS[idx];
-  const beatMs=60000/song.bpm;
-  document.getElementById('songTitle').textContent=song.title;
+function startSongScheduler(idx){
+  if(schedId) cancelAnimationFrame(schedId);
+  reverbNode = null; // reset reverb for new song
+  songIndex  = idx;
+  schedSong  = SONGS[idx];
+  schedPos   = 0;
+  schedTime  = audioCtx.currentTime + 0.1;
+  beatPos    = 0;
+  beatTime   = audioCtx.currentTime + 0.1;
+  songPlaying= true;
+  document.getElementById('songTitle').textContent = schedSong.title;
   document.getElementById('musicHud').classList.add('visible');
+  schedulerTick();
+}
 
-  let timeMs=0;
-  for(const [midi,beats] of song.notes){
-    if(songStopFlag)break;
-    const dur=beats*beatMs/1000;
-    if(midi>0){
-      const hz=midiToHz(midi);
-      const delayS=timeMs/1000;
-      // schedule note
-      (function(f,d,dS){
-        const t=setTimeout(()=>{
-          if(songStopFlag)return;
-          if(!audioCtx)return;
-          const o=audioCtx.createOscillator();
-          const g=audioCtx.createGain();
-          // Add a little reverb feel with a tiny delay node
-          o.connect(g);g.connect(audioCtx.destination);
-          o.type='triangle';
-          o.frequency.value=f;
-          const now=audioCtx.currentTime;
-          g.gain.setValueAtTime(0,now);
-          g.gain.linearRampToValueAtTime(.12,now+.03);
-          g.gain.setValueAtTime(.12,now+d*.8);
-          g.gain.exponentialRampToValueAtTime(.001,now+d+.05);
-          o.start(now);o.stop(now+d+.1);
-        },dS*1000);
-        songTimeouts.push(t);
-      })(hz,dur,timeMs/1000);
+function schedulerTick(){
+  if(!songPlaying || !audioCtx) return;
+  const beatSec = 60 / schedSong.bpm;
+
+  // ── Schedule melody notes ──
+  while(schedTime < audioCtx.currentTime + LOOK_AHEAD){
+    if(schedPos >= schedSong.notes.length){
+      // Loop: restart
+      schedPos = 0;
+      beatPos  = 0;
     }
-    timeMs+=beats*beatMs;
+    const [midi, beats] = schedSong.notes[schedPos];
+    const dur = beats * beatSec;
+    if(midi > 0) playMelodyNote(midiToHz(midi), schedTime, dur * 0.92);
+    schedTime += dur;
+    schedPos++;
   }
 
-  // loop song after it finishes
-  const totalMs=song.notes.reduce((a,[,b])=>a+b*beatMs,0)+400;
-  const loopT=setTimeout(()=>{
-    if(!songStopFlag) playSong(songIndex);
-  },totalMs);
-  songTimeouts.push(loopT);
+  // ── Schedule drums + bass on a separate beat clock ──
+  while(beatTime < audioCtx.currentTime + LOOK_AHEAD){
+    const bi = beatPos % 4;
+    // kick on beats 1 and 3
+    if(bi===0||bi===2) playKick(beatTime);
+    // hihat every beat
+    playHat(beatTime, bi===0||bi===2 ? 0.05 : 0.08);
+    // half-beat hihat
+    playHat(beatTime + beatSec*0.5, 0.04);
+    // bass note from pattern
+    const bassNotes = schedSong.bass || [60,55,57,60];
+    const bassHz = midiToHz(bassNotes[bi % bassNotes.length]);
+    playBassNote(bassHz, beatTime, beatSec);
+    beatTime += beatSec;
+    beatPos++;
+  }
+
+  schedId = requestAnimationFrame(schedulerTick);
 }
 
 function stopSong(){
-  songStopFlag=true;
-  clearSongTimeouts();
-  songPlaying=false;
+  songPlaying = false;
+  if(schedId){ cancelAnimationFrame(schedId); schedId=null; }
   document.getElementById('musicHud').classList.remove('visible');
 }
 
 function nextSong(){
-  songIndex=(songIndex+1)%SONGS.length;
-  if(songPlaying) playSong(songIndex);
-  else{
-    document.getElementById('songTitle').textContent=SONGS[songIndex].title;
+  const wasPlaying = songPlaying;
+  stopSong();
+  songIndex = (songIndex+1) % SONGS.length;
+  if(wasPlaying){
+    setTimeout(()=>startSongScheduler(songIndex), 80);
+  } else {
+    document.getElementById('songTitle').textContent = SONGS[songIndex].title;
   }
 }
 
@@ -715,7 +837,7 @@ document.getElementById('clearBtn').addEventListener('click',()=>{
 });
 document.getElementById('musicBtn').addEventListener('click',()=>{
   ensureAudio();playButtonClick();pop('musicBtn');
-  if(songPlaying){stopSong();}else{playSong(songIndex);}
+  if(songPlaying){stopSong();}else{startSongScheduler(songIndex);}
 });
 document.getElementById('nextSongBtn').addEventListener('click',()=>{
   ensureAudio();playButtonClick();nextSong();
@@ -816,7 +938,7 @@ document.getElementById('startBtn').addEventListener('click',()=>{
   playChime([523,659,784,1046,1318],.1);
   // Auto-start first song after a moment
   setTimeout(()=>{
-    playSong(songIndex);
+    startSongScheduler(songIndex);
     speakAffirmation('Welcome, little one! Let us make something beautiful for God!');
   },900);
 });
