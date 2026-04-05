@@ -1734,23 +1734,25 @@ function exitAdmin() {
 function adminView(name) {
   const ud = STATE.db.users?.[name] || { entries: [], created: null };
   const ents = ud.entries || [];
-  const preview = ents.length
-    ? [...ents].reverse().slice(0,3).map(e => `
+  const entriesHtml = ents.length
+    ? [...ents].reverse().map(e => `
         <div style="margin-top:12px;padding:14px 16px;background:var(--navy-card);border-radius:4px;border:1px solid var(--border);">
           <div style="font-family:'Cinzel',serif;font-size:10px;color:var(--blue-light);margin-bottom:7px;">Entry #${e.seq} · ${esc(e.date)} ${esc(e.time)}</div>
-          <div style="font-size:14px;color:var(--text);line-height:1.75;white-space:pre-wrap;">${esc(e.text.slice(0,300))}${e.text.length > 300 ? '...' : ''}</div>
+          <div style="font-size:14px;color:var(--text);line-height:1.75;white-space:pre-wrap;">${esc(e.text)}</div>
+          ${e.image || e.imageUrl ? `<div style="margin-top:10px;"><img src="${e.imageUrl || e.image}" style="max-width:100%;border-radius:4px;border:1px solid var(--border);" alt="Entry image"/></div>` : ''}
+          ${e.audio || e.audioUrl ? `<div style="margin-top:10px;"><audio controls preload="metadata" playsinline style="width:100%;max-width:400px;"><source src="${e.audioUrl || e.audio}" type="audio/webm"></audio></div>` : ''}
         </div>
       `).join('')
     : '<p style="color:var(--text-dim);font-style:italic;margin-top:12px;">No entries.</p>';
 
   showDlg(`
-    <div class="dialog" style="max-width:560px;">
+    <div class="dialog" style="max-width:680px;">
       <div class="dialog-title" style="color:var(--blue-light);">✦ ${esc(name)}</div>
       <div class="dialog-body">
         <strong style="color:var(--text);">${ents.length}</strong> testimon${ents.length === 1 ? 'y' : 'ies'} recorded.
         Joined: ${ud.created ? new Date(ud.created).toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'}) : 'Unknown'}.
       </div>
-      <div style="max-height:340px;overflow-y:auto;">${preview}</div>
+      <div style="max-height:500px;overflow-y:auto;padding-right:8px;">${entriesHtml}</div>
       <div style="margin-top:18px;">
         <button class="btn btn-ghost btn-full" onclick="closeDlg()">Close</button>
       </div>
