@@ -120,6 +120,30 @@
     }
     .add-btn:hover{opacity:.88;transform:translateY(-1px)}
     .add-btn svg{width:14px;height:14px}
+    .reorder-btn{
+      flex-shrink:0;display:flex;align-items:center;gap:.4rem;padding:.45rem .85rem;
+      border-radius:8px;background:var(--bg3);border:1px solid var(--border);color:rgba(255,255,255,.6);
+      font-size:.78rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+      white-space:nowrap;transition:all .2s
+    }
+    .reorder-btn:hover{background:var(--bg4);color:#fff}
+    .reorder-btn.active{background:rgba(107,61,181,.25);border-color:rgba(107,61,181,.5);color:#fff}
+    .reorder-btn svg{width:14px;height:14px}
+    .toolbar-divider{width:1px;height:20px;background:var(--border);flex-shrink:0;margin:0 .1rem}
+
+    /* ── REORDER MODE ───────────────────────────────────────────── */
+    .entry-item.dragging{opacity:.4;border-style:dashed}
+    .entry-item.drag-over{border-color:var(--purple);box-shadow:0 0 0 2px rgba(107,61,181,.4)}
+    .drag-handle{
+      display:none;align-items:center;justify-content:center;padding:.5rem .55rem;
+      cursor:grab;color:rgba(255,255,255,.3);border-right:1px solid var(--border);
+      flex-shrink:0;touch-action:none;
+    }
+    .drag-handle:active{cursor:grabbing}
+    .drag-handle svg{width:16px;height:16px}
+    body.reorder-mode .drag-handle{display:flex}
+    body.reorder-mode .entry-actions{display:none}
+    body.reorder-mode .entry-item{cursor:default}
 
     /* ── ENTRIES LIST ────────────────────────────────────────────── */
     .entries-wrap{flex:1;overflow-y:auto;padding:.75rem 1rem 7rem}
@@ -350,16 +374,20 @@
 
   <!-- Toolbar -->
   <div class="toolbar">
+    <button class="add-btn" id="addBtn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      Add
+    </button>
+    <button class="reorder-btn" id="reorderBtn" title="Drag to reorder entries">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      Reorder
+    </button>
+    <div class="toolbar-divider"></div>
     <button class="filter-chip active" data-filter="all">All</button>
     <button class="filter-chip income" data-filter="income">Income</button>
     <button class="filter-chip expense" data-filter="expense">Expenses</button>
     <button class="filter-chip" data-filter="unpaid">Unpaid</button>
     <button class="filter-chip" data-filter="paid">Paid</button>
-    <div class="toolbar-spacer"></div>
-    <button class="add-btn" id="addBtn">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-      Add
-    </button>
   </div>
 
   <!-- Entries List -->
@@ -475,6 +503,8 @@
   let panelType = 'income';
   let panelPaid = false;
   let panelWho = '';
+  let reorderMode = false;
+  let dragSrcId = null;
 
   // ── Helpers ────────────────────────────────────────────────────────────────
   function fmt(n) {
@@ -650,6 +680,9 @@
       const balClass = entry.runBal >= 0 ? 'pos' : 'neg';
 
       el.innerHTML = `
+        <div class="drag-handle" title="Drag to reorder">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="6" r="1" fill="currentColor" stroke="none"/><circle cx="15" cy="6" r="1" fill="currentColor" stroke="none"/><circle cx="9" cy="12" r="1" fill="currentColor" stroke="none"/><circle cx="15" cy="12" r="1" fill="currentColor" stroke="none"/><circle cx="9" cy="18" r="1" fill="currentColor" stroke="none"/><circle cx="15" cy="18" r="1" fill="currentColor" stroke="none"/></svg>
+        </div>
         <div class="entry-main">
           <div class="entry-top">
             <span class="entry-name">${escHtml(entry.name)}</span>
@@ -670,6 +703,9 @@
           <button class="entry-act-btn edit-btn" title="Edit">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="14" height="14"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
           </button>
+          <button class="entry-act-btn dup-btn" title="Duplicate entry">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="14" height="14"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+          </button>
           <button class="entry-act-btn del-btn" title="Delete">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="14" height="14"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
           </button>
@@ -678,7 +714,10 @@
 
       el.querySelector('.pay-btn').addEventListener('click', () => togglePaid(entry.id, !entry.paid));
       el.querySelector('.edit-btn').addEventListener('click', () => openEdit(entry.id));
+      el.querySelector('.dup-btn').addEventListener('click', () => duplicateEntry(entry.id));
       el.querySelector('.del-btn').addEventListener('click', () => deleteEntry(entry.id, entry.name));
+      // Drag-to-reorder
+      setupDragHandlers(el, entry.id);
 
       list.appendChild(el);
     });
@@ -715,6 +754,116 @@
       allEntries = allEntries.filter(e => e.id !== id);
       renderEntries();
       showToast('Deleted');
+    } catch (e) {
+      showToast('Network error');
+    }
+    loading(false);
+  }
+
+  // ── REORDER MODE ──────────────────────────────────────────────────────────
+  document.getElementById('reorderBtn').addEventListener('click', toggleReorderMode);
+
+  function toggleReorderMode() {
+    reorderMode = !reorderMode;
+    document.body.classList.toggle('reorder-mode', reorderMode);
+    const btn = document.getElementById('reorderBtn');
+    btn.classList.toggle('active', reorderMode);
+    btn.querySelector('svg + *') // no text node trick — update SVG text manually
+    if (reorderMode) {
+      btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="14" height="14"><polyline points="20 6 9 17 4 12"/></svg> Done`;
+      showToast('Drag the ≡ handles to reorder', 2500);
+    } else {
+      btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="14" height="14"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg> Reorder`;
+    }
+  }
+
+  // ── DRAG-TO-REORDER ───────────────────────────────────────────────────────
+  function setupDragHandlers(el, id) {
+    const handle = el.querySelector('.drag-handle');
+    if (!handle) return;
+
+    // Make item draggable only when handle is touched/mousedown
+    handle.addEventListener('mousedown', () => { if (reorderMode) el.draggable = true; });
+    handle.addEventListener('touchstart', () => { if (reorderMode) el.draggable = true; }, { passive: true });
+    el.addEventListener('dragend', () => { el.draggable = false; });
+
+    el.addEventListener('dragstart', e => {
+      if (!reorderMode) { e.preventDefault(); return; }
+      dragSrcId = id;
+      el.classList.add('dragging');
+      e.dataTransfer.effectAllowed = 'move';
+    });
+    el.addEventListener('dragend', () => {
+      el.classList.remove('dragging');
+      document.querySelectorAll('.entry-item.drag-over').forEach(r => r.classList.remove('drag-over'));
+    });
+    el.addEventListener('dragover', e => {
+      if (!reorderMode || dragSrcId === id) return;
+      e.preventDefault();
+      e.dataTransfer.dropEffect = 'move';
+      document.querySelectorAll('.entry-item.drag-over').forEach(r => r.classList.remove('drag-over'));
+      el.classList.add('drag-over');
+    });
+    el.addEventListener('dragleave', () => el.classList.remove('drag-over'));
+    el.addEventListener('drop', async e => {
+      e.preventDefault();
+      el.classList.remove('drag-over');
+      if (!reorderMode || dragSrcId === null || dragSrcId === id) return;
+
+      // Re-order allEntries: move dragSrc to position of drop target
+      const list = document.getElementById('entriesList');
+      const items = [...list.querySelectorAll('.entry-item')];
+      const srcIdx  = items.findIndex(i => parseInt(i.dataset.id) === dragSrcId);
+      const destIdx = items.findIndex(i => parseInt(i.dataset.id) === id);
+      if (srcIdx === -1 || destIdx === -1) return;
+
+      // Move DOM node immediately for snappy feel
+      if (srcIdx < destIdx) {
+        list.insertBefore(items[srcIdx], items[destIdx].nextSibling);
+      } else {
+        list.insertBefore(items[srcIdx], items[destIdx]);
+      }
+
+      // Update allEntries order based on new DOM order
+      const newOrder = [...list.querySelectorAll('.entry-item')].map((el, i) => ({
+        id: parseInt(el.dataset.id), order: i
+      }));
+      newOrder.forEach(({ id, order }) => {
+        const entry = allEntries.find(e => e.id === id);
+        if (entry) entry.order = order;
+      });
+
+      // Persist to server (fire and forget; re-render on error)
+      try {
+        const res = await api('PUT', `/api/entries/0`, { reorder: newOrder });
+        if (res.error) { showToast('⚠ Reorder failed'); renderEntries(); }
+      } catch (e) {
+        showToast('Network error');
+        renderEntries();
+      }
+      dragSrcId = null;
+    });
+  }
+
+  // ── DUPLICATE ENTRY ───────────────────────────────────────────────────────
+  async function duplicateEntry(id) {
+    const src = allEntries.find(e => e.id === id);
+    if (!src) return;
+    loading(true);
+    try {
+      const payload = {
+        name:    'Copy of ' + src.name,
+        amount:  src.amount,
+        type:    src.type,
+        paid:    false,
+        date:    new Date().toISOString().slice(0, 10),
+        addedBy: src.addedBy || (members[0] || ''),
+      };
+      const res = await api('POST', '/api/entries', payload);
+      if (res.error) { showToast('⚠ ' + res.error); loading(false); return; }
+      allEntries.push(res.entry);
+      renderEntries();
+      showToast('✓ Entry duplicated');
     } catch (e) {
       showToast('Network error');
     }
