@@ -437,103 +437,25 @@
     document.body.appendChild(f);
   }
 
-  function makeNoiseBuffer(ctx, duration) {
-    const buffer = ctx.createBuffer(1, Math.floor(ctx.sampleRate * duration), ctx.sampleRate);
-    const data = buffer.getChannelData(0);
-    for (let i = 0; i < data.length; i++) {
-      const t = i / data.length;
-      const shape = Math.sin(Math.PI * t);
-      data[i] = (Math.random() * 2 - 1) * shape * 0.5;
-    }
-    return buffer;
-  }
+  const sheepAudio = new Audio('https://www.twcministries.net/Pages/Apps/Sound%20effects/sheep%20bleats.mp3');
+  sheepAudio.preload = 'auto';
+  sheepAudio.loop = false;
+  sheepAudio.volume = 0.9;
 
-  function playBaa(at, pitch, duration, volume, panOffset) {
-    const ctx = audioCtx;
-    const osc1 = ctx.createOscillator();
-    const osc2 = ctx.createOscillator();
-    const noise = ctx.createBufferSource();
-    const gain = ctx.createGain();
-    const noiseGain = ctx.createGain();
-    const filter = ctx.createBiquadFilter();
-    const formant1 = ctx.createBiquadFilter();
-    const formant2 = ctx.createBiquadFilter();
-    const pan = ctx.createStereoPanner();
-
-    osc1.type = 'triangle';
-    osc2.type = 'sine';
-    osc1.frequency.setValueAtTime(pitch * 1.02, at);
-    osc1.frequency.exponentialRampToValueAtTime(pitch * 0.76, at + duration * 0.72);
-    osc2.frequency.setValueAtTime(pitch * 0.52, at);
-    osc2.frequency.exponentialRampToValueAtTime(pitch * 0.37, at + duration * 0.72);
-    osc1.detune.setValueAtTime((Math.random() * 8) - 4, at);
-    osc2.detune.setValueAtTime((Math.random() * 8) - 4, at);
-
-    filter.type = 'bandpass';
-    filter.frequency.setValueAtTime(720, at);
-    filter.frequency.exponentialRampToValueAtTime(420, at + duration);
-    filter.Q.value = 1.1;
-
-    formant1.type = 'bandpass';
-    formant1.frequency.value = 980;
-    formant1.Q.value = 3.2;
-
-    formant2.type = 'bandpass';
-    formant2.frequency.value = 1460;
-    formant2.Q.value = 2.4;
-
-    noise.buffer = makeNoiseBuffer(ctx, Math.max(duration, 0.35));
-    noiseGain.gain.setValueAtTime(0.0001, at);
-    noiseGain.gain.exponentialRampToValueAtTime(volume * 0.17, at + 0.02);
-    noiseGain.gain.exponentialRampToValueAtTime(0.0001, at + duration * 0.62);
-
-    gain.gain.setValueAtTime(0.0001, at);
-    gain.gain.exponentialRampToValueAtTime(volume, at + 0.04);
-    gain.gain.exponentialRampToValueAtTime(volume * 0.7, at + duration * 0.28);
-    gain.gain.exponentialRampToValueAtTime(0.0001, at + duration);
-
-    pan.pan.value = panOffset;
-
-    osc1.connect(filter);
-    osc2.connect(filter);
-    filter.connect(formant1);
-    formant1.connect(formant2);
-    formant2.connect(gain);
-    gain.connect(pan);
-    pan.connect(ctx.destination);
-
-    noise.connect(filter);
-    noise.connect(noiseGain);
-    noiseGain.connect(ctx.destination);
-
-    osc1.start(at);
-    osc2.start(at);
-    noise.start(at);
-    osc1.stop(at + duration + 0.05);
-    osc2.stop(at + duration + 0.05);
-    noise.stop(at + duration + 0.05);
-  }
-
-  function bleat() {
-    const at = audioCtx.currentTime + 0.01;
-    const base = 168 + Math.random() * 36;
-    playBaa(at, base, 0.54, 0.11, -0.15);
-    playBaa(at + 0.16, base * 0.95, 0.47, 0.095, 0.1);
-    if (Math.random() > 0.22) playBaa(at + 0.34, base * 1.06, 0.42, 0.085, -0.05);
-    if (Math.random() > 0.6) playBaa(at + 0.52, base * 0.88, 0.40, 0.075, 0.18);
-  }
-
-  function chorus() {
-    bleat();
-    setTimeout(bleat, 180);
-    setTimeout(bleat, 360);
-    if (Math.random() > 0.55) setTimeout(bleat, 560);
-  }
-
-  let audioCtx = null;
   let enabled = false;
   let timer = null;
   const btn = document.getElementById('soundBtn');
+
+  function chorus() {
+    const delays = [0, 240, 520];
+    delays.forEach((delay) => {
+      setTimeout(() => {
+        const clip = sheepAudio.cloneNode(true);
+        clip.volume = enabled ? 0.9 : 0;
+        clip.play().catch(() => {});
+      }, delay);
+    });
+  }
 
   function schedule() {
     if (!enabled) return;
@@ -544,13 +466,16 @@
   btn.onclick = async () => {
     enabled = !enabled;
     btn.textContent = enabled ? 'Turn Sheep Sounds Off' : 'Turn Sheep Sounds On';
+
     if (enabled) {
-      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-      if (audioCtx.state === 'suspended') await audioCtx.resume();
+      sheepAudio.play().catch(() => {});
+      sheepAudio.pause();
       schedule();
     } else {
       clearTimeout(timer);
       timer = null;
+      sheepAudio.pause();
+      sheepAudio.currentTime = 0;
     }
   };
 </script>
