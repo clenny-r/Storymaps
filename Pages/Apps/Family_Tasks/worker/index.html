@@ -373,6 +373,8 @@ body::before{
       <button class="filter-btn" data-f="high">🔴 High</button>
       <button class="filter-btn" data-f="medium">🟡 Med</button>
       <button class="filter-btn" data-f="low">🟢 Low</button>
+      <button class="filter-btn" data-f="by-clenmar">👤 Clenmar</button>
+      <button class="filter-btn" data-f="by-wife">👤 Wife</button>
     </div>
 
     <!-- Task list -->
@@ -723,9 +725,11 @@ function getFiltered() {
   return tasks.filter(t => {
     if (filter === 'open')   return !t.completed;
     if (filter === 'done')   return t.completed;
-    if (filter === 'high')   return t.priority === 'high'   && !t.completed;
-    if (filter === 'medium') return t.priority === 'medium' && !t.completed;
-    if (filter === 'low')    return t.priority === 'low'    && !t.completed;
+    if (filter === 'high')       return t.priority === 'high'   && !t.completed;
+    if (filter === 'medium')     return t.priority === 'medium' && !t.completed;
+    if (filter === 'low')        return t.priority === 'low'    && !t.completed;
+    if (filter === 'by-clenmar') return (t.addedBy || '').toLowerCase() === 'clenmar';
+    if (filter === 'by-wife')    return (t.addedBy || '').toLowerCase() === 'wife';
     return true;
   });
 }
@@ -752,7 +756,9 @@ function renderTasks() {
 
     const tagClass = `priority-tag tag-${task.priority}`;
     const tagLabel = task.priority.charAt(0).toUpperCase() + task.priority.slice(1);
-    const addedDate = new Date(task.createdAt).toLocaleDateString('en-US', { month:'short', day:'numeric' });
+    const _d = new Date(task.createdAt);
+    const addedDate = _d.toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' })
+                    + ' · ' + _d.toLocaleTimeString('en-US', { hour:'numeric', minute:'2-digit', hour12:true });
 
     el.innerHTML = `
       <div class="drag-handle" title="Drag to reorder">
