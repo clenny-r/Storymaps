@@ -1,293 +1,558 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>404 – The Lost Sheep</title>
-
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>404 | The Lost Sheep</title>
 <style>
+  :root{
+    --panel: rgba(255,255,255,0.6);
+    --ink: #3b2a17;
+    --wood: #5c3a1e;
+    --wood-dark: #422917;
+  }
 
-body{
-margin:0;
-overflow:hidden;
-font-family:Georgia,serif;
-background:#e6d8a3;
-color:#3a2c1d;
-text-align:center;
-}
+  *{ box-sizing:border-box; }
 
-/* PARALLAX */
+  html, body{
+    width:100%;
+    height:100%;
+    margin:0;
+    overflow:hidden;
+    font-family: Georgia, serif;
+    color:var(--ink);
+    text-align:center;
+    background:#050913;
+  }
 
-.layer{
-position:absolute;
-width:200%;
-height:100%;
-animation:scroll linear infinite;
-}
+  body{
+    animation: skyCycle 14s linear infinite;
+  }
 
-.sky{
-background:linear-gradient(#8ecaff,#eaf6ff);
-z-index:-3;
-animation-duration:200s;
-}
+  @keyframes skyCycle{
+    0%   { background:#050913; }
+    8%   { background:#101a30; }
+    16%  { background:#1d3052; }
+    26%  { background:#5daee9; }
+    38%  { background:#9ad7ff; }
+    48%  { background:#f8f1d4; }
+    58%  { background:#ffb05a; }
+    66%  { background:#d85a4e; }
+    74%  { background:#7c335f; }
+    84%  { background:#121a33; }
+    92%  { background:#050913; }
+    100% { background:#050913; }
+  }
+  }
 
-.hills{
-background:
-radial-gradient(circle at 20% 90%, #7dbd74 160px, transparent 161px),
-radial-gradient(circle at 60% 95%, #6aa865 180px, transparent 181px);
-z-index:-2;
-animation-duration:160s;
-}
+  .scene{
+    position:relative;
+    width:100vw;
+    height:100vh;
+    overflow:hidden;
+    background:#050913;
+    animation: sceneTone 14s linear infinite;
+  }
 
-.ground{
-background:#c9b373;
-height:40%;
-bottom:0;
-z-index:-1;
-animation-duration:80s;
-}
+  @keyframes sceneTone{
+    0%   { filter:brightness(.18) contrast(1.14) saturate(1.05); }
+    10%  { filter:brightness(.28) contrast(1.12) saturate(1.06); }
+    20%  { filter:brightness(.62) contrast(1.08) saturate(1.1); }
+    34%  { filter:brightness(1.18) contrast(1.04) saturate(1.18); }
+    46%  { filter:brightness(1.48) contrast(1.02) saturate(1.08); }
+    56%  { filter:brightness(1.22) contrast(1.04) saturate(1.16); }
+    66%  { filter:brightness(.82) contrast(1.09) saturate(1.22); }
+    78%  { filter:brightness(.38) contrast(1.12) saturate(1.08); }
+    90%  { filter:brightness(.20) contrast(1.14) saturate(1.03); }
+    100% { filter:brightness(.18) contrast(1.14) saturate(1.05); }
+  }
+  }
 
-@keyframes scroll{
-0%{transform:translateX(0)}
-100%{transform:translateX(-50%)}
-}
+  .sky-fill{
+    position:absolute;
+    inset:0;
+    background:linear-gradient(to bottom, rgba(255,255,255,0.02) 0%, rgba(255,255,255,0.02) 65%, rgba(0,0,0,0.06) 100%);
+    z-index:0;
+    pointer-events:none;
+  }
 
-/* TEXT */
+  .stars{
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    z-index:1;
+  }
 
-.container{
-position:relative;
-z-index:10;
-margin-top:110px;
-max-width:700px;
-margin-left:auto;
-margin-right:auto;
-}
+  .star{
+    position:absolute;
+    width:2px;
+    height:2px;
+    border-radius:50%;
+    background:white;
+    opacity:0;
+    animation: starCycle 14s linear infinite;
+  }
 
-h1{
-font-size:72px;
-margin-bottom:10px;
-}
+  @keyframes starCycle{
+    0%, 44% { opacity:0; transform:scale(.8); }
+    58%     { opacity:.7; }
+    82%     { opacity:1; }
+    100%    { opacity:0; }
+  }
 
-.quote{
-font-style:italic;
-margin:12px auto;
-}
+  .sky-orbit{
+    position:absolute;
+    inset:0;
+    z-index:2;
+    pointer-events:none;
+  }
 
-a{
-color:#7a4f2a;
-font-weight:bold;
-text-decoration:none;
-}
+  .celestial{
+    position:absolute;
+    width:70px;
+    height:70px;
+    border-radius:50%;
+    left:-10%;
+    top:75%;
+    will-change:left, top, opacity;
+  }
 
-a:hover{
-text-decoration:underline;
-}
+  .sun{
+    background:radial-gradient(circle at 35% 35%, #fff7c0 0 18%, #ffd86b 38%, #ff9e2a 72%, rgba(255,158,42,0) 73%);
+    box-shadow:0 0 30px rgba(255,200,80,.8);
+    animation:sunPath 14s linear infinite;
+  }
 
-/* SHEEP */
+  .moon{
+    background:radial-gradient(circle at 38% 35%, #fff 0 18%, #d7e0ef 45%, #95a3bd 80%);
+    box-shadow:0 0 20px rgba(255,255,255,.4);
+    animation:moonPath 14s linear infinite;
+    animation-delay:-7s;
+  }
 
-.sheep{
-position:absolute;
-width:120px;
-height:80px;
-transition:transform linear;
-pointer-events:none;
-}
+  .moon::after{
+    content:"";
+    position:absolute;
+    width:16px;
+    height:16px;
+    border-radius:50%;
+    right:14px;
+    top:18px;
+    background:rgba(120,130,150,0.25);
+  }
 
-.sheep svg{
-animation:bounce .4s infinite alternate;
-}
+  @keyframes sunPath{
+    0%   { left:-10%; top:75%; opacity:0; }
+    8%   { opacity:1; }
+    25%  { left:24%;  top:36%; }
+    50%  { left:50%;  top:10%; }
+    75%  { left:76%;  top:36%; }
+    92%  { opacity:1; }
+    100% { left:110%; top:75%; opacity:0; }
+  }
 
-@keyframes bounce{
-from{transform:translateY(0)}
-to{transform:translateY(-4px)}
-}
+  @keyframes moonPath{
+    0%   { left:-10%; top:75%; opacity:0; }
+    25%  { left:24%;  top:36%; opacity:.2; }
+    50%  { left:50%;  top:10%; opacity:1; }
+    75%  { left:76%;  top:36%; opacity:1; }
+    100% { left:110%; top:75%; opacity:0; }
+  }
 
-/* SHEPHERD */
+  .layers{
+    position:absolute;
+    inset:0;
+    z-index:3;
+    pointer-events:none;
+  }
 
-.shepherd{
-position:absolute;
-bottom:70px;
-left:-150px;
-width:110px;
-animation:shepherdWalk 45s linear infinite;
-}
+  .hill{
+    position:absolute;
+    width:200%;
+    left:0;
+    background-repeat:repeat-x;
+  }
 
-@keyframes shepherdWalk{
-0%{left:-150px}
-100%{left:110%}
-}
+  .hill1{
+    bottom:25%;
+    height:18%;
+    opacity:.5;
+    background:
+      radial-gradient(ellipse 200px 100px at 10% 100%,#6c9560 0 60%,transparent 61%) 0 100%/350px 100% repeat-x,
+      linear-gradient(to top, #55774a 0%, #55774a 100%);
+    animation:drift1 120s linear infinite;
+  }
 
-.lanternGlow{
-animation:glow 1.5s infinite alternate;
-}
+  .hill2{
+    bottom:14%;
+    height:22%;
+    opacity:.8;
+    background:
+      radial-gradient(ellipse 260px 120px at 10% 100%,#5d874f 0 60%,transparent 61%) 0 100%/420px 100% repeat-x,
+      linear-gradient(to top, #4f7344 0%, #4f7344 100%);
+    animation:drift2 80s linear infinite;
+  }
 
-@keyframes glow{
-from{opacity:.7}
-to{opacity:1}
-}
+  .ground{
+    bottom:0;
+    height:16%;
+    background:linear-gradient(#b99c5e,#a88848);
+    animation:drift3 40s linear infinite;
+    box-shadow:0 -1px 0 rgba(0,0,0,0.04) inset;
+  }
 
+  @keyframes drift1{ from{ transform:translateX(0); } to{ transform:translateX(-25%); } }
+  @keyframes drift2{ from{ transform:translateX(0); } to{ transform:translateX(-35%); } }
+  @keyframes drift3{ from{ transform:translateX(0); } to{ transform:translateX(-12%); } }
+
+  .container{
+    position:relative;
+    z-index:10;
+    max-width:760px;
+    margin:8vh auto 0;
+    background:var(--panel);
+    padding:30px;
+    border-radius:16px;
+    box-shadow:0 0 20px rgba(0,0,0,.2);
+    backdrop-filter:blur(4px);
+  }
+
+  h1{ font-size:70px; margin:0; }
+  h2{ margin:6px 0 14px; font-weight:normal; }
+  .quote{ font-style:italic; margin:8px auto; max-width:600px; }
+
+  .controls{
+    margin-top:18px;
+    display:flex;
+    gap:12px;
+    justify-content:center;
+    flex-wrap:wrap;
+  }
+
+  button{
+    padding:12px 20px;
+    font-size:15px;
+    border:none;
+    border-radius:8px;
+    background:var(--wood);
+    color:white;
+    cursor:pointer;
+  }
+
+  button:hover{ background:var(--wood-dark); }
+
+  .sheep{
+    position:absolute;
+    width:120px;
+    height:80px;
+    z-index:5;
+    pointer-events:none;
+    will-change:transform;
+  }
+
+  .shepherd{
+    position:absolute;
+    bottom:70px;
+    left:-160px;
+    width:120px;
+    animation:shepherdWalk 42s linear infinite;
+    z-index:6;
+  }
+
+  @keyframes shepherdWalk{
+    0%{ left:-160px; }
+    100%{ left:110%; }
+  }
+
+  .lanternLight{
+    position:absolute;
+    width:260px;
+    height:260px;
+    border-radius:50%;
+    background:radial-gradient(circle, rgba(255,230,150,.6), rgba(255,230,150,0) 70%);
+    pointer-events:none;
+    z-index:4;
+  }
+
+  .firefly{
+    position:absolute;
+    width:6px;
+    height:6px;
+    border-radius:50%;
+    background:#ffe88a;
+    box-shadow:0 0 10px rgba(255,232,138,.9);
+    animation:fly 5s infinite alternate ease-in-out;
+    z-index:5;
+    pointer-events:none;
+  }
+
+  @keyframes fly{
+    from{ transform:translate(0,0); opacity:.6; }
+    to{ transform:translate(18px,-55px); opacity:1; }
+  }
+
+  body:before{
+    content:"";
+    position:fixed;
+    inset:0;
+    border:18px solid rgba(100,70,30,.35);
+    pointer-events:none;
+    z-index:20;
+  }
+
+  @media (max-width:700px){
+    h1{ font-size:54px; }
+    .container{ margin-top:6vh; padding:24px 18px 20px; }
+  }
 </style>
 </head>
-
 <body>
+  <div class="scene">
+    <div class="sky-fill"></div>
+    <div class="stars" id="stars"></div>
 
-<div class="layer sky"></div>
-<div class="layer hills"></div>
-<div class="layer ground"></div>
+    <div class="sky-orbit">
+      <div class="celestial sun"></div>
+      <div class="celestial moon"></div>
+    </div>
 
-<div class="container">
+    <div class="layers">
+      <div class="hill hill1"></div>
+      <div class="hill hill2"></div>
+      <div class="hill ground"></div>
+    </div>
 
-<h1>404</h1>
-<h2>This Page Has Gone Astray</h2>
+    <div class="container">
+      <h1>404</h1>
+      <h2>This Page Has Gone Astray</h2>
 
-<p class="quote">
-“All we like sheep have gone astray; we have turned every one to his own way.”
-</p>
+      <p class="quote">All we like sheep have gone astray.</p>
+      <p class="quote">But now you have returned to the Shepherd.</p>
 
-<p class="quote">
-“But now you have returned to the Shepherd and Overseer of your souls.”
-</p>
+      <div class="controls">
+        <button onclick="location.href='https://twcministries.net'">Return to the Flock</button>
+        <button id="soundBtn" type="button">Turn Sheep Sounds On</button>
+      </div>
+    </div>
 
-<p style="font-size:14px;opacity:.8;">
-Isaiah 53:6 • 1 Peter 2:25
-</p>
+    <div class="shepherd" id="shepherd">
+      <svg viewBox="0 0 120 160" width="120" height="160" aria-hidden="true">
+        <path d="M40 70 L80 70 L95 150 L25 150 Z" fill="#000000"/>
+        <path d="M46 72 L74 72 L86 146 L34 146 Z" fill="#000000" opacity="0.22"/>
+        <circle cx="60" cy="45" r="14" fill="#8a5a39"/>
+        <rect x="92" y="30" width="4" height="120" fill="#2a1b10"/>
+        <rect x="86" y="92" width="12" height="16" fill="#ffd66b"/>
+      </svg>
+    </div>
 
-<p>The page you seek has wandered into the wilderness.</p>
-
-<p><a href="/">Return to the fold</a></p>
-
-</div>
-
-<!-- SHEPHERD -->
-
-<div class="shepherd">
-
-<svg viewBox="0 0 120 160">
-
-<!-- robe -->
-<path d="M40 70 L80 70 L95 150 L25 150 Z" fill="#7a5a3a"/>
-
-<!-- head -->
-<circle cx="60" cy="45" r="14" fill="#e6c19c"/>
-
-<!-- beard -->
-<path d="M48 55 Q60 70 72 55" fill="#4b3621"/>
-
-<!-- staff -->
-<rect x="92" y="30" width="4" height="120" fill="#5c3b1e"/>
-
-<!-- arm -->
-<rect x="70" y="80" width="20" height="6" fill="#e6c19c"/>
-
-<!-- lantern -->
-<g class="lanternGlow">
-<rect x="85" y="90" width="12" height="16" fill="#ffd66b"/>
-</g>
-
-</svg>
-
-</div>
+    <div class="lanternLight" id="lantern"></div>
+  </div>
 
 <script>
+  const starsHost = document.getElementById('stars');
+  for (let i = 0; i < 140; i++) {
+    const s = document.createElement('div');
+    s.className = 'star';
+    s.style.left = Math.random() * window.innerWidth + 'px';
+    s.style.top = Math.random() * window.innerHeight * 0.7 + 'px';
+    s.style.animationDelay = (Math.random() * 14).toFixed(2) + 's';
+    starsHost.appendChild(s);
+  }
 
-/* REALISTIC SHEEP SVG */
+  function sheepSVG() {
+    return `
+      <svg viewBox="0 0 120 80" width="120" height="80" aria-hidden="true">
+        <g fill="#f2f2f2" stroke="#444" stroke-width="1.5">
+          <circle cx="40" cy="35" r="18"/>
+          <circle cx="55" cy="30" r="18"/>
+          <circle cx="70" cy="35" r="18"/>
+          <circle cx="55" cy="45" r="18"/>
+        </g>
+        <ellipse cx="55" cy="40" rx="32" ry="22" fill="#f2f2f2" stroke="#444" stroke-width="2"/>
+        <ellipse cx="95" cy="42" rx="14" ry="12" fill="#444"/>
+        <circle cx="101" cy="40" r="2" fill="white"/>
+        <rect x="38" y="58" width="6" height="16" fill="#444"/>
+        <rect x="52" y="58" width="6" height="16" fill="#444"/>
+        <rect x="66" y="58" width="6" height="16" fill="#444"/>
+        <rect x="80" y="58" width="6" height="16" fill="#444"/>
+      </svg>
+    `;
+  }
 
-function sheepSVG(){
-return `
-<svg viewBox="0 0 120 80">
+  function createSheep() {
+    const s = document.createElement('div');
+    s.className = 'sheep';
+    s.innerHTML = sheepSVG();
+    document.body.appendChild(s);
+    s.style.left = Math.random() * window.innerWidth + 'px';
+    s.style.top = (window.innerHeight - 190 - Math.random() * 120) + 'px';
+    wanderSheep(s);
+  }
 
-<g fill="#f3f3f3" stroke="#444" stroke-width="1.5">
-<circle cx="40" cy="35" r="18"/>
-<circle cx="55" cy="30" r="18"/>
-<circle cx="70" cy="35" r="18"/>
-<circle cx="55" cy="45" r="18"/>
-</g>
+  function wanderSheep(s) {
+    const targetX = Math.random() * window.innerWidth;
+    const targetY = window.innerHeight - 200 - Math.random() * 120;
+    const duration = 3200 + Math.random() * 3600;
+    const dx = targetX - s.offsetLeft;
+    const dy = targetY - s.offsetTop;
+    s.style.transition = 'transform ' + duration + 'ms linear';
+    s.style.transform = Math.random() < 0.28 ? `translate(${dx}px, ${dy}px) scaleX(-1)` : `translate(${dx}px, ${dy}px)`;
+    setTimeout(() => {
+      if (Math.random() < 0.25) {
+        setTimeout(() => wanderSheep(s), 700 + Math.random() * 900);
+      } else {
+        wanderSheep(s);
+      }
+    }, duration);
+  }
 
-<ellipse cx="55" cy="40" rx="32" ry="22" fill="#f3f3f3" stroke="#444" stroke-width="2"/>
+  for (let i = 0; i < 6; i++) createSheep();
 
-<ellipse cx="95" cy="42" rx="14" ry="12" fill="#444"/>
+  const follower = document.createElement('div');
+  follower.className = 'sheep';
+  follower.innerHTML = sheepSVG();
+  document.body.appendChild(follower);
 
-<ellipse cx="92" cy="30" rx="6" ry="4" fill="#444"/>
+  document.addEventListener('mousemove', (e) => {
+    follower.style.left = (e.clientX - 60) + 'px';
+    follower.style.top = (e.clientY - 40) + 'px';
+  });
 
-<circle cx="100" cy="40" r="2.5" fill="white"/>
-<circle cx="101" cy="40" r="1.2" fill="black"/>
+  const lantern = document.getElementById('lantern');
+  const shepherd = document.getElementById('shepherd');
+  function updateLantern() {
+    const rect = shepherd.getBoundingClientRect();
+    lantern.style.left = (rect.left + 54) + 'px';
+    lantern.style.top = (rect.top + 62) + 'px';
+    requestAnimationFrame(updateLantern);
+  }
+  updateLantern();
 
-<rect x="38" y="58" width="6" height="16" fill="#444"/>
-<rect x="52" y="58" width="6" height="16" fill="#444"/>
-<rect x="66" y="58" width="6" height="16" fill="#444"/>
-<rect x="80" y="58" width="6" height="16" fill="#444"/>
+  for (let i = 0; i < 14; i++) {
+    const f = document.createElement('div');
+    f.className = 'firefly';
+    f.style.left = (180 + Math.random() * 420) + 'px';
+    f.style.bottom = (70 + Math.random() * 180) + 'px';
+    f.style.animationDelay = (Math.random() * 4).toFixed(2) + 's';
+    document.body.appendChild(f);
+  }
 
-</svg>
-`
-}
+  function makeNoiseBuffer(ctx, duration) {
+    const buffer = ctx.createBuffer(1, Math.floor(ctx.sampleRate * duration), ctx.sampleRate);
+    const data = buffer.getChannelData(0);
+    for (let i = 0; i < data.length; i++) {
+      const t = i / data.length;
+      const shape = Math.sin(Math.PI * t);
+      data[i] = (Math.random() * 2 - 1) * shape * 0.5;
+    }
+    return buffer;
+  }
 
-/* CREATE WANDERING SHEEP */
+  function playBaa(at, pitch, duration, volume, panOffset) {
+    const ctx = audioCtx;
+    const osc1 = ctx.createOscillator();
+    const osc2 = ctx.createOscillator();
+    const noise = ctx.createBufferSource();
+    const gain = ctx.createGain();
+    const noiseGain = ctx.createGain();
+    const filter = ctx.createBiquadFilter();
+    const formant1 = ctx.createBiquadFilter();
+    const formant2 = ctx.createBiquadFilter();
+    const pan = ctx.createStereoPanner();
 
-const sheepCount=6
-const sheepList=[]
+    osc1.type = 'triangle';
+    osc2.type = 'sine';
+    osc1.frequency.setValueAtTime(pitch * 1.02, at);
+    osc1.frequency.exponentialRampToValueAtTime(pitch * 0.76, at + duration * 0.72);
+    osc2.frequency.setValueAtTime(pitch * 0.52, at);
+    osc2.frequency.exponentialRampToValueAtTime(pitch * 0.37, at + duration * 0.72);
+    osc1.detune.setValueAtTime((Math.random() * 8) - 4, at);
+    osc2.detune.setValueAtTime((Math.random() * 8) - 4, at);
 
-function createSheep(){
+    filter.type = 'bandpass';
+    filter.frequency.setValueAtTime(720, at);
+    filter.frequency.exponentialRampToValueAtTime(420, at + duration);
+    filter.Q.value = 1.1;
 
-let s=document.createElement("div")
-s.className="sheep"
-s.innerHTML=sheepSVG()
+    formant1.type = 'bandpass';
+    formant1.frequency.value = 980;
+    formant1.Q.value = 3.2;
 
-document.body.appendChild(s)
+    formant2.type = 'bandpass';
+    formant2.frequency.value = 1460;
+    formant2.Q.value = 2.4;
 
-s.style.left=Math.random()*window.innerWidth+"px"
-s.style.top=(window.innerHeight-180-Math.random()*200)+"px"
+    noise.buffer = makeNoiseBuffer(ctx, Math.max(duration, 0.35));
+    noiseGain.gain.setValueAtTime(0.0001, at);
+    noiseGain.gain.exponentialRampToValueAtTime(volume * 0.17, at + 0.02);
+    noiseGain.gain.exponentialRampToValueAtTime(0.0001, at + duration * 0.62);
 
-sheepList.push(s)
+    gain.gain.setValueAtTime(0.0001, at);
+    gain.gain.exponentialRampToValueAtTime(volume, at + 0.04);
+    gain.gain.exponentialRampToValueAtTime(volume * 0.7, at + duration * 0.28);
+    gain.gain.exponentialRampToValueAtTime(0.0001, at + duration);
 
-wander(s)
+    pan.pan.value = panOffset;
 
-}
+    osc1.connect(filter);
+    osc2.connect(filter);
+    filter.connect(formant1);
+    formant1.connect(formant2);
+    formant2.connect(gain);
+    gain.connect(pan);
+    pan.connect(ctx.destination);
 
-for(let i=0;i<sheepCount;i++) createSheep()
+    noise.connect(filter);
+    noise.connect(noiseGain);
+    noiseGain.connect(ctx.destination);
 
-/* WANDER */
+    osc1.start(at);
+    osc2.start(at);
+    noise.start(at);
+    osc1.stop(at + duration + 0.05);
+    osc2.stop(at + duration + 0.05);
+    noise.stop(at + duration + 0.05);
+  }
 
-function wander(s){
+  function bleat() {
+    const at = audioCtx.currentTime + 0.01;
+    const base = 168 + Math.random() * 36;
+    playBaa(at, base, 0.54, 0.11, -0.15);
+    playBaa(at + 0.16, base * 0.95, 0.47, 0.095, 0.1);
+    if (Math.random() > 0.22) playBaa(at + 0.34, base * 1.06, 0.42, 0.085, -0.05);
+    if (Math.random() > 0.6) playBaa(at + 0.52, base * 0.88, 0.40, 0.075, 0.18);
+  }
 
-let x=Math.random()*window.innerWidth
-let y=(window.innerHeight-180-Math.random()*200)
+  function chorus() {
+    bleat();
+    setTimeout(bleat, 180);
+    setTimeout(bleat, 360);
+    if (Math.random() > 0.55) setTimeout(bleat, 560);
+  }
 
-let duration=4000+Math.random()*4000
+  let audioCtx = null;
+  let enabled = false;
+  let timer = null;
+  const btn = document.getElementById('soundBtn');
 
-s.style.transition="transform "+duration+"ms linear"
+  function schedule() {
+    if (!enabled) return;
+    chorus();
+    timer = setTimeout(schedule, 5000 + Math.random() * 6000);
+  }
 
-let dx=x-s.offsetLeft
-let dy=y-s.offsetTop
-
-s.style.transform=`translate(${dx}px,${dy}px)`
-
-setTimeout(()=>{
-
-/* confused sheep flip */
-
-if(Math.random()<0.4){
-s.style.transform+=" scaleX(-1)"
-}
-
-wander(s)
-
-},duration)
-
-}
-
-/* MOUSE FOLLOWING SHEEP */
-
-let follower=document.createElement("div")
-follower.className="sheep"
-follower.innerHTML=sheepSVG()
-document.body.appendChild(follower)
-
-document.addEventListener("mousemove",e=>{
-follower.style.left=(e.clientX-60)+"px"
-follower.style.top=(e.clientY-40)+"px"
-})
-
+  btn.onclick = async () => {
+    enabled = !enabled;
+    btn.textContent = enabled ? 'Turn Sheep Sounds Off' : 'Turn Sheep Sounds On';
+    if (enabled) {
+      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      if (audioCtx.state === 'suspended') await audioCtx.resume();
+      schedule();
+    } else {
+      clearTimeout(timer);
+      timer = null;
+    }
+  };
 </script>
-
 </body>
 </html>
-```
