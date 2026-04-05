@@ -2,14 +2,14 @@
 
 This folder powers the **Live Worship Stream** page for TWC Ministries — the primary destination for members and visitors watching Sabbath services online.
 
-**Live URL:** [twcministries.net/Pages/Live/Live.html](https://www.twcministries.net/Pages/Live/Live.html)
+**Live URL:** [twcministries.net/Pages/Live/](https://www.twcministries.net/Pages/Live/)
 
 ## Files
 
 | File | Description |
 |---|---|
-| `Live.html` | Main live stream page (canonical URL shared on social media) |
-| `index.html` | Redirect/alias to `Live.html` |
+| `index.html` | Main live stream page (canonical URL shared on social media) |
+| `index.html` | Main live stream page |
 
 ## How It Works
 

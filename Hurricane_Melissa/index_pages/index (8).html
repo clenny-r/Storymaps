@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Live | Worship Stream | Transformational Worship Centre</title>
   <link rel="icon" type="image/x-icon" href="https://www.twcministries.net/favicon.ico">
   <meta name="description" content="Join our live Sabbath worship stream at Transformational Worship Centre — TWC Ministries.">
@@ -69,8 +69,8 @@
     .drawer-link{display:block;color:rgba(255,255,255,.8);font-size:.8rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;padding:.78rem 0;border-bottom:1px solid rgba(255,255,255,.08)}
     .drawer-donate{display:block;margin-top:1rem;text-align:center;background:var(--grad-brand-h);color:#fff !important;padding:.78rem;font-weight:700;font-size:.76rem;letter-spacing:.14em;text-transform:uppercase}
     /* HERO */
-    #hero{position:relative;height:100vh;min-height:580px;display:flex;align-items:center;justify-content:center;text-align:center;overflow:hidden}
-    .hero-bg{position:absolute;inset:0;background-image:url('https://www.twcministries.net/Pages/church_photos/hero.jpg');background-size:cover;background-position:center 25%;animation:zoomBg 20s ease-in-out infinite alternate;will-change:transform}
+    #hero{position:relative;height:100svh;min-height:600px;display:flex;align-items:center;justify-content:center;text-align:center;overflow:hidden}
+    .hero-bg{position:absolute;inset:0;background-image:url('/Pages/church_photos/hero.jpg');background-size:cover;background-position:center 25%;animation:zoomBg 20s ease-in-out infinite alternate}
     @keyframes zoomBg{from{transform:scale(1.06)}to{transform:scale(1)}}
     .hero-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(19,18,40,.72) 0%,rgba(19,18,40,.55) 45%,rgba(19,18,40,.9) 100%)}
     .hero-tint{position:absolute;inset:0;background:linear-gradient(135deg,rgba(30,42,110,.28) 0%,transparent 60%,rgba(192,33,60,.2) 100%)}
@@ -154,13 +154,13 @@
     .slider-header span{font-size:.62rem;font-weight:700;letter-spacing:.28em;text-transform:uppercase;color:rgba(255,255,255,.3)}
     .slider-header strong{display:block;font-family:var(--font-display);font-size:clamp(1.4rem,3vw,2rem);font-weight:700;color:#fff;margin-top:.3rem}
     .slider-header strong em{font-style:normal;background:var(--grad-brand-h);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-    .slider-outer{position:relative;overflow:hidden;touch-action:pan-y}
+    .slider-outer{position:relative}
     /* fade-out edges */
     .slider-outer::before,.slider-outer::after{content:'';position:absolute;top:0;bottom:0;width:120px;z-index:2;pointer-events:none}
     .slider-outer::before{left:0;background:linear-gradient(to right,var(--clr-dark) 0%,transparent 100%)}
     .slider-outer::after{right:0;background:linear-gradient(to left,var(--clr-dark) 0%,transparent 100%)}
     /* infinite scroll track */
-    .slider-track{display:flex;gap:1.4rem;width:max-content;will-change:transform;touch-action:pan-y}
+    .slider-track{display:flex;gap:1.4rem;width:max-content;animation:slideLeft 38s linear infinite}
     .slider-track:hover{animation-play-state:paused}
     @keyframes slideLeft{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
     /* individual photo items */
@@ -168,22 +168,22 @@
     .slide-item img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s ease,filter .4s ease}
     .slide-item:hover img{transform:scale(1.07);filter:brightness(1.08)}
     /* caption overlay */
-    .slide-caption{position:absolute;inset:0;display:flex;align-items:flex-end;background:linear-gradient(to top,rgba(19,18,40,.85) 0%,rgba(19,18,40,.1) 55%,transparent 100%);padding:.85rem 1rem;opacity:1;transition:opacity .35s}
-    .slide-item:hover .slide-caption{opacity:1}/* always visible on mobile */
+    .slide-caption{position:absolute;inset:0;display:flex;align-items:flex-end;background:linear-gradient(to top,rgba(19,18,40,.85) 0%,rgba(19,18,40,.1) 55%,transparent 100%);padding:.85rem 1rem;opacity:0;transition:opacity .35s}
+    .slide-item:hover .slide-caption{opacity:1}
     .slide-caption-text{font-size:.7rem;font-weight:600;letter-spacing:.07em;color:#fff;line-height:1.4}
     /* brand accent bar */
     .slide-item::after{content:'';position:absolute;bottom:0;left:0;width:0;height:3px;background:var(--grad-brand-h);transition:width .4s ease}
     .slide-item:hover::after{width:100%}
     /* arrow buttons */
-    .slider-arrow{position:absolute;top:50%;transform:translateY(-50%);z-index:3;width:48px;height:48px;background:rgba(19,18,40,.82);border:1px solid rgba(255,255,255,.2);color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background .2s,border-color .2s;backdrop-filter:blur(6px);-webkit-tap-highlight-color:transparent}
+    .slider-arrow{position:absolute;top:50%;transform:translateY(-50%);z-index:3;width:40px;height:40px;background:rgba(19,18,40,.75);border:1px solid rgba(255,255,255,.15);color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background .2s,border-color .2s;backdrop-filter:blur(6px)}
     .slider-arrow:hover{background:var(--clr-crimson);border-color:transparent}
     .slider-arrow svg{width:14px;height:14px;fill:#fff;pointer-events:none}
     .slider-arrow.prev{left:1rem}
     .slider-arrow.next{right:1rem}
     /* dot indicators */
     .slider-dots{display:flex;justify-content:center;gap:.55rem;margin-top:1.6rem}
-    .slider-dot{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,.18);border:none;padding:0;cursor:pointer;transition:background .25s,transform .25s;-webkit-tap-highlight-color:transparent}
-    .slider-dot.active{background:var(--clr-crimson);transform:scale(1.3)}
+    .slider-dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.18);border:none;padding:0;cursor:pointer;transition:background .25s,transform .25s}
+    .slider-dot.active{background:var(--clr-crimson);transform:scale(1.4)}
     /* charity link */
     .slider-cta{text-align:center;margin-top:1.8rem}
     .slider-cta a{font-size:.7rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.45);border-bottom:1px solid rgba(255,255,255,.18);padding-bottom:.15rem;transition:color .2s,border-color .2s}
@@ -222,50 +222,8 @@
     .reveal.in{opacity:1;transform:none}
     @keyframes fadeUp{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:none}}
     @keyframes fadeIn{from{opacity:0}to{opacity:1}}
-    @media(max-width:960px){
-      .live-layout{grid-template-columns:1fr;gap:3rem}
-      .live-meta{position:static}
-      .donate-layout{grid-template-columns:1fr}
-      .footer-grid{grid-template-columns:1fr 1fr}
-      .footer-brand{grid-column:1/-1}
-      .slide-item{width:240px;height:175px}
-    }
-    @media(max-width:640px){
-      :root{--nav-h:70px}
-      /* Hero — stable height on mobile, no animation jank */
-      #hero{height:100svh;min-height:500px}
-      .hero-bg{animation:none}
-      .hero-h1{font-size:clamp(2.6rem,14vw,4.5rem)}
-      .hero-sub{font-size:.88rem}
-      /* Nav */
-      .main-nav{display:none}
-      .hamburger{display:flex}
-      /* Sabbath strip */
-      .strip-sep{display:none}
-      #sabbath-strip{padding:.8rem 0}
-      .strip-item{font-size:.7rem}
-      /* Slider */
-      .slide-item{width:75vw;max-width:280px;height:52vw;max-height:200px}
-      .slider-outer::before,.slider-outer::after{width:24px}
-      .slider-arrow{width:40px;height:40px}
-      .slider-dots{gap:.7rem;margin-top:1.2rem}
-      /* Sections */
-      #live{padding:4rem 0 5rem}
-      #scripture{padding:4rem 0}
-      #donations{padding:4rem 0 5rem}
-      #contact-cards{padding:3rem 0}
-      /* Footer */
-      .footer-grid{grid-template-columns:1fr;gap:2.5rem}
-      .footer-bottom{flex-direction:column;text-align:center}
-      /* Donate cards — prevent translateX jank */
-      .donate-card:hover{transform:none}
-    }
-    @media(hover:none){
-      /* Touch devices — remove hover transforms that cause layout jitter */
-      .donate-card:hover{transform:none;border-left-color:transparent}
-      .slide-item:hover img{transform:none;filter:none}
-      a:hover{opacity:1}
-    }
+    @media(max-width:960px){.live-layout{grid-template-columns:1fr;gap:3rem}.live-meta{position:static}.donate-layout{grid-template-columns:1fr}.footer-grid{grid-template-columns:1fr 1fr}.footer-brand{grid-column:1/-1}.slide-item{width:240px;height:175px}}
+    @media(max-width:640px){:root{--nav-h:70px}.main-nav{display:none}.hamburger{display:flex}.footer-grid{grid-template-columns:1fr;gap:2.5rem}.footer-bottom{flex-direction:column;text-align:center}.strip-sep{display:none}.slide-item{width:190px;height:140px}.slider-outer::before,.slider-outer::after{width:50px}}
   </style>
 </head>
 <body>
@@ -349,27 +307,28 @@
 
     <!-- DONATIONS -->
     <!-- ===================== PHOTO SLIDER ===================== -->
+    <!-- Photos, captions and labels are loaded dynamically from index_pointer.json -->
     <section id="photo-slider" aria-label="TWC community photos">
-      <div class="slider-header">
-        <span>TWC Charities &amp; Outreach</span>
-        <strong>Serving with Love, <em>Faith &amp; Dedication</em></strong>
+      <div class="slider-header" id="sliderHeader">
+        <span id="sliderLabel"></span>
+        <strong id="sliderTitle"></strong>
       </div>
       <div class="slider-outer">
-        <button class="slider-arrow prev" id="sliderPrev" aria-label="Previous photos">
+        <button class="slider-arrow prev" aria-label="Previous photos" id="sliderPrev">
           <svg viewBox="0 0 448 512"><path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.2 288H432c17.7 0 32-14.3 32-32s-14.3-32-32-32H109.2L214.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg>
         </button>
-        <button class="slider-arrow next" id="sliderNext" aria-label="Next photos">
+        <button class="slider-arrow next" aria-label="Next photos" id="sliderNext">
           <svg viewBox="0 0 448 512"><path d="M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l306.7 0L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z"/></svg>
         </button>
         <div class="slider-track" id="sliderTrack">
-          <!-- Photos loaded from index_pointer.json -->
+          <!-- Populated dynamically from index_pointer.json -->
         </div>
       </div>
       <div class="slider-dots" id="sliderDots">
-        <!-- Dots built by JS -->
+        <!-- Populated dynamically from index_pointer.json -->
       </div>
       <div class="slider-cta">
-        <a href="/Pages/Charities/">View all charity work &rarr;</a>
+        <a id="sliderCtaLink" href="/Pages/Charities/">View all charity work &rarr;</a>
       </div>
     </section>
     <!-- ===================== END PHOTO SLIDER ===================== -->
@@ -394,10 +353,10 @@
               </div>
               <div class="fact">
                 <div class="fact-icon"><svg viewBox="0 0 576 512"><path d="M549.655 124.083c-6.281-23.65-24.787-42.276-48.284-48.597C458.781 64 288 64 288 64S117.22 64 74.629 75.486c-23.497 6.322-42.003 24.947-48.284 48.597-11.412 42.867-11.412 132.305-11.412 132.305s0 89.438 11.412 132.305c6.281 23.65 24.787 41.5 48.284 47.821C117.22 448 288 448 288 448s170.78 0 213.371-11.486c23.497-6.321 42.003-24.171 48.284-47.821 11.412-42.867 11.412-132.305 11.412-132.305s0-89.438-11.412-132.305zm-317.51 213.508V175.185l142.739 81.205-142.739 81.201z"/></svg></div>
-                <div><strong>Watch On</strong>Google Meets, YouTube &amp; Facebook &mdash; Live every Saturday</div>
+                <div><strong>Watch On</strong>YouTube &amp; Facebook &mdash; Live every Saturday</div>
               </div>
             </div>
-            <a href="/Pages/Live/" class="btn-outline-dark">Connect with us live here...</a>
+            <a href="/Pages/Live/" class="btn-outline-dark">View Past Messages</a>
           </div>
           <div class="reveal" style="transition-delay:.15s">
             <div class="video-frame">
@@ -408,7 +367,7 @@
           </div>
         </div>
       </div>
-    </section>
+
 
     <section id="scripture">
       <div class="container">
@@ -431,7 +390,7 @@
             <div class="donate-cards">
               <a href="https://www.twcministries.net/Pages/Donations/local/" target="_blank" rel="noopener" class="donate-card">
                 <div class="dc-icon"><svg viewBox="0 0 576 512"><path d="M512 80c8.8 0 16 7.2 16 16l0 32L48 128l0-32c0-8.8 7.2-16 16-16l448 0zm16 144l0 192c0 8.8-7.2 16-16 16L64 432c-8.8 0-16-7.2-16-16l0-192 480 0zM64 32C28.7 32 0 60.7 0 96L0 416c0 35.3 28.7 64 64 64l448 0c35.3 0 64-28.7 64-64l0-320c0-35.3-28.7-64-64-64L64 32zm56 304c-13.3 0-24 10.7-24 24s10.7 24 24 24l48 0c13.3 0 24-10.7 24-24s-10.7-24-24-24l-48 0zm128 0c-13.3 0-24 10.7-24 24s10.7 24 24 24l112 0c13.3 0 24-10.7 24-24s-10.7-24-24-24l-112 0z"/></svg></div>
-                <div><h4>Local JMD Offering/Tithes</h4><p>Transfer via <strong>Scotiabank</strong></p></div>
+                <div><h4>Local JMD Offering/Tithes</h4><p>Transfer via Scotiabank</p></div>
               </a>
               <a href="https://www.twcministries.net/Pages/Donations/foreign/" target="_blank" rel="noopener" class="donate-card">
                 <div class="dc-icon"><svg viewBox="0 0 512 512"><path d="M190.5 68.8L225.3 128H224 152c-22.1 0-40-17.9-40-40s17.9-40 40-40h2.2c14.9 0 28.8 7.7 36.3 20.8zM64 88c0 14.4 3.5 28 9.6 40H48C21.5 128 0 149.5 0 176v48c0 17.7 14.3 32 32 32H480c17.7 0 32-14.3 32-32V176c0-26.5-21.5-48-48-48H438.4c6.1-12 9.6-25.6 9.6-40c0-48.6-39.4-88-88-88h-2.2c-31.9 0-61.5 16.9-77.7 44.4L256 85.5l-24.1-41C215.7 16.9 186.1 0 154.2 0H152C103.4 0 64 39.4 64 88zm336 0c0 22.1-17.9 40-40 40H288h-1.3l34.8-59.2C329.1 55.7 342.9 48 357.8 48H360c22.1 0 40 17.9 40 40zM32 288V464c0 26.5 21.5 48 48 48H224V288H32zm256 0V512H432c26.5 0 48-21.5 48-48V288H288z"/></svg></div>
@@ -439,7 +398,7 @@
               </a>
               <a href="https://maps.app.goo.gl/D1Q6NEo1CvQj4n8BA" target="_blank" rel="noopener" class="donate-card">
                 <div class="dc-icon"><svg viewBox="0 0 384 512"><path d="M215.7 499.2C267 435 384 279.4 384 192C384 86 298 0 192 0S0 86 0 192c0 87.4 117 243 168.3 307.2c12.3 15.3 35.1 15.3 47.4 0zM192 128a64 64 0 1 1 0 128 64 64 0 1 1 0-128z"/></svg></div>
-                <div><h4>In-Person Offering</h4><p>Join us each <strong>Sabbath (Saturday)</strong> and give during the service.</p></div>
+                <div><h4>In-Person Offering</h4><p>Join us each Sabbath (Saturday) and give during the service.</p></div>
               </a>
             </div>
             <a href="https://www.twcministries.net/Pages/Donations/foreign/" class="donate-cta" target="_blank" rel="noopener">Give Now</a>
@@ -457,7 +416,7 @@
           </div>
         </div>
       </div>
-    </section>
+
 
     <section id="contact-cards">
       <div class="container">
@@ -552,162 +511,147 @@
     /* SMOOTH SCROLL */
     document.querySelectorAll('a[href^="#"]').forEach(a=>a.addEventListener('click',e=>{const t=document.querySelector(a.getAttribute('href'));if(t){e.preventDefault();t.scrollIntoView({behavior:'smooth'})}}));
 
-    /* ===================== SLIDER ===================== */
-    (function () {
-      var GAP = 22;
-      var track    = document.getElementById('sliderTrack');
-      var dotsWrap = document.getElementById('sliderDots');
-      var manualMode   = false;
-      var manualOffset = 0;
-      var resumeTimer;
-      var TOTAL = 0;
-      var dots  = [];
+    /* ===================== SLIDER — driven by index_pointer.json ===================== */
+    (async function () {
+      const BASE   = 'https://www.twcministries.net';
+      const JSON_URL = BASE + '/index_pointer.json';
+      const track    = document.getElementById('sliderTrack');
+      const dotsWrap = document.getElementById('sliderDots');
+      const GAP      = 19;
 
-      function makeSlide(p) {
-        var raw = p.src.startsWith('http') ? p.src : 'https://twcministries.net' + p.src;
-        var src = raw.replace(/ /g, '%20');
-        return '<div class="slide-item">'
-          + '<img src="' + src + '" alt="' + (p.alt || '') + '" loading="lazy">'
-          + '<div class="slide-caption"><div class="slide-caption-text">' + (p.caption || '') + '</div></div>'
-          + '</div>';
+      /* ---- 1. Fetch the pointer JSON ---- */
+      let sliderData;
+      try {
+        const res = await fetch(JSON_URL);
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        const json = await res.json();
+        sliderData = json.slider;
+      } catch (err) {
+        console.warn('index_pointer.json could not be loaded:', err);
+        /* Hide the slider gracefully if JSON fails */
+        const section = document.getElementById('photo-slider');
+        if (section) section.style.display = 'none';
+        return;
       }
 
-      function initSlider(photos, meta) {
-        TOTAL = photos.length;
-        track.innerHTML = photos.map(makeSlide).join('') + photos.map(makeSlide).join('');
-        dotsWrap.innerHTML = photos.map(function (_, i) {
-          return '<button class="slider-dot' + (i === 0 ? ' active' : '') + '" aria-label="Photo ' + (i + 1) + '"></button>';
-        }).join('');
-        dots = Array.from(dotsWrap.querySelectorAll('.slider-dot'));
-        dots.forEach(function (d, i) { d.addEventListener('click', function () { dotClick(i); }); });
-        if (meta) {
-          var labelEl = document.querySelector('.slider-header span');
-          var ctaEl   = document.querySelector('.slider-cta a');
-          if (meta.title && labelEl)    labelEl.textContent = meta.title;
-          if (meta.cta_url && ctaEl)    ctaEl.href          = meta.cta_url;
-          if (meta.cta_label && ctaEl)  ctaEl.textContent   = meta.cta_label + ' →';
-        }
-        /* Wait for images to load so track has correct width for -50% */
-        waitForImages(function () {
-          requestAnimationFrame(function () {
-            requestAnimationFrame(function () {
-              track.style.animation = 'slideLeft 38s linear infinite';
-            });
-          });
-        });
-        setInterval(function () {
-          if (manualMode) return;
-          var x = getX(); var w = itemWidth();
-          if (w > 0) setDot(Math.round(-x / w));
-        }, 600);
+      /* ---- 2. Populate header text ---- */
+      document.getElementById('sliderLabel').textContent  = sliderData.title    || '';
+      const titleEl = document.getElementById('sliderTitle');
+      /* Re-create the styled title with an <em> for the last word */
+      const titleWords = (sliderData.subtitle || '').split(' ');
+      const lastWord   = titleWords.pop();
+      titleEl.innerHTML = titleWords.join(' ') + (titleWords.length ? ' ' : '') +
+                          '<em>' + lastWord + '</em>';
+
+      /* ---- 3. Populate CTA link ---- */
+      const ctaLink = document.getElementById('sliderCtaLink');
+      if (sliderData.cta_url)   ctaLink.href        = sliderData.cta_url;
+      if (sliderData.cta_label) ctaLink.textContent = sliderData.cta_label + ' →';
+
+      /* ---- 4. Build slide items (SET 1 + SET 2 duplicate for seamless loop) ---- */
+      const photos = sliderData.photos || [];
+      const TOTAL  = photos.length;
+      if (TOTAL === 0) return;
+
+      function makeSlide(photo) {
+        const imgSrc = photo.src.startsWith('http') ? photo.src : BASE + photo.src;
+        return `<div class="slide-item">` +
+          `<img src="${imgSrc}" alt="${photo.alt || ''}" loading="lazy">` +
+          `<div class="slide-caption"><div class="slide-caption-text">${photo.caption || ''}</div></div>` +
+          `</div>`;
       }
+
+      /* Two sets for the infinite CSS loop (translateX(-50%) trick) */
+      track.innerHTML = photos.map(makeSlide).join('') +
+                        photos.map(makeSlide).join('');
+
+      /* ---- 5. Build dots ---- */
+      dotsWrap.innerHTML = photos.map((_, i) =>
+        `<button class="slider-dot${i === 0 ? ' active' : ''}" aria-label="Photo ${i + 1}"></button>`
+      ).join('');
+      const dots = Array.from(dotsWrap.querySelectorAll('.slider-dot'));
+
+      /* ---- 6. Adjust CSS animation duration based on photo count ---- */
+      const duration = Math.max(20, TOTAL * 4.5);
+      track.style.animationDuration = duration + 's';
+
+      /* ---- 7. Slider interaction logic ---- */
+      let manualMode   = false;
+      let manualOffset = 0;
+      let resumeTimer;
 
       function itemWidth() {
-        var item = track.querySelector('.slide-item');
-        return item ? item.offsetWidth + GAP : 332;
+        const item = track.querySelector('.slide-item');
+        return item ? item.offsetWidth + GAP : 329;
       }
-      function getX() {
-        var mat = new DOMMatrix(window.getComputedStyle(track).transform);
+
+      function getTranslateX() {
+        const mat = new DOMMatrix(window.getComputedStyle(track).transform);
         return mat.m41;
       }
+
       function setDot(idx) {
-        var i = ((idx % TOTAL) + TOTAL) % TOTAL;
-        dots.forEach(function (d, j) { d.classList.toggle('active', j === i); });
+        const i = ((idx % TOTAL) + TOTAL) % TOTAL;
+        dots.forEach((d, j) => d.classList.toggle('active', j === i));
       }
-      function freeze() {
+
+      function freezeAndShift(deltaItems) {
         if (!manualMode) {
-          manualOffset = getX();
+          manualOffset = getTranslateX();
           track.style.animation = 'none';
           track.style.transform = 'translateX(' + manualOffset + 'px)';
           manualMode = true;
         }
-      }
-      function resume() {
-        track.style.transition = '';
-        track.style.transform  = '';
-        requestAnimationFrame(function () {
-          requestAnimationFrame(function () {
-            track.style.animation = 'slideLeft 38s linear infinite';
-            manualMode = false;
-          });
-        });
-      }
-      function shift(delta) {
-        freeze();
-        var w = itemWidth();
-        manualOffset += delta * -w;
-        var loop = w * TOTAL;
-        if (manualOffset < -loop) manualOffset += loop;
-        if (manualOffset > 0)     manualOffset -= loop;
+        const w = itemWidth();
+        manualOffset += deltaItems * -w;
+        const loopWidth = w * TOTAL;
+        if (manualOffset < -loopWidth) manualOffset += loopWidth;
+        if (manualOffset > 0)          manualOffset -= loopWidth;
         track.style.transition = 'transform .42s cubic-bezier(.4,0,.2,1)';
         track.style.transform  = 'translateX(' + manualOffset + 'px)';
         setDot(Math.round(-manualOffset / w));
         clearTimeout(resumeTimer);
-        resumeTimer = setTimeout(resume, 5500);
-      }
-      function dotClick(i) {
-        freeze();
-        var w = itemWidth();
-        manualOffset = -(w * i);
-        track.style.transition = 'transform .42s cubic-bezier(.4,0,.2,1)';
-        track.style.transform  = 'translateX(' + manualOffset + 'px)';
-        setDot(i);
-        clearTimeout(resumeTimer);
-        resumeTimer = setTimeout(resume, 5500);
+        resumeTimer = setTimeout(() => {
+          track.style.transition = '';
+          track.style.transform  = '';
+          track.style.animation  = 'slideLeft ' + duration + 's linear infinite';
+          manualMode = false;
+        }, 5500);
       }
 
-      document.getElementById('sliderPrev').addEventListener('click', function () { shift(-1); });
-      document.getElementById('sliderNext').addEventListener('click', function () { shift(1); });
+      document.getElementById('sliderPrev').addEventListener('click', () => freezeAndShift(-1));
+      document.getElementById('sliderNext').addEventListener('click', () => freezeAndShift(1));
 
-      /* Touch swipe support */
-      var touchStartX = 0;
-      var touchStartY = 0;
-      track.addEventListener('touchstart', function (e) {
-        touchStartX = e.touches[0].clientX;
-        touchStartY = e.touches[0].clientY;
-      }, { passive: true });
-      track.addEventListener('touchend', function (e) {
-        var dx = e.changedTouches[0].clientX - touchStartX;
-        var dy = e.changedTouches[0].clientY - touchStartY;
-        if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 40) {
-          shift(dx < 0 ? 1 : -1);
-        }
-      }, { passive: true });
-
-      var FALLBACK = [
-        { src: '/Pages/church_photos/charity_photos/street_feeding1.jpg',     alt: 'Street Feeding',          caption: 'Street Feeding — Spanish Town' },
-        { src: '/Pages/church_photos/charity_photos/street_feeding2.jpg',     alt: 'Volunteers',              caption: 'Volunteers loading meals' },
-        { src: '/Pages/church_photos/charity_photos/street_feeding3.jpg',     alt: 'Meal preparation',        caption: 'Meal preparation' },
-        { src: '/Pages/church_photos/charity_photos/street_feeding4.jpg',     alt: 'Serving community',       caption: 'Serving the community' },
-        { src: '/Pages/church_photos/charity_photos/disaster_relief1.jpg',    alt: 'Disaster Relief',         caption: 'Hurricane Disaster Relief Drive' },
-        { src: '/Pages/church_photos/charity_photos/community_outreach1.jpg', alt: 'Community Outreach',      caption: 'Community Outreach — Rock of Hope Manor' },
-        { src: '/Pages/church_photos/charity_photos/back_to_school1.jpg',     alt: 'Back to School',          caption: 'Back-to-School Drive' },
-        { src: '/Pages/church_photos/charity_photos/back_to_school2.jpg',     alt: 'Back to School supplies', caption: 'Back-to-School — supplies distributed' }
-      ];
-
-      /* Pause animation until images in the track have loaded */
-      function waitForImages(callback) {
-        var imgs = Array.from(track.querySelectorAll('img'));
-        if (!imgs.length) { callback(); return; }
-        var loaded = 0;
-        imgs.forEach(function (img) {
-          if (img.complete) { loaded++; if (loaded === imgs.length) callback(); }
-          else { img.addEventListener('load',  function () { loaded++; if (loaded === imgs.length) callback(); });
-                 img.addEventListener('error', function () { loaded++; if (loaded === imgs.length) callback(); }); }
+      dots.forEach((dot, i) => {
+        dot.addEventListener('click', () => {
+          if (!manualMode) {
+            manualOffset = getTranslateX();
+            track.style.animation = 'none';
+            track.style.transform = 'translateX(' + manualOffset + 'px)';
+            manualMode = true;
+          }
+          const w = itemWidth();
+          manualOffset = -(w * i);
+          track.style.transition = 'transform .42s cubic-bezier(.4,0,.2,1)';
+          track.style.transform  = 'translateX(' + manualOffset + 'px)';
+          setDot(i);
+          clearTimeout(resumeTimer);
+          resumeTimer = setTimeout(() => {
+            track.style.transition = '';
+            track.style.transform  = '';
+            track.style.animation  = 'slideLeft ' + duration + 's linear infinite';
+            manualMode = false;
+          }, 5500);
         });
-      }
+      });
 
-      fetch('https://twcministries.net/index_pointer.json')
-        .then(function (r) { return r.ok ? r.json() : Promise.reject('HTTP ' + r.status); })
-        .then(function (json) {
-          var s = json && json.slider;
-          initSlider((s && s.photos && s.photos.length) ? s.photos : FALLBACK, s || null);
-        })
-        .catch(function (err) {
-          console.warn('Slider: falling back to hardcoded photos. Reason:', err);
-          initSlider(FALLBACK, null);
-        });
-
+      /* Passive dot sync during auto-scroll */
+      setInterval(() => {
+        if (manualMode) return;
+        const x = getTranslateX();
+        const w = itemWidth();
+        setDot(Math.round(-x / w));
+      }, 600);
     })();
     /* ===================== END SLIDER ===================== */
   </script>

@@ -1,8 +1,8 @@
 # Connect
 
-**File:** `Connect.html`
+**File:** `index.html`
 
-**Live URL:** [twcministries.net/Pages/Connect/Connect.html](https://www.twcministries.net/Pages/Connect/Connect.html)
+**Live URL:** [twcministries.net/Pages/Connect/](https://www.twcministries.net/Pages/Connect/)
 
 This page helps visitors and members get in touch with TWC Ministries and join the community.
 
@@ -12,7 +12,3 @@ This page helps visitors and members get in touch with TWC Ministries and join t
 - Social media links
 - Contact or inquiry form
 - Information on how to get involved
-
-## Notes
-
-Single-file page. All styling and scripts are inline within `Connect.html`.

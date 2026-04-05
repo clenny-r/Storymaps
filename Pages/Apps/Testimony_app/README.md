@@ -36,8 +36,3 @@ See [`worker/README.md`](worker/README.md) for full setup instructions, includin
 | `testimony-log.html` → `v4.html` | Development iterations of the frontend (v4 is latest) |
 | `worker/index.html` | Current production frontend |
 | `worker/index.js` | Cloudflare Worker (serverless API) |
-
-## Notes
-
-- `testimony-log.html` through `testimony-log_v4.html` are development versions. Once `worker/index.html` is stable, consider removing older versions to reduce clutter.
-- `testimonies.json` is the live database. Be careful when editing it manually — invalid JSON will break the app.

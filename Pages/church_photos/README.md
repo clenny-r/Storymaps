@@ -28,7 +28,3 @@ church_photos/
 - **Home page slider**: Add to `index_pointer/` and add an entry in `/index_pointer.json`
 - Use descriptive file names (no spaces — use hyphens or underscores)
 - Compress images before committing to keep the repo size manageable (recommended: under 500 KB per image)
-
-## Notes
-
-There is a duplicate `church_photos/` folder at the repository root. Both folders currently contain the same core assets (`hero.jpg`, `Image1-transparent.gif`, etc.). Consider consolidating to this location (`Pages/church_photos/`) and removing the root-level copy.

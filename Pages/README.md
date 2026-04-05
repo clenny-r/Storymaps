@@ -1,24 +1,21 @@
 # Pages
 
-This folder contains all pages of the **TWC Ministries** website, served at [twcministries.net](https://www.twcministries.net).
+All pages of the **TWC Ministries** website, served at [twcministries.net](https://www.twcministries.net).
 
-Each subfolder is a self-contained section of the site with its own HTML file(s) and any related assets.
+Each subfolder contains an `index.html` as its main entry point, giving clean URLs.
 
 ## Sections
 
-| Folder | URL path | Description |
+| Folder | Live URL | Description |
 |---|---|---|
-| `About/` | `/Pages/About/About.html` | About the church, its mission and history |
-| `Announcements/` | `/Pages/Announcements/` | Upcoming events and church notices |
-| `Apps/` | `/Pages/Apps/` | Mini web apps built for the congregation |
-| `Charities/` | `/Pages/Charities/Charities.html` | Outreach programmes and charity work |
-| `Connect/` | `/Pages/Connect/Connect.html` | Contact details and community links |
-| `Donations/` | `/Pages/Donations/` | Local and foreign giving options |
-| `Events/` | `/Pages/Events/Events.html` | Events calendar |
-| `Live/` | `/Pages/Live/Live.html` | Live Sabbath worship stream |
-| `Ministries/` | `/Pages/Ministries/Our_Ministries.html` | Overview of church ministries |
+| `About/` | [/Pages/About/](https://www.twcministries.net/Pages/About/) | About the church, mission and history |
+| `Announcements/` | [/Pages/Announcements/](https://www.twcministries.net/Pages/Announcements/) | Church notices and updates |
+| `Apps/` | [/Pages/Apps/](https://www.twcministries.net/Pages/Apps/) | Mini web apps for the congregation |
+| `Charities/` | [/Pages/Charities/](https://www.twcministries.net/Pages/Charities/) | Outreach programmes and charity work |
+| `Connect/` | [/Pages/Connect/](https://www.twcministries.net/Pages/Connect/) | Contact details and community links |
+| `Donations/local/` | [/Pages/Donations/local/](https://www.twcministries.net/Pages/Donations/local/) | Local (JMD) giving instructions |
+| `Donations/foreign/` | [/Pages/Donations/foreign/](https://www.twcministries.net/Pages/Donations/foreign/) | International (USD) giving instructions |
+| `Events/` | [/Pages/Events/](https://www.twcministries.net/Pages/Events/) | Events calendar |
+| `Live/` | [/Pages/Live/](https://www.twcministries.net/Pages/Live/) | Live Sabbath worship stream |
+| `Ministries/` | [/Pages/Ministries/](https://www.twcministries.net/Pages/Ministries/) | Church ministries overview |
 | `church_photos/` | _(assets)_ | Shared images used across the site |
-
-## Navigation
-
-All pages link back to the main site at `twcministries.net`. The top navigation bar is consistent across pages.

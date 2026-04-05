@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TWC Ministries – Financial & Banking Information</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600;700&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --gold:    #b8963e;
+      --gold-lt: #d4af5e;
+      --cream:   #fdf8f0;
+      --parch:   #f4ead6;
+      --ink:     #1a1209;
+      --muted:   #6b5c3e;
+      --rule:    #d6c49a;
+      --white:   #ffffff;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--cream);
+      color: var(--ink);
+      font-family: 'Jost', sans-serif;
+      font-weight: 300;
+      min-height: 100vh;
+      padding: 2rem 1rem 4rem;
+    }
+
+    /* subtle parchment texture overlay */
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image:
+        radial-gradient(ellipse at 20% 10%, rgba(184,150,62,.08) 0%, transparent 55%),
+        radial-gradient(ellipse at 80% 90%, rgba(184,150,62,.07) 0%, transparent 55%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .page {
+      position: relative;
+      z-index: 1;
+      max-width: 760px;
+      margin: 0 auto;
+      background: var(--white);
+      border: 1px solid var(--rule);
+      box-shadow: 0 2px 40px rgba(100,70,20,.10), 0 0 0 6px var(--cream), 0 0 0 7px var(--rule);
+      animation: fadeUp .7s ease both;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(22px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── Header ── */
+    .header {
+      background: var(--ink);
+      padding: 2.8rem 3rem 2.4rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .header::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: repeating-linear-gradient(
+        -45deg,
+        transparent,
+        transparent 18px,
+        rgba(184,150,62,.04) 18px,
+        rgba(184,150,62,.04) 19px
+      );
+    }
+
+    .header-ornament {
+      display: flex; align-items: center; justify-content: center; gap: .9rem;
+      margin-bottom: 1rem;
+    }
+    .header-ornament span { display: block; height: 1px; width: 52px; background: var(--gold); }
+    .cross-icon {
+      width: 28px; height: 28px;
+      fill: var(--gold);
+      flex-shrink: 0;
+    }
+
+    .org-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 700;
+      font-size: clamp(1.7rem, 5vw, 2.6rem);
+      color: var(--white);
+      letter-spacing: .04em;
+      line-height: 1.1;
+      position: relative;
+    }
+
+    .doc-title {
+      font-family: 'Jost', sans-serif;
+      font-weight: 400;
+      font-size: .72rem;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      color: var(--gold-lt);
+      margin-top: .65rem;
+      position: relative;
+    }
+
+    .header-rule {
+      width: 56px; height: 2px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      margin: 1.1rem auto 0;
+    }
+
+    /* ── Body ── */
+    .body { padding: 0 2.8rem 2.8rem; }
+
+    /* ── Relief Banner ── */
+    .relief-banner {
+      background: linear-gradient(135deg, #b8963e 0%, #d4af5e 60%, #c9a448 100%);
+      margin: 0 -2.8rem;
+      padding: .8rem 2.8rem;
+      text-align: center;
+    }
+    .relief-banner p {
+      font-family: 'Jost', sans-serif;
+      font-weight: 600;
+      font-size: .68rem;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: var(--ink);
+    }
+
+    /* ── Sections ── */
+    .section {
+      margin-top: 2rem;
+      animation: fadeUp .6s ease both;
+    }
+    .section:nth-child(2) { animation-delay: .1s; }
+    .section:nth-child(3) { animation-delay: .2s; }
+    .section:nth-child(4) { animation-delay: .3s; }
+
+    .section-header {
+      display: flex; align-items: center; gap: .75rem;
+      margin-bottom: 1rem;
+    }
+    .section-icon {
+      width: 28px; height: 28px;
+      background: var(--ink);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .section-icon svg { width: 14px; height: 14px; fill: var(--gold); }
+
+    .section-label {
+      font-family: 'Jost', sans-serif;
+      font-weight: 600;
+      font-size: .65rem;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+
+    .section-rule { flex: 1; height: 1px; background: var(--rule); }
+
+    /* ── Bank Card ── */
+    .bank-card {
+      border: 1px solid var(--rule);
+      border-radius: 3px;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+
+    .bank-card-header {
+      background: var(--parch);
+      padding: .6rem 1rem;
+      display: flex; align-items: center; gap: .5rem;
+      border-bottom: 1px solid var(--rule);
+    }
+    .routing-tag {
+      font-size: .6rem;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      font-weight: 600;
+      padding: .18rem .55rem;
+      border-radius: 2px;
+    }
+    .tag-intermediary { background: var(--ink); color: var(--gold-lt); }
+    .tag-beneficiary  { background: var(--gold); color: var(--ink); }
+
+    .bank-card-body { padding: 1rem 1.1rem 1.1rem; }
+
+    .bank-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: var(--ink);
+      margin-bottom: .25rem;
+    }
+    .bank-address {
+      font-size: .78rem;
+      color: var(--muted);
+      margin-bottom: .9rem;
+      line-height: 1.5;
+    }
+
+    .fields { display: grid; grid-template-columns: 1fr 1fr; gap: .55rem; }
+    @media (max-width: 500px) { .fields { grid-template-columns: 1fr; } }
+
+    .field { }
+    .field-key {
+      font-size: .6rem;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: .15rem;
+    }
+    .field-value {
+      font-family: 'Jost', sans-serif;
+      font-weight: 500;
+      font-size: .88rem;
+      color: var(--ink);
+      letter-spacing: .04em;
+    }
+    .mono { font-family: 'Courier New', monospace; font-size: .83rem; }
+
+    /* ── Beneficiary card ── */
+    .info-card {
+      border: 1px solid var(--rule);
+      border-radius: 3px;
+      padding: 1.1rem 1.2rem;
+      margin-bottom: 1rem;
+    }
+
+    .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: .65rem; }
+    @media (max-width: 500px) { .info-grid { grid-template-columns: 1fr; } }
+
+    /* ── Contact ── */
+    .contact-row {
+      display: flex; align-items: flex-start; gap: .7rem;
+      padding: .7rem 0;
+      border-bottom: 1px solid var(--rule);
+    }
+    .contact-row:last-child { border-bottom: none; }
+    .contact-icon { width: 18px; height: 18px; fill: var(--gold); flex-shrink: 0; margin-top: .1rem; }
+    .contact-detail { font-size: .88rem; color: var(--ink); line-height: 1.5; }
+    .contact-detail a { color: var(--gold); text-decoration: none; }
+    .contact-detail a:hover { text-decoration: underline; }
+
+    /* ── Purpose box ── */
+    .purpose-box {
+      border-left: 3px solid var(--gold);
+      background: var(--parch);
+      padding: 1rem 1.2rem;
+      border-radius: 0 3px 3px 0;
+      font-size: .875rem;
+      line-height: 1.75;
+      color: var(--ink);
+    }
+
+    /* ── Footer ── */
+    .footer {
+      margin-top: 2.4rem;
+      padding-top: 1.2rem;
+      border-top: 1px solid var(--rule);
+      display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .footer-note {
+      font-size: .7rem;
+      color: var(--muted);
+      letter-spacing: .06em;
+    }
+    .footer-dots { display: flex; gap: .35rem; }
+    .dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--rule);
+    }
+    .dot:nth-child(2) { background: var(--gold); }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <!-- Header -->
+  <div class="header">
+    <div class="header-ornament">
+      <span></span>
+      <svg class="cross-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <rect x="10.5" y="2" width="3" height="20" rx="1"/>
+        <rect x="4"    y="7.5" width="16" height="3" rx="1"/>
+      </svg>
+      <span></span>
+    </div>
+    <div class="org-name">TWC Ministries</div>
+    <div class="doc-title">Financial &amp; Banking Information</div>
+    <div class="header-rule"></div>
+  </div>
+
+  <!-- Relief banner -->
+  <div class="relief-banner">
+    <p>Hurricane Disaster Relief Fund &mdash; USD Wire Transfer Instructions</p>
+  </div>
+
+  <div class="body">
+
+    <!-- Routing Instructions -->
+    <div class="section">
+      <div class="section-header">
+        <div class="section-icon">
+          <svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h10M4 17h7"/><circle cx="18" cy="17" r="3"/><path d="M18 14v3l2 1"/></svg>
+        </div>
+        <span class="section-label">Routing Instructions</span>
+        <div class="section-rule"></div>
+      </div>
+
+      <!-- Intermediary Bank -->
+      <div class="bank-card">
+        <div class="bank-card-header">
+          <span class="routing-tag tag-intermediary">Remit To &mdash; Intermediary Bank</span>
+        </div>
+        <div class="bank-card-body">
+          <div class="bank-name">Bank of America</div>
+          <div class="bank-address">701 Brickell Avenue, Miami, FL 33131</div>
+          <div class="fields">
+            <div class="field">
+              <div class="field-key">Account Number</div>
+              <div class="field-value mono">1901748985</div>
+            </div>
+            <div class="field">
+              <div class="field-key">SWIFT Code</div>
+              <div class="field-value mono">BOFAUS3M</div>
+            </div>
+            <div class="field">
+              <div class="field-key">FEDWIRE ABA</div>
+              <div class="field-value mono">026009593</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Beneficiary Bank -->
+      <div class="bank-card">
+        <div class="bank-card-header">
+          <span class="routing-tag tag-beneficiary">Credit To &mdash; Beneficiary Bank</span>
+        </div>
+        <div class="bank-card-body">
+          <div class="bank-name">The Bank of Nova Scotia Jamaica Ltd.</div>
+          <div class="bank-address">Corner of Duke &amp; Port Royal Streets, Kingston</div>
+          <div class="fields">
+            <div class="field">
+              <div class="field-key">SWIFT Code</div>
+              <div class="field-value mono">NOSCJMKN</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Beneficiary / Receiver -->
+    <div class="section">
+      <div class="section-header">
+        <div class="section-icon">
+          <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        </div>
+        <span class="section-label">Beneficiary / Receiver</span>
+        <div class="section-rule"></div>
+      </div>
+
+      <div class="info-card">
+        <div class="info-grid">
+          <div class="field">
+            <div class="field-key">Organization</div>
+            <div class="field-value">TWC Ministries</div>
+          </div>
+          <div class="field">
+            <div class="field-key">Branch</div>
+            <div class="field-value">Spanish Town</div>
+          </div>
+          <div class="field" style="grid-column: 1 / -1">
+            <div class="field-key">Address</div>
+            <div class="field-value">17 Parkington Plaza, Kingston 10, Jamaica</div>
+          </div>
+          <div class="field">
+            <div class="field-key">Transit &amp; Account Number</div>
+            <div class="field-value mono">80275 &nbsp;000858998</div>
+          </div>
+          <div class="field">
+            <div class="field-key">Account Type</div>
+            <div class="field-value">Savings</div>
+          </div>
+          <div class="field">
+            <div class="field-key">Currency</div>
+            <div class="field-value">US Dollars (USD)</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Church Address -->
+    <div class="section">
+      <div class="section-header">
+        <div class="section-icon">
+          <svg viewBox="0 0 24 24"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5z"/><path d="M9 21V12h6v9"/></svg>
+        </div>
+        <span class="section-label">Church Address</span>
+        <div class="section-rule"></div>
+      </div>
+
+      <div class="info-card" style="padding: .9rem 1.2rem;">
+        <div class="field-value" style="line-height: 1.8;">
+          C/o Innswood High School<br>
+          Old Harbour Road, Spanish Town P.O.<br>
+          St. Catherine, Jamaica W.I.
+        </div>
+      </div>
+    </div>
+
+    <!-- Contact -->
+    <div class="section">
+      <div class="section-header">
+        <div class="section-icon">
+          <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2A19.79 19.79 0 0 1 4.08 5.18 2 2 0 0 1 6.07 3h3a2 2 0 0 1 2 1.72c.128.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L10.09 10.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+        </div>
+        <span class="section-label">Contact</span>
+        <div class="section-rule"></div>
+      </div>
+
+      <div class="info-card" style="padding: .4rem 1.2rem;">
+        <div class="contact-row">
+          <svg class="contact-icon" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          <div class="contact-detail">
+            <strong>Dr. Miguel Graham</strong><br>President, TWC Ministries
+          </div>
+        </div>
+        <div class="contact-row">
+          <svg class="contact-icon" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          <div class="contact-detail">
+            <a href="mailto:twccentre@gmail.com">twccentre@gmail.com</a>
+          </div>
+        </div>
+        <div class="contact-row">
+          <svg class="contact-icon" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2A19.79 19.79 0 0 1 4.08 5.18 2 2 0 0 1 6.07 3h3a2 2 0 0 1 2 1.72c.128.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L10.09 10.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          <div class="contact-detail">
+            <a href="tel:+18763246884">+1 (876) 324-6884</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Purpose -->
+    <div class="section">
+      <div class="section-header">
+        <div class="section-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <span class="section-label">Purpose of Funds</span>
+        <div class="section-rule"></div>
+      </div>
+
+      <div class="purpose-box">
+        All funds received will be used exclusively for <strong>Hurricane Disaster Relief</strong> and related charitable outreach initiatives. Financial reports and accountability statements will be provided upon request.
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+      <span class="footer-note">This document contains sensitive financial information. Please handle with care.</span>
+      <div class="footer-dots">
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+      </div>
+    </div>
+
+  </div><!-- /body -->
+</div><!-- /page -->
+</body>
+</html>

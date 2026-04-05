@@ -78,7 +78,7 @@
 
     /* HERO */
     #hero { position: relative; height: 62vh; min-height: 460px; display: flex; align-items: center; justify-content: center; text-align: center; overflow: hidden; }
-    .hero-bg { position: absolute; inset: 0; background-image: url('https://www.twcministries.net/church_photos/hero.jpg'); background-size: cover; background-position: center 40%; animation: zoomBg 22s ease-in-out infinite alternate; }
+    .hero-bg { position: absolute; inset: 0; background-image: url('/Pages/church_photos/hero.jpg'); background-size: cover; background-position: center 40%; animation: zoomBg 22s ease-in-out infinite alternate; }
     @keyframes zoomBg { from { transform: scale(1.06); } to { transform: scale(1); } }
     .hero-overlay { position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(19,18,40,.6) 0%, rgba(19,18,40,.88) 100%); }
     .hero-tint { position: absolute; inset: 0; background: linear-gradient(135deg, rgba(30,42,110,.28) 0%, transparent 55%, rgba(192,33,60,.2) 100%); }
@@ -267,7 +267,7 @@
   <!-- BANNER -->
   <div id="banner">
     Help us serve Jamaica &nbsp;|&nbsp;
-    <a href="https://www.twcministries.net/Pages/Donations/twc-ministries-foreign-account.html" target="_blank">Donate to our charities &rarr;</a>
+    <a href="https://www.twcministries.net/Pages/Donations/foreign/" target="_blank">Donate to our charities &rarr;</a>
     <button class="banner-x" onclick="this.parentElement.style.display='none'" aria-label="Dismiss">&times;</button>
   </div>
 
@@ -275,7 +275,7 @@
   <header id="topbar" class="transparent">
     <div class="topbar-inner">
       <a href="/" class="logo" aria-label="TWC Ministries Home">
-        <img class="logo-img" src="https://www.twcministries.net/church_photos/Image1-transparent.gif" alt="Transformational Worship Centre logo"
+        <img class="logo-img" src="/Pages/church_photos/Image1-transparent.gif" alt="Transformational Worship Centre logo"
           onerror="this.style.display='none'; document.querySelector('.logo-fallback').style.display='flex';">
         <span class="logo-fallback">
           <span class="logo-wordmark">TWC</span>
@@ -284,12 +284,12 @@
       </a>
       <nav class="main-nav" aria-label="Primary">
         <a href="https://www.twcministries.net"        class="nav-link">Home</a>
-        <a href="/Pages/About/About.html"              class="nav-link">About</a>
-        <a href="/Pages/Connect/Connect.html"          class="nav-link">Connect</a>
-        <a href="/Pages/Charities/Charities.html"      class="nav-link">Charities</a>
-        <a href="/Pages/Events/Events.html"            class="nav-link">Events</a>
-        <a href="/Pages/Live/Live.html"                class="nav-link active">Watch Live</a>
-        <a href="https://www.twcministries.net/Pages/Donations/twc-ministries-foreign-account.html" target="_blank" class="nav-donate">Donate</a>
+        <a href="/Pages/About/"              class="nav-link">About</a>
+        <a href="/Pages/Connect/"          class="nav-link">Connect</a>
+        <a href="/Pages/Charities/"      class="nav-link">Charities</a>
+        <a href="/Pages/Events/"            class="nav-link">Events</a>
+        <a href="/Pages/Live/"                class="nav-link active">Watch Live</a>
+        <a href="https://www.twcministries.net/Pages/Donations/foreign/" target="_blank" class="nav-donate">Donate</a>
       </nav>
       <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false">
         <span></span><span></span><span></span>
@@ -300,12 +300,12 @@
   <!-- Mobile Drawer -->
   <nav id="drawer" aria-hidden="true" aria-label="Mobile navigation">
     <a href="https://www.twcministries.net"        class="drawer-link">Home</a>
-    <a href="/Pages/About/About.html"              class="drawer-link">About</a>
-    <a href="/Pages/Connect/Connect.html"          class="drawer-link">Connect</a>
-    <a href="/Pages/Charities/Charities.html"      class="drawer-link">Charities</a>
-    <a href="/Pages/Events/Events.html"            class="drawer-link">Events</a>
-    <a href="/Pages/Live/Live.html"                class="drawer-link">Watch Live</a>
-    <a href="https://www.twcministries.net/Pages/Donations/twc-ministries-foreign-account.html" target="_blank" class="drawer-donate">&#9829; Donate &rarr;</a>
+    <a href="/Pages/About/"              class="drawer-link">About</a>
+    <a href="/Pages/Connect/"          class="drawer-link">Connect</a>
+    <a href="/Pages/Charities/"      class="drawer-link">Charities</a>
+    <a href="/Pages/Events/"            class="drawer-link">Events</a>
+    <a href="/Pages/Live/"                class="drawer-link">Watch Live</a>
+    <a href="https://www.twcministries.net/Pages/Donations/foreign/" target="_blank" class="drawer-donate">&#9829; Donate &rarr;</a>
   </nav>
 
   <main>
@@ -333,7 +333,7 @@
              Filenames follow the pattern TWC uses on the server. -->
         <div class="slide active" data-caption="Street Feeding — Spanish Town">
           <img src="https://www.twcministries.net/Pages/church_photos/charity_photos/street_feeding1.jpg"
-               onerror="this.src='https://www.twcministries.net/church_photos/hero.jpg'"
+               onerror="this.src='/Pages/church_photos/hero.jpg'"
                alt="TWC Street Feeding Spanish Town" loading="lazy">
           <div class="slide-overlay"></div>
           <div class="slide-caption"><span class="caption-text">Street Feeding &mdash; Spanish Town</span></div>
@@ -341,7 +341,7 @@
 
         <div class="slide" data-caption="Volunteers loading meals">
           <img src="https://www.twcministries.net/Pages/church_photos/charity_photos/street_feeding2.jpg"
-               onerror="this.src='https://www.twcministries.net/church_photos/hero.jpg'"
+               onerror="this.src='/Pages/church_photos/hero.jpg'"
                alt="TWC volunteers loading meals" loading="lazy">
           <div class="slide-overlay"></div>
           <div class="slide-caption"><span class="caption-text">Volunteers loading meals</span></div>
@@ -349,7 +349,7 @@
 
         <div class="slide" data-caption="Meal preparation">
           <img src="https://www.twcministries.net/Pages/church_photos/charity_photos/street_feeding3.jpg"
-               onerror="this.src='https://www.twcministries.net/church_photos/hero.jpg'"
+               onerror="this.src='/Pages/church_photos/hero.jpg'"
                alt="TWC meal preparation" loading="lazy">
           <div class="slide-overlay"></div>
           <div class="slide-caption"><span class="caption-text">Meal preparation</span></div>
@@ -357,7 +357,7 @@
 
         <div class="slide" data-caption="Serving the community">
           <img src="https://www.twcministries.net/Pages/church_photos/charity_photos/street_feeding4.jpg"
-               onerror="this.src='https://www.twcministries.net/church_photos/hero.jpg'"
+               onerror="this.src='/Pages/church_photos/hero.jpg'"
                alt="Serving the community" loading="lazy">
           <div class="slide-overlay"></div>
           <div class="slide-caption"><span class="caption-text">Serving the community</span></div>
@@ -365,7 +365,7 @@
 
         <div class="slide" data-caption="Hurricane Disaster Relief Drive">
           <img src="https://www.twcministries.net/Pages/church_photos/charity_photos/disaster_relief1.jpg"
-               onerror="this.src='https://www.twcministries.net/church_photos/hero.jpg'"
+               onerror="this.src='/Pages/church_photos/hero.jpg'"
                alt="Hurricane Disaster Relief" loading="lazy">
           <div class="slide-overlay"></div>
           <div class="slide-caption"><span class="caption-text">Hurricane Disaster Relief Drive</span></div>
@@ -373,7 +373,7 @@
 
         <div class="slide" data-caption="Community Outreach — Rock of Hope Manor">
           <img src="https://www.twcministries.net/Pages/church_photos/charity_photos/community_outreach1.jpg"
-               onerror="this.src='https://www.twcministries.net/church_photos/hero.jpg'"
+               onerror="this.src='/Pages/church_photos/hero.jpg'"
                alt="Community Outreach Rock of Hope Manor" loading="lazy">
           <div class="slide-overlay"></div>
           <div class="slide-caption"><span class="caption-text">Community Outreach &mdash; Rock of Hope Manor</span></div>
@@ -381,7 +381,7 @@
 
         <div class="slide" data-caption="Back-to-School Drive">
           <img src="https://www.twcministries.net/Pages/church_photos/charity_photos/back_to_school1.jpg"
-               onerror="this.src='https://www.twcministries.net/church_photos/hero.jpg'"
+               onerror="this.src='/Pages/church_photos/hero.jpg'"
                alt="Back to School Drive" loading="lazy">
           <div class="slide-overlay"></div>
           <div class="slide-caption"><span class="caption-text">Back-to-School Drive</span></div>
@@ -389,7 +389,7 @@
 
         <div class="slide" data-caption="Back-to-School — supplies distributed">
           <img src="https://www.twcministries.net/Pages/church_photos/charity_photos/back_to_school2.jpg"
-               onerror="this.src='https://www.twcministries.net/church_photos/hero.jpg'"
+               onerror="this.src='/Pages/church_photos/hero.jpg'"
                alt="Back to School supplies" loading="lazy">
           <div class="slide-overlay"></div>
           <div class="slide-caption"><span class="caption-text">Back-to-School &mdash; supplies distributed</span></div>
@@ -668,8 +668,8 @@
             and rebuilding communities. Join us in serving Jamaica.
           </p>
           <div class="cta-btns">
-            <a href="https://www.twcministries.net/Pages/Donations/twc-ministries-local-account.html" target="_blank" class="btn-solid">Give Locally (JMD)</a>
-            <a href="https://www.twcministries.net/Pages/Donations/twc-ministries-foreign-account.html" target="_blank" class="btn-outline-light">Give from Overseas (USD)</a>
+            <a href="https://www.twcministries.net/Pages/Donations/local/" target="_blank" class="btn-solid">Give Locally (JMD)</a>
+            <a href="https://www.twcministries.net/Pages/Donations/foreign/" target="_blank" class="btn-outline-light">Give from Overseas (USD)</a>
           </div>
         </div>
       </div>
@@ -695,11 +695,11 @@
           <h5>Navigate</h5>
           <ul>
             <li><a href="https://www.twcministries.net">Home</a></li>
-            <li><a href="/Pages/About/About.html">About TWC</a></li>
-            <li><a href="/Pages/Charities/Charities.html">Charities</a></li>
-            <li><a href="/Pages/Events/Events.html">Events</a></li>
-            <li><a href="/Pages/Live/Live.html">Watch Live</a></li>
-            <li><a href="https://www.twcministries.net/Pages/Donations/twc-ministries-foreign-account.html" target="_blank">Donate</a></li>
+            <li><a href="/Pages/About/">About TWC</a></li>
+            <li><a href="/Pages/Charities/">Charities</a></li>
+            <li><a href="/Pages/Events/">Events</a></li>
+            <li><a href="/Pages/Live/">Watch Live</a></li>
+            <li><a href="https://www.twcministries.net/Pages/Donations/foreign/" target="_blank">Donate</a></li>
           </ul>
         </div>
         <div class="footer-col">
