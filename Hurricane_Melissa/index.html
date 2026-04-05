@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Hurricane Melissa — Storm Surge Simulations | Jamaica</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+/* ── Reset ──────────────────────────────────────────────────────── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-tap-highlight-color:transparent}
+
+:root{
+  --storm:   #060c1a;
+  --deep:    #0a1428;
+  --mid:     #0f1f3d;
+  --panel:   rgba(15,31,61,.7);
+  --border:  rgba(255,255,255,.08);
+  --border-h:rgba(255,255,255,.18);
+  --text:    #e8eeff;
+  --muted:   rgba(232,238,255,.5);
+  --amber:   #f59e0b;
+  --amber-l: #fcd34d;
+  --red:     #ef4444;
+  --red-l:   #fca5a5;
+  --teal:    #22d3ee;
+  --teal-l:  #67e8f9;
+  --green:   #34d399;
+  --radius:  12px;
+}
+
+body{
+  font-family:'Barlow',sans-serif;
+  background:var(--storm);
+  color:var(--text);
+  min-height:100vh;
+  overflow-x:hidden;
+}
+
+/* ── Animated storm background ──────────────────────────────────── */
+body::before{
+  content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(ellipse 120% 60% at 50% -10%, rgba(6,20,55,.95) 0%, transparent 60%),
+    radial-gradient(ellipse 80%  80% at 80%  80%, rgba(15,50,80,.3)  0%, transparent 55%),
+    radial-gradient(ellipse 60%  60% at 10%  60%, rgba(30,10,60,.25) 0%, transparent 55%),
+    linear-gradient(180deg, #060c1a 0%, #080f22 40%, #0a1520 100%);
+}
+
+/* Radar pulse rings */
+.radar{
+  position:fixed;top:-20vh;left:50%;transform:translateX(-50%);
+  width:160vw;height:160vw;pointer-events:none;z-index:0;
+  border-radius:50%;
+  background:transparent;
+}
+.radar-ring{
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  border-radius:50%;border:1px solid rgba(245,158,11,.1);
+  animation:radarPulse 4s ease-out infinite;
+}
+.radar-ring:nth-child(1){width:20vw;height:20vw;animation-delay:0s}
+.radar-ring:nth-child(2){width:40vw;height:40vw;animation-delay:.8s}
+.radar-ring:nth-child(3){width:65vw;height:65vw;animation-delay:1.6s}
+.radar-ring:nth-child(4){width:95vw;height:95vw;animation-delay:2.4s}
+.radar-ring:nth-child(5){width:130vw;height:130vw;animation-delay:3.2s}
+
+@keyframes radarPulse{
+  0%  {opacity:0;transform:translate(-50%,-50%) scale(.92)}
+  15% {opacity:.7}
+  100%{opacity:0;transform:translate(-50%,-50%) scale(1.04)}
+}
+
+.wrap{position:relative;z-index:1;max-width:1080px;margin:0 auto;padding:0 20px 80px}
+
+/* ── Header ─────────────────────────────────────────────────────── */
+.hero{
+  text-align:center;padding:72px 0 52px;
+}
+.hero-eyebrow{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(239,68,68,.12);border:1px solid rgba(239,68,68,.35);
+  border-radius:100px;padding:6px 18px;
+  font-family:'Barlow Condensed',sans-serif;font-size:.82rem;
+  letter-spacing:.2em;text-transform:uppercase;
+  color:var(--red-l);margin-bottom:22px;
+}
+.hero-eyebrow span{
+  width:8px;height:8px;border-radius:50%;background:var(--red);
+  animation:blink 1.4s ease-in-out infinite;flex-shrink:0;
+}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+
+.hero-title{
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:clamp(3.2rem,10vw,7.5rem);
+  font-weight:900;line-height:.9;
+  letter-spacing:-1px;text-transform:uppercase;
+  background:linear-gradient(135deg,#fff 0%,var(--amber-l) 45%,var(--amber) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  margin-bottom:10px;
+  filter:drop-shadow(0 0 40px rgba(245,158,11,.25));
+}
+.hero-subtitle{
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:clamp(1rem,3.5vw,1.6rem);font-weight:600;
+  letter-spacing:.18em;text-transform:uppercase;
+  color:var(--muted);margin-bottom:28px;
+}
+.hero-desc{
+  max-width:580px;margin:0 auto 32px;
+  font-size:.95rem;line-height:1.7;color:var(--muted);font-weight:300;
+}
+
+/* ── Scenario legend badges ──────────────────────────────────────── */
+.legend{
+  display:flex;flex-wrap:wrap;justify-content:center;gap:12px;margin-bottom:48px;
+}
+.legend-item{
+  display:flex;align-items:center;gap:10px;
+  background:var(--panel);border:1px solid var(--border);
+  border-radius:100px;padding:8px 18px;
+  font-size:.8rem;font-weight:600;letter-spacing:.06em;
+}
+.legend-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.legend-dot.s1{background:var(--teal)}
+.legend-dot.s2{background:var(--amber)}
+.legend-dot.s3{background:var(--red)}
+
+/* ── Tabs ───────────────────────────────────────────────────────── */
+.tab-bar{
+  display:flex;gap:6px;margin-bottom:32px;
+  background:rgba(255,255,255,.04);border:1px solid var(--border);
+  border-radius:14px;padding:6px;
+}
+.tab-btn{
+  flex:1;font-family:'Barlow Condensed',sans-serif;
+  font-size:clamp(.78rem,2vw,.95rem);font-weight:700;
+  letter-spacing:.1em;text-transform:uppercase;
+  border:none;border-radius:10px;padding:12px 8px;
+  cursor:pointer;transition:background .2s,color .2s;
+  background:transparent;color:var(--muted);
+}
+.tab-btn.active.s1{background:rgba(34,211,238,.15);color:var(--teal-l);border:1px solid rgba(34,211,238,.3)}
+.tab-btn.active.s2{background:rgba(245,158,11,.15);color:var(--amber-l);border:1px solid rgba(245,158,11,.3)}
+.tab-btn.active.s3{background:rgba(239,68,68,.15);color:var(--red-l);border:1px solid rgba(239,68,68,.3)}
+.tab-btn:hover:not(.active){background:rgba(255,255,255,.06);color:var(--text)}
+
+/* ── Scenario description ────────────────────────────────────────── */
+.scenario-desc{
+  background:var(--panel);border:1px solid var(--border);
+  border-radius:var(--radius);padding:16px 20px;
+  margin-bottom:28px;font-size:.88rem;line-height:1.6;color:var(--muted);
+  display:none;
+}
+.scenario-desc.active{display:block}
+.scenario-desc strong{color:var(--text);font-weight:600}
+
+/* ── Parish grid ─────────────────────────────────────────────────── */
+.tab-panel{display:none}
+.tab-panel.active{display:block}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(210px,1fr));
+  gap:12px;
+}
+
+.parish-card{
+  position:relative;
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:20px 18px 16px;
+  text-decoration:none;
+  color:var(--text);
+  display:flex;flex-direction:column;gap:6px;
+  transition:border-color .2s,transform .18s,box-shadow .18s;
+  overflow:hidden;
+}
+.parish-card::before{
+  content:'';position:absolute;inset:0;opacity:0;
+  transition:opacity .2s;pointer-events:none;
+}
+.s1 .parish-card::before{background:radial-gradient(ellipse at 0% 0%,rgba(34,211,238,.1) 0%,transparent 65%)}
+.s2 .parish-card::before{background:radial-gradient(ellipse at 0% 0%,rgba(245,158,11,.1) 0%,transparent 65%)}
+.s3 .parish-card::before{background:radial-gradient(ellipse at 0% 0%,rgba(239,68,68,.1) 0%,transparent 65%)}
+.parish-card:hover::before{opacity:1}
+
+.s1 .parish-card:hover{border-color:rgba(34,211,238,.4);transform:translateY(-3px);box-shadow:0 12px 32px rgba(0,0,0,.5),0 0 0 1px rgba(34,211,238,.15)}
+.s2 .parish-card:hover{border-color:rgba(245,158,11,.4);transform:translateY(-3px);box-shadow:0 12px 32px rgba(0,0,0,.5),0 0 0 1px rgba(245,158,11,.15)}
+.s3 .parish-card:hover{border-color:rgba(239,68,68,.4);transform:translateY(-3px);box-shadow:0 12px 32px rgba(0,0,0,.5),0 0 0 1px rgba(239,68,68,.15)}
+
+.card-icon{font-size:1.5rem;line-height:1;margin-bottom:4px}
+.card-name{
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:1.25rem;font-weight:800;letter-spacing:.04em;
+  line-height:1;
+}
+.card-tag{
+  font-size:.68rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+  border-radius:100px;padding:3px 10px;align-self:flex-start;
+  margin-top:4px;
+}
+.s1 .card-tag{background:rgba(34,211,238,.12);color:var(--teal-l);border:1px solid rgba(34,211,238,.25)}
+.s2 .card-tag{background:rgba(245,158,11,.12);color:var(--amber-l);border:1px solid rgba(245,158,11,.25)}
+.s3 .card-tag{background:rgba(239,68,68,.12);color:var(--red-l);border:1px solid rgba(239,68,68,.25)}
+
+.card-arrow{
+  position:absolute;bottom:14px;right:16px;
+  font-size:.9rem;color:var(--muted);opacity:.5;
+  transition:opacity .2s,transform .2s;
+}
+.parish-card:hover .card-arrow{opacity:1;transform:translateX(3px)}
+
+/* ── Footer ─────────────────────────────────────────────────────── */
+.footer{
+  text-align:center;padding:40px 0 0;
+  border-top:1px solid var(--border);margin-top:56px;
+  font-size:.8rem;color:var(--muted);line-height:1.8;
+}
+.footer a{color:var(--muted);text-decoration:underline;text-underline-offset:3px}
+.footer a:hover{color:var(--text)}
+.disclaimer{
+  background:rgba(245,158,11,.07);border:1px solid rgba(245,158,11,.18);
+  border-radius:var(--radius);padding:14px 18px;
+  font-size:.8rem;line-height:1.7;color:var(--muted);
+  text-align:left;margin-bottom:28px;
+}
+.disclaimer strong{color:var(--amber-l)}
+
+/* ── Responsive ─────────────────────────────────────────────────── */
+@media(max-width:500px){
+  .tab-btn{font-size:.72rem;padding:10px 5px}
+  .grid{grid-template-columns:repeat(2,1fr)}
+}
+</style>
+</head>
+<body>
+
+<!-- Radar rings decoration -->
+<div class="radar" aria-hidden="true">
+  <div class="radar-ring"></div>
+  <div class="radar-ring"></div>
+  <div class="radar-ring"></div>
+  <div class="radar-ring"></div>
+  <div class="radar-ring"></div>
+</div>
+
+<div class="wrap">
+
+  <!-- Hero -->
+  <header class="hero">
+    <div class="hero-eyebrow"><span></span> Storm Surge Simulation — Jamaica</div>
+    <h1 class="hero-title">Hurricane<br>Melissa</h1>
+    <p class="hero-subtitle">Interactive Inundation Maps · All 14 Parishes</p>
+    <p class="hero-desc">
+      Coastal engineering simulation of storm surge and inundation across Jamaica's 14 parishes. Three model scenarios explore the range of potential flood impacts based on HURRICANE MELISSA FORECAST/ADVISORY NUMBER 18.
+    </p>
+
+    <div class="legend">
+      <div class="legend-item"><div class="legend-dot s1"></div> Surge Only</div>
+      <div class="legend-item"><div class="legend-dot s2"></div> Surge + Est. Setup</div>
+      <div class="legend-item"><div class="legend-dot s3"></div> Surge + Setup + Rain</div>
+    </div>
+  </header>
+
+  <!-- Tab navigation -->
+  <div class="tab-bar" role="tablist">
+    <button class="tab-btn s1 active" data-tab="s1" role="tab" aria-selected="true">
+      💧 Surge Only
+    </button>
+    <button class="tab-btn s2" data-tab="s2" role="tab" aria-selected="false">
+      🌊 + Est. Setup
+    </button>
+    <button class="tab-btn s3" data-tab="s3" role="tab" aria-selected="false">
+      🌧 + Setup & Rain
+    </button>
+  </div>
+
+  <!-- Scenario descriptions -->
+  <div class="scenario-desc s1 active">
+    <strong>Surge Only</strong> — Models the direct wind-driven storm surge component. Represents the baseline coastal inundation from the storm's wind field and pressure gradient pushing water onshore.
+  </div>
+  <div class="scenario-desc s2">
+    <strong>Surge + Estimated Setup</strong> — Adds an estimated wind setup component to the surge model, accounting for longer-fetch wave-driven water level rise across coastal embayments.
+  </div>
+  <div class="scenario-desc s3">
+    <strong>Surge + Estimated Setup &amp; Rain</strong> — The most comprehensive scenario. Includes storm surge, wave setup, and rainfall-driven inland flooding, representing the upper bound of combined flood risk.
+  </div>
+
+  <!-- Tab panels -->
+  <!-- ── SURGE ONLY ──────────────────────────────────────────────── -->
+  <div class="tab-panel s1 active" id="tab-s1" role="tabpanel">
+    <div class="grid">
+      <a class="parish-card" href="surge_only/Hurrican_Melissa_surge_only_Clarendon.html" target="_blank">
+        <div class="card-icon">📍</div>
+        <div class="card-name">Clarendon</div>
+        <div class="card-tag">Surge Only</div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a class="parish-card" href="surge_only/Hurrican_Melissa_surge_only_Hanover.html" target="_blank">
+        <div class="card-icon">📍</div>
+        <div class="card-name">Hanover</div>
+        <div class="card-tag">Surge Only</div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a class="parish-card" href="surge_only/Hurrican_Melissa_surge_only_Kingston.html" target="_blank">
+        <div class="card-icon">🏙️</div>
+        <div class="card-name">Kingston</div>
+        <div class="card-tag">Surge Only</div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a class="parish-card" href="surge_only/Hurrican_Melissa_surge_only_Manchester.html" target="_blank">
+        <div class="card-icon">📍</div>
+        <div class="card-name">Manchester</div>
+        <div class="card-tag">Surge Only</div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a class="parish-card" href="surge_only/Hurrican_Melissa_surge_only_Portland.html" target="_blank">
+        <div class="card-icon">📍</div>
+        <div class="card-name">Portland</div>
+        <div class="card-tag">Surge Only</div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a class="parish-card" href="surge_only/Hurrican_Melissa_surge_only_Saint_Andrew.html" target="_blank">
+        <div class="card-icon">📍</div>
+        <div class="card-name">Saint Andrew</div>
+        <div class="card-tag">Surge Only</div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a class="parish-card" href="surge_only/Hurrican_Melissa_surge_only_Saint_Ann.html" target="_blank">
+        <div class="card-icon">📍</div>
+        <div class="card-name">Saint Ann</div>
+        <div class="card-tag">Surge Only</div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a class="parish-card" href="surge_only/Hurrican_Melissa_surge_only_Saint_Catherine.html" target="_blank">
+        <div class="card-icon">📍</div>
+        <div class="card-name">Saint Catherine</div>
+        <div class="card-tag">Surge Only</div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a class="parish-card" href="surge_only/Hurrican_Melissa_surge_only_Saint_Elizabeth.html" target="_blank">
+        <div class="card-icon">📍</div>
+        <div class="card-name">Saint Elizabeth</div>
+        <div class="card-tag">Surge Only</div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a class="parish-card" href="surge_only/Hurrican_Melissa_surge_only_Saint_James.html" target="_blank">
+        <div class="card-icon">📍</div>
+        <div class="card-name">Saint James</div>
+        <div class="card-tag">Surge Only</div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a class="parish-card" href="surge_only/Hurrican_Melissa_surge_only_Saint_Mary.html" target="_blank">
+        <div class="card-icon">📍</div>
+        <div class="card-name">Saint Mary</div>
+        <div class="card-tag">Surge Only</div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a class="parish-card" href="surge_only/Hurrican_Melissa_surge_only_Saint_Thomas.html" target="_blank">
+        <div class="card-icon">📍</div>
+        <div class="card-name">Saint Thomas</div>
+        <div class="card-tag">Surge Only</div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a class="parish-card" href="surge_only/Hurrican_Melissa_surge_only_Trelawny.html" target="_blank">
+        <div class="card-icon">📍</div>
+        <div class="card-name">Trelawny</div>
+        <div class="card-tag">Surge Only</div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a class="parish-card" href="surge_only/Hurrican_Melissa_surge_only_Westmoreland.html" target="_blank">
+        <div class="card-icon">📍</div>
+        <div class="card-name">Westmoreland</div>
+        <div class="card-tag">Surge Only</div>
+        <div class="card-arrow">→</div>
+      </a>
+    </div>
+  </div>
+
+  <!-- ── SURGE + EST SETUP ──────────────────────────────────────── -->
+  <div class="tab-panel s2" id="tab-s2" role="tabpanel">
+    <div class="grid">
+      <a class="parish-card" href="with_est_setup/Hurrican_Melissa_with_est_setup_Clarendon.html" target="_blank">
+        <div class="card-icon">📍</div><div class="card-name">Clarendon</div>
+        <div class="card-tag">+ Est. Setup</div><div class="card-arrow">→</div>
+      </a>
+      <a class="parish-card" href="with_est_setup/Hurrican_Melissa_with_est_setup_Hanover.html" target="_blank">
+        <div class="card-icon">📍</div><div class="card-name">Hanover</div>
+        <div class="card-tag">+ Est. Setup</div><div class="card-arrow">→</div>
+      </a>
+      <a class="parish-card" href="with_est_setup/Hurrican_Melissa_with_est_setup_Kingston.html" target="_blank">
+        <div class="card-icon">🏙️</div><div class="card-name">Kingston</div>
+        <div class="card-tag">+ Est. Setup</div><div class="card-arrow">→</div>
+      </a>
+      <a class="parish-card" href="with_est_setup/Hurrican_Melissa_with_est_setup_Manchester.html" target="_blank">
+        <div class="card-icon">📍</div><div class="card-name">Manchester</div>
+        <div class="card-tag">+ Est. Setup</div><div class="card-arrow">→</div>
+      </a>
+      <a class="parish-card" href="with_est_setup/Hurrican_Melissa_with_est_setup_Portland.html" target="_blank">
+        <div class="card-icon">📍</div><div class="card-name">Portland</div>
+        <div class="card-tag">+ Est. Setup</div><div class="card-arrow">→</div>
+      </a>
+      <a class="parish-card" href="with_est_setup/Hurrican_Melissa_with_est_setup_Saint_Andrew.html" target="_blank">
+        <div class="card-icon">📍</div><div class="card-name">Saint Andrew</div>
+        <div class="card-tag">+ Est. Setup</div><div class="card-arrow">→</div>
+      </a>
+      <a class="parish-card" href="with_est_setup/Hurrican_Melissa_with_est_setup_Saint_Ann.html" target="_blank">
+        <div class="card-icon">📍</div><div class="card-name">Saint Ann</div>
+        <div class="card-tag">+ Est. Setup</div><div class="card-arrow">→</div>
+      </a>
+      <a class="parish-card" href="with_est_setup/Hurrican_Melissa_with_est_setup_Saint_Catherine.html" target="_blank">
+        <div class="card-icon">📍</div><div class="card-name">Saint Catherine</div>
+        <div class="card-tag">+ Est. Setup</div><div class="card-arrow">→</div>
+      </a>
+      <a class="parish-card" href="with_est_setup/Hurrican_Melissa_with_est_setup_Saint_Elizabeth.html" target="_blank">
+        <div class="card-icon">📍</div><div class="card-name">Saint Elizabeth</div>
+        <div class="card-tag">+ Est. Setup</div><div class="card-arrow">→</div>
+      </a>
+      <a class="parish-card" href="with_est_setup/Hurrican_Melissa_with_est_setup_Saint_James.html" target="_blank">
+        <div class="card-icon">📍</div><div class="card-name">Saint James</div>
+        <div class="card-tag">+ Est. Setup</div><div class="card-arrow">→</div>
+      </a>
+      <a class="parish-card" href="with_est_setup/Hurrican_Melissa_with_est_setup_Saint_Mary.html" target="_blank">
+        <div class="card-icon">📍</div><div class="card-name">Saint Mary</div>
+        <div class="card-tag">+ Est. Setup</div><div class="card-arrow">→</div>
+      </a>
+      <a class="parish-card" href="with_est_setup/Hurrican_Melissa_with_est_setup_Saint_Thomas.html" target="_blank">
+        <div class="card-icon">📍</div><div class="card-name">Saint Thomas</div>
+        <div class="card-tag">+ Est. Setup</div><div class="card-arrow">→</div>
+      </a>
+      <a class="parish-card" href="with_est_setup/Hurrican_Melissa_with_est_setup_Trelawny.html" target="_blank">
+        <div class="card-icon">📍</div><div class="card-name">Trelawny</div>
+        <div class="card-tag">+ Est. Setup</div><div class="card-arrow">→</div>
+      </a>
+      <a class="parish-card" href="with_est_setup/Hurrican_Melissa_with_est_setup_Westmoreland.html" target="_blank">
+        <div class="card-icon">📍</div><div class="card-name">Westmoreland</div>
+        <div class="card-tag">+ Est. Setup</div><div class="card-arrow">→</div>
+      </a>
+    </div>
+  </div>
+
+  <!-- ── SURGE + SETUP + RAIN ───────────────────────────────────── -->
+  <div class="tab-panel s3" id="tab-s3" role="tabpanel">
+    <div class="grid">
+      <a class="parish-card" href="with_rain/Hurrican_Melissa_with_rain_Clarendon.html" target="_blank">
+        <div class="card-icon">📍</div><div class="card-name">Clarendon</div>
+        <div class="card-tag">+ Setup & Rain</div><div class="card-arrow">→</div>
+      </a>
+      <a class="parish-card" href="with_rain/Hurrican_Melissa_with_rain_Hanover.html" target="_blank">
+        <div class="card-icon">📍</div><div class="card-name">Hanover</div>
+        <div class="card-tag">+ Setup & Rain</div><div class="card-arrow">→</div>
+      </a>
+      <a class="parish-card" href="with_rain/Hurrican_Melissa_with_rain_Kingston.html" target="_blank">
+        <div class="card-icon">🏙️</div><div class="card-name">Kingston</div>
+        <div class="card-tag">+ Setup & Rain</div><div class="card-arrow">→</div>
+      </a>
+      <a class="parish-card" href="with_rain/Hurrican_Melissa_with_rain_Manchester.html" target="_blank">
+        <div class="card-icon">📍</div><div class="card-name">Manchester</div>
+        <div class="card-tag">+ Setup & Rain</div><div class="card-arrow">→</div>
+      </a>
+      <a class="parish-card" href="with_rain/Hurrican_Melissa_with_rain_Portland.html" target="_blank">
+        <div class="card-icon">📍</div><div class="card-name">Portland</div>
+        <div class="card-tag">+ Setup & Rain</div><div class="card-arrow">→</div>
+      </a>
+      <a class="parish-card" href="with_rain/Hurrican_Melissa_with_rain_Saint_Andrew.html" target="_blank">
+        <div class="card-icon">📍</div><div class="card-name">Saint Andrew</div>
+        <div class="card-tag">+ Setup & Rain</div><div class="card-arrow">→</div>
+      </a>
+      <a class="parish-card" href="with_rain/Hurrican_Melissa_with_rain_Saint_Ann.html" target="_blank">
+        <div class="card-icon">📍</div><div class="card-name">Saint Ann</div>
+        <div class="card-tag">+ Setup & Rain</div><div class="card-arrow">→</div>
+      </a>
+      <a class="parish-card" href="with_rain/Hurrican_Melissa_with_rain_Saint_Catherine.html" target="_blank">
+        <div class="card-icon">📍</div><div class="card-name">Saint Catherine</div>
+        <div class="card-tag">+ Setup & Rain</div><div class="card-arrow">→</div>
+      </a>
+      <a class="parish-card" href="with_rain/Hurrican_Melissa_with_rain_Saint_Elizabeth.html" target="_blank">
+        <div class="card-icon">📍</div><div class="card-name">Saint Elizabeth</div>
+        <div class="card-tag">+ Setup & Rain</div><div class="card-arrow">→</div>
+      </a>
+      <a class="parish-card" href="with_rain/Hurrican_Melissa_with_rain_Saint_James.html" target="_blank">
+        <div class="card-icon">📍</div><div class="card-name">Saint James</div>
+        <div class="card-tag">+ Setup & Rain</div><div class="card-arrow">→</div>
+      </a>
+      <a class="parish-card" href="with_rain/Hurrican_Melissa_with_rain_Saint_Mary.html" target="_blank">
+        <div class="card-icon">📍</div><div class="card-name">Saint Mary</div>
+        <div class="card-tag">+ Setup & Rain</div><div class="card-arrow">→</div>
+      </a>
+      <a class="parish-card" href="with_rain/Hurrican_Melissa_with_rain_Saint_Thomas.html" target="_blank">
+        <div class="card-icon">📍</div><div class="card-name">Saint Thomas</div>
+        <div class="card-tag">+ Setup & Rain</div><div class="card-arrow">→</div>
+      </a>
+      <a class="parish-card" href="with_rain/Hurrican_Melissa_with_rain_Trelawny.html" target="_blank">
+        <div class="card-icon">📍</div><div class="card-name">Trelawny</div>
+        <div class="card-tag">+ Setup & Rain</div><div class="card-arrow">→</div>
+      </a>
+      <a class="parish-card" href="with_rain/Hurrican_Melissa_with_rain_Westmoreland.html" target="_blank">
+        <div class="card-icon">📍</div><div class="card-name">Westmoreland</div>
+        <div class="card-tag">+ Setup & Rain</div><div class="card-arrow">→</div>
+      </a>
+    </div>
+  </div>
+
+  <!-- Disclaimer -->
+  <div class="disclaimer" style="margin-top:40px">
+    <strong>⚠️ Model Disclaimer:</strong> Results are based on HURRICANE MELISSA FORECAST/ADVISORY NUMBER 18. DEM resolution (up to ±10 m), forecast uncertainty, and model simplifications may cause observed flooding to differ from projections. These maps are for situational awareness only and do not replace official warnings from the National Hurricane Center or local authorities.
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>Modelled by <strong>Clenmar Rowe</strong> · Coastal Engineering · <a href="https://twcministries.net">TWC Ministries</a></p>
+    <p style="margin-top:6px">Tools: SFINCS · DeltaDTM · NOAA Advisory Data · #OneLove 🇯🇲</p>
+  </footer>
+
+</div><!-- /wrap -->
+
+<script>
+// Tab switching
+const tabs  = document.querySelectorAll('.tab-btn');
+const panels= document.querySelectorAll('.tab-panel');
+const descs = document.querySelectorAll('.scenario-desc');
+
+tabs.forEach(btn => {
+  btn.addEventListener('click', () => {
+    const t = btn.dataset.tab;
+
+    tabs.forEach(b => { b.classList.remove('active'); b.setAttribute('aria-selected','false'); });
+    panels.forEach(p => p.classList.remove('active'));
+    descs.forEach(d  => d.classList.remove('active'));
+
+    btn.classList.add('active');
+    btn.setAttribute('aria-selected','true');
+    document.getElementById('tab-' + t).classList.add('active');
+    document.querySelector(`.scenario-desc.${t}`).classList.add('active');
+  });
+});
+</script>
+</body>
+</html>
