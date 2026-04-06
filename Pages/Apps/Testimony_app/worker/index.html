@@ -8,6 +8,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 <title>Testimony Log | TWC Ministries</title>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
 :root{
   --navy:#0A1628;
@@ -702,7 +703,10 @@ function renderEntries(entries) {
       </div>
       <div class="e-divider"></div>
       <div class="e-body">${esc(e.text)}</div>
-      ${e.image || e.imageUrl ? `<div style="margin-top:14px;"><img src="${e.imageUrl || e.image}" style="max-width:100%;border-radius:4px;border:1px solid var(--border);cursor:pointer;" onclick="viewFullImage('${e.imageUrl || e.image}')" alt="Testimony photo"/></div>` : ''}
+      ${(()=>{
+        const imgs = e.images && e.images.length ? e.images : (e.image || e.imageUrl ? [e.imageUrl||e.image] : []);
+        return imgs.length ? `<div style="margin-top:14px;display:flex;flex-wrap:wrap;gap:8px;">${imgs.map(src=>`<img src="${src}" style="width:120px;height:90px;object-fit:cover;border-radius:4px;border:1px solid var(--border);cursor:pointer;" onclick="viewFullImage('${src}')" alt="Testimony photo"/>`).join('')}</div>` : '';
+      })()}
       ${e.audio || e.audioUrl ? `<div style="margin-top:14px;"><audio controls preload="metadata" playsinline style="width:100%;max-width:400px;"><source src="${e.audioUrl || e.audio}" type="audio/webm">Your browser does not support audio playback.</audio></div>` : ''}
     </div>
   `).join('')}</div>`;
@@ -728,7 +732,7 @@ function renderDash(app) {
       <div class="btn-row">
         <button class="btn btn-outline no-print" onclick="openBibleChat()">💬 Ask AI</button>
         <button class="btn btn-outline no-print" onclick="doPrint()">🖨 Print</button>
-        <button class="btn btn-outline no-print" onclick="doDownload()">⤓ Download</button>
+        <button class="btn btn-outline no-print" onclick="doExportPDF()">📄 Export PDF</button>
         <button class="btn btn-ghost no-print" onclick="doSignOut()">Sign Out</button>
       </div>
     </div>
@@ -742,13 +746,10 @@ function renderDash(app) {
         <div class="char-cnt"><span id="cc">0</span> / ${CFG.MAX_TEXT}</div>
       </div>
       <div class="fg">
-        <label for="imgUpload">Add Photo (Optional)</label>
-        <input type="file" id="imgUpload" accept="image/*" ${ro ? 'disabled' : ''} onchange="previewImage(this)" style="display:none"/>
-        <button class="btn btn-outline" onclick="document.getElementById('imgUpload').click()" ${ro ? 'disabled' : ''} style="width:100%;">📷 Choose Photo</button>
-        <div id="imgPreview" style="margin-top:10px;display:none;">
-          <img id="imgPreviewImg" style="max-width:100%;max-height:200px;border-radius:4px;border:1px solid var(--border);"/>
-          <button class="btn btn-ghost" onclick="clearImage()" style="margin-top:8px;font-size:9px;padding:4px 10px;">✕ Remove Photo</button>
-        </div>
+        <label>Add Photos (Optional — up to 3)</label>
+        <input type="file" id="imgUpload" accept="image/*" ${ro ? 'disabled' : ''} onchange="addImage(this)" style="display:none" multiple/>
+        <button class="btn btn-outline" id="addPhotoBtn" onclick="document.getElementById('imgUpload').click()" ${ro ? 'disabled' : ''} style="width:100%;">📷 Add Photo</button>
+        <div id="imgPreviewGrid" style="margin-top:10px;display:flex;flex-wrap:wrap;gap:10px;"></div>
       </div>
       <div class="fg">
         <label>Add Voice Memo (Optional - Max 60 seconds)</label>
@@ -807,34 +808,54 @@ function clearFilter() {
   render();
 }
 
-function previewImage(input) {
-  const preview = document.getElementById('imgPreview');
-  const previewImg = document.getElementById('imgPreviewImg');
-  
-  if (input.files && input.files[0]) {
-    const file = input.files[0];
-    
-    // Check file size (max 2MB)
-    if (file.size > 2 * 1024 * 1024) {
-      toast('Image too large. Please choose an image under 2MB.', true);
-      input.value = '';
-      return;
+// Multi-image state (up to 3)
+let pendingImages = [];
+
+function addImage(input) {
+  const grid = document.getElementById('imgPreviewGrid');
+  const files = Array.from(input.files || []);
+  input.value = ''; // reset so same file can be re-added
+
+  for (const file of files) {
+    if (pendingImages.length >= 3) {
+      toast('Maximum 3 photos allowed', true);
+      break;
     }
-    
+    if (file.size > 2 * 1024 * 1024) {
+      toast(`"${file.name}" is too large (max 2MB)`, true);
+      continue;
+    }
     const reader = new FileReader();
-    reader.onload = function(e) {
-      previewImg.src = e.target.result;
-      preview.style.display = 'block';
+    reader.onload = function(ev) {
+      const src = ev.target.result;
+      pendingImages.push(src);
+      renderImagePreviews();
     };
     reader.readAsDataURL(file);
   }
 }
 
+function renderImagePreviews() {
+  const grid = document.getElementById('imgPreviewGrid');
+  const btn  = document.getElementById('addPhotoBtn');
+  if (!grid) return;
+  grid.innerHTML = pendingImages.map((src, i) => `
+    <div style="position:relative;display:inline-block;">
+      <img src="${src}" style="width:100px;height:80px;object-fit:cover;border-radius:4px;border:1px solid var(--border);" alt="Photo ${i+1}"/>
+      <button onclick="removeImage(${i})" style="position:absolute;top:-6px;right:-6px;background:var(--red);border:none;color:#fff;border-radius:50%;width:20px;height:20px;font-size:11px;cursor:pointer;line-height:20px;text-align:center;padding:0;">✕</button>
+    </div>
+  `).join('');
+  if (btn) btn.style.display = pendingImages.length >= 3 ? 'none' : '';
+}
+
+function removeImage(i) {
+  pendingImages.splice(i, 1);
+  renderImagePreviews();
+}
+
 function clearImage() {
-  const input = document.getElementById('imgUpload');
-  const preview = document.getElementById('imgPreview');
-  input.value = '';
-  preview.style.display = 'none';
+  pendingImages = [];
+  renderImagePreviews();
 }
 
 // Voice recording state
@@ -982,7 +1003,6 @@ function viewFullImage(src) {
 async function submitEntry() {
   const ta = document.getElementById('et');
   const text = ta.value.trim();
-  const imgInput = document.getElementById('imgUpload');
 
   if (!text || text.length < CFG.MIN_TEXT) {
     toast('Please write a bit more', true);
@@ -991,20 +1011,8 @@ async function submitEntry() {
 
   setBusy('subBtn', true, '<span class="spin"></span> Saving...');
   try {
-    let imageData = null;
     let audioData = null;
-    
-    // Convert image to base64 if present
-    if (imgInput.files && imgInput.files[0]) {
-      const file = imgInput.files[0];
-      imageData = await new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onload = (e) => resolve(e.target.result);
-        reader.onerror = reject;
-        reader.readAsDataURL(file);
-      });
-    }
-    
+
     // Convert audio to base64 if present
     if (recordedAudioBlob) {
       audioData = await new Promise((resolve, reject) => {
@@ -1014,7 +1022,7 @@ async function submitEntry() {
         reader.readAsDataURL(recordedAudioBlob);
       });
     }
-    
+
     // Use device local time
     const now = new Date();
     const timestamp = {
@@ -1022,14 +1030,14 @@ async function submitEntry() {
       time: now.toLocaleTimeString(),
       iso: now.toISOString()
     };
-    
+
     const res = await api('/api/entries', {
       method: 'POST',
-      body: JSON.stringify({ 
-        text, 
+      body: JSON.stringify({
+        text,
         name: STATE.user,
         accessCode: STATE.accessCode,
-        image: imageData,
+        images: pendingImages.length ? pendingImages : undefined,
         audio: audioData,
         timestamp: timestamp
       })
@@ -1107,41 +1115,151 @@ function doPrint() {
   window.print();
 }
 
-function doDownload() {
+async function doExportPDF() {
   const ud = STATE.db.users?.[STATE.user] || { entries: [] };
-  const ents = ud.entries || [];
-  if (!ents.length) {
-    toast('No entries to download yet', true);
-    return;
+  const ents = [...(ud.entries || [])].reverse();
+  if (!ents.length) { toast('No entries to export yet', true); return; }
+
+  toast('Generating PDF…');
+  await new Promise(r => setTimeout(r, 80)); // let toast render
+
+  try {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({ unit: 'mm', format: 'a4' });
+    const pageW = doc.internal.pageSize.getWidth();
+    const pageH = doc.internal.pageSize.getHeight();
+    const margin = 18;
+    const contentW = pageW - margin * 2;
+    let y = margin;
+
+    function checkPage(needed = 10) {
+      if (y + needed > pageH - margin) { doc.addPage(); y = margin; }
+    }
+
+    // ── Header ──────────────────────────────────────────────────────────
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(18);
+    doc.setTextColor(180, 20, 40);
+    doc.text('TWC MINISTRIES', pageW / 2, y, { align: 'center' });
+    y += 7;
+
+    doc.setFontSize(9);
+    doc.setTextColor(100, 120, 150);
+    doc.setFont('helvetica', 'normal');
+    doc.text('Transformational Worship Centre | twcministries.net', pageW / 2, y, { align: 'center' });
+    y += 5;
+
+    // divider line
+    doc.setDrawColor(180, 20, 40);
+    doc.setLineWidth(0.4);
+    doc.line(margin, y, pageW - margin, y);
+    y += 6;
+
+    doc.setFontSize(13);
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(30, 50, 90);
+    doc.text('TESTIMONY LOG', pageW / 2, y, { align: 'center' });
+    y += 6;
+
+    doc.setFontSize(9);
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(80, 100, 130);
+    doc.text(`Name: ${STATE.user}   |   Entries: ${ents.length}   |   ${new Date().toLocaleDateString()}`, pageW / 2, y, { align: 'center' });
+    y += 5;
+
+    doc.setFontSize(8);
+    doc.setTextColor(120, 100, 60);
+    doc.setFont('helvetica', 'italic');
+    doc.text('"They triumphed by the blood of the Lamb and the word of their testimony." - Rev 12:11', pageW / 2, y, { align: 'center' });
+    y += 8;
+
+    doc.setDrawColor(180, 20, 40);
+    doc.setLineWidth(0.3);
+    doc.line(margin, y, pageW - margin, y);
+    y += 8;
+
+    // ── Entries ──────────────────────────────────────────────────────────
+    for (const e of ents) {
+      checkPage(20);
+
+      // Entry header
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(10);
+      doc.setTextColor(30, 50, 90);
+      doc.text(`Entry #${e.seq}`, margin, y);
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(8);
+      doc.setTextColor(100, 120, 150);
+      doc.text(`${e.date}  ·  ${e.time}`, pageW - margin, y, { align: 'right' });
+      y += 5;
+
+      // Divider
+      doc.setDrawColor(200, 210, 225);
+      doc.setLineWidth(0.2);
+      doc.line(margin, y, pageW - margin, y);
+      y += 4;
+
+      // Body text (word-wrapped)
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(10);
+      doc.setTextColor(30, 40, 60);
+      const lines = doc.splitTextToSize(e.text || '', contentW);
+      for (const line of lines) {
+        checkPage(5);
+        doc.text(line, margin, y);
+        y += 5;
+      }
+      y += 3;
+
+      // Images (compact — up to 3 side-by-side at ~55mm each)
+      const imgs = e.images && e.images.length ? e.images : (e.image || e.imageUrl ? [e.imageUrl || e.image] : []);
+      if (imgs.length) {
+        const imgW = Math.min(55, (contentW - (imgs.length - 1) * 4) / imgs.length);
+        const imgH = imgW * 0.72; // ~4:3 aspect crop
+        checkPage(imgH + 4);
+        let xi = margin;
+        for (const src of imgs) {
+          try {
+            // Determine format from data URL
+            const fmt = src.startsWith('data:image/png') ? 'PNG' : 'JPEG';
+            doc.addImage(src, fmt, xi, y, imgW, imgH);
+          } catch (_) { /* skip unreadable image */ }
+          xi += imgW + 4;
+        }
+        y += imgH + 6;
+      }
+
+      // Entry separator
+      checkPage(6);
+      doc.setDrawColor(220, 225, 235);
+      doc.setLineWidth(0.2);
+      doc.line(margin, y, pageW - margin, y);
+      y += 8;
+    }
+
+    // ── Footer on last page ──────────────────────────────────────────────
+    checkPage(10);
+    doc.setFont('helvetica', 'italic');
+    doc.setFontSize(9);
+    doc.setTextColor(120, 100, 60);
+    doc.text('To God be the glory, great things He hath done!', pageW / 2, y, { align: 'center' });
+
+    // Page numbers
+    const totalPages = doc.internal.getNumberOfPages();
+    for (let p = 1; p <= totalPages; p++) {
+      doc.setPage(p);
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(8);
+      doc.setTextColor(150, 160, 175);
+      doc.text(`Page ${p} of ${totalPages}`, pageW - margin, pageH - 8, { align: 'right' });
+    }
+
+    doc.save(`TWC_Testimony_${STATE.user.replace(/[^a-z0-9]/gi, '_')}.pdf`);
+    toast('PDF exported!', false, true);
+  } catch (err) {
+    console.error('PDF export error:', err);
+    toast('PDF export failed: ' + (err.message || err), true);
   }
-
-  const lines = [
-    'TWC MINISTRIES - TESTIMONY LOG',
-    'Transformational Worship Centre | twcministries.net',
-    '',
-    'Name: ' + STATE.user,
-    'Downloaded: ' + new Date().toLocaleString(),
-    'Total Entries: ' + ents.length,
-    '',
-    '"They triumphed over him by the blood of the Lamb',
-    ' and by the word of their testimony." - Revelation 12:11',
-    '',
-    '═'.repeat(64)
-  ];
-
-  [...ents].reverse().forEach(e => {
-    lines.push('', `ENTRY #${e.seq}`, `Date: ${e.date}`, `Time: ${e.time}`, '', e.text, '', '─'.repeat(64));
-  });
-  lines.push('', 'To God be the glory, great things He hath done!');
-
-  const blob = new Blob([lines.join('\n')], { type:'text/plain;charset=utf-8' });
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = `TWC_Testimony_${STATE.user.replace(/[^a-z0-9]/gi,'_')}.txt`;
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  toast('Downloaded!', false, true);
 }
 
 function doSignOut() {

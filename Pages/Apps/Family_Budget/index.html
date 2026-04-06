@@ -875,8 +875,11 @@
   // ── RENDER ENTRIES ─────────────────────────────────────────────────────────
   function renderEntries() {
     const sorted = [...allEntries].sort((a, b) => {
+      const ao = a.order ?? 0;
+      const bo = b.order ?? 0;
+      if (ao !== bo) return ao - bo;
       if (a.date !== b.date) return a.date.localeCompare(b.date);
-      return a.order - b.order;
+      return 0;
     });
     let runBal = 0;
     const withBal = sorted.map(e => {
@@ -959,6 +962,25 @@
       el.querySelector('.del-btn').addEventListener('click', () => deleteEntry(entry.id, entry.name));
       setupDragHandlers(el, entry.id);
       list.appendChild(el);
+    });
+  }
+
+  // ── RECALC RUNNING BALANCES IN-PLACE (after drag reorder) ─────────────────
+  function recalcRunningBalances() {
+    const list = document.getElementById('entriesList');
+    if (!list) return;
+    let runBal = 0;
+    list.querySelectorAll('.entry-item').forEach(el => {
+      const id = parseInt(el.dataset.id);
+      const entry = allEntries.find(e => e.id === id);
+      if (!entry) return;
+      runBal += entry.type === 'income' ? entry.amount : -entry.amount;
+      entry.runBal = runBal;
+      const badge = el.querySelector('.running-bal');
+      if (badge) {
+        badge.textContent = '= ' + fmt(runBal);
+        badge.className = 'running-bal ' + (runBal >= 0 ? 'pos' : 'neg');
+      }
     });
   }
 
@@ -1106,6 +1128,7 @@
     else         list.insertBefore(items[si], items[di]);
     const newOrder = [...list.querySelectorAll('.entry-item')].map((el, i) => ({ id: parseInt(el.dataset.id), order: i }));
     newOrder.forEach(({ id, order }) => { const entry = allEntries.find(e => e.id === id); if (entry) entry.order = order; });
+    recalcRunningBalances();
     try {
       const res = await api('PUT', `/api/entries/${currentBudgetId}/0`, { reorder: newOrder });
       if (res.error) { showToast('⚠ Reorder failed'); renderEntries(); }
