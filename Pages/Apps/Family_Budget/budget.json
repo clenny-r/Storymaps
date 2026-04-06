@@ -34,6 +34,18 @@
               "order": 1,
               "createdAt": "2026-04-06T02:45:18.531Z",
               "updatedAt": "2026-04-06T02:45:31.124Z"
+            },
+            {
+              "id": 1775443560883,
+              "name": "Shadene sub items",
+              "amount": 190,
+              "type": "expense",
+              "paid": false,
+              "date": "2026-04-06",
+              "addedBy": "Clenmar",
+              "order": 2,
+              "createdAt": "2026-04-06T02:46:00.883Z",
+              "updatedAt": "2026-04-06T02:46:00.883Z"
             }
           ]
         }
