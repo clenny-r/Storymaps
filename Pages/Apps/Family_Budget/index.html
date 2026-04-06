@@ -211,6 +211,12 @@
     .drag-handle svg{width:16px;height:16px}
     body.reorder-mode .drag-handle{display:flex}
     body.reorder-mode .entry-actions{display:none}
+    body.reorder-mode .entry-item{
+      cursor:grab;
+      user-select:none;-webkit-user-select:none;
+      touch-action:none;
+    }
+    body.reorder-mode .entry-item.dragging{cursor:grabbing;opacity:.45;border-style:dashed}
 
     /* ── ENTRIES LIST ─────────────────────────────────────────── */
     .entries-wrap{flex:1;overflow-y:auto;padding:.75rem 1rem 7rem}
@@ -908,7 +914,7 @@
     if (filtered.length === 0) { empty.style.display = 'block'; return; }
     empty.style.display = 'none';
 
-    const display = [...filtered].reverse();
+    const display = [...filtered]; // oldest first → new entries appear at bottom
     display.forEach(entry => {
       const el = document.createElement('div');
       el.className = `entry-item ${entry.type}-row${entry.paid ? ' paid-row' : ''}`;
@@ -946,6 +952,7 @@
           </button>
         </div>
       `;
+      if (reorderMode) el.draggable = true;
       el.querySelector('.pay-btn').addEventListener('click', () => togglePaid(entry.id, !entry.paid));
       el.querySelector('.edit-btn').addEventListener('click', () => openEdit(entry.id));
       el.querySelector('.dup-btn').addEventListener('click', () => duplicateEntry(entry.id));
@@ -1009,11 +1016,12 @@
   function toggleReorderMode() {
     reorderMode = !reorderMode;
     document.body.classList.toggle('reorder-mode', reorderMode);
+    // Immediately set/clear draggable on every row so there's no mousedown delay
+    document.querySelectorAll('.entry-item').forEach(el => { el.draggable = reorderMode; });
     const btn = document.getElementById('reorderBtn');
     btn.classList.toggle('active', reorderMode);
     if (reorderMode) {
       btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="14" height="14"><polyline points="20 6 9 17 4 12"/></svg> Done`;
-      showToast('Drag the ⠿ handles to reorder', 2500);
     } else {
       btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="14" height="14"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg> Reorder`;
     }
@@ -1022,13 +1030,18 @@
   // ── DRAG HANDLERS ──────────────────────────────────────────────────────────
   function setupDragHandlers(el, id) {
     const handle = el.querySelector('.drag-handle');
-    if (!handle) return;
-    handle.addEventListener('mousedown', () => { if (reorderMode) el.draggable = true; });
-    handle.addEventListener('touchstart', () => { if (reorderMode) el.draggable = true; }, { passive: true });
-    el.addEventListener('dragend', () => { el.draggable = false; el.classList.remove('dragging'); document.querySelectorAll('.entry-item.drag-over').forEach(r => r.classList.remove('drag-over')); });
+
+    // ── Mouse drag ──────────────────────────────────────────────────────────
+    // draggable=true is set by toggleReorderMode / renderEntries, not here
     el.addEventListener('dragstart', e => {
       if (!reorderMode) { e.preventDefault(); return; }
-      dragSrcId = id; el.classList.add('dragging'); e.dataTransfer.effectAllowed = 'move';
+      dragSrcId = id;
+      setTimeout(() => el.classList.add('dragging'), 0);
+      e.dataTransfer.effectAllowed = 'move';
+    });
+    el.addEventListener('dragend', () => {
+      el.classList.remove('dragging');
+      document.querySelectorAll('.entry-item.drag-over').forEach(r => r.classList.remove('drag-over'));
     });
     el.addEventListener('dragover', e => {
       if (!reorderMode || dragSrcId === id) return;
@@ -1040,21 +1053,63 @@
     el.addEventListener('drop', async e => {
       e.preventDefault(); el.classList.remove('drag-over');
       if (!reorderMode || dragSrcId === null || dragSrcId === id) return;
-      const list  = document.getElementById('entriesList');
-      const items = [...list.querySelectorAll('.entry-item')];
-      const si    = items.findIndex(i => parseInt(i.dataset.id) === dragSrcId);
-      const di    = items.findIndex(i => parseInt(i.dataset.id) === id);
-      if (si === -1 || di === -1) return;
-      if (si < di) list.insertBefore(items[si], items[di].nextSibling);
-      else         list.insertBefore(items[si], items[di]);
-      const newOrder = [...list.querySelectorAll('.entry-item')].map((el, i) => ({ id: parseInt(el.dataset.id), order: i }));
-      newOrder.forEach(({ id, order }) => { const entry = allEntries.find(e => e.id === id); if (entry) entry.order = order; });
-      try {
-        const res = await api('PUT', `/api/entries/${currentBudgetId}/0`, { reorder: newOrder });
-        if (res.error) { showToast('⚠ Reorder failed'); renderEntries(); }
-      } catch(e) { showToast('Network error'); renderEntries(); }
+      await applyReorder(dragSrcId, id);
       dragSrcId = null;
     });
+
+    // ── Touch drag (via the handle) ─────────────────────────────────────────
+    if (!handle) return;
+    handle.addEventListener('touchstart', e => {
+      if (!reorderMode) return;
+      dragSrcId = id;
+      el.classList.add('dragging');
+    }, { passive: true });
+
+    handle.addEventListener('touchmove', e => {
+      if (!reorderMode) return;
+      e.preventDefault(); // stop page scroll while dragging
+      const y = e.touches[0].clientY;
+      const items = [...document.querySelectorAll('.entry-item')];
+      const over = items.find(item => {
+        const r = item.getBoundingClientRect();
+        return y >= r.top && y <= r.bottom && item !== el;
+      });
+      document.querySelectorAll('.entry-item.drag-over').forEach(r => r.classList.remove('drag-over'));
+      if (over) over.classList.add('drag-over');
+    }, { passive: false });
+
+    handle.addEventListener('touchend', async e => {
+      if (!reorderMode) return;
+      el.classList.remove('dragging');
+      const y = e.changedTouches[0].clientY;
+      const items = [...document.querySelectorAll('.entry-item')];
+      const over = items.find(item => {
+        const r = item.getBoundingClientRect();
+        return y >= r.top && y <= r.bottom && item !== el;
+      });
+      document.querySelectorAll('.entry-item.drag-over').forEach(r => r.classList.remove('drag-over'));
+      if (over) {
+        const targetId = parseInt(over.dataset.id, 10);
+        await applyReorder(dragSrcId, targetId);
+      }
+      dragSrcId = null;
+    });
+  }
+
+  async function applyReorder(srcId, destId) {
+    const list  = document.getElementById('entriesList');
+    const items = [...list.querySelectorAll('.entry-item')];
+    const si    = items.findIndex(i => parseInt(i.dataset.id) === srcId);
+    const di    = items.findIndex(i => parseInt(i.dataset.id) === destId);
+    if (si === -1 || di === -1) return;
+    if (si < di) list.insertBefore(items[si], items[di].nextSibling);
+    else         list.insertBefore(items[si], items[di]);
+    const newOrder = [...list.querySelectorAll('.entry-item')].map((el, i) => ({ id: parseInt(el.dataset.id), order: i }));
+    newOrder.forEach(({ id, order }) => { const entry = allEntries.find(e => e.id === id); if (entry) entry.order = order; });
+    try {
+      const res = await api('PUT', `/api/entries/${currentBudgetId}/0`, { reorder: newOrder });
+      if (res.error) { showToast('⚠ Reorder failed'); renderEntries(); }
+    } catch(e) { showToast('Network error'); renderEntries(); }
   }
 
   // ── ADD / EDIT PANEL ───────────────────────────────────────────────────────
