@@ -12,18 +12,6 @@
           "createdAt": "2026-04-06T02:33:25.396Z",
           "entries": [
             {
-              "id": 1775442852937,
-              "name": "Salary",
-              "amount": 2140,
-              "type": "income",
-              "paid": false,
-              "date": "2026-04-06",
-              "addedBy": "Clenmar",
-              "order": 0,
-              "createdAt": "2026-04-06T02:34:12.937Z",
-              "updatedAt": "2026-04-06T02:34:12.937Z"
-            },
-            {
               "id": 1775442875910,
               "name": "Groceries",
               "amount": 275,
