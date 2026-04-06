@@ -12,12 +12,12 @@
           "name": "Salary",
           "amount": 2140,
           "type": "income",
-          "paid": false,
+          "paid": true,
           "date": "2026-04-06",
           "addedBy": "Clenmar",
           "order": 0,
           "createdAt": "2026-04-06T02:01:24.553Z",
-          "updatedAt": "2026-04-06T02:01:24.553Z"
+          "updatedAt": "2026-04-06T02:02:19.441Z"
         },
         {
           "id": 1775440929152,
