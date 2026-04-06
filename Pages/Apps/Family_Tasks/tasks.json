@@ -66,6 +66,16 @@
           "addedBy": "Clenmar",
           "createdAt": "2026-04-06T00:40:34.601Z",
           "updatedAt": "2026-04-06T00:41:16.513Z"
+        },
+        {
+          "id": 1775436441364,
+          "text": "Discuss buying sofa cleaner",
+          "completed": false,
+          "priority": "low",
+          "order": 6,
+          "addedBy": "Clenmar",
+          "createdAt": "2026-04-06T00:47:21.364Z",
+          "updatedAt": "2026-04-06T00:47:21.364Z"
         }
       ]
     },
