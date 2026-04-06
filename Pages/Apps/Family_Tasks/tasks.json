@@ -76,6 +76,16 @@
           "addedBy": "Clenmar",
           "createdAt": "2026-04-06T00:49:44.308Z",
           "updatedAt": "2026-04-06T00:51:07.341Z"
+        },
+        {
+          "id": 1775436741299,
+          "text": "1) Car Vs house ( $1500TFSA or emergency ?)",
+          "completed": false,
+          "priority": "low",
+          "order": 7,
+          "addedBy": "Clenmar",
+          "createdAt": "2026-04-06T00:52:21.299Z",
+          "updatedAt": "2026-04-06T00:52:21.299Z"
         }
       ]
     },
