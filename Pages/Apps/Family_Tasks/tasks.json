@@ -12,10 +12,10 @@
           "text": "Please call the dentist everyday to see if a slot has opened up",
           "completed": false,
           "priority": "high",
-          "order": 1,
+          "order": 0,
           "addedBy": "Clenmar",
           "createdAt": "2026-04-05T14:46:10.248Z",
-          "updatedAt": "2026-04-06T00:53:05.392Z"
+          "updatedAt": "2026-04-06T02:54:19.821Z"
         },
         {
           "id": 1775400405434,
@@ -25,27 +25,27 @@
           "order": 3,
           "addedBy": "Wife",
           "createdAt": "2026-04-05T14:46:45.434Z",
-          "updatedAt": "2026-04-06T00:53:05.392Z"
+          "updatedAt": "2026-04-06T02:54:19.821Z"
         },
         {
           "id": 1775402200991,
           "text": "Book communauto",
           "completed": true,
           "priority": "high",
-          "order": 2,
+          "order": 1,
           "addedBy": "Wife",
           "createdAt": "2026-04-05T15:16:40.991Z",
-          "updatedAt": "2026-04-06T00:53:05.392Z"
+          "updatedAt": "2026-04-06T02:54:19.821Z"
         },
         {
           "id": 1775403670421,
           "text": "Create MarEnCo.com site ; create email addresses for the morenco site; create a GitHub account using the email address @marenco.com. move the hurricane stuff to the new site;",
           "completed": false,
           "priority": "medium",
-          "order": 9,
+          "order": 10,
           "addedBy": "Clenmar",
           "createdAt": "2026-04-05T15:41:10.421Z",
-          "updatedAt": "2026-04-06T00:53:05.392Z"
+          "updatedAt": "2026-04-06T02:54:19.821Z"
         },
         {
           "id": 1775436034601,
@@ -55,7 +55,7 @@
           "order": 5,
           "addedBy": "Clenmar",
           "createdAt": "2026-04-06T00:40:34.601Z",
-          "updatedAt": "2026-04-06T00:53:05.392Z"
+          "updatedAt": "2026-04-06T02:54:19.821Z"
         },
         {
           "id": 1775436441364,
@@ -65,17 +65,17 @@
           "order": 4,
           "addedBy": "Clenmar",
           "createdAt": "2026-04-06T00:47:21.364Z",
-          "updatedAt": "2026-04-06T00:53:05.392Z"
+          "updatedAt": "2026-04-06T02:54:19.821Z"
         },
         {
           "id": 1775436584308,
           "text": "Sign AIP settlement plan ASAP",
           "completed": false,
           "priority": "high",
-          "order": 0,
+          "order": 2,
           "addedBy": "Clenmar",
           "createdAt": "2026-04-06T00:49:44.308Z",
-          "updatedAt": "2026-04-06T00:53:05.392Z"
+          "updatedAt": "2026-04-06T02:54:19.821Z"
         },
         {
           "id": 1775436741299,
@@ -85,7 +85,7 @@
           "order": 6,
           "addedBy": "Clenmar",
           "createdAt": "2026-04-06T00:52:21.299Z",
-          "updatedAt": "2026-04-06T00:53:05.392Z"
+          "updatedAt": "2026-04-06T02:54:19.821Z"
         },
         {
           "id": 1775436759456,
@@ -95,7 +95,7 @@
           "order": 7,
           "addedBy": "Clenmar",
           "createdAt": "2026-04-06T00:52:39.456Z",
-          "updatedAt": "2026-04-06T00:53:05.392Z"
+          "updatedAt": "2026-04-06T02:54:19.821Z"
         },
         {
           "id": 1775436774307,
@@ -105,7 +105,17 @@
           "order": 8,
           "addedBy": "Clenmar",
           "createdAt": "2026-04-06T00:52:54.307Z",
-          "updatedAt": "2026-04-06T00:53:05.392Z"
+          "updatedAt": "2026-04-06T02:54:19.821Z"
+        },
+        {
+          "id": 1775444034563,
+          "text": "Select some work clothes for Clenmar to buy with his money",
+          "completed": false,
+          "priority": "medium",
+          "order": 9,
+          "addedBy": "Clenmar",
+          "createdAt": "2026-04-06T02:53:54.563Z",
+          "updatedAt": "2026-04-06T02:54:19.821Z"
         }
       ]
     },
