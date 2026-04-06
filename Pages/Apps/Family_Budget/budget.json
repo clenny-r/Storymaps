@@ -10,7 +10,20 @@
         "b_1775442805396": {
           "name": "Canada budget",
           "createdAt": "2026-04-06T02:33:25.396Z",
-          "entries": []
+          "entries": [
+            {
+              "id": 1775442852937,
+              "name": "Salary",
+              "amount": 2140,
+              "type": "income",
+              "paid": false,
+              "date": "2026-04-06",
+              "addedBy": "Clenmar",
+              "order": 0,
+              "createdAt": "2026-04-06T02:34:12.937Z",
+              "updatedAt": "2026-04-06T02:34:12.937Z"
+            }
+          ]
         }
       }
     }
