@@ -6,32 +6,7 @@
         "Clenmar",
         "Wife"
       ],
-      "entries": [
-        {
-          "id": 1775440884553,
-          "name": "Salary",
-          "amount": 2140,
-          "type": "income",
-          "paid": false,
-          "date": "2026-04-06",
-          "addedBy": "Clenmar",
-          "order": 0,
-          "createdAt": "2026-04-06T02:01:24.553Z",
-          "updatedAt": "2026-04-06T02:02:20.620Z"
-        },
-        {
-          "id": 1775440929152,
-          "name": "Groceries",
-          "amount": 275,
-          "type": "expense",
-          "paid": false,
-          "date": "2026-04-06",
-          "addedBy": "Clenmar",
-          "order": 1,
-          "createdAt": "2026-04-06T02:02:09.152Z",
-          "updatedAt": "2026-04-06T02:02:24.394Z"
-        }
-      ]
+      "budgets": {}
     }
   }
 }
