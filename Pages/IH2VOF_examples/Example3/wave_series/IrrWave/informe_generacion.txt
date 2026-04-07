@@ -1,0 +1,21 @@
+____________________________________________________________________________________________ 
+Archivo linea   * Y Divisions 
+Teor�a de ondas empleada:  2 
+Directorio /home/maria/IH2VOF/CASES/example3/wave_series/IrrWave/ 
+Duraci�n de la se�al 800 s 
+Calado en la generaci�n 20 m 
+  
+Recuerda!! Estamos en profundidades intermedias... 
+  
+____________________________________________________________________________________________ 
+  
+Numero de olas   129 
+Hs   5.4013 
+Hrms   3.8004 
+Hmedia   3.3143 
+Hmax   9.8618   instante   641.0422   (Hmax/Hs=1.8258   etamax/Hmax=   0.50218 ) 
+  
+Periodo medio   6.0528 
+Periodo significante   8.3745 
+  
+____________________________________________________________________________________________ 

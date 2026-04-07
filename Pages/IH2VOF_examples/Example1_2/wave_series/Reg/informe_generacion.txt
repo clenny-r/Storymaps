@@ -1,0 +1,20 @@
+____________________________________________________________________________________________ 
+Archivo linea   * Y Divisions 
+Teoria de ondas empleada   Stokes 5 
+Directorio /home/maria/IH2VOF/CASES/example_1/wave_series/Reg/ 
+Duracion de la señal 200 s 
+Calado en la generacion 0.25 m 
+  
+Recuerda!! Estamos en profundidades intermedias... 
+  
+____________________________________________________________________________________________ 
+  
+Numero de olas   131 
+Hs   0.099968 
+Hrms   0.098518 
+Hmedia   0.097921 
+  
+Periodo medio   1.5 
+Periodo significante   1.5 
+  
+____________________________________________________________________________________________ 

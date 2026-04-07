@@ -1,0 +1,19 @@
+____________________________________________________________________________________________ 
+Teor�a de ondas empleada   Stokes 4 
+Directorio /home/maria/IH2VOF/CASES/EXAMPLE_4/wave_series/RegWave/ 
+Duraci�n de la se�al 200 s 
+Calado en la generaci�n 0.4 m 
+  
+Recuerda!! Estamos en profundidades intermedias... 
+  
+____________________________________________________________________________________________ 
+  
+Numero de olas   98 
+Hs   0.1 
+Hrms   0.1 
+Hmedia   0.1 
+  
+Periodo medio   2 
+Periodo significante   2 
+  
+____________________________________________________________________________________________ 

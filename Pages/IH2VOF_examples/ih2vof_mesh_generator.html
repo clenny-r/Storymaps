@@ -1,0 +1,1754 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IH2VOF Mesh Generator — CORAL-style</title>
+<style>
+/* ============================================================
+   RESET & VARIABLES
+   ============================================================ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg0: #0b1520; --bg1: #111e30; --bg2: #172540; --bg3: #1d2e50;
+  --bg4: #243660; --accent: #2e86de; --accent-h: #54a0ff;
+  --success: #1dd1a1; --warning: #feca57; --danger: #ff6b6b;
+  --text: #d8e4f0; --text2: #8aa0be; --text3: #4e6880;
+  --border: #223348; --border2: #192840;
+  --header-h: 48px; --status-h: 26px; --lp-w: 208px; --rp-w: 252px;
+}
+html, body { height: 100%; overflow: hidden; }
+body {
+  font: 12.5px/1.5 'Segoe UI', system-ui, -apple-system, sans-serif;
+  background: var(--bg0); color: var(--text);
+  display: flex; flex-direction: column;
+}
+/* ---- header ---- */
+#hdr {
+  height: var(--header-h); background: var(--bg1);
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; padding: 0 10px;
+  gap: 8px; flex-shrink: 0; z-index: 10;
+}
+.hdr-logo { font-size: 13px; font-weight: 700; color: var(--accent-h); white-space: nowrap; }
+.hdr-logo sub { font-size: 9px; color: var(--text2); font-weight: 400; }
+.sep { width: 1px; height: 22px; background: var(--border); }
+.btn {
+  padding: 5px 11px; background: var(--bg3);
+  border: 1px solid var(--border); border-radius: 4px;
+  color: var(--text); cursor: pointer; font-size: 12px;
+  transition: background .15s; white-space: nowrap; line-height: 1.4;
+}
+.btn:hover { background: var(--bg4); }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+.btn.primary:hover { background: var(--accent-h); }
+.btn.danger { background: #6b1515; border-color: #a02020; color: #ffa0a0; }
+.btn.danger:hover { background: #8b2020; }
+.btn.sm { padding: 3px 8px; font-size: 11px; }
+#hdr-info { margin-left: auto; color: var(--text3); font-size: 11px; white-space: nowrap; }
+/* ---- main ---- */
+#main { flex: 1; display: flex; overflow: hidden; }
+/* ---- left panel ---- */
+#lpanel {
+  width: var(--lp-w); background: var(--bg1);
+  border-right: 1px solid var(--border);
+  display: flex; flex-direction: column; flex-shrink: 0; overflow: hidden;
+}
+.lp-scroll { overflow-y: auto; flex: 1; }
+.psec { border-bottom: 1px solid var(--border2); padding: 8px; }
+.ptitle {
+  font-size: 9.5px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: .09em; color: var(--text3); margin-bottom: 6px;
+}
+/* ---- tools ---- */
+.tools-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 3px; }
+.tbtn {
+  display: flex; flex-direction: column; align-items: center;
+  padding: 7px 3px 5px; background: var(--bg2);
+  border: 1px solid var(--border); border-radius: 4px;
+  cursor: pointer; color: var(--text2); font-size: 10px;
+  gap: 2px; transition: all .12s; user-select: none;
+}
+.tbtn:hover { background: var(--bg3); color: var(--text); }
+.tbtn.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+.tbtn span { font-size: 17px; line-height: 1; }
+/* ---- materials ---- */
+.mat-item {
+  display: flex; align-items: center; gap: 7px;
+  padding: 5px 6px; border-radius: 4px; cursor: pointer;
+  border: 1px solid transparent; margin-bottom: 2px; transition: all .12s;
+}
+.mat-item:hover { background: var(--bg2); }
+.mat-item.active { border-color: var(--accent); background: var(--bg2); }
+.mswatch { width: 14px; height: 14px; border-radius: 3px; border: 1px solid rgba(255,255,255,.12); flex-shrink: 0; }
+.mname { flex: 1; font-size: 11.5px; }
+.mcode { font-size: 10px; color: var(--text3); font-family: monospace; background: var(--bg0); padding: 1px 4px; border-radius: 2px; }
+/* ---- canvas ---- */
+#canvas-area {
+  flex: 1; position: relative; overflow: hidden;
+  background: #080f1a;
+}
+#grid-canvas { position: absolute; top: 0; left: 0; display: block; image-rendering: pixelated; }
+/* ---- right panel ---- */
+#rpanel {
+  width: var(--rp-w); background: var(--bg1);
+  border-left: 1px solid var(--border);
+  display: flex; flex-direction: column; overflow-y: auto; flex-shrink: 0;
+}
+.frow { display: flex; align-items: center; gap: 6px; margin-bottom: 5px; }
+.frow label { flex: 1; color: var(--text2); font-size: 11.5px; min-width: 0; }
+.frow input[type=number], .frow input[type=text], .frow select {
+  width: 82px; padding: 3px 6px; background: var(--bg0);
+  border: 1px solid var(--border); border-radius: 3px;
+  color: var(--text); font-size: 12px;
+}
+.frow input:focus, .frow select:focus { outline: none; border-color: var(--accent); }
+.frow-full { flex-direction: column; align-items: flex-start; }
+.frow-full label { margin-bottom: 3px; }
+.frow-full input, .frow-full textarea {
+  width: 100%; padding: 4px 7px; background: var(--bg0);
+  border: 1px solid var(--border); border-radius: 3px;
+  color: var(--text); font-size: 12px; font-family: 'Consolas', monospace;
+  resize: vertical;
+}
+.frow-full input:focus, .frow-full textarea:focus { outline: none; border-color: var(--accent); }
+.stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; }
+.stat-card { background: var(--bg2); border-radius: 4px; padding: 5px 8px; }
+.sc-lbl { font-size: 10px; color: var(--text3); }
+.sc-val { font-size: 13px; font-weight: 600; color: var(--accent-h); }
+/* ---- status bar ---- */
+#status {
+  height: var(--status-h); background: var(--bg0);
+  border-top: 1px solid var(--border2);
+  display: flex; align-items: center; padding: 0 12px;
+  gap: 20px; font-size: 11px; color: var(--text3); flex-shrink: 0;
+}
+.s-item { display: flex; gap: 4px; align-items: center; }
+.s-val { color: var(--text2); }
+/* ---- modals ---- */
+.moverlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,.62);
+  z-index: 1000; display: none; align-items: center; justify-content: center;
+}
+.moverlay.show { display: flex; }
+.mbox {
+  background: var(--bg1); border: 1px solid var(--border);
+  border-radius: 8px; width: min(560px,96vw);
+  max-height: 88vh; display: flex; flex-direction: column;
+  box-shadow: 0 24px 72px rgba(0,0,0,.6);
+}
+.mhdr {
+  padding: 13px 18px 10px; border-bottom: 1px solid var(--border2);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.mtitle { font-weight: 600; font-size: 14px; }
+.mclose { background: none; border: none; color: var(--text3); cursor: pointer; font-size: 20px; line-height: 1; padding: 2px 6px; }
+.mclose:hover { color: var(--text); }
+.mbody { padding: 16px 18px; overflow-y: auto; flex: 1; }
+.mfooter { padding: 10px 18px 14px; border-top: 1px solid var(--border2); display: flex; gap: 8px; justify-content: flex-end; }
+/* tabs */
+.tabs { display: flex; border-bottom: 1px solid var(--border2); margin-bottom: 14px; }
+.tab-btn {
+  padding: 6px 14px; background: none; border: none;
+  border-bottom: 2px solid transparent; color: var(--text2);
+  cursor: pointer; font-size: 12px; margin-bottom: -1px;
+}
+.tab-btn.active { color: var(--accent-h); border-color: var(--accent); }
+.tab-pane { display: none; }
+.tab-pane.active { display: block; }
+/* zone table */
+.ztable { width: 100%; border-collapse: collapse; margin-bottom: 8px; }
+.ztable th {
+  text-align: left; font-size: 10px; color: var(--text3);
+  padding: 3px 5px; border-bottom: 1px solid var(--border2);
+}
+.ztable td { padding: 3px 5px; }
+.ztable input {
+  width: 74px; padding: 3px 5px; background: var(--bg0);
+  border: 1px solid var(--border); border-radius: 3px;
+  color: var(--text); font-size: 12px;
+}
+.ztable input:focus { outline: none; border-color: var(--accent); }
+.z-info { font-size: 10.5px; color: var(--success); font-family: monospace; padding: 0 4px; }
+.z-del { background: none; border: none; color: var(--danger); cursor: pointer; font-size: 15px; padding: 0 4px; }
+/* export preview */
+#dat-preview {
+  background: #060e18; border: 1px solid var(--border);
+  border-radius: 4px; padding: 10px 12px;
+  font-family: 'Consolas','Courier New',monospace; font-size: 11px;
+  color: #7fbcf0; white-space: pre; overflow: auto;
+  max-height: 320px; line-height: 1.5;
+}
+/* radio */
+.radio-grp { display: flex; gap: 16px; margin-bottom: 12px; }
+.rlbl { display: flex; align-items: center; gap: 5px; cursor: pointer; font-size: 12px; }
+.rlbl input { accent-color: var(--accent); }
+/* toggle */
+.trow { display: flex; align-items: center; justify-content: space-between; margin-bottom: 5px; }
+.trow label { font-size: 11.5px; color: var(--text2); }
+.tswitch { position: relative; display: inline-block; width: 32px; height: 17px; }
+.tswitch input { opacity: 0; width: 0; height: 0; }
+.tslider { position: absolute; cursor: pointer; inset: 0; background: var(--bg3); border-radius: 10px; transition: .2s; }
+.tslider::before { content: ''; position: absolute; width: 13px; height: 13px; left: 2px; bottom: 2px; background: var(--text2); border-radius: 50%; transition: .2s; }
+.tswitch input:checked + .tslider { background: var(--accent); }
+.tswitch input:checked + .tslider::before { transform: translateX(15px); background: #fff; }
+/* notification */
+#notif {
+  position: fixed; bottom: 36px; left: 50%; transform: translateX(-50%);
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: 6px; padding: 7px 20px;
+  font-size: 12px; color: var(--text); z-index: 9999;
+  display: none; pointer-events: none; white-space: nowrap;
+  box-shadow: 0 4px 24px rgba(0,0,0,.5);
+}
+#notif.show { display: block; }
+#notif.ok { border-color: var(--success); color: var(--success); }
+#notif.err { border-color: var(--danger); color: var(--danger); }
+/* tooltip */
+#tip {
+  position: fixed; background: rgba(8,16,28,.95);
+  border: 1px solid var(--border); border-radius: 4px;
+  padding: 4px 9px; font-size: 11px; color: var(--text2);
+  pointer-events: none; display: none; z-index: 500; white-space: nowrap;
+}
+/* scrollbar */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: var(--bg0); }
+::-webkit-scrollbar-thumb { background: var(--bg3); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--bg4); }
+/* file input hidden */
+#file-in { display: none; }
+/* help text */
+.help-text { font-size: 11px; color: var(--text3); margin-top: 3px; line-height: 1.5; }
+/* domain summary */
+.dsummary {
+  background: var(--bg2); border-radius: 4px; padding: 8px 10px;
+  font-size: 11.5px; color: var(--text2); margin-bottom: 10px; line-height: 1.8;
+}
+.dsummary b { color: var(--accent-h); }
+/* porosity table */
+.por-table { width: 100%; border-collapse: collapse; }
+.por-table th { font-size: 10px; color: var(--text3); text-align: left; padding: 3px 4px; border-bottom: 1px solid var(--border2); }
+.por-table td { padding: 3px 4px; }
+.por-table input {
+  width: 60px; padding: 2px 5px; background: var(--bg0);
+  border: 1px solid var(--border); border-radius: 3px;
+  color: var(--text); font-size: 11.5px;
+}
+.por-table input:focus { outline: none; border-color: var(--accent); }
+</style>
+</head>
+<body>
+<!-- ═══════════════════════════════════════════════════════
+     HEADER
+     ═══════════════════════════════════════════════════════ -->
+<header id="hdr">
+  <div class="hdr-logo">IH2VOF<sub>Mesh</sub> &nbsp;Generator</div>
+  <div class="sep"></div>
+  <button class="btn" onclick="openModal('new-modal')">⊞ New Grid</button>
+  <button class="btn" onclick="triggerImport()">📂 Open .dat</button>
+  <button class="btn primary" onclick="openExport()">💾 Export .dat</button>
+  <div class="sep"></div>
+  <button class="btn sm" onclick="undo()" title="Undo (Ctrl+Z)">↩ Undo</button>
+  <button class="btn sm" onclick="redo()" title="Redo (Ctrl+Y)">↪ Redo</button>
+  <div class="sep"></div>
+  <button class="btn sm" onclick="fitView()">⊡ Fit</button>
+  <button class="btn sm" onclick="zoomIn()">＋</button>
+  <button class="btn sm" onclick="zoomOut()">－</button>
+  <input type="file" id="file-in" accept=".dat,.txt" onchange="handleImport(event)">
+  <div id="hdr-info">Grid: <span id="info-size">—</span> &nbsp;|&nbsp; Domain: <span id="info-domain">—</span></div>
+</header>
+
+<!-- ═══════════════════════════════════════════════════════
+     MAIN AREA
+     ═══════════════════════════════════════════════════════ -->
+<div id="main">
+  <!-- LEFT PANEL -->
+  <div id="lpanel">
+    <div class="lp-scroll">
+      <!-- Tools -->
+      <div class="psec">
+        <div class="ptitle">Drawing Tools</div>
+        <div class="tools-grid" id="tools-grid">
+          <div class="tbtn active" data-tool="pencil" title="Pencil — paint single cells (P)">
+            <span>✏️</span>Pencil
+          </div>
+          <div class="tbtn" data-tool="rect" title="Rectangle fill (R)">
+            <span>▭</span>Rect
+          </div>
+          <div class="tbtn" data-tool="fill" title="Flood fill (F)">
+            <span>🪣</span>Fill
+          </div>
+          <div class="tbtn" data-tool="line" title="Draw slope/line (L)">
+            <span>╱</span>Slope
+          </div>
+          <div class="tbtn" data-tool="erase" title="Erase → fluid (E)">
+            <span>⬜</span>Erase
+          </div>
+          <div class="tbtn" data-tool="pan" title="Pan view (Space/Middle-drag)">
+            <span>✋</span>Pan
+          </div>
+        </div>
+      </div>
+      <!-- Materials -->
+      <div class="psec">
+        <div class="ptitle">Materials</div>
+        <div id="mat-list"></div>
+      </div>
+      <!-- View -->
+      <div class="psec">
+        <div class="ptitle">View</div>
+        <div class="trow">
+          <label>Grid lines</label>
+          <label class="tswitch"><input type="checkbox" id="tog-grid" checked onchange="render()"><span class="tslider"></span></label>
+        </div>
+        <div class="trow">
+          <label>Rulers</label>
+          <label class="tswitch"><input type="checkbox" id="tog-ruler" checked onchange="render()"><span class="tslider"></span></label>
+        </div>
+        <div class="trow">
+          <label>Cell coords</label>
+          <label class="tswitch"><input type="checkbox" id="tog-coords" onchange="render()"><span class="tslider"></span></label>
+        </div>
+      </div>
+      <!-- Zoom -->
+      <div class="psec">
+        <div class="ptitle">Zoom</div>
+        <div class="frow">
+          <label>Level</label>
+          <span id="zoom-val" class="s-val">100%</span>
+        </div>
+        <input type="range" id="zoom-slider" min="5" max="800" value="100"
+               oninput="setZoomFromSlider(this.value)" style="margin-top:4px">
+      </div>
+    </div>
+  </div>
+
+  <!-- CANVAS AREA -->
+  <div id="canvas-area">
+    <canvas id="grid-canvas"></canvas>
+  </div>
+
+  <!-- RIGHT PANEL -->
+  <div id="rpanel">
+    <!-- Grid info -->
+    <div class="psec">
+      <div class="ptitle">Grid Properties</div>
+      <div class="frow"><label>Columns (NX)</label><span id="rp-nx" class="s-val">—</span></div>
+      <div class="frow"><label>Rows (NY)</label><span id="rp-ny" class="s-val">—</span></div>
+      <div class="frow"><label>Width (m)</label><span id="rp-w" class="s-val">—</span></div>
+      <div class="frow"><label>Height (m)</label><span id="rp-h" class="s-val">—</span></div>
+      <div class="frow"><label>dx range (m)</label><span id="rp-dx" class="s-val">—</span></div>
+      <div class="frow"><label>dy range (m)</label><span id="rp-dy" class="s-val">—</span></div>
+    </div>
+    <!-- Cell counts -->
+    <div class="psec">
+      <div class="ptitle">Cell Statistics</div>
+      <div class="stat-grid" id="stat-grid"></div>
+    </div>
+    <!-- Porous material properties -->
+    <div class="psec">
+      <div class="ptitle">Porous Material Properties</div>
+      <table class="por-table" id="por-table">
+        <thead><tr>
+          <th>Type</th><th>n (−)</th><th>d₅₀ (m)</th><th>α</th><th>β</th>
+        </tr></thead>
+        <tbody id="por-tbody"></tbody>
+      </table>
+    </div>
+    <!-- Quick actions -->
+    <div class="psec">
+      <div class="ptitle">Quick Actions</div>
+      <div style="display:flex; flex-direction:column; gap:5px;">
+        <button class="btn sm" onclick="fillAll(0)" style="text-align:left">Clear all → Fluid</button>
+        <button class="btn sm" onclick="fillRow()" style="text-align:left">Add floor (bottom row → Solid)</button>
+        <button class="btn sm" onclick="mirrorH()" style="text-align:left">Mirror left→right</button>
+        <button class="btn sm" onclick="openModal('template-modal')" style="text-align:left">Load template…</button>
+      </div>
+    </div>
+    <!-- Cell inspector -->
+    <div class="psec">
+      <div class="ptitle">Cell Inspector</div>
+      <div id="cell-inspector" style="font-size:11.5px; color:var(--text2); line-height:1.8;">
+        Hover over a cell to inspect it.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- STATUS BAR -->
+<div id="status">
+  <div class="s-item">Cell: <span class="s-val" id="s-cell">—</span></div>
+  <div class="s-item">X: <span class="s-val" id="s-x">—</span> m</div>
+  <div class="s-item">Y: <span class="s-val" id="s-y">—</span> m</div>
+  <div class="s-item">Material: <span class="s-val" id="s-mat">—</span></div>
+  <div class="s-item" style="margin-left:auto">Zoom: <span class="s-val" id="s-zoom">100%</span></div>
+</div>
+
+<!-- TOOLTIP -->
+<div id="tip"></div>
+<div id="notif"></div>
+
+<!-- ═══════════════════════════════════════════════════════
+     MODAL: NEW GRID
+     ═══════════════════════════════════════════════════════ -->
+<div class="moverlay" id="new-modal">
+  <div class="mbox" style="width:min(600px,96vw)">
+    <div class="mhdr">
+      <div class="mtitle">New Mesh Grid</div>
+      <button class="mclose" onclick="closeModal('new-modal')">✕</button>
+    </div>
+    <div class="mbody">
+      <div class="tabs" id="new-tabs">
+        <button class="tab-btn active" onclick="switchTab('new','uniform')">Uniform Spacing</button>
+        <button class="tab-btn" onclick="switchTab('new','variable')">Variable / Zones</button>
+      </div>
+      <!-- UNIFORM TAB -->
+      <div class="tab-pane active" id="new-tab-uniform">
+        <div class="frow">
+          <label>Columns NX (horizontal cells)</label>
+          <input type="number" id="u-nx" value="120" min="2" max="2000">
+        </div>
+        <div class="frow">
+          <label>Rows NY (vertical cells)</label>
+          <input type="number" id="u-ny" value="60" min="2" max="2000">
+        </div>
+        <div class="frow">
+          <label>Cell width dx (m)</label>
+          <input type="number" id="u-dx" value="0.1" min="0.0001" step="0.01">
+        </div>
+        <div class="frow">
+          <label>Cell height dy (m)</label>
+          <input type="number" id="u-dy" value="0.05" min="0.0001" step="0.01">
+        </div>
+        <div class="dsummary" id="u-summary">—</div>
+        <p class="help-text">Creates a uniform structured grid. All cells start as <b>Fluid (type 0)</b>.</p>
+      </div>
+      <!-- VARIABLE TAB -->
+      <div class="tab-pane" id="new-tab-variable">
+        <p class="help-text" style="margin-bottom:10px">Define refinement zones in X and Y. Each zone has a total width/height and number of cells — giving uniform spacing within each zone.</p>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+          <!-- X zones -->
+          <div>
+            <div class="ptitle" style="margin-bottom:6px">X-Direction Zones</div>
+            <table class="ztable" id="xzone-table">
+              <thead><tr><th>Width (m)</th><th>N cells</th><th>dx</th><th></th></tr></thead>
+              <tbody id="xzone-body"></tbody>
+            </table>
+            <button class="btn sm" onclick="addZone('x')">+ Add X zone</button>
+          </div>
+          <!-- Y zones -->
+          <div>
+            <div class="ptitle" style="margin-bottom:6px">Y-Direction Zones</div>
+            <table class="ztable" id="yzone-table">
+              <thead><tr><th>Height (m)</th><th>N cells</th><th>dy</th><th></th></tr></thead>
+              <tbody id="yzone-body"></tbody>
+            </table>
+            <button class="btn sm" onclick="addZone('y')">+ Add Y zone</button>
+          </div>
+        </div>
+        <div class="dsummary" id="v-summary" style="margin-top:12px">—</div>
+      </div>
+    </div>
+    <div class="mfooter">
+      <button class="btn" onclick="closeModal('new-modal')">Cancel</button>
+      <button class="btn primary" onclick="createGrid()">Create Grid</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     MODAL: EXPORT
+     ═══════════════════════════════════════════════════════ -->
+<div class="moverlay" id="export-modal">
+  <div class="mbox" style="width:min(680px,96vw)">
+    <div class="mhdr">
+      <div class="mtitle">Export IH2VOF Mesh (.dat)</div>
+      <button class="mclose" onclick="closeModal('export-modal')">✕</button>
+    </div>
+    <div class="mbody">
+      <div class="frow" style="margin-bottom:10px">
+        <label>Filename</label>
+        <input type="text" id="exp-filename" value="mesh" style="width:180px">
+        <span style="color:var(--text3);font-size:12px">.dat</span>
+      </div>
+      <div class="frow" style="margin-bottom:12px">
+        <label style="font-size:12px">Row order in file:</label>
+        <div class="radio-grp" style="margin:0">
+          <label class="rlbl"><input type="radio" name="row-order" value="topdown" checked> Top→Bottom</label>
+          <label class="rlbl"><input type="radio" name="row-order" value="bottomup"> Bottom→Top</label>
+        </div>
+      </div>
+      <div class="ptitle" style="margin-bottom:6px">Preview (first 80 rows)</div>
+      <div id="dat-preview">Generating…</div>
+    </div>
+    <div class="mfooter">
+      <button class="btn" onclick="closeModal('export-modal')">Cancel</button>
+      <button class="btn sm" onclick="copyDAT()">Copy to clipboard</button>
+      <button class="btn primary" onclick="downloadDAT()">⬇ Download .dat</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     MODAL: TEMPLATES
+     ═══════════════════════════════════════════════════════ -->
+<div class="moverlay" id="template-modal">
+  <div class="mbox" style="width:min(520px,96vw)">
+    <div class="mhdr">
+      <div class="mtitle">Load Template</div>
+      <button class="mclose" onclick="closeModal('template-modal')">✕</button>
+    </div>
+    <div class="mbody">
+      <p class="help-text" style="margin-bottom:12px">Select a common IH2VOF wave flume configuration to start from:</p>
+      <div id="template-list" style="display:flex; flex-direction:column; gap:8px;"></div>
+    </div>
+    <div class="mfooter">
+      <button class="btn" onclick="closeModal('template-modal')">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<script>
+'use strict';
+/* ═══════════════════════════════════════════════════════════
+   CONSTANTS & MATERIALS
+   ═══════════════════════════════════════════════════════════ */
+const MATERIALS = [
+  { id:0, name:'Fluid',          code:'0', color:'#0d2a6e',  solid:'#0d2a6e', label:'F',
+    desc:'Open fluid domain (water/air). RANS equations solved here.' },
+  { id:1, name:'Solid (Imperm.)',code:'1', color:'#5c6680',  solid:'#5c6680', label:'S',
+    desc:'Impermeable solid structure (concrete, bedrock, seawall).' },
+  { id:2, name:'Porous – Armor', code:'2', color:'#c97820',  solid:'#c97820', label:'P1',
+    desc:'Porous medium type 1 — armour layer of rubble-mound breakwater.' },
+  { id:3, name:'Porous – Core',  code:'3', color:'#804018',  solid:'#804018', label:'P2',
+    desc:'Porous medium type 2 — breakwater core material.' },
+  { id:4, name:'Porous – Filter',code:'4', color:'#907830',  solid:'#907830', label:'P3',
+    desc:'Porous medium type 3 — filter/under-layer material.' },
+  { id:5, name:'Damping Zone',   code:'5', color:'#5c2898',  solid:'#5c2898', label:'D',
+    desc:'Numerical damping / sponge layer for wave absorption.' },
+];
+
+const POROUS_DEFAULTS = [
+  { id:2, n:0.40, d50:0.020, alpha:200, beta:1.1 },
+  { id:3, n:0.35, d50:0.010, alpha:200, beta:1.1 },
+  { id:4, n:0.40, d50:0.005, alpha:200, beta:1.1 },
+];
+
+const TEMPLATES = [
+  {
+    name:'Simple Wave Flume',
+    desc:'Flat-bottom flume with solid floor and sidewalls',
+    build: () => buildTemplate('flume')
+  },
+  {
+    name:'Rubble-Mound Breakwater',
+    desc:'Trapezoidal porous breakwater with armor + core + filter layers',
+    build: () => buildTemplate('breakwater')
+  },
+  {
+    name:'Smooth Impermeable Dike (1:2 slope)',
+    desc:'Triangular solid dike with 1:2 seaward slope',
+    build: () => buildTemplate('dike')
+  },
+  {
+    name:'Submerged Reef / Bar',
+    desc:'Flat-topped submerged breakwater (solid)',
+    build: () => buildTemplate('reef')
+  },
+];
+
+/* ═══════════════════════════════════════════════════════════
+   STATE
+   ═══════════════════════════════════════════════════════════ */
+let grid = null;   // { nx, ny, dx:Float64Array, dy:Float64Array, cells:Uint8Array }
+let view = { zoom:1, panX:40, panY:40 };
+let activeTool = 'pencil';
+let activeMat = 1;
+let porousProps = POROUS_DEFAULTS.map(p => ({...p}));
+let drawing = false, drawStart = null, prevCells = null;
+let undoStack = [], redoStack = [];
+let spaceDown = false;
+let xZones = [], yZones = [];
+
+/* ═══════════════════════════════════════════════════════════
+   CANVAS SETUP
+   ═══════════════════════════════════════════════════════════ */
+const canvas = document.getElementById('grid-canvas');
+const ctx = canvas.getContext('2d');
+const area = document.getElementById('canvas-area');
+
+function resizeCanvas() {
+  canvas.width = area.clientWidth;
+  canvas.height = area.clientHeight;
+  render();
+}
+new ResizeObserver(resizeCanvas).observe(area);
+
+/* ═══════════════════════════════════════════════════════════
+   GRID CREATION
+   ═══════════════════════════════════════════════════════════ */
+function makeGrid(nx, ny, dxArr, dyArr) {
+  const cells = new Uint8Array(nx * ny);
+  grid = { nx, ny, dx: Float64Array.from(dxArr), dy: Float64Array.from(dyArr), cells };
+  undoStack = []; redoStack = [];
+  fitView();
+  updateUI();
+  render();
+}
+
+function createGrid() {
+  const activeTab = document.querySelector('#new-modal .tab-pane.active').id;
+  if (activeTab === 'new-tab-uniform') {
+    const nx  = clamp(parseInt(document.getElementById('u-nx').value)||120, 2, 2000);
+    const ny  = clamp(parseInt(document.getElementById('u-ny').value)||60,  2, 2000);
+    const dx  = parseFloat(document.getElementById('u-dx').value)||0.1;
+    const dy  = parseFloat(document.getElementById('u-dy').value)||0.05;
+    if (dx <= 0 || dy <= 0) return notify('dx and dy must be positive', 'err');
+    makeGrid(nx, ny, Array.from({length:nx}, ()=>dx), Array.from({length:ny}, ()=>dy));
+  } else {
+    const xz = collectZones('x');
+    const yz = collectZones('y');
+    if (!xz || !yz) return;
+    const dxArr = xz.dx, dyArr = yz.dy;
+    makeGrid(xz.n, yz.n, dxArr, dyArr);
+  }
+  closeModal('new-modal');
+  notify('Grid created!', 'ok');
+}
+
+function collectZones(dir) {
+  const rows = document.querySelectorAll(`#${dir}zone-body tr`);
+  if (!rows.length) { notify(`Add at least one ${dir.toUpperCase()} zone`, 'err'); return null; }
+  const sizes = [];
+  for (const tr of rows) {
+    const w = parseFloat(tr.querySelector('.z-w').value);
+    const n = parseInt(tr.querySelector('.z-n').value);
+    if (!w || w<=0 || !n || n<1) { notify('Invalid zone values', 'err'); return null; }
+    const d = w/n;
+    for (let k=0; k<n; k++) sizes.push(d);
+  }
+  return dir==='x' ? {n:sizes.length, dx:sizes} : {n:sizes.length, dy:sizes};
+}
+
+/* ═══════════════════════════════════════════════════════════
+   COORDINATE TRANSFORMS
+   ═══════════════════════════════════════════════════════════ */
+function getXPos() {
+  // xPos[i] = screen X of left edge of column i (i=0..NX)
+  const xp = new Float64Array(grid.nx + 1);
+  xp[0] = view.panX;
+  for (let i = 0; i < grid.nx; i++) xp[i+1] = xp[i] + grid.dx[i] * view.zoom;
+  return xp;
+}
+
+function getYPos() {
+  // yPos[j] = screen Y of TOP edge of screen-row j
+  // screen-row 0 = physical row ny-1 (top of domain)
+  // screen-row j → physical row = ny-1-j
+  const yp = new Float64Array(grid.ny + 1);
+  yp[0] = view.panY;
+  for (let j = 0; j < grid.ny; j++) {
+    const physJ = grid.ny - 1 - j;
+    yp[j+1] = yp[j] + grid.dy[physJ] * view.zoom;
+  }
+  return yp;
+}
+
+function screenToCell(sx, sy) {
+  if (!grid) return null;
+  const xp = getXPos(), yp = getYPos();
+  const i = bsearch(xp, sx);
+  const sj = bsearch(yp, sy);
+  if (i < 0 || i >= grid.nx || sj < 0 || sj >= grid.ny) return null;
+  const j = grid.ny - 1 - sj;  // convert screen-row to physical row
+  return { i, j };
+}
+
+function bsearch(arr, val) {
+  let lo = 0, hi = arr.length - 2;
+  if (val < arr[lo] || val >= arr[hi+1]) return -1;
+  while (lo < hi) {
+    const mid = (lo+hi+1)>>1;
+    if (arr[mid] <= val) lo = mid; else hi = mid-1;
+  }
+  return lo;
+}
+
+function cellRect(i, j, xp, yp) {
+  const sj = grid.ny - 1 - j;
+  return { x:xp[i], y:yp[sj], w:xp[i+1]-xp[i], h:yp[sj+1]-yp[sj] };
+}
+
+function cellIndex(i, j) { return j * grid.nx + i; }
+function getCell(i, j) { return grid.cells[cellIndex(i, j)]; }
+function setCell(i, j, v) { grid.cells[cellIndex(i, j)] = v; }
+
+function worldX(i) {
+  let s = 0;
+  for (let k = 0; k < i; k++) s += grid.dx[k];
+  return s;
+}
+function worldY(j) {
+  let s = 0;
+  for (let k = 0; k < j; k++) s += grid.dy[k];
+  return s;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   RENDERING
+   ═══════════════════════════════════════════════════════════ */
+let lastHover = null;
+
+function render() {
+  if (!grid) { ctx.clearRect(0,0,canvas.width,canvas.height); drawEmpty(); return; }
+  const W = canvas.width, H = canvas.height;
+  ctx.clearRect(0, 0, W, H);
+
+  const xp = getXPos();
+  const yp = getYPos();
+  const showGrid  = document.getElementById('tog-grid').checked;
+  const showRuler = document.getElementById('tog-ruler').checked;
+  const showCoords= document.getElementById('tog-coords').checked;
+  const RULER_W = showRuler ? 36 : 0;
+
+  // clip to canvas
+  ctx.save();
+  ctx.beginPath();
+  ctx.rect(RULER_W, RULER_W, W, H);
+  ctx.clip();
+
+  // compute visible range
+  const ix0 = Math.max(0, bsearch(xp, RULER_W)-1);
+  const ix1 = Math.min(grid.nx-1, bsearch(xp, W)+1);
+  const iy0 = Math.max(0, bsearch(yp, RULER_W)-1);
+  const iy1 = Math.min(grid.ny-1, bsearch(yp, H)+1);
+
+  if (ix0 < 0 || iy0 < 0 || ix0 > ix1 || iy0 > iy1) { ctx.restore(); drawRulers(xp,yp,RULER_W); return; }
+
+  // draw cells
+  for (let sj = iy0; sj <= iy1; sj++) {
+    const j = grid.ny - 1 - sj;
+    const cellY = yp[sj], cellH = yp[sj+1]-yp[sj];
+    for (let i = ix0; i <= ix1; i++) {
+      const mat = getCell(i, j);
+      const m   = MATERIALS[mat] || MATERIALS[0];
+      const cellX  = xp[i], cellW = xp[i+1]-xp[i];
+      if (mat === 0) {
+        // Fluid: deep ocean blue with subtle depth tint
+        const depthRatio = j / Math.max(1, grid.ny - 1);
+        ctx.fillStyle = `rgb(${10+depthRatio*8},${40+depthRatio*30},${90+depthRatio*40})`;
+      } else {
+        ctx.fillStyle = m.solid;
+      }
+      ctx.fillRect(cellX, cellY, cellW, cellH);
+    }
+  }
+
+  // grid lines — draw after cells so they're always visible
+  if (showGrid) {
+    // Use zoom-adaptive opacity: finer at low zoom
+    const alpha = Math.min(0.55, 0.18 + view.zoom * 0.012);
+    ctx.strokeStyle = `rgba(140,200,255,${alpha})`;
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    // vertical lines
+    for (let i = ix0; i <= Math.min(ix1+1, grid.nx) && i < xp.length; i++) {
+      if (xp[i] < RULER_W - 1 || xp[i] > W + 1) continue;
+      ctx.moveTo(Math.round(xp[i]) + 0.5, yp[iy0]);
+      ctx.lineTo(Math.round(xp[i]) + 0.5, yp[Math.min(iy1+1, grid.ny)]);
+    }
+    // horizontal lines
+    for (let sj = iy0; sj <= Math.min(iy1+1, grid.ny) && sj < yp.length; sj++) {
+      if (yp[sj] < RULER_W - 1 || yp[sj] > H + 1) continue;
+      ctx.moveTo(xp[ix0], Math.round(yp[sj]) + 0.5);
+      ctx.lineTo(xp[Math.min(ix1+1, grid.nx)], Math.round(yp[sj]) + 0.5);
+    }
+    ctx.stroke();
+  }
+
+  // hover highlight — bright yellow fill + border
+  if (lastHover) {
+    const { i, j } = lastHover;
+    if (i >= 0 && i < grid.nx && j >= 0 && j < grid.ny) {
+      const r = cellRect(i, j, xp, yp);
+      ctx.fillStyle = 'rgba(255,255,100,0.22)';
+      ctx.fillRect(r.x, r.y, r.w, r.h);
+      ctx.strokeStyle = 'rgba(255,230,0,0.95)';
+      ctx.lineWidth = 2;
+      ctx.strokeRect(r.x + 1, r.y + 1, r.w - 2, r.h - 2);
+    }
+  }
+
+  // rect tool preview
+  if (drawing && drawStart && (activeTool==='rect' || activeTool==='line') && lastHover) {
+    const { i:i0, j:j0 } = drawStart;
+    const { i:i1, j:j1 } = lastHover;
+    if (activeTool === 'rect') {
+      const ri0=Math.min(i0,i1), ri1=Math.max(i0,i1), rj0=Math.min(j0,j1), rj1=Math.max(j0,j1);
+      const x0s = xp[ri0], y0s = yp[grid.ny-1-rj1];
+      const x1s = xp[ri1+1], y1s = yp[grid.ny-1-rj0+1];
+      ctx.strokeStyle = 'rgba(100,210,255,0.9)';
+      ctx.lineWidth = 1.5;
+      ctx.setLineDash([4,3]);
+      ctx.strokeRect(x0s, y0s, x1s-x0s, y1s-y0s);
+      ctx.setLineDash([]);
+    }
+    if (activeTool === 'line') {
+      ctx.strokeStyle = 'rgba(100,255,180,0.7)';
+      ctx.lineWidth = 1.5;
+      ctx.setLineDash([4,3]);
+      const r0=cellRect(i0,j0,xp,yp), r1=cellRect(i1,j1,xp,yp);
+      ctx.beginPath();
+      ctx.moveTo(r0.x+r0.w/2, r0.y+r0.h/2);
+      ctx.lineTo(r1.x+r1.w/2, r1.y+r1.h/2);
+      ctx.stroke();
+      ctx.setLineDash([]);
+    }
+  }
+
+  // cell coords
+  if (showCoords && view.zoom >= 30) {
+    ctx.fillStyle = 'rgba(200,220,255,0.55)';
+    ctx.font = `${Math.min(9, view.zoom*0.22)}px monospace`;
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    for (let sj = iy0; sj <= iy1; sj++) {
+      const j = grid.ny-1-sj;
+      for (let i = ix0; i <= ix1; i++) {
+        const r = cellRect(i, j, xp, yp);
+        if (r.w > 16 && r.h > 10) ctx.fillText(`${i},${j}`, r.x+r.w/2, r.y+r.h/2);
+      }
+    }
+  }
+
+  ctx.restore();
+
+  // domain border — bright cyan outline
+  const dx0 = xp[0], dy0 = yp[0], dx1 = xp[grid.nx], dy1 = yp[grid.ny];
+  ctx.strokeStyle = 'rgba(60,200,255,0.9)';
+  ctx.lineWidth = 2;
+  ctx.strokeRect(dx0, dy0, dx1-dx0, dy1-dy0);
+
+  drawRulers(xp, yp, RULER_W);
+}
+
+function drawEmpty() {
+  const W = canvas.width, H = canvas.height;
+  ctx.fillStyle = 'rgba(40,100,200,0.08)';
+  ctx.fillRect(0, 0, W, H);
+  ctx.fillStyle = 'rgba(100,160,255,0.35)';
+  ctx.font = '16px Segoe UI';
+  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  ctx.fillText('Click "⊞ New Grid" or "📂 Open .dat" to begin', W/2, H/2);
+  ctx.font = '12px Segoe UI';
+  ctx.fillStyle = 'rgba(100,160,255,0.2)';
+  ctx.fillText('IH2VOF Mesh Generator — Interactive 2D structured mesh editor', W/2, H/2+28);
+}
+
+function drawRulers(xp, yp, RW) {
+  if (!RW) return;
+  const W = canvas.width, H = canvas.height;
+  // backgrounds
+  ctx.fillStyle = '#0d1820';
+  ctx.fillRect(0, 0, W, RW);
+  ctx.fillRect(0, 0, RW, H);
+  ctx.fillRect(0, 0, RW, RW);
+  // X ruler
+  ctx.fillStyle = 'rgba(100,180,255,0.6)';
+  ctx.font = '9px monospace'; ctx.textAlign = 'center'; ctx.textBaseline = 'top';
+  let cumX = 0;
+  for (let i = 0; i <= grid.nx; i++) {
+    const sx = xp[i];
+    if (sx >= RW && sx <= W) {
+      if (view.zoom >= 2) {
+        ctx.beginPath();
+        ctx.moveTo(sx, RW-6); ctx.lineTo(sx, RW);
+        ctx.strokeStyle='rgba(100,180,255,0.4)'; ctx.lineWidth=0.5; ctx.stroke();
+        // label
+        const label = formatNum(cumX);
+        if (view.zoom * grid.dx[Math.min(i,grid.nx-1)] > 28 || i % Math.ceil(10/view.zoom/grid.dx[0]) === 0) {
+          ctx.fillText(label, sx, 2);
+        }
+      }
+    }
+    if (i < grid.nx) cumX += grid.dx[i];
+  }
+  // X axis label
+  ctx.fillStyle = 'rgba(100,180,255,0.35)'; ctx.font='9px monospace';
+  ctx.fillText('x (m)', RW + (W-RW)/2, 18);
+
+  // Y ruler
+  ctx.textAlign = 'right'; ctx.textBaseline = 'middle';
+  let cumY = 0;
+  // cumY starts from top of domain = sum(dy) and goes down
+  const totalH = Array.from(grid.dy).reduce((a,b)=>a+b,0);
+  let cumYphys = totalH;
+  for (let sj = 0; sj <= grid.ny; sj++) {
+    const sy = yp[sj];
+    if (sy >= RW && sy <= H) {
+      if (view.zoom >= 1) {
+        ctx.beginPath();
+        ctx.moveTo(RW-6, sy); ctx.lineTo(RW, sy);
+        ctx.strokeStyle='rgba(100,180,255,0.4)'; ctx.lineWidth=0.5; ctx.stroke();
+        const label = formatNum(cumYphys);
+        const minPx = sj < grid.ny ? grid.dy[grid.ny-1-sj]*view.zoom : 0;
+        if (view.zoom * (sj<grid.ny?grid.dy[grid.ny-1-sj]:0.01) > 16 || sj % Math.ceil(10/view.zoom/grid.dy[0]) === 0) {
+          ctx.save(); ctx.translate(RW-8, sy); ctx.rotate(-Math.PI/2);
+          ctx.fillStyle='rgba(100,180,255,0.6)'; ctx.font='9px monospace';
+          ctx.textAlign='center'; ctx.textBaseline='middle';
+          ctx.fillText(label, 0, 0);
+          ctx.restore();
+        }
+      }
+    }
+    if (sj < grid.ny) cumYphys -= grid.dy[grid.ny-1-sj];
+  }
+  // Y label
+  ctx.save(); ctx.translate(10, RW+(H-RW)/2); ctx.rotate(-Math.PI/2);
+  ctx.fillStyle='rgba(100,180,255,0.35)'; ctx.font='9px monospace';
+  ctx.textAlign='center'; ctx.textBaseline='middle';
+  ctx.fillText('y (m)', 0, 0);
+  ctx.restore();
+
+  // corner
+  ctx.fillStyle = '#0d1820';
+  ctx.fillRect(0, 0, RW, RW);
+}
+
+function formatNum(n) {
+  if (n >= 100)  return n.toFixed(0);
+  if (n >= 10)   return n.toFixed(1);
+  if (n >= 1)    return n.toFixed(2);
+  return n.toFixed(3);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   DRAWING TOOLS
+   ═══════════════════════════════════════════════════════════ */
+function saveUndo() {
+  undoStack.push(new Uint8Array(grid.cells));
+  if (undoStack.length > 50) undoStack.shift();
+  redoStack = [];
+}
+
+function undo() {
+  if (!grid || !undoStack.length) return notify('Nothing to undo');
+  redoStack.push(new Uint8Array(grid.cells));
+  grid.cells = undoStack.pop();
+  render(); updateStats();
+}
+
+function redo() {
+  if (!grid || !redoStack.length) return notify('Nothing to redo');
+  undoStack.push(new Uint8Array(grid.cells));
+  grid.cells = redoStack.pop();
+  render(); updateStats();
+}
+
+function paintCell(i, j, mat) {
+  if (!grid || i<0||i>=grid.nx||j<0||j>=grid.ny) return;
+  setCell(i, j, mat);
+}
+
+function floodFill(si, sj, newMat) {
+  if (!grid) return;
+  const old = getCell(si, sj);
+  if (old === newMat) return;
+  saveUndo();
+  const stack = [[si, sj]];
+  const visited = new Uint8Array(grid.nx * grid.ny);
+  while (stack.length) {
+    const [i, j] = stack.pop();
+    if (i<0||i>=grid.nx||j<0||j>=grid.ny) continue;
+    const idx = cellIndex(i,j);
+    if (visited[idx] || grid.cells[idx] !== old) continue;
+    visited[idx] = 1;
+    grid.cells[idx] = newMat;
+    stack.push([i+1,j],[i-1,j],[i,j+1],[i,j-1]);
+  }
+  render(); updateStats();
+}
+
+function fillRect(i0, j0, i1, j1, mat) {
+  const ri0=Math.min(i0,i1), ri1=Math.max(i0,i1);
+  const rj0=Math.min(j0,j1), rj1=Math.max(j0,j1);
+  for (let j=rj0; j<=rj1; j++)
+    for (let i=ri0; i<=ri1; i++)
+      setCell(i,j,mat);
+}
+
+function drawBresenham(i0, j0, i1, j1, mat) {
+  // Bresenham's line
+  let dx = Math.abs(i1-i0), dy = Math.abs(j1-j0);
+  let sx = i0<i1?1:-1, sy = j0<j1?1:-1;
+  let err = dx-dy;
+  let ci = i0, cj = j0;
+  while (true) {
+    setCell(ci, cj, mat);
+    if (ci===i1 && cj===j1) break;
+    const e2 = 2*err;
+    if (e2 > -dy) { err-=dy; ci+=sx; }
+    if (e2 < dx) { err+=dx; cj+=sy; }
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   MOUSE / TOUCH EVENTS
+   ═══════════════════════════════════════════════════════════ */
+let lastPan = null;
+let midPanning = false;
+
+canvas.addEventListener('contextmenu', e => e.preventDefault());
+
+// Helper: convert a mouse event to canvas-local coordinates
+function canvasXY(e) {
+  const r = canvas.getBoundingClientRect();
+  return { cx: e.clientX - r.left, cy: e.clientY - r.top };
+}
+
+canvas.addEventListener('mousedown', e => {
+  if (!grid) return;
+  e.preventDefault();
+  const { cx, cy } = canvasXY(e);
+  const cell = screenToCell(cx, cy);
+
+  if (e.button === 1 || (e.button === 0 && (spaceDown || activeTool==='pan'))) {
+    lastPan = {x:cx, y:cy, px:view.panX, py:view.panY};
+    midPanning = true;
+    canvas.style.cursor = 'grabbing';
+    return;
+  }
+
+  if (e.button === 2) {
+    // right-click = pick material
+    if (cell) { activeMat = getCell(cell.i, cell.j); updateMatUI(); }
+    return;
+  }
+
+  if (e.button !== 0) return;
+  drawing = true;
+  drawStart = cell;
+  prevCells = new Uint8Array(grid.cells); // for undo on release
+
+  if (!cell) return;
+  if (activeTool === 'pencil' || activeTool === 'erase') {
+    const mat = activeTool==='erase' ? 0 : activeMat;
+    paintCell(cell.i, cell.j, mat);
+    render();
+  } else if (activeTool === 'fill') {
+    floodFill(cell.i, cell.j, activeMat);
+    drawing = false;
+  }
+});
+
+canvas.addEventListener('mousemove', e => {
+  const { cx, cy } = canvasXY(e);
+
+  if (midPanning && lastPan) {
+    view.panX = lastPan.px + cx - lastPan.x;
+    view.panY = lastPan.py + cy - lastPan.y;
+    render(); return;
+  }
+
+  if (!grid) return;
+  const cell = screenToCell(cx, cy);
+  lastHover = cell;
+
+  // update status & inspector
+  if (cell) {
+    const mat = getCell(cell.i, cell.j);
+    const m = MATERIALS[mat]||MATERIALS[0];
+    const wx = worldX(cell.i) + grid.dx[cell.i]/2;
+    const wy = worldY(cell.j) + grid.dy[cell.j]/2;
+    document.getElementById('s-cell').textContent = `(${cell.i}, ${cell.j})`;
+    document.getElementById('s-x').textContent = wx.toFixed(3);
+    document.getElementById('s-y').textContent = wy.toFixed(3);
+    document.getElementById('s-mat').textContent = `${m.name} [${mat}]`;
+    document.getElementById('cell-inspector').innerHTML =
+      `<b>Cell (i=${cell.i}, j=${cell.j})</b><br>` +
+      `x = ${wx.toFixed(4)} m, y = ${wy.toFixed(4)} m<br>` +
+      `dx = ${grid.dx[cell.i].toFixed(5)} m, dy = ${grid.dy[cell.j].toFixed(5)} m<br>` +
+      `<span style="color:${m.solid==='#3d4860'?'#8aa0ff':m.solid};font-weight:600">Type ${mat} — ${m.name}</span>`;
+  } else {
+    lastHover = null;
+    document.getElementById('s-cell').textContent='—';
+    document.getElementById('s-x').textContent='—';
+    document.getElementById('s-y').textContent='—';
+    document.getElementById('s-mat').textContent='—';
+    document.getElementById('cell-inspector').textContent='Hover over a cell to inspect it.';
+  }
+
+  if (!drawing || !cell) { render(); return; }
+
+  const mat = activeTool==='erase'?0:activeMat;
+  if (activeTool==='pencil'||activeTool==='erase') {
+    // paint along path
+    if (drawStart) {
+      drawBresenham(drawStart.i, drawStart.j, cell.i, cell.j, mat);
+      drawStart = cell;
+    } else {
+      paintCell(cell.i, cell.j, mat);
+    }
+  }
+  render();
+});
+
+canvas.addEventListener('mouseup', e => {
+  if (midPanning) {
+    midPanning = false; lastPan = null;
+    canvas.style.cursor = activeTool==='pan'?'grab':'crosshair';
+    return;
+  }
+  if (!drawing || !grid) { drawing=false; return; }
+  const { cx:mux, cy:muy } = canvasXY(e);
+  const cell = screenToCell(mux, muy);
+  const mat = activeTool==='erase'?0:activeMat;
+
+  if (activeTool==='rect' && drawStart && cell) {
+    undoStack.push(new Uint8Array(prevCells));
+    redoStack = [];
+    fillRect(drawStart.i, drawStart.j, cell.i, cell.j, mat);
+  } else if (activeTool==='line' && drawStart && cell) {
+    undoStack.push(new Uint8Array(prevCells));
+    redoStack = [];
+    drawBresenham(drawStart.i, drawStart.j, cell.i, cell.j, mat);
+  } else if ((activeTool==='pencil'||activeTool==='erase') && prevCells) {
+    // save undo if anything changed
+    let changed = false;
+    for (let k=0; k<grid.cells.length; k++) if (grid.cells[k]!==prevCells[k]){changed=true;break;}
+    if (changed) { undoStack.push(new Uint8Array(prevCells)); redoStack=[]; }
+  }
+  drawing = false; drawStart = null; prevCells = null;
+  render(); updateStats();
+});
+
+canvas.addEventListener('mouseleave', () => {
+  lastHover = null;
+  if (midPanning) { midPanning=false; lastPan=null; }
+  render();
+});
+
+canvas.addEventListener('wheel', e => {
+  e.preventDefault();
+  const factor = e.deltaY < 0 ? 1.12 : 1/1.12;
+  const cx = e.clientX, cy = e.clientY;
+  const wx = (cx - view.panX) / view.zoom;
+  const wy = (cy - view.panY) / view.zoom;
+  view.zoom = clamp(view.zoom * factor, 0.05, 80);
+  view.panX = cx - wx * view.zoom;
+  view.panY = cy - wy * view.zoom;
+  updateZoomUI();
+  render();
+}, { passive:false });
+
+document.addEventListener('keydown', e => {
+  if (e.target.tagName==='INPUT'||e.target.tagName==='TEXTAREA') return;
+  if (e.code==='Space') { spaceDown=true; canvas.style.cursor='grab'; e.preventDefault(); }
+  if ((e.ctrlKey||e.metaKey) && e.key==='z') { e.preventDefault(); undo(); }
+  if ((e.ctrlKey||e.metaKey) && (e.key==='y'||(e.shiftKey&&e.key==='z'))) { e.preventDefault(); redo(); }
+  const keyMap = { p:'pencil', r:'rect', f:'fill', l:'line', e:'erase' };
+  if (keyMap[e.key.toLowerCase()]) selectTool(keyMap[e.key.toLowerCase()]);
+  if (e.key>='0' && e.key<='5') { activeMat=parseInt(e.key); updateMatUI(); }
+});
+
+document.addEventListener('keyup', e => {
+  if (e.code==='Space') { spaceDown=false; canvas.style.cursor=activeTool==='pan'?'grab':'crosshair'; }
+});
+
+/* ═══════════════════════════════════════════════════════════
+   VIEW CONTROLS
+   ═══════════════════════════════════════════════════════════ */
+function fitView() {
+  if (!grid) return;
+  const totalW = Array.from(grid.dx).reduce((a,b)=>a+b,0);
+  const totalH = Array.from(grid.dy).reduce((a,b)=>a+b,0);
+  const W = canvas.width, H = canvas.height;
+  const margin = 50;
+  const zx = (W - margin*2) / totalW;
+  const zy = (H - margin*2) / totalH;
+  view.zoom = Math.min(zx, zy, 80);
+  view.panX = (W - totalW*view.zoom)/2;
+  view.panY = (H - totalH*view.zoom)/2;
+  updateZoomUI(); render();
+}
+
+function zoomIn()  { applyZoom(1.25); }
+function zoomOut() { applyZoom(1/1.25); }
+function applyZoom(f) {
+  const cx = canvas.width/2, cy = canvas.height/2;
+  const wx = (cx-view.panX)/view.zoom, wy = (cy-view.panY)/view.zoom;
+  view.zoom = clamp(view.zoom*f, 0.05, 80);
+  view.panX = cx - wx*view.zoom;
+  view.panY = cy - wy*view.zoom;
+  updateZoomUI(); render();
+}
+
+function setZoomFromSlider(v) {
+  const factor = v/100;
+  const cx=canvas.width/2, cy=canvas.height/2;
+  const wx=(cx-view.panX)/view.zoom, wy=(cy-view.panY)/view.zoom;
+  view.zoom = clamp(factor, 0.05, 8);
+  view.panX = cx - wx*view.zoom;
+  view.panY = cy - wy*view.zoom;
+  updateZoomUI(); render();
+}
+
+function updateZoomUI() {
+  const pct = Math.round(view.zoom*100)+'%';
+  document.getElementById('zoom-val').textContent = pct;
+  document.getElementById('s-zoom').textContent   = pct;
+  const sl = document.getElementById('zoom-slider');
+  sl.value = Math.round(view.zoom*100);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   TOOL & MATERIAL UI
+   ═══════════════════════════════════════════════════════════ */
+function selectTool(name) {
+  activeTool = name;
+  document.querySelectorAll('.tbtn').forEach(b => b.classList.toggle('active', b.dataset.tool===name));
+  canvas.style.cursor = name==='pan'?'grab':'crosshair';
+}
+
+function updateMatUI() {
+  document.querySelectorAll('.mat-item').forEach(el => {
+    el.classList.toggle('active', parseInt(el.dataset.matid)===activeMat);
+  });
+}
+
+function buildMatList() {
+  const el = document.getElementById('mat-list');
+  el.innerHTML = '';
+  MATERIALS.forEach(m => {
+    const div = document.createElement('div');
+    div.className = 'mat-item' + (m.id===activeMat?' active':'');
+    div.dataset.matid = m.id;
+    div.title = m.desc;
+    div.innerHTML = `<div class="mswatch" style="background:${m.solid}"></div>
+      <div class="mname">${m.name}</div>
+      <div class="mcode">${m.code}</div>`;
+    div.onclick = () => { activeMat=m.id; updateMatUI(); };
+    el.appendChild(div);
+  });
+}
+
+function buildToolBtns() {
+  document.querySelectorAll('.tbtn').forEach(btn => {
+    btn.addEventListener('click', () => selectTool(btn.dataset.tool));
+  });
+}
+
+function buildPorTable() {
+  const tbody = document.getElementById('por-tbody');
+  tbody.innerHTML = '';
+  porousProps.forEach(pp => {
+    const m = MATERIALS[pp.id];
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td style="font-size:11px;color:var(--accent-h)">${pp.id} – ${m.name.replace('Porous – ','')}</td>
+      <td><input type="number" class="por-n"   data-id="${pp.id}" value="${pp.n}"     min="0.01" max="0.99" step="0.01"></td>
+      <td><input type="number" class="por-d50" data-id="${pp.id}" value="${pp.d50}"   min="0.0001" step="0.001"></td>
+      <td><input type="number" class="por-a"   data-id="${pp.id}" value="${pp.alpha}" min="1" step="10"></td>
+      <td><input type="number" class="por-b"   data-id="${pp.id}" value="${pp.beta}"  min="0.1" step="0.1"></td>`;
+    tbody.appendChild(tr);
+  });
+  tbody.querySelectorAll('input').forEach(inp => {
+    inp.addEventListener('change', () => {
+      const id = parseInt(inp.dataset.id);
+      const p  = porousProps.find(p=>p.id===id);
+      if (!p) return;
+      if (inp.classList.contains('por-n'))   p.n     = parseFloat(inp.value)||p.n;
+      if (inp.classList.contains('por-d50')) p.d50   = parseFloat(inp.value)||p.d50;
+      if (inp.classList.contains('por-a'))   p.alpha = parseFloat(inp.value)||p.alpha;
+      if (inp.classList.contains('por-b'))   p.beta  = parseFloat(inp.value)||p.beta;
+    });
+  });
+}
+
+function buildStatGrid() {
+  const sg = document.getElementById('stat-grid');
+  sg.innerHTML = '';
+  MATERIALS.forEach(m => {
+    const div = document.createElement('div');
+    div.className = 'stat-card';
+    div.id = `sc-${m.id}`;
+    div.innerHTML = `<div class="sc-lbl" style="color:${m.solid==='#3d4860'?'#8a9aff':m.solid}">${m.name}</div><div class="sc-val" id="sv-${m.id}">—</div>`;
+    sg.appendChild(div);
+  });
+}
+
+function updateStats() {
+  if (!grid) return;
+  const counts = new Array(MATERIALS.length).fill(0);
+  for (const c of grid.cells) { if (c < counts.length) counts[c]++; }
+  MATERIALS.forEach(m => {
+    const el = document.getElementById(`sv-${m.id}`);
+    if (el) el.textContent = counts[m.id].toLocaleString();
+  });
+  const totalW = Array.from(grid.dx).reduce((a,b)=>a+b,0);
+  const totalH = Array.from(grid.dy).reduce((a,b)=>a+b,0);
+  document.getElementById('rp-nx').textContent = grid.nx;
+  document.getElementById('rp-ny').textContent = grid.ny;
+  document.getElementById('rp-w').textContent  = totalW.toFixed(3);
+  document.getElementById('rp-h').textContent  = totalH.toFixed(3);
+  const dxMin = Math.min(...grid.dx).toFixed(4), dxMax = Math.max(...grid.dx).toFixed(4);
+  const dyMin = Math.min(...grid.dy).toFixed(4), dyMax = Math.max(...grid.dy).toFixed(4);
+  document.getElementById('rp-dx').textContent = dxMin===dxMax ? dxMin : `${dxMin}–${dxMax}`;
+  document.getElementById('rp-dy').textContent = dyMin===dyMax ? dyMin : `${dyMin}–${dyMax}`;
+  document.getElementById('info-size').textContent   = `${grid.nx} × ${grid.ny}`;
+  document.getElementById('info-domain').textContent = `${totalW.toFixed(2)} m × ${totalH.toFixed(2)} m`;
+}
+
+function updateUI() { updateStats(); buildPorTable(); }
+
+/* ═══════════════════════════════════════════════════════════
+   QUICK ACTIONS
+   ═══════════════════════════════════════════════════════════ */
+function fillAll(mat) {
+  if (!grid) return;
+  if (!confirm(`Fill entire grid with material type ${mat} (${MATERIALS[mat].name})?`)) return;
+  saveUndo();
+  grid.cells.fill(mat);
+  render(); updateStats();
+}
+
+function fillRow() {
+  if (!grid) return;
+  saveUndo();
+  for (let i=0; i<grid.nx; i++) setCell(i, 0, 1);
+  render(); updateStats();
+}
+
+function mirrorH() {
+  if (!grid) return;
+  if (!confirm('Mirror left half onto right half?')) return;
+  saveUndo();
+  for (let j=0; j<grid.ny; j++) {
+    for (let i=0; i<Math.floor(grid.nx/2); i++) {
+      setCell(grid.nx-1-i, j, getCell(i, j));
+    }
+  }
+  render(); updateStats();
+}
+
+/* ═══════════════════════════════════════════════════════════
+   DAT EXPORT
+   ═══════════════════════════════════════════════════════════ */
+function generateDAT(topDown=true) {
+  if (!grid) return '';
+  const nl = '\n';
+  const totalW = Array.from(grid.dx).reduce((a,b)=>a+b,0);
+  const totalH = Array.from(grid.dy).reduce((a,b)=>a+b,0);
+  const now = new Date().toISOString().slice(0,16).replace('T',' ');
+
+  let s = '';
+  s += `! =========================================================\n`;
+  s += `! IH2VOF Mesh File\n`;
+  s += `! Generated by IH2VOF Mesh Generator (CORAL-style GUI)\n`;
+  s += `! Date: ${now}\n`;
+  s += `! Grid: ${grid.nx} x ${grid.ny} cells\n`;
+  s += `! Domain: ${totalW.toFixed(4)} m (x) × ${totalH.toFixed(4)} m (y)\n`;
+  s += `! Cell types: 0=Fluid, 1=Solid, 2=Porous(Armor), 3=Porous(Core), 4=Porous(Filter), 5=Damping\n`;
+  s += `! =========================================================\n`;
+  s += nl;
+  s += `! NX  NY\n`;
+  s += `${grid.nx}  ${grid.ny}\n`;
+  s += nl;
+
+  // dx array
+  s += `! Cell widths in x-direction [m] (NX = ${grid.nx} values)\n`;
+  const dxLine = Array.from(grid.dx).map(v=>v.toFixed(6)).join('  ');
+  s += wrapLine(dxLine, 12) + nl;
+  s += nl;
+
+  // dy array (physical order: j=0=bottom to j=NY-1=top)
+  s += `! Cell heights in y-direction [m] (NY = ${grid.ny} values, j=1=bottom to j=${grid.ny}=top)\n`;
+  const dyLine = Array.from(grid.dy).map(v=>v.toFixed(6)).join('  ');
+  s += wrapLine(dyLine, 12) + nl;
+  s += nl;
+
+  // cell type matrix
+  s += `! Cell type matrix\n`;
+  s += topDown
+    ? `! Row order: top (j=${grid.ny}) → bottom (j=1), columns: left (i=1) → right (i=${grid.nx})\n`
+    : `! Row order: bottom (j=1) → top (j=${grid.ny}), columns: left (i=1) → right (i=${grid.nx})\n`;
+
+  const rows = [];
+  if (topDown) {
+    for (let j = grid.ny-1; j >= 0; j--) {
+      const row = [];
+      for (let i = 0; i < grid.nx; i++) row.push(getCell(i,j));
+      rows.push(row.join(' '));
+    }
+  } else {
+    for (let j = 0; j < grid.ny; j++) {
+      const row = [];
+      for (let i = 0; i < grid.nx; i++) row.push(getCell(i,j));
+      rows.push(row.join(' '));
+    }
+  }
+  s += rows.join(nl) + nl;
+  s += nl;
+
+  // porous material parameters
+  s += `! ---------------------------------------------------------\n`;
+  s += `! Porous material parameters (for use in IH2VOF input file)\n`;
+  s += `! Type  Porosity(n)  d50(m)    Alpha    Beta\n`;
+  for (const pp of porousProps) {
+    s += `! ${pp.id}     ${pp.n.toFixed(3)}        ${pp.d50.toFixed(5)}   ${pp.alpha.toFixed(1)}    ${pp.beta.toFixed(3)}\n`;
+  }
+
+  return s;
+}
+
+function wrapLine(str, perLine) {
+  const parts = str.split('  ');
+  const lines = [];
+  for (let i=0; i<parts.length; i+=perLine) {
+    lines.push(parts.slice(i,i+perLine).join('  '));
+  }
+  return lines.join('\n');
+}
+
+function openExport() {
+  if (!grid) return notify('Create a grid first', 'err');
+  openModal('export-modal');
+  refreshExportPreview();
+}
+
+function refreshExportPreview() {
+  const topDown = document.querySelector('input[name="row-order"]:checked').value === 'topdown';
+  const txt = generateDAT(topDown);
+  // Show limited preview
+  const lines = txt.split('\n');
+  const preview = lines.slice(0, 80).join('\n') + (lines.length>80 ? `\n… (${lines.length-80} more lines)` : '');
+  document.getElementById('dat-preview').textContent = preview;
+}
+
+document.querySelectorAll('input[name="row-order"]').forEach(r => r.addEventListener('change', () => {
+  if (document.getElementById('export-modal').classList.contains('show')) refreshExportPreview();
+}));
+
+function downloadDAT() {
+  if (!grid) return;
+  const topDown = document.querySelector('input[name="row-order"]:checked').value === 'topdown';
+  const txt = generateDAT(topDown);
+  const fname = (document.getElementById('exp-filename').value||'mesh').replace(/\.dat$/i,'') + '.dat';
+  downloadText(txt, fname);
+  notify(`Saved ${fname}`, 'ok');
+}
+
+function copyDAT() {
+  if (!grid) return;
+  const topDown = document.querySelector('input[name="row-order"]:checked').value === 'topdown';
+  navigator.clipboard.writeText(generateDAT(topDown)).then(()=>notify('Copied to clipboard','ok'));
+}
+
+function downloadText(txt, fname) {
+  const blob = new Blob([txt], {type:'text/plain'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = fname;
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   DAT IMPORT
+   ═══════════════════════════════════════════════════════════ */
+function triggerImport() { document.getElementById('file-in').click(); }
+
+function handleImport(evt) {
+  const file = evt.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    try { parseDAT(e.target.result); notify('Mesh imported successfully','ok'); }
+    catch(err) { notify('Import failed: '+err.message, 'err'); console.error(err); }
+  };
+  reader.readAsText(file);
+  evt.target.value='';
+}
+
+function parseDAT(text) {
+  const lines = text.split(/\r?\n/)
+    .map(l => l.replace(/!.*/,'').trim())  // strip comments
+    .filter(l => l.length > 0);
+
+  let idx = 0;
+  const readTokens = () => {
+    const toks = [];
+    while (idx < lines.length && toks.length === 0) {
+      toks.push(...lines[idx].split(/\s+/).filter(s=>s));
+      idx++;
+    }
+    return toks;
+  };
+
+  const readAllTokensUntilEnough = (n) => {
+    const toks = [];
+    while (toks.length < n && idx < lines.length) {
+      toks.push(...lines[idx].split(/\s+/).filter(s=>s));
+      idx++;
+    }
+    return toks;
+  };
+
+  // NX NY
+  const dims = readTokens();
+  const nx = parseInt(dims[0]), ny = parseInt(dims[1]);
+  if (!nx || !ny || nx<1 || ny<1) throw new Error('Cannot parse NX/NY');
+
+  // dx values
+  const dxToks = readAllTokensUntilEnough(nx);
+  const dxArr = dxToks.slice(0,nx).map(Number);
+  if (dxArr.some(isNaN)) throw new Error('Cannot parse dx array');
+
+  // dy values
+  const dyToks = readAllTokensUntilEnough(ny);
+  const dyArr = dyToks.slice(0,ny).map(Number);
+  if (dyArr.some(isNaN)) throw new Error('Cannot parse dy array');
+
+  // cell matrix: collect nx*ny values
+  const cellToks = readAllTokensUntilEnough(nx*ny);
+  const cellVals = cellToks.slice(0,nx*ny).map(Number);
+  if (cellVals.some(isNaN)) throw new Error('Cannot parse cell matrix');
+
+  // detect order by checking if first row looks like top or bottom
+  // we'll just assume top-down (which is more common) if we have exactly nx*ny
+  const cells = new Uint8Array(nx*ny);
+  // top-down: row 0 in file = physical row ny-1
+  for (let r=0; r<ny; r++) {
+    const physJ = ny-1-r;
+    for (let i=0; i<nx; i++) {
+      cells[physJ*nx+i] = Math.min(5, Math.max(0, cellVals[r*nx+i]));
+    }
+  }
+
+  grid = { nx, ny, dx:Float64Array.from(dxArr), dy:Float64Array.from(dyArr), cells };
+  undoStack=[]; redoStack=[];
+  fitView(); updateUI(); render();
+}
+
+/* ═══════════════════════════════════════════════════════════
+   TEMPLATES
+   ═══════════════════════════════════════════════════════════ */
+function buildTemplateList() {
+  const el = document.getElementById('template-list');
+  el.innerHTML='';
+  TEMPLATES.forEach(t => {
+    const div = document.createElement('div');
+    div.style.cssText = 'display:flex;align-items:center;background:var(--bg2);border-radius:5px;padding:10px 12px;gap:12px;cursor:pointer;border:1px solid var(--border)';
+    div.innerHTML = `<div style="flex:1"><div style="font-weight:600;font-size:13px;margin-bottom:2px">${t.name}</div><div style="font-size:11px;color:var(--text2)">${t.desc}</div></div><button class="btn sm primary">Load</button>`;
+    div.querySelector('button').onclick = () => { t.build(); closeModal('template-modal'); };
+    el.appendChild(div);
+  });
+}
+
+function buildTemplate(type) {
+  const configs = {
+    flume: { nx:160, ny:50, dx:0.1, dy:0.05 },
+    breakwater: { nx:200, ny:60, dx:0.1, dy:0.05 },
+    dike: { nx:200, ny:60, dx:0.1, dy:0.05 },
+    reef: { nx:200, ny:50, dx:0.1, dy:0.05 },
+  };
+  const c = configs[type];
+  const dxArr = Array.from({length:c.nx},()=>c.dx);
+  const dyArr = Array.from({length:c.ny},()=>c.dy);
+  makeGrid(c.nx, c.ny, dxArr, dyArr);
+  saveUndo();
+
+  if (type==='flume') {
+    // Solid floor (j=0) and walls
+    for (let i=0;i<c.nx;i++) setCell(i,0,1);
+  }
+
+  if (type==='breakwater') {
+    // Solid floor
+    for (let i=0;i<c.nx;i++) setCell(i,0,1);
+    // Rubble-mound breakwater: crest at x=100-120, height=30 cells
+    const cx0=80, cx1=140, crestH=30, slope=1.5;
+    for (let j=1;j<crestH;j++) {
+      const hw = Math.floor((crestH-j)*slope);
+      const i0=cx0-hw, i1=cx1+hw;
+      for (let i=Math.max(0,i0);i<=Math.min(c.nx-1,i1);i++) {
+        // layer classification based on distance from surface
+        const distFromSurface = crestH-j;
+        const distFromCenter  = Math.abs(i-(cx0+cx1)/2)-((cx1-cx0)/2);
+        let mat;
+        if (distFromSurface <= 4) mat=2;       // armor
+        else if (distFromSurface <= 8) mat=4;   // filter
+        else mat=3;                             // core
+        setCell(i,j,mat);
+      }
+    }
+    // crest top
+    for (let i=cx0;i<=cx1;i++) for(let j=crestH;j<crestH+2;j++) setCell(i,j,2);
+  }
+
+  if (type==='dike') {
+    for (let i=0;i<c.nx;i++) setCell(i,0,1);
+    const base=80, crestI=130, crestH=24, slopeL=2, slopeR=2;
+    for (let j=1;j<crestH;j++) {
+      const seaI = base - j*slopeL;
+      const leaI = crestI + j*slopeR;
+      for (let i=Math.max(0,seaI);i<=Math.min(c.nx-1,leaI);i++) setCell(i,j,1);
+    }
+    for (let i=base;i<=crestI;i++) for(let j=crestH;j<crestH+2;j++) setCell(i,j,1);
+  }
+
+  if (type==='reef') {
+    for (let i=0;i<c.nx;i++) setCell(i,0,1);
+    const r0=70, r1=130, rh=20;
+    for (let j=1;j<=rh;j++)
+      for (let i=r0;i<=r1;i++) setCell(i,j,1);
+  }
+
+  render(); updateStats();
+  notify(`Template "${TEMPLATES.find(t=>t.build.toString().includes(type))?.name}" loaded`, 'ok');
+}
+
+/* ═══════════════════════════════════════════════════════════
+   ZONE EDITOR
+   ═══════════════════════════════════════════════════════════ */
+function addZone(dir) {
+  const tbody = document.getElementById(`${dir}zone-body`);
+  const tr = document.createElement('tr');
+  const isX = dir==='x';
+  tr.innerHTML = `<td><input type="number" class="z-w" value="${isX?10:1}" min="0.01" step="0.1"></td>
+    <td><input type="number" class="z-n" value="${isX?50:20}" min="1"></td>
+    <td><span class="z-info">—</span></td>
+    <td><button class="z-del" onclick="this.closest('tr').remove();updateZoneSummary()">✕</button></td>`;
+  tbody.appendChild(tr);
+  tr.querySelectorAll('input').forEach(i=>i.addEventListener('input',updateZoneSummary));
+  updateZoneSummary();
+}
+
+function updateZoneSummary() {
+  const computeDir = (dir) => {
+    const rows = document.querySelectorAll(`#${dir}zone-body tr`);
+    let totalSize=0, totalN=0;
+    rows.forEach(tr=>{
+      const w=parseFloat(tr.querySelector('.z-w').value)||0;
+      const n=parseInt(tr.querySelector('.z-n').value)||0;
+      totalSize+=w; totalN+=n;
+      const info=tr.querySelector('.z-info');
+      if(info) info.textContent = n>0 ? `d${dir}=${(w/n).toFixed(4)}m` : '—';
+    });
+    return {totalSize,totalN};
+  };
+  const x=computeDir('x'), y=computeDir('y');
+  document.getElementById('v-summary').innerHTML =
+    `<b>${x.totalN} × ${y.totalN} cells</b> &nbsp;|&nbsp; ` +
+    `Domain: <b>${x.totalSize.toFixed(2)} m × ${y.totalSize.toFixed(2)} m</b>`;
+}
+
+function updateUniformSummary() {
+  const nx=parseInt(document.getElementById('u-nx').value)||0;
+  const ny=parseInt(document.getElementById('u-ny').value)||0;
+  const dx=parseFloat(document.getElementById('u-dx').value)||0;
+  const dy=parseFloat(document.getElementById('u-dy').value)||0;
+  document.getElementById('u-summary').innerHTML =
+    `<b>${nx} × ${ny} cells</b> &nbsp;|&nbsp; ` +
+    `Domain: <b>${(nx*dx).toFixed(2)} m × ${(ny*dy).toFixed(2)} m</b> &nbsp;|&nbsp; ` +
+    `Total cells: <b>${(nx*ny).toLocaleString()}</b>`;
+}
+
+['u-nx','u-ny','u-dx','u-dy'].forEach(id=>{
+  document.getElementById(id).addEventListener('input',updateUniformSummary);
+});
+
+/* ═══════════════════════════════════════════════════════════
+   MODAL HELPERS
+   ═══════════════════════════════════════════════════════════ */
+function openModal(id) {
+  document.getElementById(id).classList.add('show');
+  if (id==='new-modal') { updateUniformSummary(); initZones(); }
+  if (id==='template-modal') buildTemplateList();
+}
+function closeModal(id) { document.getElementById(id).classList.remove('show'); }
+
+document.querySelectorAll('.moverlay').forEach(mo=>{
+  mo.addEventListener('mousedown', e=>{ if(e.target===mo) closeModal(mo.id); });
+});
+
+function switchTab(modalName, tabId) {
+  const panes = document.querySelectorAll(`#${modalName}-modal .tab-pane`);
+  const btns  = document.querySelectorAll(`#${modalName}-modal .tab-btn`);
+  panes.forEach(p=>p.classList.toggle('active', p.id===`${modalName}-tab-${tabId}`));
+  btns.forEach((b,i)=>b.classList.toggle('active', b.getAttribute('onclick').includes(`'${tabId}'`)));
+}
+
+function initZones() {
+  if (document.querySelectorAll('#xzone-body tr').length === 0) {
+    addZone('x'); addZone('x'); addZone('x');
+  }
+  if (document.querySelectorAll('#yzone-body tr').length === 0) {
+    addZone('y'); addZone('y');
+  }
+  // set default zone values
+  const xrows=[...document.querySelectorAll('#xzone-body tr')];
+  const yrows=[...document.querySelectorAll('#yzone-body tr')];
+  const xvals=[[10,40],[10,100],[10,40]], yvals=[[1,20],[1,20]];
+  xrows.forEach((tr,i)=>{
+    if (xvals[i]) { tr.querySelector('.z-w').value=xvals[i][0]; tr.querySelector('.z-n').value=xvals[i][1]; }
+  });
+  yrows.forEach((tr,i)=>{
+    if (yvals[i]) { tr.querySelector('.z-w').value=yvals[i][0]; tr.querySelector('.z-n').value=yvals[i][1]; }
+  });
+  updateZoneSummary();
+}
+
+/* ═══════════════════════════════════════════════════════════
+   NOTIFICATIONS
+   ═══════════════════════════════════════════════════════════ */
+let notifTimer = null;
+function notify(msg, type='') {
+  const el = document.getElementById('notif');
+  el.textContent = msg;
+  el.className = 'show' + (type ? ` ${type}` : '');
+  clearTimeout(notifTimer);
+  notifTimer = setTimeout(()=>el.classList.remove('show'), 2800);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   UTILITIES
+   ═══════════════════════════════════════════════════════════ */
+function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
+
+/* ═══════════════════════════════════════════════════════════
+   KEYBOARD SHORTCUTS HELP
+   ═══════════════════════════════════════════════════════════ */
+function buildShortcutsBar() {
+  // nothing visible; using title tooltips and key handlers above
+}
+
+/* ═══════════════════════════════════════════════════════════
+   INITIALIZATION
+   ═══════════════════════════════════════════════════════════ */
+function init() {
+  buildMatList();
+  buildToolBtns();
+  buildStatGrid();
+  buildPorTable();
+  resizeCanvas();
+  render();
+  updateUniformSummary();
+
+  // Default tool
+  selectTool('pencil');
+
+  // Auto-create a starter grid so users see something right away
+  const defNx = 100, defNy = 40;
+  makeGrid(defNx, defNy,
+    Array.from({length:defNx}, ()=>0.1),
+    Array.from({length:defNy}, ()=>0.05));
+  // Add a solid floor
+  for (let i=0; i<defNx; i++) setCell(i, 0, 1);
+  updateStats();
+  notify('Starter grid loaded — click cells to paint, or use ⊞ New Grid to customise.', '');
+}
+
+init();
+</script>
+</body>
+</html>

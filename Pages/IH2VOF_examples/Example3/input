@@ -1,0 +1,88 @@
+EXAMPLE_3
+
+&NUMERIC_PARAMETER
+    delt = 0.005
+    twfin = 800
+    kl = 6
+    kr = 3
+/
+&NUMERIC_PARAMETER
+    rhof = 1
+/
+&WAVE_PARAMETER
+    wave_type = 'static-paddle'
+    wave_generation_side = 'left'
+    aa = 1
+    h0 = 20
+/
+&OUTPUT
+    writeON = .true.
+    tinit_output = 0
+    tend_output = 800
+    freq_output = 0.1
+    interx = 1
+    intery = 1
+    number_lines = 1000
+    start_number_lines = 1
+    toreal4 = .true.
+    write_vof = .true.
+    write_u = .true.
+    write_w = .true.
+    write_pressure = .true.
+    write_k = .true.
+/
+&SENSOR_FREESURFACE
+    sensor_freesurfaceON = .true.
+    num_fs_sensor = 4
+    xout_fs = 65,  140,  173,183.5
+    tinit_fs_sensor = 0
+    tend_fs_sensor = 800
+    freq_fs_sensor = 0.033333
+/
+&SENSOR_VELOCITY
+    sensor_velocityON = .true.
+    num_v_sensor = 4
+    xout_v = 65,  140,  173,183.5
+    tinit_v_sensor = 0
+    tend_v_sensor = 800
+    freq_v_sensor = 0.033333
+/
+&FREESURFACE_TRACKING
+    freesurface_method = 'vof'
+/
+&ZONE_RUNUP
+    ZoneRunupON = .true.
+    x_run_ini_m = 150
+    x_run_fin_m = 228
+    y_run_ini_m = 10
+    y_run_fin_m = 36
+    tinit_ZoneRunup = 0
+    tend_ZoneRunup = 800
+    freq_ZoneRunup = 0.033333
+/
+&ZONE_PRESSURE
+    ZonePressureON = .true.
+    x_pres_ini_m = 175
+    x_pres_fin_m = 200
+    y_pres_ini_m = 3
+    y_pres_fin_m = 30
+    tinit_ZonePressure = 0
+    tend_ZonePressure = 800
+    freq_ZonePressure = 0.033333
+/
+&ENVELOPE
+    envelopeON = .true.
+    x_env_ini_m = 0
+    x_env_fin_m = 100000
+    y_env_ini_m = 0
+    y_env_fin_m = 100000
+    tinit_envelope = 0
+    tend_envelope = 800
+    freq_envelope = 0.1
+/
+&TURBULENCE
+    kemodel = 'k-epsilon'
+    ticf = 0.05
+    eddycoef = 1e-006
+    kopen = 1
+/
