@@ -28,16 +28,6 @@
           "updatedAt": "2026-04-06T03:27:10.512Z"
         },
         {
-          "id": 1775402200991,
-          "text": "Book communauto",
-          "completed": true,
-          "priority": "high",
-          "order": 1,
-          "addedBy": "Wife",
-          "createdAt": "2026-04-05T15:16:40.991Z",
-          "updatedAt": "2026-04-06T03:27:10.512Z"
-        },
-        {
           "id": 1775403670421,
           "text": "Create MarEnCo.com site ; create email addresses for the morenco site; create a GitHub account using the email address @marenco.com. move the hurricane stuff to the new site;",
           "completed": false,
