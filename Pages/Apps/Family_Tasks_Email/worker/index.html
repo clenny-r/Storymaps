@@ -6,7 +6,7 @@
 <meta name="mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
-<title>Family Tasks | TWC</title>
+<title>Family Tasks -Email | TWC</title>
 <!-- EmailJS SDK — required for email notifications -->
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
@@ -303,6 +303,13 @@ body::before{
 .p-popup-btn.low{color:var(--green)}
 .p-popup-btn:hover{background:rgba(255,255,255,.07)}
 
+/* ── Toast undo button ────────────────────────────────────────────── */
+#toast .toast-undo{
+  background:none;border:none;font-family:inherit;font-size:inherit;
+  font-weight:700;text-decoration:underline;cursor:pointer;
+  color:inherit;padding:0 0 0 10px;
+}
+
 /* ── Loading / toast ──────────────────────────────────────────────── */
 .spinner{
   width:20px;height:20px;border:2px solid rgba(255,255,255,.15);
@@ -469,6 +476,13 @@ body::before{
           <div style="color:var(--muted);font-size:.82rem">Loading…</div>
         </div>
       </div>
+
+      <!-- Member email addresses — populated dynamically after login -->
+      <div class="admin-section" id="email-section" style="display:none">
+        <h3>Member Email Addresses</h3>
+        <div id="email-list"></div>
+        <div class="admin-err" id="email-err"></div>
+      </div>
     </div>
 
     <!-- Filter bar -->
@@ -514,24 +528,14 @@ const EMAILJS_CFG = {
   PUBLIC_KEY:  'Hzb7w3nDbYqseJ6Gz',
 };
 
-// ════════════════════════════════════════════════════════════════════════════
 // ── Family Member → Email Mapping ────────────────────────────────────────
-// TODO: Replace placeholder addresses with real emails for each family member.
-// The keys must match the member names exactly as they appear in the app
-// (they are set when the family is registered via the Admin panel).
-// Add or remove entries to match your family's member list.
-// ════════════════════════════════════════════════════════════════════════════
-const EMAIL_MAP = {
-  'Mum':    'mum@example.com',       // TODO: replace with Mum's real email
-  'Dad':    'dad@example.com',       // TODO: replace with Dad's real email
-  'John':   'john@example.com',      // TODO: replace with John's real email
-  'Mary':   'mary@example.com',      // TODO: replace with Mary's real email
-  // Add more members here as needed: 'Name': 'email@example.com',
-};
+// Loaded dynamically from GET /api/member-emails after login.
+// Admins can edit addresses in the Admin panel — no need to hardcode here.
+let emailMap = {};
 
 // ── Config ─────────────────────────────────────────────────────────────────
 const CFG = {
-  API_BASE: 'https://twc-family-tasks.kd7bgn7q2z.workers.dev',
+  API_BASE: 'https://twc-family-tasks-email.kd7bgn7q2z.workers.dev', // TODO: Update to new worker URL after deployment
 };
 
 // ── State ──────────────────────────────────────────────────────────────────
@@ -544,6 +548,7 @@ let dragSrc = null;
 let roomPassword = '';
 let roomMembers = [];
 let isAdmin = false;
+const deleteTimers = new Map(); // id → { timer, task } for undo-delete
 
 // ── Initialise EmailJS ────────────────────────────────────────────────────
 (function() {
@@ -591,6 +596,10 @@ document.getElementById('lock-form').addEventListener('submit', async e => {
         loadFamilyList();
         setupAdminForm();
       }
+      // Load email map; then show email editor in admin panel once map is ready
+      loadEmailMap().then(() => {
+        if (isAdmin) buildEmailSection(roomMembers);
+      });
       // Tasks already loaded — use them directly
       tasks = (data.tasks || []).sort((a, b) => a.order - b.order);
       lockEl.style.display = 'none';
@@ -751,7 +760,7 @@ async function sendTaskEmail(task) {
     return;
   }
 
-  const toEmail = EMAIL_MAP[task.assignedTo];
+  const toEmail = emailMap[task.assignedTo];
   if (!toEmail) {
     console.warn(`[EmailJS] No email found for "${task.assignedTo}" in EMAIL_MAP.`);
     return;
@@ -848,17 +857,38 @@ async function toggleTask(id) {
   }
 }
 
-// ── Delete task ────────────────────────────────────────────────────────────
-async function deleteTask(id) {
+// ── Delete task (with 5-second undo) ──────────────────────────────────────
+function deleteTask(id) {
+  const task = tasks.find(t => t.id === id);
+  if (!task) return;
+
+  // Optimistic remove
   tasks = tasks.filter(t => t.id !== id);
   renderTasks(); updateStats();
-  try {
-    await apiFetch(`/api/tasks/${id}`, { method: 'DELETE' });
-    showToast('Task removed', 'ok');
-  } catch (e) {
-    showToast('Delete failed: ' + e.message, 'err');
-    loadTasks();
-  }
+
+  // Schedule real DELETE after 5 s
+  const timer = setTimeout(async () => {
+    deleteTimers.delete(id);
+    try {
+      await apiFetch(`/api/tasks/${id}`, { method: 'DELETE' });
+    } catch (e) {
+      showToast('Delete failed: ' + e.message, 'err');
+      loadTasks();
+    }
+  }, 5000);
+
+  deleteTimers.set(id, { timer, task });
+
+  showUndoToast('Task deleted', () => {
+    const entry = deleteTimers.get(id);
+    if (!entry) return;
+    clearTimeout(entry.timer);
+    deleteTimers.delete(id);
+    tasks.push(entry.task);
+    tasks.sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
+    renderTasks(); updateStats();
+    showToast('Task restored', 'ok');
+  });
 }
 
 // ── Clear completed ────────────────────────────────────────────────────────
@@ -1127,6 +1157,19 @@ function showToast(msg, type = 'ok') {
   toastTimer = setTimeout(() => { t.classList.remove('show'); }, 2800);
 }
 
+function showUndoToast(msg, onUndo) {
+  const t = document.getElementById('toast');
+  t.innerHTML = `${escHtml(msg)} <button class="toast-undo">Undo</button>`;
+  t.className = 'show ok';
+  clearTimeout(toastTimer);
+  t.querySelector('.toast-undo').addEventListener('click', () => {
+    clearTimeout(toastTimer);
+    t.classList.remove('show');
+    onUndo();
+  });
+  toastTimer = setTimeout(() => { t.classList.remove('show'); }, 5000);
+}
+
 
 // ── Admin: load family list ─────────────────────────────────────────────────
 async function loadFamilyList() {
@@ -1209,6 +1252,79 @@ function setupAdminForm() {
       btn.disabled = false;
       btn.textContent = 'Create';
     }
+  });
+}
+
+// ── Email map: load & save ─────────────────────────────────────────────────
+async function loadEmailMap() {
+  try {
+    const data = await apiFetch('/api/member-emails');
+    emailMap = data.emails || {};
+  } catch (e) {
+    // Non-fatal — emails will warn in console if address not found
+    console.warn('[EmailMap] Could not load:', e.message);
+  }
+}
+
+async function saveEmailMap() {
+  await apiFetch('/api/member-emails', {
+    method: 'PUT',
+    body: JSON.stringify({ emails: emailMap }),
+  });
+}
+
+// ── Admin: member email editor ─────────────────────────────────────────────
+function buildEmailSection(members) {
+  const section = document.getElementById('email-section');
+  const listEl  = document.getElementById('email-list');
+  const errEl   = document.getElementById('email-err');
+  section.style.display = 'block';
+  listEl.innerHTML = '';
+
+  members.forEach(m => {
+    const row = document.createElement('div');
+    row.className = 'admin-row';
+    row.style.alignItems = 'center';
+
+    const label = document.createElement('span');
+    label.style.cssText = 'font-size:.82rem;font-weight:600;min-width:80px;flex-shrink:0;';
+    label.textContent = m;
+
+    const input = document.createElement('input');
+    input.className = 'admin-input';
+    input.type = 'email';
+    input.placeholder = `${m.toLowerCase()}@example.com`;
+    input.value = emailMap[m] || '';
+    input.dataset.member = m;
+
+    const btn = document.createElement('button');
+    btn.className = 'admin-btn';
+    btn.textContent = 'Save';
+    btn.addEventListener('click', async () => {
+      errEl.textContent = '';
+      const email = input.value.trim();
+      if (email) {
+        emailMap[m] = email;
+      } else {
+        delete emailMap[m];
+      }
+      btn.disabled = true;
+      btn.innerHTML = '<span class="spinner"></span>';
+      try {
+        await saveEmailMap();
+        showToast(`Email saved for ${m}`, 'ok');
+      } catch (e) {
+        errEl.textContent = 'Save failed: ' + e.message;
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Save';
+      }
+    });
+
+    row.appendChild(label);
+    row.appendChild(input);
+    row.appendChild(btn);
+    listEl.appendChild(row);
   });
 }
 
