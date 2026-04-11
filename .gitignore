@@ -14,6 +14,9 @@ Pages/Apps/Testimony_app/worker/twc-testimony-worker/wrangler.toml
 rose_figs/
 figs/
 
+# Claude Code (all .claude folders anywhere in the repo)
+**/.claude/
+
 # ============================================
 # Development Files
 # ============================================
