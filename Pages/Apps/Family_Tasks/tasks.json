@@ -65,7 +65,9 @@
           "order": 12,
           "addedBy": "Clenmar",
           "createdAt": "2026-04-07T03:45:52.290Z",
-          "updatedAt": "2026-04-07T03:45:52.290Z"
+          "updatedAt": "2026-04-11T06:51:10.034Z",
+          "deleted": true,
+          "deletedAt": "2026-04-11T06:51:10.034Z"
         },
         {
           "id": 1775793803460,
@@ -86,6 +88,88 @@
           "addedBy": "Wife",
           "createdAt": "2026-04-10T04:11:51.237Z",
           "updatedAt": "2026-04-10T04:11:51.237Z"
+        },
+        {
+          "id": 1775890008441,
+          "text": "Plan for Sunday’s trip",
+          "completed": false,
+          "priority": "medium",
+          "order": 8,
+          "addedBy": "Clenmar",
+          "createdAt": "2026-04-11T06:46:48.441Z",
+          "updatedAt": "2026-04-11T06:46:48.441Z"
+        },
+        {
+          "id": 1775890031448,
+          "text": "Plan for Sundays trip",
+          "completed": false,
+          "priority": "medium",
+          "order": 9,
+          "addedBy": "Clenmar",
+          "createdAt": "2026-04-11T06:47:11.448Z",
+          "updatedAt": "2026-04-11T06:47:11.448Z"
+        },
+        {
+          "id": 1775890114830,
+          "text": "add task",
+          "completed": false,
+          "priority": "medium",
+          "order": 10,
+          "addedBy": "Clenmar",
+          "createdAt": "2026-04-11T06:48:34.830Z",
+          "updatedAt": "2026-04-11T06:48:34.830Z"
+        },
+        {
+          "id": 1775890136498,
+          "text": "Add Sunday stuff",
+          "completed": false,
+          "priority": "medium",
+          "order": 11,
+          "addedBy": "Clenmar",
+          "createdAt": "2026-04-11T06:48:56.498Z",
+          "updatedAt": "2026-04-11T06:48:56.498Z"
+        },
+        {
+          "id": 1775890179575,
+          "text": "Plan for sundays trip",
+          "completed": false,
+          "priority": "medium",
+          "order": 12,
+          "addedBy": "Clenmar",
+          "createdAt": "2026-04-11T06:49:39.575Z",
+          "updatedAt": "2026-04-11T06:49:39.575Z"
+        },
+        {
+          "id": 1775890212434,
+          "text": "try again",
+          "completed": false,
+          "priority": "medium",
+          "order": 13,
+          "addedBy": "Clenmar",
+          "createdAt": "2026-04-11T06:50:12.434Z",
+          "updatedAt": "2026-04-11T06:50:56.180Z",
+          "deleted": true,
+          "deletedAt": "2026-04-11T06:50:56.180Z"
+        },
+        {
+          "id": 1775891062451,
+          "text": "hmm",
+          "completed": false,
+          "priority": "medium",
+          "order": 12,
+          "addedBy": "Clenmar",
+          "createdAt": "2026-04-11T07:04:22.451Z",
+          "updatedAt": "2026-04-11T07:04:22.451Z"
+        },
+        {
+          "id": 1775891119457,
+          "text": "ok testing",
+          "completed": false,
+          "priority": "medium",
+          "order": 13,
+          "addedBy": "Clenmar",
+          "createdAt": "2026-04-11T07:05:19.457Z",
+          "updatedAt": "2026-04-11T07:05:19.457Z"
         }
       ]
     },
