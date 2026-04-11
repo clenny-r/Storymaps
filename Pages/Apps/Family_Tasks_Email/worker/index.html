@@ -1262,7 +1262,15 @@ function setupAdminForm() {
 async function loadEmailMap() {
   try {
     const data = await apiFetch('/api/member-emails');
-    emailMap = data.emails || {};
+    let emails = data.emails || {};
+    // Heal legacy double-wrapped format { emails: { ... } } saved by old bug
+    if (emails.emails && typeof emails.emails === 'object' && !Array.isArray(emails.emails)) {
+      emails = emails.emails;
+      // Re-save in correct format immediately
+      emailMap = emails;
+      saveEmailMap().catch(() => {});
+    }
+    emailMap = emails;
   } catch (e) {
     // Non-fatal — emails will warn in console if address not found
     console.warn('[EmailMap] Could not load:', e.message);
@@ -1272,7 +1280,7 @@ async function loadEmailMap() {
 async function saveEmailMap() {
   await apiFetch('/api/member-emails', {
     method: 'PUT',
-    body: JSON.stringify({ emails: emailMap }),
+    body: JSON.stringify(emailMap),
   });
 }
 
