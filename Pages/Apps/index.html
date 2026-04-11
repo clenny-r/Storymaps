@@ -9,6 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="manifest" href="manifest.json">
   <style>
     :root {
       --clr-blue-deep:#1e2a6e; --clr-blue-mid:#3b3fa0; --clr-purple:#6b3db5;
@@ -375,6 +376,61 @@
     el.style.animationPlayState = 'paused';
     obs.observe(el);
   });
+</script>
+
+<!-- ── iOS Add to Home Screen Banner ─────────────────────────────────────── -->
+<style>
+#aths-banner{display:none;position:fixed;bottom:0;left:0;right:0;z-index:9999;background:#1a1836;border-top:1px solid rgba(255,255,255,.12);padding:12px 16px;align-items:center;gap:12px;box-shadow:0 -4px 24px rgba(0,0,0,.4)}
+#aths-banner.show{display:flex}
+#aths-icon{width:40px;height:40px;border-radius:10px;object-fit:contain;flex-shrink:0;background:linear-gradient(135deg,#1e2a6e,#6b3db5,#c0213c);padding:6px}
+#aths-text{flex:1;min-width:0}
+#aths-text strong{display:block;font-size:.88rem;font-weight:700;color:#fff}
+#aths-text span{font-size:.75rem;color:rgba(255,255,255,.55)}
+#aths-btn{background:linear-gradient(90deg,#1e2a6e,#6b3db5);color:#fff;border:none;border-radius:8px;padding:8px 14px;font-size:.78rem;font-weight:700;letter-spacing:.05em;cursor:pointer;flex-shrink:0;white-space:nowrap}
+#aths-close{background:none;border:none;color:rgba(255,255,255,.4);font-size:1.3rem;line-height:1;cursor:pointer;padding:4px 6px;flex-shrink:0}
+#aths-close:hover{color:#fff}
+#aths-modal{display:none;position:fixed;inset:0;z-index:10000;background:rgba(0,0,0,.72);align-items:flex-end;justify-content:center;padding:0 16px 16px}
+#aths-modal.show{display:flex}
+#aths-modal-box{background:#1c1939;border:1px solid rgba(255,255,255,.14);border-radius:18px;padding:28px 22px 22px;max-width:360px;width:100%;text-align:center;box-shadow:0 8px 40px rgba(0,0,0,.6)}
+#aths-modal-box h3{font-size:1.05rem;font-weight:700;color:#fff;margin-bottom:14px}
+#aths-modal-box p{font-size:.88rem;color:rgba(255,255,255,.65);line-height:1.65;margin-bottom:6px}
+#aths-modal-close{margin-top:18px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.14);border-radius:10px;padding:11px 28px;color:#fff;font-size:.85rem;font-weight:600;cursor:pointer;width:100%}
+#aths-modal-close:hover{background:rgba(255,255,255,.18)}
+@keyframes aths-bounce{0%{transform:translateY(0)}100%{transform:translateY(7px)}}
+#aths-arrow{display:inline-block;font-size:1.5rem;margin-top:10px;animation:aths-bounce .8s ease-in-out infinite alternate}
+</style>
+
+<div id="aths-banner" role="complementary" aria-label="Add to home screen prompt">
+  <img id="aths-icon" src="/Pages/church_photos/Image1-transparent.gif" alt="TWC logo" onerror="this.src='';this.style.display='none'">
+  <div id="aths-text">
+    <strong>Add TWC to your home screen</strong>
+    <span>Use it like a native app</span>
+  </div>
+  <button id="aths-btn" aria-label="Show instructions">How?</button>
+  <button id="aths-close" aria-label="Dismiss">&#x2715;</button>
+</div>
+
+<div id="aths-modal" role="dialog" aria-modal="true" aria-label="How to add to home screen">
+  <div id="aths-modal-box">
+    <h3>Add TWC to Your Home Screen</h3>
+    <p>Tap the <strong>Share &#x2B06;</strong> button at the bottom of Safari,</p>
+    <p>then tap <strong>"Add to Home Screen"</strong></p>
+    <span id="aths-arrow">&#x2193;</span>
+    <br>
+    <button id="aths-modal-close">Got it</button>
+  </div>
+</div>
+
+<script>
+(function(){
+  if(!/iphone|ipad|ipod/i.test(navigator.userAgent)||navigator.standalone||localStorage.getItem('twc_aths_dismissed'))return;
+  var b=document.getElementById('aths-banner'),m=document.getElementById('aths-modal');
+  setTimeout(function(){b.classList.add('show')},2500);
+  document.getElementById('aths-close').addEventListener('click',function(){b.classList.remove('show');localStorage.setItem('twc_aths_dismissed','1')});
+  document.getElementById('aths-btn').addEventListener('click',function(){m.classList.add('show')});
+  document.getElementById('aths-modal-close').addEventListener('click',function(){m.classList.remove('show')});
+  m.addEventListener('click',function(e){if(e.target===m)m.classList.remove('show')});
+})();
 </script>
 </body>
 </html>
