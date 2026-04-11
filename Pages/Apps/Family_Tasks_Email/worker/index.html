@@ -1278,56 +1278,94 @@ async function saveEmailMap() {
 
 // ── Admin: member email editor ─────────────────────────────────────────────
 function buildEmailSection(members) {
-  const section = document.getElementById('email-section');
-  const listEl  = document.getElementById('email-list');
-  const errEl   = document.getElementById('email-err');
-  section.style.display = 'block';
+  document.getElementById('email-section').style.display = 'block';
+  renderEmailList(members);
+}
+
+function renderEmailList(members) {
+  const listEl = document.getElementById('email-list');
+  const errEl  = document.getElementById('email-err');
   listEl.innerHTML = '';
+  errEl.textContent = '';
 
   members.forEach(m => {
     const row = document.createElement('div');
-    row.className = 'admin-row';
-    row.style.alignItems = 'center';
+    row.className = 'family-row';
+    row.dataset.member = m;
 
-    const label = document.createElement('span');
-    label.style.cssText = 'font-size:.82rem;font-weight:600;min-width:80px;flex-shrink:0;';
-    label.textContent = m;
+    const email = emailMap[m] || '';
+    row.innerHTML = `
+      <div class="family-info">
+        <span class="family-name">${escHtml(m)}</span>
+        <span class="family-pass">${email ? escHtml(email) : '<em style="opacity:.45">no email set</em>'}</span>
+      </div>
+      <div style="display:flex;gap:6px;align-items:center">
+        <button class="admin-btn email-edit-btn" style="padding:6px 10px;font-size:.72rem">✏️ Edit</button>
+        ${email ? `<button class="family-del email-del-btn" title="Remove email">✕</button>` : ''}
+      </div>`;
 
-    const input = document.createElement('input');
-    input.className = 'admin-input';
-    input.type = 'email';
-    input.placeholder = `${m.toLowerCase()}@example.com`;
-    input.value = emailMap[m] || '';
-    input.dataset.member = m;
+    row.querySelector('.email-edit-btn').addEventListener('click', () => startEmailEdit(m, row, members));
 
-    const btn = document.createElement('button');
-    btn.className = 'admin-btn';
-    btn.textContent = 'Save';
-    btn.addEventListener('click', async () => {
-      errEl.textContent = '';
-      const email = input.value.trim();
-      if (email) {
-        emailMap[m] = email;
-      } else {
+    const delBtn = row.querySelector('.email-del-btn');
+    if (delBtn) {
+      delBtn.addEventListener('click', async () => {
         delete emailMap[m];
-      }
-      btn.disabled = true;
-      btn.innerHTML = '<span class="spinner"></span>';
-      try {
-        await saveEmailMap();
-        showToast(`Email saved for ${m}`, 'ok');
-      } catch (e) {
-        errEl.textContent = 'Save failed: ' + e.message;
-      } finally {
-        btn.disabled = false;
-        btn.textContent = 'Save';
-      }
-    });
+        delBtn.disabled = true;
+        try {
+          await saveEmailMap();
+          showToast(`Email removed for ${m}`, 'ok');
+          renderEmailList(members);
+        } catch (e) {
+          errEl.textContent = 'Remove failed: ' + e.message;
+          delBtn.disabled = false;
+        }
+      });
+    }
 
-    row.appendChild(label);
-    row.appendChild(input);
-    row.appendChild(btn);
     listEl.appendChild(row);
+  });
+}
+
+function startEmailEdit(m, row, members) {
+  const errEl = document.getElementById('email-err');
+  errEl.textContent = '';
+  const currentEmail = emailMap[m] || '';
+
+  row.innerHTML = `
+    <span style="font-size:.82rem;font-weight:600;min-width:80px;flex-shrink:0;">${escHtml(m)}</span>
+    <input class="admin-input email-inline-input" type="email"
+           value="${escHtml(currentEmail)}" placeholder="${escHtml(m.toLowerCase())}@example.com"
+           style="flex:1;margin:0 8px"/>
+    <div style="display:flex;gap:4px;flex-shrink:0">
+      <button class="admin-btn email-save-confirm" style="padding:6px 10px;font-size:.72rem">✓ Save</button>
+      <button class="family-del email-cancel" style="padding:6px 8px" title="Cancel">✗</button>
+    </div>`;
+
+  const input   = row.querySelector('.email-inline-input');
+  const saveBtn = row.querySelector('.email-save-confirm');
+  input.focus(); input.select();
+
+  saveBtn.addEventListener('click', async () => {
+    const val = input.value.trim();
+    if (val) { emailMap[m] = val; } else { delete emailMap[m]; }
+    saveBtn.disabled = true;
+    saveBtn.innerHTML = '<span class="spinner"></span>';
+    try {
+      await saveEmailMap();
+      showToast(`Email saved for ${m}`, 'ok');
+      renderEmailList(members);
+    } catch (e) {
+      errEl.textContent = 'Save failed: ' + e.message;
+      saveBtn.disabled = false;
+      saveBtn.textContent = '✓ Save';
+    }
+  });
+
+  row.querySelector('.email-cancel').addEventListener('click', () => renderEmailList(members));
+
+  input.addEventListener('keydown', e => {
+    if (e.key === 'Enter')  { e.preventDefault(); saveBtn.click(); }
+    if (e.key === 'Escape') { renderEmailList(members); }
   });
 }
 
