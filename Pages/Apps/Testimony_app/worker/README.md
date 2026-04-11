@@ -85,7 +85,7 @@ Example: `https://twc-testimony-api.kd7bgn7q2z.workers.dev`
 
 3. Access the app at:
    ```
-   https://clenmar.github.io/Storymaps/Pages/Apps/Testimony_app/worker/
+   https://clenny-r.github.io/Storymaps/Pages/Apps/Testimony_app/worker/
    ```
 
 ## GitHub Data Storage
@@ -225,6 +225,6 @@ For issues or questions:
 
 **Deployed at**: https://twcministries.net/Pages/Apps/Testimony_app/worker/
 
-**Repository**: https://github.com/Clenmar/Storymaps
+**Repository**: https://github.com/clenny-r/Storymaps
 
 **Last Updated**: April 2026

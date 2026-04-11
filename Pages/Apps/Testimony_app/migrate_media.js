@@ -45,7 +45,7 @@ for (const [userName, userData] of Object.entries(data.users)) {
       fs.writeFileSync(filePath, buffer);
       
       // Replace with URL (GitHub raw URL)
-      entry.imageUrl = `https://raw.githubusercontent.com/Clenmar/Storymaps/main/Pages/Apps/Testimony_app/media/images/${fileName}`;
+      entry.imageUrl = `https://raw.githubusercontent.com/clenny-r/Storymaps/main/Pages/Apps/Testimony_app/media/images/${fileName}`;
       delete entry.image;
       
       imageCount++;
@@ -66,7 +66,7 @@ for (const [userName, userData] of Object.entries(data.users)) {
       fs.writeFileSync(filePath, buffer);
       
       // Replace with URL
-      entry.audioUrl = `https://raw.githubusercontent.com/Clenmar/Storymaps/main/Pages/Apps/Testimony_app/media/audio/${fileName}`;
+      entry.audioUrl = `https://raw.githubusercontent.com/clenny-r/Storymaps/main/Pages/Apps/Testimony_app/media/audio/${fileName}`;
       delete entry.audio;
       
       audioCount++;

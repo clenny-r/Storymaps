@@ -99,8 +99,8 @@ wrangler deploy
 {
   "id": 1775267443060,
   "text": "My testimony...",
-  "imageUrl": "https://raw.githubusercontent.com/Clenmar/Storymaps/main/Pages/Apps/Testimony_app/media/images/Clenny_1775267443060.jpg",
-  "audioUrl": "https://raw.githubusercontent.com/Clenmar/Storymaps/main/Pages/Apps/Testimony_app/media/audio/Clenny_1775267443060.webm"
+  "imageUrl": "https://raw.githubusercontent.com/clenny-r/Storymaps/main/Pages/Apps/Testimony_app/media/images/Clenny_1775267443060.jpg",
+  "audioUrl": "https://raw.githubusercontent.com/clenny-r/Storymaps/main/Pages/Apps/Testimony_app/media/audio/Clenny_1775267443060.webm"
 }
 ```
 

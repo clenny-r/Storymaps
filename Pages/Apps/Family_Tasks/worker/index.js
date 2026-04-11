@@ -2,7 +2,7 @@
  * TWC Family Task List — Cloudflare Worker (multi-family edition)
  *
  * Data file: Pages/Apps/Family_Tasks/tasks.json
- * Repo:      Clenmar/Storymaps
+ * Repo:      clenny-r/Storymaps
  *
  * JSON structure:
  * {
@@ -20,7 +20,7 @@
  *   ADMIN_PASS    — Admin password (can create / delete families)
  */
 
-const GITHUB_OWNER = 'Clenmar';
+const GITHUB_OWNER = 'clenny-r';
 const GITHUB_REPO  = 'Storymaps';
 const GITHUB_FILE  = 'Pages/Apps/Family_Tasks/tasks.json';
 const GITHUB_API   = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${GITHUB_FILE}`;

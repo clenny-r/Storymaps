@@ -4,7 +4,7 @@ export default {
     const ACCESS_CODE = env.ACCESS_CODE;
     const ADMIN_PASSWORD = env.ADMIN_PASSWORD;
 
-    const repoOwner = "Clenmar";
+    const repoOwner = "clenny-r";
     const repoName = "Storymaps";
     const filePath = "Pages/Apps/Testimony_app/testimonies.json";
     const apiBase = `https://api.github.com/repos/${repoOwner}/${repoName}/contents/${filePath}`;
