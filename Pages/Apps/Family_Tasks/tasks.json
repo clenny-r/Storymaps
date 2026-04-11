@@ -126,6 +126,16 @@
           "addedBy": "Clenmar",
           "createdAt": "2026-04-11T06:48:56.498Z",
           "updatedAt": "2026-04-11T06:48:56.498Z"
+        },
+        {
+          "id": 1775890179575,
+          "text": "Plan for sundays trip",
+          "completed": false,
+          "priority": "medium",
+          "order": 12,
+          "addedBy": "Clenmar",
+          "createdAt": "2026-04-11T06:49:39.575Z",
+          "updatedAt": "2026-04-11T06:49:39.575Z"
         }
       ]
     },
