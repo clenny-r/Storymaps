@@ -86,6 +86,16 @@
           "addedBy": "Wife",
           "createdAt": "2026-04-10T04:11:51.237Z",
           "updatedAt": "2026-04-10T04:11:51.237Z"
+        },
+        {
+          "id": 1775890008441,
+          "text": "Plan for Sunday’s trip",
+          "completed": false,
+          "priority": "medium",
+          "order": 8,
+          "addedBy": "Clenmar",
+          "createdAt": "2026-04-11T06:46:48.441Z",
+          "updatedAt": "2026-04-11T06:46:48.441Z"
         }
       ]
     },
