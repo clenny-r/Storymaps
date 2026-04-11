@@ -5,8 +5,8 @@ export default {
     const ADMIN_PASSWORD = env.ADMIN_PASSWORD;
 
     const repoOwner = "clenny-r";
-    const repoName = "Storymaps";
-    const filePath = "Pages/Apps/Testimony_app/testimonies.json";
+    const repoName = "Twc_private_data";
+    const filePath = "User_Data/testimonies.json";
     const apiBase = `https://api.github.com/repos/${repoOwner}/${repoName}/contents/${filePath}`;
 
     const headers = {

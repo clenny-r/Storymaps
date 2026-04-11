@@ -21,8 +21,8 @@
  */
 
 const GITHUB_OWNER = 'clenny-r';
-const GITHUB_REPO  = 'Storymaps';
-const GITHUB_FILE  = 'Pages/Apps/Family_Tasks/tasks.json';
+const GITHUB_REPO  = 'Twc_private_data';
+const GITHUB_FILE  = 'User_Data/tasks.json';
 const GITHUB_API   = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${GITHUB_FILE}`;
 
 export default {
