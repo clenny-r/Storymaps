@@ -762,19 +762,21 @@ async function sendTaskEmail(task) {
 
   const toEmail = emailMap[task.assignedTo];
   if (!toEmail) {
-    console.warn(`[EmailJS] No email found for "${task.assignedTo}" in EMAIL_MAP.`);
+    console.warn(`[EmailJS] No email found for "${task.assignedTo}" in emailMap.`);
     return;
   }
 
   const templateParams = {
-    to_email:       toEmail,
-    to_name:        task.assignedTo,
-    assigned_by:    task.addedBy  || 'Someone',
-    assigned_to:    task.assignedTo,
-    task_title:     task.text,
-    task_desc:      task.description || '(no description)',
-    task_priority:  task.priority || 'medium',
+    name:  task.assignedTo,
+    title: task.text,
+    email: toEmail,
   };
+
+  console.log('[EmailJS] Sending with params:', templateParams);
+  if (!templateParams.email) {
+    console.warn('[EmailJS] email param is empty — skipping send.');
+    return;
+  }
 
   try {
     await emailjs.send(EMAILJS_CFG.SERVICE_ID, EMAILJS_CFG.TEMPLATE_ID, templateParams);
