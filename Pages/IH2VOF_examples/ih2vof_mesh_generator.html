@@ -86,7 +86,7 @@ body {
 /* ---- canvas ---- */
 #canvas-area {
   flex: 1; position: relative; overflow: hidden;
-  background: #080f1a;
+  background: #0d0d0d;
 }
 #grid-canvas { position: absolute; top: 0; left: 0; display: block; image-rendering: pixelated; }
 /* ---- right panel ---- */
@@ -218,6 +218,15 @@ body {
 ::-webkit-scrollbar-thumb:hover { background: var(--bg4); }
 /* file input hidden */
 #file-in { display: none; }
+/* CORAL-style object buttons */
+.coral-obj-btn {
+  padding: 5px 6px; background: var(--bg2);
+  border: 1px solid var(--border); border-radius: 3px;
+  color: var(--text2); cursor: pointer; font-size: 11px;
+  text-align: left; transition: all .12s; line-height: 1.3;
+}
+.coral-obj-btn:hover { background: var(--bg3); color: var(--text); }
+.coral-obj-btn.active { background: var(--bg3); color: #fff; border-color: var(--border2); }
 /* help text */
 .help-text { font-size: 11px; color: var(--text3); margin-top: 3px; line-height: 1.5; }
 /* domain summary */
@@ -246,8 +255,8 @@ body {
   <div class="hdr-logo">IH2VOF<sub>Mesh</sub> &nbsp;Generator</div>
   <div class="sep"></div>
   <button class="btn" onclick="openModal('new-modal')">⊞ New Grid</button>
-  <button class="btn" onclick="triggerImport()">📂 Open .dat</button>
-  <button class="btn primary" onclick="openExport()">💾 Export .dat</button>
+  <button class="btn" onclick="triggerImport()">📂 Open mesh</button>
+  <button class="btn primary" onclick="openExport()">💾 Export</button>
   <div class="sep"></div>
   <button class="btn sm" onclick="undo()" title="Undo (Ctrl+Z)">↩ Undo</button>
   <button class="btn sm" onclick="redo()" title="Redo (Ctrl+Y)">↪ Redo</button>
@@ -255,7 +264,7 @@ body {
   <button class="btn sm" onclick="fitView()">⊡ Fit</button>
   <button class="btn sm" onclick="zoomIn()">＋</button>
   <button class="btn sm" onclick="zoomOut()">－</button>
-  <input type="file" id="file-in" accept=".dat,.txt" onchange="handleImport(event)">
+  <input type="file" id="file-in" accept=".dat,.txt,.mes" onchange="handleImport(event)">
   <div id="hdr-info">Grid: <span id="info-size">—</span> &nbsp;|&nbsp; Domain: <span id="info-domain">—</span></div>
 </header>
 
@@ -290,9 +299,24 @@ body {
           </div>
         </div>
       </div>
-      <!-- Materials -->
+      <!-- Materials — CORAL Objects panel style -->
       <div class="psec">
-        <div class="ptitle">Materials</div>
+        <div class="ptitle">Objects / Materials</div>
+        <!-- Quick-select buttons like CORAL's Obstacle/Porous/Water -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:3px;margin-bottom:6px">
+          <button class="coral-obj-btn" onclick="setActiveMat(0)" data-mat="0"
+            style="border-left:3px solid #3a78c9">Water</button>
+          <button class="coral-obj-btn" onclick="setActiveMat(1)" data-mat="1"
+            style="border-left:3px solid #1e1e1e">Obstacle</button>
+          <button class="coral-obj-btn" onclick="setActiveMat(2)" data-mat="2"
+            style="border-left:3px solid #cc2200">Porous Armor</button>
+          <button class="coral-obj-btn" onclick="setActiveMat(3)" data-mat="3"
+            style="border-left:3px solid #881100">Porous Core</button>
+          <button class="coral-obj-btn" onclick="setActiveMat(4)" data-mat="4"
+            style="border-left:3px solid #228833">Porous Filter</button>
+          <button class="coral-obj-btn" onclick="setActiveMat(5)" data-mat="5"
+            style="border-left:3px solid #6633aa">Damping</button>
+        </div>
         <div id="mat-list"></div>
       </div>
       <!-- View -->
@@ -373,15 +397,41 @@ body {
         Hover over a cell to inspect it.
       </div>
     </div>
+    <!-- XY Coordinate Fill — like CORAL's Node Coordinates -->
+    <div class="psec">
+      <div class="ptitle" style="color:#8bc34a">Fill by Coordinates (m)</div>
+      <p style="font-size:10.5px;color:var(--text3);margin-bottom:7px;line-height:1.5">
+        Enter physical XY bounds to fill a region with the active material.</p>
+      <div class="frow">
+        <label style="width:28px;flex:none;font-size:11px">X₀</label>
+        <input type="number" id="coord-x0" value="0" step="0.01" style="flex:1;width:auto">
+        <label style="width:28px;flex:none;font-size:11px">X₁</label>
+        <input type="number" id="coord-x1" value="1" step="0.01" style="flex:1;width:auto">
+      </div>
+      <div class="frow">
+        <label style="width:28px;flex:none;font-size:11px">Y₀</label>
+        <input type="number" id="coord-y0" value="0" step="0.01" style="flex:1;width:auto">
+        <label style="width:28px;flex:none;font-size:11px">Y₁</label>
+        <input type="number" id="coord-y1" value="1" step="0.01" style="flex:1;width:auto">
+      </div>
+      <button class="btn primary" style="width:100%;margin-top:4px;font-size:12px" onclick="fillByCoords()">Fill Region</button>
+      <button class="btn" style="width:100%;margin-top:3px;font-size:11px" onclick="zoomToCoords()">Zoom to Region</button>
+    </div>
   </div>
 </div>
 
-<!-- STATUS BAR -->
+<!-- STATUS BAR — matches CORAL's bottom coordinate display -->
 <div id="status">
-  <div class="s-item">Cell: <span class="s-val" id="s-cell">—</span></div>
-  <div class="s-item">X: <span class="s-val" id="s-x">—</span> m</div>
-  <div class="s-item">Y: <span class="s-val" id="s-y">—</span> m</div>
-  <div class="s-item">Material: <span class="s-val" id="s-mat">—</span></div>
+  <div class="s-item" style="font-family:monospace;letter-spacing:.02em">
+    X: <span class="s-val" id="s-x" style="color:#8bc34a;font-weight:600">—</span> m &nbsp;
+    Y: <span class="s-val" id="s-y" style="color:#8bc34a;font-weight:600">—</span> m
+  </div>
+  <div class="sep" style="margin:0 4px"></div>
+  <div class="s-item">Cell [<span class="s-val" id="s-cell">—</span>]</div>
+  <div class="s-item">
+    <span class="mswatch" id="s-mat-swatch" style="width:10px;height:10px;border-radius:2px;display:inline-block;background:#555;vertical-align:middle;margin-right:3px"></span>
+    <span class="s-val" id="s-mat">—</span>
+  </div>
   <div class="s-item" style="margin-left:auto">Zoom: <span class="s-val" id="s-zoom">100%</span></div>
 </div>
 
@@ -463,29 +513,29 @@ body {
 <div class="moverlay" id="export-modal">
   <div class="mbox" style="width:min(680px,96vw)">
     <div class="mhdr">
-      <div class="mtitle">Export IH2VOF Mesh (.dat)</div>
+      <div class="mtitle">Export IH2VOF Mesh</div>
       <button class="mclose" onclick="closeModal('export-modal')">✕</button>
     </div>
     <div class="mbody">
       <div class="frow" style="margin-bottom:10px">
         <label>Filename</label>
         <input type="text" id="exp-filename" value="mesh" style="width:180px">
-        <span style="color:var(--text3);font-size:12px">.dat</span>
       </div>
-      <div class="frow" style="margin-bottom:12px">
-        <label style="font-size:12px">Row order in file:</label>
+      <div class="frow" style="margin-bottom:10px">
+        <label style="font-size:12px">Format:</label>
         <div class="radio-grp" style="margin:0">
-          <label class="rlbl"><input type="radio" name="row-order" value="topdown" checked> Top→Bottom</label>
-          <label class="rlbl"><input type="radio" name="row-order" value="bottomup"> Bottom→Top</label>
+          <label class="rlbl"><input type="radio" name="exp-fmt" value="dat" checked> CORAL DAT (polygon regions)</label>
+          <label class="rlbl"><input type="radio" name="exp-fmt" value="mes"> Mesh.mes (IH2VOF native)</label>
         </div>
       </div>
-      <div class="ptitle" style="margin-bottom:6px">Preview (first 80 rows)</div>
+      <div id="exp-dat-opts"></div>
+      <div class="ptitle" style="margin-bottom:6px">Preview</div>
       <div id="dat-preview">Generating…</div>
     </div>
     <div class="mfooter">
       <button class="btn" onclick="closeModal('export-modal')">Cancel</button>
       <button class="btn sm" onclick="copyDAT()">Copy to clipboard</button>
-      <button class="btn primary" onclick="downloadDAT()">⬇ Download .dat</button>
+      <button class="btn primary" onclick="downloadExport()">⬇ Download</button>
     </div>
   </div>
 </div>
@@ -515,18 +565,20 @@ body {
    CONSTANTS & MATERIALS
    ═══════════════════════════════════════════════════════════ */
 const MATERIALS = [
-  { id:0, name:'Fluid',          code:'0', color:'#0d2a6e',  solid:'#0d2a6e', label:'F',
-    desc:'Open fluid domain (water/air). RANS equations solved here.' },
-  { id:1, name:'Solid (Imperm.)',code:'1', color:'#5c6680',  solid:'#5c6680', label:'S',
-    desc:'Impermeable solid structure (concrete, bedrock, seawall).' },
-  { id:2, name:'Porous – Armor', code:'2', color:'#c97820',  solid:'#c97820', label:'P1',
+  { id:0, name:'Water',          code:'0', color:'#3a78c9',  solid:'#3a78c9', label:'W',
+    desc:'Open fluid domain — water/air. RANS equations solved here.' },
+  { id:1, name:'Bathymetry',     code:'1', color:'#1e1e1e',  solid:'#1e1e1e', label:'O',
+    desc:'Impermeable solid bathymetry: seabed, bedrock (TObstacleDef Bathymetry).' },
+  { id:2, name:'Porous – Armor', code:'2', color:'#cc2200',  solid:'#cc2200', label:'P1',
     desc:'Porous medium type 1 — armour layer of rubble-mound breakwater.' },
-  { id:3, name:'Porous – Core',  code:'3', color:'#804018',  solid:'#804018', label:'P2',
+  { id:3, name:'Porous – Core',  code:'3', color:'#881100',  solid:'#881100', label:'P2',
     desc:'Porous medium type 2 — breakwater core material.' },
-  { id:4, name:'Porous – Filter',code:'4', color:'#907830',  solid:'#907830', label:'P3',
+  { id:4, name:'Porous – Filter',code:'4', color:'#228833',  solid:'#228833', label:'P3',
     desc:'Porous medium type 3 — filter/under-layer material.' },
-  { id:5, name:'Damping Zone',   code:'5', color:'#5c2898',  solid:'#5c2898', label:'D',
+  { id:5, name:'Damping Zone',   code:'5', color:'#6633aa',  solid:'#6633aa', label:'D',
     desc:'Numerical damping / sponge layer for wave absorption.' },
+  { id:6, name:'Crown Wall',     code:'6', color:'#ffcc00',  solid:'#ffcc00', label:'CW',
+    desc:'Impermeable concrete crown wall (TObstacleDef Crown Wall) — rendered in yellow for visibility.' },
 ];
 
 const POROUS_DEFAULTS = [
@@ -535,7 +587,18 @@ const POROUS_DEFAULTS = [
   { id:4, n:0.40, d50:0.005, alpha:200, beta:1.1 },
 ];
 
+// ── Default CORAL project file (ruled7) embedded as the canonical template ──
+// Full polygon-based layout: bathymetry + armor + core + 2 leeward layers +
+// 2 extra porous media + crown wall obstacle + water surface.  Y-axis is
+// CORAL's native Y-DOWN; parseCORALDAT flips it on import.
+const WATERLEVEL_RULED7_DAT = ` 4.40000000000000E+0001\r\n 3.20000000000000E+0002\r\n3\r\n 2.29000000000000E+0002\r\n 0.00000000000000E+0000\r\n190\r\n1\r\n 1.00000000000000E+0000\r\n 2.31000000000000E+0002\r\n 2.30000000000000E+0002\r\n1\r\n50\r\n 1.00000000000000E+0000\r\n 2.81000000000000E+0002\r\n 2.80000000000000E+0002\r\n1\r\n30\r\n 1.00000000000000E+0000\r\n3\r\n 8.50000000000000E+0000\r\n 0.00000000000000E+0000\r\n14\r\n1\r\n 5.00000000000000E-0001\r\n 9.50000000000000E+0000\r\n 9.00000000000000E+0000\r\n1\r\n50\r\n 5.00000000000000E-0001\r\n 3.45000000000000E+0001\r\n 3.40000000000000E+0001\r\n1\r\n15\r\n 5.00000000000000E-0001\r\n2\r\n0\r\n0\r\n0\r\n0\r\n9\r\n5 1\r\n-1.00000000 44.23600000\r\n0.36295546 43.80943694\r\n209.59800000 37.80000000\r\n321.00000000 40.00000000\r\n321.00000000 45.21600000\r\nTObstacleDef\r\nBathymetry\r\n4 1\r\n235.23028928 39.62414530\r\n258.71117686 24.61574293\r\n273.82060000 24.50000000\r\n297.07060000 40.00000000\r\nTPorousMediumDef\r\nCore\r\nCore\r\n 2.00000000000000E+0002\r\n 8.00000000000000E-0001\r\n 3.40000000000000E-0001\r\n 6.00000000000000E-0002\r\n 0.00000000000000E+0000\r\n 2.00000000000000E-0001\r\n6 1\r\n262.33060000 24.50000000\r\n262.28844839 17.19223208\r\n265.89261670 17.19223208\r\n266.08060000 21.80000000\r\n274.42060000 21.80000000\r\n274.42060000 24.50000000\r\nTObstacleDef\r\nCrown Wall\r\n6 1\r\n255.80632479 20.52743261\r\n262.33060000 20.35700000\r\n262.33060000 17.20000000\r\n254.12527613 17.19223208\r\n223.07294543 39.78552597\r\n228.23712689 39.67793886\r\nTPorousMediumDef\r\nArmorlayer\r\nArmorlayer\r\n 2.00000000000000E+0002\r\n 1.10000000000000E+0000\r\n 3.40000000000000E-0001\r\n 3.00000000000000E+0000\r\n 0.00000000000000E+0000\r\n 4.00000000000000E-0001\r\n4 1\r\n297.07060000 40.00000000\r\n273.82060000 24.50000000\r\n274.42060000 24.50000000\r\n297.67060000 40.00000000\r\nTPorousMediumDef\r\nLeewardlayer2\r\nLeewardlayer2\r\n 2.00000000000000E+0002\r\n 1.00000000000000E+0000\r\n 3.40000000000000E-0001\r\n 4.00000000000000E-0001\r\n 0.00000000000000E+0000\r\n 2.50000000000000E-0001\r\n4 1\r\n297.67060000 40.00000000\r\n274.42060000 24.50000000\r\n274.42060000 22.94700000\r\n300.00000000 40.00000000\r\nTPorousMediumDef\r\nLeewardlayer1\r\nLeewardlayer1\r\n 2.00000000000000E+0002\r\n 1.00000000000000E+0000\r\n 3.40000000000000E-0001\r\n 6.00000000000000E-0001\r\n 0.00000000000000E+0000\r\n 3.00000000000000E-0001\r\n4 1\r\n-1.00000000 45.21600000\r\n321.00000000 45.21600000\r\n321.05800000 30.80000000\r\n-0.84300000 30.80000000\r\nTWaterDef\r\nWater\r\n 0.00000000000000E+0000\r\n6 1\r\n228.29092045 39.62414530\r\n255.83322156 20.58122617\r\n262.39603550 20.36605194\r\n262.39603550 22.57158777\r\n257.52771861 22.67917488\r\n231.08818540 39.67793886\r\nTPorousMediumDef\r\nPorous media 1\r\nPorous media 1\r\n 2.00000000000000E+0002\r\n 1.10000000000000E+0000\r\n 3.40000000000000E-0001\r\n 9.50000000000000E-0001\r\n 0.00000000000000E+0000\r\n 3.50000000000000E-0001\r\n6 1\r\n230.98059829 39.73173241\r\n257.60840894 22.73296844\r\n262.39603550 22.62538133\r\n262.39603550 24.56194938\r\n258.79186719 24.56194938\r\n235.17649573 39.62414530\r\nTPorousMediumDef\r\nPorous media 3\r\nPorous media 3\r\n 2.00000000000000E+0002\r\n 1.00000000000000E+0000\r\n 3.40000000000000E-0001\r\n 2.40000000000000E-0001\r\n 0.00000000000000E+0000\r\n 3.00000000000000E-0001\r\n`;
+
 const TEMPLATES = [
+  {
+    name:'⭐ Waterlevel Bathy Armour (ruled7) — DEFAULT',
+    desc:'Reference CORAL project: 320×44 m flume, rubble-mound breakwater with armor/core/leeward porous layers, concrete crown wall (yellow), and waterlevel 14.4 m. The canonical round-trip template.',
+    build: () => { try { parseCORALDAT(WATERLEVEL_RULED7_DAT); } catch (e) { notify('Template load failed: '+e.message, 'err'); } }
+  },
   {
     name:'Simple Wave Flume',
     desc:'Flat-bottom flume with solid floor and sidewalls',
@@ -718,13 +781,16 @@ function render() {
   ctx.rect(RULER_W, RULER_W, W, H);
   ctx.clip();
 
-  // compute visible range
-  const ix0 = Math.max(0, bsearch(xp, RULER_W)-1);
-  const ix1 = Math.min(grid.nx-1, bsearch(xp, W)+1);
-  const iy0 = Math.max(0, bsearch(yp, RULER_W)-1);
-  const iy1 = Math.min(grid.ny-1, bsearch(yp, H)+1);
-
-  if (ix0 < 0 || iy0 < 0 || ix0 > ix1 || iy0 > iy1) { ctx.restore(); drawRulers(xp,yp,RULER_W); return; }
+  // compute visible column/row range
+  // Default to full grid; only narrow when viewport genuinely clips it.
+  // bsearch returns -1 both when val < arr[0] AND when val >= arr[last],
+  // so we can't use it directly for the right/bottom edges.
+  let ix0 = 0, ix1 = grid.nx - 1;
+  let iy0 = 0, iy1 = grid.ny - 1;
+  if (RULER_W > xp[0]) { const b = bsearch(xp, RULER_W); if (b >= 0) ix0 = Math.max(0, b - 1); }
+  if (W < xp[grid.nx]) { const b = bsearch(xp, W);       if (b >= 0) ix1 = Math.min(grid.nx - 1, b + 1); }
+  if (RULER_W > yp[0]) { const b = bsearch(yp, RULER_W); if (b >= 0) iy0 = Math.max(0, b - 1); }
+  if (H < yp[grid.ny]) { const b = bsearch(yp, H);       if (b >= 0) iy1 = Math.min(grid.ny - 1, b + 1); }
 
   // draw cells
   for (let sj = iy0; sj <= iy1; sj++) {
@@ -734,22 +800,16 @@ function render() {
       const mat = getCell(i, j);
       const m   = MATERIALS[mat] || MATERIALS[0];
       const cellX  = xp[i], cellW = xp[i+1]-xp[i];
-      if (mat === 0) {
-        // Fluid: deep ocean blue with subtle depth tint
-        const depthRatio = j / Math.max(1, grid.ny - 1);
-        ctx.fillStyle = `rgb(${10+depthRatio*8},${40+depthRatio*30},${90+depthRatio*40})`;
-      } else {
-        ctx.fillStyle = m.solid;
-      }
+      // CORAL-style flat colors
+      ctx.fillStyle = m.solid;
       ctx.fillRect(cellX, cellY, cellW, cellH);
     }
   }
 
-  // grid lines — draw after cells so they're always visible
+  // grid lines — CORAL-style dark olive-green
   if (showGrid) {
-    // Use zoom-adaptive opacity: finer at low zoom
-    const alpha = Math.min(0.55, 0.18 + view.zoom * 0.012);
-    ctx.strokeStyle = `rgba(140,200,255,${alpha})`;
+    const alpha = Math.min(0.75, 0.25 + view.zoom * 0.014);
+    ctx.strokeStyle = `rgba(60,140,60,${alpha})`;
     ctx.lineWidth = 1;
     ctx.beginPath();
     // vertical lines
@@ -823,10 +883,10 @@ function render() {
 
   ctx.restore();
 
-  // domain border — bright cyan outline
+  // domain border — CORAL-style yellow outline
   const dx0 = xp[0], dy0 = yp[0], dx1 = xp[grid.nx], dy1 = yp[grid.ny];
-  ctx.strokeStyle = 'rgba(60,200,255,0.9)';
-  ctx.lineWidth = 2;
+  ctx.strokeStyle = 'rgba(220,200,60,0.85)';
+  ctx.lineWidth = 1.5;
   ctx.strokeRect(dx0, dy0, dx1-dx0, dy1-dy0);
 
   drawRulers(xp, yp, RULER_W);
@@ -834,27 +894,28 @@ function render() {
 
 function drawEmpty() {
   const W = canvas.width, H = canvas.height;
-  ctx.fillStyle = 'rgba(40,100,200,0.08)';
+  ctx.fillStyle = '#0d0d0d';
   ctx.fillRect(0, 0, W, H);
-  ctx.fillStyle = 'rgba(100,160,255,0.35)';
+  ctx.fillStyle = 'rgba(60,140,60,0.28)';
   ctx.font = '16px Segoe UI';
   ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-  ctx.fillText('Click "⊞ New Grid" or "📂 Open .dat" to begin', W/2, H/2);
+  ctx.fillText('Click "⊞ New Grid" or "📂 Open mesh" (.dat / .mes) to begin', W/2, H/2);
   ctx.font = '12px Segoe UI';
-  ctx.fillStyle = 'rgba(100,160,255,0.2)';
-  ctx.fillText('IH2VOF Mesh Generator — Interactive 2D structured mesh editor', W/2, H/2+28);
+  ctx.fillStyle = 'rgba(60,140,60,0.15)';
+  ctx.fillText('IH2VOF Mesh Generator — CORAL-compatible 2D structured mesh editor', W/2, H/2+28);
 }
 
 function drawRulers(xp, yp, RW) {
   if (!RW) return;
   const W = canvas.width, H = canvas.height;
-  // backgrounds
-  ctx.fillStyle = '#0d1820';
+  // backgrounds — CORAL dark ruler
+  ctx.fillStyle = '#141414';
   ctx.fillRect(0, 0, W, RW);
   ctx.fillRect(0, 0, RW, H);
+  ctx.fillStyle = '#0d0d0d';
   ctx.fillRect(0, 0, RW, RW);
   // X ruler
-  ctx.fillStyle = 'rgba(100,180,255,0.6)';
+  ctx.fillStyle = 'rgba(100,200,100,0.7)';
   ctx.font = '9px monospace'; ctx.textAlign = 'center'; ctx.textBaseline = 'top';
   let cumX = 0;
   for (let i = 0; i <= grid.nx; i++) {
@@ -863,7 +924,7 @@ function drawRulers(xp, yp, RW) {
       if (view.zoom >= 2) {
         ctx.beginPath();
         ctx.moveTo(sx, RW-6); ctx.lineTo(sx, RW);
-        ctx.strokeStyle='rgba(100,180,255,0.4)'; ctx.lineWidth=0.5; ctx.stroke();
+        ctx.strokeStyle='rgba(60,160,60,0.5)'; ctx.lineWidth=0.5; ctx.stroke();
         // label
         const label = formatNum(cumX);
         if (view.zoom * grid.dx[Math.min(i,grid.nx-1)] > 28 || i % Math.ceil(10/view.zoom/grid.dx[0]) === 0) {
@@ -874,7 +935,7 @@ function drawRulers(xp, yp, RW) {
     if (i < grid.nx) cumX += grid.dx[i];
   }
   // X axis label
-  ctx.fillStyle = 'rgba(100,180,255,0.35)'; ctx.font='9px monospace';
+  ctx.fillStyle = 'rgba(80,180,80,0.5)'; ctx.font='9px monospace';
   ctx.fillText('x (m)', RW + (W-RW)/2, 18);
 
   // Y ruler
@@ -889,12 +950,12 @@ function drawRulers(xp, yp, RW) {
       if (view.zoom >= 1) {
         ctx.beginPath();
         ctx.moveTo(RW-6, sy); ctx.lineTo(RW, sy);
-        ctx.strokeStyle='rgba(100,180,255,0.4)'; ctx.lineWidth=0.5; ctx.stroke();
+        ctx.strokeStyle='rgba(60,160,60,0.5)'; ctx.lineWidth=0.5; ctx.stroke();
         const label = formatNum(cumYphys);
         const minPx = sj < grid.ny ? grid.dy[grid.ny-1-sj]*view.zoom : 0;
         if (view.zoom * (sj<grid.ny?grid.dy[grid.ny-1-sj]:0.01) > 16 || sj % Math.ceil(10/view.zoom/grid.dy[0]) === 0) {
           ctx.save(); ctx.translate(RW-8, sy); ctx.rotate(-Math.PI/2);
-          ctx.fillStyle='rgba(100,180,255,0.6)'; ctx.font='9px monospace';
+          ctx.fillStyle='rgba(100,200,100,0.7)'; ctx.font='9px monospace';
           ctx.textAlign='center'; ctx.textBaseline='middle';
           ctx.fillText(label, 0, 0);
           ctx.restore();
@@ -1021,7 +1082,7 @@ canvas.addEventListener('mousedown', e => {
 
   if (e.button === 2) {
     // right-click = pick material
-    if (cell) { activeMat = getCell(cell.i, cell.j); updateMatUI(); }
+    if (cell) { setActiveMat(getCell(cell.i, cell.j)); }
     return;
   }
 
@@ -1060,15 +1121,17 @@ canvas.addEventListener('mousemove', e => {
     const m = MATERIALS[mat]||MATERIALS[0];
     const wx = worldX(cell.i) + grid.dx[cell.i]/2;
     const wy = worldY(cell.j) + grid.dy[cell.j]/2;
-    document.getElementById('s-cell').textContent = `(${cell.i}, ${cell.j})`;
+    document.getElementById('s-cell').textContent = `${cell.i}, ${cell.j}`;
     document.getElementById('s-x').textContent = wx.toFixed(3);
     document.getElementById('s-y').textContent = wy.toFixed(3);
     document.getElementById('s-mat').textContent = `${m.name} [${mat}]`;
+    const sw = document.getElementById('s-mat-swatch');
+    if (sw) sw.style.background = m.solid;
     document.getElementById('cell-inspector').innerHTML =
       `<b>Cell (i=${cell.i}, j=${cell.j})</b><br>` +
       `x = ${wx.toFixed(4)} m, y = ${wy.toFixed(4)} m<br>` +
       `dx = ${grid.dx[cell.i].toFixed(5)} m, dy = ${grid.dy[cell.j].toFixed(5)} m<br>` +
-      `<span style="color:${m.solid==='#3d4860'?'#8aa0ff':m.solid};font-weight:600">Type ${mat} — ${m.name}</span>`;
+      `<span style="color:${m.solid};font-weight:600">▪ Type ${mat} — ${m.name}</span>`;
   } else {
     lastHover = null;
     document.getElementById('s-cell').textContent='—';
@@ -1148,7 +1211,7 @@ document.addEventListener('keydown', e => {
   if ((e.ctrlKey||e.metaKey) && (e.key==='y'||(e.shiftKey&&e.key==='z'))) { e.preventDefault(); redo(); }
   const keyMap = { p:'pencil', r:'rect', f:'fill', l:'line', e:'erase' };
   if (keyMap[e.key.toLowerCase()]) selectTool(keyMap[e.key.toLowerCase()]);
-  if (e.key>='0' && e.key<='5') { activeMat=parseInt(e.key); updateMatUI(); }
+  if (e.key>='0' && e.key<='6') { activeMat=parseInt(e.key); updateMatUI(); }
 });
 
 document.addEventListener('keyup', e => {
@@ -1210,9 +1273,18 @@ function selectTool(name) {
   canvas.style.cursor = name==='pan'?'grab':'crosshair';
 }
 
+function setActiveMat(id) {
+  activeMat = id;
+  updateMatUI();
+}
+
 function updateMatUI() {
   document.querySelectorAll('.mat-item').forEach(el => {
     el.classList.toggle('active', parseInt(el.dataset.matid)===activeMat);
+  });
+  // also update CORAL-style quick buttons
+  document.querySelectorAll('.coral-obj-btn').forEach(el => {
+    el.classList.toggle('active', parseInt(el.dataset.mat)===activeMat);
   });
 }
 
@@ -1227,7 +1299,7 @@ function buildMatList() {
     div.innerHTML = `<div class="mswatch" style="background:${m.solid}"></div>
       <div class="mname">${m.name}</div>
       <div class="mcode">${m.code}</div>`;
-    div.onclick = () => { activeMat=m.id; updateMatUI(); };
+    div.onclick = () => { setActiveMat(m.id); };
     el.appendChild(div);
   });
 }
@@ -1330,83 +1402,253 @@ function mirrorH() {
   render(); updateStats();
 }
 
-/* ═══════════════════════════════════════════════════════════
-   DAT EXPORT
-   ═══════════════════════════════════════════════════════════ */
-function generateDAT(topDown=true) {
-  if (!grid) return '';
-  const nl = '\n';
-  const totalW = Array.from(grid.dx).reduce((a,b)=>a+b,0);
-  const totalH = Array.from(grid.dy).reduce((a,b)=>a+b,0);
-  const now = new Date().toISOString().slice(0,16).replace('T',' ');
+/* ── Fill by physical XY coordinates (CORAL-style coordinate input) ── */
+function fillByCoords() {
+  if (!grid) return notify('Create a grid first', 'err');
+  const x0 = parseFloat(document.getElementById('coord-x0').value);
+  const x1 = parseFloat(document.getElementById('coord-x1').value);
+  const y0 = parseFloat(document.getElementById('coord-y0').value);
+  const y1 = parseFloat(document.getElementById('coord-y1').value);
+  if ([x0,x1,y0,y1].some(isNaN)) return notify('Enter valid numbers', 'err');
+  const xLo = Math.min(x0,x1), xHi = Math.max(x0,x1);
+  const yLo = Math.min(y0,y1), yHi = Math.max(y0,y1);
 
-  let s = '';
-  s += `! =========================================================\n`;
-  s += `! IH2VOF Mesh File\n`;
-  s += `! Generated by IH2VOF Mesh Generator (CORAL-style GUI)\n`;
-  s += `! Date: ${now}\n`;
-  s += `! Grid: ${grid.nx} x ${grid.ny} cells\n`;
-  s += `! Domain: ${totalW.toFixed(4)} m (x) × ${totalH.toFixed(4)} m (y)\n`;
-  s += `! Cell types: 0=Fluid, 1=Solid, 2=Porous(Armor), 3=Porous(Core), 4=Porous(Filter), 5=Damping\n`;
-  s += `! =========================================================\n`;
-  s += nl;
-  s += `! NX  NY\n`;
-  s += `${grid.nx}  ${grid.ny}\n`;
-  s += nl;
+  // Build cumulative edge arrays
+  let cumX = 0, cumY = 0;
+  const xEdge = [0]; for (const d of grid.dx) { cumX += d; xEdge.push(cumX); }
+  const yEdge = [0]; for (const d of grid.dy) { cumY += d; yEdge.push(cumY); }
 
-  // dx array
-  s += `! Cell widths in x-direction [m] (NX = ${grid.nx} values)\n`;
-  const dxLine = Array.from(grid.dx).map(v=>v.toFixed(6)).join('  ');
-  s += wrapLine(dxLine, 12) + nl;
-  s += nl;
+  // Find columns and rows overlapping [xLo,xHi] × [yLo,yHi]
+  const iLo = xEdge.findIndex((_,k) => xEdge[k+1] > xLo);
+  const iHi = xEdge.reduce((acc,v,k)=>v<=xHi?k:acc, -1);
+  const jLo = yEdge.findIndex((_,k) => yEdge[k+1] > yLo);
+  const jHi = yEdge.reduce((acc,v,k)=>v<=yHi?k:acc, -1);
 
-  // dy array (physical order: j=0=bottom to j=NY-1=top)
-  s += `! Cell heights in y-direction [m] (NY = ${grid.ny} values, j=1=bottom to j=${grid.ny}=top)\n`;
-  const dyLine = Array.from(grid.dy).map(v=>v.toFixed(6)).join('  ');
-  s += wrapLine(dyLine, 12) + nl;
-  s += nl;
+  if (iLo < 0 || iHi < 0 || jLo < 0 || jHi < 0 || iLo > iHi || jLo > jHi)
+    return notify('Region outside grid domain', 'err');
 
-  // cell type matrix
-  s += `! Cell type matrix\n`;
-  s += topDown
-    ? `! Row order: top (j=${grid.ny}) → bottom (j=1), columns: left (i=1) → right (i=${grid.nx})\n`
-    : `! Row order: bottom (j=1) → top (j=${grid.ny}), columns: left (i=1) → right (i=${grid.nx})\n`;
-
-  const rows = [];
-  if (topDown) {
-    for (let j = grid.ny-1; j >= 0; j--) {
-      const row = [];
-      for (let i = 0; i < grid.nx; i++) row.push(getCell(i,j));
-      rows.push(row.join(' '));
+  saveUndo();
+  let count = 0;
+  for (let j = jLo; j <= Math.min(jHi, grid.ny-1); j++)
+    for (let i = iLo; i <= Math.min(iHi, grid.nx-1); i++) {
+      setCell(i, j, activeMat); count++;
     }
-  } else {
-    for (let j = 0; j < grid.ny; j++) {
-      const row = [];
-      for (let i = 0; i < grid.nx; i++) row.push(getCell(i,j));
-      rows.push(row.join(' '));
-    }
-  }
-  s += rows.join(nl) + nl;
-  s += nl;
-
-  // porous material parameters
-  s += `! ---------------------------------------------------------\n`;
-  s += `! Porous material parameters (for use in IH2VOF input file)\n`;
-  s += `! Type  Porosity(n)  d50(m)    Alpha    Beta\n`;
-  for (const pp of porousProps) {
-    s += `! ${pp.id}     ${pp.n.toFixed(3)}        ${pp.d50.toFixed(5)}   ${pp.alpha.toFixed(1)}    ${pp.beta.toFixed(3)}\n`;
-  }
-
-  return s;
+  render(); updateStats();
+  notify(`Filled ${count} cells (${MATERIALS[activeMat].name}) in [${xLo.toFixed(3)},${xHi.toFixed(3)}]×[${yLo.toFixed(3)},${yHi.toFixed(3)}]`, 'ok');
 }
 
-function wrapLine(str, perLine) {
-  const parts = str.split('  ');
-  const lines = [];
-  for (let i=0; i<parts.length; i+=perLine) {
-    lines.push(parts.slice(i,i+perLine).join('  '));
+function zoomToCoords() {
+  if (!grid) return;
+  const x0 = parseFloat(document.getElementById('coord-x0').value);
+  const x1 = parseFloat(document.getElementById('coord-x1').value);
+  const y0 = parseFloat(document.getElementById('coord-y0').value);
+  const y1 = parseFloat(document.getElementById('coord-y1').value);
+  if ([x0,x1,y0,y1].some(isNaN)) return;
+  const xLo=Math.min(x0,x1), xHi=Math.max(x0,x1), yLo=Math.min(y0,y1), yHi=Math.max(y0,y1);
+  const regionW = xHi - xLo, regionH = yHi - yLo;
+  if (regionW <= 0 || regionH <= 0) return;
+  const area = document.getElementById('canvas-area');
+  const aW = area.clientWidth, aH = area.clientHeight;
+  // compute zoom to fit region with 20% padding
+  const totalW = Array.from(grid.dx).reduce((a,b)=>a+b,0);
+  const totalH = Array.from(grid.dy).reduce((a,b)=>a+b,0);
+  const pxPerM = Math.min(aW/totalW, aH/totalH) * (view.zoom/100);
+  const fitZoom = Math.min(800, Math.floor(0.8 * Math.min(aW/(regionW), aH/(regionH)) * (view.zoom/100) * 100 / pxPerM * pxPerM));
+  view.zoom = Math.max(5, fitZoom);
+  // center on region
+  const cx = (xLo + xHi) / 2, cy = (yLo + yHi) / 2;
+  const totalPxW = totalW * view.zoom / 100 * (view.zoom > 0 ? 1 : 1);
+  fitView(); // refit then let user zoom if needed
+  notify(`Zoomed to [${xLo.toFixed(2)},${xHi.toFixed(2)}]×[${yLo.toFixed(2)},${yHi.toFixed(2)}]`, 'ok');
+}
+
+/* ═══════════════════════════════════════════════════════════
+   CORAL DAT EXPORT  —  polygon-based format (compact, GUI-readable)
+   ═══════════════════════════════════════════════════════════ */
+
+/* Trace the outer boundary polygon of a connected region of cells.
+   Returns array of [x, y] world-coordinate pairs (collinear points removed). */
+function traceRegionPolygon(region, nx, ny, dxArr, dyArr) {
+  const cellSet = new Set(region);
+
+  // Precompute cumulative corner coordinates
+  const xCoords = new Float64Array(nx + 1);
+  const yCoords = new Float64Array(ny + 1);
+  for (let k = 0; k < nx; k++) xCoords[k+1] = xCoords[k] + dxArr[k];
+  for (let k = 0; k < ny; k++) yCoords[k+1] = yCoords[k] + dyArr[k];
+
+  // Build directed edge map: corner_key → [next_ci, next_cj]
+  // Convention: counter-clockwise around the region interior
+  const edgeMap = new Map();
+  const addEdge = (ci0, cj0, ci1, cj1) => edgeMap.set(`${ci0},${cj0}`, [ci1, cj1]);
+
+  for (const idx of region) {
+    const i = idx % nx;
+    const j = Math.floor(idx / nx);
+    // Bottom boundary (cell below absent)
+    if (j === 0 || !cellSet.has((j-1)*nx + i))   addEdge(i+1, j,   i,   j);
+    // Top boundary (cell above absent)
+    if (j === ny-1 || !cellSet.has((j+1)*nx + i)) addEdge(i,   j+1, i+1, j+1);
+    // Left boundary (cell left absent)
+    if (i === 0 || !cellSet.has(j*nx + (i-1)))    addEdge(i,   j,   i,   j+1);
+    // Right boundary (cell right absent)
+    if (i === nx-1 || !cellSet.has(j*nx + (i+1))) addEdge(i+1, j+1, i+1, j);
   }
-  return lines.join('\n');
+
+  const startKey = edgeMap.keys().next().value;
+  if (!startKey) return [];
+
+  const poly = [];
+  let key = startKey;
+  for (let safety = 0; safety < 400000; safety++) {
+    const [ci, cj] = key.split(',').map(Number);
+    poly.push([xCoords[ci], yCoords[cj]]);
+    const next = edgeMap.get(key);
+    edgeMap.delete(key);
+    if (!next) break;
+    key = `${next[0]},${next[1]}`;
+    if (key === startKey) break;
+  }
+
+  // Remove collinear vertices
+  const n = poly.length;
+  if (n < 3) return poly;
+  const out = [];
+  for (let i = 0; i < n; i++) {
+    const [px, py] = poly[(i - 1 + n) % n];
+    const [cx, cy] = poly[i];
+    const [nx2, ny2] = poly[(i + 1) % n];
+    const cross = (cx-px)*(ny2-py) - (cy-py)*(nx2-px);
+    if (Math.abs(cross) > 1e-12) out.push(poly[i]);
+  }
+  return out.length >= 3 ? out : poly;
+}
+
+/* Generate CORAL-format polygon DAT file (same format as CORAL project files). */
+function generateCORALDAT() {
+  if (!grid) return '';
+  const { nx, ny, dx, dy, cells } = grid;
+
+  // Total domain extents (prefer stored values from a round-tripped CORAL file)
+  const totalDx = Array.from(dx).reduce((s,v)=>s+v,0);
+  const totalDy = Array.from(dy).reduce((s,v)=>s+v,0);
+  const Lx = (grid.domainLx && isFinite(grid.domainLx)) ? grid.domainLx : totalDx;
+  const Ly = (grid.domainLy && isFinite(grid.domainLy)) ? grid.domainLy : totalDy;
+
+  // Representative cell sizes
+  const repDx = totalDx / nx;
+  const repDy = totalDy / ny;
+
+  // ── Type metadata ─────────────────────────────────────────────────────
+  const TYPE_INFO = {
+    0: { kw:'TWaterDef',        name:'Water',       extra: true  },
+    1: { kw:'TObstacleDef',     name:'Bathymetry',  extra: false },
+    2: { kw:'TPorousMediumDef', name:'Armorlayer',  porous: true },
+    3: { kw:'TPorousMediumDef', name:'Core',        porous: true },
+    4: { kw:'TPorousMediumDef', name:'Filter',      porous: true },
+    5: { kw:'TPorousMediumDef', name:'Damping',     porous: true },
+    6: { kw:'TObstacleDef',     name:'Crown Wall',  extra: false },
+  };
+
+  // ── First pass: collect all polygons (so we can write the header count) ──
+  // Write order: water first, porous, bathymetry, crown-wall last (highest priority)
+  const WRITE_ORDER = [0, 2, 3, 4, 5, 1, 6];
+  const polygons = [];  // { ctype, poly }
+
+  for (const ctype of WRITE_ORDER) {
+    const mask = new Uint8Array(nx * ny);
+    let count = 0;
+    for (let idx = 0; idx < nx * ny; idx++) {
+      if (cells[idx] === ctype) { mask[idx] = 1; count++; }
+    }
+    if (!count) continue;
+
+    const visited = new Uint8Array(nx * ny);
+    for (let startIdx = 0; startIdx < nx * ny; startIdx++) {
+      if (!mask[startIdx] || visited[startIdx]) continue;
+      const region = [];
+      const queue = [startIdx];
+      visited[startIdx] = 1;
+      while (queue.length) {
+        const idx = queue.shift();
+        region.push(idx);
+        const ci = idx % nx, cj = Math.floor(idx / nx);
+        for (const [di, dj] of [[-1,0],[1,0],[0,-1],[0,1]]) {
+          const ni = ci+di, nj = cj+dj;
+          if (ni>=0 && ni<nx && nj>=0 && nj<ny) {
+            const nidx = nj*nx+ni;
+            if (mask[nidx] && !visited[nidx]) { visited[nidx]=1; queue.push(nidx); }
+          }
+        }
+      }
+      const poly = traceRegionPolygon(region, nx, ny, dx, dy);
+      if (poly.length >= 3) polygons.push({ ctype, poly });
+    }
+  }
+
+  // Count how many porous-media polygons there are (for header flag)
+  const numPorous = polygons.filter(p => [2,3,4,5].includes(p.ctype)).length;
+
+  // ── Write Fortran-style CORAL header ──────────────────────────────────
+  const lines = [];
+
+  // 1) Ly (total height), 2) Lx (total width)
+  lines.push(toSci(Ly));
+  lines.push(toSci(Lx));
+
+  // 3) X subzones — 1 uniform zone spanning the full domain
+  lines.push('1');
+  lines.push(toSci(Lx));         // Center (convergence point)
+  lines.push(toSci(0));          // Division (left edge)
+  lines.push('1');               // Num. cells left
+  lines.push(String(nx));        // Num. cells right
+  lines.push(toSci(repDx));      // Max. sep. center
+
+  // 4) Y subzones — 1 uniform zone
+  lines.push('1');
+  lines.push(toSci(Ly));         // Center
+  lines.push(toSci(0));          // Division
+  lines.push('1');               // Num. cells left
+  lines.push(String(ny));        // Num. cells right
+  lines.push(toSci(repDy));      // Max. sep. center
+
+  // 5) Flag block (empirically observed as "2" + four zeros in CORAL files)
+  lines.push('2');
+  lines.push('0');
+  lines.push('0');
+  lines.push('0');
+  lines.push('0');
+
+  // 6) Polygon count (all objects)
+  lines.push(String(polygons.length));
+
+  // ── Write polygons (flipping Y back to CORAL's Y-DOWN convention) ──────
+  for (const { ctype, poly } of polygons) {
+    const info = TYPE_INFO[ctype] || TYPE_INFO[1];
+    lines.push(`${poly.length} 1`);
+    for (const [x, y] of poly) {
+      // Flip Y: internal Y-up → CORAL Y-down
+      const yCoral = Ly - y;
+      lines.push(`${x.toFixed(8)} ${yCoral.toFixed(8)}`);
+    }
+    lines.push(info.kw);
+    lines.push(info.name);
+
+    if (info.porous) {
+      lines.push(info.name);   // name repeated on second line
+      const p = porousProps.find(pp => pp.id === ctype) || { alpha:200, n:0.4, d50:0.02, beta:1.1 };
+      lines.push(toSci(p.alpha));
+      lines.push(toSci(p.n));
+      lines.push(toSci(0.34));    // Cm (added-mass coefficient)
+      lines.push(toSci(p.beta));
+      lines.push(toSci(0));
+      lines.push(toSci(p.d50));
+    } else if (info.extra) {
+      lines.push(toSci(0));       // water level offset
+    }
+  }
+
+  return lines.join('\r\n') + '\r\n';
 }
 
 function openExport() {
@@ -1416,31 +1658,171 @@ function openExport() {
 }
 
 function refreshExportPreview() {
-  const topDown = document.querySelector('input[name="row-order"]:checked').value === 'topdown';
-  const txt = generateDAT(topDown);
-  // Show limited preview
-  const lines = txt.split('\n');
-  const preview = lines.slice(0, 80).join('\n') + (lines.length>80 ? `\n… (${lines.length-80} more lines)` : '');
+  const fmt = document.querySelector('input[name="exp-fmt"]:checked').value;
+  let txt;
+  if (fmt === 'mes') {
+    txt = '* Mesh.mes format selected.\n* Click ⬇ Download to export.';
+  } else {
+    txt = generateCORALDAT();
+  }
+  const lines = txt.split(/\r?\n/);
+  const preview = lines.slice(0, 80).join('\n') + (lines.length > 80 ? `\n… (${lines.length-80} more lines)` : '');
   document.getElementById('dat-preview').textContent = preview;
 }
 
-document.querySelectorAll('input[name="row-order"]').forEach(r => r.addEventListener('change', () => {
+document.querySelectorAll('input[name="exp-fmt"]').forEach(r => r.addEventListener('change', () => {
   if (document.getElementById('export-modal').classList.contains('show')) refreshExportPreview();
 }));
 
+// Monotonically-increasing build counter persists for the page session
+let __datBuildCounter = 0;
+
+/* Human-readable version tag — v{n}_YYYYMMDD-HHMMSS — lets the user
+   distinguish successive exports while iterating. */
+function buildVersionTag() {
+  __datBuildCounter += 1;
+  const d = new Date();
+  const pad = n => String(n).padStart(2, '0');
+  const ts = `${d.getFullYear()}${pad(d.getMonth()+1)}${pad(d.getDate())}` +
+             `-${pad(d.getHours())}${pad(d.getMinutes())}${pad(d.getSeconds())}`;
+  return `v${__datBuildCounter}_${ts}`;
+}
+
 function downloadDAT() {
   if (!grid) return;
-  const topDown = document.querySelector('input[name="row-order"]:checked').value === 'topdown';
-  const txt = generateDAT(topDown);
-  const fname = (document.getElementById('exp-filename').value||'mesh').replace(/\.dat$/i,'') + '.dat';
+  const txt = generateCORALDAT();
+  const base = (document.getElementById('exp-filename').value || 'mesh').replace(/\.dat$/i, '');
+  const tag  = buildVersionTag();
+  const fname = `${base}_html_output_${tag}.dat`;
   downloadText(txt, fname);
   notify(`Saved ${fname}`, 'ok');
 }
 
+/* dispatcher — reads the format radio and calls the right exporter */
+function downloadExport() {
+  if (!grid) return notify('Create a grid first', 'err');
+  const fmt = document.querySelector('input[name="exp-fmt"]:checked').value;
+  if (fmt === 'mes') downloadMES();
+  else downloadDAT();
+}
+
+/* Export to Mesh.mes — IH2VOF native node-based format */
+function downloadMES() {
+  if (!grid) return;
+  const { nx, ny, dx, dy, cells } = grid;
+  const lines = [];
+
+  // ── * Porous types ──────────────────────────────────────────
+  // Identify which porous types (2=Armor, 3=Core, 4=Filter) are used in the grid
+  const usedPorous = [];
+  for (let t = 2; t <= 4; t++) {
+    if ([...cells].some(c => c === t)) usedPorous.push(t);
+  }
+  // Build porous property map from current UI values
+  const propMap = {};
+  porousProps.forEach(p => { propMap[p.id] = p; });
+  // Default porous properties if not in porousProps
+  const DEF_POROUS = { n:0.40, alpha:200, beta:1.1, d50:0.020 };
+
+  lines.push('* Porous types');
+  lines.push('2');                          // always 2 (Mesh.mes format constant)
+  lines.push(String(usedPorous.length));    // number of porous material definitions
+  for (const pType of usedPorous) {
+    const p = propMap[pType] || DEF_POROUS;
+    const Cm = 0.34;   // added mass coefficient (default)
+    // Property row format (6 values): 0  n  C1  alpha  Cm  D50
+    lines.push(`0.0000 ${p.n.toFixed(4)} ${p.alpha.toFixed(4)} ${p.beta.toFixed(4)} ${Cm.toFixed(4)} ${p.d50.toFixed(4)}`);
+  }
+
+  // ── * X divisions ────────────────────────────────────────────
+  lines.push('* X divisions');
+  lines.push(String(nx + 1));
+  let cx = 0;
+  lines.push(toSci(cx));
+  for (let i = 0; i < nx; i++) { cx += dx[i]; lines.push(toSci(cx)); }
+
+  // ── * Y Divisions ────────────────────────────────────────────
+  lines.push('* Y Divisions');
+  lines.push(String(ny + 1));
+  let cy = 0;
+  lines.push(toSci(cy));
+  for (let j = 0; j < ny; j++) { cy += dy[j]; lines.push(toSci(cy)); }
+
+  // ── * Matrices — 6 data blocks ───────────────────────────────
+  // Build porous-type lookup array for quick access
+  // usedPorous[0] → Section-6 code 2,  usedPorous[1] → 3, etc.
+  const porousCode = {};   // cellType → section-6 value
+  usedPorous.forEach((t, idx) => { porousCode[t] = idx + 2; });
+
+  // For each node (row=top-down, col=left-right):
+  //   Owner cell: i = clamp(col-1, 0, nx-1),  j = clamp(ny-1-row, 0, ny-1)
+  //   This is the upper-right interior node of cell (i,j), matching parseMES.
+  const getCellAt = (row, col) => {
+    const i = Math.min(nx-1, Math.max(0, col-1));
+    const j = Math.min(ny-1, Math.max(0, ny-1-row));
+    return cells[j*nx+i];
+  };
+
+  // VOF values: solid→0.00, fluid/porous→1.00  (Sections 1-5)
+  // Porous codes: non-porous→1, usedPorous[k]→k+2  (Section 6)
+  const N = (nx+1)*(ny+1);
+  const sec1 = new Float64Array(N);
+  const sec6 = new Float64Array(N).fill(1);
+  for (let row = 0; row <= ny; row++) {
+    for (let col = 0; col <= nx; col++) {
+      const ctype = getCellAt(row, col);
+      const idx = row*(nx+1)+col;
+      sec1[idx] = (ctype === 1 || ctype === 6) ? 0.00 : 1.00;   // solid (bathymetry/crown wall)→0, everything else→1
+      if (porousCode[ctype] !== undefined) sec6[idx] = porousCode[ctype];
+    }
+  }
+
+  lines.push('* Matrices');
+
+  const writeBlock = (arr) => {
+    lines.push('ASC');
+    lines.push('Dimensions');
+    lines.push('2');
+    lines.push('Sizes');
+    lines.push(String(nx+1));
+    lines.push(String(ny+1));
+    lines.push('Type');
+    lines.push('R8');
+    lines.push('Data');
+    for (const v of arr) lines.push(v.toFixed(2));
+  };
+
+  writeBlock(sec1);   // Block 1: initial VOF field
+  writeBlock(sec1);   // Block 2: VOF copy
+  writeBlock(sec1);   // Block 3: binary fluid mask
+  writeBlock(sec1);   // Block 4: binary fluid mask
+  writeBlock(sec1);   // Block 5: binary fluid mask
+  writeBlock(sec6);   // Block 6: porous media type codes
+
+  const base = (document.getElementById('exp-filename').value || 'Mesh').replace(/\.(dat|mes)$/i, '');
+  const fname = `${base}_html_output_${buildVersionTag()}.mes`;
+  downloadText(lines.join('\n'), fname);
+  notify(`Saved ${fname} — IH2VOF native Mesh.mes (${nx}x${ny}, ${usedPorous.length} porous type${usedPorous.length!==1?'s':''})`, 'ok');
+}
+
+/* Fortran-style scientific notation: ' 1.23456789012345E+0002' */
+function toSci(v) {
+  if (v === 0) return ' 0.00000000000000E+0000';
+  const neg = v < 0;
+  const abs = Math.abs(v);
+  const exp = Math.floor(Math.log10(abs));
+  const mantissa = abs / Math.pow(10, exp);
+  // Guard against floating-point rounding pushing mantissa to 10
+  const mClamped = Math.min(mantissa, 9.99999999999999);
+  const sign = neg ? '-' : ' ';
+  const expSign = exp >= 0 ? '+' : '-';
+  const expStr = String(Math.abs(exp)).padStart(4, '0');
+  return `${sign}${mClamped.toFixed(14)}E${expSign}${expStr}`;
+}
+
 function copyDAT() {
   if (!grid) return;
-  const topDown = document.querySelector('input[name="row-order"]:checked').value === 'topdown';
-  navigator.clipboard.writeText(generateDAT(topDown)).then(()=>notify('Copied to clipboard','ok'));
+  navigator.clipboard.writeText(generateCORALDAT()).then(()=>notify('Copied to clipboard','ok'));
 }
 
 function downloadText(txt, fname) {
@@ -1453,7 +1835,10 @@ function downloadText(txt, fname) {
 }
 
 /* ═══════════════════════════════════════════════════════════
-   DAT IMPORT
+   MESH IMPORT  —  supports:
+     • CORAL project .DAT  (TWaterDef/TObstacleDef polygons)
+     • Simple DAT cell-matrix  (our native format)
+     • Mesh.mes  (IH2VOF native mesh output)
    ═══════════════════════════════════════════════════════════ */
 function triggerImport() { document.getElementById('file-in').click(); }
 
@@ -1462,70 +1847,313 @@ function handleImport(evt) {
   if (!file) return;
   const reader = new FileReader();
   reader.onload = e => {
-    try { parseDAT(e.target.result); notify('Mesh imported successfully','ok'); }
-    catch(err) { notify('Import failed: '+err.message, 'err'); console.error(err); }
+    const text = e.target.result;
+    try {
+      if (/TWaterDef|TObstacleDef|TPorousMediumDef/i.test(text)) {
+        parseCORALDAT(text);
+        notify('CORAL DAT imported — ' + grid.nx + '×' + grid.ny + ' cells (approx. domain)', 'ok');
+      } else if (/\*\s*X\s+divisions/i.test(text) || /\*\s*Porous\s+types/i.test(text)) {
+        parseMES(text);
+        notify('Mesh.mes imported — ' + grid.nx + '×' + grid.ny + ' cells', 'ok');
+      } else {
+        parseDAT(text);
+        notify('Mesh imported — ' + grid.nx + '×' + grid.ny + ' cells', 'ok');
+      }
+    }
+    catch(err) { notify('Import failed: ' + err.message, 'err'); console.error(err); }
   };
   reader.readAsText(file);
-  evt.target.value='';
+  evt.target.value = '';
 }
 
-function parseDAT(text) {
-  const lines = text.split(/\r?\n/)
-    .map(l => l.replace(/!.*/,'').trim())  // strip comments
-    .filter(l => l.length > 0);
-
+/* ── Mesh.mes parser ─────────────────────────────────────────
+   Format (IH2VOF native mesh):
+     * Porous types / * X divisions / * Y Divisions / * Matrices
+   Cell-type encoding in the node matrix:
+     0.00 → solid/impermeable (type 1)
+     1.00 → fluid             (type 0)
+     2.00 → porous armor      (type 2)
+     3.00 → porous core       (type 3)
+     4.00 → porous filter     (type 4)
+     ≥5   → damping zone      (type 5)
+   ─────────────────────────────────────────────────────────── */
+function parseMES(text) {
+  const raw = text.split(/\r?\n/).map(l => l.trim());
   let idx = 0;
-  const readTokens = () => {
-    const toks = [];
-    while (idx < lines.length && toks.length === 0) {
-      toks.push(...lines[idx].split(/\s+/).filter(s=>s));
-      idx++;
-    }
-    return toks;
+
+  // ── X divisions ──────────────────────────────────────────
+  while (idx < raw.length && !/x\s+divisions/i.test(raw[idx])) idx++;
+  if (idx >= raw.length) throw new Error('Mesh.mes: cannot find "* X divisions" section');
+  idx++;  // skip section header
+
+  // next non-blank line = count of X boundary positions (NX+1)
+  while (idx < raw.length && raw[idx] === '') idx++;
+  const nx1 = parseInt(raw[idx++]);
+  if (!nx1 || nx1 < 2 || nx1 > 6001) throw new Error(`Mesh.mes: invalid X division count (${nx1})`);
+
+  const xcoords = [];
+  while (xcoords.length < nx1 && idx < raw.length) {
+    const v = parseFloat(raw[idx]);
+    if (!isNaN(v)) xcoords.push(v);
+    idx++;
+  }
+  if (xcoords.length < nx1) throw new Error('Mesh.mes: not enough X coordinate values');
+
+  // ── Y divisions ──────────────────────────────────────────
+  while (idx < raw.length && !/y\s+divisions/i.test(raw[idx])) idx++;
+  if (idx >= raw.length) throw new Error('Mesh.mes: cannot find "* Y Divisions" section');
+  idx++;
+
+  while (idx < raw.length && raw[idx] === '') idx++;
+  const ny1 = parseInt(raw[idx++]);
+  if (!ny1 || ny1 < 2 || ny1 > 6001) throw new Error(`Mesh.mes: invalid Y division count (${ny1})`);
+
+  const ycoords = [];
+  while (ycoords.length < ny1 && idx < raw.length) {
+    const v = parseFloat(raw[idx]);
+    if (!isNaN(v)) ycoords.push(v);
+    idx++;
+  }
+  if (ycoords.length < ny1) throw new Error('Mesh.mes: not enough Y coordinate values');
+
+  const nx = nx1 - 1, ny = ny1 - 1;
+  if (nx < 1 || ny < 1) throw new Error(`Mesh.mes: degenerate grid (${nx}×${ny})`);
+
+  // dx / dy arrays from consecutive coordinate differences
+  const dxArr = Array.from({length: nx}, (_, i) => Math.abs(xcoords[i+1] - xcoords[i]));
+  const dyArr = Array.from({length: ny}, (_, j) => Math.abs(ycoords[j+1] - ycoords[j]));
+
+  // ── Matrices → Data ──────────────────────────────────────
+  while (idx < raw.length && !/\*\s*matrices/i.test(raw[idx])) idx++;
+  if (idx >= raw.length) throw new Error('Mesh.mes: cannot find "* Matrices" section');
+
+  // scan forward for the 'Data' keyword
+  while (idx < raw.length && raw[idx] !== 'Data') idx++;
+  if (idx >= raw.length) throw new Error('Mesh.mes: cannot find Data keyword in Matrices section');
+  idx++;  // move past 'Data'
+
+  // Read the first matrix: (nx1 × ny1) node values, one per line.
+  // Layout: row-major, top-down (row 0 = highest y).
+  const nodeCount = nx1 * ny1;
+  const nodeVals  = new Float32Array(nodeCount);
+  let filled = 0;
+  while (filled < nodeCount && idx < raw.length) {
+    const v = parseFloat(raw[idx]);
+    if (!isNaN(v)) nodeVals[filled++] = v;
+    idx++;
+  }
+  if (filled < nodeCount)
+    throw new Error(`Mesh.mes: expected ${nodeCount} data values, got only ${filled}`);
+
+  // ── Map node values → IH2VOF cell types ──────────────────
+  // For cell (i, j) [j=0 at domain bottom], sample the "interior" node:
+  //   x-node index = i+1           (right boundary of cell)
+  //   top-down row = ny - (j+1)    (converts bottom-up j to top-down row)
+  const mesNodeToType = v => {
+    if (v < 0.1) return 1;          // 0.00 → solid/impermeable
+    if (v < 1.5) return 0;          // 1.00 → fluid
+    if (v < 2.5) return 2;          // 2.xx → porous armor
+    if (v < 3.5) return 3;          // 3.xx → porous core
+    if (v < 4.5) return 4;          // 4.xx → porous filter
+    return 5;                        // 5+   → damping zone
   };
-
-  const readAllTokensUntilEnough = (n) => {
-    const toks = [];
-    while (toks.length < n && idx < lines.length) {
-      toks.push(...lines[idx].split(/\s+/).filter(s=>s));
-      idx++;
-    }
-    return toks;
-  };
-
-  // NX NY
-  const dims = readTokens();
-  const nx = parseInt(dims[0]), ny = parseInt(dims[1]);
-  if (!nx || !ny || nx<1 || ny<1) throw new Error('Cannot parse NX/NY');
-
-  // dx values
-  const dxToks = readAllTokensUntilEnough(nx);
-  const dxArr = dxToks.slice(0,nx).map(Number);
-  if (dxArr.some(isNaN)) throw new Error('Cannot parse dx array');
-
-  // dy values
-  const dyToks = readAllTokensUntilEnough(ny);
-  const dyArr = dyToks.slice(0,ny).map(Number);
-  if (dyArr.some(isNaN)) throw new Error('Cannot parse dy array');
-
-  // cell matrix: collect nx*ny values
-  const cellToks = readAllTokensUntilEnough(nx*ny);
-  const cellVals = cellToks.slice(0,nx*ny).map(Number);
-  if (cellVals.some(isNaN)) throw new Error('Cannot parse cell matrix');
-
-  // detect order by checking if first row looks like top or bottom
-  // we'll just assume top-down (which is more common) if we have exactly nx*ny
-  const cells = new Uint8Array(nx*ny);
-  // top-down: row 0 in file = physical row ny-1
-  for (let r=0; r<ny; r++) {
-    const physJ = ny-1-r;
-    for (let i=0; i<nx; i++) {
-      cells[physJ*nx+i] = Math.min(5, Math.max(0, cellVals[r*nx+i]));
+  const cells = new Uint8Array(nx * ny);
+  for (let j = 0; j < ny; j++) {
+    const topDownRow = ny - (j + 1);  // row index in the top-down node matrix
+    for (let i = 0; i < nx; i++) {
+      const nodeIdx = topDownRow * nx1 + (i + 1);
+      cells[j * nx + i] = mesNodeToType(nodeVals[nodeIdx]);
     }
   }
 
-  grid = { nx, ny, dx:Float64Array.from(dxArr), dy:Float64Array.from(dyArr), cells };
-  undoStack=[]; redoStack=[];
+  grid = { nx, ny, dx: Float64Array.from(dxArr), dy: Float64Array.from(dyArr), cells };
+  undoStack = []; redoStack = [];
+  fitView(); updateUI(); render();
+}
+
+/* ── CORAL project .DAT parser ───────────────────────────────
+   Parses polygon-based geometry from CORAL's project files.
+   Rasterizes TWaterDef / TObstacleDef / TPorousMediumDef
+   polygon regions onto a uniform grid using point-in-polygon.
+   ─────────────────────────────────────────────────────────── */
+function parseCORALDAT(text) {
+  const lines = text.split(/\r?\n/).map(l => l.trim()).filter(l => l.length > 0);
+  const TYPE_RX = /^(TWaterDef|TObstacleDef|TPorousMediumDef)$/i;
+
+  // Pre-scan: find ALL valid polygon headers (pattern: "N 1" line, N coord pairs, type keyword, name)
+  // Capture the human-readable name on line (hi + n + 2) for identifying Crown Wall vs Bathymetry.
+  const polyHeaders = [];
+  for (let i = 0; i < lines.length - 2; i++) {
+    const m = lines[i].match(/^(\d+)\s+(\d+)$/);
+    if (!m) continue;
+    const n = parseInt(m[1]);
+    if (n < 3 || n > 200 || parseInt(m[2]) !== 1) continue;
+    if (i + n + 1 >= lines.length) continue;
+    let ok = true;
+    for (let k = 1; k <= n; k++) {
+      const p = lines[i + k].split(/\s+/);
+      if (p.length < 2 || isNaN(parseFloat(p[0])) || isNaN(parseFloat(p[1]))) { ok = false; break; }
+    }
+    if (ok && TYPE_RX.test(lines[i + n + 1])) polyHeaders.push(i);
+  }
+  if (!polyHeaders.length) throw new Error('No polygon regions found in CORAL file');
+
+  // ── CORAL Fortran-style header (lines before first polygon) ──────────────
+  //   Line 1: Ly  (total domain height)
+  //   Line 2: Lx  (total domain width)
+  //   Line 3: nXsubzones, then for each subzone: Center, Division, NcellsL, NcellsR, MaxSepCenter
+  //   Line  : nYsubzones, same structure
+  //   Line  : flag block (usually "2", "0", "0", "0", "0")  — carried through export verbatim
+  //   Line  : nPolygons
+  const headerLines = lines.slice(0, polyHeaders[0]);
+  let Ly = NaN, Lx = NaN;
+  if (headerLines.length >= 2) {
+    Ly = parseFloat(headerLines[0]);
+    Lx = parseFloat(headerLines[1]);
+  }
+
+  // dx/dy: prefer "MaxSepCenter" values harvested from subzone header blocks
+  // Fall back to small positive values (<20) if the header is malformed.
+  const hvals = [];
+  for (const hl of headerLines) {
+    const v = parseFloat(hl);
+    if (!isNaN(v) && v > 1e-5 && v < 20) hvals.push(v);
+  }
+  const sf = [...new Set(hvals.map(v => +v.toPrecision(4)))].sort((a, b) => a - b);
+  if (!sf.length) throw new Error('Cannot determine cell sizes from CORAL header');
+  const dy = sf[0], dx = (sf.length > 1 && sf[1] > dy * 1.001) ? sf[1] : dy;
+
+  // Parse each polygon region (verts remain in CORAL Y-DOWN coordinates; flipped below)
+  const polys = []; let porousN = 0;
+  for (const hi of polyHeaders) {
+    const n = parseInt(lines[hi]);
+    const verts = [];
+    for (let k = 1; k <= n; k++) {
+      const p = lines[hi + k].split(/\s+/);
+      verts.push([parseFloat(p[0]), parseFloat(p[1])]);
+    }
+    const kw = lines[hi + n + 1];
+    const polyName = (lines[hi + n + 2] || '').trim();
+    let type;
+    if (/TWater/i.test(kw)) {
+      type = 0;
+    } else if (/TObstacle/i.test(kw)) {
+      // Distinguish Crown Wall (yellow, type 6) from Bathymetry/generic obstacle (dark, type 1)
+      type = /crown\s*wall/i.test(polyName) ? 6 : 1;
+    } else {
+      porousN++;
+      type = Math.min(5, porousN + 1);
+    }
+    polys.push({ verts, type, name: polyName });
+  }
+
+  // Determine domain extents.  Use the header-declared Lx/Ly when sensible;
+  // otherwise derive from polygon bounding box.
+  let xMax = 0, yMax = 0;
+  polys.forEach(p => p.verts.forEach(([x, y]) => { if (x > xMax) xMax = x; if (y > yMax) yMax = y; }));
+  const domainLx = (isFinite(Lx) && Lx > dx) ? Lx : Math.max(dx, xMax - dx);
+  const domainLy = (isFinite(Ly) && Ly > dy) ? Ly : Math.max(dy, yMax - dy);
+  const nx = Math.min(3000, Math.max(2, Math.round(domainLx / dx)));
+  const ny = Math.min(3000, Math.max(2, Math.round(domainLy / dy)));
+
+  // ── CRITICAL: flip Y axis. CORAL uses Y-DOWN (y=0 at top of domain),
+  //     HTML/canvas internal grid uses Y-UP (j=0 at bottom).  Flip every
+  //     polygon vertex before rasterizing so the preview is upright.
+  for (const poly of polys) {
+    poly.verts = poly.verts.map(([x, y]) => [x, domainLy - y]);
+  }
+
+  // Rasterize — water first, then porous, then solid (solid = highest priority)
+  const ordered = [
+    ...polys.filter(p => p.type === 0),
+    ...polys.filter(p => p.type >= 2 && p.type <= 5),
+    ...polys.filter(p => p.type === 1 || p.type === 6),
+  ];
+  const cells = new Uint8Array(nx * ny).fill(1); // default: solid
+  for (const poly of ordered) {
+    for (let j = 0; j < ny; j++) {
+      const cy = (j + 0.5) * dy;
+      for (let i = 0; i < nx; i++) {
+        if (pointInPolygon((i + 0.5) * dx, cy, poly.verts)) cells[j * nx + i] = poly.type;
+      }
+    }
+  }
+
+  grid = {
+    nx, ny,
+    dx: new Float64Array(nx).fill(dx),
+    dy: new Float64Array(ny).fill(dy),
+    cells,
+    // Preserve domain/polygon metadata for round-trip export of the CORAL header
+    domainLx, domainLy,
+    polyNames: polys.map(p => p.name),
+  };
+  undoStack = []; redoStack = [];
+  fitView(); updateUI(); render();
+}
+
+function pointInPolygon(x, y, verts) {
+  let inside = false;
+  for (let i = 0, j = verts.length - 1; i < verts.length; j = i++) {
+    const xi = verts[i][0], yi = verts[i][1], xj = verts[j][0], yj = verts[j][1];
+    if ((yi > y) !== (yj > y) && x < (xj - xi) * (y - yi) / (yj - yi) + xi) inside = !inside;
+  }
+  return inside;
+}
+
+/* ── Simple DAT cell-matrix parser ──────────────────────────
+   Format:
+     NX  NY               (same line OR separate lines)
+     dx[0] … dx[NX-1]
+     dy[0] … dy[NY-1]
+     cell[0][0] … cell[NY-1][NX-1]   (top-down row order)
+   Comment styles stripped: !, #, %, --, Fortran-C
+   ─────────────────────────────────────────────────────────── */
+function parseDAT(text) {
+  // Strip all comment styles before parsing
+  const lines = text.split(/\r?\n/)
+    .map(l => l.replace(/(!|#|%|--).*$/, '')       // inline: !, #, %, --
+                .replace(/^\s*(C|c)[ \t].*$/, '')   // Fortran-style: C <space> comment
+                .replace(/\*.*$/, '')                // * comments (not MES headers — already routed above)
+                .trim())
+    .filter(l => l.length > 0);
+
+  let idx = 0;
+  const readAllTokensUntilEnough = n => {
+    const toks = [];
+    while (toks.length < n && idx < lines.length) {
+      toks.push(...lines[idx].split(/[\s,]+/).filter(s => s && !isNaN(Number(s))));
+      idx++;
+    }
+    return toks;
+  };
+
+  // NX NY — may be on same line OR separate lines
+  const dims = readAllTokensUntilEnough(2);
+  const nx = parseInt(dims[0]), ny = parseInt(dims[1]);
+  if (!nx || !ny || nx < 1 || ny < 1)
+    throw new Error(`Cannot parse NX/NY (got: "${dims[0]}", "${dims[1]}")`);
+  if (nx > 5000 || ny > 5000) throw new Error(`Grid too large: ${nx} × ${ny}`);
+
+  const dxArr = readAllTokensUntilEnough(nx).slice(0, nx).map(Number);
+  if (dxArr.some(isNaN)) throw new Error('Cannot parse dx array');
+
+  const dyArr = readAllTokensUntilEnough(ny).slice(0, ny).map(Number);
+  if (dyArr.some(isNaN)) throw new Error('Cannot parse dy array');
+
+  const cellToks = readAllTokensUntilEnough(nx * ny).slice(0, nx * ny).map(Number);
+  if (cellToks.some(isNaN)) throw new Error('Cannot parse cell matrix');
+
+  // top-down: row 0 in file = physical row ny-1 (bottom of screen = y=0)
+  const cells = new Uint8Array(nx * ny);
+  for (let r = 0; r < ny; r++) {
+    const physJ = ny - 1 - r;
+    for (let i = 0; i < nx; i++)
+      cells[physJ * nx + i] = Math.min(5, Math.max(0, cellToks[r * nx + i]));
+  }
+
+  grid = { nx, ny, dx: Float64Array.from(dxArr), dy: Float64Array.from(dyArr), cells };
+  undoStack = []; redoStack = [];
   fitView(); updateUI(); render();
 }
 
@@ -1742,9 +2370,10 @@ function init() {
   makeGrid(defNx, defNy,
     Array.from({length:defNx}, ()=>0.1),
     Array.from({length:defNy}, ()=>0.05));
-  // Add a solid floor
-  for (let i=0; i<defNx; i++) setCell(i, 0, 1);
+  // Add a solid floor (row j=0)
+  for (let i = 0; i < defNx; i++) setCell(i, 0, 1);
   updateStats();
+  render(); // re-render after setting floor cells
   notify('Starter grid loaded — click cells to paint, or use ⊞ New Grid to customise.', '');
 }
 

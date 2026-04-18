@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Disk Space Analyzer</title>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg: #0d1117;
+      --surface: #161b22;
+      --surface2: #1c2128;
+      --border: #30363d;
+      --border-dim: #21262d;
+      --text: #e6edf3;
+      --text-dim: #8b949e;
+      --text-faint: #484f58;
+      --accent: #667eea;
+      --accent2: #764ba2;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* ── WELCOME ─────────────────────────────────────────── */
+    #screen-welcome {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      text-align: center;
+      padding: 2rem;
+    }
+    .welcome-icon { font-size: 5rem; margin-bottom: 1.5rem; line-height: 1; }
+    .welcome-title {
+      font-size: 2.6rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 0.6rem;
+    }
+    .welcome-sub { color: var(--text-dim); font-size: 1.05rem; margin-bottom: 2.5rem; max-width: 420px; line-height: 1.6; }
+    .btn-open {
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color: #fff;
+      border: none;
+      padding: 0.9rem 2.4rem;
+      font-size: 1.05rem;
+      font-weight: 700;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: transform 0.15s, box-shadow 0.15s;
+      letter-spacing: 0.01em;
+    }
+    .btn-open:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(102,126,234,0.45); }
+    .btn-open:active { transform: translateY(0); }
+    .welcome-note {
+      margin-top: 1.8rem;
+      color: var(--text-faint);
+      font-size: 0.82rem;
+      max-width: 380px;
+      line-height: 1.5;
+    }
+    .compat-badges { display: flex; gap: 0.6rem; margin-top: 1rem; justify-content: center; }
+    .badge {
+      padding: 0.25rem 0.7rem;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      border: 1px solid;
+    }
+    .badge.ok  { background: rgba(46,160,67,.15); color: #3fb950; border-color: rgba(46,160,67,.35); }
+    .badge.no  { background: rgba(248,81,73,.1);  color: #f85149; border-color: rgba(248,81,73,.3);  }
+
+    /* ── LOADING ─────────────────────────────────────────── */
+    #screen-loading {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      text-align: center;
+      gap: 0.5rem;
+    }
+    .spinner {
+      width: 56px; height: 56px;
+      border: 4px solid var(--border-dim);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 0.75s linear infinite;
+      margin-bottom: 1.5rem;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    #scan-num  { font-size: 2.4rem; font-weight: 800; color: var(--accent); line-height: 1; }
+    #scan-label { color: var(--text-dim); font-size: 0.9rem; }
+    #scan-path {
+      color: var(--text-faint); font-size: 0.8rem;
+      max-width: 440px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+      margin-top: 0.75rem;
+    }
+
+    /* ── RESULTS ─────────────────────────────────────────── */
+    #screen-results { display: none; flex-direction: column; min-height: 100vh; }
+
+    .topbar {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border-dim);
+      padding: 0.8rem 1.4rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+    .btn-back, .btn-rescan {
+      background: var(--surface2);
+      color: var(--text);
+      border: 1px solid var(--border);
+      padding: 0.35rem 0.9rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      font-weight: 500;
+      transition: background 0.12s;
+      white-space: nowrap;
+    }
+    .btn-back:hover, .btn-rescan:hover { background: var(--border); }
+    .btn-back:disabled { opacity: 0.35; cursor: not-allowed; }
+    .topbar-folder { font-size: 1rem; font-weight: 700; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .topbar-total { color: var(--accent); font-weight: 700; font-size: 1rem; white-space: nowrap; }
+    .topbar-label { color: var(--text-dim); font-size: 0.85rem; white-space: nowrap; }
+
+    /* Stats bar */
+    .statsbar {
+      display: flex;
+      gap: 1.5rem;
+      padding: 0.6rem 1.4rem;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border-dim);
+      flex-wrap: wrap;
+    }
+    .stat { display: flex; flex-direction: column; }
+    .stat-val { font-size: 1rem; font-weight: 700; }
+    .stat-key { font-size: 0.72rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.06em; }
+
+    /* Breadcrumb */
+    .breadcrumb {
+      display: flex; align-items: center; gap: 0.2rem;
+      padding: 0.5rem 1.4rem;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border-dim);
+      font-size: 0.83rem;
+      overflow-x: auto;
+      white-space: nowrap;
+      scrollbar-width: thin;
+    }
+    .crumb {
+      color: var(--accent); cursor: pointer;
+      padding: 0.15rem 0.4rem; border-radius: 4px;
+      transition: background 0.1s;
+    }
+    .crumb:hover { background: var(--surface2); }
+    .crumb.active { color: var(--text); cursor: default; font-weight: 600; }
+    .crumb.active:hover { background: none; }
+    .crumb-sep { color: var(--text-faint); }
+
+    /* Main content */
+    .content { padding: 1.2rem 1.4rem; display: flex; flex-direction: column; gap: 1.2rem; }
+
+    /* Card */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border-dim);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .card-title {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: var(--text-dim);
+      font-weight: 600;
+    }
+
+    /* Treemap */
+    .treemap-header {
+      padding: 0.9rem 1.2rem 0.6rem;
+      display: flex; align-items: center; gap: 0.5rem;
+    }
+    .treemap-hint {
+      color: var(--text-faint); font-size: 0.75rem; margin-left: auto;
+    }
+    #treemap-canvas {
+      display: block; width: 100%; cursor: crosshair;
+    }
+    .legend {
+      display: flex; flex-wrap: wrap; gap: 0.5rem 1rem;
+      padding: 0.8rem 1.2rem;
+      border-top: 1px solid var(--border-dim);
+    }
+    .legend-item { display: flex; align-items: center; gap: 0.3rem; font-size: 0.75rem; color: var(--text-dim); }
+    .legend-dot { width: 9px; height: 9px; border-radius: 2px; flex-shrink: 0; }
+
+    /* Table */
+    .table-header {
+      padding: 0.9rem 1.2rem;
+      display: flex; align-items: center; gap: 0.75rem;
+      border-bottom: 1px solid var(--border-dim);
+    }
+    .item-count { color: var(--text-dim); font-size: 0.8rem; }
+    .sort-note   { color: var(--text-faint); font-size: 0.75rem; margin-left: auto; }
+
+    .tbl { width: 100%; border-collapse: collapse; }
+    .tbl thead th {
+      background: var(--bg);
+      padding: 0.6rem 1.2rem;
+      text-align: left;
+      font-size: 0.73rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-dim);
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    .tbl thead th:nth-child(3),
+    .tbl thead th:nth-child(4),
+    .tbl thead th:nth-child(5) { text-align: right; }
+
+    .tbl tbody tr {
+      border-top: 1px solid var(--border-dim);
+      transition: background 0.1s;
+    }
+    .tbl tbody tr:hover { background: var(--surface2); }
+    .tbl tbody tr.row-folder { cursor: pointer; }
+
+    .tbl tbody td { padding: 0.6rem 1.2rem; font-size: 0.88rem; vertical-align: middle; }
+    .tbl tbody td:nth-child(3),
+    .tbl tbody td:nth-child(4) { text-align: right; }
+    .tbl tbody td:nth-child(5) { min-width: 110px; }
+
+    .row-name { display: flex; align-items: center; gap: 0.5rem; }
+    .row-name-text { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 320px; font-weight: 500; }
+    .row-icon { font-size: 1.1rem; flex-shrink: 0; }
+    .nav-arrow { color: var(--text-faint); font-size: 0.8rem; flex-shrink: 0; }
+    .row-size { font-weight: 700; white-space: nowrap; }
+    .row-pct  { color: var(--text-dim); font-size: 0.82rem; white-space: nowrap; }
+
+    .type-chip {
+      display: inline-block; padding: 0.15rem 0.55rem;
+      border-radius: 20px; font-size: 0.72rem; font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .bar-wrap { height: 5px; background: var(--border-dim); border-radius: 3px; overflow: hidden; }
+    .bar-fill  { height: 100%; border-radius: 3px; transition: width 0.4s cubic-bezier(.4,0,.2,1); }
+
+    .empty-row td { text-align: center; color: var(--text-faint); padding: 2.5rem; }
+
+    /* Tooltip */
+    #tooltip {
+      position: fixed; z-index: 9999;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      padding: 0.7rem 1rem;
+      pointer-events: none;
+      display: none;
+      max-width: 240px;
+      box-shadow: 0 6px 24px rgba(0,0,0,.5);
+    }
+    #tt-name { font-weight: 700; font-size: 0.88rem; word-break: break-all; margin-bottom: 0.3rem; }
+    #tt-size { font-size: 1.1rem; font-weight: 800; color: var(--accent); }
+    #tt-meta { font-size: 0.75rem; color: var(--text-dim); margin-top: 0.2rem; }
+
+    /* No API warning */
+    .no-api-msg {
+      background: rgba(248,81,73,.1);
+      border: 1px solid rgba(248,81,73,.35);
+      color: #f85149;
+      border-radius: 8px;
+      padding: 0.75rem 1.1rem;
+      font-size: 0.85rem;
+      max-width: 420px;
+      text-align: left;
+      line-height: 1.5;
+      margin-top: 1.5rem;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══ WELCOME ══════════════════════════════════════════════ -->
+<div id="screen-welcome">
+  <div class="welcome-icon">🗂️</div>
+  <h1 class="welcome-title">Disk Space Analyzer</h1>
+  <p class="welcome-sub">Scan any folder on your computer and instantly see what's eating up the most space — visualized as an interactive map.</p>
+  <button class="btn-open" onclick="openFolder()">📁 &nbsp;Choose a Folder to Analyze</button>
+  <div class="compat-badges">
+    <span class="badge ok">✓ Chrome</span>
+    <span class="badge ok">✓ Edge</span>
+    <span class="badge no">✗ Firefox</span>
+    <span class="badge no">✗ Safari</span>
+  </div>
+  <p class="welcome-note">Uses your browser's File System API — your files are read locally and never sent anywhere.</p>
+  <div class="no-api-msg" id="no-api-msg">
+    ⚠️ Your browser doesn't support the File System Access API. Please open this file in <strong>Chrome</strong> or <strong>Edge</strong> (version 86+) for full functionality.
+  </div>
+</div>
+
+<!-- ═══ LOADING ═══════════════════════════════════════════════ -->
+<div id="screen-loading">
+  <div class="spinner"></div>
+  <div id="scan-num">0</div>
+  <div id="scan-label" style="color:var(--text-dim);font-size:0.9rem;">files scanned</div>
+  <div id="scan-path">Starting scan…</div>
+</div>
+
+<!-- ═══ RESULTS ═══════════════════════════════════════════════ -->
+<div id="screen-results">
+  <!-- Top bar -->
+  <div class="topbar">
+    <button class="btn-back" id="btn-back" onclick="navigateBack()" disabled>← Back</button>
+    <span class="topbar-folder" id="topbar-folder">—</span>
+    <span class="topbar-label">Total:</span>
+    <span class="topbar-total" id="topbar-total">—</span>
+    <button class="btn-rescan" onclick="doReset()">🔄 New Scan</button>
+  </div>
+
+  <!-- Stats -->
+  <div class="statsbar" id="statsbar"></div>
+
+  <!-- Breadcrumb -->
+  <div class="breadcrumb" id="breadcrumb"></div>
+
+  <div class="content">
+    <!-- Treemap card -->
+    <div class="card">
+      <div class="treemap-header">
+        <span class="card-title">Space Map</span>
+        <span class="treemap-hint">hover to inspect · click folders to drill in</span>
+      </div>
+      <canvas id="treemap-canvas"></canvas>
+      <div class="legend" id="legend"></div>
+    </div>
+
+    <!-- Table card -->
+    <div class="card">
+      <div class="table-header">
+        <span class="card-title">Contents</span>
+        <span class="item-count" id="item-count"></span>
+        <span class="sort-note">sorted by size ↓</span>
+      </div>
+      <table class="tbl">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Size</th>
+            <th>% of folder</th>
+            <th>Relative size</th>
+          </tr>
+        </thead>
+        <tbody id="tbl-body"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- Tooltip -->
+<div id="tooltip">
+  <div id="tt-name"></div>
+  <div id="tt-size"></div>
+  <div id="tt-meta"></div>
+</div>
+
+<script>
+// ════════════════════════════════════════════════════════════
+//  CONSTANTS & STATE
+// ════════════════════════════════════════════════════════════
+const FILE_TYPES = {
+  image:    { exts: ['jpg','jpeg','png','gif','bmp','svg','webp','ico','tiff','heic','raw','avif'], color: '#3b82f6', label: 'Images' },
+  video:    { exts: ['mp4','mkv','avi','mov','wmv','flv','webm','m4v','mpg','mpeg','ts','vob'],    color: '#a855f7', label: 'Videos' },
+  audio:    { exts: ['mp3','wav','flac','aac','ogg','m4a','wma','opus','aiff'],                    color: '#ec4899', label: 'Audio'  },
+  document: { exts: ['pdf','doc','docx','xls','xlsx','ppt','pptx','txt','rtf','odt','pages','numbers','key','epub'], color: '#10b981', label: 'Docs' },
+  code:     { exts: ['js','ts','jsx','tsx','py','java','cpp','c','cs','go','rs','php','rb','swift','kt','html','css','json','xml','yaml','yml','sh','bash','sql','r','m','lua','scala','dart','vue','svelte'], color: '#f59e0b', label: 'Code' },
+  archive:  { exts: ['zip','rar','7z','tar','gz','bz2','xz','iso','dmg','pkg','deb','rpm','cab','tgz'], color: '#f97316', label: 'Archives' },
+  data:     { exts: ['csv','tsv','db','sqlite','sqlite3','parquet','h5','hdf5','npy','npz','pkl','feather'], color: '#06b6d4', label: 'Data' },
+  font:     { exts: ['ttf','otf','woff','woff2','eot'],                                            color: '#84cc16', label: 'Fonts'  },
+};
+const COLOR_FOLDER = '#667eea';
+const COLOR_OTHER  = '#6b7280';
+
+let rootNode = null, currentNode = null, navStack = [];
+let treemapHitRects = []; // { x, y, w, h, node }
+let totalRootFiles = 0, totalRootDirs = 0;
+
+// ════════════════════════════════════════════════════════════
+//  UTILITIES
+// ════════════════════════════════════════════════════════════
+function fmtSize(bytes) {
+  if (bytes === 0) return '0 B';
+  const u = ['B','KB','MB','GB','TB'];
+  const i = Math.min(Math.floor(Math.log(Math.max(bytes,1)) / Math.log(1024)), u.length - 1);
+  return (bytes / Math.pow(1024, i)).toFixed(i > 0 ? 1 : 0) + ' ' + u[i];
+}
+
+function fmtNum(n) { return n.toLocaleString(); }
+
+function getTypeMeta(name) {
+  if (!name) return null;
+  const ext = name.split('.').pop()?.toLowerCase();
+  for (const [key, info] of Object.entries(FILE_TYPES)) {
+    if (info.exts.includes(ext)) return { key, ...info };
+  }
+  return null;
+}
+
+function nodeColor(node) {
+  if (node.type === 'directory') return COLOR_FOLDER;
+  return getTypeMeta(node.name)?.color || COLOR_OTHER;
+}
+
+function nodeIcon(node) {
+  if (node.type === 'directory') return '📁';
+  const ext = node.name?.split('.').pop()?.toLowerCase();
+  const map = {
+    pdf:'📄',doc:'📝',docx:'📝',xls:'📊',xlsx:'📊',ppt:'📊',pptx:'📊',
+    txt:'📄',zip:'🗜️',rar:'🗜️','7z':'🗜️',tar:'🗜️',gz:'🗜️',
+    mp4:'🎬',mkv:'🎬',avi:'🎬',mov:'🎬',mp3:'🎵',wav:'🎵',flac:'🎵',
+    jpg:'🖼️',jpeg:'🖼️',png:'🖼️',gif:'🖼️',svg:'🖼️',webp:'🖼️',
+    js:'⚡',ts:'⚡',jsx:'⚡',tsx:'⚡',py:'🐍',java:'☕',
+    html:'🌐',css:'🎨',json:'📋',csv:'📊',db:'🗄️',sqlite:'🗄️',
+    iso:'💿',dmg:'💿',sh:'⚙️',
+  };
+  return map[ext] || '📄';
+}
+
+// ════════════════════════════════════════════════════════════
+//  SCAN
+// ════════════════════════════════════════════════════════════
+async function openFolder() {
+  if (!window.showDirectoryPicker) {
+    document.getElementById('no-api-msg').style.display = 'block';
+    return;
+  }
+  try {
+    const handle = await window.showDirectoryPicker({ mode: 'read' });
+    show('loading');
+    totalRootFiles = 0; totalRootDirs = 0;
+    rootNode = await scanDir(handle, '');
+    rootNode.name = handle.name;
+    navStack = [];
+    currentNode = rootNode;
+    show('results');
+    renderView();
+  } catch(e) {
+    if (e.name !== 'AbortError') alert('Error: ' + e.message);
+    show('welcome');
+  }
+}
+
+async function scanDir(handle, parentPath) {
+  const node = {
+    name: handle.name,
+    path: parentPath + '/' + handle.name,
+    type: 'directory',
+    size: 0,
+    children: [],
+    fileCount: 0,
+    dirCount: 0,
+  };
+
+  for await (const [, child] of handle.entries()) {
+    if (child.kind === 'file') {
+      const f = await child.getFile();
+      node.children.push({ name: child.name, path: node.path + '/' + child.name, type: 'file', size: f.size, lastModified: f.lastModified });
+      node.size += f.size;
+      node.fileCount++;
+      totalRootFiles++;
+      if (totalRootFiles % 100 === 0) {
+        document.getElementById('scan-num').textContent  = fmtNum(totalRootFiles);
+        document.getElementById('scan-path').textContent = node.path;
+        await yieldFrame();
+      }
+    } else {
+      try {
+        const sub = await scanDir(child, node.path);
+        node.children.push(sub);
+        node.size      += sub.size;
+        node.fileCount += sub.fileCount;
+        node.dirCount  += 1 + sub.dirCount;
+        totalRootDirs++;
+      } catch (_) {
+        node.children.push({ name: child.name, path: node.path + '/' + child.name, type: 'directory', size: 0, children: [], fileCount: 0, dirCount: 0, error: true });
+      }
+    }
+  }
+  node.children.sort((a, b) => b.size - a.size);
+  return node;
+}
+
+function yieldFrame() { return new Promise(r => setTimeout(r, 0)); }
+
+// ════════════════════════════════════════════════════════════
+//  NAVIGATION
+// ════════════════════════════════════════════════════════════
+function navigateInto(node) {
+  if (node.type !== 'directory' || !node.children?.length) return;
+  navStack.push(currentNode);
+  currentNode = node;
+  renderView();
+}
+
+function navigateBack() {
+  if (!navStack.length) return;
+  currentNode = navStack.pop();
+  renderView();
+}
+
+function navigateToCrumb(idx) {
+  // idx is 0-based index in [...navStack, currentNode]
+  const all = [...navStack, currentNode];
+  navStack = all.slice(0, idx);
+  currentNode = all[idx];
+  renderView();
+}
+
+function doReset() {
+  rootNode = currentNode = null; navStack = [];
+  show('welcome');
+}
+
+// ════════════════════════════════════════════════════════════
+//  RENDER VIEW
+// ════════════════════════════════════════════════════════════
+function renderView() {
+  document.getElementById('btn-back').disabled = !navStack.length;
+  document.getElementById('topbar-folder').textContent = currentNode.name;
+  document.getElementById('topbar-total').textContent  = fmtSize(currentNode.size);
+
+  renderStats();
+  renderBreadcrumb();
+  renderTreemap();
+  renderTable();
+}
+
+function renderStats() {
+  const items = currentNode.children || [];
+  const files = items.filter(n => n.type === 'file');
+  const dirs  = items.filter(n => n.type === 'directory');
+  const largest = items[0];
+  const sb = document.getElementById('statsbar');
+  sb.innerHTML = `
+    <div class="stat"><span class="stat-val">${fmtNum(items.length)}</span><span class="stat-key">Items</span></div>
+    <div class="stat"><span class="stat-val">${fmtNum(files.length)}</span><span class="stat-key">Files</span></div>
+    <div class="stat"><span class="stat-val">${fmtNum(dirs.length)}</span><span class="stat-key">Folders</span></div>
+    ${largest ? `<div class="stat"><span class="stat-val">${fmtSize(largest.size)}</span><span class="stat-key">Largest item</span></div>` : ''}
+    ${currentNode.fileCount !== undefined ? `<div class="stat"><span class="stat-val">${fmtNum(currentNode.fileCount)}</span><span class="stat-key">Total files (incl. subfolders)</span></div>` : ''}
+  `;
+}
+
+function renderBreadcrumb() {
+  const all  = [...navStack, currentNode];
+  const bc   = document.getElementById('breadcrumb');
+  bc.innerHTML = '';
+  all.forEach((node, i) => {
+    const span = document.createElement('span');
+    span.className = 'crumb' + (i === all.length - 1 ? ' active' : '');
+    span.textContent = node.name || '/';
+    if (i < all.length - 1) span.onclick = () => navigateToCrumb(i);
+    bc.appendChild(span);
+    if (i < all.length - 1) {
+      const sep = document.createElement('span');
+      sep.className = 'crumb-sep';
+      sep.textContent = ' › ';
+      bc.appendChild(sep);
+    }
+  });
+}
+
+// ════════════════════════════════════════════════════════════
+//  TREEMAP (squarified)
+// ════════════════════════════════════════════════════════════
+function renderTreemap() {
+  const canvas = document.getElementById('treemap-canvas');
+  const dpr    = window.devicePixelRatio || 1;
+  const W      = canvas.parentElement.clientWidth - 2; // card border
+  const H      = Math.max(Math.min(W * 0.46, 460), 180);
+
+  canvas.style.width  = W + 'px';
+  canvas.style.height = H + 'px';
+  canvas.width  = Math.round(W * dpr);
+  canvas.height = Math.round(H * dpr);
+
+  const ctx = canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+  ctx.clearRect(0, 0, W, H);
+
+  const items = (currentNode.children || []).filter(n => n.size > 0);
+  treemapHitRects = [];
+
+  if (!items.length) {
+    ctx.fillStyle = '#21262d';
+    ctx.fillRect(0, 0, W, H);
+    ctx.fillStyle = COLOR_OTHER;
+    ctx.font = '14px system-ui';
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillText('Empty folder', W / 2, H / 2);
+    document.getElementById('legend').innerHTML = '';
+    return;
+  }
+
+  const total = items.reduce((s, n) => s + n.size, 0);
+  const normed = items.map(n => ({ node: n, area: (n.size / total) * W * H }));
+
+  // Draw background
+  ctx.fillStyle = '#0d1117';
+  ctx.fillRect(0, 0, W, H);
+
+  squarifyDraw(ctx, normed, 0, 0, W, H);
+  renderLegend(items);
+}
+
+function squarifyDraw(ctx, items, x, y, w, h) {
+  if (!items.length || w < 1 || h < 1) return;
+  if (items.length === 1) {
+    drawRect(ctx, items[0], x, y, w, h);
+    treemapHitRects.push({ x, y, w, h, node: items[0].node });
+    return;
+  }
+
+  const short = Math.min(w, h);
+  let row = [], rowArea = 0, i = 0;
+
+  while (i < items.length) {
+    const candidate = [...row, items[i]];
+    const cArea = rowArea + items[i].area;
+    if (!row.length || worstRatio(candidate, cArea, short) <= worstRatio(row, rowArea, short)) {
+      row = candidate;
+      rowArea = cArea;
+      i++;
+    } else break;
+  }
+
+  // Layout this row
+  let nx = x, ny = y, nw = w, nh = h;
+  if (w >= h) {
+    const colW = rowArea / h;
+    let cy = y;
+    for (const it of row) {
+      const ch = (it.area / rowArea) * h;
+      drawRect(ctx, it, x, cy, colW, ch);
+      treemapHitRects.push({ x, y: cy, w: colW, h: ch, node: it.node });
+      cy += ch;
+    }
+    nx = x + colW; nw = w - colW;
+  } else {
+    const rowH = rowArea / w;
+    let cx = x;
+    for (const it of row) {
+      const cw = (it.area / rowArea) * w;
+      drawRect(ctx, it, cx, y, cw, rowH);
+      treemapHitRects.push({ x: cx, y, w: cw, h: rowH, node: it.node });
+      cx += cw;
+    }
+    ny = y + rowH; nh = h - rowH;
+  }
+
+  squarifyDraw(ctx, items.slice(i), nx, ny, nw, nh);
+}
+
+function worstRatio(row, rowArea, short) {
+  if (!row.length || rowArea === 0) return Infinity;
+  const s = short * short;
+  const maxA = row[0].area, minA = row[row.length - 1].area;
+  return Math.max(s * maxA / (rowArea * rowArea), rowArea * rowArea / (s * minA));
+}
+
+function drawRect(ctx, item, x, y, w, h) {
+  if (w < 1 || h < 1) return;
+  const GAP = 1.5;
+  const rx = x + GAP, ry = y + GAP, rw = Math.max(0, w - GAP * 2), rh = Math.max(0, h - GAP * 2);
+  const color = nodeColor(item.node);
+
+  // Fill
+  ctx.fillStyle = color;
+  ctx.globalAlpha = 0.82;
+  rrect(ctx, rx, ry, rw, rh, 4);
+  ctx.fill();
+  ctx.globalAlpha = 1;
+
+  // Label
+  if (rw > 32 && rh > 18) {
+    const fs = Math.max(9, Math.min(13, Math.sqrt(rw * rh) / 7));
+    ctx.font = `${fs}px system-ui,sans-serif`;
+    ctx.fillStyle = 'rgba(255,255,255,0.92)';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+
+    const cx = rx + rw / 2, cy = ry + rh / 2;
+    let label = item.node.name;
+    while (ctx.measureText(label).width > rw - 8 && label.length > 3)
+      label = label.slice(0, -4) + '…';
+
+    if (rh > 38) {
+      ctx.fillText(label, cx, cy - fs * 0.7);
+      ctx.font = `bold ${fs}px system-ui,sans-serif`;
+      ctx.fillStyle = '#fff';
+      ctx.fillText(fmtSize(item.node.size), cx, cy + fs * 0.8);
+    } else {
+      ctx.fillText(label, cx, cy);
+    }
+  }
+}
+
+function rrect(ctx, x, y, w, h, r) {
+  r = Math.min(r, w / 2, h / 2);
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.arcTo(x + w, y, x + w, y + h, r);
+  ctx.arcTo(x + w, y + h, x, y + h, r);
+  ctx.arcTo(x, y + h, x, y, r);
+  ctx.arcTo(x, y, x + w, y, r);
+  ctx.closePath();
+}
+
+function renderLegend(items) {
+  const seen = new Set(), parts = [];
+  const hasFolders = items.some(n => n.type === 'directory');
+  if (hasFolders) { seen.add('folder'); parts.push({ color: COLOR_FOLDER, label: 'Folders' }); }
+  for (const [, info] of Object.entries(FILE_TYPES)) {
+    if (items.some(n => n.type === 'file' && getTypeMeta(n.name)?.label === info.label)) {
+      if (!seen.has(info.label)) { seen.add(info.label); parts.push(info); }
+    }
+  }
+  if (items.some(n => n.type === 'file' && !getTypeMeta(n.name))) parts.push({ color: COLOR_OTHER, label: 'Other' });
+
+  document.getElementById('legend').innerHTML = parts.map(p =>
+    `<div class="legend-item"><div class="legend-dot" style="background:${p.color}"></div>${p.label}</div>`
+  ).join('');
+}
+
+// ════════════════════════════════════════════════════════════
+//  TABLE
+// ════════════════════════════════════════════════════════════
+function renderTable() {
+  const tbody  = document.getElementById('tbl-body');
+  const items  = currentNode.children || [];
+  const parent = currentNode.size || 1;
+  const maxSz  = items.length ? items[0].size : 1;
+
+  document.getElementById('item-count').textContent = `${items.length} item${items.length !== 1 ? 's' : ''}`;
+  tbody.innerHTML = '';
+
+  if (!items.length) {
+    tbody.innerHTML = '<tr class="empty-row"><td colspan="5">This folder is empty</td></tr>';
+    return;
+  }
+
+  items.forEach(node => {
+    const pct   = parent > 0 ? ((node.size / parent) * 100).toFixed(1) : '0';
+    const barPct = maxSz > 0 ? Math.max(2, (node.size / maxSz) * 100) : 0;
+    const color = nodeColor(node);
+    const meta  = node.type === 'directory'
+      ? { label: 'Folder', color: COLOR_FOLDER }
+      : (getTypeMeta(node.name) || { label: (node.name.split('.').pop()?.toUpperCase() || 'File').slice(0,8), color: COLOR_OTHER });
+    const isDir = node.type === 'directory' && node.children?.length > 0;
+
+    const tr = document.createElement('tr');
+    if (isDir) tr.className = 'row-folder';
+    tr.innerHTML = `
+      <td>
+        <div class="row-name">
+          <span class="row-icon">${nodeIcon(node)}</span>
+          <span class="row-name-text" title="${node.name}">${node.name}</span>
+          ${isDir ? '<span class="nav-arrow">›</span>' : ''}
+        </div>
+      </td>
+      <td><span class="type-chip" style="background:${meta.color}20;color:${meta.color}">${meta.label}</span></td>
+      <td class="row-size">${fmtSize(node.size)}</td>
+      <td class="row-pct">${pct}%</td>
+      <td>
+        <div class="bar-wrap">
+          <div class="bar-fill" style="width:${barPct}%;background:${color}"></div>
+        </div>
+      </td>`;
+
+    if (isDir) tr.addEventListener('click', () => navigateInto(node));
+    tbody.appendChild(tr);
+  });
+}
+
+// ════════════════════════════════════════════════════════════
+//  CANVAS MOUSE EVENTS
+// ════════════════════════════════════════════════════════════
+const canvas  = document.getElementById('treemap-canvas');
+const tooltip = document.getElementById('tooltip');
+
+canvas.addEventListener('mousemove', e => {
+  const r  = canvas.getBoundingClientRect();
+  const mx = e.clientX - r.left, my = e.clientY - r.top;
+  const hit = treemapHitRects.find(h => mx >= h.x && mx <= h.x + h.w && my >= h.y && my <= h.y + h.h);
+
+  if (hit) {
+    const pct = currentNode.size > 0 ? ((hit.node.size / currentNode.size) * 100).toFixed(1) : '0';
+    document.getElementById('tt-name').textContent = hit.node.name;
+    document.getElementById('tt-size').textContent = fmtSize(hit.node.size);
+    document.getElementById('tt-meta').textContent =
+      `${hit.node.type === 'directory' ? 'Folder' : 'File'} · ${pct}% of this folder`;
+
+    const tx = Math.min(e.clientX + 14, window.innerWidth  - 260);
+    const ty = Math.min(e.clientY - 12, window.innerHeight - 100);
+    tooltip.style.left    = tx + 'px';
+    tooltip.style.top     = ty + 'px';
+    tooltip.style.display = 'block';
+    canvas.style.cursor   = (hit.node.type === 'directory' && hit.node.children?.length) ? 'pointer' : 'default';
+  } else {
+    tooltip.style.display = 'none';
+    canvas.style.cursor = 'default';
+  }
+});
+
+canvas.addEventListener('mouseleave', () => { tooltip.style.display = 'none'; });
+
+canvas.addEventListener('click', e => {
+  const r  = canvas.getBoundingClientRect();
+  const mx = e.clientX - r.left, my = e.clientY - r.top;
+  const hit = treemapHitRects.find(h => mx >= h.x && mx <= h.x + h.w && my >= h.y && my <= h.y + h.h);
+  if (hit?.node.type === 'directory' && hit.node.children?.length) {
+    tooltip.style.display = 'none';
+    navigateInto(hit.node);
+  }
+});
+
+// Re-render on resize
+let resizeT;
+window.addEventListener('resize', () => {
+  clearTimeout(resizeT);
+  resizeT = setTimeout(() => { if (currentNode) renderTreemap(); }, 150);
+});
+
+// ════════════════════════════════════════════════════════════
+//  SCREEN SWITCHER
+// ════════════════════════════════════════════════════════════
+function show(name) {
+  ['welcome','loading','results'].forEach(s => {
+    const el = document.getElementById('screen-' + s);
+    el.style.display = (s === name) ? (s === 'results' ? 'flex' : s === 'loading' ? 'flex' : 'flex') : 'none';
+  });
+}
+
+// Check API support on load
+if (!window.showDirectoryPicker) {
+  document.getElementById('no-api-msg').style.display = 'block';
+}
+</script>
+</body>
+</html>

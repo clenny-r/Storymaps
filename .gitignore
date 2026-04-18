@@ -74,3 +74,4 @@ dist/
 build/
 *.min.js
 *.min.css
+/Pages/IH2VOF_examples
