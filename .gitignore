@@ -14,6 +14,9 @@ Pages/Apps/Testimony_app/worker/twc-testimony-worker/wrangler.toml
 rose_figs/
 figs/
 
+# Riddim project — large media files (mp3/mp4/png), excluded from repo
+Pages/Riddim/
+
 # Claude Code (all .claude folders anywhere in the repo)
 **/.claude/
 
