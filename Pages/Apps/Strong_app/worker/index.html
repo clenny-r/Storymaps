@@ -496,9 +496,12 @@ const CFG = {
 /* ───────────────────────────────────────────────────────────────────
    DEFAULT EXERCISE LIBRARY
    Image URLs sourced from yuhonas/free-exercise-db (public on GitHub).
+   Each default exercise has 2 frames (start & end pose) so we can
+   animate them as a ~1s motion preview ("video").
 ─────────────────────────────────────────────────────────────────── */
 const IMG_BASE = 'https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises';
 function img(slug, n=0){ return `${IMG_BASE}/${slug}/${n}.jpg`; }
+function frames(slug){ return [img(slug, 0), img(slug, 1)]; }
 
 const DEFAULT_EXERCISES = [
   // ── CHEST ──
@@ -573,7 +576,17 @@ const DEFAULT_EXERCISES = [
   { id:'def_row',            name:'Rowing',                          category:'Cardio',    primaryMuscle:'Cardio',    equipment:'Machine',  imageUrl:'' },
   { id:'def_jumprope',       name:'Jump Rope',                       category:'Cardio',    primaryMuscle:'Cardio',    equipment:'Rope',     imageUrl:'' },
 ];
-DEFAULT_EXERCISES.forEach(e => { e.isCustom = false; });
+DEFAULT_EXERCISES.forEach(e => {
+  e.isCustom = false;
+  e.videoUrl = '';
+  // Derive 2-frame motion preview from imageUrl (slug-based)
+  if (e.imageUrl && e.imageUrl.startsWith(IMG_BASE + '/')) {
+    const slug = e.imageUrl.slice(IMG_BASE.length + 1).split('/')[0];
+    e.videoFrames = frames(slug);
+  } else {
+    e.videoFrames = [];
+  }
+});
 
 const CATEGORY_EMOJI = {
   Chest:'🏋️', Back:'🔙', Legs:'🦵', Shoulders:'🤸', Arms:'💪', Core:'🧘', Cardio:'🏃', Other:'⭐'
@@ -599,6 +612,7 @@ const STATE = {
   exerciseFilter: 'All',
   exerciseSearch: '',
   timer:        null,
+  streakResetAt: null,
 };
 
 /* ───────────────────────────────────────────────────────────────────
@@ -717,12 +731,7 @@ $('#lockForm').addEventListener('submit', async e => {
   }
 });
 
-$('#userBadge').addEventListener('click', () => {
-  if (confirm('Log out?')) {
-    sessionStorage.removeItem('twcStrongToken');
-    location.reload();
-  }
-});
+$('#userBadge').addEventListener('click', () => openSettings());
 
 async function onLogin() {
   $('#lock').style.display = 'none';
@@ -737,9 +746,10 @@ async function onLogin() {
 async function refreshState(){
   try {
     const data = await api('/api/state');
-    STATE.exercises = data.exercises || [];
-    STATE.workouts  = data.workouts  || [];
-    STATE.routines  = data.routines  || [];
+    STATE.exercises     = data.exercises || [];
+    STATE.workouts      = data.workouts  || [];
+    STATE.routines      = data.routines  || [];
+    STATE.streakResetAt = data.streakResetAt || null;
   } catch (e) {
     toast(e.message, 'error');
   }
@@ -787,8 +797,12 @@ function renderWorkoutStats(){
   const now = Date.now();
   const weekAgo = now - 7*24*3600*1000;
   $('#statWeek').textContent = w.filter(x => new Date(x.completedAt).getTime() > weekAgo).length;
-  // streak
-  const days = new Set(w.map(x => new Date(x.completedAt).toDateString()));
+  // streak — only counts workouts after streakResetAt (if set)
+  const resetMs = STATE.streakResetAt ? new Date(STATE.streakResetAt).getTime() : 0;
+  const days = new Set(
+    w.filter(x => new Date(x.completedAt).getTime() >= resetMs)
+     .map(x => new Date(x.completedAt).toDateString())
+  );
   let streak = 0;
   for (let d = new Date(); ; d.setDate(d.getDate()-1)) {
     if (days.has(d.toDateString())) streak++;
@@ -1115,8 +1129,17 @@ function openExerciseDetail(id){
     <div class="chart-wrap"><canvas id="exChart"></canvas></div>
   ` : '';
 
+  const hasVideo = !!ex.videoUrl || (Array.isArray(ex.videoFrames) && ex.videoFrames.length >= 2);
+  const previewBtn = hasVideo
+    ? `<button class="btn btn-ghost btn-sm" onclick="openVideoPreview('${ex.id}')" style="position:absolute;top:8px;right:8px">
+         <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+         Preview
+       </button>` : '';
   openModal(ex.name, `
-    ${ex.imageUrl ? `<img class="detail-img" src="${escapeHtml(ex.imageUrl)}" alt="" onerror="this.style.display='none'"/>` : ''}
+    <div style="position:relative">
+      ${ex.imageUrl ? `<img class="detail-img" src="${escapeHtml(ex.imageUrl)}" alt="" onerror="this.style.display='none'"/>` : ''}
+      ${previewBtn}
+    </div>
     <div class="detail-row"><div class="lbl">Category</div><div>${escapeHtml(ex.category)}</div></div>
     <div class="detail-row"><div class="lbl">Muscle</div><div>${escapeHtml(ex.primaryMuscle || '—')}</div></div>
     <div class="detail-row"><div class="lbl">Equipment</div><div>${escapeHtml(ex.equipment || '—')}</div></div>
@@ -1132,6 +1155,64 @@ function openExerciseDetail(id){
   `);
   if (history.length >= 2) {
     requestAnimationFrame(() => drawChart('exChart', history));
+  }
+}
+
+/* ── VIDEO / MOTION PREVIEW ────────────────────────────────────── */
+function openVideoPreview(exId){
+  const ex = getExercise(exId);
+  if (!ex) return;
+
+  // Decide what to show:
+  //  1. Custom videoUrl (mp4/webm/gif/youtube)
+  //  2. 2-frame animation from videoFrames (defaults)
+  let body = '';
+  if (ex.videoUrl) {
+    const v = ex.videoUrl.trim();
+    const isYT = /youtube\.com|youtu\.be/i.test(v);
+    if (isYT) {
+      // Convert to embed URL
+      let id = '';
+      const m1 = v.match(/youtu\.be\/([^?&#/]+)/);
+      const m2 = v.match(/[?&]v=([^?&#/]+)/);
+      const m3 = v.match(/youtube\.com\/embed\/([^?&#/]+)/);
+      id = (m1 && m1[1]) || (m2 && m2[1]) || (m3 && m3[1]) || '';
+      const embed = id ? `https://www.youtube.com/embed/${id}?autoplay=1&loop=1&playlist=${id}&mute=1` : v;
+      body = `<div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:var(--radius)">
+                <iframe src="${escapeHtml(embed)}" style="position:absolute;top:0;left:0;width:100%;height:100%;border:0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+              </div>`;
+    } else if (/\.(mp4|webm|mov|m4v)(\?|#|$)/i.test(v)) {
+      body = `<video src="${escapeHtml(v)}" autoplay loop muted playsinline controls style="width:100%;border-radius:var(--radius);background:#000"></video>`;
+    } else {
+      // assume image / gif
+      body = `<img src="${escapeHtml(v)}" alt="" style="width:100%;border-radius:var(--radius);background:var(--bg3)" onerror="this.outerHTML='<p class=&quot;text-muted text-sm text-center&quot;>Video could not load.</p>'"/>`;
+    }
+  } else if (Array.isArray(ex.videoFrames) && ex.videoFrames.length >= 2) {
+    // 2-frame animation — alternate every 600ms
+    body = `
+      <div style="position:relative;background:var(--bg3);border-radius:var(--radius);overflow:hidden;aspect-ratio:4/3">
+        <img id="vpFrame0" src="${escapeHtml(ex.videoFrames[0])}" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:1;transition:opacity .25s"/>
+        <img id="vpFrame1" src="${escapeHtml(ex.videoFrames[1])}" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .25s"/>
+      </div>
+      <p class="text-muted text-xs text-center mt-2">2-frame motion preview · start ↔ end position</p>`;
+  } else {
+    body = '<p class="text-muted text-sm text-center">No preview available for this exercise.</p>';
+  }
+
+  openModal(ex.name + ' — Preview', body);
+
+  // Start the 2-frame animation if applicable
+  if (!ex.videoUrl && Array.isArray(ex.videoFrames) && ex.videoFrames.length >= 2) {
+    let toggle = false;
+    const f0 = $('#vpFrame0'), f1 = $('#vpFrame1');
+    if (f0 && f1) {
+      const interval = setInterval(() => {
+        if (!document.body.contains(f0)) { clearInterval(interval); return; }
+        toggle = !toggle;
+        f0.style.opacity = toggle ? 0 : 1;
+        f1.style.opacity = toggle ? 1 : 0;
+      }, 600);
+    }
   }
 }
 
@@ -1232,6 +1313,11 @@ function openExerciseEditor(id){
         <input class="input" name="imageUrl" value="${escapeHtml(editing?.imageUrl||'')}" placeholder="https://..."/>
       </div>
       <div class="form-row">
+        <label class="label">Video URL (optional · mp4 / webm / gif / YouTube)</label>
+        <input class="input" name="videoUrl" value="${escapeHtml(editing?.videoUrl||'')}" placeholder="https://example.com/squat.mp4"/>
+        <p class="text-muted text-xs" style="margin-top:4px">Tip: any short clip works — direct .mp4/.webm, animated .gif, or a YouTube link.</p>
+      </div>
+      <div class="form-row">
         <label class="label">Instructions / Notes</label>
         <textarea class="textarea" name="instructions" placeholder="How to perform...">${escapeHtml(editing?.instructions||'')}</textarea>
       </div>
@@ -1246,6 +1332,7 @@ function openExerciseEditor(id){
       equipment:     fd.get('equipment'),
       primaryMuscle: fd.get('primaryMuscle'),
       imageUrl:      fd.get('imageUrl'),
+      videoUrl:      fd.get('videoUrl'),
       instructions:  fd.get('instructions'),
     };
     try {
@@ -1556,6 +1643,176 @@ async function deleteWorkout(id){
   } catch (e) { toast(e.message, 'error'); }
 }
 
+/* ── SETTINGS / ADMIN ──────────────────────────────────────────── */
+async function openSettings(){
+  let adminRoomsHtml = '';
+  if (STATE.isAdmin) {
+    adminRoomsHtml = `
+      <div class="section-head" style="margin-top:18px"><h3 class="section-title">Admin · Accounts</h3></div>
+      <div id="adminRoomList" class="text-muted text-sm" style="margin:6px 0 10px">Loading…</div>
+      <details class="card" style="padding:12px">
+        <summary style="cursor:pointer;font-weight:600">+ Add new account</summary>
+        <form id="newRoomForm" onsubmit="return false" style="margin-top:12px">
+          <div class="form-row">
+            <label class="label">Account / Family Name</label>
+            <input class="input" name="name" placeholder="Smith Family" required/>
+          </div>
+          <div class="form-row">
+            <label class="label">Password (login code)</label>
+            <input class="input" name="password" placeholder="smith 2026" required/>
+          </div>
+          <div class="form-row">
+            <label class="label">Members (comma-separated)</label>
+            <input class="input" name="members" placeholder="John, Jane"/>
+          </div>
+          <button type="submit" class="btn btn-block">Create Account</button>
+        </form>
+      </details>`;
+  }
+
+  openModal('Settings', `
+    <div class="card" style="background:var(--bg3)">
+      <div class="card-row">
+        <div>
+          <div class="card-title">${escapeHtml(STATE.name)}</div>
+          <div class="card-meta">${STATE.isAdmin ? 'Administrator' : 'Member'}${STATE.members.length?` · ${STATE.members.map(escapeHtml).join(', ')}`:''}</div>
+        </div>
+        <button class="btn btn-ghost btn-sm" id="btnLogout">Log out</button>
+      </div>
+    </div>
+
+    <div class="section-head" style="margin-top:18px"><h3 class="section-title">Data Management</h3></div>
+    ${STATE.streakResetAt ? `<p class="text-muted text-xs mb-2">Streak resets after ${escapeHtml(fmtDate(STATE.streakResetAt))}</p>` : ''}
+    <div class="flex-col">
+      <button class="btn btn-ghost" id="btnResetStreak">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><polyline points="3 4 3 10 9 10"/></svg>
+        Reset Streak Counter
+      </button>
+      <button class="btn btn-ghost" id="btnClearWorkouts">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-2 14a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2L5 6"/></svg>
+        Delete All Workout History (${STATE.workouts.length})
+      </button>
+      <button class="btn btn-ghost" id="btnClearRoutines">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-2 14a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2L5 6"/></svg>
+        Delete All Routines (${STATE.routines.length})
+      </button>
+      <button class="btn btn-ghost" id="btnClearCustomEx">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-2 14a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2L5 6"/></svg>
+        Delete All Custom Exercises (${STATE.exercises.length})
+      </button>
+    </div>
+
+    ${adminRoomsHtml}
+  `);
+
+  $('#btnLogout').addEventListener('click', () => {
+    sessionStorage.removeItem('twcStrongToken');
+    location.reload();
+  });
+
+  $('#btnResetStreak').addEventListener('click', async () => {
+    if (!confirm('Reset your streak counter? Past workouts are kept, but the streak number starts over from today.')) return;
+    try {
+      const r = await api('/api/settings/reset-streak', { method:'POST' });
+      STATE.streakResetAt = r.streakResetAt;
+      toast('Streak reset', 'success');
+      closeModal();
+      renderWorkoutStats();
+    } catch (e) { toast(e.message, 'error'); }
+  });
+
+  $('#btnClearWorkouts').addEventListener('click', async () => {
+    if (!STATE.workouts.length) return toast('No history to delete');
+    if (!confirm(`Permanently delete all ${STATE.workouts.length} workouts? This cannot be undone.`)) return;
+    if (!confirm('Are you sure? Type the password before this delete is permanent.')) return;
+    try {
+      await api('/api/workouts', { method:'DELETE' });
+      STATE.workouts = [];
+      toast('History cleared', 'success');
+      closeModal();
+      render();
+    } catch (e) { toast(e.message, 'error'); }
+  });
+
+  $('#btnClearRoutines').addEventListener('click', async () => {
+    if (!STATE.routines.length) return toast('No routines to delete');
+    if (!confirm(`Delete all ${STATE.routines.length} routines? This cannot be undone.`)) return;
+    try {
+      await api('/api/routines', { method:'DELETE' });
+      STATE.routines = [];
+      toast('Routines cleared', 'success');
+      closeModal();
+      render();
+    } catch (e) { toast(e.message, 'error'); }
+  });
+
+  $('#btnClearCustomEx').addEventListener('click', async () => {
+    if (!STATE.exercises.length) return toast('No custom exercises to delete');
+    if (!confirm(`Delete all ${STATE.exercises.length} custom exercises? Default exercises are unaffected.`)) return;
+    try {
+      await api('/api/exercises', { method:'DELETE' });
+      STATE.exercises = [];
+      toast('Custom exercises cleared', 'success');
+      closeModal();
+      render();
+    } catch (e) { toast(e.message, 'error'); }
+  });
+
+  if (STATE.isAdmin) {
+    refreshAdminRooms();
+    $('#newRoomForm').addEventListener('submit', async e => {
+      const fd = new FormData(e.target);
+      const payload = {
+        name:     fd.get('name'),
+        password: fd.get('password'),
+        members:  String(fd.get('members')||'').split(',').map(s=>s.trim()).filter(Boolean),
+      };
+      try {
+        await api('/api/admin/rooms', { method:'POST', body: payload });
+        toast('Account created', 'success');
+        e.target.reset();
+        refreshAdminRooms();
+      } catch (err) { toast(err.message, 'error'); }
+    });
+  }
+}
+
+async function refreshAdminRooms(){
+  try {
+    const data = await api('/api/admin/rooms');
+    const wrap = $('#adminRoomList');
+    if (!data.rooms.length) {
+      wrap.innerHTML = '<p class="text-muted text-sm">No accounts yet.</p>';
+      return;
+    }
+    wrap.innerHTML = data.rooms.map(r => `
+      <div class="card" style="margin-bottom:8px">
+        <div class="card-row">
+          <div style="flex:1;min-width:0">
+            <div class="card-title">${escapeHtml(r.name)}</div>
+            <div class="card-meta">
+              Code: <code style="background:var(--bg3);padding:1px 6px;border-radius:4px">${escapeHtml(r.password)}</code>
+              · ${r.workoutCount} workouts
+              ${r.members.length?` · ${r.members.map(escapeHtml).join(', ')}`:''}
+            </div>
+          </div>
+          ${r.password === STATE.token
+            ? '<span class="exercise-tag">YOU</span>'
+            : `<button class="btn btn-danger btn-sm" onclick="deleteRoom('${escapeHtml(r.password).replace(/'/g,"\\'")}', '${escapeHtml(r.name).replace(/'/g,"\\'")}')">Delete</button>`}
+        </div>
+      </div>`).join('');
+  } catch (e) { toast(e.message, 'error'); }
+}
+
+async function deleteRoom(password, name){
+  if (!confirm(`Delete account "${name}" and ALL its workouts/routines/exercises?\n\nThis cannot be undone.`)) return;
+  try {
+    await api('/api/admin/rooms', { method:'DELETE', body: { password } });
+    toast('Account deleted', 'success');
+    refreshAdminRooms();
+  } catch (e) { toast(e.message, 'error'); }
+}
+
 /* ── MODAL ─────────────────────────────────────────────────────── */
 function openModal(title, html){
   $('#modal').innerHTML = `
@@ -1619,6 +1876,8 @@ window.removeRoutineExercise = removeRoutineExercise;
 window.openWorkoutDetail   = openWorkoutDetail;
 window.deleteWorkout       = deleteWorkout;
 window.closeModal          = closeModal;
+window.deleteRoom          = deleteRoom;
+window.openVideoPreview    = openVideoPreview;
 </script>
 </body>
 </html>
