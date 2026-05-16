@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Credit Card Spending — May 2 – May 14, 2026</title>
+<title>Credit Card Spending — __RANGE__</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -74,22 +74,22 @@
 <body>
 <div class="container">
   <header>
-    <div class="eyebrow">Wealthsimple Credit Card · May 2 – May 14, 2026</div>
-    <h1>13 days, <em>34 charges</em>.</h1>
+    <div class="eyebrow">Wealthsimple Credit Card · __RANGE__</div>
+    <h1>__NDAYS__ days, <em>__NTX__ charges</em>.</h1>
     <p class="subtitle">A close read of where the money actually went, what's recurring, and which categories quietly compound. Filterable by category below.</p>
     <div class="links"><a href="suggestions.html">→ See suggestions</a><a href="summary.md">→ summary.md</a><a href="transactions.csv">→ transactions.csv</a></div>
   </header>
   <div class="kpis">
-    <div class="kpi"><div class="kpi-label">Total Spend</div><div class="kpi-value accent">$1,170.48</div><div class="kpi-sub">CAD · 34 transactions</div></div>
-    <div class="kpi"><div class="kpi-label">Daily Avg</div><div class="kpi-value">$90.04</div><div class="kpi-sub">across 13 days</div></div>
-    <div class="kpi"><div class="kpi-label">Largest Charge</div><div class="kpi-value">$274.25</div><div class="kpi-sub">Engineers Nova Scotia · 05-06</div></div>
-    <div class="kpi"><div class="kpi-label">Median Charge</div><div class="kpi-value">$22.29</div><div class="kpi-sub">half above, half below</div></div>
+    <div class="kpi"><div class="kpi-label">Total Spend</div><div class="kpi-value accent">$__TOTAL__</div><div class="kpi-sub">CAD · __NTX__ transactions</div></div>
+    <div class="kpi"><div class="kpi-label">Daily Avg</div><div class="kpi-value">$__AVG__</div><div class="kpi-sub">across __NDAYS__ days</div></div>
+    <div class="kpi"><div class="kpi-label">Largest Charge</div><div class="kpi-value">$__LARGEST__</div><div class="kpi-sub">__LARGEST_LABEL__</div></div>
+    <div class="kpi"><div class="kpi-label">Median Charge</div><div class="kpi-value">$__MEDIAN__</div><div class="kpi-sub">half above, half below</div></div>
   </div>
   <section><div class="section-head"><h2>Cumulative spend</h2><span class="tag">Running total</span></div>
-    <div class="card"><div class="card-title">Where the curve steepens</div><div class="card-headline">A handful of days drove most of the total.</div><div class="chart-wrap tall"><canvas id="cumChart"></canvas></div></div></section>
+    <div class="card"><div class="card-title">Where the curve steepens</div><div class="card-headline">__CUM_HEADLINE__</div><div class="chart-wrap tall"><canvas id="cumChart"></canvas></div></div></section>
   <section class="grid-3">
-    <div class="card"><div class="card-title">Daily activity</div><div class="card-headline">$311 on 2026-05-06 was the biggest day.</div><div class="chart-wrap"><canvas id="dailyChart"></canvas></div></div>
-    <div class="card"><div class="card-title">Category share</div><div class="card-headline">Amazon alone is 30% of spend.</div><div class="chart-wrap"><canvas id="catDonut"></canvas></div></div>
+    <div class="card"><div class="card-title">Daily activity</div><div class="card-headline">__DAILY_HEADLINE__</div><div class="chart-wrap"><canvas id="dailyChart"></canvas></div></div>
+    <div class="card"><div class="card-title">Category share</div><div class="card-headline">__CAT_HEADLINE__</div><div class="chart-wrap"><canvas id="catDonut"></canvas></div></div>
   </section>
   <section style="margin-top:48px;"><div class="section-head"><h2>By category</h2><span class="tag">Sorted by spend</span></div><div class="card"><div class="cat-list" id="catList"></div></div></section>
   <section><div class="section-head"><h2>Top merchants</h2><span class="tag">Where it really goes</span></div><div class="card"><div class="chart-wrap tall"><canvas id="merchChart"></canvas></div></div></section>
@@ -100,9 +100,9 @@
   <footer><span>Source: Wealthsimple credit card PDF activity export</span><span>Generated from PDFs</span></footer>
 </div>
 <script>
-const TX = [["2026-05-02", "Plaza Grocery", 13.93, "Groceries"], ["2026-05-04", "Surfshark Bv", 85.57, "Subscriptions"], ["2026-05-04", "Sq *Poke Go & Broth House", 22.29, "Restaurants"], ["2026-05-04", "Apple.Com/Bill", 19.14, "Subscriptions"], ["2026-05-05", "Koodo Subscription", 55.86, "Subscriptions"], ["2026-05-05", "Communauto Atlantic", 54.15, "Transportation"], ["2026-05-05", "Amzn Mktp Ca*Bv6Jn1Nd1", 44.92, "Amazon"], ["2026-05-05", "Amzn Mktp Ca*Bv6Be44V1", 26.99, "Amazon"], ["2026-05-05", "Sq *Poke Go & Broth House", 22.29, "Restaurants"], ["2026-05-05", "Dollarama # 657", 21.09, "Discount retail"], ["2026-05-05", "Amzn Mktp Ca*Bf9K904Z2", 20.51, "Amazon"], ["2026-05-05", "Communauto Atlantic", 1.0, "Transportation"], ["2026-05-06", "Engineers Nova Scotia", 274.25, "Professional"], ["2026-05-06", "Sq *Poke Go & Broth House", 22.29, "Restaurants"], ["2026-05-06", "Apple.Com/Bill", 14.81, "Subscriptions"], ["2026-05-07", "Dollarama # 657", 16.89, "Discount retail"], ["2026-05-07", "365 Market Ca 2", 6.03, "Other"], ["2026-05-08", "Dollarama # 657", 18.13, "Discount retail"], ["2026-05-09", "Amzn Mktp Ca*Bv9Sj9Wz1", 88.98, "Amazon"], ["2026-05-09", "Ikea Halifax", 29.06, "Home"], ["2026-05-09", "Sq *Mic Mac Crepe Delicio", 14.76, "Restaurants"], ["2026-05-09", "Ikea Halifax", 2.85, "Home"], ["2026-05-10", "Amzn Mktp Ca*Bf9D15Oq1", 63.6, "Amazon"], ["2026-05-10", "Amzn Mktp Ca*Bv2F92E20", 56.99, "Amazon"], ["2026-05-10", "Uber Canada/Ubereats", 27.45, "Restaurants"], ["2026-05-10", "Amzn Mktp Ca*Fm88I57L3", 22.79, "Amazon"], ["2026-05-10", "Amzn Mktp Ca*Bf7Kd2Zh1", 11.39, "Amazon"], ["2026-05-11", "Communauto Atlantic", 25.42, "Transportation"], ["2026-05-11", "Sq *Poke Go & Broth House", 22.29, "Restaurants"], ["2026-05-11", "Amzn Mktp Ca*M27At2L53", 17.08, "Amazon"], ["2026-05-11", "Dollarama # 657", 5.25, "Discount retail"], ["2026-05-13", "Dollarama # 657", 13.12, "Discount retail"], ["2026-05-14", "Sq *Poke Go & Broth House", 22.29, "Restaurants"], ["2026-05-14", "Dollarama # 657", 7.02, "Discount retail"]];
-const INSIGHTS = [["Restaurants as a slow leak", "<strong>7 charges totalling $153.66.</strong> Most are under $50. Individually minor, collectively the largest small-ticket category. A 24-hour wait rule typically trims this 20\u201330%."], ["The $22.29 habit", "Sq *Poke Go & Broth House hit <strong>5 times</strong> for the exact same $22.29. At this cadence that's roughly <strong>$257/month</strong> on a single merchant."], ["Dollarama # 657 drift", "<strong>6 visits, $81.50 total.</strong> High-frequency small-store spending usually means forgotten items from the previous trip. One consolidated weekly run typically cuts this 30\u201340%."], ["Subscriptions to audit", "Surfshark Bv $85.57, Apple.Com/Bill $19.14, Koodo Subscription $55.86, Apple.Com/Bill $14.81. Confirm each is still in use and watch for double-billings inside the same week."]];
-const CAT_COLORS = {"Amazon": "#d4a574", "Professional": "#c4554f", "Subscriptions": "#6ea8c4", "Restaurants": "#d97757", "Discount retail": "#7cb992", "Transportation": "#9a7ab8", "Home": "#b89968", "Groceries": "#5e9b8a", "Other": "#4a5468"};
+const TX = __TX_JSON__;
+const INSIGHTS = __INSIGHTS_JSON__;
+const CAT_COLORS = __CAT_COLORS__;
 const INK="#e8ecf2", DIM="#8a94a6", GRID="rgba(138,148,166,0.08)";
 const FONT="'JetBrains Mono', monospace";
 Chart.defaults.color=DIM; Chart.defaults.font.family="Inter, sans-serif"; Chart.defaults.font.size=11;

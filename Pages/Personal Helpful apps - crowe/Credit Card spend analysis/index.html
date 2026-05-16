@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Credit Card Spend — Reports</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root { --bg:#0a0e14; --panel:#11161f; --panel-2:#161c27; --ink:#e8ecf2; --ink-dim:#8a94a6; --ink-faint:#4a5468; --rule:#1f2632; --accent:#d4a574; --accent-2:#6ea8c4; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  html,body { background:var(--bg); color:var(--ink); font-family:'Inter',sans-serif; line-height:1.5; -webkit-font-smoothing:antialiased; }
+  body { background:radial-gradient(ellipse 80% 50% at 10% 0%,rgba(212,165,116,0.06),transparent 60%),radial-gradient(ellipse 60% 40% at 90% 100%,rgba(110,168,196,0.05),transparent 60%),var(--bg); min-height:100vh; padding:64px 32px 80px; }
+  .container { max-width:1080px; margin:0 auto; }
+  header { margin-bottom:56px; border-bottom:1px solid var(--rule); padding-bottom:32px; }
+  .eyebrow { font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.18em; text-transform:uppercase; color:var(--accent); margin-bottom:14px; }
+  h1 { font-family:'Fraunces',serif; font-weight:500; font-size:clamp(36px,5vw,60px); letter-spacing:-0.02em; line-height:1.05; margin-bottom:12px; }
+  h1 em { font-style:italic; color:var(--accent); font-weight:400; }
+  .subtitle { color:var(--ink-dim); font-size:15.5px; max-width:640px; line-height:1.55; }
+  .stat-strip { display:flex; gap:32px; margin-top:32px; flex-wrap:wrap; }
+  .stat-strip > div { display:flex; flex-direction:column; gap:6px; }
+  .stat-label { font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:0.16em; text-transform:uppercase; color:var(--ink-faint); }
+  .stat-value { font-family:'Fraunces',serif; font-size:24px; font-weight:500; }
+  .stat-value.accent { color:var(--accent); }
+  .section-head { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:24px; padding-bottom:12px; border-bottom:1px solid var(--rule); }
+  .section-head h2 { font-family:'Fraunces',serif; font-weight:500; font-size:22px; letter-spacing:-0.01em; }
+  .section-head .tag { font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:0.15em; color:var(--ink-faint); text-transform:uppercase; }
+  .reports { display:grid; grid-template-columns:repeat(auto-fit,minmax(320px,1fr)); gap:16px; }
+  .report-card { background:var(--panel); border:1px solid var(--rule); padding:28px; text-decoration:none; color:inherit; display:flex; flex-direction:column; gap:18px; transition:border-color 0.2s, transform 0.2s; }
+  .report-card:hover { border-color:var(--accent); transform:translateY(-2px); }
+  .card-date { font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:0.15em; color:var(--accent); text-transform:uppercase; }
+  .card-range { font-family:'Fraunces',serif; font-size:24px; font-weight:500; letter-spacing:-0.01em; line-height:1.15; }
+  .card-stats { display:flex; gap:24px; padding-top:6px; }
+  .card-stats > div { display:flex; flex-direction:column; gap:4px; }
+  .card-stat-label { font-family:'JetBrains Mono',monospace; font-size:9.5px; letter-spacing:0.13em; color:var(--ink-faint); text-transform:uppercase; }
+  .card-stat-value { font-family:'JetBrains Mono',monospace; font-size:15px; color:var(--ink); }
+  .card-links { margin-top:auto; padding-top:14px; border-top:1px solid var(--rule); display:flex; gap:16px; }
+  .card-links a { font-family:'JetBrains Mono',monospace; font-size:10.5px; letter-spacing:0.12em; text-transform:uppercase; color:var(--accent-2); text-decoration:none; }
+  .card-links a:hover { color:var(--accent); }
+  .meta-section { margin-top:64px; padding-top:32px; border-top:1px solid var(--rule); display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:32px; color:var(--ink-dim); font-size:13.5px; line-height:1.65; }
+  .meta-section h3 { font-family:'Fraunces',serif; font-weight:500; font-size:16px; color:var(--ink); margin-bottom:10px; letter-spacing:-0.005em; }
+  .meta-section code { font-family:'JetBrains Mono',monospace; font-size:12px; background:var(--panel); padding:1px 6px; border:1px solid var(--rule); }
+  footer { margin-top:80px; padding-top:24px; border-top:1px solid var(--rule); font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--ink-faint); }
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <div class="eyebrow">Personal · Credit Card Activity</div>
+    <h1>Spending, <em>read closely</em>.</h1>
+    <p class="subtitle">Each report below covers a window of Wealthsimple credit-card activity. Open one to see the dashboard, suggestions, and the underlying transactions.</p>
+    <div class="stat-strip">
+      <div><span class="stat-label">Reports</span><span class="stat-value accent" id="nReports">1</span></div>
+      <div><span class="stat-label">Total tracked</span><span class="stat-value" id="totalAll">$1,170.48</span></div>
+      <div><span class="stat-label">Latest</span><span class="stat-value" id="latest">May 14, 2026</span></div>
+    </div>
+  </header>
+
+  <section>
+    <div class="section-head">
+      <h2>Reports</h2>
+      <span class="tag">Newest first</span>
+    </div>
+    <div class="reports" id="reports"></div>
+  </section>
+
+  <div class="meta-section">
+    <div>
+      <h3>How to add a new report</h3>
+      Drop the new PDF into <code>input/</code>, then ask Claude:<br><br>
+      <em>"new PDF in input/, build the report"</em><br><br>
+      Claude reads <code>CLAUDE.md</code> for everything else.
+    </div>
+    <div>
+      <h3>What's in each report</h3>
+      <code>spending_dashboard.html</code> — KPIs, charts, filterable transactions<br>
+      <code>suggestions.html</code> — auto-generated ways to lower spend<br>
+      <code>summary.md</code> — written overview<br>
+      <code>transactions.csv</code> — raw data
+    </div>
+    <div>
+      <h3>Folder layout</h3>
+      <code>input/</code> — raw PDFs (gitignored)<br>
+      <code>reports/</code> — one folder per date range<br>
+      <code>templates/</code> — clone-and-fill HTML templates<br>
+      <code>legacy/</code> — old pipeline notebooks
+    </div>
+  </div>
+
+  <footer>Spending reports · Generated from Wealthsimple PDF activity exports</footer>
+</div>
+
+<script>
+// === REPORTS LIST ===
+// To add a new report: push a new object to this array, newest first.
+const REPORTS = [
+  {
+    folder: "2026-05-02_to_2026-05-14",
+    range_label: "May 2 – May 14, 2026",
+    n_days: 13,
+    n_tx: 34,
+    total: 1170.48,
+    largest_label: "Engineers NS · May 6"
+  }
+];
+
+const fmt$ = n => "$" + n.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+const reportsEl = document.getElementById("reports");
+REPORTS.forEach(r => {
+  const card = document.createElement("a");
+  card.className = "report-card";
+  card.href = `reports/${r.folder}/spending_dashboard.html`;
+  card.innerHTML = `
+    <div>
+      <div class="card-date">${r.n_days} days</div>
+      <div class="card-range">${r.range_label}</div>
+    </div>
+    <div class="card-stats">
+      <div><span class="card-stat-label">Total</span><span class="card-stat-value">${fmt$(r.total)}</span></div>
+      <div><span class="card-stat-label">Charges</span><span class="card-stat-value">${r.n_tx}</span></div>
+      <div><span class="card-stat-label">Largest</span><span class="card-stat-value">${r.largest_label}</span></div>
+    </div>
+    <div class="card-links">
+      <a href="reports/${r.folder}/spending_dashboard.html">Dashboard →</a>
+      <a href="reports/${r.folder}/suggestions.html" onclick="event.stopPropagation()">Suggestions</a>
+    </div>
+  `;
+  reportsEl.appendChild(card);
+});
+
+// Header stats
+document.getElementById("nReports").textContent = REPORTS.length;
+const totalAll = REPORTS.reduce((s, r) => s + r.total, 0);
+document.getElementById("totalAll").textContent = fmt$(totalAll);
+if (REPORTS.length) {
+  document.getElementById("latest").textContent = REPORTS[0].range_label.split("–").pop().trim();
+}
+</script>
+</body>
+</html>

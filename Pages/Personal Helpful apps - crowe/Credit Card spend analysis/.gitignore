@@ -1,0 +1,11 @@
+# Raw bank statements — personal financial data
+input/*.pdf
+input/*.PDF
+
+# OS / editor cruft
+.DS_Store
+Thumbs.db
+*.swp
+.ipynb_checkpoints/
+__pycache__/
+*.pyc
