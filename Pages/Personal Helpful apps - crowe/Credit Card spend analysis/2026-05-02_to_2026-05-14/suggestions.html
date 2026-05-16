@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Suggestions — May 2 – May 14, 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root { --bg:#0a0e14; --panel:#11161f; --panel-2:#161c27; --ink:#e8ecf2; --ink-dim:#8a94a6; --ink-faint:#4a5468; --rule:#1f2632; --accent:#d4a574; --accent-2:#6ea8c4; --high:#c4554f; --med:#d4a574; --low:#6ea8c4; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  html,body { background:var(--bg); color:var(--ink); font-family:'Inter',sans-serif; line-height:1.5; -webkit-font-smoothing:antialiased; }
+  body { background:radial-gradient(ellipse 80% 50% at 10% 0%,rgba(212,165,116,0.06),transparent 60%),radial-gradient(ellipse 60% 40% at 90% 100%,rgba(110,168,196,0.05),transparent 60%),var(--bg); min-height:100vh; padding:48px 32px 80px; }
+  .container { max-width:920px; margin:0 auto; }
+  header { margin-bottom:48px; border-bottom:1px solid var(--rule); padding-bottom:32px; }
+  .eyebrow { font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.18em; text-transform:uppercase; color:var(--accent); margin-bottom:12px; }
+  h1 { font-family:'Fraunces',serif; font-weight:500; font-size:clamp(32px,4.5vw,52px); letter-spacing:-0.02em; line-height:1.05; margin-bottom:8px; }
+  h1 em { font-style:italic; color:var(--accent); font-weight:400; }
+  .subtitle { color:var(--ink-dim); font-size:15px; max-width:680px; }
+  .links { font-family:'JetBrains Mono',monospace; font-size:11px; margin-top:16px; }
+  .links a { color:var(--accent-2); text-decoration:none; margin-right:18px; }
+  .links a:hover { text-decoration:underline; }
+  .total-bar { background:var(--panel); border:1px solid var(--rule); padding:24px 28px; margin-bottom:32px; display:flex; align-items:baseline; justify-content:space-between; flex-wrap:wrap; gap:12px; }
+  .total-label { font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:0.18em; text-transform:uppercase; color:var(--ink-dim); }
+  .total-value { font-family:'Fraunces',serif; font-size:40px; font-weight:500; letter-spacing:-0.02em; color:var(--accent); }
+  .total-sub { font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--ink-faint); }
+  .sugg { background:var(--panel); border:1px solid var(--rule); border-left:3px solid var(--accent); padding:28px 32px; margin-bottom:16px; display:grid; grid-template-columns:1fr 160px; gap:24px; align-items:start; }
+  @media (max-width:680px) { .sugg { grid-template-columns:1fr; } }
+  .sugg.impact-high { border-left-color:var(--high); }
+  .sugg.impact-medium { border-left-color:var(--med); }
+  .sugg.impact-low { border-left-color:var(--low); }
+  .sugg-num { font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:0.18em; color:var(--ink-faint); margin-bottom:8px; }
+  .sugg-title { font-family:'Fraunces',serif; font-size:22px; font-weight:500; letter-spacing:-0.01em; margin-bottom:12px; }
+  .sugg-body { font-size:14px; color:var(--ink-dim); line-height:1.65; }
+  .sugg-body strong { color:var(--ink); font-weight:500; }
+  .sugg-meta { text-align:right; }
+  .sugg-amt { font-family:'Fraunces',serif; font-size:28px; font-weight:500; color:var(--ink); line-height:1; }
+  .sugg-amt-label { font-family:'JetBrains Mono',monospace; font-size:9.5px; letter-spacing:0.15em; text-transform:uppercase; color:var(--ink-faint); margin-top:6px; }
+  .sugg-impact { display:inline-block; margin-top:14px; font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:0.15em; padding:4px 10px; border:1px solid var(--rule); text-transform:uppercase; }
+  .impact-high .sugg-impact { color:var(--high); border-color:var(--high); }
+  .impact-medium .sugg-impact { color:var(--med); border-color:var(--med); }
+  .impact-low .sugg-impact { color:var(--low); border-color:var(--low); }
+  footer { margin-top:64px; padding-top:24px; border-top:1px solid var(--rule); font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--ink-faint); }
+  .empty { background:var(--panel); border:1px solid var(--rule); padding:48px 32px; text-align:center; color:var(--ink-dim); }
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <div class="eyebrow">Suggestions · May 2 – May 14, 2026</div>
+    <h1>Where you could <em>actually</em> save.</h1>
+    <p class="subtitle">Rule-based reads of the patterns in this period. Every estimate assumes you act on the suggestion; ignoring it costs you the same amount.</p>
+    <div class="links"><a href="spending_dashboard.html">← back to dashboard</a><a href="summary.md">summary.md</a></div>
+  </header>
+  <div class="total-bar">
+    <div><div class="total-label">Combined potential</div><div class="total-value">$1,699</div></div>
+    <div class="total-sub">per month, if you act on all of the below</div>
+  </div>
+      <div class="sugg impact-high">
+      <div>
+        <div class="sugg-num">01</div>
+        <div class="sugg-title">Set a $50/day cap and watch the slope</div>
+        <div class="sugg-body">Daily average right now is <strong>$90.04</strong>. Sliding that to $50 would save roughly <strong>$1,201/month</strong>. The cumulative-spend chart in the dashboard is the fastest way to spot the days that blew past it.</div>
+      </div>
+      <div class="sugg-meta">
+        <div class="sugg-amt">$1,201</div>
+        <div class="sugg-amt-label">est. /month</div>
+        <div class="sugg-impact">high impact</div>
+      </div>
+    </div>
+    <div class="sugg impact-high">
+      <div>
+        <div class="sugg-num">02</div>
+        <div class="sugg-title">Consolidate Amazon orders with a 24-hour wait rule</div>
+        <div class="sugg-body"><strong>9 Amazon orders totalling $353.25</strong> in 13 days. Most are small impulse buys. A 24-hour cart wait and a once-weekly checkout typically trims 15–20% of Amazon spend.</div>
+      </div>
+      <div class="sugg-meta">
+        <div class="sugg-amt">$143</div>
+        <div class="sugg-amt-label">est. /month</div>
+        <div class="sugg-impact">high impact</div>
+      </div>
+    </div>
+    <div class="sugg impact-high">
+      <div>
+        <div class="sugg-num">03</div>
+        <div class="sugg-title">Audit subscriptions — cancel one</div>
+        <div class="sugg-body">Active in this window: <strong>Surfshark Bv</strong> ($85.57), <strong>Apple.Com/Bill</strong> ($19.14), <strong>Koodo Subscription</strong> ($55.86), <strong>Apple.Com/Bill</strong> ($14.81). Pick the one you used least this month and cancel. A single dropped subscription is the cleanest recurring win.</div>
+      </div>
+      <div class="sugg-meta">
+        <div class="sugg-amt">$101</div>
+        <div class="sugg-amt-label">est. /month</div>
+        <div class="sugg-impact">high impact</div>
+      </div>
+    </div>
+    <div class="sugg impact-medium">
+      <div>
+        <div class="sugg-num">04</div>
+        <div class="sugg-title">Consolidate Sq *Poke Go & Broth House visits into one weekly run</div>
+        <div class="sugg-body"><strong>5 visits, $111.45</strong> at Sq *Poke Go & Broth House. High-frequency stops at one store usually mean you're returning for forgotten items. A single weekly list-driven trip typically cuts this 30–40%.</div>
+      </div>
+      <div class="sugg-meta">
+        <div class="sugg-amt">$90</div>
+        <div class="sugg-amt-label">est. /month</div>
+        <div class="sugg-impact">medium impact</div>
+      </div>
+    </div>
+    <div class="sugg impact-medium">
+      <div>
+        <div class="sugg-num">05</div>
+        <div class="sugg-title">Consolidate Dollarama # 657 visits into one weekly run</div>
+        <div class="sugg-body"><strong>6 visits, $81.50</strong> at Dollarama # 657. High-frequency stops at one store usually mean you're returning for forgotten items. A single weekly list-driven trip typically cuts this 30–40%.</div>
+      </div>
+      <div class="sugg-meta">
+        <div class="sugg-amt">$66</div>
+        <div class="sugg-amt-label">est. /month</div>
+        <div class="sugg-impact">medium impact</div>
+      </div>
+    </div>
+    <div class="sugg impact-medium">
+      <div>
+        <div class="sugg-num">06</div>
+        <div class="sugg-title">Cut one Sq *Poke Go & Broth House order per week</div>
+        <div class="sugg-body">You spent <strong>$22.29 × 5 = $111.45</strong> on Sq *Poke Go & Broth House alone over 13 days. Dropping just one of these per week cuts about a quarter of the habit cost.</div>
+      </div>
+      <div class="sugg-meta">
+        <div class="sugg-amt">$64</div>
+        <div class="sugg-amt-label">est. /month</div>
+        <div class="sugg-impact">medium impact</div>
+      </div>
+    </div>
+    <div class="sugg impact-low">
+      <div>
+        <div class="sugg-num">07</div>
+        <div class="sugg-title">Verify Apple.Com/Bill double-billing</div>
+        <div class="sugg-body"><strong>Apple.Com/Bill billed 2 times</strong> in this window, including charges within 3 days of each other. Worth confirming iCloud storage vs. an in-app purchase you forgot about.</div>
+      </div>
+      <div class="sugg-meta">
+        <div class="sugg-amt">$34</div>
+        <div class="sugg-amt-label">est. /month</div>
+        <div class="sugg-impact">low impact</div>
+      </div>
+    </div>
+  <footer>Generated automatically from your PDF activity export.</footer>
+</div>
+</body></html>
