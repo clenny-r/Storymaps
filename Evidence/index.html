@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Weh Di Evidence Seh? | TWC</title>
+<meta name="description" content="Weh Di Evidence Seh? Short Jamaican conversations with evidence for the faith. A Transformational Worship Centre video series.">
+<meta property="og:title" content="Weh Di Evidence Seh?">
+<meta property="og:description" content="Evidence for the faith, in Jamaican voices. A TWC short-video series.">
+<meta property="og:image" content="posters/e01-p1.jpg">
+<meta name="theme-color" content="#1a0a3d">
+<link rel="icon" href="assets/twc-mark.png">
+<style>
+  :root{
+    --bg:#120826; --bg2:#1a0a3d; --panel:#241347; --panel2:#2d1a55;
+    --ink:#f6f1ff; --ink2:#c9bde6; --muted:#8f82b3;
+    --red:#d1162f; --red2:#ff3b57; --blue:#2f6bff; --gold:#f2c14e;
+    --radius:14px; --shadow:0 10px 30px rgba(0,0,0,.45);
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;overflow-x:hidden}
+  a{color:var(--ink2)}
+  img{display:block;max-width:100%}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 16px}
+
+  /* header */
+  header{background:linear-gradient(160deg,#2a0f5e 0%,#160a33 55%,#120826 100%);border-bottom:1px solid rgba(255,255,255,.06);position:relative;overflow:hidden}
+  header:before{content:"";position:absolute;inset:0;background:radial-gradient(60% 80% at 85% 10%,rgba(47,107,255,.25),transparent 60%),radial-gradient(50% 60% at 10% 90%,rgba(209,22,47,.22),transparent 60%);pointer-events:none}
+  .brand{display:flex;align-items:center;gap:12px;padding:14px 0;position:relative}
+  .brand img{width:44px;height:auto;filter:drop-shadow(0 2px 6px rgba(0,0,0,.4))}
+  .brand .name{font-weight:700;letter-spacing:.3px;font-size:14px;color:var(--ink2);text-transform:uppercase}
+  .brand .name span{display:block;font-weight:400;font-size:12px;color:var(--muted);text-transform:none;letter-spacing:0}
+  .hero{padding:18px 0 28px;position:relative}
+  .hero h1{margin:0 0 6px;font-size:clamp(30px,7vw,52px);line-height:1.05;letter-spacing:-.5px}
+  .hero h1 em{font-style:normal;color:var(--red2)}
+  .hero .tag{margin:0 0 14px;font-size:clamp(16px,3.6vw,20px);color:var(--ink2)}
+  .hero p.about{max-width:720px;margin:0 0 18px;color:var(--ink2);font-size:15px}
+  .stats{display:flex;flex-wrap:wrap;gap:10px}
+  .stat{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);border-radius:999px;padding:6px 12px;font-size:13px;color:var(--ink2)}
+  .stat b{color:var(--ink)}
+
+  /* controls */
+  .controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center;padding:18px 0 6px;position:sticky;top:0;background:rgba(18,8,38,.92);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);z-index:5;border-bottom:1px solid rgba(255,255,255,.06)}
+  .search{flex:1 1 220px;display:flex;align-items:center;gap:8px;background:var(--panel);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:8px 12px}
+  .search input{flex:1;background:none;border:0;outline:0;color:var(--ink);font-size:16px;min-width:0}
+  .search input::placeholder{color:var(--muted)}
+  .chips{display:flex;gap:8px;flex-wrap:wrap}
+  .chip{border:1px solid rgba(255,255,255,.14);background:transparent;color:var(--ink2);border-radius:999px;padding:7px 12px;font-size:13px;cursor:pointer}
+  .chip.on{background:var(--red);border-color:var(--red);color:#fff}
+
+  /* seasons and grid */
+  section.season{padding:22px 0 8px}
+  .season h2{margin:0 0 4px;font-size:22px;display:flex;align-items:baseline;gap:10px}
+  .season h2 small{font-size:13px;color:var(--muted);font-weight:400}
+  .season p.lead{margin:0 0 14px;color:var(--muted);font-size:14px}
+  .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+  @media(min-width:560px){.grid{grid-template-columns:repeat(3,1fr)}}
+  @media(min-width:820px){.grid{grid-template-columns:repeat(4,1fr);gap:16px}}
+  @media(min-width:1080px){.grid{grid-template-columns:repeat(5,1fr)}}
+  .card{background:var(--panel);border-radius:var(--radius);overflow:hidden;border:1px solid rgba(255,255,255,.07);box-shadow:var(--shadow);cursor:pointer;transition:transform .15s,border-color .15s;position:relative;text-align:left;padding:0;color:inherit;font:inherit}
+  .card:hover,.card:focus-visible{transform:translateY(-3px);border-color:rgba(255,255,255,.22);outline:none}
+  .poster{aspect-ratio:9/16;background:#0d0620 center/cover no-repeat;position:relative}
+  .poster.none{background:linear-gradient(160deg,#2b1a52,#160a33);display:flex;align-items:center;justify-content:center;padding:16px;text-align:center;color:var(--ink2);font-size:14px;line-height:1.35}
+  .poster .play{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
+  .poster .play i{width:52px;height:52px;border-radius:50%;background:rgba(209,22,47,.92);display:flex;align-items:center;justify-content:center;box-shadow:0 6px 18px rgba(0,0,0,.5)}
+  .poster .play i:after{content:"";border-left:16px solid #fff;border-top:10px solid transparent;border-bottom:10px solid transparent;margin-left:4px}
+  .poster .dur{position:absolute;right:8px;bottom:8px;background:rgba(0,0,0,.65);padding:2px 7px;border-radius:6px;font-size:12px}
+  .poster .num{position:absolute;left:8px;top:8px;background:var(--red);padding:2px 8px;border-radius:6px;font-size:12px;font-weight:700;letter-spacing:.3px}
+  .poster .soon{position:absolute;left:8px;top:8px;background:rgba(255,255,255,.14);padding:2px 8px;border-radius:6px;font-size:12px;font-weight:700}
+  .meta{padding:10px 11px 12px}
+  .meta h3{margin:0 0 4px;font-size:14px;line-height:1.3}
+  .meta p{margin:0;font-size:12px;color:var(--muted)}
+  .empty{padding:30px 0;color:var(--muted);text-align:center}
+
+  /* player modal */
+  .modal{position:fixed;inset:0;background:rgba(8,3,20,.975);z-index:50;display:none;overflow:auto;-webkit-overflow-scrolling:touch}
+  .modal.open{display:block}
+  .modal .inner{max-width:1040px;margin:0 auto;padding:12px 12px 40px;display:grid;grid-template-columns:1fr;gap:16px}
+  @media(min-width:860px){.modal .inner{grid-template-columns:minmax(300px,420px) 1fr;padding-top:28px}}
+  .vwrap{position:relative;background:#000;border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);aspect-ratio:9/16;max-height:calc(100vh - 110px);margin:0 auto;width:100%;max-width:min(100%,calc((100vh - 110px) * 9 / 16))}
+  @media(min-width:860px){.vwrap{max-width:420px;max-height:none}}
+  .vwrap video{width:100%;height:100%;display:block;background:#000;object-fit:contain}
+  .info h2{margin:4px 0 6px;font-size:clamp(20px,4.6vw,28px);line-height:1.15}
+  .info .ep{color:var(--red2);font-weight:700;font-size:13px;letter-spacing:.6px;text-transform:uppercase}
+  .info blockquote{margin:12px 0;padding:10px 14px;border-left:3px solid var(--gold);background:rgba(255,255,255,.05);border-radius:0 10px 10px 0;color:var(--ink2);font-style:italic}
+  .info p{margin:8px 0;color:var(--ink2)}
+  .info .kv{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;font-size:14px;margin:10px 0}
+  .info .kv b{color:var(--muted);font-weight:600}
+  .parts{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+  .parts button{border:1px solid rgba(255,255,255,.16);background:var(--panel);color:var(--ink);border-radius:10px;padding:8px 14px;font-size:14px;cursor:pointer}
+  .parts button.on{background:var(--red);border-color:var(--red)}
+  .parts button:disabled{opacity:.45;cursor:default}
+  .row{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+  .btn{border:1px solid rgba(255,255,255,.16);background:var(--panel);color:var(--ink);border-radius:10px;padding:9px 14px;font-size:14px;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:6px}
+  .btn.primary{background:var(--red);border-color:var(--red);color:#fff}
+  .close{position:fixed;top:10px;right:10px;z-index:60;width:42px;height:42px;border-radius:50%;border:0;background:rgba(255,255,255,.12);color:#fff;font-size:22px;cursor:pointer;line-height:42px;text-align:center}
+  .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--panel2);color:var(--ink);padding:10px 16px;border-radius:999px;font-size:14px;box-shadow:var(--shadow);opacity:0;transition:opacity .2s;pointer-events:none;z-index:70}
+  .toast.show{opacity:1}
+
+  footer{margin-top:40px;padding:26px 0 40px;border-top:1px solid rgba(255,255,255,.06);color:var(--muted);font-size:13px}
+  footer .f{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+  footer img{width:34px}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <div class="brand">
+      <img src="assets/twc-mark.png" alt="TWC">
+      <div class="name">Transformational Worship Centre <span>Media ministry</span></div>
+    </div>
+    <div class="hero">
+      <h1>Weh Di <em>Evidence</em> Seh?</h1>
+      <p class="tag" id="tagline"></p>
+      <p class="about" id="about"></p>
+      <div class="stats" id="stats"></div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="controls">
+    <label class="search" aria-label="Search episodes">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input id="q" type="search" placeholder="Search a question, a place or a name" autocomplete="off">
+    </label>
+    <div class="chips" id="chips">
+      <button class="chip on" data-f="all">All</button>
+      <button class="chip" data-f="ready">Watch now</button>
+      <button class="chip" data-f="1">Season 1</button>
+      <button class="chip" data-f="2">Season 2</button>
+    </div>
+  </div>
+  <div id="seasons"></div>
+  <div class="empty" id="empty" hidden>No episode matches that search.</div>
+</main>
+
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="mtitle">
+  <button class="close" id="close" aria-label="Close">&times;</button>
+  <div class="inner">
+    <div>
+      <div class="vwrap"><video id="video" controls playsinline preload="metadata" controlsList="nodownload"></video></div>
+    </div>
+    <div class="info">
+      <div class="ep" id="mep"></div>
+      <h2 id="mtitle"></h2>
+      <blockquote id="mstreet"></blockquote>
+      <div class="parts" id="mparts"></div>
+      <p id="msummary"></p>
+      <div class="kv"><b>Where</b><span id="msetting"></span><b>Who</b><span id="mcast"></span><b>Length</b><span id="mdur"></span></div>
+      <div class="row">
+        <button class="btn" id="share">Copy link</button>
+        <button class="btn" id="prev">Previous</button>
+        <button class="btn" id="next">Next</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<footer>
+  <div class="wrap f">
+    <img src="assets/twc-mark.png" alt="">
+    <div><b id="fchurch"></b> &middot; <a id="furl" href="#" rel="noopener">twcministries.net</a><br>Weh Di Evidence Seh? is a TWC media ministry series. Updated <span id="fupd"></span>.</div>
+  </div>
+</footer>
+
+<script src="episodes.js"></script>
+<script>
+(function(){
+  var S = window.SERIES, E = window.EPISODES.slice().sort(function(a,b){return a.episode-b.episode;});
+  var $ = function(id){return document.getElementById(id);};
+  function fmt(s){ if(!s) return ""; s=Math.round(s); return Math.floor(s/60)+":"+String(s%60).padStart(2,"0"); }
+  function ready(ep){ return ep.parts.some(function(p){return !!p.file;}); }
+  function esc(t){ return String(t).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];}); }
+
+  $("tagline").textContent = S.tagline; $("about").textContent = S.about;
+  $("fchurch").textContent = S.church; $("furl").href = S.churchUrl; $("fupd").textContent = S.updated;
+  var nReady = E.filter(ready).length, nParts = E.reduce(function(n,e){return n+e.parts.filter(function(p){return p.file;}).length;},0);
+  $("stats").innerHTML = '<span class="stat"><b>'+nReady+'</b> of '+E.length+' episodes available</span><span class="stat"><b>'+nParts+'</b> videos</span><span class="stat"><b>2</b> seasons</span><span class="stat">Under 3 minutes each</span>';
+
+  var filter="all", query="";
+  function render(){
+    var box=$("seasons"); box.innerHTML=""; var shown=0;
+    [1,2].forEach(function(season){
+      if(filter!=="all" && filter!=="ready" && String(season)!==filter) return;
+      var eps=E.filter(function(e){
+        if(e.season!==season) return false;
+        if(filter==="ready" && !ready(e)) return false;
+        if(query){ var h=(e.question+" "+e.street+" "+e.setting+" "+e.cast+" "+e.summary+" episode "+e.episode).toLowerCase(); if(h.indexOf(query)<0) return false; }
+        return true;
+      });
+      if(!eps.length) return;
+      shown+=eps.length;
+      var sec=document.createElement("section"); sec.className="season";
+      var avail=eps.filter(ready).length;
+      sec.innerHTML='<h2>Season '+season+' <small>'+avail+' of '+eps.length+' available</small></h2><p class="lead">'+(season===1?"Thirteen questions, thirteen Jamaican places.":"The next thirteen, as the episodes are released.")+'</p><div class="grid"></div>';
+      var grid=sec.querySelector(".grid");
+      eps.forEach(function(e){
+        var p=e.parts.find(function(x){return x.file;});
+        var card=document.createElement("button"); card.className="card"; card.setAttribute("data-ep",e.episode);
+        card.setAttribute("aria-label","Episode "+e.episode+": "+e.question);
+        if(p){
+          card.innerHTML='<div class="poster" style="background-image:url(\''+p.poster+'\')"><span class="num">EP '+e.episode+'</span><span class="play"><i></i></span><span class="dur">'+fmt(p.duration)+'</span></div><div class="meta"><h3>'+esc(e.question)+'</h3><p>'+esc(e.setting)+'</p></div>';
+          card.addEventListener("click",function(){open(e.episode);});
+        } else {
+          card.innerHTML='<div class="poster none"><span class="soon">EP '+e.episode+'</span><span>'+esc(e.question)+'<br><small style="color:var(--muted)">Coming soon</small></span></div><div class="meta"><h3>'+esc(e.question)+'</h3><p>'+esc(e.setting)+'</p></div>';
+          card.addEventListener("click",function(){toast("Episode "+e.episode+" is coming soon.");});
+        }
+        grid.appendChild(card);
+      });
+      box.appendChild(sec);
+    });
+    $("empty").hidden = shown>0;
+  }
+  $("q").addEventListener("input",function(){query=this.value.trim().toLowerCase();render();});
+  $("chips").addEventListener("click",function(ev){var b=ev.target.closest(".chip"); if(!b) return; filter=b.getAttribute("data-f"); Array.prototype.forEach.call(this.children,function(c){c.classList.toggle("on",c===b);}); render();});
+
+  /* player */
+  var cur=null, curPart=1, video=$("video");
+  function open(num, part, auto){
+    var e=E.find(function(x){return x.episode===num;}); if(!e||!ready(e)) return;
+    cur=e; var parts=e.parts.filter(function(p){return p.file;}); var p=parts.find(function(x){return x.part===part;})||parts[0]; curPart=p.part;
+    $("mep").textContent="Season "+e.season+" · Episode "+e.episode+" · Part "+p.part;
+    $("mtitle").textContent=e.question; $("mstreet").textContent="“"+e.street+"”";
+    $("msummary").textContent=e.summary; $("msetting").textContent=e.setting; $("mcast").textContent=e.cast; $("mdur").textContent=fmt(p.duration);
+    var pb=$("mparts"); pb.innerHTML="";
+    e.parts.forEach(function(x){ var b=document.createElement("button"); b.textContent="Part "+x.part; b.disabled=!x.file; b.classList.toggle("on",x.part===p.part); if(x.file) b.addEventListener("click",function(){open(num,x.part,true);}); pb.appendChild(b); });
+    if(e.parts.length<2) pb.style.display="none"; else pb.style.display="";
+    video.pause(); video.poster=p.poster; video.src=p.file; video.load();
+    $("modal").classList.add("open"); document.body.style.overflow="hidden";
+    if(history.replaceState) history.replaceState(null,"","#e"+String(num).padStart(2,"0")+(p.part>1?"-p"+p.part:""));
+    if(auto){ var pr=video.play(); if(pr&&pr.catch) pr.catch(function(){}); }
+    var prevs=E.filter(function(x){return ready(x)&&x.episode<num;}), nexts=E.filter(function(x){return ready(x)&&x.episode>num;});
+    $("prev").disabled=!prevs.length; $("next").disabled=!nexts.length;
+    $("prev").onclick=function(){ if(prevs.length) open(prevs[prevs.length-1].episode,1,true); };
+    $("next").onclick=function(){ if(nexts.length) open(nexts[0].episode,1,true); };
+  }
+  function close(){ $("modal").classList.remove("open"); document.body.style.overflow=""; video.pause(); video.removeAttribute("src"); video.load(); if(history.replaceState) history.replaceState(null,"",location.pathname+location.search); }
+  $("close").addEventListener("click",close);
+  $("modal").addEventListener("click",function(ev){ if(ev.target===this) close(); });
+  document.addEventListener("keydown",function(ev){ if(ev.key==="Escape") close(); });
+  video.addEventListener("ended",function(){ var nexts=E.filter(function(x){return ready(x)&&x.episode>cur.episode;}); if(nexts.length) open(nexts[0].episode,1,true); });
+  $("share").addEventListener("click",function(){
+    var url=location.origin+location.pathname+"#e"+String(cur.episode).padStart(2,"0")+(curPart>1?"-p"+curPart:"");
+    if(navigator.share){ navigator.share({title:"Weh Di Evidence Seh? Episode "+cur.episode, text:cur.question, url:url}).catch(function(){}); }
+    else if(navigator.clipboard){ navigator.clipboard.writeText(url).then(function(){toast("Link copied");}); }
+    else toast(url);
+  });
+  var tt; function toast(m){ var t=$("toast"); t.textContent=m; t.classList.add("show"); clearTimeout(tt); tt=setTimeout(function(){t.classList.remove("show");},2200); }
+
+  render();
+  var m=/#e(\d+)(?:-p(\d+))?/.exec(location.hash); if(m) open(parseInt(m[1],10), m[2]?parseInt(m[2],10):1, false);
+})();
+</script>
+</body>
+</html>
