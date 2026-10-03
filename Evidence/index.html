@@ -28,7 +28,9 @@
   header{background:linear-gradient(160deg,#2a0f5e 0%,#160a33 55%,#120826 100%);border-bottom:1px solid rgba(255,255,255,.06);position:relative;overflow:hidden}
   header:before{content:"";position:absolute;inset:0;background:radial-gradient(60% 80% at 85% 10%,rgba(47,107,255,.25),transparent 60%),radial-gradient(50% 60% at 10% 90%,rgba(209,22,47,.22),transparent 60%);pointer-events:none}
   .brand{display:flex;align-items:center;gap:12px;padding:14px 0;position:relative}
-  .brand img{width:44px;height:auto;filter:drop-shadow(0 2px 6px rgba(0,0,0,.4))}
+  .brand .tile,footer .tile{background:#fff;border-radius:12px;padding:5px;display:inline-flex;box-shadow:0 2px 10px rgba(0,0,0,.35)}
+  .brand img{width:40px;height:auto}
+  footer .tile img{width:30px}
   .brand .name{font-weight:700;letter-spacing:.3px;font-size:14px;color:var(--ink2);text-transform:uppercase}
   .brand .name span{display:block;font-weight:400;font-size:12px;color:var(--muted);text-transform:none;letter-spacing:0}
   .hero{padding:18px 0 28px;position:relative}
@@ -98,16 +100,56 @@
   .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--panel2);color:var(--ink);padding:10px 16px;border-radius:999px;font-size:14px;box-shadow:var(--shadow);opacity:0;transition:opacity .2s;pointer-events:none;z-index:70}
   .toast.show{opacity:1}
 
+  /* issue reports */
+  .report{margin-top:18px;border:1px solid rgba(255,255,255,.1);border-radius:var(--radius);background:rgba(255,255,255,.04);overflow:hidden}
+  .report summary{cursor:pointer;padding:12px 14px;font-weight:600;list-style:none;display:flex;align-items:center;gap:8px}
+  .report summary::-webkit-details-marker{display:none}
+  .report summary:after{content:"+";margin-left:auto;color:var(--muted);font-weight:400}
+  .report[open] summary:after{content:"\2212"}
+  .report .body{padding:0 14px 14px}
+  .report p.hint{margin:0 0 10px;font-size:13px;color:var(--muted)}
+  .stamp{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:10px}
+  .stamp .t{background:var(--panel2);border:1px solid rgba(255,255,255,.14);border-radius:8px;padding:6px 10px;font-variant-numeric:tabular-nums;font-size:14px;min-width:64px;text-align:center}
+  .report select,.report input[type=text],.report textarea{width:100%;background:var(--panel);color:var(--ink);border:1px solid rgba(255,255,255,.14);border-radius:10px;padding:9px 11px;font:inherit;font-size:15px;margin-bottom:8px}
+  .report textarea{min-height:76px;resize:vertical}
+  .report .hp{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
+  .report .status{font-size:13px;color:var(--muted);margin-top:6px;min-height:1.2em}
+  .rlist{margin:12px 0 0;padding:0;list-style:none;font-size:13px}
+  .rlist li{padding:7px 0;border-top:1px solid rgba(255,255,255,.08);color:var(--ink2)}
+  .rlist li a{color:var(--gold);text-decoration:none;font-variant-numeric:tabular-nums;margin-right:6px}
+  .rlist li .who{color:var(--muted)}
+
+  /* skip intro and end screen */
+  .skip{position:absolute;right:12px;bottom:64px;z-index:3;background:rgba(0,0,0,.72);color:#fff;border:1px solid rgba(255,255,255,.35);border-radius:8px;padding:9px 14px;font:600 14px/1 inherit;font-family:inherit;cursor:pointer;display:none;align-items:center;gap:8px;backdrop-filter:blur(4px)}
+  .skip.show{display:inline-flex}
+  .skip:after{content:"\25B6\25B6";font-size:11px;letter-spacing:-3px}
+  .endscreen{position:absolute;inset:0;z-index:4;background:linear-gradient(180deg,rgba(10,4,24,.55),rgba(10,4,24,.96) 45%);display:none;flex-direction:column;justify-content:flex-end;padding:14px;color:#fff}
+  .endscreen.show{display:flex}
+  .endscreen .lbl{font-size:12px;letter-spacing:.6px;text-transform:uppercase;color:var(--ink2);margin:0 0 6px}
+  .upnext{display:flex;gap:12px;align-items:center;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);border-radius:12px;padding:10px;cursor:pointer;text-align:left;color:#fff;font:inherit;width:100%}
+  .upnext img{width:54px;aspect-ratio:9/16;object-fit:cover;border-radius:6px;background:#000}
+  .upnext .t{flex:1;min-width:0}
+  .upnext .t b{display:block;font-size:14px;line-height:1.25;margin-bottom:3px}
+  .upnext .t span{font-size:12px;color:var(--ink2)}
+  .ring{width:46px;height:46px;border-radius:50%;display:grid;place-items:center;background:conic-gradient(var(--red) var(--p,0%),rgba(255,255,255,.18) 0);flex:none;font-size:12px;font-weight:700}
+  .ring i{width:36px;height:36px;border-radius:50%;background:#1a0a3d;display:grid;place-items:center;font-style:normal}
+  .sugg{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
+  .sugg button{background:none;border:0;padding:0;color:#fff;font:inherit;text-align:left;cursor:pointer}
+  .sugg img{width:100%;aspect-ratio:9/16;object-fit:cover;border-radius:8px;background:#000;border:1px solid rgba(255,255,255,.14)}
+  .sugg span{display:block;font-size:11px;line-height:1.25;margin-top:4px;color:var(--ink2)}
+  .endrow{display:flex;gap:8px;margin-top:10px}
+  .endrow .btn{flex:1;justify-content:center;font-size:13px;padding:8px 10px}
+
   footer{margin-top:40px;padding:26px 0 40px;border-top:1px solid rgba(255,255,255,.06);color:var(--muted);font-size:13px}
   footer .f{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
-  footer img{width:34px}
+  
 </style>
 </head>
 <body>
 <header>
   <div class="wrap">
     <div class="brand">
-      <img src="assets/twc-mark.png" alt="TWC">
+      <span class="tile"><img src="assets/twc-mark.png" alt="TWC"></span>
       <div class="name">Transformational Worship Centre <span>Media ministry</span></div>
     </div>
     <div class="hero">
@@ -140,7 +182,17 @@
   <button class="close" id="close" aria-label="Close">&times;</button>
   <div class="inner">
     <div>
-      <div class="vwrap"><video id="video" controls playsinline preload="metadata" controlsList="nodownload"></video></div>
+      <div class="vwrap">
+        <video id="video" controls playsinline preload="metadata" controlsList="nodownload"></video>
+        <button class="skip" id="skip" type="button">Skip intro</button>
+        <div class="endscreen" id="endscreen">
+          <p class="lbl">Up next</p>
+          <button class="upnext" id="upnext" type="button"><img id="unimg" alt=""><span class="t"><b id="untitle"></b><span id="unsub"></span></span><span class="ring" id="ring"><i id="ringn">8</i></span></button>
+          <p class="lbl" style="margin-top:12px">You might also like</p>
+          <div class="sugg" id="sugg"></div>
+          <div class="endrow"><button class="btn" id="replay" type="button">Watch again</button><button class="btn" id="cancelnext" type="button">Stay here</button></div>
+        </div>
+      </div>
     </div>
     <div class="info">
       <div class="ep" id="mep"></div>
@@ -154,6 +206,32 @@
         <button class="btn" id="prev">Previous</button>
         <button class="btn" id="next">Next</button>
       </div>
+
+      <details class="report" id="report">
+        <summary><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 21V4h12l-1 4 1 4H4"/></svg> Report an issue in this video</summary>
+        <div class="body">
+          <p class="hint">See or hear something wrong? Pause at the spot, press Mark time, say what it is, and send. The team reads every report.</p>
+          <div class="stamp">
+            <button class="btn" id="mark" type="button">Mark time</button>
+            <span class="t" id="rtime">0:00</span>
+            <button class="btn" id="goto" type="button" title="Jump the video to the marked time">Go to</button>
+          </div>
+          <select id="rtype" aria-label="What kind of issue">
+            <option value="picture">Picture (wrong shot, person, place, hand, face)</option>
+            <option value="sound">Sound (voice, pronunciation, timing, volume)</option>
+            <option value="words">Words (what is said is wrong or unclear)</option>
+            <option value="captions">Captions (caption does not match or is misspelt)</option>
+            <option value="facts">Facts or Bible (a claim or verse to check)</option>
+            <option value="other">Something else</option>
+          </select>
+          <textarea id="rtext" maxlength="1000" placeholder="What did you see or hear at that time?"></textarea>
+          <input id="rname" type="text" maxlength="60" placeholder="Your name (optional)" autocomplete="name">
+          <input class="hp" id="rweb" type="text" tabindex="-1" autocomplete="off" aria-hidden="true">
+          <div class="row" style="margin-top:4px"><button class="btn primary" id="rsend" type="button">Send report</button></div>
+          <div class="status" id="rstatus"></div>
+          <ul class="rlist" id="rlist"></ul>
+        </div>
+      </details>
     </div>
   </div>
 </div>
@@ -161,7 +239,7 @@
 
 <footer>
   <div class="wrap f">
-    <img src="assets/twc-mark.png" alt="">
+    <span class="tile"><img src="assets/twc-mark.png" alt=""></span>
     <div><b id="fchurch"></b> &middot; <a id="furl" href="#" rel="noopener">twcministries.net</a><br>Weh Di Evidence Seh? is a TWC media ministry series. Updated <span id="fupd"></span>.</div>
   </div>
 </footer>
@@ -169,6 +247,8 @@
 <script src="episodes.js"></script>
 <script>
 (function(){
+  var REPORT_API = "https://twc-evidence-reports.kd7bgn7q2z.workers.dev";   // Cloudflare Worker address for issue reports, e.g. "https://twc-evidence-api.kd7bgn7q2z.workers.dev". Empty = reports fall back to a mailto link.
+  var REPORT_MAIL = "";  // fallback e-mail for reports when REPORT_API is empty, e.g. "media@twcministries.net"
   var S = window.SERIES, E = window.EPISODES.slice().sort(function(a,b){return a.episode-b.episode;});
   var $ = function(id){return document.getElementById(id);};
   function fmt(s){ if(!s) return ""; s=Math.round(s); return Math.floor(s/60)+":"+String(s%60).padStart(2,"0"); }
@@ -231,23 +311,88 @@
     video.pause(); video.poster=p.poster; video.src=p.file; video.load();
     $("modal").classList.add("open"); document.body.style.overflow="hidden";
     if(history.replaceState) history.replaceState(null,"","#e"+String(num).padStart(2,"0")+(p.part>1?"-p"+p.part:""));
+    hideEnd(); setStamp(0); $("rstatus").textContent=""; $("report").open=false; loadReports();
     if(auto){ var pr=video.play(); if(pr&&pr.catch) pr.catch(function(){}); }
     var prevs=E.filter(function(x){return ready(x)&&x.episode<num;}), nexts=E.filter(function(x){return ready(x)&&x.episode>num;});
     $("prev").disabled=!prevs.length; $("next").disabled=!nexts.length;
     $("prev").onclick=function(){ if(prevs.length) open(prevs[prevs.length-1].episode,1,true); };
     $("next").onclick=function(){ if(nexts.length) open(nexts[0].episode,1,true); };
   }
-  function close(){ $("modal").classList.remove("open"); document.body.style.overflow=""; video.pause(); video.removeAttribute("src"); video.load(); if(history.replaceState) history.replaceState(null,"",location.pathname+location.search); }
+  function close(){ hideEnd(); $("modal").classList.remove("open"); document.body.style.overflow=""; video.pause(); video.removeAttribute("src"); video.load(); if(history.replaceState) history.replaceState(null,"",location.pathname+location.search); }
   $("close").addEventListener("click",close);
   $("modal").addEventListener("click",function(ev){ if(ev.target===this) close(); });
   document.addEventListener("keydown",function(ev){ if(ev.key==="Escape") close(); });
-  video.addEventListener("ended",function(){ var nexts=E.filter(function(x){return ready(x)&&x.episode>cur.episode;}); if(nexts.length) open(nexts[0].episode,1,true); });
+  video.addEventListener("ended",function(){ skipBtn.classList.remove("show"); showEnd(); });
   $("share").addEventListener("click",function(){
     var url=location.origin+location.pathname+"#e"+String(cur.episode).padStart(2,"0")+(curPart>1?"-p"+curPart:"");
     if(navigator.share){ navigator.share({title:"Weh Di Evidence Seh? Episode "+cur.episode, text:cur.question, url:url}).catch(function(){}); }
     else if(navigator.clipboard){ navigator.clipboard.writeText(url).then(function(){toast("Link copied");}); }
     else toast(url);
   });
+  /* issue reports */
+  var rtime=0;
+  function setStamp(t){ rtime=Math.max(0,t||0); $("rtime").textContent=fmt(rtime); }
+  $("mark").addEventListener("click",function(){ setStamp(video.currentTime); if(!video.paused) video.pause(); });
+  $("goto").addEventListener("click",function(){ video.currentTime=rtime; var pr=video.play(); if(pr&&pr.catch) pr.catch(function(){}); });
+  function loadReports(){
+    var ul=$("rlist"); ul.innerHTML="";
+    if(!REPORT_API||!cur) return;
+    fetch(REPORT_API+"/api/reports?episode="+cur.episode).then(function(r){return r.json();}).then(function(d){
+      if(!d.reports||!d.reports.length||!cur) return;
+      d.reports.slice(-8).reverse().forEach(function(r){
+        var li=document.createElement("li"); var a=document.createElement("a"); a.href="#"; a.textContent=r.timecode;
+        a.addEventListener("click",function(ev){ev.preventDefault(); video.currentTime=r.time; setStamp(r.time);});
+        li.appendChild(a); li.appendChild(document.createTextNode((r.type?r.type+": ":"")+r.text+" ")); var w=document.createElement("span"); w.className="who"; w.textContent="\u2014 "+(r.name||"Someone")+(r.status&&r.status!=="open"?" ("+r.status+")":""); li.appendChild(w); ul.appendChild(li);
+      });
+    }).catch(function(){});
+  }
+  $("rsend").addEventListener("click",function(){
+    var text=$("rtext").value.trim(), name=$("rname").value.trim(), type=$("rtype").value, st=$("rstatus");
+    if(text.length<3){ st.textContent="Please say what you saw or heard."; $("rtext").focus(); return; }
+    var payload={episode:cur.episode, part:curPart, time:Math.round(rtime*10)/10, timecode:fmt(rtime), type:type, text:text, name:name, website:$("rweb").value, page:location.href};
+    if(!REPORT_API){
+      var body="Weh Di Evidence Seh? report\nEpisode "+cur.episode+" Part "+curPart+" at "+fmt(rtime)+"\nType: "+type+"\n\n"+text+"\n\nFrom: "+(name||"(no name)")+"\n"+location.href;
+      if(REPORT_MAIL){ location.href="mailto:"+REPORT_MAIL+"?subject="+encodeURIComponent("Evidence report: Episode "+cur.episode+" at "+fmt(rtime))+"&body="+encodeURIComponent(body); st.textContent="Your mail app opened with the report; press send there."; }
+      else if(navigator.clipboard){ navigator.clipboard.writeText(body); st.textContent="Reports are not switched on yet. The report text is copied; paste it to the team."; }
+      return;
+    }
+    $("rsend").disabled=true; st.textContent="Sending\u2026";
+    fetch(REPORT_API+"/api/report",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload)})
+      .then(function(r){return r.json().then(function(d){return {ok:r.ok,d:d};});})
+      .then(function(x){ if(!x.ok) throw new Error(x.d.error||"failed"); st.textContent="Thank you. Logged at "+x.d.timecode+"."; $("rtext").value=""; try{localStorage.setItem("evidence_name",name);}catch(e){} loadReports(); })
+      .catch(function(e){ st.textContent="Could not send ("+e.message+"). Try again in a moment."; })
+      .then(function(){ $("rsend").disabled=false; });
+  });
+  try{ var nm=localStorage.getItem("evidence_name"); if(nm) $("rname").value=nm; }catch(e){}
+
+  /* skip intro: the series intro and question card run to INTRO_END seconds; the conversation starts after it */
+  var INTRO_END = 42.1, SKIP_TO = 42.0;
+  var skipBtn=$("skip");
+  video.addEventListener("timeupdate",function(){ skipBtn.classList.toggle("show", video.currentTime>1.5 && video.currentTime<INTRO_END-1.5 && !video.ended); });
+  skipBtn.addEventListener("click",function(){ video.currentTime=SKIP_TO; var pr=video.play(); if(pr&&pr.catch) pr.catch(function(){}); skipBtn.classList.remove("show"); });
+
+  /* end screen: up next with a countdown, plus suggestions */
+  var endT=null, endLeft=8;
+  function hideEnd(){ $("endscreen").classList.remove("show"); clearInterval(endT); endT=null; }
+  function pick(n){ // other ready episodes, nearest numbers first, excluding the current and the next
+    var nxt=nextOf(cur); return E.filter(function(x){return ready(x)&&x!==cur&&x!==nxt;}).sort(function(a,b){return Math.abs(a.episode-cur.episode)-Math.abs(b.episode-cur.episode);}).slice(0,n);
+  }
+  function nextOf(e){ var n=E.filter(function(x){return ready(x)&&x.episode>e.episode;}); return n[0]||E.filter(ready)[0]; }
+  function firstPart(e){ return e.parts.find(function(p){return p.file;}); }
+  function showEnd(){
+    var nxt=nextOf(cur); if(!nxt||nxt===cur) return;
+    $("unimg").src=firstPart(nxt).poster; $("untitle").textContent="Episode "+nxt.episode+": "+nxt.question; $("unsub").textContent=nxt.setting+" \u00b7 "+fmt(firstPart(nxt).duration);
+    var sg=$("sugg"); sg.innerHTML="";
+    pick(3).forEach(function(e){ var b=document.createElement("button"); b.innerHTML='<img src="'+firstPart(e).poster+'" alt=""><span>EP '+e.episode+' \u00b7 '+esc(e.question)+'</span>'; b.addEventListener("click",function(){hideEnd(); open(e.episode,1,true);}); sg.appendChild(b); });
+    $("upnext").onclick=function(){ hideEnd(); open(nxt.episode,1,true); };
+    endLeft=8; $("ringn").textContent=endLeft; $("ring").style.setProperty("--p","0%");
+    $("endscreen").classList.add("show");
+    clearInterval(endT); endT=setInterval(function(){ endLeft--; $("ringn").textContent=endLeft; $("ring").style.setProperty("--p",((8-endLeft)/8*100)+"%"); if(endLeft<=0){ hideEnd(); open(nxt.episode,1,true); } },1000);
+  }
+  $("cancelnext").addEventListener("click",function(){ clearInterval(endT); endT=null; $("ringn").textContent="\u2715"; $("ring").style.setProperty("--p","0%"); });
+  $("replay").addEventListener("click",function(){ hideEnd(); video.currentTime=0; var pr=video.play(); if(pr&&pr.catch) pr.catch(function(){}); });
+  video.addEventListener("play",function(){ if(endT||$("endscreen").classList.contains("show")) hideEnd(); });
+
   var tt; function toast(m){ var t=$("toast"); t.textContent=m; t.classList.add("show"); clearTimeout(tt); tt=setTimeout(function(){t.classList.remove("show");},2200); }
 
   render();

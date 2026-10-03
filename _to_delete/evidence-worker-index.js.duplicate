@@ -1,0 +1,127 @@
+/**
+ * Weh Di Evidence Seh? issue reports, Cloudflare Worker
+ *
+ * Viewers of https://twcministries.net/Evidence/ press "Report an issue" in the player, mark the time in the video,
+ * write what they saw, and send. This worker appends the report to a JSON file in the private repository, the same
+ * way the Family Tasks and Testimony workers do.
+ *
+ * Data file: User_Data/evidence_reports.json in clenny-r/Twc_private_data
+ * {
+ *   "reports": [
+ *     { "id": "r_20261003_0412_ab12", "at": "2026-10-03T04:12:09Z", "episode": 4, "part": 1, "file": "videos/e04-p1.mp4",
+ *       "time": 83.4, "timecode": "1:23", "type": "sound", "text": "The wide shot shows while Clenmar is talking",
+ *       "name": "Shadene", "page": "https://twcministries.net/Evidence/#e04", "status": "open" }
+ *   ]
+ * }
+ *
+ * Endpoints
+ *   POST /api/report            body: { episode, part, time, text, type, name, website (honeypot), page }
+ *   GET  /api/reports?episode=4  the open reports for one episode (text, timecode, name, date only), for the page to show
+ *   GET  /api/health
+ *
+ * Environment variables (Settings > Variables, encrypted):
+ *   GITHUB_TOKEN  Personal Access Token with repo scope on Twc_private_data
+ *   ALLOWED_ORIGIN (optional) e.g. https://twcministries.net ; default allows any origin
+ */
+
+const GITHUB_OWNER = 'clenny-r';
+const GITHUB_REPO  = 'Twc_private_data';
+const GITHUB_FILE  = 'User_Data/evidence_reports.json';
+const GITHUB_API   = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${GITHUB_FILE}`;
+const MAX_TEXT = 1000, MAX_NAME = 60, MAX_PER_IP_PER_HOUR = 20;
+const TYPES = ['picture', 'sound', 'words', 'captions', 'facts', 'other'];
+
+const hits = new Map(); // ip -> [timestamps], per isolate, good enough to slow a flood
+
+export default {
+  async fetch(request, env) {
+    function b64Encode(str) { const bytes = new TextEncoder().encode(str); return btoa(Array.from(bytes, b => String.fromCodePoint(b)).join('')); }
+    function b64Decode(str) { const bin = atob(str); return new TextDecoder().decode(Uint8Array.from(bin, c => c.charCodeAt(0))); }
+
+    const origin = request.headers.get('Origin') || '*';
+    const allowed = env.ALLOWED_ORIGIN ? (origin === env.ALLOWED_ORIGIN ? origin : env.ALLOWED_ORIGIN) : origin;
+    const CORS = {
+      'Access-Control-Allow-Origin': allowed,
+      'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+      'Access-Control-Allow-Headers': 'Content-Type',
+    };
+    if (request.method === 'OPTIONS') return new Response(null, { status: 204, headers: CORS });
+    const json = (data, status = 200) => new Response(JSON.stringify(data), { status, headers: { ...CORS, 'Content-Type': 'application/json' } });
+    const err = (msg, status = 400) => json({ error: msg }, status);
+
+    const gh = { Authorization: `token ${env.GITHUB_TOKEN}`, Accept: 'application/vnd.github.v3+json', 'User-Agent': 'TWC-Evidence-Reports' };
+
+    async function readDB() {
+      const res = await fetch(GITHUB_API, { headers: gh });
+      if (res.status === 404) return { data: { reports: [] }, sha: undefined };
+      if (!res.ok) throw new Error(`GitHub read failed: ${res.status}`);
+      const file = await res.json();
+      let data = { reports: [] };
+      try { data = JSON.parse(b64Decode(file.content.replace(/\n/g, ''))); } catch (e) {}
+      if (!Array.isArray(data.reports)) data.reports = [];
+      return { data, sha: file.sha };
+    }
+    async function writeDB(data, sha, message) {
+      const body = { message, content: b64Encode(JSON.stringify(data, null, 2)) };
+      if (sha) body.sha = sha;
+      const res = await fetch(GITHUB_API, { method: 'PUT', headers: { ...gh, 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+      if (!res.ok) throw new Error(`GitHub write failed: ${res.status} ${await res.text()}`);
+    }
+
+    const url = new URL(request.url);
+    const path = url.pathname;
+
+    if (request.method === 'GET' && path === '/api/health') return json({ ok: true, file: GITHUB_FILE });
+
+    if (request.method === 'GET' && path === '/api/reports') {
+      try {
+        const ep = parseInt(url.searchParams.get('episode') || '0', 10);
+        const { data } = await readDB();
+        const list = data.reports
+          .filter(r => (!ep || r.episode === ep) && r.status !== 'spam')
+          .slice(-200)
+          .map(r => ({ id: r.id, at: r.at, episode: r.episode, part: r.part, time: r.time, timecode: r.timecode, type: r.type, text: r.text, name: r.name || 'Someone', status: r.status || 'open' }));
+        return json({ reports: list });
+      } catch (e) { return err('Could not read reports: ' + e.message, 500); }
+    }
+
+    if (request.method === 'POST' && path === '/api/report') {
+      try {
+        const ip = request.headers.get('CF-Connecting-IP') || 'unknown';
+        const now = Date.now();
+        const arr = (hits.get(ip) || []).filter(t => now - t < 3600e3);
+        if (arr.length >= MAX_PER_IP_PER_HOUR) return err('Too many reports from this connection; try again later.', 429);
+        arr.push(now); hits.set(ip, arr);
+
+        const b = await request.json();
+        if (b.website) return json({ ok: true }); // honeypot field filled by a bot: pretend success, store nothing
+        const episode = parseInt(b.episode, 10), part = parseInt(b.part || 1, 10);
+        const time = Math.max(0, Math.round((parseFloat(b.time) || 0) * 10) / 10);
+        const text = String(b.text || '').trim().slice(0, MAX_TEXT);
+        const name = String(b.name || '').trim().slice(0, MAX_NAME);
+        const type = TYPES.includes(b.type) ? b.type : 'other';
+        if (!episode || episode < 1 || episode > 99) return err('Episode missing');
+        if (text.length < 3) return err('Please say what you saw or heard');
+        const m = Math.floor(time / 60), s = Math.round(time % 60);
+        const d = new Date();
+        const id = 'r_' + d.toISOString().replace(/[-:T]/g, '').slice(0, 13) + '_' + Math.random().toString(36).slice(2, 6);
+        const report = {
+          id, at: d.toISOString(), episode, part, file: `videos/e${String(episode).padStart(2, '0')}-p${part}.mp4`,
+          time, timecode: `${m}:${String(s).padStart(2, '0')}`, type, text, name,
+          page: String(b.page || '').slice(0, 200), ua: (request.headers.get('User-Agent') || '').slice(0, 160), status: 'open'
+        };
+        // read, append, write; retry once if the file changed under us
+        for (let attempt = 0; attempt < 2; attempt++) {
+          try {
+            const { data, sha } = await readDB();
+            data.reports.push(report);
+            await writeDB(data, sha, `evidence: report on Episode ${episode} at ${report.timecode}`);
+            return json({ ok: true, id, timecode: report.timecode });
+          } catch (e) { if (attempt === 1) throw e; }
+        }
+      } catch (e) { return err('Could not save the report: ' + e.message, 500); }
+    }
+
+    return err('Not found', 404);
+  }
+};
