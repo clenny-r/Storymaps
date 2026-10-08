@@ -366,7 +366,7 @@
       var c=document.createElement("button"); c.className="card"; c.type="button"; c.setAttribute("aria-label","Continue Episode "+e.episode+" Part "+p.part);
       c.innerHTML='<div class="poster" style="background-image:url(\''+p.poster+'\')"><span class="num">'+e.episode+'</span><span class="bar"><b style="width:'+pct+'%"></b></span></div><div class="meta"><h3>'+esc(pi.question||e.question)+'</h3><p>Part '+p.part+', '+fmt(left)+' left</p></div>';
       c.addEventListener("click",function(){open(e.episode,p.part,true);}); g.appendChild(c); });
-    $("resume").hidden=!g.children.length;
+    $("resume").hidden=!g.children.length||!!query||filter!=="all"; // search or a filter: results come first, nothing above them
   }
   var filter="all", query="";
   function render(){
@@ -403,8 +403,8 @@
     });
     $("empty").hidden = shown>0;
   }
-  $("q").addEventListener("input",function(){query=this.value.trim().toLowerCase();render();});
-  $("chips").addEventListener("click",function(ev){var b=ev.target.closest(".chip"); if(!b) return; filter=b.getAttribute("data-f"); Array.prototype.forEach.call(this.children,function(c){c.classList.toggle("on",c===b);}); render();});
+  $("q").addEventListener("input",function(){query=this.value.trim().toLowerCase();render();renderResume();});
+  $("chips").addEventListener("click",function(ev){var b=ev.target.closest(".chip"); if(!b) return; filter=b.getAttribute("data-f"); Array.prototype.forEach.call(this.children,function(c){c.classList.toggle("on",c===b);}); render(); renderResume();});
 
   /* player */
   var cur=null, curPart=1, video=$("video");
