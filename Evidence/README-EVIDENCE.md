@@ -40,3 +40,9 @@ Every video has "Report an issue" in the player: Mark time, describe, send. Repo
 ## What stays out of GitHub
 
 Only this folder is in the repository. The working files (clips, pipeline, tests, version 2 builds) live in `C:\Users\ramne\Documents\Claude\Apologetics course` and are never copied here except the approved MP4 under its fixed name.
+
+## Changes on 8 October 2026
+
+1. Part descriptions: `episodes.js` ends with `window.PART_INFO`, one entry per Part 2 and Part 3 (key "episode.part": question, opening line, cast, summary). The player shows that text when the part is selected. To change a description, edit its entry there.
+2. Reports are no longer listed on the page. The page still sends them. The worker's read address still answers anyone who knows it; closing that needs a change in the worker (`00_All_Workers\twc-evidence-reports`) and a `wrangler deploy`.
+3. The player has a Season 1 and Season 2 menu with a grid of episode buttons, under Copy link, Previous and Next.

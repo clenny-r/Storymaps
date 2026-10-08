@@ -119,6 +119,20 @@
   .rlist li a{color:var(--gold);text-decoration:none;font-variant-numeric:tabular-nums;margin-right:6px}
   .rlist li .who{color:var(--muted)}
 
+  /* episode menu in the player */
+  .info .from{margin:0 0 6px;font-size:13px;color:var(--muted)}
+  .epnav{margin-top:16px}
+  .epmenu{border:1px solid rgba(255,255,255,.1);border-radius:var(--radius);background:rgba(255,255,255,.04);margin-top:8px}
+  .epmenu summary{cursor:pointer;padding:11px 14px;font-weight:600;font-size:14px;list-style:none;display:flex;align-items:center;gap:8px}
+  .epmenu summary::-webkit-details-marker{display:none}
+  .epmenu summary small{color:var(--muted);font-weight:400}
+  .epmenu summary:after{content:"+";margin-left:auto;color:var(--muted);font-weight:400}
+  .epmenu[open] summary:after{content:"\2212"}
+  .epgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(62px,1fr));gap:6px;padding:0 12px 12px}
+  .epgrid button{border:1px solid rgba(255,255,255,.16);background:var(--panel);color:var(--ink);border-radius:8px;padding:9px 0;font:600 13px/1 inherit;font-family:inherit;cursor:pointer}
+  .epgrid button.on{background:var(--red);border-color:var(--red);color:#fff}
+  .epgrid button:disabled{opacity:.4;cursor:default}
+
   /* skip intro and end screen */
   .skip{position:absolute;right:12px;bottom:64px;z-index:3;background:rgba(0,0,0,.72);color:#fff;border:1px solid rgba(255,255,255,.35);border-radius:8px;padding:9px 14px;font:600 14px/1 inherit;font-family:inherit;cursor:pointer;display:none;align-items:center;gap:8px;backdrop-filter:blur(4px)}
   .skip.show{display:inline-flex}
@@ -197,6 +211,7 @@
     <div class="info">
       <div class="ep" id="mep"></div>
       <h2 id="mtitle"></h2>
+      <p id="mfrom" class="from" hidden></p>
       <blockquote id="mstreet"></blockquote>
       <div class="parts" id="mparts"></div>
       <p id="msummary"></p>
@@ -206,6 +221,8 @@
         <button class="btn" id="prev">Previous</button>
         <button class="btn" id="next">Next</button>
       </div>
+
+      <div class="epnav" id="epnav" aria-label="All episodes"></div>
 
       <details class="report" id="report">
         <summary><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 21V4h12l-1 4 1 4H4"/></svg> Report an issue in this video</summary>
@@ -229,7 +246,6 @@
           <input class="hp" id="rweb" type="text" tabindex="-1" autocomplete="off" aria-hidden="true">
           <div class="row" style="margin-top:4px"><button class="btn primary" id="rsend" type="button">Send report</button></div>
           <div class="status" id="rstatus"></div>
-          <ul class="rlist" id="rlist"></ul>
         </div>
       </details>
     </div>
@@ -268,7 +284,8 @@
       var eps=E.filter(function(e){
         if(e.season!==season) return false;
         if(filter==="ready" && !ready(e)) return false;
-        if(query){ var h=(e.question+" "+e.street+" "+e.setting+" "+e.cast+" "+e.summary+" episode "+e.episode).toLowerCase(); if(h.indexOf(query)<0) return false; }
+        if(query){ var pinfo=window.PART_INFO||{}, extra=e.parts.map(function(x){var i=pinfo[e.episode+"."+x.part]; return i?i.question+" "+i.summary:"";}).join(" ");
+          var h=(e.question+" "+e.street+" "+e.setting+" "+e.cast+" "+e.summary+" "+extra+" episode "+e.episode).toLowerCase(); if(h.indexOf(query)<0) return false; }
         return true;
       });
       if(!eps.length) return;
@@ -303,8 +320,10 @@
     var e=E.find(function(x){return x.episode===num;}); if(!e||!ready(e)) return;
     cur=e; var parts=e.parts.filter(function(p){return p.file;}); var p=parts.find(function(x){return x.part===part;})||parts[0]; curPart=p.part;
     $("mep").textContent="Season "+e.season+" · Episode "+e.episode+" · Part "+p.part;
-    $("mtitle").textContent=e.question; $("mstreet").textContent="“"+e.street+"”";
-    $("msummary").textContent=e.summary; $("msetting").textContent=e.setting; $("mcast").textContent=e.cast; $("mdur").textContent=fmt(p.duration);
+    var pi=(window.PART_INFO||{})[e.episode+"."+p.part]||{};
+    $("mtitle").textContent=pi.question||e.question; $("mstreet").textContent="“"+(pi.street||e.street)+"”";
+    $("msummary").textContent=pi.summary||e.summary; $("msetting").textContent=e.setting; $("mcast").textContent=pi.cast||e.cast; $("mdur").textContent=fmt(p.duration);
+    $("mfrom").textContent=pi.question?"Continues Episode "+e.episode+": "+e.question:""; $("mfrom").hidden=!pi.question;
     var pb=$("mparts"); pb.innerHTML="";
     e.parts.forEach(function(x){ var b=document.createElement("button"); b.textContent="Part "+x.part; b.disabled=!x.file; b.classList.toggle("on",x.part===p.part); if(x.file) b.addEventListener("click",function(){open(num,x.part,true);}); pb.appendChild(b); });
     if(e.parts.length<2) pb.style.display="none"; else pb.style.display="";
@@ -313,10 +332,26 @@
     if(history.replaceState) history.replaceState(null,"","#e"+String(num).padStart(2,"0")+(p.part>1?"-p"+p.part:""));
     hideEnd(); setStamp(0); $("rstatus").textContent=""; $("report").open=false; loadReports();
     if(auto){ var pr=video.play(); if(pr&&pr.catch) pr.catch(function(){}); }
+    buildNav();
     var prevs=E.filter(function(x){return ready(x)&&x.episode<num;}), nexts=E.filter(function(x){return ready(x)&&x.episode>num;});
     $("prev").disabled=!prevs.length; $("next").disabled=!nexts.length;
     $("prev").onclick=function(){ if(prevs.length) open(prevs[prevs.length-1].episode,1,true); };
     $("next").onclick=function(){ if(nexts.length) open(nexts[0].episode,1,true); };
+  }
+  function buildNav(){ // season drop-downs with a grid of episode buttons; the season of the playing episode stays open
+    var nav=$("epnav"), wasOpen={}; Array.prototype.forEach.call(nav.children,function(d){wasOpen[d.getAttribute("data-s")]=d.open;});
+    var first=!nav.children.length; nav.innerHTML="";
+    [1,2].forEach(function(season){
+      var eps=E.filter(function(x){return x.season===season;}); if(!eps.length) return;
+      var d=document.createElement("details"); d.className="epmenu"; d.setAttribute("data-s",season);
+      d.open = first ? false : !!wasOpen[season];
+      d.innerHTML='<summary>Season '+season+' <small>Episodes '+eps[0].episode+' to '+eps[eps.length-1].episode+'</small></summary><div class="epgrid"></div>';
+      var g=d.querySelector(".epgrid");
+      eps.forEach(function(x){ var b=document.createElement("button"); b.type="button"; b.textContent="EP "+x.episode; b.title=x.question; b.setAttribute("aria-label","Episode "+x.episode+": "+x.question);
+        b.disabled=!ready(x); if(cur&&x.episode===cur.episode){ b.classList.add("on"); b.setAttribute("aria-current","true"); }
+        b.addEventListener("click",function(){ open(x.episode,1,true); $("modal").scrollTop=0; }); g.appendChild(b); });
+      nav.appendChild(d);
+    });
   }
   function close(){ hideEnd(); $("modal").classList.remove("open"); document.body.style.overflow=""; video.pause(); video.removeAttribute("src"); video.load(); if(history.replaceState) history.replaceState(null,"",location.pathname+location.search); }
   $("close").addEventListener("click",close);
@@ -334,18 +369,7 @@
   function setStamp(t){ rtime=Math.max(0,t||0); $("rtime").textContent=fmt(rtime); }
   $("mark").addEventListener("click",function(){ setStamp(video.currentTime); if(!video.paused) video.pause(); });
   $("goto").addEventListener("click",function(){ video.currentTime=rtime; var pr=video.play(); if(pr&&pr.catch) pr.catch(function(){}); });
-  function loadReports(){
-    var ul=$("rlist"); ul.innerHTML="";
-    if(!REPORT_API||!cur) return;
-    fetch(REPORT_API+"/api/reports?episode="+cur.episode).then(function(r){return r.json();}).then(function(d){
-      if(!d.reports||!d.reports.length||!cur) return;
-      d.reports.slice(-8).reverse().forEach(function(r){
-        var li=document.createElement("li"); var a=document.createElement("a"); a.href="#"; a.textContent=r.timecode;
-        a.addEventListener("click",function(ev){ev.preventDefault(); video.currentTime=r.time; setStamp(r.time);});
-        li.appendChild(a); li.appendChild(document.createTextNode((r.type?r.type+": ":"")+r.text+" ")); var w=document.createElement("span"); w.className="who"; w.textContent="\u2014 "+(r.name||"Someone")+(r.status&&r.status!=="open"?" ("+r.status+")":""); li.appendChild(w); ul.appendChild(li);
-      });
-    }).catch(function(){});
-  }
+  function loadReports(){ /* Reports are private: the page sends them but never lists them. The team reads them in the backend. */ }
   $("rsend").addEventListener("click",function(){
     var text=$("rtext").value.trim(), name=$("rname").value.trim(), type=$("rtype").value, st=$("rstatus");
     if(text.length<3){ st.textContent="Please say what you saw or heard."; $("rtext").focus(); return; }
