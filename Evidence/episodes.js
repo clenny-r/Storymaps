@@ -5,7 +5,7 @@
 window.SERIES = {
   title: "Weh Di Evidence Seh?",
   tagline: "Evidence for the faith, in Jamaican voices.",
-  about: "Short conversations, filmed as if on the street, where somebody raises the question people really ask about God, Jesus and the Bible, and somebody answers with evidence: history, archaeology, science and the Bible itself. Each episode is under three minutes. Every claim is sourced on screen.",
+  about: "Have you ever been asked a question about your faith that you could not answer? This series is for that moment. Each short video takes a real challenge we meet when we share the gospel, on the street, at work or at home, and shows how to answer it with evidence and with grace: history, archaeology, science and the Bible itself.",
   church: "Transformational Worship Centre",
   churchUrl: "https://twcministries.net",
   updated: "8 October 2026"

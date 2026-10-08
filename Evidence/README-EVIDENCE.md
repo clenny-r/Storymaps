@@ -46,3 +46,9 @@ Only this folder is in the repository. The working files (clips, pipeline, tests
 1. Part descriptions: `episodes.js` ends with `window.PART_INFO`, one entry per Part 2 and Part 3 (key "episode.part": question, opening line, cast, summary). The player shows that text when the part is selected. To change a description, edit its entry there.
 2. Reports are no longer listed on the page. The page still sends them. The worker's read address still answers anyone who knows it; closing that needs a change in the worker (`00_All_Workers\twc-evidence-reports`) and a `wrangler deploy`.
 3. The player has a Season 1 and Season 2 menu with a grid of episode buttons, under Copy link, Previous and Next.
+
+## Share pages and the look (8 October 2026, second change)
+
+1. `s\eNN-pP.html`: one small page per video. It carries the title, summary and poster that WhatsApp shows when a link is shared, then opens the episode. The Copy link button gives this address. After any change to `episodes.js`, remake them with `python3 "C:\Users\ramne\Documents\Claude\Apologetics course\Video build\pipeline\v6\make_share_pages.py" "C:\Users\ramne\Documents\GitHub\Storymaps\Evidence"`.
+2. Continue watching: the page remembers on the viewer's own device where they stopped (nothing is sent anywhere) and offers to carry on.
+3. The page now loads one font (Bricolage Grotesque) from Google Fonts; without a connection it falls back to the device font.

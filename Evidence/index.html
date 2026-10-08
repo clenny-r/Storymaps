@@ -8,8 +8,10 @@
 <meta property="og:title" content="Weh Di Evidence Seh?">
 <meta property="og:description" content="Evidence for the faith, in Jamaican voices. A TWC short-video series.">
 <meta property="og:image" content="posters/e01-p1.jpg">
-<meta name="theme-color" content="#1a0a3d">
+<meta name="theme-color" content="#1c0d2e">
 <link rel="icon" href="assets/twc-mark.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&display=swap" rel="stylesheet">
 <style>
   :root{
     --bg:#120826; --bg2:#1a0a3d; --panel:#241347; --panel2:#2d1a55;
@@ -156,7 +158,75 @@
 
   footer{margin-top:40px;padding:26px 0 40px;border-top:1px solid rgba(255,255,255,.06);color:var(--muted);font-size:13px}
   footer .f{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
-  
+
+  /* ---- 8 October 2026 redesign: aubergine ground, flag gold, the street question as the hero ---- */
+  :root{
+    --bg:#1c0d2e; --bg2:#241238; --panel:#2a1742; --panel2:#35204f;
+    --ink:#fbf5e6; --ink2:#d9cfe6; --muted:#a596b8;
+    --gold:#f5b82e; --red:#d1162f; --red2:#ff5a6e; --green:#2fa866;
+    --radius:10px; --shadow:0 14px 34px rgba(8,2,18,.5);
+    --display:"Bricolage Grotesque",ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  body{background:var(--bg);font-size:17px;line-height:1.55}
+  a{color:var(--gold)}
+  :focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+  header{background:var(--bg);border-bottom:0}
+  header:before{background:none}
+  .brand{padding:16px 0 0}
+  .brand .name{text-transform:none;letter-spacing:0;font-size:15px;color:var(--ink)}
+  .brand .name span{font-size:13px}
+  .hero{padding:26px 0 34px}
+  .hero h1{font-family:var(--display);font-weight:800;font-size:clamp(34px,9vw,68px);line-height:.98;letter-spacing:-.02em;margin:0 0 12px;color:var(--gold)}
+  .hero .tag{display:none}
+  .hero p.about{max-width:62ch;font-size:17px;color:var(--ink2);margin:0 0 26px}
+  .ask{margin:0;padding:22px 20px 20px;background:var(--ink);color:#1c0d2e;border-radius:18px 18px 18px 4px;max-width:720px;position:relative;box-shadow:var(--shadow)}
+  .ask blockquote{margin:0;font-family:var(--display);font-weight:700;font-size:clamp(24px,6.4vw,40px);line-height:1.12;letter-spacing:-.01em}
+  .ask figcaption{margin:10px 0 16px;font-size:15px;color:#5a4a6e}
+  .askrow{display:flex;gap:10px;flex-wrap:wrap}
+  .ask .btn{background:transparent;color:#1c0d2e;border-color:rgba(28,13,46,.35);font-weight:600;font-size:16px;padding:11px 16px}
+  .ask .btn.primary{background:#1c0d2e;color:var(--ink);border-color:#1c0d2e}
+  .controls{background:rgba(28,13,46,.94);border-bottom:1px solid rgba(251,245,230,.1);padding:14px 0 12px}
+  .search{background:var(--panel);border-color:rgba(251,245,230,.16);border-radius:999px;padding:10px 16px}
+  .chip{font-size:15px;padding:8px 14px;border-color:rgba(251,245,230,.22);color:var(--ink)}
+  .chip.on{background:var(--gold);border-color:var(--gold);color:#1c0d2e;font-weight:700}
+  section.season{padding:30px 0 6px}
+  .season h2{font-family:var(--display);font-weight:800;font-size:clamp(26px,6vw,36px);letter-spacing:-.01em;margin:0 0 2px}
+  .season p.lead{font-size:16px;margin:0 0 16px}
+  .grid{gap:14px 12px;align-items:start}
+  .card{display:block;width:100%}
+  .card{background:none;border:0;box-shadow:none;border-radius:0;overflow:visible;transition:none}
+  .card:hover,.card:focus-visible{transform:none}
+  .card .poster{border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);outline:1px solid rgba(251,245,230,.1)}
+  .card:hover .poster{outline:2px solid var(--gold)}
+  .poster .num,.poster .soon{left:0;top:0;border-radius:0 0 var(--radius) 0;background:var(--gold);color:#1c0d2e;font-family:var(--display);font-weight:800;font-size:15px;padding:4px 10px;letter-spacing:0}
+  .poster .soon{background:var(--panel2);color:var(--ink2)}
+  .poster .play i{width:46px;height:46px;background:rgba(28,13,46,.78);border:2px solid var(--ink);box-shadow:none}
+  .poster .play i:after{border-left-width:14px;border-top-width:9px;border-bottom-width:9px}
+  .poster .bar{position:absolute;left:0;right:0;bottom:0;height:5px;background:rgba(251,245,230,.25)}
+  .poster .bar b{display:block;height:100%;background:var(--gold)}
+  .meta{padding:9px 2px 0}
+  .meta h3{font-family:var(--display);font-weight:700;font-size:16px;line-height:1.22;margin:0 0 3px}
+  .meta p{font-size:13.5px}
+  .resume{padding:26px 0 0}
+  .resume h2{font-family:var(--display);font-weight:800;font-size:22px;margin:0 0 12px}
+  .resume .grid{grid-template-columns:repeat(3,1fr)}
+  @media(min-width:820px){.resume .grid{grid-template-columns:repeat(6,1fr)}}
+  .modal{background:rgba(20,8,34,.985)}
+  .info .ep{text-transform:none;letter-spacing:0;font-size:15px;color:var(--gold);font-weight:700}
+  .info h2{font-family:var(--display);font-weight:800;letter-spacing:-.01em;font-size:clamp(24px,5.6vw,34px);line-height:1.08}
+  .info blockquote{border-left:4px solid var(--gold);background:none;border-radius:0;font-style:normal;font-size:18px;color:var(--ink);padding:2px 0 2px 14px}
+  .info p{font-size:16.5px}
+  .info .kv{font-size:15px}
+  .parts button,.btn{font-size:15px;border-color:rgba(251,245,230,.24);background:transparent}
+  .parts button.on{background:var(--gold);border-color:var(--gold);color:#1c0d2e;font-weight:700}
+  .btn.primary{background:var(--gold);border-color:var(--gold);color:#1c0d2e;font-weight:700}
+  .epgrid button.on{background:var(--gold);border-color:var(--gold);color:#1c0d2e}
+  .epmenu,.report{background:var(--panel);border-color:rgba(251,245,230,.12)}
+  .ring{background:conic-gradient(var(--gold) var(--p,0%),rgba(255,255,255,.18) 0)}
+  .ring i{background:var(--bg)}
+  .endscreen .lbl{text-transform:none;letter-spacing:0;font-size:14px}
+  footer{font-size:14px}
+  @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
 </head>
 <body>
@@ -167,10 +237,15 @@
       <div class="name">Transformational Worship Centre <span>Media ministry</span></div>
     </div>
     <div class="hero">
-      <h1>Weh Di <em>Evidence</em> Seh?</h1>
+      <h1>Weh Di Evidence Seh?</h1>
       <p class="tag" id="tagline"></p>
       <p class="about" id="about"></p>
-      <div class="stats" id="stats"></div>
+      <figure class="ask" id="ask" hidden>
+        <blockquote id="askq"></blockquote>
+        <figcaption id="askwho"></figcaption>
+        <div class="askrow"><button class="btn primary" id="askplay" type="button">Watch the answer</button><button class="btn" id="asknext" type="button">Another question</button></div>
+      </figure>
+      <div class="stats" id="stats" hidden></div>
     </div>
   </div>
 </header>
@@ -188,6 +263,7 @@
       <button class="chip" data-f="2">Season 2</button>
     </div>
   </div>
+  <section class="resume" id="resume" hidden><h2>Continue watching</h2><div class="grid" id="resumegrid"></div></section>
   <div id="seasons"></div>
   <div class="empty" id="empty" hidden>No episode matches that search.</div>
 </main>
@@ -273,9 +349,25 @@
 
   $("tagline").textContent = S.tagline; $("about").textContent = S.about;
   $("fchurch").textContent = S.church; $("furl").href = S.churchUrl; $("fupd").textContent = S.updated;
-  var nReady = E.filter(ready).length, nParts = E.reduce(function(n,e){return n+e.parts.filter(function(p){return p.file;}).length;},0);
-  $("stats").innerHTML = '<span class="stat"><b>'+nReady+'</b> of '+E.length+' episodes available</span><span class="stat"><b>'+nParts+'</b> videos</span><span class="stat"><b>2</b> seasons</span><span class="stat">Under 3 minutes each</span>';
+  $("stats").hidden = true;
 
+  /* hero: one real street challenge; the button opens its answer */
+  var askPool=E.filter(ready), askI=Math.floor(Math.random()*Math.max(1,askPool.length));
+  function showAsk(){ if(!askPool.length) return; var e=askPool[askI%askPool.length]; $("askq").textContent="\u201c"+e.street+"\u201d"; $("askwho").textContent="Episode "+e.episode+", "+e.setting.charAt(0).toLowerCase()+e.setting.slice(1); $("ask").hidden=false; $("askplay").onclick=function(){open(e.episode,1,true);}; }
+  $("asknext").addEventListener("click",function(){ askI++; showAsk(); });
+  /* continue watching: remembered on this device only */
+  var PKEY="evidence_progress";
+  function prog(){ try{ return JSON.parse(localStorage.getItem(PKEY)||"{}")||{}; }catch(e){ return {}; } }
+  function saveProg(o){ try{ localStorage.setItem(PKEY,JSON.stringify(o)); }catch(e){} }
+  function renderResume(){
+    var o=prog(), keys=Object.keys(o).sort(function(a,b){return (o[b].at||0)-(o[a].at||0);}).slice(0,3), g=$("resumegrid"); g.innerHTML="";
+    keys.forEach(function(k){ var m=/^(\d+)\.(\d+)$/.exec(k); if(!m) return; var e=E.find(function(x){return x.episode===+m[1];}); if(!e) return; var p=e.parts.find(function(x){return x.part===+m[2]&&x.file;}); if(!p) return;
+      var pi=(window.PART_INFO||{})[k]||{}, left=Math.max(0,(o[k].d||p.duration)-o[k].t), pct=Math.min(100,Math.round(o[k].t/(o[k].d||p.duration)*100));
+      var c=document.createElement("button"); c.className="card"; c.type="button"; c.setAttribute("aria-label","Continue Episode "+e.episode+" Part "+p.part);
+      c.innerHTML='<div class="poster" style="background-image:url(\''+p.poster+'\')"><span class="num">'+e.episode+'</span><span class="bar"><b style="width:'+pct+'%"></b></span></div><div class="meta"><h3>'+esc(pi.question||e.question)+'</h3><p>Part '+p.part+', '+fmt(left)+' left</p></div>';
+      c.addEventListener("click",function(){open(e.episode,p.part,true);}); g.appendChild(c); });
+    $("resume").hidden=!g.children.length;
+  }
   var filter="all", query="";
   function render(){
     var box=$("seasons"); box.innerHTML=""; var shown=0;
@@ -292,17 +384,17 @@
       shown+=eps.length;
       var sec=document.createElement("section"); sec.className="season";
       var avail=eps.filter(ready).length;
-      sec.innerHTML='<h2>Season '+season+' <small>'+avail+' of '+eps.length+' available</small></h2><p class="lead">'+(season===1?"Thirteen questions, thirteen Jamaican places.":"The next thirteen, as the episodes are released.")+'</p><div class="grid"></div>';
+      sec.innerHTML='<h2>Season '+season+(avail<eps.length?' <small>'+avail+' ready, more coming</small>':'')+'</h2><p class="lead">'+(season===1?"Thirteen questions, thirteen Jamaican places.":"The next thirteen, as the episodes are released.")+'</p><div class="grid"></div>';
       var grid=sec.querySelector(".grid");
       eps.forEach(function(e){
         var p=e.parts.find(function(x){return x.file;});
         var card=document.createElement("button"); card.className="card"; card.setAttribute("data-ep",e.episode);
         card.setAttribute("aria-label","Episode "+e.episode+": "+e.question);
         if(p){
-          card.innerHTML='<div class="poster" style="background-image:url(\''+p.poster+'\')"><span class="num">EP '+e.episode+'</span><span class="play"><i></i></span><span class="dur">'+fmt(p.duration)+'</span></div><div class="meta"><h3>'+esc(e.question)+'</h3><p>'+esc(e.setting)+'</p></div>';
+          card.innerHTML='<div class="poster" style="background-image:url(\''+p.poster+'\')"><span class="num">'+e.episode+'</span><span class="play"><i></i></span><span class="dur">'+fmt(p.duration)+'</span></div><div class="meta"><h3>'+esc(e.question)+'</h3><p>'+esc(e.setting)+'</p></div>';
           card.addEventListener("click",function(){open(e.episode);});
         } else {
-          card.innerHTML='<div class="poster none"><span class="soon">EP '+e.episode+'</span><span>'+esc(e.question)+'<br><small style="color:var(--muted)">Coming soon</small></span></div><div class="meta"><h3>'+esc(e.question)+'</h3><p>'+esc(e.setting)+'</p></div>';
+          card.innerHTML='<div class="poster none"><span class="soon">'+e.episode+'</span><span>'+esc(e.question)+'<br><small style="color:var(--muted)">Coming soon</small></span></div><div class="meta"><h3>'+esc(e.question)+'</h3><p>'+esc(e.setting)+'</p></div>';
           card.addEventListener("click",function(){toast("Episode "+e.episode+" is coming soon.");});
         }
         grid.appendChild(card);
@@ -319,7 +411,7 @@
   function open(num, part, auto){
     var e=E.find(function(x){return x.episode===num;}); if(!e||!ready(e)) return;
     cur=e; var parts=e.parts.filter(function(p){return p.file;}); var p=parts.find(function(x){return x.part===part;})||parts[0]; curPart=p.part;
-    $("mep").textContent="Season "+e.season+" · Episode "+e.episode+" · Part "+p.part;
+    $("mep").textContent="Episode "+e.episode+", Part "+p.part;
     var pi=(window.PART_INFO||{})[e.episode+"."+p.part]||{};
     $("mtitle").textContent=pi.question||e.question; $("mstreet").textContent="“"+(pi.street||e.street)+"”";
     $("msummary").textContent=pi.summary||e.summary; $("msetting").textContent=e.setting; $("mcast").textContent=pi.cast||e.cast; $("mdur").textContent=fmt(p.duration);
@@ -328,6 +420,8 @@
     e.parts.forEach(function(x){ var b=document.createElement("button"); b.textContent="Part "+x.part; b.disabled=!x.file; b.classList.toggle("on",x.part===p.part); if(x.file) b.addEventListener("click",function(){open(num,x.part,true);}); pb.appendChild(b); });
     if(e.parts.length<2) pb.style.display="none"; else pb.style.display="";
     video.pause(); video.poster=p.poster; video.src=p.file; video.load();
+    var saved=prog()[e.episode+"."+p.part];
+    if(saved&&saved.t>45){ var st=saved.t; video.addEventListener("loadedmetadata",function once(){ video.removeEventListener("loadedmetadata",once); if(st<video.duration-12){ video.currentTime=st; toast("Resumed at "+fmt(st)); } }); }
     $("modal").classList.add("open"); document.body.style.overflow="hidden";
     if(history.replaceState) history.replaceState(null,"","#e"+String(num).padStart(2,"0")+(p.part>1?"-p"+p.part:""));
     hideEnd(); setStamp(0); $("rstatus").textContent=""; $("report").open=false; loadReports();
@@ -353,13 +447,20 @@
       nav.appendChild(d);
     });
   }
-  function close(){ hideEnd(); $("modal").classList.remove("open"); document.body.style.overflow=""; video.pause(); video.removeAttribute("src"); video.load(); if(history.replaceState) history.replaceState(null,"",location.pathname+location.search); }
+  var lastSave=0;
+  video.addEventListener("timeupdate",function(){ if(!cur||!video.duration) return; var now=Date.now(); if(now-lastSave<4000) return; lastSave=now;
+    var o=prog(), k=cur.episode+"."+curPart, t=video.currentTime;
+    if(t>45&&t<video.duration-12) o[k]={t:Math.round(t),d:Math.round(video.duration),at:now}; else if(t>=video.duration-12) delete o[k];
+    saveProg(o); });
+  video.addEventListener("ended",function(){ if(!cur) return; var o=prog(); delete o[cur.episode+"."+curPart]; saveProg(o); });
+  function close(){ renderResume(); hideEnd(); $("modal").classList.remove("open"); document.body.style.overflow=""; video.pause(); video.removeAttribute("src"); video.load(); if(history.replaceState) history.replaceState(null,"",location.pathname+location.search); }
   $("close").addEventListener("click",close);
   $("modal").addEventListener("click",function(ev){ if(ev.target===this) close(); });
   document.addEventListener("keydown",function(ev){ if(ev.key==="Escape") close(); });
   video.addEventListener("ended",function(){ skipBtn.classList.remove("show"); showEnd(); });
   $("share").addEventListener("click",function(){
-    var url=location.origin+location.pathname+"#e"+String(cur.episode).padStart(2,"0")+(curPart>1?"-p"+curPart:"");
+    // share pages (s/eNN-pP.html) carry the picture and title for WhatsApp and then open the episode here
+    var url=location.origin+location.pathname.replace(/[^\/]*$/,"")+"s/e"+String(cur.episode).padStart(2,"0")+"-p"+curPart+".html";
     if(navigator.share){ navigator.share({title:"Weh Di Evidence Seh? Episode "+cur.episode, text:cur.question, url:url}).catch(function(){}); }
     else if(navigator.clipboard){ navigator.clipboard.writeText(url).then(function(){toast("Link copied");}); }
     else toast(url);
@@ -405,9 +506,9 @@
   function firstPart(e){ return e.parts.find(function(p){return p.file;}); }
   function showEnd(){
     var nxt=nextOf(cur); if(!nxt||nxt===cur) return;
-    $("unimg").src=firstPart(nxt).poster; $("untitle").textContent="Episode "+nxt.episode+": "+nxt.question; $("unsub").textContent=nxt.setting+" \u00b7 "+fmt(firstPart(nxt).duration);
+    $("unimg").src=firstPart(nxt).poster; $("untitle").textContent="Episode "+nxt.episode+": "+nxt.question; $("unsub").textContent=nxt.setting+", "+fmt(firstPart(nxt).duration);
     var sg=$("sugg"); sg.innerHTML="";
-    pick(3).forEach(function(e){ var b=document.createElement("button"); b.innerHTML='<img src="'+firstPart(e).poster+'" alt=""><span>EP '+e.episode+' \u00b7 '+esc(e.question)+'</span>'; b.addEventListener("click",function(){hideEnd(); open(e.episode,1,true);}); sg.appendChild(b); });
+    pick(3).forEach(function(e){ var b=document.createElement("button"); b.innerHTML='<img src="'+firstPart(e).poster+'" alt=""><span>'+e.episode+'. '+esc(e.question)+'</span>'; b.addEventListener("click",function(){hideEnd(); open(e.episode,1,true);}); sg.appendChild(b); });
     $("upnext").onclick=function(){ hideEnd(); open(nxt.episode,1,true); };
     endLeft=8; $("ringn").textContent=endLeft; $("ring").style.setProperty("--p","0%");
     $("endscreen").classList.add("show");
@@ -419,7 +520,7 @@
 
   var tt; function toast(m){ var t=$("toast"); t.textContent=m; t.classList.add("show"); clearTimeout(tt); tt=setTimeout(function(){t.classList.remove("show");},2200); }
 
-  render();
+  render(); showAsk(); renderResume();
   var m=/#e(\d+)(?:-p(\d+))?/.exec(location.hash); if(m) open(parseInt(m[1],10), m[2]?parseInt(m[2],10):1, false);
 })();
 </script>
