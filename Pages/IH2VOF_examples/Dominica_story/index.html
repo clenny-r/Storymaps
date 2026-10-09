@@ -1,0 +1,467 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Can nature hold back the sea? | Dominica coastal options</title>
+<meta name="description" content="A story map of 25 storm simulations testing rock, reef, marsh and seagrass options for three Dominican shorelines.">
+<meta name="robots" content="noindex">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<style>
+:root{
+  --bg:#f6f4ee; --paper:#ffffff; --ink:#17212b; --ink2:#44505c; --muted:#7b858e; --line:#dedbd0;
+  --sea:#0f4c75; --sea2:#1b6ca8; --accent:#1f6fb2; --grey:#b8b5aa; --green:#2f7d5b; --sand:#e9e2cf; --warn:#9a5b00;
+  --shadow:0 12px 34px rgba(16,36,56,.16); --r:14px;
+}
+@media (prefers-color-scheme:dark){:root{
+  --bg:#0f161d; --paper:#18222c; --ink:#eef2f5; --ink2:#c0cad3; --muted:#8a96a1; --line:#2b3844;
+  --sea:#0b2f49; --sea2:#2a7fc0; --accent:#5aa7e6; --grey:#5d6670; --green:#58b58c; --sand:#232e38; --warn:#e2a54a;
+  --shadow:0 12px 34px rgba(0,0,0,.5);
+}}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;overflow-x:hidden}
+h1,h2,h3{font-family:Georgia,"Iowan Old Style","Times New Roman",serif;font-weight:700;line-height:1.15;text-wrap:balance;margin:0}
+p{margin:0 0 14px}
+img,video{display:block;max-width:100%}
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+.narrow{max-width:720px}
+.kicker{font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);font-weight:700;margin:0 0 10px}
+
+/* top bar */
+.bar{position:sticky;top:0;z-index:40;background:color-mix(in srgb,var(--bg) 90%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.bar .in{display:flex;align-items:center;gap:14px;max-width:1280px;margin:0 auto;padding:8px 16px}
+.bar b{font-size:13.5px;white-space:nowrap}
+.bar nav{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;flex:1}
+.bar nav::-webkit-scrollbar{display:none}
+.bar a{font-size:13px;color:var(--ink2);text-decoration:none;padding:5px 10px;border-radius:999px;white-space:nowrap}
+.bar a.on{background:var(--accent);color:#fff}
+.prog{height:3px;background:var(--accent);width:0}
+
+/* cover */
+.cover{position:relative;min-height:92vh;display:flex;align-items:flex-end;color:#fff;background:#06243a;overflow:hidden}
+.cover video,.cover .shade{position:absolute;inset:0;width:100%;height:100%}
+.cover video{object-fit:cover;opacity:.8;transform:scale(2.1);transform-origin:86% 40%}
+.cover .shade{background:linear-gradient(180deg,rgba(4,22,36,.35) 0%,rgba(4,22,36,.2) 35%,rgba(4,22,36,.92) 100%)}
+.cover .txt{position:relative;padding:40px 20px 56px;max-width:1080px;margin:0 auto;width:100%}
+.cover h1{font-size:clamp(38px,7.2vw,78px);letter-spacing:-.5px;max-width:14ch}
+.cover .sub{font-size:clamp(18px,2.6vw,24px);max-width:36ch;margin:14px 0 18px;color:#e4edf4}
+.cover .meta{font-size:13.5px;color:#b9cbd9}
+.ribbon{display:inline-block;background:#f2c14e;color:#3a2a00;font-weight:700;font-size:12.5px;padding:4px 10px;border-radius:6px;margin-bottom:16px}
+.scrollcue{position:absolute;left:50%;bottom:14px;transform:translateX(-50%);font-size:12px;color:#b9cbd9;letter-spacing:.1em}
+
+section.block{padding:72px 0}
+[data-nav]{scroll-margin-top:46px}
+section.block h2{font-size:clamp(28px,4.4vw,44px);margin-bottom:16px}
+.lead{font-size:clamp(19px,2.4vw,23px);line-height:1.5;color:var(--ink)}
+.tint{background:var(--sand)}
+
+/* stat tiles */
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-top:26px}
+.tile{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);padding:16px}
+.tile b{display:block;font:700 32px/1.05 Georgia,serif;color:var(--accent);font-variant-numeric:tabular-nums}
+.tile span{font-size:14px;color:var(--ink2)}
+
+/* map */
+.mapgrid{display:grid;grid-template-columns:1.2fr 1fr;gap:22px;align-items:stretch;margin-top:22px}
+#map{min-height:440px;border-radius:var(--r);box-shadow:var(--shadow);z-index:1}
+.sites{display:flex;flex-direction:column;gap:10px}
+.site{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px;cursor:pointer;text-align:left;font:inherit;color:inherit}
+.site.on{border-color:var(--accent);box-shadow:0 0 0 2px color-mix(in srgb,var(--accent) 35%,transparent)}
+.site h3{font-size:19px;margin-bottom:4px}
+.site p{margin:0;font-size:15px;color:var(--ink2)}
+
+/* explainer */
+.two{display:grid;grid-template-columns:1fr 1fr;gap:28px;align-items:center}
+.fig{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);padding:14px;box-shadow:var(--shadow)}
+.fig figcaption,.cap{font-size:13.5px;color:var(--muted);margin-top:8px}
+figure{margin:0}
+.key{display:grid;grid-template-columns:auto 1fr;gap:8px 12px;font-size:15px;margin-top:14px;align-items:center}
+.sw{width:34px;height:16px;border-radius:4px;border:1px solid rgba(0,0,0,.15)}
+
+/* sidecar */
+.sidecar{position:relative;background:#081a28;color:#fff}
+.sidecar .stage{position:sticky;top:44px;height:calc(100vh - 44px);display:flex;flex-direction:column;justify-content:center;padding:14px;overflow:hidden}
+.sidecar .stage video{width:100%;max-height:62vh;object-fit:contain;background:#fff;border-radius:10px}
+.sidecar .stage .lab{display:flex;justify-content:space-between;gap:12px;align-items:baseline;padding:10px 4px 0;font-size:14px;color:#c5d6e3}
+.sidecar .stage .lab b{font:700 20px Georgia,serif;color:#fff}
+.sidecar .steps{position:relative;margin-top:calc(-100vh + 44px);pointer-events:none;padding-bottom:30vh}
+.step{min-height:92vh;display:flex;align-items:flex-end;padding:0 20px 8vh;pointer-events:none}
+.card{pointer-events:auto;background:var(--paper);color:var(--ink);border-radius:var(--r);box-shadow:var(--shadow);padding:20px 22px;max-width:430px;border-left:6px solid var(--grey)}
+.card.green{border-left-color:var(--green)} .card.grey{border-left-color:#6f7780} .card.hybrid{border-left-color:var(--accent)} .card.base{border-left-color:#b23b3b}
+.card h3{font-size:24px;margin-bottom:6px}
+.card .code{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:700}
+.card p{font-size:15.5px;margin-bottom:10px;color:var(--ink2)}
+.card .nums{display:flex;gap:18px;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:10px;margin-top:4px}
+.card .nums div{font-size:12.5px;color:var(--muted)}
+.card .nums b{display:block;font:700 22px Georgia,serif;color:var(--ink);font-variant-numeric:tabular-nums}
+.card .nums b.good{color:var(--green)}
+.intro-card{border-left-color:var(--accent)}
+.playhint{font-size:12.5px;color:#9fb4c4;padding:6px 4px 0}
+
+/* charts */
+.chart{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);padding:18px 16px 10px;box-shadow:var(--shadow);margin-top:22px}
+.chart h3{font-size:20px;margin-bottom:2px}
+.chart .sub{font-size:14px;color:var(--muted);margin:0 0 8px}
+.chart svg{width:100%;height:auto;display:block;overflow:visible}
+.chart text{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+.tip{position:fixed;z-index:60;background:var(--ink);color:var(--bg);font-size:13px;padding:6px 9px;border-radius:6px;pointer-events:none;opacity:0;transition:opacity .12s;max-width:260px}
+details.tbl{margin-top:8px;font-size:14px;color:var(--ink2)}
+details.tbl table{border-collapse:collapse;margin-top:8px;width:100%;font-variant-numeric:tabular-nums}
+details.tbl td,details.tbl th{border-bottom:1px solid var(--line);padding:5px 8px;text-align:right}
+details.tbl td:first-child,details.tbl th:first-child{text-align:left}
+
+/* pairs */
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:22px}
+.vid{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);padding:10px;box-shadow:var(--shadow)}
+.vid video{width:100%;border-radius:8px;background:#fff}
+.vid h3{font-size:17px;margin:10px 4px 2px}
+.vid p{font-size:14.5px;color:var(--ink2);margin:0 4px 6px}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px}
+.tabs button{font:inherit;font-size:14.5px;padding:8px 14px;border-radius:999px;border:1px solid var(--line);background:var(--paper);color:var(--ink);cursor:pointer}
+.tabs button.on{background:var(--accent);border-color:var(--accent);color:#fff}
+
+/* conclusions */
+.concl{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:16px;margin-top:26px}
+.c{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);padding:20px}
+.c .big{font:700 40px/1 Georgia,serif;color:var(--accent);margin-bottom:10px;font-variant-numeric:tabular-nums}
+.c h3{font-size:20px;margin-bottom:8px}
+.c p{font-size:15.5px;color:var(--ink2);margin:0}
+ul.cav{padding-left:20px;margin:16px 0 0}
+ul.cav li{margin-bottom:10px;color:var(--ink2)}
+dl.gl{display:grid;grid-template-columns:minmax(120px,200px) 1fr;gap:10px 20px;margin:20px 0 0;font-size:15.5px}
+dl.gl dt{font-weight:700} dl.gl dd{margin:0;color:var(--ink2)}
+footer{padding:36px 0 60px;font-size:13.5px;color:var(--muted);border-top:1px solid var(--line)}
+
+@media (max-width:820px){
+  body{font-size:16px}
+  .mapgrid,.two,.pair{grid-template-columns:1fr}
+  #map{min-height:320px}
+  .sidecar .stage{justify-content:flex-start;padding-top:10px}
+  .sidecar .stage video{max-height:34vh}
+  .step{padding:0 12px 5vh}
+  .card{max-width:none;padding:16px}
+  .card h3{font-size:20px}
+  section.block{padding:52px 0}
+  dl.gl{grid-template-columns:1fr;gap:2px 0} dl.gl dd{margin-bottom:12px}
+}
+@media (min-width:821px){ .step{justify-content:flex-start;padding-left:4vw} .sidecar .stage{padding-left:calc(430px + 7vw)} }
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+
+<div class="bar"><div class="in"><b>Dominica coastal options</b>
+  <nav id="nav"></nav></div><div class="prog" id="prog"></div></div>
+
+<header class="cover" id="top">
+  <video id="coverVid" muted loop playsinline preload="metadata" poster="posters/sh-s01.jpg" src="videos/sh-s01.mp4"></video>
+  <div class="shade"></div>
+  <div class="txt">
+    <span class="ribbon" id="status"></span>
+    <h1 id="title"></h1>
+    <p class="sub" id="subtitle"></p>
+    <p class="meta" id="meta"></p>
+  </div>
+  <div class="scrollcue">SCROLL ↓</div>
+</header>
+
+<section class="block" id="question" data-nav="The question">
+  <div class="wrap narrow">
+    <p class="kicker">The question</p>
+    <h2>Rock, or roots?</h2>
+    <p class="lead" id="lead"></p>
+    <p>Rock structures are the familiar answer. They are also costly, they bury habitat, and they are hard to change once built. Nature-based options, such as marsh plants on the upper beach or seagrass on the sea bed, are cheaper and kinder to the coast, but nobody builds them without evidence that they work in a storm.</p>
+    <p>This page walks through that evidence: what we tested, what the water did, and what we would and would not conclude from it.</p>
+  </div>
+  <div class="wrap"><div class="tiles">
+    <div class="tile"><b>25</b><span>storm simulations</span></div>
+    <div class="tile"><b>3</b><span>towns, 5 shoreline sections</span></div>
+    <div class="tile"><b>7</b><span>options compared at Scott's Head</span></div>
+    <div class="tile"><b>2</b><span>sea levels: today's design level and 0.70 m higher</span></div>
+  </div></div>
+</section>
+
+<section class="block tint" id="places" data-nav="The places">
+  <div class="wrap">
+    <p class="kicker">The places</p>
+    <h2>Three towns on Dominica's west coast</h2>
+    <p class="narrow">People here live on a narrow, low strip between the sea and steep hills. When a hurricane raises the sea and sends long waves across the reef, there is little room to retreat. Choose a place to see it on the map.</p>
+    <div class="mapgrid"><div id="map" role="img" aria-label="Map of Dominica with the three study sites"></div><div class="sites" id="sites"></div></div>
+  </div>
+</section>
+
+<section class="block" id="method" data-nav="How we tested">
+  <div class="wrap">
+    <p class="kicker">How we tested</p>
+    <h2>A wave tank inside a computer</h2>
+    <div class="two">
+      <div>
+        <p>Engineers often test sea defences in a laboratory wave tank: a long glass channel with a paddle at one end and a model shoreline at the other. We built the same thing digitally, with a model called IH2VOF.</p>
+        <p>Each simulation is a slice through the shoreline, from deep water to the land behind. A paddle sends in ten minutes of irregular storm waves, sized from a 50-year storm study of the coast (waves about 2.8 m high every 13 seconds at Scott's Head). The model tracks every splash on a grid of cells half a metre wide.</p>
+        <p>For each option we changed only the shoreline, never the storm. So any difference in flooding comes from the option itself.</p>
+        <p>We measured four things: wave height near the shore, how high the water ran up, how fast it moved along the bed, and above all <strong>how much water got over the top</strong>.</p>
+      </div>
+      <figure class="fig">
+        <svg viewBox="0 0 560 250" role="img" aria-label="Sketch of the digital wave tank">
+          <rect x="0" y="0" width="560" height="250" fill="none"/>
+          <path d="M20 205 L250 205 L400 150 L455 105 L490 92 L500 92 L500 225 L20 225 Z" fill="var(--grey)" opacity=".75"/>
+          <path d="M20 120 Q45 100 70 120 T120 120 T170 120 T220 118 T270 120 T320 114 Q350 96 372 120 L400 150 L250 205 L20 205 Z" fill="var(--sea2)" opacity=".55"/>
+          <line x1="20" y1="120" x2="455" y2="120" stroke="var(--accent)" stroke-dasharray="5 4"/>
+          <rect x="14" y="70" width="10" height="140" fill="var(--ink)"/>
+          <path d="M455 105 Q472 70 496 88" fill="none" stroke="var(--sea2)" stroke-width="3" stroke-linecap="round"/>
+          <path d="M502 96 q10 4 14 18" fill="none" stroke="var(--sea2)" stroke-width="3" stroke-linecap="round"/>
+          <line x1="492" y1="58" x2="492" y2="92" stroke="var(--ink)" stroke-width="1.5"/>
+          <g font-size="13" fill="var(--ink)">
+            <text x="30" y="60">Wave paddle</text>
+            <text x="150" y="95">10 minutes of storm waves</text>
+            <text x="262" y="138" fill="var(--accent)">still water level</text>
+            <text x="250" y="222">sea bed and reef</text>
+            <text x="370" y="34">Counting line:</text>
+            <text x="370" y="50" font-weight="700">water past here is flooding</text>
+          </g>
+        </svg>
+        <figcaption>The digital wave tank. Everything that crosses the counting line at the top of the shore is counted as flooding ("overtopping").</figcaption>
+      </figure>
+    </div>
+    <div class="two" style="margin-top:34px">
+      <figure class="fig"><img src="posters/sh-s05.jpg" alt="One frame of a simulation video: the sea in red and blue, the sea bed in grey" loading="lazy"><figcaption>One frame from a simulation. The videos on this page are these frames played in order.</figcaption></figure>
+      <div>
+        <h3 style="font-size:24px;margin-bottom:8px">How to read the videos</h3>
+        <div class="key">
+          <span class="sw" style="background:#c0392b"></span><span><strong>Red</strong> water is moving towards the land.</span>
+          <span class="sw" style="background:#2b6cb0"></span><span><strong>Blue</strong> water is moving back out to sea.</span>
+          <span class="sw" style="background:#8f8b82"></span><span><strong>Grey</strong> is the sea bed and the land.</span>
+          <span class="sw" style="background:#9fc7a6"></span><span><strong>Tinted</strong> layers are rock, cobble or plants that water can pass through.</span>
+        </div>
+        <p style="margin-top:14px">The land is on the right. Heights are stretched five times so the waves are easy to see, and the ten minute storm plays in one minute.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sidecar" id="options" data-nav="Seven options">
+  <div class="stage">
+    <video id="scVid" muted loop playsinline preload="none"></video>
+    <div class="lab"><b id="scName"></b><span id="scNote">Scott's Head, design sea level</span></div>
+    <div class="playhint">Tap the video to pause or play. On a phone, turn it sideways or use full screen for a bigger picture.</div>
+  </div>
+  <div class="steps" id="steps"></div>
+</section>
+
+<section class="block" id="ranking" data-nav="The ranking">
+  <div class="wrap">
+    <p class="kicker">The ranking</p>
+    <h2>Two options with plants came out on top</h2>
+    <p class="narrow">Put side by side, the options fall into two clear groups. The engineered rock design and the two options with marsh plants stop most of the flooding. Any single measure in front of the shore stops about a third.</p>
+    <div class="chart" id="chBars"></div>
+  </div>
+</section>
+
+<section class="block tint" id="surprise" data-nav="The surprise">
+  <div class="wrap">
+    <p class="kicker">The surprise</p>
+    <h2>Calming the waves did not keep the land dry</h2>
+    <div class="two">
+      <div>
+        <p>Sea defences are often judged by how much smaller they make the waves. We expected the options that calmed the waves most to flood the least.</p>
+        <p>They did not. The cobble beach made waves at the shore two thirds smaller, yet flooding fell by only a third. The marsh left the waves as big as before, yet flooding fell by 87 %.</p>
+        <p>The reason is where the flooding is decided: in the last few metres, at the top of the beach. A thin, fast sheet of water rushes up and over. Whatever slows or blocks that sheet, such as dense plants or a higher crest, does more than anything that happens further out to sea.</p>
+        <p><strong>The lesson for design:</strong> measure the flooding itself, not the wave height.</p>
+      </div>
+      <div class="chart" id="chScatter" style="margin-top:0"></div>
+    </div>
+  </div>
+</section>
+
+<section class="block" id="sealevel" data-nav="A higher sea">
+  <div class="wrap">
+    <p class="kicker">A higher sea</p>
+    <h2>Raise the sea by 0.70 m and much of the benefit goes</h2>
+    <p class="narrow">We repeated the main comparisons with the sea 0.70 m higher, the 50-year storm water level. That is also a fair stand-in for future sea level rise. At Scott's Head, flooding without any works tripled. The rock design, which had stopped 73 % of the flooding, now stopped 35 %.</p>
+    <div class="pair">
+      <div class="vid"><video controls muted loop playsinline preload="none" poster="posters/sh-s01-high.jpg" src="videos/sh-s01-high.mp4"></video><h3>Do nothing, higher sea</h3><p>The backshore is under water before the waves arrive. 370 cubic metres per metre in ten minutes.</p></div>
+      <div class="vid"><video controls muted loop playsinline preload="none" poster="posters/sh-s02-high.jpg" src="videos/sh-s02-high.mp4"></video><h3>Rock design, higher sea</h3><p>Smaller waves, but the crest is now overflowed in a few large surges. 241 cubic metres per metre.</p></div>
+    </div>
+    <div class="chart" id="chLevels"></div>
+    <p class="narrow" style="margin-top:18px">Designs that work by being a little higher than the water lose the most, because the rising sea uses up that height. They should be checked at the higher level and built so the crest can be raised later.</p>
+  </div>
+</section>
+
+<section class="block tint" id="others" data-nav="Other sites">
+  <div class="wrap">
+    <p class="kicker">The other sites</p>
+    <h2>Pottersville and Portsmouth</h2>
+    <div class="tabs" id="tabs" role="tablist"></div>
+    <div id="tabBody"></div>
+  </div>
+</section>
+
+<section class="block" id="conclusions" data-nav="Conclusions">
+  <div class="wrap">
+    <p class="kicker">Conclusions</p>
+    <h2>What we take from this</h2>
+    <div class="concl" id="concl"></div>
+    <div class="narrow" style="margin-top:44px">
+      <h3 style="font-size:26px">Our recommendation</h3>
+      <p style="margin-top:10px" class="lead">Design to the amount of flooding and the largest single surge, at the higher sea level. Pair anything that calms waves offshore with something that acts at the top of the beach: a raised crest, or a dense band of vegetation.</p>
+      <p>Before the marsh options are preferred over rock, they should be confirmed with the higher sea level and with a vegetation model that has been checked against measurements.</p>
+    </div>
+  </div>
+</section>
+
+<section class="block tint" id="honest" data-nav="Limits">
+  <div class="wrap narrow">
+    <p class="kicker">Keeping ourselves honest</p>
+    <h2>What this study cannot tell you</h2>
+    <ul class="cav" id="cav"></ul>
+    <h3 style="font-size:24px;margin-top:40px">Words used on this page</h3>
+    <dl class="gl" id="gl"></dl>
+  </div>
+</section>
+
+<footer><div class="wrap">
+  <p id="foot"></p>
+  <p>Wave conditions: 50-year spectral wave study by DHI (Danish Hydraulic Institute). Model: IH2VOF by IHCantabria. Map imagery: Esri World Imagery.</p>
+</div></footer>
+<div class="tip" id="tip"></div>
+
+<script src="story.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script>
+(function(){
+const $=s=>document.querySelector(s), el=(t,c,h)=>{const e=document.createElement(t);if(c)e.className=c;if(h!=null)e.innerHTML=h;return e};
+const S=window.STORY, OPT=window.OPTIONS, base=OPT.find(o=>o.kind==='base');
+const pct=o=>Math.round((1-o.q/base.q)*100);
+$('#title').textContent=S.title; $('#subtitle').textContent=S.subtitle; $('#status').textContent=S.status;
+$('#meta').textContent=S.author+' · Updated '+S.updated; $('#lead').textContent=S.lead;
+$('#foot').textContent=S.status+' '+S.author+'. Updated '+S.updated+'.';
+
+/* nav + progress */
+const secs=[...document.querySelectorAll('[data-nav]')], nav=$('#nav');
+secs.forEach(s=>{const a=el('a',null,s.dataset.nav);a.href='#'+s.id;nav.appendChild(a)});
+const links=[...nav.children];
+function onScroll(){
+  const h=document.documentElement, p=h.scrollTop/(h.scrollHeight-h.clientHeight); $('#prog').style.width=(p*100)+'%';
+  let cur=-1; secs.forEach((s,i)=>{if(s.getBoundingClientRect().top<innerHeight*0.4)cur=i});
+  links.forEach((a,i)=>{const on=i===cur; if(on&&!a.classList.contains('on'))a.scrollIntoView({block:'nearest',inline:'center'}); a.classList.toggle('on',on)});
+}
+addEventListener('scroll',onScroll,{passive:true}); onScroll();
+
+/* video helpers: play only while visible */
+const vio=new IntersectionObserver(es=>es.forEach(e=>{const v=e.target; if(e.isIntersecting){if(v.dataset.auto)v.play().catch(()=>{})}else v.pause()}),{threshold:.35});
+const cv=$('#coverVid'); cv.dataset.auto=1; vio.observe(cv);
+document.querySelectorAll('.vid video').forEach(v=>vio.observe(v));
+
+/* map */
+const sitesBox=$('#sites'); let map,marks={};
+try{
+  map=L.map('map',{scrollWheelZoom:false}).setView([15.40,-61.38],10);
+  L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',{maxZoom:18,attribution:'Imagery © Esri'}).addTo(map);
+  L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}',{maxZoom:18}).addTo(map);
+}catch(e){ $('#map').textContent='Map needs an internet connection.'; }
+window.SITES.forEach(s=>{
+  const b=el('button','site','<h3>'+s.name+'</h3><p>'+s.text+'</p>'); b.type='button';
+  b.onclick=()=>{document.querySelectorAll('.site').forEach(x=>x.classList.remove('on'));b.classList.add('on'); if(map){map.flyTo([s.lat,s.lon],15,{duration:1.2}); marks[s.id]&&marks[s.id].openPopup()}};
+  sitesBox.appendChild(b);
+  if(map){marks[s.id]=L.circleMarker([s.lat,s.lon],{radius:9,color:'#fff',weight:2,fillColor:'#f2c14e',fillOpacity:1}).addTo(map).bindPopup('<b>'+s.name+'</b>')}
+});
+const allBtn=el('button','site','<h3>Whole island</h3><p>Zoom back out.</p>'); allBtn.type='button'; allBtn.onclick=()=>{map&&map.flyTo([15.40,-61.38],10,{duration:1})}; sitesBox.appendChild(allBtn);
+
+/* sidecar */
+const steps=$('#steps'), scVid=$('#scVid'), scName=$('#scName');
+steps.appendChild(Object.assign(el('div','step'),{innerHTML:'<div class="card intro-card"><p class="kicker">Scott\'s Head</p><h3>One shoreline, seven futures</h3><p>Keep scrolling. Each card swaps the shoreline in the video and plays the same storm against it.</p><p>Watch the right-hand edge: that is the top of the shore, where water spills onto the land.</p></div>'}));
+steps.firstChild.dataset.i=0;
+OPT.forEach((o,i)=>{
+  const red=o.kind==='base'?'':'<div>Less flooding than today<b class="good">'+pct(o)+' %</b></div>';
+  const st=el('div','step','<div class="card '+o.kind+'"><div class="code">Option '+(i+1)+' of '+OPT.length+'</div><h3>'+o.name+'</h3><p><strong>What it is.</strong> '+o.what+'</p><p><strong>What the water did.</strong> '+o.saw+'</p><div class="nums"><div>Water over the top<b>'+o.q.toFixed(0)+' m³/m</b></div>'+red+'<div>Wave height at the shore<b>'+o.wave.toFixed(1)+' m</b></div></div></div>');
+  st.dataset.i=i; steps.appendChild(st);
+});
+let curOpt=-1;
+function showOpt(i){ if(i===curOpt)return; curOpt=i; const o=OPT[i]; scVid.poster='posters/'+o.id+'.jpg'; scVid.src='videos/'+o.id+'.mp4'; scName.textContent=o.name; if(scOn)scVid.play().catch(()=>{}); }
+let scOn=false;
+new IntersectionObserver(es=>es.forEach(e=>{scOn=e.isIntersecting; if(scOn){if(curOpt<0)showOpt(0); scVid.play().catch(()=>{})}else scVid.pause()}),{threshold:.05}).observe($('#options'));
+new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)showOpt(+e.target.dataset.i)}),{rootMargin:'-45% 0px -45% 0px'}).observe(steps.children[0]);
+const stepIO=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)showOpt(+e.target.dataset.i)}),{rootMargin:'-50% 0px -49% 0px'});
+[...steps.children].forEach(s=>stepIO.observe(s));
+scVid.onclick=()=>scVid.paused?scVid.play():scVid.pause(); scVid.controls=true;
+
+/* tooltip */
+const tip=$('#tip');
+function hover(node,text){node.addEventListener('pointermove',e=>{tip.textContent=text;tip.style.opacity=1;tip.style.left=Math.min(e.clientX+14,innerWidth-270)+'px';tip.style.top=(e.clientY+14)+'px'});node.addEventListener('pointerleave',()=>tip.style.opacity=0)}
+const NS='http://www.w3.org/2000/svg';
+function svg(tag,attrs,parent,text){const n=document.createElementNS(NS,tag);for(const k in attrs)n.setAttribute(k,attrs[k]);if(text!=null)n.textContent=text;parent&&parent.appendChild(n);return n}
+function chartShell(id,title,sub,w,h,label){const box=$(id);box.innerHTML='<h3>'+title+'</h3><p class="sub">'+sub+'</p>';const s=svg('svg',{viewBox:'0 0 '+w+' '+h,role:'img','aria-label':label},box);return {box,s}}
+function tableOf(box,head,rows){const d=el('details','tbl','<summary>Show the numbers</summary>');const t=el('table');t.innerHTML='<tr>'+head.map(h=>'<th>'+h+'</th>').join('')+'</tr>'+rows.map(r=>'<tr>'+r.map(c=>'<td>'+c+'</td>').join('')+'</tr>').join('');d.appendChild(t);box.appendChild(d)}
+
+/* chart 1: ranked bars */
+(function(){
+  const rows=OPT.filter(o=>o.kind!=='base').sort((a,b)=>a.q-b.q), W=760, rh=46, y0=14, x0=250, w=400, H=y0+rows.length*rh+44;
+  const {box,s}=chartShell('#chBars','Share of today\'s flooding that each option stops','Scott\'s Head, design sea level. Today: '+base.q+' cubic metres of water per metre of shore in a ten minute storm.',W,H,'Bar chart of flooding reduction by option');
+  [0,25,50,75,100].forEach(t=>{const x=x0+t/100*w;svg('line',{x1:x,x2:x,y1:y0,y2:y0+rows.length*rh,stroke:'var(--line)'},s);svg('text',{x:x,y:y0+rows.length*rh+18,'text-anchor':'middle','font-size':12,fill:'var(--muted)'},s,t+' %')});
+  svg('text',{x:x0+w/2,y:H-4,'text-anchor':'middle','font-size':12.5,fill:'var(--muted)'},s,'Less flooding than doing nothing');
+  rows.forEach((o,i)=>{const y=y0+i*rh, p=pct(o), strong=p>50;
+    svg('text',{x:x0-12,y:y+27,'text-anchor':'end','font-size':14,fill:'var(--ink)'},s,o.name);
+    const r=svg('rect',{x:x0,y:y+10,width:Math.max(2,p/100*w),height:26,rx:4,fill:strong?'var(--accent)':'var(--grey)'},s);
+    hover(r,o.name+': '+o.q+' m³/m, '+p+' % less than today');
+    svg('text',{x:x0+p/100*w+8,y:y+28,'font-size':14,'font-weight':700,fill:'var(--ink)'},s,p+' %');
+  });
+  svg('line',{x1:x0,x2:x0,y1:y0,y2:y0+rows.length*rh,stroke:'var(--muted)'},s);
+  tableOf(box,['Option','Water over the top (m³/m)','Less than today','Wave height at shore (m)','Speed near bed (m/s)'],OPT.map(o=>[o.name,o.q.toFixed(1),o.kind==='base'?'':pct(o)+' %',o.wave.toFixed(2),o.speed.toFixed(2)]));
+})();
+
+/* chart 2: scatter */
+(function(){
+  const P=window.PAIRS, W=520,H=470,x0=64,y0=20,w=430,h=370, xs=v=>x0+v*w, ys=v=>y0+h-v*h;
+  const {box,s}=chartShell('#chScatter','No pattern: wave calming against flooding','Each dot is one design compared with the shore as it is today. Blue: Scott\'s Head. Grey: other sites.',W,H,'Scatter chart of wave height ratio against flooding ratio');
+  [0,.25,.5,.75,1].forEach(t=>{svg('line',{x1:xs(t),x2:xs(t),y1:y0,y2:y0+h,stroke:'var(--line)'},s);svg('line',{x1:x0,x2:x0+w,y1:ys(t),y2:ys(t),stroke:'var(--line)'},s);
+    svg('text',{x:xs(t),y:y0+h+18,'text-anchor':'middle','font-size':12,fill:'var(--muted)'},s,Math.round(t*100)+' %');svg('text',{x:x0-8,y:ys(t)+4,'text-anchor':'end','font-size':12,fill:'var(--muted)'},s,Math.round(t*100)+' %')});
+  svg('line',{x1:xs(0),y1:ys(0),x2:xs(1),y2:ys(1),stroke:'var(--muted)','stroke-dasharray':'5 4'},s);
+  svg('text',{x:xs(.52),y:ys(.56)-6,'font-size':11.5,fill:'var(--muted)',transform:'rotate(-40.7 '+xs(.52)+' '+ys(.56)+')'},s,'if flooding followed wave height');
+  svg('text',{x:x0+w/2,y:H-22,'text-anchor':'middle','font-size':12.5,fill:'var(--ink2)'},s,'Wave height left at the shore (100 % = no calming)');
+  svg('text',{x:16,y:y0+h/2,'text-anchor':'middle','font-size':12.5,fill:'var(--ink2)',transform:'rotate(-90 16 '+(y0+h/2)+')'},s,'Flooding left (100 % = no benefit)');
+  P.forEach(p=>{const c=svg('circle',{cx:xs(p.kt),cy:ys(p.qrel),r:7,fill:p.sh?'var(--accent)':'var(--grey)',stroke:'var(--paper)','stroke-width':2},s);
+    hover(c,p.name+': waves '+Math.round(p.kt*100)+' % of before, flooding '+Math.round(p.qrel*100)+' % of before')});
+  P.filter(p=>p.label).forEach(p=>{const words=p.label.split(': '), x=xs(p.kt)+p.dx, y=ys(p.qrel)+p.dy;
+    const t=svg('text',{x:x,y:y,'text-anchor':p.anchor,'font-size':12,fill:'var(--ink)',stroke:'var(--paper)','stroke-width':4,'paint-order':'stroke','stroke-linejoin':'round'},s); svg('tspan',{'font-weight':700},t,words[0]); svg('tspan',{x:x,dy:14},t,words[1])});
+  tableOf(box,['Design','Wave height left','Flooding left'],P.map(p=>[p.name,Math.round(p.kt*100)+' %',Math.round(p.qrel*100)+' %']));
+})();
+
+/* chart 3: dumbbell */
+(function(){
+  const R=window.LEVELS, W=760, rh=50, y0=40, x0=250, w=420, H=y0+R.length*rh+44, xs=v=>x0+v/100*w;
+  const {box,s}=chartShell('#chLevels','Four of the five designs lose ground when the sea is higher','Share of flooding stopped by each proposed design, at the two sea levels.',W,H,'Dumbbell chart of flooding reduction at two sea levels');
+  svg('circle',{cx:x0+6,cy:16,r:7,fill:'var(--accent)','fill-opacity':.35},s);svg('text',{x:x0+20,y:20,'font-size':12.5,fill:'var(--ink2)'},s,'Design sea level (+0.78 m)');
+  svg('circle',{cx:x0+216,cy:16,r:7,fill:'var(--accent)'},s);svg('text',{x:x0+230,y:20,'font-size':12.5,fill:'var(--ink2)'},s,'Sea 0.70 m higher (+1.48 m)');
+  [0,25,50,75,100].forEach(t=>{svg('line',{x1:xs(t),x2:xs(t),y1:y0,y2:y0+R.length*rh,stroke:'var(--line)'},s);svg('text',{x:xs(t),y:y0+R.length*rh+18,'text-anchor':'middle','font-size':12,fill:'var(--muted)'},s,t+' %')});
+  svg('text',{x:x0+w/2,y:H-4,'text-anchor':'middle','font-size':12.5,fill:'var(--muted)'},s,'Share of flooding stopped');
+  R.forEach((r,i)=>{const y=y0+i*rh+25;
+    svg('text',{x:x0-14,y:y+5,'text-anchor':'end','font-size':14,fill:'var(--ink)'},s,r.name);
+    svg('line',{x1:xs(r.low),x2:xs(r.high),y1:y,y2:y,stroke:'var(--accent)','stroke-opacity':.5,'stroke-width':3},s);
+    const a=svg('circle',{cx:xs(r.low),cy:y,r:8,fill:'var(--paper)',stroke:'none'},s); svg('circle',{cx:xs(r.low),cy:y,r:8,fill:'var(--accent)','fill-opacity':.35},s);
+    const b=svg('circle',{cx:xs(r.high),cy:y,r:8,fill:'var(--accent)',stroke:'var(--paper)','stroke-width':2},s);
+    hover(a,r.name+', design sea level: '+r.low+' % stopped'); hover(b,r.name+', higher sea: '+r.high+' % stopped');
+    const close=Math.abs(r.low-r.high)<8;
+    svg('text',{x:xs(r.low)+(close?14:0),y:close?y+5:y-14,'text-anchor':close?'start':'middle','font-size':12.5,fill:'var(--ink2)'},s,close?r.low+' % and '+r.high+' %':r.low+' %');
+    if(!close)svg('text',{x:xs(r.high),y:y+24,'text-anchor':'middle','font-size':12.5,'font-weight':700,fill:'var(--ink)'},s,r.high+' %');
+  });
+  tableOf(box,['Design','Design sea level','Sea 0.70 m higher'],R.map(r=>[r.name,r.low+' %',r.high+' %']));
+})();
+
+/* other sites tabs */
+const TABS=[
+ {name:'Pottersville',html:'<div class="pair"><div class="vid"><video controls muted loop playsinline preload="none" poster="posters/pot-existing.jpg" src="videos/pot-existing.mp4"></video><h3>As it is today</h3><p>50 separate bursts of water over the top. The biggest carries 19 cubic metres per metre.</p></div><div class="vid"><video controls muted loop playsinline preload="none" poster="posters/pot-proposed.jpg" src="videos/pot-proposed.mp4"></video><h3>Proposed rock reef structure</h3><p>Only 16 bursts, but the biggest carries 63 cubic metres per metre.</p></div></div><p class="narrow" style="margin-top:18px"><strong>Smaller waves, nearly the same flooding.</strong> The proposed structure halves the waves at the shore and slows the water near the bed by more than half, which protects the beach. But total flooding falls by only 13 %. The structure stops the ordinary waves and lets the biggest wave groups through as a few long surges, more like a river overflowing than waves splashing. For people and vehicles behind the shore, one large surge can be more dangerous than many small splashes.</p>'},
+ {name:'Portsmouth revetment',html:'<div class="pair"><div class="vid"><video controls muted loop playsinline preload="none" poster="posters/pm-existing-high.jpg" src="videos/pm-existing-high.mp4"></video><h3>As it is today, higher sea</h3><p>126 cubic metres per metre over the top.</p></div><div class="vid"><video controls muted loop playsinline preload="none" poster="posters/pm-proposed-high.jpg" src="videos/pm-proposed-high.mp4"></video><h3>Proposed revetment, higher sea</h3><p>53 cubic metres per metre: 58 % less.</p></div></div><p class="narrow" style="margin-top:18px"><strong>The clearest success, with a warning.</strong> At the design sea level the proposed revetment stopped the flooding completely: no water reached the counting line. With the sea 0.70 m higher (shown here) it still stopped 58 %, but it was no longer dry behind.</p>'},
+ {name:'Portsmouth docks',html:'<div class="pair"><div class="vid"><video controls muted loop playsinline preload="none" poster="posters/sd1-proposed-high.jpg" src="videos/sd1-proposed-high.mp4"></video><h3>Dock SD1, higher sea</h3><p>Flooding behind the dock falls by 84 %. Peak sideways wave force: 34 kilonewtons per metre of dock.</p></div><div class="vid"><video controls muted loop playsinline preload="none" poster="posters/sd2-proposed-high.jpg" src="videos/sd2-proposed-high.mp4"></video><h3>Dock SD2, higher sea</h3><p>Flooding falls by 70 %. Peak sideways wave force: 71 kilonewtons per metre.</p></div></div><p class="narrow" style="margin-top:18px"><strong>How hard do the waves push?</strong> For the two proposed docks we also measured the push of the waves on the concrete. On dock SD1 the push nearly doubled when the sea was 0.70 m higher. We then checked against the standard hand calculation used for sea walls (the Goda method). It gave 78 and 160 kilonewtons per metre, more than twice the model values, because it assumes the single highest wave hits the wall unbroken. The structural design should use the larger numbers.</p>'}
+];
+const tabs=$('#tabs'), body=$('#tabBody');
+TABS.forEach((t,i)=>{const b=el('button',null,t.name);b.type='button';b.setAttribute('role','tab');b.onclick=()=>{[...tabs.children].forEach(x=>x.classList.remove('on'));b.classList.add('on');body.querySelectorAll('video').forEach(v=>v.pause());body.innerHTML=t.html;body.querySelectorAll('video').forEach(v=>vio.observe(v))};tabs.appendChild(b);if(!i)b.click()});
+
+/* conclusions, caveats, glossary */
+window.CONCLUSIONS.forEach(c=>$('#concl').appendChild(el('div','c','<div class="big">'+c.big+'</div><h3>'+c.head+'</h3><p>'+c.text+'</p>')));
+window.CAVEATS.forEach(c=>$('#cav').appendChild(el('li',null,c)));
+window.GLOSSARY.forEach(g=>{$('#gl').appendChild(el('dt',null,g[0]));$('#gl').appendChild(el('dd',null,g[1]))});
+})();
+</script>
+</body>
+</html>
