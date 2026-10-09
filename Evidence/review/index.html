@@ -58,14 +58,12 @@
 <body>
 <div class="wrap">
   <h1>Review queue</h1>
-  <p class="lead">Questions from Claude about the videos. Play the clip, pick an answer, add a comment if you want, and save. You can stop at any time; answers are kept on this device and sent when the key is set.</p>
-  <details class="setup" id="setup">
-    <summary>Key and sending</summary>
-    <p>Enter the admin key once (the password you set with <code>wrangler secret put ADMIN_KEY</code>). It is kept only on this device and is needed to send answers.</p>
-    <input type="password" id="key" placeholder="Admin key" autocomplete="off">
-    <div class="foot"><button class="btn primary" id="savekey" type="button">Save key</button><button class="btn" id="sendall" type="button">Send unsent answers</button><button class="btn" id="copyall" type="button">Copy all answers</button></div>
+  <p class="lead">Questions from Claude about the videos. Play the clip, pick an answer, add a comment if you want, and save. You can stop at any time; answers are kept on this device and sent by themselves.</p>
+<details class="setup" id="setup">
+    <summary>Sending</summary>
+    <p>Answers are sent by themselves a few seconds after you save, and when you leave the page. No key is needed.</p>
+    <div class="foot"><button class="btn primary" id="sendall" type="button">Send now</button><button class="btn" id="copyall" type="button">Copy all answers</button></div>
     <p class="state" id="setupstate"></p>
-    <p>No key yet? Use "Copy all answers" and paste the text to Claude.</p>
   </details>
 </div>
 <div class="bar"><div class="wrap">
@@ -108,7 +106,7 @@
     var n = ITEMS.filter(function(it){ return A[it.id]; }).length, unsent = ITEMS.filter(function(it){ return A[it.id] && !A[it.id].sent; }).length;
     $("count").textContent = n + " of " + ITEMS.length + " answered" + (unsent ? ", " + unsent + " not sent yet" : "");
     $("meter").style.width = (ITEMS.length ? n/ITEMS.length*100 : 0) + "%";
-    $("end").textContent = "Round: " + ROUND + ". Answers go to Twc_private_data, User_Data/evidence_data/review.json.";
+    $("end").textContent = "Round: " + ROUND + ". Answers arrive in the reports file, marked [REVIEW].";
   }
   function card(it){
     var a = A[it.id] || {}, c = el("section", "card" + (A[it.id] ? " done" : "")); c.id = "q-" + it.id;
@@ -149,7 +147,7 @@
       if(!sel.value){ st.className = "state bad"; st.textContent = "Choose an answer first."; sel.focus(); return; }
       A[it.id] = {choice: sel.value, comment: ta.value.trim(), at: new Date().toISOString(), sent: false}; store(A);
       c.classList.add("done"); st.className = "state warn"; st.textContent = "Saved on this device"; progress();
-      send([it.id]).then(function(ok){ if(ok){ st.className = "state ok"; st.textContent = "Saved and sent"; } progress(); });
+      sendSoon();
       var nx = c.nextElementSibling; while(nx && !nx.classList.contains("card")) nx = nx.nextElementSibling;
       if(nx && filter !== "open") nx.scrollIntoView({behavior: "smooth", block: "start"});
       if(filter === "open"){ var top = c.getBoundingClientRect().top + window.scrollY; render(); window.scrollTo(0, Math.max(0, top - 130)); }
@@ -157,20 +155,31 @@
     foot.appendChild(save); foot.appendChild(st); c.appendChild(sel); c.appendChild(ta); c.appendChild(foot);
     return c;
   }
-  function payload(ids){ return ids.map(function(id){ var it = ITEMS.find(function(x){ return x.id === id; }) || {}, a = A[id];
-    return {id: id, round: ROUND, choice: a.choice, comment: a.comment, at: a.at, question: it.title || "", episode: it.ep || null, part: it.part || null, from: it.a == null ? null : it.a, to: it.b == null ? null : it.b}; }); }
+  // Answers go through the same address as the "Report an issue" button (no key). Several answers are packed into one
+  // message: "[REVIEW round] id=optionNumber|comment ;; id=optionNumber|comment". Option numbers start at 1; 0 = "Not sure".
+  function pack(ids){ var msgs=[], cur=[], len=0, head="[REVIEW "+ROUND+"] ";
+    ids.forEach(function(id){ var it=ITEMS.find(function(x){return x.id===id;}), a=A[id]; if(!it||!a) return;
+      var n=it.options.indexOf(a.choice)+1, s=id+"="+n+(a.comment?"|"+a.comment.replace(/;;/g,";").slice(0,300):"");
+      if(cur.length && len+s.length+4>900){ msgs.push({ids:cur.map(function(c){return c[0];}), text:head+cur.map(function(c){return c[1];}).join(" ;; ")}); cur=[]; len=0; }
+      cur.push([id,s]); len+=s.length+4; });
+    if(cur.length) msgs.push({ids:cur.map(function(c){return c[0];}), text:head+cur.map(function(c){return c[1];}).join(" ;; ")});
+    return msgs; }
+  var sending=false;
   function send(ids){
-    var k = key(); if(!k || !ids.length) return Promise.resolve(false);
-    return fetch(API + "/api/review", {method: "POST", headers: {"Content-Type": "application/json", "X-Admin-Key": k}, body: JSON.stringify({answers: payload(ids)})})
-      .then(function(r){ if(!r.ok) throw new Error(r.status === 403 ? "The key was refused." : r.status === 404 ? "The worker is not updated yet (run wrangler deploy)." : "Error " + r.status); return r.json(); })
-      .then(function(){ ids.forEach(function(id){ if(A[id]) A[id].sent = true; }); store(A); $("setupstate").className = "state ok"; $("setupstate").textContent = "Sent " + ids.length + " answer" + (ids.length === 1 ? "" : "s") + "."; return true; })
-      .catch(function(e){ $("setupstate").className = "state bad"; $("setupstate").textContent = "Not sent: " + e.message + " Answers stay on this device."; return false; });
+    if(!ids.length || sending) return Promise.resolve(false); sending=true;
+    var msgs=pack(ids), ok=true, chain=Promise.resolve();
+    msgs.forEach(function(m){ chain=chain.then(function(){
+      return fetch(API+"/api/report",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({episode:98, part:1, time:0, type:"other", text:m.text, name:"Clenmar review", page:location.href})})
+        .then(function(r){ if(!r.ok) throw new Error(r.status===429?"too many sends this hour; they will go later":"error "+r.status); m.ids.forEach(function(id){ if(A[id]) A[id].sent=true; }); store(A); }); }); });
+    return chain.then(function(){ $("setupstate").className="state ok"; $("setupstate").textContent="Sent."; })
+      .catch(function(e){ ok=false; $("setupstate").className="state bad"; $("setupstate").textContent="Not sent ("+e.message+"). Answers stay on this device."; })
+      .then(function(){ sending=false; progress(); return ok; });
   }
-  $("savekey").addEventListener("click", function(){ var v = $("key").value.trim(); if(!v) return; try{ localStorage.setItem(LK, v); }catch(e){} $("key").value = ""; $("setupstate").className = "state ok"; $("setupstate").textContent = "Key saved on this device."; });
-  $("sendall").addEventListener("click", function(){ var ids = ITEMS.map(function(i){ return i.id; }).filter(function(id){ return A[id] && !A[id].sent; });
-    if(!key()){ $("setupstate").className = "state bad"; $("setupstate").textContent = "Save the key first."; return; }
-    if(!ids.length){ $("setupstate").className = "state ok"; $("setupstate").textContent = "Nothing waiting to be sent."; return; }
-    send(ids).then(function(){ render(); }); });
+  function unsent(){ return ITEMS.map(function(i){return i.id;}).filter(function(id){ return A[id] && !A[id].sent; }); }
+  var timer=null;
+  function sendSoon(){ clearTimeout(timer); timer=setTimeout(function(){ send(unsent()).then(function(){ if(filter!=="open") render(); }); }, 15000); }
+  document.addEventListener("visibilitychange",function(){ if(document.visibilityState==="hidden"){ clearTimeout(timer); send(unsent()); } });
+  $("sendall").addEventListener("click", function(){ var ids=unsent(); if(!ids.length){ $("setupstate").className="state ok"; $("setupstate").textContent="Nothing waiting to be sent."; return; } clearTimeout(timer); send(ids).then(function(){ render(); }); });
   $("copyall").addEventListener("click", function(){ var lines = ["Review answers, " + ROUND];
     ITEMS.forEach(function(it){ var a = A[it.id]; if(a) lines.push(it.id + " | " + a.choice + (a.comment ? " | " + a.comment : "")); });
     var txt = lines.join("\n"); var done = function(){ $("setupstate").className = "state ok"; $("setupstate").textContent = "Copied " + (lines.length - 1) + " answers. Paste them to Claude."; };
@@ -181,7 +190,6 @@
   function chips(){ var box = $("chips"); box.innerHTML = ""; var groups = []; ITEMS.forEach(function(it){ if(groups.indexOf(it.group) < 0) groups.push(it.group); });
     [["open", "Unanswered"], ["all", "All"]].concat(groups.map(function(g){ return [g, g]; })).forEach(function(p){ var b = el("button", "chip" + (filter === p[0] ? " on" : ""), p[1]); b.type = "button";
       b.addEventListener("click", function(){ filter = p[0]; chips(); render(); window.scrollTo(0, 0); }); box.appendChild(b); }); }
-  if(!key()) $("setup").open = true;
   chips(); render();
 })();
 </script>
