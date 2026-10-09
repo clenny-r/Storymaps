@@ -24,3 +24,7 @@ This repository is published at twcministries.net, so a push makes the page PUBL
 permission to publish (client and CBCL) is still an open question in the paper manuscript. Nothing has been
 committed or pushed. Options: keep the folder out of git (add `Pages/IH2VOF_examples/Dominica_story/` to
 `.gitignore`), or push only after permission.
+
+## 2026-10-09 Wave forces section added
+- New section "Wave forces" (id `forces`) between "Other sites" and "Conclusions": force time series for docks SD1 and SD2 at +1.48 m and a comparison with the Goda hand calculation.
+- Data: `window.FORCES` at the end of `story.js`, built from `C:\IH2VOF\CASES\Portsmouth_SD1_proposed_WL148\post\pressure_forces.csv`, `C:\IH2VOF\CASES\Portsmouth_SD2_proposed_WL148\post\pressure_forces.csv` and `C:\IH2VOF\CASES\Dominica_design_runs\06_goda_check\goda_check.csv`.

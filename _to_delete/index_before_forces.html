@@ -297,19 +297,7 @@ footer{padding:36px 0 60px;font-size:13.5px;color:var(--muted);border-top:1px so
   </div>
 </section>
 
-<section class="block" id="forces" data-nav="Wave forces">
-  <div class="wrap">
-    <p class="kicker">Wave forces</p>
-    <h2>How hard do the waves hit the docks?</h2>
-    <p class="narrow">Flooding is one question. Whether a structure survives is another. On the seaward wall of each proposed Portsmouth dock we placed a pressure zone: a patch of the model that records the water pressure about 26 times a second. Adding those pressures up gives the push on the wall, in kilonewtons per metre run of dock. One kilonewton is roughly the weight of 100 kilograms.</p>
-    <div class="chart" id="chForce"></div>
-    <p class="narrow" style="margin-top:18px">The push is not steady. Each wave gives the wall a short, sharp shove and the water then falls away. A few waves hit far harder than the rest, and the design has to resist the largest of them. With the sea at today's design level the peaks were 19 kilonewtons per metre on dock SD1 and 62 on dock SD2. With the sea 0.70 m higher they rose to 34 and 71.</p>
-    <div class="chart" id="chGoda"></div>
-    <p class="narrow" style="margin-top:18px"><strong>Treat the model forces as a lower bound.</strong> Engineers normally size walls like these with a hand calculation, the Goda method. It gives forces more than twice the model's, and about four times when an allowance for waves breaking directly on the wall is added. A model of this kind smooths out the sharpest part of a wave impact, so the larger hand-calculation values should guide the structural design. The hand method only applies at the higher sea level; at today's level the rock in front of the docks stands above the water and the wall is struck by run-up only.</p>
-  </div>
-</section>
-
-<section class="block tint" id="conclusions" data-nav="Conclusions">
+<section class="block" id="conclusions" data-nav="Conclusions">
   <div class="wrap">
     <p class="kicker">Conclusions</p>
     <h2>What we take from this</h2>
@@ -322,7 +310,7 @@ footer{padding:36px 0 60px;font-size:13.5px;color:var(--muted);border-top:1px so
   </div>
 </section>
 
-<section class="block" id="honest" data-nav="Limits">
+<section class="block tint" id="honest" data-nav="Limits">
   <div class="wrap narrow">
     <p class="kicker">Keeping ourselves honest</p>
     <h2>What this study cannot tell you</h2>
@@ -468,39 +456,6 @@ const TABS=[
 ];
 const tabs=$('#tabs'), body=$('#tabBody');
 TABS.forEach((t,i)=>{const b=el('button',null,t.name);b.type='button';b.setAttribute('role','tab');b.onclick=()=>{[...tabs.children].forEach(x=>x.classList.remove('on'));b.classList.add('on');body.querySelectorAll('video').forEach(v=>v.pause());body.innerHTML=t.html;body.querySelectorAll('video').forEach(v=>vio.observe(v))};tabs.appendChild(b);if(!i)b.click()});
-
-/* wave forces */
-(function(){
-  const F=window.FORCES; if(!F)return;
-  const W=760, ph=150, gap=46, x0=56, w=W-x0-20, y0=30, H=y0+F.series.length*(ph+gap);
-  const {box,s}=chartShell('#chForce','Sharp hits, not a steady push','Largest sideways wave force on each dock in every second of the ten minute storm, sea 0.70 m higher (+1.48 m). Kilonewtons per metre of dock.',W,H,'Line charts of wave force against time on docks SD1 and SD2');
-  F.series.forEach((r,k)=>{const top=y0+k*(ph+gap), ymax=Math.ceil(r.peak/20)*20, xs=t=>x0+t/600*w, ys=v=>top+ph-v/ymax*ph;
-    svg('text',{x:x0,y:top-8,'font-size':14,'font-weight':700,fill:'var(--ink)'},s,r.name);
-    [0,ymax/2,ymax].forEach(t=>{svg('line',{x1:x0,x2:x0+w,y1:ys(t),y2:ys(t),stroke:'var(--line)'},s);svg('text',{x:x0-8,y:ys(t)+4,'text-anchor':'end','font-size':12,fill:'var(--muted)'},s,t)});
-    [0,2,4,6,8,10].forEach(m=>svg('text',{x:xs(m*60),y:top+ph+16,'text-anchor':'middle','font-size':12,fill:'var(--muted)'},s,m+(m===10?' min':'')));
-    svg('path',{d:'M'+xs(0)+','+ys(0)+r.v.map((v,i)=>'L'+xs(i+.5).toFixed(1)+','+ys(v).toFixed(1)).join('')+'L'+xs(600)+','+ys(0)+'Z',fill:'var(--accent)','fill-opacity':.18,stroke:'var(--accent)','stroke-width':1.4,'stroke-linejoin':'round'},s);
-    const i=r.v.indexOf(Math.max.apply(null,r.v)), px=xs(i+.5), py=ys(r.v[i]);
-    svg('circle',{cx:px,cy:py,r:5,fill:'var(--accent)',stroke:'var(--paper)','stroke-width':2},s);
-    const right=px<x0+w*0.7; svg('text',{x:px+(right?10:-10),y:py+12,'text-anchor':right?'start':'end','font-size':12.5,'font-weight':700,fill:'var(--ink)',stroke:'var(--paper)','stroke-width':4,'paint-order':'stroke'},s,'Peak '+Math.round(r.peak)+' kN per metre');
-    const hit=svg('rect',{x:x0,y:top,width:w,height:ph,fill:'transparent'},s);
-    hit.addEventListener('pointermove',e=>{const b=hit.getBoundingClientRect(), t=Math.max(0,Math.min(599,Math.floor((e.clientX-b.left)/b.width*600)));tip.textContent=r.name+', '+Math.floor(t/60)+' min '+(t%60)+' s: '+r.v[t]+' kN per metre';tip.style.opacity=1;tip.style.left=Math.min(e.clientX+14,innerWidth-270)+'px';tip.style.top=(e.clientY+14)+'px'});
-    hit.addEventListener('pointerleave',()=>tip.style.opacity=0);
-  });
-  tableOf(box,['Dock','Peak force, design sea level (+0.78 m)','Peak force, sea 0.70 m higher (+1.48 m)'],F.low.map(r=>[r.name,r.low+' kN per metre',r.high+' kN per metre']));
-})();
-(function(){
-  const F=window.FORCES; if(!F)return;
-  const R=F.compare, W=760, x0=56, w=W-x0-150, y0=44, gh=104, bh=22, H=y0+R.length*gh+10, mx=300, xs=v=>x0+v/mx*w;
-  const K=[['model','Computer model','var(--accent)',1],['goda','Hand calculation (Goda)','var(--grey)',1],['imp','Hand calculation with breaking-wave allowance','var(--warn)',.8]];
-  const {box,s}=chartShell('#chGoda','The standard hand calculation gives two to four times more','Peak force with the sea 0.70 m higher (+1.48 m). Kilonewtons per metre of dock.',W,H,'Bar chart comparing model wave forces with Goda hand calculations');
-  let lx=x0; K.forEach(k=>{svg('rect',{x:lx,y:8,width:12,height:12,rx:2,fill:k[2],'fill-opacity':k[3]},s);const t=svg('text',{x:lx+17,y:19,'font-size':12.5,fill:'var(--ink2)'},s,k[1]);lx+=17+k[1].length*6.6+18});
-  R.forEach((r,i)=>{const top=y0+i*gh; svg('text',{x:x0,y:top+12,'font-size':14,'font-weight':700,fill:'var(--ink)'},s,r.name);
-    K.forEach((k,j)=>{const v=r[k[0]], y=top+22+j*(bh+3); if(v==null){svg('text',{x:x0,y:y+15,'font-size':12.5,fill:'var(--muted)'},s,'Breaking-wave allowance not calculated for uplift');return}
-      const b=svg('rect',{x:x0,y:y,width:xs(v)-x0,height:bh,rx:3,fill:k[2],'fill-opacity':k[3]},s); hover(b,r.name+', '+k[1].toLowerCase()+': '+v+' kN per metre');
-      svg('text',{x:xs(v)+8,y:y+15,'font-size':12.5,'font-weight':j?400:700,fill:'var(--ink)'},s,Math.round(v)+(j?'':' (model)'))});
-  });
-  tableOf(box,['Force','Computer model','Goda','Goda with breaking-wave allowance'],R.map(r=>[r.name,r.model,r.goda,r.imp==null?'not calculated':r.imp]));
-})();
 
 /* conclusions, caveats, glossary */
 window.CONCLUSIONS.forEach(c=>$('#concl').appendChild(el('div','c','<div class="big">'+c.big+'</div><h3>'+c.head+'</h3><p>'+c.text+'</p>')));
