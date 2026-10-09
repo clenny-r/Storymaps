@@ -225,6 +225,16 @@
   .ring{background:conic-gradient(var(--gold) var(--p,0%),rgba(255,255,255,.18) 0)}
   .ring i{background:var(--bg)}
   .endscreen .lbl{text-transform:none;letter-spacing:0;font-size:14px}
+  .empty p{margin:0 0 12px}
+  .askus{margin:44px 0 0;padding:24px 20px;background:var(--panel);border-radius:18px 18px 18px 4px;max-width:720px}
+  .askus h2{font-family:var(--display);font-weight:800;font-size:clamp(24px,5.6vw,32px);line-height:1.1;margin:0 0 8px;color:var(--gold)}
+  .askus p{margin:0 0 16px;color:var(--ink2);font-size:16px;max-width:56ch}
+  .askus label{display:block;font-size:14px;color:var(--ink2);margin:0 0 4px}
+  .askus textarea,.askus input[type=text]{width:100%;background:var(--bg);color:var(--ink);border:1px solid rgba(251,245,230,.25);border-radius:10px;padding:11px 12px;font:inherit;font-size:16px;margin:0 0 12px}
+  .askus textarea{min-height:92px;resize:vertical}
+  .askus .hp{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
+  .askus .askrow{align-items:center}
+  .askus .status{font-size:14px;color:var(--ink2)}
   footer{font-size:14px}
   @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
@@ -265,7 +275,17 @@
   </div>
   <section class="resume" id="resume" hidden><h2>Continue watching</h2><div class="grid" id="resumegrid"></div></section>
   <div id="seasons"></div>
-  <div class="empty" id="empty" hidden>No episode matches that search.</div>
+  <div class="empty" id="empty" hidden><p>No episode answers that yet.</p><button class="btn primary" id="askthis" type="button">Send it as a question</button></div>
+  <section class="askus" id="askus" aria-labelledby="askus-h">
+    <h2 id="askus-h">Didn't find your question?</h2>
+    <p>Tell us what you have been asked, or what you are asking yourself. We read every one and will try to answer it in a coming episode.</p>
+    <label for="aq">Your question</label>
+    <textarea id="aq" maxlength="400" placeholder="Somebody asked me..."></textarea>
+    <label for="an">Your name (optional)</label>
+    <input id="an" type="text" maxlength="60" autocomplete="name">
+    <input class="hp" id="aweb" type="text" tabindex="-1" autocomplete="off" aria-hidden="true">
+    <div class="askrow"><button class="btn primary" id="asend" type="button">Send question</button><span class="status" id="astatus" role="status"></span></div>
+  </section>
 </main>
 
 <div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="mtitle">
@@ -465,6 +485,25 @@
     else if(navigator.clipboard){ navigator.clipboard.writeText(url).then(function(){toast("Link copied");}); }
     else toast(url);
   });
+  /* ask a question that has no episode yet */
+  $("askthis").addEventListener("click",function(){ var t=$("q").value.trim(); if(t) $("aq").value=t; $("askus").scrollIntoView({behavior:"smooth",block:"center"}); $("aq").focus({preventScroll:true}); });
+  $("asend").addEventListener("click",function(){
+    var text=$("aq").value.trim(), name=$("an").value.trim(), st=$("astatus"), btn=this;
+    if(text.length<8){ st.textContent="Please write your question first."; $("aq").focus(); return; }
+    if(!REPORT_API){ st.textContent="Questions are not switched on yet."; return; }
+    var body={question:text, name:name, website:$("aweb").value, page:location.href};
+    function post(path,data){ return fetch(REPORT_API+path,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(data)}).then(function(r){ return r.json().catch(function(){return {};}).then(function(d){ return {ok:r.ok,status:r.status,d:d}; }); }); }
+    btn.disabled=true; st.textContent="Sending\u2026";
+    post("/api/question",body).then(function(x){
+      // until the worker has the question address, send it through the report address, marked as a question
+      if(x.status===404) return post("/api/report",{episode:99, part:1, time:0, type:"other", text:"[QUESTION] "+text, name:name, website:body.website, page:body.page});
+      return x;
+    }).then(function(x){ if(!x.ok) throw new Error((x.d&&x.d.error)||"failed"); st.textContent="Thank you. We have your question."; $("aq").value=""; try{localStorage.setItem("evidence_name",name);}catch(e){} })
+      .catch(function(e){ st.textContent="Could not send ("+e.message+"). Please try again in a moment."; })
+      .then(function(){ btn.disabled=false; });
+  });
+  try{ var nm0=localStorage.getItem("evidence_name"); if(nm0) $("an").value=nm0; }catch(e){}
+
   /* issue reports */
   var rtime=0;
   function setStamp(t){ rtime=Math.max(0,t||0); $("rtime").textContent=fmt(rtime); }
