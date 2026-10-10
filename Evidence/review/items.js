@@ -2,7 +2,7 @@
 // a and b are the start and end second in videos/eNN-pP.mp4. An entry with no ep has no clip.
 // group "Fixed": "old" is a short clip of the video before the fix (review/old/...), a and b are the same moment in the new video.
 // "rows": [label, text] pairs shown under the question.
-window.REVIEW_ROUND = "round-2-2026-10-10";
+window.REVIEW_ROUND = "round-3-2026-10-10";
 window.REVIEW_ITEMS = [
  {
   "id": "r-word",
@@ -1400,6 +1400,764 @@ window.REVIEW_ITEMS = [
    "Approved: keep it published",
    "Needs changes (say where in the comment)",
    "Take it down until it is fixed"
+  ]
+ },
+ {
+  "id": "s3-rt-13",
+  "round": "round-3-2026-10-10",
+  "group": "New clips: wording",
+  "ep": 1,
+  "part": 3,
+  "a": 101,
+  "b": 106,
+  "title": "Jahnoy, line 8",
+  "why": "\"can't\" for \"cyaan\". You also asked why his hands are up so often: the prompt will say his hands rest still. The clip plays the line as it is now.",
+  "rows": [
+   [
+    "Now",
+    "So mi cyaan trust dem part deh?"
+   ],
+   [
+    "New",
+    "So mi can't trust dem part deh?"
+   ]
+  ],
+  "options": [
+   "Use the new wording",
+   "Change it (write the words in the comment)",
+   "Do not remake this line"
+  ],
+  "line": 8,
+  "who": "Jahnoy",
+  "new": "So mi can't trust dem part deh?"
+ },
+ {
+  "id": "s3-rt-22",
+  "round": "round-3-2026-10-10",
+  "group": "New clips: wording",
+  "ep": 2,
+  "part": 2,
+  "a": 124,
+  "b": 131,
+  "title": "Jahnoy, line 11",
+  "why": "\"can't\", and \"have fi\" becomes \"have to\" (Meta garbles \"fi\"). The clip plays the line as it is now.",
+  "rows": [
+   [
+    "Now",
+    "So mi cousin have fi decide if the claim true. Him cyaan pretend Jesus never make it."
+   ],
+   [
+    "New",
+    "So mi cousin have to decide if the claim true. Him can't pretend Jesus never make it."
+   ]
+  ],
+  "options": [
+   "Use the new wording",
+   "Change it (write the words in the comment)",
+   "Do not remake this line"
+  ],
+  "line": 11,
+  "who": "Jahnoy",
+  "new": "So mi cousin have to decide if the claim true. Him can't pretend Jesus never make it."
+ },
+ {
+  "id": "s3-rt-43",
+  "round": "round-3-2026-10-10",
+  "group": "New clips: wording",
+  "ep": 4,
+  "part": 3,
+  "a": 65,
+  "b": 71,
+  "title": "Miguel, line 3",
+  "why": "The line from your first report. The clip plays the line as it is now.",
+  "rows": [
+   [
+    "Now",
+    "Cyaan play partner dominoes by yuhself, boss."
+   ],
+   [
+    "New",
+    "Can't play partner dominoes by yuhself, boss."
+   ]
+  ],
+  "options": [
+   "Use the new wording",
+   "Change it (write the words in the comment)",
+   "Do not remake this line"
+  ],
+  "line": 3,
+  "who": "Miguel",
+  "new": "Can't play partner dominoes by yuhself, boss."
+ },
+ {
+  "id": "s3-rt-63a",
+  "round": "round-3-2026-10-10",
+  "group": "New clips: wording",
+  "ep": 6,
+  "part": 3,
+  "a": 47,
+  "b": 55,
+  "title": "Jahnoya, line 1",
+  "why": "The clip plays the line as it is now.",
+  "rows": [
+   [
+    "Now",
+    "One more, Miss. Yuh say everything need a maker. Then who make God? Yuh cyaan just stop there."
+   ],
+   [
+    "New",
+    "One more, Miss. Yuh say everything need a maker. Then who make God? Yuh can't just stop there."
+   ]
+  ],
+  "options": [
+   "Use the new wording",
+   "Change it (write the words in the comment)",
+   "Do not remake this line"
+  ],
+  "line": 1,
+  "who": "Jahnoya",
+  "new": "One more, Miss. Yuh say everything need a maker. Then who make God? Yuh can't just stop there."
+ },
+ {
+  "id": "s3-rt-63b",
+  "round": "round-3-2026-10-10",
+  "group": "New clips: wording",
+  "ep": 6,
+  "part": 3,
+  "a": 99,
+  "b": 104,
+  "title": "Jahnoya, line 8",
+  "why": "The clip plays the line as it is now.",
+  "rows": [
+   [
+    "Now",
+    "So it cyaan be made of anything."
+   ],
+   [
+    "New",
+    "So it can't be made of anything."
+   ]
+  ],
+  "options": [
+   "Use the new wording",
+   "Change it (write the words in the comment)",
+   "Do not remake this line"
+  ],
+  "line": 8,
+  "who": "Jahnoya",
+  "new": "So it can't be made of anything."
+ },
+ {
+  "id": "s3-rt-72",
+  "round": "round-3-2026-10-10",
+  "group": "New clips: wording",
+  "ep": 7,
+  "part": 2,
+  "a": 78,
+  "b": 84,
+  "title": "Moesha, line 5",
+  "why": "\"dat\" becomes \"that\" too, since Meta garbled the whole line. The clip plays the line as it is now.",
+  "rows": [
+   [
+    "Now",
+    "Hmm. She cyaan answer dat one."
+   ],
+   [
+    "New",
+    "Hmm. She can't answer that one."
+   ]
+  ],
+  "options": [
+   "Use the new wording",
+   "Change it (write the words in the comment)",
+   "Do not remake this line"
+  ],
+  "line": 5,
+  "who": "Moesha",
+  "new": "Hmm. She can't answer that one."
+ },
+ {
+  "id": "s3-rt-92",
+  "round": "round-3-2026-10-10",
+  "group": "New clips: wording",
+  "ep": 9,
+  "part": 2,
+  "a": 47,
+  "b": 57,
+  "title": "Jahnoya, line 1",
+  "why": "The clip plays the line as it is now.",
+  "rows": [
+   [
+    "Now",
+    "Mi find one, Jahnoy. Matthew say Joseph father name Jacob. Luke say him name Heli. One man cyaan have two father."
+   ],
+   [
+    "New",
+    "Mi find one, Jahnoy. Matthew say Joseph father name Jacob. Luke say him name Heli. One man can't have two father."
+   ]
+  ],
+  "options": [
+   "Use the new wording",
+   "Change it (write the words in the comment)",
+   "Do not remake this line"
+  ],
+  "line": 1,
+  "who": "Jahnoya",
+  "new": "Mi find one, Jahnoy. Matthew say Joseph father name Jacob. Luke say him name Heli. One man can't have two father."
+ },
+ {
+  "id": "s3-rt-112",
+  "round": "round-3-2026-10-10",
+  "group": "New clips: wording",
+  "ep": 11,
+  "part": 2,
+  "a": 47,
+  "b": 54,
+  "title": "Miguel, line 1",
+  "why": "This part also gets the new wide shot with Lucian as a woman (picture batch). The clip plays the line as it is now.",
+  "rows": [
+   [
+    "Now",
+    "Yuh say it yuhself, youth. Stone cyaan prove miracle. So the miracle part still a just talk."
+   ],
+   [
+    "New",
+    "Yuh say it yuhself, youth. Stone can't prove miracle. So the miracle part still a just talk."
+   ]
+  ],
+  "options": [
+   "Use the new wording",
+   "Change it (write the words in the comment)",
+   "Do not remake this line"
+  ],
+  "line": 1,
+  "who": "Miguel",
+  "new": "Yuh say it yuhself, youth. Stone can't prove miracle. So the miracle part still a just talk."
+ },
+ {
+  "id": "s3-rt-131",
+  "round": "round-3-2026-10-10",
+  "group": "New clips: wording",
+  "ep": 13,
+  "part": 1,
+  "a": 54,
+  "b": 63,
+  "title": "Moesha, line 2",
+  "why": "She stumbled and said \"believe\" twice; \"inna nutten\" becomes \"in nothing\" so the line is easier for Meta. The clip plays the line as it is now.",
+  "rows": [
+   [
+    "Now",
+    "Mi nuh believe inna nutten mi cyaan see. Show mi God and then we talk."
+   ],
+   [
+    "New",
+    "Mi nuh believe in nothing mi can't see. Show mi God and then we talk."
+   ]
+  ],
+  "options": [
+   "Use the new wording",
+   "Change it (write the words in the comment)",
+   "Do not remake this line"
+  ],
+  "line": 2,
+  "who": "Moesha",
+  "new": "Mi nuh believe in nothing mi can't see. Show mi God and then we talk."
+ },
+ {
+  "id": "s3-rt-132",
+  "round": "round-3-2026-10-10",
+  "group": "New clips: wording",
+  "ep": 13,
+  "part": 2,
+  "a": 65,
+  "b": 76,
+  "title": "Shadene, line 4",
+  "why": "The clip plays the line as it is now.",
+  "rows": [
+   [
+    "Now",
+    "Yuh cyaan force somebody fi love yuh. Clenmar never win mi by shouting through a loudspeaker."
+   ],
+   [
+    "New",
+    "You can't force somebody to love you. Clenmar never win me by shouting through a loudspeaker."
+   ]
+  ],
+  "options": [
+   "Use the new wording",
+   "Change it (write the words in the comment)",
+   "Do not remake this line"
+  ],
+  "line": 4,
+  "who": "Shadene",
+  "new": "You can't force somebody to love you. Clenmar never win me by shouting through a loudspeaker."
+ },
+ {
+  "id": "s3-rt-211",
+  "round": "round-3-2026-10-10",
+  "group": "New clips: wording",
+  "ep": 21,
+  "part": 1,
+  "a": 55,
+  "b": 63,
+  "title": "Moesha, line 2",
+  "why": "\"cannot\", as you asked. The clip plays the line as it is now.",
+  "rows": [
+   [
+    "Now",
+    "If Christianity true, why unnu cyaan agree? Which one right?"
+   ],
+   [
+    "New",
+    "If Christianity true, why unnu cannot agree? Which one right?"
+   ]
+  ],
+  "options": [
+   "Use the new wording",
+   "Change it (write the words in the comment)",
+   "Do not remake this line"
+  ],
+  "line": 2,
+  "who": "Moesha",
+  "new": "If Christianity true, why unnu cannot agree? Which one right?"
+ },
+ {
+  "id": "s3-rt-223",
+  "round": "round-3-2026-10-10",
+  "group": "New clips: wording",
+  "ep": 22,
+  "part": 3,
+  "a": 121,
+  "b": 129,
+  "title": "Anniela, line 12",
+  "why": "The clip plays the line as it is now.",
+  "rows": [
+   [
+    "Now",
+    "Alright. So mi cyaan rule it out from mi chair. Mi have fi look."
+   ],
+   [
+    "New",
+    "Alright. So I can't rule it out from my chair. I have to look."
+   ]
+  ],
+  "options": [
+   "Use the new wording",
+   "Change it (write the words in the comment)",
+   "Do not remake this line"
+  ],
+  "line": 12,
+  "who": "Anniela",
+  "new": "Alright. So I can't rule it out from my chair. I have to look."
+ },
+ {
+  "id": "s3-rt-261",
+  "round": "round-3-2026-10-10",
+  "group": "New clips: wording",
+  "ep": 26,
+  "part": 1,
+  "a": 60,
+  "b": 68,
+  "title": "Jahnoya, line 3",
+  "why": "The clip plays the line as it is now.",
+  "rows": [
+   [
+    "Now",
+    "But why him haffi die? Why God cyaan just forgive? Why blood?"
+   ],
+   [
+    "New",
+    "But why him have to die? Why God can't just forgive? Why blood?"
+   ]
+  ],
+  "options": [
+   "Use the new wording",
+   "Change it (write the words in the comment)",
+   "Do not remake this line"
+  ],
+  "line": 3,
+  "who": "Jahnoya",
+  "new": "But why him have to die? Why God can't just forgive? Why blood?"
+ },
+ {
+  "id": "s3-rt-203n",
+  "round": "round-3-2026-10-10",
+  "group": "New clips: wording",
+  "ep": 20,
+  "part": 3,
+  "a": 122,
+  "b": 131,
+  "title": "Miguel, line 12",
+  "why": "Your wording from chat. The clip plays the line as it is now.",
+  "rows": [
+   [
+    "Now",
+    "Alright. Mi cyaan say nutten. Mi go a church basic school miself."
+   ],
+   [
+    "New",
+    "Alright. I can't argue with that."
+   ]
+  ],
+  "options": [
+   "Use the new wording",
+   "Change it (write the words in the comment)",
+   "Do not remake this line"
+  ],
+  "line": 12,
+  "who": "Miguel",
+  "new": "Alright. I can't argue with that."
+ },
+ {
+  "id": "s3-rt-231",
+  "round": "round-3-2026-10-10",
+  "group": "New clips: wording",
+  "ep": 23,
+  "part": 1,
+  "a": 74,
+  "b": 88,
+  "title": "Miss Anthonette, line 5",
+  "why": "Same words; the old take was garbled and said part of it twice. The clip plays the line as it is now.",
+  "rows": [
+   [
+    "Now",
+    "Read Genesis fifteen. God waited four hundred years, because their sin was not yet complete."
+   ],
+   [
+    "New",
+    "Read Genesis fifteen. God waited four hundred years, because their sin was not yet complete."
+   ]
+  ],
+  "options": [
+   "Use the new wording",
+   "Change it (write the words in the comment)",
+   "Do not remake this line"
+  ],
+  "line": 5,
+  "who": "Miss Anthonette",
+  "new": "Read Genesis fifteen. God waited four hundred years, because their sin was not yet complete."
+ },
+ {
+  "id": "s3-rt-251u",
+  "round": "round-3-2026-10-10",
+  "group": "New clips: wording",
+  "ep": 25,
+  "part": 1,
+  "a": 106,
+  "b": 114,
+  "title": "Clenmar, line 10",
+  "why": "Standard English for your character; new fixed Clenmar picture. The clip plays the line as it is now.",
+  "rows": [
+   [
+    "Now",
+    "And mi understand why Rasta honour him. But the titles him carry come from Revelation nineteen, and dem describe Jesus."
+   ],
+   [
+    "New",
+    "And I understand why Rasta honour him. But the titles he carries come from Revelation nineteen, and they describe Jesus."
+   ]
+  ],
+  "options": [
+   "Use the new wording",
+   "Change it (write the words in the comment)",
+   "Do not remake this line"
+  ],
+  "line": 10,
+  "who": "Clenmar",
+  "new": "And I understand why Rasta honour him. But the titles he carries come from Revelation nineteen, and they describe Jesus."
+ },
+ {
+  "id": "s3-rt-251c",
+  "round": "round-3-2026-10-10",
+  "group": "New clips: wording",
+  "ep": 25,
+  "part": 1,
+  "a": 72,
+  "b": 83,
+  "title": "Clenmar, line 5",
+  "why": "Your note: \"Jesus craw\". Standard English, fixed Clenmar picture. The clip plays the line as it is now.",
+  "rows": [
+   [
+    "Now",
+    "Selassie himself was an Ethiopian Orthodox Christian. Him pray to Jesus Christ all him life."
+   ],
+   [
+    "New",
+    "Selassie himself was an Ethiopian Orthodox Christian. He prayed to Jesus Christ all his life."
+   ]
+  ],
+  "options": [
+   "Use the new wording",
+   "Change it (write the words in the comment)",
+   "Do not remake this line"
+  ],
+  "line": 5,
+  "who": "Clenmar",
+  "new": "Selassie himself was an Ethiopian Orthodox Christian. He prayed to Jesus Christ all his life."
+ },
+ {
+  "id": "s3-rt-232",
+  "round": "round-3-2026-10-10",
+  "group": "New clips: wording",
+  "ep": 23,
+  "part": 2,
+  "a": 122,
+  "b": 132,
+  "title": "Jahnoya, line 12",
+  "why": "The clip plays the line as it is now.",
+  "rows": [
+   [
+    "Now",
+    "So the ark a the part fi look at. Him provide a boat before the rain."
+   ],
+   [
+    "New",
+    "So the ark is the part to look at. Him provide a boat before the rain."
+   ]
+  ],
+  "options": [
+   "Use the new wording",
+   "Change it (write the words in the comment)",
+   "Do not remake this line"
+  ],
+  "line": 12,
+  "who": "Jahnoya",
+  "new": "So the ark is the part to look at. Him provide a boat before the rain."
+ },
+ {
+  "id": "s3-rt-151p",
+  "round": "round-3-2026-10-10",
+  "group": "New clips: wording",
+  "ep": 15,
+  "part": 1,
+  "a": 111,
+  "b": 120,
+  "title": "Clenmar, line 10",
+  "why": "Your note: add \"will\". Standard English, fixed Clenmar picture. The clip plays the line as it is now.",
+  "rows": [
+   [
+    "Now",
+    "And nobody can buy a blessing. A man try pay Peter fi power, and Peter tell him, yuh money perish wid yuh."
+   ],
+   [
+    "New",
+    "And nobody can buy a blessing. A man tried to pay Peter for power, and Peter told him, your money will perish with you."
+   ]
+  ],
+  "options": [
+   "Use the new wording",
+   "Change it (write the words in the comment)",
+   "Do not remake this line"
+  ],
+  "line": 10,
+  "who": "Clenmar",
+  "new": "And nobody can buy a blessing. A man tried to pay Peter for power, and Peter told him, your money will perish with you."
+ },
+ {
+  "id": "s3-rt-203c",
+  "round": "round-3-2026-10-10",
+  "group": "New clips: wording",
+  "ep": 20,
+  "part": 3,
+  "a": 112,
+  "b": 124,
+  "title": "Clenmar, line 11",
+  "why": "Same words; he turns into another man here. Fixed Clenmar picture. The clip plays the line as it is now.",
+  "rows": [
+   [
+    "Now",
+    "Basic schools, children's homes, clinics, feeding programmes. Take them away tomorrow and see who the government calls."
+   ],
+   [
+    "New",
+    "Basic schools, children's homes, clinics, feeding programmes. Take them away tomorrow and see who the government calls."
+   ]
+  ],
+  "options": [
+   "Use the new wording",
+   "Change it (write the words in the comment)",
+   "Do not remake this line"
+  ],
+  "line": 11,
+  "who": "Clenmar",
+  "new": "Basic schools, children's homes, clinics, feeding programmes. Take them away tomorrow and see who the government calls."
+ },
+ {
+  "id": "s3-rt-202c",
+  "round": "round-3-2026-10-10",
+  "group": "New clips: wording",
+  "ep": 20,
+  "part": 2,
+  "a": 67,
+  "b": 78,
+  "title": "Clenmar, line 4",
+  "why": "His background changes here. Fixed Clenmar picture. The clip plays the line as it is now.",
+  "rows": [
+   [
+    "Now",
+    "People say it, Jahnoy, though nobody can show mi the count. But we have plenty, true, and plenty violence. Both are real."
+   ],
+   [
+    "New",
+    "People say it, Jahnoy, though nobody can show me the count. But we have plenty, true, and plenty violence. Both are real."
+   ]
+  ],
+  "options": [
+   "Use the new wording",
+   "Change it (write the words in the comment)",
+   "Do not remake this line"
+  ],
+  "line": 4,
+  "who": "Clenmar",
+  "new": "People say it, Jahnoy, though nobody can show me the count. But we have plenty, true, and plenty violence. Both are real."
+ },
+ {
+  "id": "s3-rt-252c",
+  "round": "round-3-2026-10-10",
+  "group": "New clips: wording",
+  "ep": 25,
+  "part": 2,
+  "a": 68,
+  "b": 80,
+  "title": "Clenmar, line 4",
+  "why": "Same words; your report of the background change at 1:13. Fixed Clenmar picture. The clip plays the line as it is now.",
+  "rows": [
+   [
+    "Now",
+    "Matthew two. When Herod wanted to kill the baby Jesus, where did the family run? Egypt. Africa sheltered him."
+   ],
+   [
+    "New",
+    "Matthew two. When Herod wanted to kill the baby Jesus, where did the family run? Egypt. Africa sheltered him."
+   ]
+  ],
+  "options": [
+   "Use the new wording",
+   "Change it (write the words in the comment)",
+   "Do not remake this line"
+  ],
+  "line": 4,
+  "who": "Clenmar",
+  "new": "Matthew two. When Herod wanted to kill the baby Jesus, where did the family run? Egypt. Africa sheltered him."
+ },
+ {
+  "id": "s3-rt-142",
+  "round": "round-3-2026-10-10",
+  "group": "New clips: wording",
+  "ep": 14,
+  "part": 2,
+  "a": 113,
+  "b": 123,
+  "title": "Moesha, line 11",
+  "why": "Your note: she says \"church\" twice and an empty seat appears. The 3 second pause before it is trimmed too. The clip plays the line as it is now.",
+  "rows": [
+   [
+    "Now",
+    "Hmm. Mi never hear a church woman say it so plain."
+   ],
+   [
+    "New",
+    "Hmm. I never hear a church woman say it so plain."
+   ]
+  ],
+  "options": [
+   "Use the new wording",
+   "Change it (write the words in the comment)",
+   "Do not remake this line"
+  ],
+  "line": 11,
+  "who": "Moesha",
+  "new": "Hmm. I never hear a church woman say it so plain."
+ },
+ {
+  "id": "s3-rt-41",
+  "round": "round-3-2026-10-10",
+  "group": "New clips: wording",
+  "ep": 4,
+  "part": 1,
+  "a": 118,
+  "b": 128,
+  "title": "Moesha, line 11 (only if still weak)",
+  "why": "You said fix it when the part is rebuilt. Plan: raise its level in the rebuild first and remake it only if it is still weak.",
+  "rows": [
+   [
+    "Now",
+    "Mi still nah trust pastor with mi money."
+   ],
+   [
+    "New if remade",
+    "I still don't trust pastor with my money."
+   ]
+  ],
+  "options": [
+   "Agree with the plan",
+   "Remake it anyway",
+   "Leave it as it is"
+  ]
+ },
+ {
+  "id": "s3-closeups",
+  "round": "round-3-2026-10-10",
+  "group": "New clips: wording",
+  "ep": 1,
+  "part": 2,
+  "a": 50,
+  "b": 62,
+  "title": "Teacher close-ups: 28 clips",
+  "why": "Miss Anthonette's lines in 1.2, 1.3, 2.2 and 2.3 get close-ups from her Part 1 medium-shot picture, same words as now; Jahnoy's lines stay on the wide shot. Together with the retakes, as you said: about 52 Meta clips with one Sonnet helper.",
+  "options": [
+   "Go ahead with all 28",
+   "Do Episode 1 Part 2 first (7 clips)",
+   "Not now"
+  ]
+ },
+ {
+  "id": "s3-clenmar-pic",
+  "round": "round-3-2026-10-10",
+  "group": "New clips: wording",
+  "ep": 25,
+  "part": 2,
+  "a": 130,
+  "b": 142,
+  "title": "The fixed Clenmar picture",
+  "why": "Every new Clenmar clip uses one picture: his Episode 25 face (this clip). Inside a part, his old clips stay until that part is remade, so his face can change between lines there.",
+  "options": [
+   "Yes, use this face",
+   "Use another face (say which episode)"
+  ]
+ },
+ {
+  "id": "fx-122",
+  "round": "round-3-2026-10-10",
+  "group": "Fixed",
+  "ep": 12,
+  "part": 2,
+  "a": 117,
+  "b": 127,
+  "old": "old/e12-p2-forest.mp4",
+  "title": "Episode 12 Part 2: campus cutaway instead of the forest",
+  "why": "Rebuilt 10 October: the mountain forest is gone (campus shots only), plus the new sources card spacing and caption rules. Every line heard (97 percent).",
+  "options": [
+   "Better: keep it",
+   "No better",
+   "Worse: go back"
+  ]
+ },
+ {
+  "id": "fx-123",
+  "round": "round-3-2026-10-10",
+  "group": "Fixed",
+  "ep": 12,
+  "part": 3,
+  "a": 60,
+  "b": 70,
+  "old": "old/e12-p3-forest.mp4",
+  "title": "Episode 12 Part 3: campus cutaway instead of the forest",
+  "why": "Rebuilt 10 October: the forest at 1:04 is gone. Every line heard.",
+  "options": [
+   "Better: keep it",
+   "No better",
+   "Worse: go back"
   ]
  }
 ];
