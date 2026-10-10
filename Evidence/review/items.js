@@ -1,6 +1,8 @@
-// Questions for Clenmar. One entry per question; add a new round by appending entries with a new 'round' name.
+// Questions for Clenmar. One entry per question; each entry names its round. Add a new round by appending entries with a new 'round'.
 // a and b are the start and end second in videos/eNN-pP.mp4. An entry with no ep has no clip.
-window.REVIEW_ROUND = "round-1-2026-10-09";
+// group "Fixed": "old" is a short clip of the video before the fix (review/old/...), a and b are the same moment in the new video.
+// "rows": [label, text] pairs shown under the question.
+window.REVIEW_ROUND = "round-2-2026-10-10";
 window.REVIEW_ITEMS = [
  {
   "id": "r-word",
@@ -17,7 +19,8 @@ window.REVIEW_ITEMS = [
    "Decide after I hear a \"cyaah\" test clip"
   ],
   "script": "Cyaan play partner dominoes by yuhself, boss.",
-  "heard": "Let's see and play partner dominoes by yourself, boss."
+  "heard": "Let's see and play partner dominoes by yourself, boss.",
+  "round": "round-1-2026-10-09"
  },
  {
   "id": "r-clenmar-english",
@@ -32,7 +35,8 @@ window.REVIEW_ITEMS = [
    "Yes, for every new or remade line",
    "Yes, and remake his lines in Episode 25 Part 1 now",
    "No, keep his Patois"
-  ]
+  ],
+  "round": "round-1-2026-10-09"
  },
  {
   "id": "r-order",
@@ -46,7 +50,8 @@ window.REVIEW_ITEMS = [
   "options": [
    "Start the no-clip fixes now",
    "Wait until I have answered everything"
-  ]
+  ],
+  "round": "round-1-2026-10-09"
  },
  {
   "id": "r-cast-clenmar",
@@ -61,7 +66,8 @@ window.REVIEW_ITEMS = [
    "Fix only when a part is being remade anyway",
    "Remake the worst episodes now (name them in the comment)",
    "Leave as they are"
-  ]
+  ],
+  "round": "round-1-2026-10-09"
  },
  {
   "id": "r-cast-marsha",
@@ -76,7 +82,8 @@ window.REVIEW_ITEMS = [
    "Fix only when a part is being remade anyway",
    "Remake Episode 3 with Marsha as his mother",
    "Leave as they are"
-  ]
+  ],
+  "round": "round-1-2026-10-09"
  },
  {
   "id": "e-93-quiet",
@@ -92,7 +99,8 @@ window.REVIEW_ITEMS = [
    "Sounds fine",
    "Retake the line"
   ],
-  "script": "That's a famous one. First thing. If there were two, there was one. Matthew never says there was only one."
+  "script": "That's a famous one. First thing. If there were two, there was one. Matthew never says there was only one.",
+  "round": "round-1-2026-10-09"
  },
  {
   "id": "e-41-moesha",
@@ -110,7 +118,8 @@ window.REVIEW_ITEMS = [
    "Cut the line"
   ],
   "script": "Mi still nah trust pastor with mi money.",
-  "heard": "(nothing)"
+  "heard": "(nothing)",
+  "round": "round-1-2026-10-09"
  },
  {
   "id": "e-231-genesis",
@@ -128,7 +137,8 @@ window.REVIEW_ITEMS = [
    "Cut the line"
   ],
   "script": "Read Genesis fifteen. God waited four hundred years, because their sin was not yet complete.",
-  "heard": "Readed 400 years because their sin was not 400 years because their sin was not yet complete."
+  "heard": "Readed 400 years because their sin was not 400 years because their sin was not yet complete.",
+  "round": "round-1-2026-10-09"
  },
  {
   "id": "e-251-understand",
@@ -145,7 +155,8 @@ window.REVIEW_ITEMS = [
    "Leave it"
   ],
   "script": "And mi understand why Rasta honour him.",
-  "heard": "and me on describe Jesus why Rasta honor him"
+  "heard": "and me on describe Jesus why Rasta honor him",
+  "round": "round-1-2026-10-09"
  },
  {
   "id": "e-151-accounts",
@@ -163,7 +174,8 @@ window.REVIEW_ITEMS = [
    "Cut the line"
   ],
   "script": "Ask fi see the accounts. An honest church show where the money go.",
-  "heard": "Ask Vissilia Kontz. An honest church show where the money go."
+  "heard": "Ask Vissilia Kontz. An honest church show where the money go.",
+  "round": "round-1-2026-10-09"
  },
  {
   "id": "e-151-peter",
@@ -181,7 +193,8 @@ window.REVIEW_ITEMS = [
    "Cut the line"
   ],
   "script": "A man tried to pay Peter for power, and Peter told him, your money perish with you.",
-  "heard": "I'm Man Tripe Peter Fipowa. And Peter tell him, your money perish with you."
+  "heard": "I'm Man Tripe Peter Fipowa. And Peter tell him, your money perish with you.",
+  "round": "round-1-2026-10-09"
  },
  {
   "id": "e-232-ark",
@@ -199,7 +212,8 @@ window.REVIEW_ITEMS = [
    "Cut the line"
   ],
   "script": "So the ark a the part fi look at. Him provide a boat before the rain.",
-  "heard": "So the R the part Finlucats. Tim provide a boat before the rain."
+  "heard": "So the R the part Finlucats. Tim provide a boat before the rain.",
+  "round": "round-1-2026-10-09"
  },
  {
   "id": "e-111-lucian",
@@ -217,7 +231,8 @@ window.REVIEW_ITEMS = [
    "Cut the line"
   ],
   "script": "Hear this, Lucian. Dis man pon TikTok say the whole Bible a just story.",
-  "heard": "Here is the solution. This man found TikTok say the whole Bible are just story."
+  "heard": "Here is the solution. This man found TikTok say the whole Bible are just story.",
+  "round": "round-1-2026-10-09"
  },
  {
   "id": "e-223-hole",
@@ -235,7 +250,8 @@ window.REVIEW_ITEMS = [
    "Cut the line"
   ],
   "script": "What hole?",
-  "heard": "(faint)"
+  "heard": "(faint)",
+  "round": "round-1-2026-10-09"
  },
  {
   "id": "e-203-nutten",
@@ -253,7 +269,8 @@ window.REVIEW_ITEMS = [
    "Cut the line"
   ],
   "script": "Alright. Mi cyaan say nutten. Mi go a church basic school miself.",
-  "heard": "Let me go to church basic school myself."
+  "heard": "Let me go to church basic school myself.",
+  "round": "round-1-2026-10-09"
  },
  {
   "id": "c-131",
@@ -269,7 +286,8 @@ window.REVIEW_ITEMS = [
    "Sounds wrong: remake with the new word"
   ],
   "script": "Mi nuh believe inna nutten mi cyaan see. Show mi God and then we talk.",
-  "heard": "me no believing now. Believe in a not admittance. Show me God and then we talk."
+  "heard": "me no believing now. Believe in a not admittance. Show me God and then we talk.",
+  "round": "round-1-2026-10-09"
  },
  {
   "id": "c-211",
@@ -285,7 +303,8 @@ window.REVIEW_ITEMS = [
    "Sounds wrong: remake with the new word"
   ],
   "script": "If Christianity true, why unnu cyaan agree? Which one right?",
-  "heard": "If Christianity true. Why are you not here and agree? Which one right?"
+  "heard": "If Christianity true. Why are you not here and agree? Which one right?",
+  "round": "round-1-2026-10-09"
  },
  {
   "id": "c-261",
@@ -301,7 +320,8 @@ window.REVIEW_ITEMS = [
    "Sounds wrong: remake with the new word"
   ],
   "script": "But why him haffi die? Why God cyaan just forgive? Why blood?",
-  "heard": "But why him half a day? Why God's here and just forgive? Why blood?"
+  "heard": "But why him half a day? Why God's here and just forgive? Why blood?",
+  "round": "round-1-2026-10-09"
  },
  {
   "id": "c-13",
@@ -317,7 +337,8 @@ window.REVIEW_ITEMS = [
    "Sounds wrong: remake with the new word"
   ],
   "script": "So mi cyaan trust dem part deh?",
-  "heard": "So Mityan trusts them part there."
+  "heard": "So Mityan trusts them part there.",
+  "round": "round-1-2026-10-09"
  },
  {
   "id": "c-22",
@@ -333,7 +354,8 @@ window.REVIEW_ITEMS = [
    "Sounds wrong: remake with the new word"
   ],
   "script": "So mi cousin have fi decide if the claim true. Him cyaan pretend Jesus never make it.",
-  "heard": "...Him saying pretend Jesus never make it."
+  "heard": "...Him saying pretend Jesus never make it.",
+  "round": "round-1-2026-10-09"
  },
  {
   "id": "c-63a",
@@ -349,7 +371,8 @@ window.REVIEW_ITEMS = [
    "Sounds wrong: remake with the new word"
   ],
   "script": "One more, Miss. Yuh say everything need a maker. Then who make God? Yuh cyaan just stop there.",
-  "heard": "One more miss. You'll say everything need a maker. Then who made God?"
+  "heard": "One more miss. You'll say everything need a maker. Then who made God?",
+  "round": "round-1-2026-10-09"
  },
  {
   "id": "c-63b",
@@ -365,7 +388,8 @@ window.REVIEW_ITEMS = [
    "Sounds wrong: remake with the new word"
   ],
   "script": "So it cyaan be made of anything.",
-  "heard": "so it's sian be made of anything."
+  "heard": "so it's sian be made of anything.",
+  "round": "round-1-2026-10-09"
  },
  {
   "id": "c-72",
@@ -381,7 +405,8 @@ window.REVIEW_ITEMS = [
    "Sounds wrong: remake with the new word"
   ],
   "script": "Hmm. She cyaan answer dat one.",
-  "heard": "Shiksi anansada to one"
+  "heard": "Shiksi anansada to one",
+  "round": "round-1-2026-10-09"
  },
  {
   "id": "c-92",
@@ -397,7 +422,8 @@ window.REVIEW_ITEMS = [
    "Sounds wrong: remake with the new word"
   ],
   "script": "...One man cyaan have two father.",
-  "heard": "One man see and have two father."
+  "heard": "One man see and have two father.",
+  "round": "round-1-2026-10-09"
  },
  {
   "id": "c-112",
@@ -413,7 +439,8 @@ window.REVIEW_ITEMS = [
    "Sounds wrong: remake with the new word"
   ],
   "script": "Yuh say it yuhself, youth. Stone cyaan prove miracle.",
-  "heard": "You saved yourself youth. Stone-Syan proved miracle."
+  "heard": "You saved yourself youth. Stone-Syan proved miracle.",
+  "round": "round-1-2026-10-09"
  },
  {
   "id": "c-113",
@@ -429,7 +456,8 @@ window.REVIEW_ITEMS = [
    "Sounds wrong: remake with the new word"
   ],
   "script": "Alright. Dat one mi cyaan use again.",
-  "heard": "Alright. That one we can't use again."
+  "heard": "Alright. That one we can't use again.",
+  "round": "round-1-2026-10-09"
  },
  {
   "id": "c-132",
@@ -445,7 +473,8 @@ window.REVIEW_ITEMS = [
    "Sounds wrong: remake with the new word"
   ],
   "script": "Yuh cyaan force somebody fi love yuh.",
-  "heard": "You can't force somebody if they love you."
+  "heard": "You can't force somebody if they love you.",
+  "round": "round-1-2026-10-09"
  },
  {
   "id": "c-223",
@@ -461,7 +490,8 @@ window.REVIEW_ITEMS = [
    "Sounds wrong: remake with the new word"
   ],
   "script": "Alright. So mi cyaan rule it out from mi chair. Mi have fi look.",
-  "heard": "All right. So, Mityan, rule it out from mature. we have to look."
+  "heard": "All right. So, Mityan, rule it out from mature. we have to look.",
+  "round": "round-1-2026-10-09"
  },
  {
   "id": "v-112-barber",
@@ -476,7 +506,8 @@ window.REVIEW_ITEMS = [
    "Make a new wide shot with Lucian as a woman",
    "Just remove the wide shot",
    "Leave it"
-  ]
+  ],
+  "round": "round-1-2026-10-09"
  },
  {
   "id": "v-17-wide",
@@ -491,7 +522,8 @@ window.REVIEW_ITEMS = [
    "Make a new opening and wide shot from the close-up pictures",
    "Remove the wide shots for now",
    "Leave it"
-  ]
+  ],
+  "round": "round-1-2026-10-09"
  },
  {
   "id": "v-203-clenmar",
@@ -505,7 +537,8 @@ window.REVIEW_ITEMS = [
   "options": [
    "Retake that line",
    "Leave it"
-  ]
+  ],
+  "round": "round-1-2026-10-09"
  },
  {
   "id": "v-202-bg",
@@ -519,7 +552,8 @@ window.REVIEW_ITEMS = [
   "options": [
    "Retake that line",
    "Leave it"
-  ]
+  ],
+  "round": "round-1-2026-10-09"
  },
  {
   "id": "v-252-bg",
@@ -533,7 +567,8 @@ window.REVIEW_ITEMS = [
   "options": [
    "Retake that line",
    "Leave it"
-  ]
+  ],
+  "round": "round-1-2026-10-09"
  },
  {
   "id": "v-122-cutaway",
@@ -547,7 +582,8 @@ window.REVIEW_ITEMS = [
   "options": [
    "Swap for a cutaway from this place",
    "Leave it"
-  ]
+  ],
+  "round": "round-1-2026-10-09"
  },
  {
   "id": "v-23-minibus",
@@ -561,7 +597,8 @@ window.REVIEW_ITEMS = [
   "options": [
    "Swap for a cutaway from this place",
    "Leave it"
-  ]
+  ],
+  "round": "round-1-2026-10-09"
  },
  {
   "id": "v-12-wideonly",
@@ -576,7 +613,8 @@ window.REVIEW_ITEMS = [
    "Yes, make teacher close-ups for all four parts",
    "Try Episode 1 Part 2 first, then decide",
    "Not now"
-  ]
+  ],
+  "round": "round-1-2026-10-09"
  },
  {
   "id": "v-141-numbers",
@@ -592,7 +630,8 @@ window.REVIEW_ITEMS = [
    "Show only 1-888-PROTECT",
    "Show only 211",
    "Something else (in the comment)"
-  ]
+  ],
+  "round": "round-1-2026-10-09"
  },
  {
   "id": "o-4",
@@ -607,7 +646,8 @@ window.REVIEW_ITEMS = [
    "Use the shot of the three at the table as the opener",
    "Make a new opening shot",
    "Leave it"
-  ]
+  ],
+  "round": "round-1-2026-10-09"
  },
  {
   "id": "o-9",
@@ -621,7 +661,8 @@ window.REVIEW_ITEMS = [
   "options": [
    "Make a new opening shot in a route taxi",
    "A bus is fine, leave it"
-  ]
+  ],
+  "round": "round-1-2026-10-09"
  },
  {
   "id": "o-14",
@@ -635,7 +676,8 @@ window.REVIEW_ITEMS = [
   "options": [
    "Make a new, brighter opening shot of the three women",
    "Leave it"
-  ]
+  ],
+  "round": "round-1-2026-10-09"
  },
  {
   "id": "o-24",
@@ -649,7 +691,8 @@ window.REVIEW_ITEMS = [
   "options": [
    "Move the question card lower when faces are at the top",
    "Leave it"
-  ]
+  ],
+  "round": "round-1-2026-10-09"
  },
  {
   "id": "o-18",
@@ -663,7 +706,8 @@ window.REVIEW_ITEMS = [
   "options": [
    "Accept aerial openers",
    "The opener must show the cast"
-  ]
+  ],
+  "round": "round-1-2026-10-09"
  },
  {
   "id": "p-171",
@@ -677,7 +721,8 @@ window.REVIEW_ITEMS = [
   "options": [
    "Meant: keep them",
    "Trim to about 1 second"
-  ]
+  ],
+  "round": "round-1-2026-10-09"
  },
  {
   "id": "p-142",
@@ -692,7 +737,8 @@ window.REVIEW_ITEMS = [
    "Trim all such pauses to about 1 second",
    "Keep them",
    "Decide one by one (list in the comment)"
-  ]
+  ],
+  "round": "round-1-2026-10-09"
  },
  {
   "id": "k-sources",
@@ -706,7 +752,8 @@ window.REVIEW_ITEMS = [
   "options": [
    "Go ahead with the proposed text",
    "Let me read the proposed text first"
-  ]
+  ],
+  "round": "round-1-2026-10-09"
  },
  {
   "id": "k-203",
@@ -721,7 +768,8 @@ window.REVIEW_ITEMS = [
    "Find a real source for each",
    "Show the facts (name, year, church) as they are",
    "Remove the card's names"
-  ]
+  ],
+  "round": "round-1-2026-10-09"
  },
  {
   "id": "k-pastoral",
@@ -736,6 +784,622 @@ window.REVIEW_ITEMS = [
    "Reviewed and approved",
    "Not reviewed yet: leave them published",
    "Not reviewed yet: take them down until reviewed"
+  ],
+  "round": "round-1-2026-10-09"
+ },
+ {
+  "id": "s2-src-32",
+  "round": "round-2-2026-10-10",
+  "group": "Sources cards",
+  "ep": 3,
+  "part": 2,
+  "a": 146,
+  "b": 152,
+  "title": "Sources card, Episode 3 Part 2",
+  "why": "The card at the end of this part. Read the new text; the clip shows the card as it is now.",
+  "rows": [
+   [
+    "Now",
+    "Exodus 21:16 / Exodus 21:2 / Deuteronomy 15:12 to 14 / Deuteronomy 23:15 to 16 / 1 Timothy 1:10 (enslavers, slave traders) / Philemon 15 to 16 / Jamaican slave codes on runaways"
+   ],
+   [
+    "New",
+    "Exodus 21:16 / Exodus 21:2 / Deuteronomy 15:12 to 14 / Deuteronomy 23:15 to 16 / 1 Timothy 1:10 (enslavers, slave traders) / Philemon 15 to 16 / Leviticus 25:44 to 46"
+   ]
+  ],
+  "options": [
+   "Use the new text",
+   "Change it (say how in the comment)",
+   "Keep the card as it is now"
+  ],
+  "proposed": [
+   "Exodus 21:16",
+   "Exodus 21:2",
+   "Deuteronomy 15:12 to 14",
+   "Deuteronomy 23:15 to 16",
+   "1 Timothy 1:10 (enslavers, slave traders)",
+   "Philemon 15 to 16",
+   "Leviticus 25:44 to 46"
+  ]
+ },
+ {
+  "id": "s2-src-33",
+  "round": "round-2-2026-10-10",
+  "group": "Sources cards",
+  "ep": 3,
+  "part": 3,
+  "a": 129,
+  "b": 135,
+  "title": "Sources card, Episode 3 Part 3",
+  "why": "The card at the end of this part. Read the new text; the clip shows the card as it is now.",
+  "rows": [
+   [
+    "Now",
+    "Isaiah 53:2 / Revelation 7:9 / history of European depictions of Jesus"
+   ],
+   [
+    "New",
+    "Isaiah 53:2 / Revelation 7:9"
+   ]
+  ],
+  "options": [
+   "Use the new text",
+   "Change it (say how in the comment)",
+   "Keep the card as it is now"
+  ],
+  "proposed": [
+   "Isaiah 53:2",
+   "Revelation 7:9"
+  ]
+ },
+ {
+  "id": "s2-src-73",
+  "round": "round-2-2026-10-10",
+  "group": "Sources cards",
+  "ep": 7,
+  "part": 3,
+  "a": 124,
+  "b": 130,
+  "title": "Sources card, Episode 7 Part 3",
+  "why": "The card at the end of this part. Read the new text; the clip shows the card as it is now.",
+  "rows": [
+   [
+    "Now",
+    "Pew Research Center, 2011 / Global Christianity report"
+   ],
+   [
+    "New",
+    "Pew Research Center, Global Christianity, 2011"
+   ]
+  ],
+  "options": [
+   "Use the new text",
+   "Change it (say how in the comment)",
+   "Keep the card as it is now"
+  ],
+  "proposed": [
+   "Pew Research Center, Global Christianity, 2011"
+  ]
+ },
+ {
+  "id": "s2-src-83",
+  "round": "round-2-2026-10-10",
+  "group": "Sources cards",
+  "ep": 8,
+  "part": 3,
+  "a": 128,
+  "b": 134,
+  "title": "Sources card, Episode 8 Part 3",
+  "why": "You asked what 1 Clement 5 is. It is a letter from the church in Rome to the church in Corinth, about AD 96. Chapter 5 holds up Peter and Paul as men who suffered and died for their witness, one of the earliest writings after the New Testament to say so.",
+  "rows": [
+   [
+    "Now",
+    "Matthew 28:11 to 15 / Mark 14:50 and 14:66 to 72 / John 20:19 / Acts 4 and 5 / Acts 12:2 / 1 Clement 5 on Peter and Paul (say \"early writers say\", not \"we know\")"
+   ],
+   [
+    "New",
+    "Matthew 28:11 to 15 / Mark 14:50 and 14:66 to 72 / John 20:19 / Acts 4 and 5 / Acts 12:2 / 1 Clement 5 (about AD 96)"
+   ]
+  ],
+  "options": [
+   "Use the new text",
+   "Change it (say how in the comment)",
+   "Keep the card as it is now"
+  ],
+  "proposed": [
+   "Matthew 28:11 to 15",
+   "Mark 14:50 and 14:66 to 72",
+   "John 20:19",
+   "Acts 4 and 5",
+   "Acts 12:2",
+   "1 Clement 5 (about AD 96)"
+  ]
+ },
+ {
+  "id": "s2-src-132",
+  "round": "round-2-2026-10-10",
+  "group": "Sources cards",
+  "ep": 13,
+  "part": 2,
+  "a": 133,
+  "b": 139,
+  "title": "Sources card, Episode 13 Part 2",
+  "why": "The card at the end of this part. Read the new text; the clip shows the card as it is now.",
+  "rows": [
+   [
+    "Now",
+    "James 2:19 / John 1:18 / John 14:8 to 9. Follows the new Part 1 ending (\"continue climb to di top\")"
+   ],
+   [
+    "New",
+    "James 2:19 / John 1:18 / John 14:8 to 9"
+   ]
+  ],
+  "options": [
+   "Use the new text",
+   "Change it (say how in the comment)",
+   "Keep the card as it is now"
+  ],
+  "proposed": [
+   "James 2:19",
+   "John 1:18",
+   "John 14:8 to 9"
+  ]
+ },
+ {
+  "id": "s2-src-141",
+  "round": "round-2-2026-10-10",
+  "group": "Sources cards",
+  "ep": 14,
+  "part": 1,
+  "a": 145,
+  "b": 151,
+  "title": "Sources card, Episode 14 Part 1",
+  "why": "Only the working notes come off; the numbers stay as you confirmed.",
+  "rows": [
+   [
+    "Now",
+    "Matthew 18:6 / diG Jamaica: Moravian Church sex scandal timeline, pastor sentenced to eight years, March 2018 / Jamaica Observer, 16 October 2022: your duty to report child abuse (Child Care and Protection Act) / Jamaica Information Service, 19 May 2015: 1-888-PROTECT (1-888-776-8328) is run by the Office of the Children's Registry (checked 28 Sep)"
+   ],
+   [
+    "New",
+    "Matthew 18:6 / diG Jamaica: Moravian Church sex scandal timeline, March 2018 / Jamaica Observer, 16 October 2022: your duty to report child abuse / Jamaica Information Service, 19 May 2015: 1-888-PROTECT, Office of the Children's Registry"
+   ]
+  ],
+  "options": [
+   "Use the new text",
+   "Change it (say how in the comment)",
+   "Keep the card as it is now"
+  ],
+  "proposed": [
+   "Matthew 18:6",
+   "diG Jamaica: Moravian Church sex scandal timeline, March 2018",
+   "Jamaica Observer, 16 October 2022: your duty to report child abuse",
+   "Jamaica Information Service, 19 May 2015: 1-888-PROTECT, Office of the Children's Registry"
+  ]
+ },
+ {
+  "id": "s2-src-181",
+  "round": "round-2-2026-10-10",
+  "group": "Sources cards",
+  "ep": 18,
+  "part": 1,
+  "a": 137,
+  "b": 143,
+  "title": "Sources card, Episode 18 Part 1",
+  "why": "The card at the end of this part. Read the new text; the clip shows the card as it is now.",
+  "rows": [
+   [
+    "Now",
+    "Chronograph of 354 / Plutarch, On Isis and Osiris 12 to 19 (about AD 100): Isis conceives Horus by Osiris; no virgin birth, no disciples, no cross / Geraldine Pinch, Egyptian Mythology: A Guide to the Gods, Goddesses, and Traditions of Ancient Egypt (Oxford University Press, 2002), Isis and Horus entries / Bart D. Ehrman, Did Jesus Exist? (HarperOne, 2012), pages 20 to 24: the Horus and pagan copy claims of Acharya S, the source behind Zeitgeist part one, are wrong (checked 3 Oct)"
+   ],
+   [
+    "New",
+    "Chronograph of 354 / Plutarch, On Isis and Osiris, about AD 100 / Geraldine Pinch, Egyptian Mythology, 2002 / Bart D. Ehrman, Did Jesus Exist?, 2012"
+   ]
+  ],
+  "options": [
+   "Use the new text",
+   "Change it (say how in the comment)",
+   "Keep the card as it is now"
+  ],
+  "proposed": [
+   "Chronograph of 354",
+   "Plutarch, On Isis and Osiris, about AD 100",
+   "Geraldine Pinch, Egyptian Mythology, 2002",
+   "Bart D. Ehrman, Did Jesus Exist?, 2012"
+  ]
+ },
+ {
+  "id": "s2-src-182",
+  "round": "round-2-2026-10-10",
+  "group": "Sources cards",
+  "ep": 18,
+  "part": 2,
+  "a": 122,
+  "b": 128,
+  "title": "Sources card, Episode 18 Part 2",
+  "why": "The card at the end of this part. Read the new text; the clip shows the card as it is now.",
+  "rows": [
+   [
+    "Now",
+    "Clauss 2000; Beck 2006 / Manfred Clauss, The Roman Cult of Mithras / Roger Beck, The Religion of the Mithras Cult"
+   ],
+   [
+    "New",
+    "Manfred Clauss, The Roman Cult of Mithras, 2000 / Roger Beck, The Religion of the Mithras Cult in the Roman Empire, 2006"
+   ]
+  ],
+  "options": [
+   "Use the new text",
+   "Change it (say how in the comment)",
+   "Keep the card as it is now"
+  ],
+  "proposed": [
+   "Manfred Clauss, The Roman Cult of Mithras, 2000",
+   "Roger Beck, The Religion of the Mithras Cult in the Roman Empire, 2006"
+  ]
+ },
+ {
+  "id": "s2-src-183",
+  "round": "round-2-2026-10-10",
+  "group": "Sources cards",
+  "ep": 18,
+  "part": 3,
+  "a": 125,
+  "b": 131,
+  "title": "Sources card, Episode 18 Part 3",
+  "why": "Eusebius checked on the web: the Easter dispute (Victor of Rome and Polycrates) is Church History book 5, chapters 23 and 24.",
+  "rows": [
+   [
+    "Now",
+    "Pascha, from Hebrew Pesach / Second century Easter dispute / Bede, The Reckoning of Time, 15"
+   ],
+   [
+    "New",
+    "Bede, The Reckoning of Time, chapter 15 / Eusebius, Church History 5.23 to 24"
+   ]
+  ],
+  "options": [
+   "Use the new text",
+   "Change it (say how in the comment)",
+   "Keep the card as it is now"
+  ],
+  "proposed": [
+   "Bede, The Reckoning of Time, chapter 15",
+   "Eusebius, Church History 5.23 to 24"
+  ]
+ },
+ {
+  "id": "s2-src-191",
+  "round": "round-2-2026-10-10",
+  "group": "Sources cards",
+  "ep": 19,
+  "part": 1,
+  "a": 145,
+  "b": 151,
+  "title": "Sources card, Episode 19 Part 1",
+  "why": "The card at the end of this part. Read the new text; the clip shows the card as it is now.",
+  "rows": [
+   [
+    "Now",
+    "Pliny the Younger, Letters 10.96 / John 8:58 to 59; Mark 14:61 to 64; John 20:28 / Council of Nicaea, AD 325: ancient counts run from about 250 to 318 bishops; only Secundus of Ptolemais and Theonas of Marmarica refused to sign (checked 28 Sep)"
+   ],
+   [
+    "New",
+    "Pliny the Younger, Letters 10.96 / John 8:58 to 59; Mark 14:61 to 64; John 20:28 / Council of Nicaea, AD 325"
+   ]
+  ],
+  "options": [
+   "Use the new text",
+   "Change it (say how in the comment)",
+   "Keep the card as it is now"
+  ],
+  "proposed": [
+   "Pliny the Younger, Letters 10.96",
+   "John 8:58 to 59; Mark 14:61 to 64; John 20:28",
+   "Council of Nicaea, AD 325"
+  ]
+ },
+ {
+  "id": "s2-src-192",
+  "round": "round-2-2026-10-10",
+  "group": "Sources cards",
+  "ep": 19,
+  "part": 2,
+  "a": 140,
+  "b": 146,
+  "title": "Sources card, Episode 19 Part 2",
+  "why": "The card at the end of this part. Read the new text; the clip shows the card as it is now.",
+  "rows": [
+   [
+    "Now",
+    "the twenty canons of Nicaea / the late legend (Synodicon Vetus, 9th century) / Muratorian fragment (dating debated, usually late second century) / Eusebius, Life of Constantine 4.36 / Athanasius, Festal Letter 39 / Constantine died AD 337 / the creed and the synodal letter (Easter date)"
+   ],
+   [
+    "New",
+    "Council of Nicaea, AD 325: creed, canons and synodal letter / Muratorian fragment, late second century / Eusebius, Life of Constantine 4.36 / Athanasius, Festal Letter 39, AD 367"
+   ]
+  ],
+  "options": [
+   "Use the new text",
+   "Change it (say how in the comment)",
+   "Keep the card as it is now"
+  ],
+  "proposed": [
+   "Council of Nicaea, AD 325: creed, canons and synodal letter",
+   "Muratorian fragment, late second century",
+   "Eusebius, Life of Constantine 4.36",
+   "Athanasius, Festal Letter 39, AD 367"
+  ]
+ },
+ {
+  "id": "s2-src-201",
+  "round": "round-2-2026-10-10",
+  "group": "Sources cards",
+  "ep": 20,
+  "part": 1,
+  "a": 131,
+  "b": 137,
+  "title": "Sources card, Episode 20 Part 1",
+  "why": "The card at the end of this part. Read the new text; the clip shows the card as it is now.",
+  "rows": [
+   [
+    "Now",
+    "Andrew Holt, Counting Religious Wars in the Encyclopedia of Wars, 26 December 2018: 121 entries (122 wars) of 1,763, about 6.9 percent; the often quoted 123 is a miscount (checked 28 Sep) / James 4:1; Matthew 26:52; Matthew 5:9"
+   ],
+   [
+    "New",
+    "Andrew Holt, Counting Religious Wars in the Encyclopedia of Wars, 2018 / James 4:1; Matthew 26:52; Matthew 5:9"
+   ]
+  ],
+  "options": [
+   "Use the new text",
+   "Change it (say how in the comment)",
+   "Keep the card as it is now"
+  ],
+  "proposed": [
+   "Andrew Holt, Counting Religious Wars in the Encyclopedia of Wars, 2018",
+   "James 4:1; Matthew 26:52; Matthew 5:9"
+  ]
+ },
+ {
+  "id": "s2-src-202",
+  "round": "round-2-2026-10-10",
+  "group": "Sources cards",
+  "ep": 20,
+  "part": 2,
+  "a": 127,
+  "b": 133,
+  "title": "Sources card, Episode 20 Part 2",
+  "why": "The card at the end of this part. Read the new text; the clip shows the card as it is now.",
+  "rows": [
+   [
+    "Now",
+    "Matthew 7:21 / James 2:17 / the \"most churches per square mile\" saying"
+   ],
+   [
+    "New",
+    "Matthew 7:21 / James 2:17"
+   ]
+  ],
+  "options": [
+   "Use the new text",
+   "Change it (say how in the comment)",
+   "Keep the card as it is now"
+  ],
+  "proposed": [
+   "Matthew 7:21",
+   "James 2:17"
+  ]
+ },
+ {
+  "id": "s2-src-203",
+  "round": "round-2-2026-10-10",
+  "group": "Sources cards",
+  "ep": 20,
+  "part": 3,
+  "a": 127,
+  "b": 133,
+  "title": "Sources card, Episode 20 Part 3",
+  "why": "You asked for a real source for each name. Each line now names where the fact comes from (checked on the web 10 October).",
+  "rows": [
+   [
+    "Now",
+    "Calabar High School / Kingston College / St George's College / William Knibb / James Phillippo and Sligoville, 1835"
+   ],
+   [
+    "New",
+    "Calabar High School history: founded 1912 by Jamaican Baptists / Kingston College history: opened 1925, Anglican / Jamaica Observer, 2015: St George's College, founded by Jesuits, 1850 / William Knibb, Colonial Slavery, speech in London, 1832 / Jamaica Information Service, 2018: Sligoville, first free village, 1835"
+   ]
+  ],
+  "options": [
+   "Use the new text",
+   "Change it (say how in the comment)",
+   "Keep the card as it is now"
+  ],
+  "proposed": [
+   "Calabar High School history: founded 1912 by Jamaican Baptists",
+   "Kingston College history: opened 1925, Anglican",
+   "Jamaica Observer, 2015: St George's College, founded by Jesuits, 1850",
+   "William Knibb, Colonial Slavery, speech in London, 1832",
+   "Jamaica Information Service, 2018: Sligoville, first free village, 1835"
+  ]
+ },
+ {
+  "id": "s2-src-221",
+  "round": "round-2-2026-10-10",
+  "group": "Sources cards",
+  "ep": 22,
+  "part": 1,
+  "a": 136,
+  "b": 142,
+  "title": "Sources card, Episode 22 Part 1",
+  "why": "The card at the end of this part. Read the new text; the clip shows the card as it is now.",
+  "rows": [
+   [
+    "Now",
+    "Craig S. Keener, Miracles: The Credibility of the New Testament Accounts, 2 volumes, Baker Academic, 2011 (checked 28 Sep) / C. S. Lewis, Miracles (1947) / David Hume, An Enquiry Concerning Human Understanding (1748), section 10"
+   ],
+   [
+    "New",
+    "Craig S. Keener, Miracles, 2011 / C. S. Lewis, Miracles, 1947 / David Hume, An Enquiry Concerning Human Understanding, 1748, section 10"
+   ]
+  ],
+  "options": [
+   "Use the new text",
+   "Change it (say how in the comment)",
+   "Keep the card as it is now"
+  ],
+  "proposed": [
+   "Craig S. Keener, Miracles, 2011",
+   "C. S. Lewis, Miracles, 1947",
+   "David Hume, An Enquiry Concerning Human Understanding, 1748, section 10"
+  ]
+ },
+ {
+  "id": "s2-src-231",
+  "round": "round-2-2026-10-10",
+  "group": "Sources cards",
+  "ep": 23,
+  "part": 1,
+  "a": 139,
+  "b": 145,
+  "title": "Sources card, Episode 23 Part 1",
+  "why": "The card at the end of this part. Read the new text; the clip shows the card as it is now.",
+  "rows": [
+   [
+    "Now",
+    "Genesis 15:13 to 16 / Leviticus 18:21; Deuteronomy 12:31 / Joshua 10:40; Judges 1:21 to 33 / Jonah 3:10 and 4:2; Ezekiel 33:11 / K. Lawson Younger Jr., Ancient Conquest Accounts (JSOT Press, 1990): ancient Near Eastern war reports use total victory language as standard exaggeration / Paul Copan, Is God a Moral Monster? (Baker Books, 2011), chapters on the Canaanites (checked 3 Oct)"
+   ],
+   [
+    "New",
+    "Genesis 15:13 to 16 / Leviticus 18:21; Deuteronomy 12:31 / Joshua 10:40; Judges 1:21 to 33 / Jonah 3:10 and 4:2; Ezekiel 33:11 / K. Lawson Younger Jr., Ancient Conquest Accounts, 1990 / Paul Copan, Is God a Moral Monster?, 2011"
+   ]
+  ],
+  "options": [
+   "Use the new text",
+   "Change it (say how in the comment)",
+   "Keep the card as it is now"
+  ],
+  "proposed": [
+   "Genesis 15:13 to 16",
+   "Leviticus 18:21; Deuteronomy 12:31",
+   "Joshua 10:40; Judges 1:21 to 33",
+   "Jonah 3:10 and 4:2; Ezekiel 33:11",
+   "K. Lawson Younger Jr., Ancient Conquest Accounts, 1990",
+   "Paul Copan, Is God a Moral Monster?, 2011"
+  ]
+ },
+ {
+  "id": "s2-src-232",
+  "round": "round-2-2026-10-10",
+  "group": "Sources cards",
+  "ep": 23,
+  "part": 2,
+  "a": 130,
+  "b": 136,
+  "title": "Sources card, Episode 23 Part 2",
+  "why": "The Port Royal earthquake is not a source for anything said in this part, so it comes off.",
+  "rows": [
+   [
+    "Now",
+    "Genesis 6:5 to 6 and 6:11 / 2 Peter 2:5 / 1 Peter 3:20 / Genesis 9:11 to 13 / the Port Royal earthquake of 1692"
+   ],
+   [
+    "New",
+    "Genesis 6:5 to 6 and 6:11 / 2 Peter 2:5 / 1 Peter 3:20 / Genesis 9:11 to 13"
+   ]
+  ],
+  "options": [
+   "Use the new text",
+   "Change it (say how in the comment)",
+   "Keep the card as it is now"
+  ],
+  "proposed": [
+   "Genesis 6:5 to 6 and 6:11",
+   "2 Peter 2:5",
+   "1 Peter 3:20",
+   "Genesis 9:11 to 13"
+  ]
+ },
+ {
+  "id": "s2-src-253",
+  "round": "round-2-2026-10-10",
+  "group": "Sources cards",
+  "ep": 25,
+  "part": 3,
+  "a": 133,
+  "b": 139,
+  "title": "Sources card, Episode 25 Part 3",
+  "why": "Checked: Haile Selassie set up a Bible Committee (1947 to 1952) and the Amharic Bible came out in 1962. Line 11 (he had it put into Amharic so his people could read it) holds up.",
+  "rows": [
+   [
+    "Now",
+    "the King James translators / the Ethiopian Orthodox canon of 81 books including Enoch and Jubilees / the Haile Selassie Amharic Bible"
+   ],
+   [
+    "New",
+    "King James Version, 1611 / Ethiopian Orthodox canon: 81 books / Amharic Bible, Haile Selassie's Bible Committee, 1962"
+   ]
+  ],
+  "options": [
+   "Use the new text",
+   "Change it (say how in the comment)",
+   "Keep the card as it is now"
+  ],
+  "proposed": [
+   "King James Version, 1611",
+   "Ethiopian Orthodox canon: 81 books",
+   "Amharic Bible, Haile Selassie's Bible Committee, 1962"
+  ]
+ },
+ {
+  "id": "s2-past-143",
+  "round": "round-2-2026-10-10",
+  "group": "Pastoral review",
+  "ep": 14,
+  "part": 3,
+  "a": 46,
+  "b": 135,
+  "title": "Pastoral review: Trusting God after abuse",
+  "why": "The whole part, from the end of the intro. Is everything said here pastorally sound for TWC? Name the time of anything to change in the comment.",
+  "options": [
+   "Approved: keep it published",
+   "Needs changes (say where in the comment)",
+   "Take it down until it is fixed"
+  ]
+ },
+ {
+  "id": "s2-past-163",
+  "round": "round-2-2026-10-10",
+  "group": "Pastoral review",
+  "ep": 16,
+  "part": 3,
+  "a": 46,
+  "b": 144,
+  "title": "Pastoral review: When a baby dies",
+  "why": "The whole part, from the end of the intro. Is everything said here pastorally sound for TWC? Name the time of anything to change in the comment.",
+  "options": [
+   "Approved: keep it published",
+   "Needs changes (say where in the comment)",
+   "Take it down until it is fixed"
+  ]
+ },
+ {
+  "id": "s2-past-173",
+  "round": "round-2-2026-10-10",
+  "group": "Pastoral review",
+  "ep": 17,
+  "part": 3,
+  "a": 46,
+  "b": 135,
+  "title": "Pastoral review: Faith and healing",
+  "why": "The whole part, from the end of the intro. Is everything said here pastorally sound for TWC? Name the time of anything to change in the comment.",
+  "options": [
+   "Approved: keep it published",
+   "Needs changes (say where in the comment)",
+   "Take it down until it is fixed"
   ]
  }
 ];

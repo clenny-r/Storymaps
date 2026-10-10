@@ -52,16 +52,19 @@
   details.setup{background:var(--panel);border-radius:14px;padding:12px 16px;margin:14px 0}
   details.setup summary{cursor:pointer;font-weight:600}
   details.setup p{font-size:15px;color:var(--ink2)}
+  .vs{display:flex;gap:10px;margin:0 0 12px}.vs figure{margin:0;flex:1;min-width:0}.vs figcaption{font-size:13px;color:var(--muted);margin:0 0 4px;font-weight:700}
+  .vs video,.vs .ph{width:100%;aspect-ratio:9/16;background:#000;border-radius:10px;display:block}
+  .rows{margin:0 0 12px;display:grid;gap:8px}.rows div{background:var(--panel2);border-radius:10px;padding:10px 12px;font-size:15px}.rows b{display:block;color:var(--gold);font-size:13px;margin-bottom:2px}
   .end{padding:20px 0 60px;color:var(--muted);font-size:15px}
 </style>
 </head>
 <body>
 <div class="wrap">
   <h1>Review queue</h1>
-  <p class="lead">Questions from Claude about the videos. Play the clip, pick an answer, add a comment if you want, and save. You can stop at any time; answers are kept on this device and sent by themselves.</p>
+  <p class="lead">Questions from Claude about the videos, and in Fixed, each fix before and after. Play the clip, pick an answer, add a comment if you want, and save. You can stop at any time; answers are kept on this device and sent by themselves.</p>
 <details class="setup" id="setup">
     <summary>Sending</summary>
-    <p>Answers are sent by themselves a few seconds after you save, and when you leave the page. No key is needed.</p>
+    <p>Answers are packed together and sent when you leave the page, 3 minutes after your last save, or when you press Send now. If a send is refused they stay on this device and are tried again every 10 minutes while the page is open, and the next time you open it.</p>
     <div class="foot"><button class="btn primary" id="sendall" type="button">Send now</button><button class="btn" id="copyall" type="button">Copy all answers</button></div>
     <p class="state" id="setupstate"></p>
   </details>
@@ -99,7 +102,7 @@
       if(it.group !== lastGroup){ list.appendChild(el("h2", null, it.group)); lastGroup = it.group; }
       list.appendChild(card(it)); shown++;
     });
-    if(!shown) list.appendChild(el("p", "lead", filter === "open" ? "Everything is answered. Thank you." : "Nothing in this group."));
+    if(!shown) list.appendChild(el("p", "lead", filter === "open" ? "Everything is answered. Thank you." : (filter === "Fixed" ? "Nothing fixed yet. Each fix shows here with the video before and after." : "Nothing in this group.")));
     progress();
   }
   function progress(){
@@ -110,10 +113,21 @@
   }
   function card(it){
     var a = A[it.id] || {}, c = el("section", "card" + (A[it.id] ? " done" : "")); c.id = "q-" + it.id;
-    if(it.ep) c.appendChild(el("p", "where", "Episode " + it.ep + ", Part " + it.part + ", " + fmt(it.a) + " to " + fmt(it.b)));
+    if(it.ep) c.appendChild(el("p", "where", "Episode " + it.ep + ", Part " + it.part + ", " + fmt(it.a) + " to " + fmt(it.b) + (it.round && it.round !== ROUND ? " (" + it.round.split("-").slice(0, 2).join(" ") + ")" : "")));
     c.appendChild(el("h3", null, it.title));
     c.appendChild(el("p", "why", it.why));
-    if(it.ep){
+    if(it.ep && it.old){
+      var vs = el("div", "vs");
+      [["Before", it.old, 0, 9999], ["After", file(it), it.a, it.b]].forEach(function(p){
+        var fg = el("figure"), cap = el("figcaption", null, p[0]), v = document.createElement("video");
+        v.playsInline = true; v.setAttribute("playsinline", ""); v.controls = true; v.preload = "metadata";
+        v.src = p[1] + (p[0] === "After" ? "#t=" + p[2] + "," + p[3] : "");
+        if(p[0] === "After"){ v.addEventListener("timeupdate", function(){ if(v.currentTime >= p[3]) v.pause(); });
+          v.addEventListener("play", function(){ if(v.currentTime < p[2] - 0.5 || v.currentTime >= p[3]) try{ v.currentTime = p[2]; }catch(e){} }); }
+        v.addEventListener("play", function(){ document.querySelectorAll("video").forEach(function(o){ if(o !== v) o.pause(); }); });
+        fg.appendChild(cap); fg.appendChild(v); vs.appendChild(fg); });
+      c.appendChild(vs);
+    } else if(it.ep){
       var clip = el("div", "clip"), ph = el("button", "ph"); ph.type = "button"; ph.setAttribute("aria-label", "Play the clip"); ph.style.backgroundImage = "url('" + poster(it) + "')";
       var ctl = el("div", "ctl"), b1 = el("button", "btn primary", "Play clip"), b2 = el("button", "btn", "Start 5 s earlier"), b3 = el("button", "btn", "Play 5 s longer"), t = el("span", "t", fmt(it.b - it.a) + " clip");
       b1.type = b2.type = b3.type = "button";
@@ -133,6 +147,7 @@
       b3.addEventListener("click", function(){ to = to + 5; play(); });
       ctl.appendChild(b1); ctl.appendChild(b2); ctl.appendChild(b3); ctl.appendChild(t); clip.appendChild(ph); clip.appendChild(ctl); c.appendChild(clip);
     }
+    if(it.rows){ var rw = el("div", "rows"); it.rows.forEach(function(r){ var d = el("div"); d.appendChild(el("b", null, r[0])); d.appendChild(document.createTextNode(r[1])); rw.appendChild(d); }); c.appendChild(rw); }
     if(it.script || it.heard){ var dl = el("dl", "said");
       if(it.script){ dl.appendChild(el("dt", null, "Script")); dl.appendChild(el("dd", null, it.script)); }
       if(it.heard){ dl.appendChild(el("dt", null, "Machine heard")); dl.appendChild(el("dd", null, it.heard)); }
@@ -157,13 +172,16 @@
   }
   // Answers go through the same address as the "Report an issue" button (no key). Several answers are packed into one
   // message: "[REVIEW round] id=optionNumber|comment ;; id=optionNumber|comment". Option numbers start at 1; 0 = "Not sure".
-  function pack(ids){ var msgs=[], cur=[], len=0, head="[REVIEW "+ROUND+"] ";
+  function pack(ids){ var msgs=[], byRound={};
+    ids.forEach(function(id){ var it=ITEMS.find(function(x){return x.id===id;}); if(it){ var r=it.round||ROUND; (byRound[r]=byRound[r]||[]).push(id); } });
+    Object.keys(byRound).forEach(function(r){ packOne(byRound[r], r, msgs); });
+    return msgs; }
+  function packOne(ids, round, msgs){ var cur=[], len=0, head="[REVIEW "+round+"] ";
     ids.forEach(function(id){ var it=ITEMS.find(function(x){return x.id===id;}), a=A[id]; if(!it||!a) return;
       var n=it.options.indexOf(a.choice)+1, s=id+"="+n+(a.comment?"|"+a.comment.replace(/;;/g,";").slice(0,300):"");
       if(cur.length && len+s.length+4>900){ msgs.push({ids:cur.map(function(c){return c[0];}), text:head+cur.map(function(c){return c[1];}).join(" ;; ")}); cur=[]; len=0; }
       cur.push([id,s]); len+=s.length+4; });
-    if(cur.length) msgs.push({ids:cur.map(function(c){return c[0];}), text:head+cur.map(function(c){return c[1];}).join(" ;; ")});
-    return msgs; }
+    if(cur.length) msgs.push({ids:cur.map(function(c){return c[0];}), text:head+cur.map(function(c){return c[1];}).join(" ;; ")}); }
   var sending=false;
   function send(ids){
     if(!ids.length || sending) return Promise.resolve(false); sending=true;
@@ -172,13 +190,14 @@
       return fetch(API+"/api/report",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({episode:98, part:1, time:0, type:"other", text:m.text, name:"Clenmar review", page:location.href})})
         .then(function(r){ if(!r.ok) throw new Error(r.status===429?"too many sends this hour; they will go later":"error "+r.status); m.ids.forEach(function(id){ if(A[id]) A[id].sent=true; }); store(A); }); }); });
     return chain.then(function(){ $("setupstate").className="state ok"; $("setupstate").textContent="Sent."; })
-      .catch(function(e){ ok=false; $("setupstate").className="state bad"; $("setupstate").textContent="Not sent ("+e.message+"). Answers stay on this device."; })
+      .catch(function(e){ ok=false; $("setupstate").className="state bad"; $("setupstate").textContent="Not sent ("+e.message+"). Answers stay on this device and are tried again in 10 minutes."; clearTimeout(retry); retry=setTimeout(function(){ send(unsent()); }, 600000); })
       .then(function(){ sending=false; progress(); return ok; });
   }
   function unsent(){ return ITEMS.map(function(i){return i.id;}).filter(function(id){ return A[id] && !A[id].sent; }); }
-  var timer=null;
-  function sendSoon(){ clearTimeout(timer); timer=setTimeout(function(){ send(unsent()).then(function(){ if(filter!=="open") render(); }); }, 15000); }
-  document.addEventListener("visibilitychange",function(){ if(document.visibilityState==="hidden"){ clearTimeout(timer); send(unsent()); } });
+  var timer=null, retry=null;
+  function sendSoon(){ clearTimeout(timer); timer=setTimeout(function(){ send(unsent()).then(function(){ if(filter!=="open") render(); }); }, 180000); }
+  setTimeout(function(){ if(unsent().length) send(unsent()); }, 5000);
+  document.addEventListener("visibilitychange",function(){ if(document.visibilityState==="hidden" && unsent().length){ clearTimeout(timer); send(unsent()); } });
   $("sendall").addEventListener("click", function(){ var ids=unsent(); if(!ids.length){ $("setupstate").className="state ok"; $("setupstate").textContent="Nothing waiting to be sent."; return; } clearTimeout(timer); send(ids).then(function(){ render(); }); });
   $("copyall").addEventListener("click", function(){ var lines = ["Review answers, " + ROUND];
     ITEMS.forEach(function(it){ var a = A[it.id]; if(a) lines.push(it.id + " | " + a.choice + (a.comment ? " | " + a.comment : "")); });
@@ -188,6 +207,7 @@
     if(filter !== "open" && filter !== "all" && it.group !== filter){ filter = "open"; chips(); render(); }
     var c = $("q-" + it.id); if(c) c.scrollIntoView({behavior: "smooth", block: "start"}); });
   function chips(){ var box = $("chips"); box.innerHTML = ""; var groups = []; ITEMS.forEach(function(it){ if(groups.indexOf(it.group) < 0) groups.push(it.group); });
+    if(groups.indexOf("Fixed") < 0) groups.push("Fixed");
     [["open", "Unanswered"], ["all", "All"]].concat(groups.map(function(g){ return [g, g]; })).forEach(function(p){ var b = el("button", "chip" + (filter === p[0] ? " on" : ""), p[1]); b.type = "button";
       b.addEventListener("click", function(){ filter = p[0]; chips(); render(); window.scrollTo(0, 0); }); box.appendChild(b); }); }
   chips(); render();
