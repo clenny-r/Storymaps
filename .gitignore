@@ -80,4 +80,5 @@ build/
 # IH2VOF working folder: ignored, except the Dominica story page (published 2026-10-08)
 /Pages/IH2VOF_examples/*
 !/Pages/IH2VOF_examples/Dominica_story/
+!/Pages/IH2VOF_examples/How_it_works/
 /Pages/IH2VOF_examples/Dominica_story/_to_delete/

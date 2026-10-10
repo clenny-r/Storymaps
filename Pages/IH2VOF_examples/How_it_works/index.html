@@ -1,0 +1,506 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How the wave tank model was built | IH2VOF as a final sanity check</title>
+<meta name="description" content="How the IH2VOF numerical wave tank for the Western Head revetment was set up, what every input means, the checks that were run, and how far the results can be trusted.">
+<style>
+:root{--bg:#f6f4ee;--paper:#fff;--ink:#17212b;--ink2:#44505c;--muted:#6f7a84;--line:#dedbd0;--sea:#0f4c75;--accent:#1f6fb2;--green:#2f7d5b;--warn:#9a5b00;--bad:#a8322a;--tint:#eef2f5;--r:12px}
+@media (prefers-color-scheme:dark){:root{--bg:#0f161d;--paper:#18222c;--ink:#eef2f5;--ink2:#c0cad3;--muted:#8f9ba6;--line:#2b3844;--sea:#0b2f49;--accent:#5aa7e6;--green:#58b58c;--warn:#e2a54a;--bad:#ef8a80;--tint:#141d26}}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+h1,h2,h3{font-family:Georgia,"Times New Roman",serif;line-height:1.2;margin:0}
+h1{font-size:clamp(30px,5vw,52px)}h2{font-size:clamp(25px,3.4vw,36px);margin-bottom:14px}h3{font-size:21px;margin:26px 0 8px}
+p{margin:0 0 14px}a{color:var(--accent)}
+.wrap{max-width:1040px;margin:0 auto;padding:0 18px}
+.narrow{max-width:760px}
+header.cover{background:linear-gradient(160deg,var(--sea),#1b6ca8);color:#fff;padding:70px 0 54px}
+header.cover p.sub{font-size:21px;max-width:760px;opacity:.95;margin-top:14px}
+.ribbon{display:inline-block;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.4);border-radius:99px;padding:4px 14px;font-size:14px;margin-bottom:18px}
+nav.top{position:sticky;top:0;z-index:20;background:var(--paper);border-bottom:1px solid var(--line);overflow-x:auto;white-space:nowrap}
+nav.top a{display:inline-block;padding:11px 12px;font-size:14px;color:var(--ink2);text-decoration:none}
+nav.top a:hover{color:var(--accent)}
+section{padding:54px 0;border-bottom:1px solid var(--line)}section.tint{background:var(--tint)}
+.kicker{font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);font-weight:700;margin-bottom:8px}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px;margin-top:20px}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);padding:18px}
+.card h3{margin:0 0 6px;font-size:19px}.card p{margin:0;color:var(--ink2);font-size:15.5px}
+.card.good{border-left:5px solid var(--green)}.card.warn{border-left:5px solid var(--warn)}.card.bad{border-left:5px solid var(--bad)}
+.tablewrap{overflow-x:auto;margin:14px 0;border:1px solid var(--line);border-radius:var(--r);background:var(--paper)}
+table{border-collapse:collapse;width:100%;font-size:15px;min-width:560px}
+th,td{padding:9px 12px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:13px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);background:var(--tint)}
+tr:last-child td{border-bottom:0}td.num{font-variant-numeric:tabular-nums;white-space:nowrap}
+.fig{margin:18px 0;background:var(--paper);border:1px solid var(--line);border-radius:var(--r);padding:12px}
+.fig img,.fig video{width:100%;height:auto;display:block;border-radius:8px;background:#fff}
+.fig figcaption,.cap{font-size:14px;color:var(--muted);margin-top:8px}
+.eq{background:var(--paper);border:1px solid var(--line);border-left:5px solid var(--accent);border-radius:8px;padding:12px 16px;margin:14px 0;font-family:"Cambria Math",Georgia,serif;font-size:18px;overflow-x:auto;white-space:nowrap}
+.eq small{font-family:system-ui,sans-serif;font-size:13.5px;color:var(--muted);white-space:normal;display:block;margin-top:6px}
+.note{background:var(--paper);border:1px solid var(--line);border-left:5px solid var(--warn);border-radius:8px;padding:12px 16px;margin:14px 0;font-size:15.5px}
+.note.bad{border-left-color:var(--bad)}.note.good{border-left-color:var(--green)}
+ol.steps{counter-reset:s;list-style:none;padding:0;margin:18px 0}
+ol.steps>li{counter-increment:s;position:relative;padding:14px 16px 14px 62px;background:var(--paper);border:1px solid var(--line);border-radius:var(--r);margin-bottom:10px}
+ol.steps>li::before{content:counter(s);position:absolute;left:16px;top:14px;width:32px;height:32px;border-radius:50%;background:var(--accent);color:#fff;font-weight:700;display:grid;place-items:center}
+ol.steps b{display:block;font-size:17.5px}ol.steps span{color:var(--ink2);font-size:15.5px}ol.steps em{display:block;font-style:normal;font-size:14.5px;color:var(--green);margin-top:4px}
+code{background:var(--tint);border:1px solid var(--line);border-radius:5px;padding:1px 5px;font-size:13.5px;word-break:break-all}
+.calc{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;background:var(--paper);border:1px solid var(--line);border-radius:var(--r);padding:16px;margin:14px 0}
+.calc label{font-size:13.5px;color:var(--muted);display:block}.calc input,.calc select{width:100%;font:inherit;padding:7px 9px;border:1px solid var(--line);border-radius:7px;background:var(--bg);color:var(--ink)}
+.out{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px;font-size:16px}
+.out b{font-variant-numeric:tabular-nums}
+details{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);padding:12px 16px;margin-bottom:10px}
+details summary{cursor:pointer;font-weight:600}details p{margin:10px 0 0;color:var(--ink2)}details p b{color:var(--ink)}
+ul.tight{padding-left:20px;margin:8px 0 14px}ul.tight li{margin-bottom:6px}
+.chart svg{width:100%;height:auto;display:block}.chart{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);padding:14px}
+.chart h3{margin:0 0 2px;font-size:19px}.chart p{font-size:14px;color:var(--muted);margin:0 0 6px}
+ol.refs{font-size:15px;padding-left:22px}ol.refs li{margin-bottom:8px}
+footer{padding:30px 0 60px;color:var(--muted);font-size:14px}
+.pill{display:inline-block;font-size:12.5px;border-radius:99px;padding:1px 9px;border:1px solid var(--line);color:var(--muted);margin-left:6px;white-space:nowrap}
+.pill.ok{color:var(--green);border-color:var(--green)}.pill.chk{color:var(--warn);border-color:var(--warn)}
+</style>
+</head>
+<body>
+<header class="cover"><div class="wrap">
+  <span class="ribbon">Internal learning page. Draft. Indicative results, not for design.</span>
+  <h1>A wave tank inside a computer, used as a final sanity check</h1>
+  <p class="sub">How the IH2VOF model of the Shore Road revetment at Western Head, Nova Scotia was built, what every input means, which checks were run, and how far the answers can be trusted.</p>
+  <p style="opacity:.85;margin-top:18px;font-size:15px">Clenmar Rowe, P.Eng., CBCL Limited. Updated 10 October 2026. Worked example: main revetment, station 0+120, proposed design.</p>
+</div></header>
+<nav class="top"><div class="wrap">
+  <a href="#pitch">The pitch</a><a href="#workflow">Workflow</a><a href="#domain">The tank</a><a href="#grid">Grid</a><a href="#materials">Rock as numbers</a><a href="#waves">Waves</a><a href="#checks">Health checks</a><a href="#result">Example result</a><a href="#hand">Hand checks</a><a href="#trust">Reliability</a><a href="#limits">Limits</a><a href="#diy">Do it yourself</a><a href="#quiz">Self-test</a><a href="#refs">References</a>
+</div></nav>
+
+<section id="pitch"><div class="wrap">
+  <p class="kicker">1. The pitch</p>
+  <h2>What this tool is for, and what it is not</h2>
+  <p class="narrow">Coastal structures are normally designed with hand formulae: van der Meer for rock size, the EurOtop manual for overtopping, Goda for wave forces on walls. Those formulae are built on thousands of laboratory tests and remain the basis of design. Their weakness is that each one assumes a tidy, standard shape. A real section has a berm, a buried wall, a shallow irregular foreshore and three rock layers, and the formulae do not talk to each other.</p>
+  <p class="narrow">IH2VOF is a two-dimensional numerical wave tank developed by the Environmental Hydraulics Institute of Cantabria (IHCantabria), Spain. It solves the equations of fluid motion on a grid, tracks the water surface, and lets water flow through rock layers. It can run the actual section from the drawing, with all its details, under an irregular storm.</p>
+  <div class="cards">
+    <div class="card good"><h3>Use it as</h3><p>A final, independent check on a detailed section once the hand design is done. Does the model see roughly the overtopping EurOtop predicts? Roughly the force Goda predicts? Does anything unexpected happen at the berm, the toe or the wall?</p></div>
+    <div class="card good"><h3>It is strong at</h3><p>Comparing two versions of the same section under identical waves, showing mechanisms on video, and catching details the formulae cannot represent.</p></div>
+    <div class="card bad"><h3>It is not</h3><p>A replacement for the design formulae, a physical model test, or a source of design numbers on its own. It is two-dimensional, the rock parameters here are not calibrated, and each run covers only about 45 waves.</p></div>
+  </div>
+  <div class="note"><b>The rule proposed for using it:</b> hand methods set the design. The wave tank is run afterwards. Agreement within a factor of about two to three on overtopping, and the same order of magnitude on forces, is confirmation. A larger disagreement is not a new answer; it is a prompt to find out which assumption differs.</div>
+</div></section>
+
+<section id="workflow" class="tint"><div class="wrap">
+  <p class="kicker">2. The workflow</p>
+  <h2>Seven stages, each with a human check</h2>
+  <p class="narrow">Every stage lives in its own numbered folder under <code>C:\IH2VOF\Western head\</code> with a copy of the script that produced it, so any number can be traced back. Scripts and repetitive clicking were automated; the green line under each stage is the check a person has to make.</p>
+  <ol class="steps">
+    <li><b>Inputs (00_inputs)</b><span>Tender drawings, the armour design spreadsheet, the spectral wave model results (MIKE 21 Spectral Waves), the revetment footprint shapefile and the 1 m survey elevation model.</span><em>Check: are these the current issue of the drawings and the same datum (CGVD2013) everywhere?</em></li>
+    <li><b>Sections from the drawings (01_sections)</b><span>The section linework was read from the drawing file as vectors and scaled from two known lines on each section (higher high water at +0.76 m and lower low water at −1.5 m). Station positions were fixed by matching the plan to the footprint shapefile, then confirmed against the survey model.</span><em>Check: overlay the traced section on the drawing (the video does this) and compare the drawn ground with the survey. Here the fit is 0.22 m on the main revetment.</em></li>
+    <li><b>Model geometry (02_geometry)</b><span>Each layer becomes a polygon with a material name: armour, filter, bedding, backfill, wall, ground. Gauge positions, the pressure zone and the overtopping basin are set here.</span><em>Check: layer thicknesses and levels against the typical section (crest +5.6 m, berm +2.7 m, toe −1.5 m).</em></li>
+    <li><b>Waves and sea bed offshore (03_forcing)</b><span>The drawing stops 30 m seaward of the wall. The sea bed from there to the wave paddle comes from the survey model; the wave height and period at the paddle come from the spectral wave model.</span><em>Check: is the paddle wave physically possible in that depth, and is the water level the one the design uses?</em></li>
+    <li><b>Case files and preparation (04_cases)</b><span>Geometry and settings are written to the model's input format. The mesh, wave series and paddle motion are generated in the IH2VOF program itself. A script then compares every saved setting with the intended value.</span><em>Check: the input check must pass; no "floating" water cells trapped under rock.</em></li>
+    <li><b>Run and monitor (05_run)</b><span>A runner starts the solver, logs progress every two minutes, and post-processes each finished case.</span><em>Check: the health checks in section 7.</em></li>
+    <li><b>Results and video (06_analysis, 07_hq_videos)</b><span>Wave heights at the gauges, overtopping, wall force, and the standard video with the drawing overlaid.</span><em>Check: compare with EurOtop and Goda by hand (section 9) before believing anything.</em></li>
+  </ol>
+  <figure class="fig"><img src="assets/footprint_match.png" alt="Plan linework from the drawing placed on the surveyed footprint outline" loading="lazy"><figcaption>Stage 2 check. Grey: linework from the plan sheet. Red: the footprint shapefile. Blue: modelled station lines. An earlier attempt that placed the plan using only the coarse wave model sea bed was 120 m out along the shore; the footprint and the survey model caught it. Lesson: position has to be tied to surveyed data.</figcaption></figure>
+</div></section>
+
+<section id="domain"><div class="wrap">
+  <p class="kicker">3. The tank</p>
+  <h2>What the model domain looks like</h2>
+  <p class="narrow">The model is a vertical slice through the shore, 353 m long and 14.55 m high. Waves are made at the offshore end by a numerical paddle and travel over the real sea bed to the structure.</p>
+  <div class="tablewrap"><table>
+    <tr><th>Item</th><th>Value at station 0+120</th><th>Why</th></tr>
+    <tr><td>Still water level</td><td class="num">+2.38 m CGVD2013</td><td>Design level in the armour spreadsheet: higher high water plus sea level rise to 2100 (+1.46 m) plus 0.93 m storm surge.</td></tr>
+    <tr><td>Paddle position and depth</td><td class="num">bed −5.5 m, depth 7.88 m</td><td>Deep enough to generate the waves cleanly, shallow enough to keep the tank short.</td></tr>
+    <tr><td>Flat section at the paddle</td><td class="num">130 m</td><td>One wavelength of flat bed so the waves form properly before the slope.</td></tr>
+    <tr><td>Sea bed from paddle to drawing</td><td class="num">about 180 m</td><td>From the 1 m survey elevation model along the station line.</td></tr>
+    <tr><td>Structure</td><td class="num">last 30 m</td><td>Traced from the tender drawing.</td></tr>
+    <tr><td>Offshore boundary</td><td>Wave paddle with active absorption</td><td>Absorbs waves reflected by the structure so they do not bounce back in.</td></tr>
+    <tr><td>Landward boundary</td><td>Closed, with a dry basin 9 to 14 m behind the wall</td><td>Water that passes the wall drains into the basin and is counted; it cannot slosh back.</td></tr>
+  </table></div>
+  <figure class="fig"><img src="assets/instruments_WHM0120.png" alt="Section showing gauges, run-up length, pressure zone and overtopping basin" loading="lazy"><figcaption>Where readings are taken. Gauges G1 (near the paddle) and G2 (seaward end of the drawing) are off the picture. G3 is at the toe, G4 and G5 on the slope, G6 one grid cell behind the wall. Overtopping is the flow through the vertical line at G6, the standard EurOtop definition (landward edge of the crest). The dry basin is an independent volume count used as a cross-check. The magenta box is the zone where pressure on the wall is recorded.</figcaption></figure>
+</div></section>
+
+<section id="grid" class="tint"><div class="wrap">
+  <p class="kicker">4. The grid</p>
+  <h2>How many cells, and is that enough?</h2>
+  <p class="narrow">The tank is divided into rectangular cells 0.5 m long and 0.15 m high: 706 columns by 97 rows, about 68,500 cells. Every result is limited by this resolution, so it is worth knowing how many cells cover each feature.</p>
+  <div class="tablewrap"><table id="tblGrid">
+    <tr><th>Feature</th><th>Size</th><th>Cells across it</th><th>Comment</th></tr>
+  </table></div>
+  <p class="narrow">Common guidance for this family of models is at least 10 cells per wave height (preferably 15 to 20), at least 70 to 100 cells per wavelength, and a cell length no more than about 2.5 to 5 times its height. This grid meets those for the waves. The weak spots are horizontal: the wall is under two cells wide and each rock layer is only a few cells thick measured along the slope.</p>
+  <h3>Resolution zones: was the grid made finer near the structure?</h3>
+  <p class="narrow"><b>No.</b> These runs use one uniform zone: the same 0.5 m by 0.15 m cell from the paddle to the basin and from the floor to the lid. The solid brackets below show that single zone. The dashed brackets show where a finer zone would normally be placed and was not.</p>
+  <div class="chart" style="overflow-x:auto"><svg viewBox="0 0 1000 372" style="min-width:720px" role="img" aria-label="Tank outline with brackets showing one uniform resolution zone along the length and height, and dashed brackets where a finer zone is recommended near the structure">
+    <defs><pattern id="gridpat" width="12" height="6" patternUnits="userSpaceOnUse"><path d="M12 0H0V6" fill="none" stroke="var(--muted)" stroke-width=".5" opacity=".45"/></pattern></defs>
+    <rect x="90" y="60" width="860" height="200" fill="var(--paper)" stroke="var(--ink2)"/>
+    <polygon points="90,152 950,152 950,260 90,260" fill="var(--accent)" opacity=".18"/>
+    <rect x="90" y="60" width="860" height="200" fill="url(#gridpat)"/>
+    <polygon points="90,260 407,260 845,205 950,205 950,260" fill="#8a7a63"/>
+    <polygon points="872,205 905,147 915,147 928,107 938,107 938,205" fill="#5d6770"/>
+    <rect x="938" y="100" width="4" height="105" fill="var(--ink)"/>
+    <line x1="90" y1="152" x2="872" y2="152" stroke="var(--accent)" stroke-width="2"/>
+    <rect x="86" y="130" width="6" height="130" fill="var(--bad)"/>
+    <g font-size="13" fill="var(--ink2)" font-family="system-ui,sans-serif">
+      <text x="100" y="80">Wave paddle</text><text x="300" y="145">Still water +2.38 m</text>
+      <text x="200" y="250">Flat bed −5.5 m (130 m)</text><text x="560" y="228">Surveyed sea bed</text>
+      <text x="935" y="92" text-anchor="end">Revetment and wall</text>
+      <text x="90" y="52">Lid +9.05 m</text><text x="950" y="52" text-anchor="end">Tank length 353 m, height 14.55 m (vertical scale stretched)</text>
+    </g>
+    <g fill="none" stroke="var(--ink)" stroke-width="1.8">
+      <path d="M90,270 q0,8 8,8 L512,278 q8,0 8,8 q0,-8 8,-8 L942,278 q8,0 8,-8"/>
+      <path d="M80,60 q-8,0 -8,8 L72,152 q0,8 -8,8 q8,0 8,8 L72,252 q0,8 8,8"/>
+    </g>
+    <g fill="none" stroke="var(--bad)" stroke-width="1.8" stroke-dasharray="5 4">
+      <path d="M853,318 q0,8 8,8 L893,326 q8,0 8,8 q0,-8 8,-8 L942,326 q8,0 8,-8"/>
+      <path d="M956,88 q8,0 8,8 L964,142 q0,8 8,8 q-8,0 -8,8 L964,204 q0,8 -8,8"/>
+    </g>
+    <g font-size="14" font-family="system-ui,sans-serif" fill="var(--ink)">
+      <text x="520" y="304" text-anchor="middle" font-weight="700">One zone: 706 columns, each 0.5 m long</text>
+      <text transform="translate(52,160) rotate(-90)" text-anchor="middle" font-weight="700">One zone: 97 rows, each 0.15 m</text>
+      <text x="950" y="354" text-anchor="end" fill="var(--bad)">Not done: finer columns over the last 40 m (for example 0.25 m)</text>
+      <text transform="translate(990,150) rotate(90)" text-anchor="middle" fill="var(--bad)">Not done: 0.10 m rows</text>
+    </g>
+  </svg></div>
+  <p class="cap">Resolution zones for station 0+120. Solid brackets: what was run. Dashed red brackets: the refinement that was not applied.</p>
+  <div class="note"><b>Why it matters and what to say.</b> The mesh generator in IH2VOF allows the length and the height to be split into sub-zones with smaller cells near the structure, growing gradually offshore. That was not used here, to keep the set-up identical across all stations. The consequence is that the waves are well resolved (about 23 rows per wave height and over 250 columns per wavelength at the paddle) but the structure is coarsely resolved: the wall is under two columns wide and a thin overtopping sheet of 0.1 to 0.2 m is only about one row deep. The honest statement is: "uniform grid, adequate for wave transformation, coarse at the wall and crest; a refined zone near the structure and a repeat run to show the answer does not change is the first improvement before relying on small overtopping values."</div>
+</div></section>
+
+<section id="materials"><div class="wrap">
+  <p class="kicker">5. Rock as numbers</p>
+  <h2>How armour, filter, bedding and wall are represented</h2>
+  <p class="narrow">The model does not contain individual stones. A rock layer is a zone where water can flow, but feels a drag that depends on how fast it moves and on the stone size. Four numbers describe each layer: the stone size D50, the porosity n (fraction of voids), and two drag coefficients, α and β.</p>
+  <div class="eq">I = a·u + b·u|u| + c·∂u/∂t
+    <small>I is the hydraulic gradient (the push needed to drive the flow), u is the average velocity through the layer. The first term is slow, viscous seepage; the second is turbulent drag, which dominates in rock; the third is the extra inertia of water accelerating around stones.</small></div>
+  <div class="eq">a = α · (1−n)² / n³ · ν / (g·D50²) &nbsp;&nbsp;&nbsp; b = β · (1 + 7.5/KC) · (1−n) / n³ · 1 / (g·D50) &nbsp;&nbsp;&nbsp; c = [1 + γ(1−n)/n] / (n·g), γ = 0.34
+    <small>ν is the viscosity of water (about 1×10⁻⁶ m²/s), g is gravity, KC is the Keulegan-Carpenter number (how far the water moves back and forth compared with the stone size). This is the form introduced by van Gent (1995) and used in the COBRAS and IH2VOF family (Liu et al., 1999; Hsu et al., 2002).</small></div>
+  <p class="narrow"><b>The key point for a reviewer:</b> α and β were kept the same for every rock layer (α = 200, β = 1.1, the values of Liu et al., 1999). What changes from layer to layer is D50 and n. Because a goes with 1/D50² and b with 1/D50, small stone resists flow far more than large stone, with no change to the coefficients.</p>
+  <div class="tablewrap"><table id="tblMat">
+    <tr><th>Layer</th><th>How it is modelled</th><th>D50 (m)</th><th>n</th><th>α</th><th>β</th><th>a (s/m)</th><th>b (s²/m²)</th><th>Gradient at 1 m/s</th><th>Source of D50</th></tr>
+  </table></div>
+  <div class="chart" id="chPor"></div>
+  <p class="cap">The curves show how the two drag terms fall as stone size grows, for n = 0.40, α = 200 and β = 1.1 with KC large. Dots are the layers in this model. Bedding and backfill sit at the far left: they are almost a barrier compared with the armour.</p>
+  <h3>Try the numbers yourself</h3>
+  <div class="calc">
+    <div><label>Stone mass M50 (kg), or leave 0 and enter D50</label><input id="pM" type="number" value="7800" min="0" step="100"></div>
+    <div><label>D50 (m)</label><input id="pD" type="number" value="1.43" min="0.005" step="0.01"></div>
+    <div><label>Porosity n</label><input id="pN" type="number" value="0.40" min="0.2" max="0.6" step="0.01"></div>
+    <div><label>α</label><input id="pA" type="number" value="200" step="50"></div>
+    <div><label>β</label><input id="pB" type="number" value="1.1" step="0.1"></div>
+    <div><label>Velocity u (m/s)</label><input id="pU" type="number" value="1" step="0.1"></div>
+  </div>
+  <div class="out" id="pOut"></div>
+  <p class="cap">Nominal diameter from mass: Dn50 = (M50 / ρ)^(1/3) with rock density ρ = 2650 kg/m³. For 7,800 kg this gives 1.43 m, the value on the design sheet.</p>
+  <h3>What to say when asked "why those values?"</h3>
+  <ul class="tight narrow">
+    <li><b>Published ranges.</b> van Gent (1995) fitted α = 1000 and β = 1.1 to oscillating-flow tests. Liu et al. (1999) used α = 200 and β = 1.1. Work with IH2VOF commonly uses α = 200 with β between 0.8 and 1.1. Jensen et al. (2014) recommend α = 500 and β = 2.0 for a different formulation. There is no single agreed pair.</li>
+    <li><b>Which one matters.</b> In armour-sized rock the turbulent term b·u² is thousands of times larger than the viscous term, so β matters and α hardly does. Castiglione et al. (2023) found that changing β by 10 to 20 % changed computed overtopping of a rubble mound by more than 150 %.</li>
+    <li><b>Consequence.</b> The coefficients here are literature values, not calibrated to tests on this structure. Overtopping from this model carries that uncertainty. A sensitivity run with β = 0.8 and β = 1.5 is the honest way to show the range.</li>
+    <li><b>Stone size used.</b> The model's D50 was set equal to the nominal diameter Dn50 from the drawing. Strictly Dn50 is about 0.84 × D50 for quarry rock, so the layers are modelled as slightly finer, and slightly more resistant, than a strict conversion would give.</li>
+  </ul>
+  <div class="note bad"><b>There is no "core" in this model, and the ground is watertight.</b> This is a revetment laid on existing ground, not a breakwater with a quarry-run core. Below the bedding layer the ground is a solid, impermeable boundary. Water cannot drain into the beach, which tends to hold water levels inside the rock slightly high. The wall is also a solid, impermeable block. The grain sizes for bedding (0.05 m) and backfill (0.05 m) are assumed and still to be confirmed against the specification.</div>
+</div></section>
+
+<section id="waves" class="tint"><div class="wrap">
+  <p class="kicker">6. Waves</p>
+  <h2>Where the storm comes from</h2>
+  <div class="tablewrap"><table>
+    <tr><th>Quantity</th><th>Value</th><th>Source and reasoning</th></tr>
+    <tr><td>Storm</td><td>100-year waves, year 2100, from 180°</td><td>Step 149 of the spectral wave model results used for the design.</td></tr>
+    <tr><td>Peak period Tp</td><td class="num">15.1 s</td><td>Read from the wave model at the paddle position.</td></tr>
+    <tr><td>Wave height in the wave model at the paddle</td><td class="num">4.67 m</td><td>At the point where the bed is −5.5 m.</td></tr>
+    <tr><td>Wave height given to the paddle, Hs</td><td class="num">3.5 m</td><td>Capped at 0.45 × depth (0.45 × 7.88 = 3.55 m, rounded down). A paddle cannot make a stable irregular sea steeper than that in such shallow water; larger waves would simply break at the paddle.</td></tr>
+    <tr><td>Spectrum</td><td>JONSWAP, peak factor 3.3, 512 components</td><td>Standard storm spectrum.</td></tr>
+    <tr><td>Length of storm</td><td class="num">600 s, about 47 waves</td><td>Limited by run time: 600 s of storm took 14.6 hours of computing for the proposed case.</td></tr>
+    <tr><td>Achieved near the paddle (gauge G1)</td><td class="num">3.43 m</td><td>Within 2 % of the 3.5 m target.</td></tr>
+  </table></div>
+  <div class="note"><b>Three honest caveats on the waves.</b>
+    <ul class="tight" style="margin-bottom:0">
+      <li>The wave model was run at a water level of +1.46 m, without the surge. The design spreadsheet pairs those waves with +2.38 m. Near the structure the waves are depth-limited, so the true wave at +2.38 m is probably larger than the 3.24 m used to size the armour. This is a question for the design, not just the wave tank.</li>
+      <li>The paddle wave (3.5 m) is smaller than the wave model has at that point (4.67 m). The tank relies on the foreshore to control what reaches the structure, which is reasonable when waves are depth-limited but should be shown, not assumed: compare the tank wave height where the bed is −2.5 m with the design value.</li>
+      <li>About 47 waves is far short of the 500 to 1000 recommended for stable overtopping statistics. The largest wave group arrives at about 370 s; a 300 s run would miss it.</li>
+    </ul></div>
+</div></section>
+
+<section id="checks"><div class="wrap">
+  <p class="kicker">7. Health checks</p>
+  <h2>How we know a run has not "blown up"</h2>
+  <p class="narrow">A numerical model can produce confident-looking nonsense. These are the checks made on every run, with the values from the worked example (0+120 proposed, 600 s).</p>
+  <div class="tablewrap"><table>
+    <tr><th>Check</th><th>What it guards against</th><th>Value in the example</th><th>Verdict</th></tr>
+    <tr><td>Input check script</td><td>A setting typed wrongly in the program (gauge positions, pressure zone, absorption, duration).</td><td>All settings match the intended values.</td><td><span class="pill ok">pass</span></td></tr>
+    <tr><td>Trapped water cells</td><td>Gaps between layer polygons that leave isolated pockets of water under rock.</td><td class="num">0 cells</td><td><span class="pill ok">pass</span></td></tr>
+    <tr><td>Wave height at G1 against target</td><td>The paddle not delivering the intended sea state.</td><td class="num">3.43 m against 3.5 m</td><td><span class="pill ok">pass</span></td></tr>
+    <tr><td>Time step chosen by the solver</td><td>Instability. The solver shortens its time step so water never crosses more than a fraction of a cell per step (the Courant condition). A collapse to tiny steps signals trouble.</td><td class="num">0.005 to 0.048 s, median 0.014 s, 37,640 steps</td><td><span class="pill ok">pass</span></td></tr>
+    <tr><td>Pressure solver iterations</td><td>The pressure solution failing to converge.</td><td class="num">at most 62 per step</td><td><span class="pill ok">pass</span></td></tr>
+    <tr><td>Largest velocity anywhere</td><td>Unphysical spikes. Shallow-water wave speed here is √(g·h) ≈ 8.8 m/s; breaking jets can reach about twice that.</td><td class="num">15.0 m/s, in isolated spray cells</td><td><span class="pill chk">acceptable, watch</span></td></tr>
+    <tr><td>Water volume in the tank</td><td>The model creating or losing water. Computed from the saved water-surface frames, not from the solver's own counter.</td><td class="num">drift 1.9 % over 600 s</td><td><span class="pill ok">pass</span></td></tr>
+    <tr><td>Run completes</td><td>Crashes. Any case that fails twice is stopped and investigated, not retried blindly.</td><td>Finished at 600 s.</td><td><span class="pill ok">pass</span></td></tr>
+  </table></div>
+  <div class="note"><b>A counter that looks alarming but is not.</b> The solver prints a "volume change" figure that reached −203 % in this run. With an absorbing paddle that counter adds up water passing through the open boundary, so it is not a mass error. The real volume check is the 1.9 % above. Knowing this distinction is exactly the kind of thing a reviewer will probe.</div>
+</div></section>
+
+<section id="result" class="tint"><div class="wrap">
+  <p class="kicker">8. Example result</p>
+  <h2>Station 0+120, proposed revetment</h2>
+  <figure class="fig"><video controls muted loop playsinline preload="none" poster="assets/poster.jpg" src="assets/WHM0120_proposed_plan.mp4"></video><figcaption>The standard video. Top left: the tender drawing laid over the model. Top right: location. Box: results for the whole storm. Bottom: the whole tank. Red water moves towards land, blue moves seaward. Ten minutes of storm play in one minute. The sea is on the right, as on the drawings.</figcaption></figure>
+  <div class="cards">
+    <div class="card"><h3>Overtopping past the wall</h3><p>Zero in 600 s. At the largest wave group the water rose through the rock to about +4 m against a wall top of +4.5 m.</p></div>
+    <div class="card"><h3>Wave heights</h3><p>3.43 m near the paddle, 2.29 m at the toe gauge, 1.43 m on the upper slope: the foreshore and the rock remove most of the energy.</p></div>
+    <div class="card"><h3>Force on the wall</h3><p>Peak 11.9 kilonewtons per metre at 371 s. In the first 300 s the peak is only 2.8, which is why storm length matters.</p></div>
+  </div>
+  <figure class="fig"><img src="assets/pressure_WHM0120_proposed.png" alt="Pressure zone, force time series and pressure distribution on the wall" loading="lazy"><figcaption>Wall force. The pressure zone records pressure on the seaward face of the wall about 30 times a second; adding it up gives force per metre of wall. Values are dynamic (hydrostatic removed) with a 0.7 s moving average, which smooths short impact spikes.</figcaption></figure>
+</div></section>
+
+<section id="hand"><div class="wrap">
+  <p class="kicker">9. Hand checks</p>
+  <h2>Confirming against EurOtop and Goda</h2>
+  <h3>Overtopping: EurOtop (2018), rubble mound slope</h3>
+  <div class="eq">q / √(g·Hm0³) = 0.09 · exp[ −( 1.5 · Rc / (Hm0 · γf · γβ) )^1.3 ] &nbsp;&nbsp; then × Cr, &nbsp; Cr = 3.06 · exp(−1.5 · Gc / Hm0), at most 1
+    <small>Mean-value form for steep rough slopes. Rc is the crest height above still water, Hm0 the wave height at the toe, γf the roughness factor (0.40 for two layers of rock on a permeable core, 0.55 on an impermeable core), γβ the wave angle factor (1 for head-on waves), Gc the crest width. Check the equation numbers and factors in the manual before quoting.</small></div>
+  <div class="calc">
+    <div><label>Hm0 at the toe (m)</label><input id="eH" type="number" value="3.24" step="0.05"></div>
+    <div><label>Crest freeboard Rc (m)</label><input id="eR" type="number" value="3.22" step="0.05"></div>
+    <div><label>Roughness factor γf</label><select id="eG"><option value="0.40">0.40 rock, 2 layers, permeable core</option><option value="0.55" selected>0.55 rock, 2 layers, impermeable core</option><option value="1">1.00 smooth</option></select></div>
+    <div><label>Crest width Gc (m)</label><input id="eC" type="number" value="5.8" step="0.1"></div>
+  </div>
+  <div class="out" id="eOut"></div>
+  <p class="narrow" style="margin-top:14px">With the design wave of 3.24 m, freeboard 3.22 m (crest +5.6 m, water +2.38 m) and the 5.8 m crest, EurOtop gives of the order of 1 to 10 litres per second per metre depending on the roughness factor. Put in the wave height the tank actually had at the toe gauge (2.29 m) and the answer drops to a few hundredths of a litre per second per metre, effectively zero over 47 waves. So the tank's "zero" is consistent with EurOtop <em>for the wave the tank delivered</em>. The open question is which toe wave height is right, which is the same question raised in section 6. That is the value of the cross-check: it points at the input that needs settling.</p>
+  <h3>Wave force on walls: how Goda's method works</h3>
+  <p class="narrow">Yoshimi Goda (1974; textbook 2000) gave a single set of formulae for the wave pressure on a vertical wall that works for both non-breaking and breaking waves. It is the standard for caisson breakwaters and quay walls worldwide. The idea is simple: assume a pressure diagram of a fixed shape, then use coefficients to set its size.</p>
+  <div class="chart" style="overflow-x:auto"><svg viewBox="0 0 760 392" style="min-width:640px" role="img" aria-label="Goda pressure diagram on a vertical wall: zero at height eta star, largest value p1 at still water level, p3 at the wall base, uplift triangle under the base">
+    <polygon points="0,150 380,150 380,330 0,330" fill="var(--accent)" opacity=".15"/>
+    <rect x="0" y="330" width="760" height="40" fill="#8a7a63"/>
+    <polygon points="210,330 300,266 600,266 690,330" fill="#9aa3ab"/>
+    <rect x="380" y="100" width="150" height="186" fill="var(--paper)" stroke="var(--ink)" stroke-width="2"/>
+    <line x1="0" y1="150" x2="380" y2="150" stroke="var(--accent)" stroke-width="2"/>
+    <polygon points="380,100 340,100 290,150 322,286 380,286" fill="var(--bad)" opacity=".28" stroke="var(--bad)" stroke-width="2"/>
+    <path d="M340,100 L380,60" stroke="var(--bad)" stroke-width="1.6" stroke-dasharray="5 4" fill="none"/>
+    <polygon points="380,290 530,290 380,326" fill="var(--warn)" opacity=".35" stroke="var(--warn)" stroke-width="2"/>
+    <g stroke="var(--ink2)" stroke-width="1.2" fill="none">
+      <path d="M560,60 V150 M554,60 h12 M554,150 h12"/><path d="M590,100 V150 M584,100 h12 M584,150 h12"/>
+      <path d="M60,150 V330 M54,150 h12 M54,330 h12"/><path d="M120,150 V266 M114,150 h12 M114,266 h12"/><path d="M180,150 V286 M174,150 h12 M174,286 h12"/>
+      <path d="M380,84 H530 M380,78 v12 M530,78 v12"/><path d="M380,60 H560" stroke-dasharray="3 3"/>
+    </g>
+    <g font-size="14" font-family="system-ui,sans-serif" fill="var(--ink)">
+      <text x="568" y="80">η* (pressure reaches zero)</text><text x="598" y="130">hc (crest height)</text>
+      <text x="66" y="245">h</text><text x="126" y="215">d</text><text x="186" y="225">h′</text><text x="455" y="76" text-anchor="middle">B</text>
+      <text x="282" y="146" text-anchor="end" font-weight="700" fill="var(--bad)">p1</text><text x="316" y="282" text-anchor="end" font-weight="700" fill="var(--bad)">p3</text>
+      <text x="334" y="94" text-anchor="end" font-weight="700" fill="var(--bad)">p4</text><text x="372" y="320" text-anchor="end" font-weight="700" fill="var(--warn)">pu</text>
+      <text x="455" y="200" text-anchor="middle">Wall</text><text x="455" y="312" text-anchor="middle">uplift under the base</text><text x="640" y="258" text-anchor="middle">rubble mound</text>
+      <text x="10" y="142">Still water level</text><text x="10" y="352" fill="#fff">Sea bed</text>
+    </g>
+  </svg></div>
+  <p class="cap">Goda's pressure diagram. h: water depth in front of the wall. d: depth to the top of the armour on the mound. h′: depth to the base of the wall. hc: wall crest above still water. B: base width.</p>
+  <ol class="steps">
+    <li><b>Choose the design wave: the largest single wave, not the significant wave</b><span>Hmax = 1.8 × Hs when the wall is seaward of the breaker zone. Inside the breaker zone, Hmax is the largest breaking wave at a point 5 × Hs seaward of the wall (depth hb there). The period is the significant wave period, roughly Tp ÷ 1.1. This is the most common mistake: putting Hs into the formula under-predicts by almost half.</span></li>
+    <li><b>How high the pressure reaches</b><span>η* = 0.75 (1 + cos β) Hmax, where β is the wave angle to the wall normal (0 for head-on; Goda allows reducing the real angle by 15 degrees as a safety margin). For head-on waves the pressure reaches 1.5 × Hmax above still water.</span></li>
+    <li><b>Three coefficients set the size</b><span>α1 = 0.6 + ½ [ (4πh/L) ÷ sinh(4πh/L) ]². The effect of period: 1.1 for long waves in shallow water, 0.6 for short waves in deep water.<br>α2 = the smaller of [ (hb − d) ÷ (3 hb) ] (Hmax/d)² and 2d/Hmax. The extra pressure when a high mound makes the wave break onto the wall.<br>α3 = 1 − (h′/h) [ 1 − 1 ÷ cosh(2πh/L) ]. How fast pressure decays with depth.<br>L is the wavelength in depth h.</span></li>
+    <li><b>The pressures</b><span>p1 = ½ (1 + cos β)(α1 + α2 cos²β) ρ g Hmax at still water level.<br>p3 = α3 p1 at the wall base. p4 = p1 (1 − hc/η*) at the crest if the wall is lower than η*, otherwise zero.<br>pu = ½ (1 + cos β) α1 α3 ρ g Hmax, the uplift at the seaward edge of the base, falling to zero at the landward edge.</span></li>
+    <li><b>Add up the areas</b><span>Horizontal force per metre of wall = ½ (p1 + p3) h′ + ½ (p1 + p4) hc*, where hc* is the smaller of hc and η*. Uplift = ½ pu B. The wall is then checked for sliding and overturning with safety factors of at least 1.2.</span></li>
+  </ol>
+  <h3>Try Goda yourself</h3>
+  <div class="calc">
+    <div><label>Hs at the wall (m)</label><input id="gH" type="number" step="0.1" value="3.0"></div>
+    <div><label>Hmax ÷ Hs (1.8 offshore of breaking)</label><input id="gF" type="number" step="0.05" value="1.8"></div>
+    <div><label>Significant period T (s)</label><input id="gT" type="number" step="0.5" value="12"></div>
+    <div><label>Depth at wall h (m)</label><input id="gh" type="number" step="0.1" value="8"></div>
+    <div><label>Depth over mound armour d (m)</label><input id="gd" type="number" step="0.1" value="6"></div>
+    <div><label>Depth to wall base h′ (m)</label><input id="gp" type="number" step="0.1" value="6.5"></div>
+    <div><label>Depth 5 × Hs seaward hb (m)</label><input id="gb" type="number" step="0.1" value="8.5"></div>
+    <div><label>Crest above water hc (m)</label><input id="gc" type="number" step="0.1" value="3"></div>
+    <div><label>Base width B (m)</label><input id="gB" type="number" step="0.5" value="8"></div>
+    <div><label>Wave angle β (degrees)</label><input id="ga" type="number" step="5" value="0"></div>
+  </div>
+  <div class="out" id="gOut"></div>
+  <p class="cap">The starting values are an illustrative caisson, not a project structure. Sea water density 1,030 kg/m³.</p>
+  <div class="cards">
+    <div class="card good"><h3>What Goda is good for</h3><p>Sliding and overturning design of vertical walls standing in water, under non-breaking and ordinary breaking waves. Calibrated on model tests and on real breakwaters that slid or stayed put.</p></div>
+    <div class="card warn"><h3>Where it under-predicts</h3><p>Violent "impulsive" breaking on a high mound or steep bed. Takahashi et al. (1994) added an impulsive coefficient that replaces α2 when larger; in the Dominica check it nearly doubled the force.</p></div>
+    <div class="card bad"><h3>Where it does not apply</h3><p>Walls whose base is above the water, walls set back behind a rock crest or beach, and local slamming pressures on small elements. It gives a force for stability, not a pressure map for concrete design.</p></div>
+  </div>
+  <h3>Goda against the wave tank</h3>
+  <p class="narrow">Goda's method gives the pressure on a vertical wall standing in water. It was applied to the two Portsmouth docks in the Dominica study, where the walls do stand in water at the higher sea level:</p>
+  <div class="tablewrap"><table>
+    <tr><th>Structure (sea level +1.48 m)</th><th>Model peak force</th><th>Goda</th><th>Goda with impulsive allowance (Takahashi et al., 1994)</th><th>Model ÷ Goda</th></tr>
+    <tr><td>Dock SD1, horizontal</td><td class="num">34.1 kN/m</td><td class="num">77.8 kN/m</td><td class="num">146.1 kN/m</td><td class="num">0.44</td></tr>
+    <tr><td>Dock SD2, horizontal</td><td class="num">70.9 kN/m</td><td class="num">160.1 kN/m</td><td class="num">290.3 kN/m</td><td class="num">0.44</td></tr>
+    <tr><td>Dock SD1, uplift</td><td class="num">32.4 kN/m</td><td class="num">75.9 kN/m</td><td class="num">not calculated</td><td class="num">0.43</td></tr>
+  </table></div>
+  <p class="narrow">The model gave a little under half of Goda in both cases. That is the expected direction: Goda is a design envelope, and a model with 0.5 m cells and smoothed pressures cannot resolve the sharpest part of an impact. The conclusion drawn was that Goda governs structural design and the model forces are a lower bound.</p>
+  <div class="note"><b>At Western Head, Goda does not strictly apply.</b> The wall base is at about +2.6 m, above the still water level, and in the proposed design the wall is buried behind the rock. The 11.9 kN/m is pressure transmitted through the rock, not a wave striking a wall in water. The right hand check there is a bore-impact or post-overtopping load estimate for walls set back on a crest (see EurOtop 2018 on storm walls, and Goda's own limits of application). Saying this, instead of forcing a Goda number, shows understanding of the method.</div>
+</div></section>
+
+<section id="trust" class="tint"><div class="wrap">
+  <p class="kicker">10. Reliability and validation</p>
+  <h2>Why this model family can be trusted, and how far</h2>
+  <p class="narrow">IH2VOF descends from COBRAS, developed at Cornell University (Lin and Liu, 1998), which was extended at the University of Cantabria (as COBRAS-UC) and then rewritten as IH2VOF. It solves the Reynolds-averaged Navier-Stokes equations with a volume-of-fluid surface, and volume-averaged equations inside porous layers. It has been compared with laboratory measurements for over twenty years.</p>
+  <div class="tablewrap"><table>
+    <tr><th>Study</th><th>What was compared with laboratory data</th></tr>
+    <tr><td>Lin and Liu (1998)</td><td>Breaking waves in the surf zone: surface elevation, velocities, turbulence.</td></tr>
+    <tr><td>Liu et al. (1999); Hsu et al. (2002)</td><td>Flow through porous structures and in front of a composite breakwater; the porous-flow equations used here.</td></tr>
+    <tr><td>Garcia et al. (2004); Losada et al. (2005); Lara et al. (2006)</td><td>Regular and random waves on low-crested permeable breakwaters: surface elevation, pressure and velocity inside and outside the rock.</td></tr>
+    <tr><td>Losada et al. (2008)</td><td>Overtopping of rubble mound breakwaters: instantaneous and mean discharge against flume tests.</td></tr>
+    <tr><td>Lara et al. (2008)</td><td>Low-mound breakwaters with a crown wall: free surface and pressures.</td></tr>
+    <tr><td>Guanche et al. (2009)</td><td>Wave loads and stability of composite and rubble mound breakwaters: pressures and forces on the crown wall and caisson against tests.</td></tr>
+    <tr><td>Torres-Freyermuth et al. (2010); Lara et al. (2011)</td><td>Short and long wave transformation and run-up on beaches.</td></tr>
+  </table></div>
+  <div class="cards">
+    <div class="card good"><h3>Well supported</h3><p>Wave transformation and breaking on a foreshore, water levels and pressures in and around rock structures, and mean overtopping of rubble mounds, <b>when the porous coefficients are calibrated</b> and the turbulence model is on.</p></div>
+    <div class="card warn"><h3>Supported with care</h3><p>Forces on crown walls: good agreement for slowly varying (pulsating) loads; short impact peaks depend strongly on grid and sampling.</p></div>
+    <div class="card bad"><h3>Not shown by this study</h3><p>No comparison with measurements was made for Western Head. The published validation shows the tool can work; it does not validate this particular setup.</p></div>
+  </div>
+  <div class="note"><b>Verification done in this project.</b> Geometry checked against the drawing by overlay; station positions against survey; input files against intended settings; delivered wave height against target; water volume conserved; EurOtop consistency for the delivered wave; and, in the Dominica study, forces against Goda and a full set of before-and-after comparisons. An early Dominica batch was found to have vegetation floating above the bed and a closed wall contaminating overtopping; both were caught by these checks and rerun.</div>
+</div></section>
+
+<section id="limits"><div class="wrap">
+  <p class="kicker">11. Limits</p>
+  <h2>Everything a reviewer should be told up front</h2>
+  <ul class="tight narrow">
+    <li><b>Two-dimensional.</b> One slice, waves head-on. No oblique waves, no flow along the shore, no gaps or roundheads.</li>
+    <li><b>Turbulence model switched off.</b> These runs used the option without the k-epsilon turbulence closure. Breaking is still captured by the grid, but energy loss in breaking and inside the rock is less well represented than in the published validations, which used the turbulence model.</li>
+    <li><b>Porous coefficients not calibrated.</b> Literature values; overtopping is sensitive to β.</li>
+    <li><b>Short storm.</b> About 47 waves. Peak values depend on which waves happened to be in the series; one random series only.</li>
+    <li><b>Impermeable ground and wall, no settlement, no stone movement.</b> The model cannot show armour damage. Rock stability remains a van der Meer question.</li>
+    <li><b>Resolution.</b> 0.5 m cells: the wall is under two cells wide, thin overtopping sheets are coarsely resolved, impact pressures are smoothed.</li>
+    <li><b>Paddle wave capped by depth</b> and taken from a wave model run at a lower water level than the tank.</li>
+    <li><b>Assumed grain sizes</b> for bedding and backfill.</li>
+    <li><b>Wind, spray and air entrainment</b> are not modelled.</li>
+  </ul>
+</div></section>
+
+<section id="diy" class="tint"><div class="wrap">
+  <p class="kicker">12. Do it yourself</p>
+  <h2>Reproducing the key numbers by hand from the drawing</h2>
+  <ol class="steps">
+    <li><b>Read the section.</b><span>From the typical section: crest level and width, berm level and width, toe level, slopes, layer thicknesses, wall top and base. Convert a level to model height with y = level − (−5.5) m; the still water level +2.38 m becomes 7.88 m.</span></li>
+    <li><b>Turn stone masses into sizes.</b><span>Dn50 = (M50 / 2650)^(1/3). Armour 6 to 10 tonnes, M50 about 8 tonnes, gives about 1.45 m. Filter 400 to 1200 kg, M50 about 800 kg, gives 0.67 m.</span></li>
+    <li><b>Count cells.</b><span>Divide each thickness by 0.15 m vertically and each width by 0.5 m horizontally. Fewer than about five cells across a feature means it is only roughly resolved.</span></li>
+    <li><b>Compute the drag terms.</b><span>Use the calculator in section 5, or the formulae directly. For armour: a ≈ 5×10⁻⁵ s/m and b ≈ 0.73 s²/m², so at 1 m/s the gradient is about 0.73, almost all from the turbulent term.</span></li>
+    <li><b>Check the paddle wave.</b><span>Depth 7.88 m; cap 0.45 × 7.88 = 3.55 m; used 3.5 m. Wavelength from the dispersion relation for 15.1 s in 7.88 m is about 130 m, so 260 cells per wavelength and 23 cells per wave height.</span></li>
+    <li><b>Estimate the time step.</b><span>Courant limit ≈ 0.3 × cell height ÷ fastest vertical velocity, or cell length ÷ fastest horizontal velocity. With velocities of several metres per second, steps of around 0.01 s are expected, as seen.</span></li>
+    <li><b>Predict before you look.</b><span>Run EurOtop with the design wave and with the delivered toe wave (section 9). Write both down. Then open the result. If the model is far outside that range, find out why before using it.</span></li>
+  </ol>
+</div></section>
+
+<section id="quiz"><div class="wrap">
+  <p class="kicker">13. Self-test</p>
+  <h2>Questions a manager or reviewer might ask</h2>
+  <div id="qa"></div>
+</div></section>
+
+<section id="refs" class="tint"><div class="wrap">
+  <p class="kicker">14. References</p>
+  <h2>Sources</h2>
+  <p class="narrow">Every journal link below was checked against the publisher or a citation index on 10 October 2026. Links marked <span class="pill ok">free to read</span> open the full text. Links marked <span class="pill">journal site</span> open the publisher page; the full text needs a subscription or a library request. Those papers are copyrighted, so copies are not stored on this page. Saved in a private folder they can be opened at an exact page by adding <code>#page=12</code> to the file address in a browser.</p>
+  <div class="note good"><b>If time is short, read these four in this order.</b> (1) EurOtop 2018, Chapter 6, for the overtopping check. (2) Losada et al. (2008), the IH2VOF family validated for overtopping of a rubble mound. (3) Castiglione et al. (2023), free, on how much the rock coefficients change overtopping. (4) Guanche et al. (2009), wave loads on a wall compared with tests and with Goda.</div>
+  <ol class="refs">
+    <li>Battjes, J.A., Groenendijk, H.W. (2000). Wave height distributions on shallow foreshores. <i>Coastal Engineering</i> 40, 161 to 182. <a href="https://doi.org/10.1016/S0378-3839(00)00007-7" target="_blank" rel="noopener">doi:10.1016/S0378-3839(00)00007-7</a> <span class="pill">journal site</span></li>
+    <li>Castiglione, F., Stagnitti, M., Musumeci, R.E., Foti, E. (2023). Influence of van Gent parameters on the overtopping discharge of a rubble mound breakwater. <i>Journal of Marine Science and Engineering</i> 11(8), 1600. <a href="https://doi.org/10.3390/jmse11081600" target="_blank" rel="noopener">doi:10.3390/jmse11081600</a> <span class="pill ok">free to read</span></li>
+    <li>CIRIA, CUR, CETMEF (2007). <i>The Rock Manual. The use of rock in hydraulic engineering</i>, 2nd edition. CIRIA C683, London.</li>
+    <li>EurOtop (2018). <i>Manual on wave overtopping of sea defences and related structures</i>, 2nd edition. van der Meer, J.W. and others. <a href="https://overtopping-manual.com/assets/downloads/EurOtop_II_2018_Final_version.pdf" target="_blank" rel="noopener">full manual (PDF)</a>, <a href="https://overtopping-manual.com/assets/downloads/Errata_EurOtop_2018_Nov_2019.pdf" target="_blank" rel="noopener">errata 2019</a> <span class="pill ok">free to read</span>. Read Chapter 6 (armoured rubble slopes: the overtopping formula, the roughness factor table and the crest width factor) and Chapter 7 (vertical walls).</li>
+    <li>Garcia, N., Lara, J.L., Losada, I.J. (2004). 2-D numerical analysis of near-field flow at low-crested permeable breakwaters. <i>Coastal Engineering</i> 51, 991 to 1020. <a href="https://doi.org/10.1016/j.coastaleng.2004.07.017" target="_blank" rel="noopener">doi:10.1016/j.coastaleng.2004.07.017</a> <span class="pill">journal site</span></li>
+    <li>Goda, Y. (1974). New wave pressure formulae for composite breakwaters. <i>Proceedings of the 14th International Conference on Coastal Engineering</i>, Copenhagen. The original paper; the conference proceedings are free to read online.</li>
+    <li>Goda, Y. (2000). <i>Random Seas and Design of Maritime Structures</i>, 2nd edition. World Scientific. Chapter 4 is the wall pressure method explained in section 9. A book, so not linked.</li>
+    <li>Guanche, R., Losada, I.J., Lara, J.L. (2009). Numerical analysis of wave loads for coastal structure stability. <i>Coastal Engineering</i> 56, 543 to 558. <a href="https://doi.org/10.1016/j.coastaleng.2008.11.003" target="_blank" rel="noopener">doi:10.1016/j.coastaleng.2008.11.003</a> <span class="pill">journal site</span></li>
+    <li>Hsu, T.-J., Sakakiyama, T., Liu, P.L.-F. (2002). A numerical model for wave motions and turbulence flows in front of a composite breakwater. <i>Coastal Engineering</i> 46, 25 to 50. <a href="https://doi.org/10.1016/S0378-3839(02)00045-5" target="_blank" rel="noopener">doi:10.1016/S0378-3839(02)00045-5</a> <span class="pill">journal site</span></li>
+    <li>Jensen, B., Jacobsen, N.G., Christensen, E.D. (2014). Investigations on the porous media equations and resistance coefficients for coastal structures. <i>Coastal Engineering</i> 84, 56 to 72. <a href="https://doi.org/10.1016/j.coastaleng.2013.11.004" target="_blank" rel="noopener">doi:10.1016/j.coastaleng.2013.11.004</a> <span class="pill">journal site</span></li>
+    <li>Lara, J.L., Garcia, N., Losada, I.J. (2006). RANS modelling applied to random wave interaction with submerged permeable structures. <i>Coastal Engineering</i> 53, 395 to 417. <a href="https://doi.org/10.1016/j.coastaleng.2005.11.003" target="_blank" rel="noopener">doi:10.1016/j.coastaleng.2005.11.003</a> <span class="pill">journal site</span></li>
+    <li>Lara, J.L., Losada, I.J., Guanche, R. (2008). Wave interaction with low-mound breakwaters using a RANS model. <i>Ocean Engineering</i> 35, 1388 to 1400. <a href="https://doi.org/10.1016/j.oceaneng.2008.05.006" target="_blank" rel="noopener">doi:10.1016/j.oceaneng.2008.05.006</a> <span class="pill">journal site</span></li>
+    <li>Lara, J.L., Ruju, A., Losada, I.J. (2011). Reynolds averaged Navier-Stokes modelling of long waves induced by a transient wave group on a beach. <i>Proceedings of the Royal Society A</i> 467, 1215 to 1242. <a href="https://doi.org/10.1098/rspa.2010.0331" target="_blank" rel="noopener">doi:10.1098/rspa.2010.0331</a> <span class="pill">journal site</span></li>
+    <li>Lin, P., Liu, P.L.-F. (1998). A numerical study of breaking waves in the surf zone. <i>Journal of Fluid Mechanics</i> 359, 239 to 264. <a href="https://doi.org/10.1017/S002211209700846X" target="_blank" rel="noopener">doi:10.1017/S002211209700846X</a> <span class="pill">journal site</span></li>
+    <li>Liu, P.L.-F., Lin, P., Chang, K.-A., Sakakiyama, T. (1999). Numerical modeling of wave interaction with porous structures. <i>Journal of Waterway, Port, Coastal, and Ocean Engineering</i> 125(6), 322 to 330. <a href="https://doi.org/10.1061/(ASCE)0733-950X(1999)125:6(322)" target="_blank" rel="noopener">doi:10.1061/(ASCE)0733-950X(1999)125:6(322)</a> <span class="pill">journal site</span></li>
+    <li>Losada, I.J., Lara, J.L., Christensen, E.D., Garcia, N. (2005). Modelling of velocity and turbulence fields around and within low-crested rubble-mound breakwaters. <i>Coastal Engineering</i> 52, 887 to 913. <a href="https://doi.org/10.1016/j.coastaleng.2005.09.008" target="_blank" rel="noopener">doi:10.1016/j.coastaleng.2005.09.008</a> <span class="pill">journal site</span></li>
+    <li>Losada, I.J., Lara, J.L., Guanche, R., Gonzalez-Ondina, J.M. (2008). Numerical analysis of wave overtopping of rubble mound breakwaters. <i>Coastal Engineering</i> 55, 47 to 62. <a href="https://doi.org/10.1016/j.coastaleng.2007.06.003" target="_blank" rel="noopener">doi:10.1016/j.coastaleng.2007.06.003</a> <span class="pill">journal site</span></li>
+    <li>Takahashi, S., Tanimoto, K., Shimosako, K. (1994). A proposal of impulsive pressure coefficient for design of composite breakwaters. <i>Proceedings of Hydro-Port '94</i>, Yokosuka, 489 to 504.</li>
+    <li>Torres-Freyermuth, A., Lara, J.L., Losada, I.J. (2010). Numerical modelling of short- and long-wave transformation on a barred beach. <i>Coastal Engineering</i> 57, 317 to 330. <a href="https://doi.org/10.1016/j.coastaleng.2009.10.013" target="_blank" rel="noopener">doi:10.1016/j.coastaleng.2009.10.013</a> <span class="pill">journal site</span></li>
+    <li>van der Meer, J.W. (1988). <i>Rock slopes and gravel beaches under wave attack</i>. Doctoral thesis, Delft University of Technology. <a href="https://repository.tudelft.nl/record/uuid:67e5692c-0905-4ddd-8487-37fdda9af6b4" target="_blank" rel="noopener">Delft repository</a> <span class="pill ok">free to read</span></li>
+    <li>van Gent, M.R.A. (1995). Porous flow through rubble-mound material. <i>Journal of Waterway, Port, Coastal, and Ocean Engineering</i> 121(3), 176 to 181. <a href="https://doi.org/10.1061/(ASCE)0733-950X(1995)121:3(176)" target="_blank" rel="noopener">doi:10.1061/(ASCE)0733-950X(1995)121:3(176)</a> <span class="pill">journal site</span></li>
+    <li>van Gent, M.R.A. (1995). <i>Wave interaction with permeable coastal structures</i>. Doctoral thesis, Delft University of Technology. <a href="https://repository.tudelft.nl/record/uuid:7bbff8e4-215d-4bfc-a3af-51cdecb754bd" target="_blank" rel="noopener">Delft repository</a>. The fuller story behind the porous-flow coefficients.</li>
+    <li>IH2VOF model and publications page, IHCantabria: <a href="https://ih2vof.ihcantabria.com/">ih2vof.ihcantabria.com</a></li>
+  </ol>
+</div></section>
+
+<footer><div class="wrap">Project files: <code>C:\IH2VOF\Western head\</code>. Companion page: <a href="../Dominica_story/">Dominica coastal options</a>. Results on this page are indicative and are not for design.</div></footer>
+
+<script>
+const g=9.81, nu=1e-6;
+const $=s=>document.querySelector(s);
+function fmt(x){ if(x===0) return '0'; const a=Math.abs(x); if(a>=100) return x.toFixed(0); if(a>=10) return x.toFixed(1); if(a>=1) return x.toFixed(2); if(a>=0.01) return x.toFixed(3); return x.toExponential(1).replace('e','×10^'); }
+function ab(D,n,al,be){ return {a: al*(1-n)**2/n**3*nu/(g*D*D), b: be*(1-n)/n**3/(g*D)}; }
+
+/* grid table */
+const dx=0.5, dz=0.15;
+[['Wave height at the paddle','3.5 m','v',3.5,'Good (target: 10 or more, ideally 15 to 20).'],
+ ['Water depth at the paddle','7.88 m','v',7.88,'Good.'],
+ ['Wavelength at the paddle','130 m','h',130,'Good (target: 70 to 100 or more).'],
+ ['Armour layer thickness','2.9 m','v',2.9,'Good vertically; about 6 cells measured across the slope.'],
+ ['Filter layer thickness','1.3 m','v',1.3,'Adequate.'],
+ ['Bedding layers together','0.7 m','v',0.7,'Coarse. Acts mainly as a low-permeability skin.'],
+ ['Crest width','5.8 m','h',5.8,'Adequate.'],
+ ['Berm width','4.3 m','h',4.3,'Adequate.'],
+ ['Wall thickness','0.83 m','h',0.83,'Poor: under two cells. The wall is a blunt block in the model.'],
+ ['Wall height (base +2.6 m to top +4.5 m)','1.9 m','v',1.9,'Adequate for total force, coarse for pressure distribution.']
+].forEach(r=>{const n=r[3]/(r[2]==='v'?dz:dx); $('#tblGrid').insertAdjacentHTML('beforeend',`<tr><td>${r[0]}</td><td class="num">${r[1]}</td><td class="num">${n<10?n.toFixed(1):Math.round(n)} ${r[2]==='v'?'high':'long'}</td><td>${r[4]}</td></tr>`)});
+
+/* materials */
+const MAT=[
+ ['Armour, main revetment','Porous zone',1.45,0.40,'Drawing: 6 to 10 tonne, Dn50 1.45 m, two layers, 2.9 m thick'],
+ ['Armour, eastern revetment','Porous zone',1.30,0.40,'Drawing: 5 to 7 tonne, Dn50 1.3 m'],
+ ['Toe stone','Porous zone',1.56,0.40,'Drawing: 10 tonne; (10000 ÷ 2650)^(1/3)'],
+ ['Filter','Porous zone',0.67,0.40,'Drawing: 400 to 1200 kg, M50 about 800 kg (to confirm)'],
+ ['Bedding (clear stone and gravel)','Porous zone',0.05,0.35,'Assumed, to confirm against the specification'],
+ ['Backfill (excavated beach material)','Porous zone',0.05,0.35,'Assumed, to confirm']];
+MAT.forEach(m=>{const c=ab(m[2],m[3],200,1.1); $('#tblMat').insertAdjacentHTML('beforeend',`<tr><td>${m[0]}</td><td>${m[1]}</td><td class="num">${m[2].toFixed(2)}</td><td class="num">${m[3].toFixed(2)}</td><td class="num">200</td><td class="num">1.1</td><td class="num">${fmt(c.a)}</td><td class="num">${fmt(c.b)}</td><td class="num">${fmt(c.a+c.b)}</td><td>${m[4]}</td></tr>`)});
+$('#tblMat').insertAdjacentHTML('beforeend','<tr><td>Concrete block wall</td><td>Solid, impermeable obstacle</td><td class="num" colspan="7">no flow through it</td><td>Drawing: existing precast block wall</td></tr><tr><td>Existing ground and sea bed</td><td>Solid, impermeable boundary</td><td class="num" colspan="7">no flow through it</td><td>Drawing and 1 m survey elevation model</td></tr>');
+
+/* chart: a and b against D50 (log-log) */
+(function(){
+  const W=860,H=430,L=70,R=24,T=18,B=58, x0=Math.log10(0.02), x1=Math.log10(3), y0=-5.5, y1=2.5;
+  const X=d=>L+(Math.log10(d)-x0)/(x1-x0)*(W-L-R), Y=v=>T+(y1-Math.log10(v))/(y1-y0)*(H-T-B);
+  let s=`<h3>Small stone resists flow far more than large stone</h3><p>Drag terms of the porous-flow equation against stone size (both axes logarithmic). n = 0.40, α = 200, β = 1.1.</p><svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Chart of porous drag coefficients against stone size">`;
+  for(let e=-5;e<=2;e++){ s+=`<line x1="${L}" x2="${W-R}" y1="${Y(10**e)}" y2="${Y(10**e)}" stroke="var(--line)"/><text x="${L-8}" y="${Y(10**e)+4}" text-anchor="end" font-size="12" fill="var(--muted)">${e<0?'10^'+e:10**e}</text>`; }
+  [0.02,0.05,0.1,0.2,0.5,1,2,3].forEach(d=>{ s+=`<line x1="${X(d)}" x2="${X(d)}" y1="${T}" y2="${H-B}" stroke="var(--line)"/><text x="${X(d)}" y="${H-B+18}" text-anchor="middle" font-size="12" fill="var(--muted)">${d}</text>`; });
+  s+=`<text x="${(L+W-R)/2}" y="${H-14}" text-anchor="middle" font-size="13" fill="var(--ink2)">Stone size D50 (m)</text><text transform="translate(16 ${(T+H-B)/2}) rotate(-90)" text-anchor="middle" font-size="13" fill="var(--ink2)">Coefficient value</text>`;
+  const pa=[],pb=[]; for(let i=0;i<=80;i++){const d=10**(x0+(x1-x0)*i/80), c=ab(d,0.4,200,1.1); pa.push(X(d).toFixed(1)+','+Y(c.a).toFixed(1)); pb.push(X(d).toFixed(1)+','+Y(c.b).toFixed(1));}
+  s+=`<polyline points="${pb.join(' ')}" fill="none" stroke="var(--accent)" stroke-width="2.5"/><polyline points="${pa.join(' ')}" fill="none" stroke="var(--warn)" stroke-width="2.5" stroke-dasharray="7 5"/>`;
+  s+=`<text x="${X(0.022)}" y="${Y(ab(0.022,0.4,200,1.1).b)-10}" font-size="13" font-weight="700" fill="var(--accent)">b, turbulent drag (s²/m²): falls as 1 ÷ D50</text><text x="${X(0.16)}" y="${Y(ab(0.16,0.4,200,1.1).a)-12}" font-size="13" font-weight="700" fill="var(--warn)">a, viscous drag (s/m): falls as 1 ÷ D50²</text>`;
+  [['Bedding, backfill',0.05,0.35,-1],['Filter',0.67,0.40,-1],['Armour',1.45,0.40,1]].forEach(m=>{const c=ab(m[1],m[2],200,1.1);
+    s+=`<circle cx="${X(m[1])}" cy="${Y(c.b)}" r="6" fill="var(--accent)" stroke="var(--paper)" stroke-width="2"/><circle cx="${X(m[1])}" cy="${Y(c.a)}" r="6" fill="var(--warn)" stroke="var(--paper)" stroke-width="2"/><text x="${X(m[1])+(m[3]>0?10:-10)}" y="${Y(c.b)+(m[1]<0.1?24:-12)}" text-anchor="${m[1]<0.1?'start':(m[3]>0?'start':'end')}" font-size="12.5" fill="var(--ink)">${m[0]} (b = ${fmt(c.b)})</text>`;});
+  $('#chPor').innerHTML=s+'</svg>';
+})();
+
+/* porous calculator */
+function por(){ let M=+$('#pM').value, D=+$('#pD').value; if(M>0){ D=Math.cbrt(M/2650); $('#pD').value=D.toFixed(3); }
+  const n=+$('#pN').value, c=ab(D,n,+$('#pA').value,+$('#pB').value), u=+$('#pU').value, I1=c.a*u, I2=c.b*u*u;
+  $('#pOut').innerHTML=`D50 = <b>${D.toFixed(2)} m</b>. Viscous coefficient a = <b>${fmt(c.a)} s/m</b>, turbulent coefficient b = <b>${fmt(c.b)} s²/m²</b>.<br>At u = ${u} m/s the hydraulic gradient is <b>${fmt(I1+I2)}</b>: ${fmt(I1)} from the viscous term and ${fmt(I2)} from the turbulent term (${(100*I2/(I1+I2||1)).toFixed(1)} % turbulent).`; }
+['pM','pD','pN','pA','pB','pU'].forEach(i=>$('#'+i).addEventListener('input',e=>{ if(i==='pD') $('#pM').value=0; por(); })); por();
+
+/* EurOtop calculator */
+function eur(){ const H=+$('#eH').value, Rc=+$('#eR').value, gf=+$('#eG').value, Gc=+$('#eC').value;
+  const q0=0.09*Math.sqrt(g*H**3)*Math.exp(-((1.5*Rc/(H*gf))**1.3)), Cr=Math.min(1,3.06*Math.exp(-1.5*Gc/H)), q=q0*Cr*1000;
+  $('#eOut').innerHTML=`Without crest-width reduction: <b>${fmt(q0*1000)} litres per second per metre</b>. Crest factor Cr = <b>${Cr.toFixed(2)}</b>. Mean overtopping q ≈ <b>${fmt(q)} litres per second per metre</b>, about <b>${fmt(q*0.6)} m³ per metre</b> over a 600 s storm.<br><span class="cap">Try Hm0 = 3.24 m (design wave) and 2.29 m (wave the tank had at the toe gauge).</span>`; }
+['eH','eR','eG','eC'].forEach(i=>$('#'+i).addEventListener('input',eur)); eur();
+
+/* Goda calculator */
+function goda(){ const v=i=>+$('#'+i).value, Hs=v('gH'), Hm=Hs*v('gF'), T=v('gT'), h=v('gh'), d=v('gd'), hp=v('gp'), hb=v('gb'), hc=v('gc'), B=v('gB'), cb=Math.cos(v('ga')*Math.PI/180), rho=1030;
+  let k=(2*Math.PI/T)**2/g; for(let i=0;i<60;i++) k=(2*Math.PI/T)**2/(g*Math.tanh(k*h)); const L=2*Math.PI/k;
+  const x=4*Math.PI*h/L, a1=0.6+0.5*(x/Math.sinh(x))**2, a2=Math.max(0,Math.min((hb-d)/(3*hb)*(Hm/d)**2, 2*d/Hm)), a3=1-(hp/h)*(1-1/Math.cosh(2*Math.PI*h/L));
+  const eta=0.75*(1+cb)*Hm, p1=0.5*(1+cb)*(a1+a2*cb*cb)*rho*g*Hm/1000, p3=a3*p1, p4=eta>hc?p1*(1-hc/eta):0, pu=0.5*(1+cb)*a1*a3*rho*g*Hm/1000, hcs=Math.min(eta,hc);
+  const P=0.5*(p1+p3)*hp+0.5*(p1+p4)*hcs, U=0.5*pu*B, f=n=>n.toFixed(n<10?2:1);
+  $('#gOut').innerHTML=`Hmax = <b>${f(Hm)} m</b>, wavelength L = <b>${f(L)} m</b>, pressure reaches η* = <b>${f(eta)} m</b> above still water${eta>hc?' (higher than the crest, so the wall is overtopped)':''}.<br>α1 = <b>${a1.toFixed(2)}</b>, α2 = <b>${a2.toFixed(2)}</b>, α3 = <b>${a3.toFixed(2)}</b>.<br>p1 = <b>${f(p1)} kPa</b>, p3 = <b>${f(p3)} kPa</b>, p4 = <b>${f(p4)} kPa</b>, pu = <b>${f(pu)} kPa</b>.<br>Horizontal force = <b>${f(P)} kN per metre</b>. Uplift = <b>${f(U)} kN per metre</b>.<br><span class="cap">For scale: still water pressure at the wall base is ${f(rho*g*hp/1000)} kPa. Try halving the period, or raising the mound (smaller d), and watch α1 and α2.</span>`; }
+['gH','gF','gT','gh','gd','gp','gb','gc','gB','ga'].forEach(i=>$('#'+i).addEventListener('input',goda)); goda();
+
+/* self-test */
+[['What does IH2VOF actually solve?','The Reynolds-averaged Navier-Stokes equations in a two-dimensional vertical slice, with a volume-of-fluid method for the water surface and volume-averaged equations inside porous layers.','It computes velocity and pressure in every cell at every time step, so breaking, run-up, overtopping and flow through rock all come out of the same calculation instead of separate formulae. The price is run time and sensitivity to grid and coefficients.'],
+ ['How is a rock layer represented?','As a porous zone with a stone size D50, a porosity n and two drag coefficients α and β. No individual stones.','Flow through the zone feels a resistance I = a·u + b·u|u| + c·du/dt. a and b are computed from α, β, n and D50. The model therefore cannot show stones moving; stability stays with van der Meer.'],
+ ['Did you change α and β between armour and filter?','No. α = 200 and β = 1.1 for all rock layers. Only D50 and n change.','The formulae already contain the size effect: b goes with 1/D50 and a with 1/D50². The filter (0.67 m) gets about twice the turbulent resistance of the armour (1.45 m) with the same coefficients.'],
+ ['Are α and β calibrated?','No. They are literature values (Liu et al., 1999). This is the largest single uncertainty on overtopping.','Published values range from α 200 to 1000 and β 0.8 to 2. Castiglione et al. (2023) show 10 to 20 % changes in β can change overtopping by more than 150 %. A sensitivity run brackets the effect.'],
+ ['Is there a core?','No. The revetment sits on existing ground, modelled as solid and impermeable. The wall is also solid.','Real beach material would let some water drain. Treating it as watertight tends to keep water levels in the rock slightly high.'],
+ ['What grid did you use and why is it adequate?','0.5 m by 0.15 m cells, 706 by 97. About 23 cells per wave height and 260 per wavelength.','That exceeds usual guidance for wave propagation. It is coarse horizontally for the 0.83 m wall and for thin overtopping sheets, which is stated as a limit.'],
+ ['How do you know the run did not blow up?','Time step stayed between 0.005 and 0.048 s, pressure iterations stayed below 62, water volume drifted 1.9 %, wave height at the paddle gauge was within 2 % of target, and the run completed.','The solver also prints a "volume change" counter that reached −203 %; with an absorbing boundary that counts flow through the boundary, not an error. The independent volume check from the saved frames is the one to trust.'],
+ ['Why is the paddle wave 3.5 m when the wave model has 4.67 m there?','A paddle cannot generate a stable irregular sea steeper than about 0.45 times the depth; in 7.88 m that is 3.55 m.','Waves at the structure are depth-limited, so the foreshore controls what arrives. This must be demonstrated by comparing the tank wave height at the design point (bed −2.5 m) with the design value.'],
+ ['The model shows zero overtopping. Does that prove the design?','No. It shows no overtopping for about 47 waves with a toe wave of about 2.3 m.','EurOtop with the same toe wave also gives essentially zero, so the two agree. With the 3.24 m design wave EurOtop gives of the order of 1 to 10 litres per second per metre. The open issue is the toe wave height, not the structure.'],
+ ['Why is the model force lower than Goda?','Goda is a design envelope fitted to maxima in tests; the model has 0.5 m cells, smoothed pressures and a short storm.','In the Dominica docks the model gave 0.44 of Goda. Goda governs design; the model force is a lower bound and a check on order of magnitude.'],
+ ['Can Goda be applied to the Western Head wall?','Not strictly. The wall base is above still water and, in the proposed design, behind the rock.','Goda assumes a wall standing in water. Here the load is from water transmitted through the rock or from a bore after overtopping, which needs a different method.'],
+ ['Has this model been validated?','The code has, extensively, against laboratory tests (Lin and Liu 1998; Losada et al. 2008; Guanche et al. 2009 and others). This setup has not been compared with measurements.','That is why it is positioned as a sanity check alongside hand methods, not as a source of design values.'],
+ ['What would make it more reliable?','A longer storm (several hundred waves or several random series), the turbulence model switched on, a β sensitivity run, a second water level, and a spectral wave model run at +2.38 m.','Each addresses a named limit: statistics, energy dissipation, porous uncertainty, freeboard sensitivity, and the mismatch in water level between the wave model and the design.']
+].forEach((q,i)=>$('#qa').insertAdjacentHTML('beforeend',`<details><summary>Question ${i+1}. ${q[0]}</summary><p><b>Answer.</b> ${q[1]}</p><p><b>Explanation.</b> ${q[2]}</p></details>`));
+</script>
+</body>
+</html>
