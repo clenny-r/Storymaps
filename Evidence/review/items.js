@@ -2159,5 +2159,22 @@ window.REVIEW_ITEMS = [
    "No better",
    "Worse: go back"
   ]
+ },
+ {
+  "id": "fx-111",
+  "round": "round-3-2026-10-10",
+  "group": "Fixed",
+  "ep": 11,
+  "part": 1,
+  "a": 40,
+  "b": 50,
+  "old": "old/e11-p1-opener.mp4",
+  "title": "Episode 11 Part 1: clearer opening shot",
+  "why": "Rebuilt 10 October: the dark opener is replaced by the clearer barber shop shot Parts 2 and 3 use; the sources card sits below the episode tag; new caption rules. Every line heard.",
+  "options": [
+   "Better: keep it",
+   "No better",
+   "Worse: go back"
+  ]
  }
 ];
