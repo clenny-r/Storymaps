@@ -211,6 +211,37 @@ footer{padding:30px 0 60px;color:var(--muted);font-size:14px}
     <li><b>Stone size used.</b> The model's D50 was set equal to the nominal diameter Dn50 from the drawing. Strictly Dn50 is about 0.84 × D50 for quarry rock, so the layers are modelled as slightly finer, and slightly more resistant, than a strict conversion would give.</li>
   </ul>
   <div class="note bad"><b>There is no "core" in this model, and the ground is watertight.</b> This is a revetment laid on existing ground, not a breakwater with a quarry-run core. Below the bedding layer the ground is a solid, impermeable boundary. Water cannot drain into the beach, which tends to hold water levels inside the rock slightly high. The wall is also a solid, impermeable block. The grain sizes for bedding (0.05 m) and backfill (0.05 m) are assumed and still to be confirmed against the specification.</div>
+  <h3>Nature-based features: seagrass, salt marsh, mangroves</h3>
+  <p class="narrow">Western Head has none, but the Dominica runs did, and the question will come up. Vegetation is not rock: it is a sparse field of stems that slows the water by drag. There are two ways to put it in a wave tank model.</p>
+  <div class="cards">
+    <div class="card good"><h3>The published way: a drag force</h3><p>Maza, Lara and Losada (2013) extended IH2VOF with a drag force on the plants, F = ½ ρ C<sub>D</sub> a N |u| u per unit volume, with plant swaying and extra turbulence terms, and validated it against flume tests. That research version is not the program used here; I did not find a vegetation option in its screens.</p></div>
+    <div class="card warn"><h3>What was done in Dominica: a porous stand-in</h3><p>The vegetation was drawn as a very open porous layer whose resistance was matched to the stem drag. It uses the same four numbers as rock, but they no longer mean "stone size" and "voids between stones".</p></div>
+  </div>
+  <div class="eq">β (1 − n) ÷ (n³ · D50) = ½ · C<sub>D</sub> · N · d<small>Left: the turbulent resistance of the porous layer per metre (the b term without g, and without its wave-period factor). Right: stem drag per metre. N = stems per m², d = stem diameter (m), C<sub>D</sub> = drag coefficient (about 1 for stiff stems). Choose n and β, then solve for D50.</small></div>
+  <div class="tablewrap"><table>
+    <tr><th>Number</th><th>Meaning for rock</th><th>Meaning for vegetation</th><th>Dominica value</th></tr>
+    <tr><td>Porosity n</td><td>Voids between stones, 0.35 to 0.45</td><td>Nearly all water. Geometrically 1 − N·π·d²/4, usually above 0.97</td><td class="num">0.97</td></tr>
+    <tr><td>D50</td><td>Stone size</td><td>Not a size at all: a tuning length that sets the drag. Smaller means more drag</td><td class="num">0.036 m</td></tr>
+    <tr><td>β</td><td>Turbulent drag coefficient</td><td>Kept at the rock value; the drag is tuned through D50</td><td class="num">1.1</td></tr>
+    <tr><td>α</td><td>Viscous drag coefficient</td><td>Kept at the rock value; has almost no effect at these speeds</td><td class="num">200</td></tr>
+  </table></div>
+  <p class="narrow">Check of the Dominica numbers: 1.1 × 0.03 ÷ (0.97³ × 0.036) = 1.0 per metre, and ½ × 1 × 400 stems/m² × 0.005 m = 1.0 per metre. They match by construction. The 400 stems and 5 mm were assumed, not measured at the site. One published study took a different route to the same place (Chalmoukis et al., 2023): porosity equal to the true water fraction, the stem diameter as the length, α = 1000 and β = 1.1.</p>
+  <div class="calc">
+    <div><label>Stems per m², N</label><input id="vN" type="number" step="10" value="400"></div>
+    <div><label>Stem diameter d (m)</label><input id="vD" type="number" step="0.001" value="0.005"></div>
+    <div><label>Drag coefficient C<sub>D</sub></label><input id="vC" type="number" step="0.1" value="1"></div>
+    <div><label>Porosity n to use</label><input id="vP" type="number" step="0.01" value="0.97"></div>
+    <div><label>β</label><input id="vB" type="number" step="0.1" value="1.1"></div>
+  </div>
+  <div class="out" id="vOut"></div>
+  <div class="tablewrap"><table>
+    <tr><th>Vegetation</th><th>Measured values to start from</th><th>Source</th></tr>
+    <tr><td>Seagrass (Posidonia oceanica)</td><td>615 ± 34 shoots/m², canopy height 0.8 m (one Mallorca meadow); density varies widely between meadows</td><td>Infantes et al. (2012)</td></tr>
+    <tr><td>Salt marsh (Spartina alterniflora)</td><td>about 330 to 510 stems/m², stem diameter 8 mm, plant height 0.6 to 1 m</td><td>Jadhav and Chen (2012); Yang et al. (2012)</td></tr>
+    <tr><td>Mangrove (Rhizophora)</td><td>about 24 prop roots per mature tree, root diameter 0.03 to 0.04 m; roots, trunks and canopy differ, so use separate layers</td><td>Ohira et al. (2013), as used by Maza et al. (2019)</td></tr>
+  </table></div>
+  <p class="cap">Values as reported by those sources for their sites. A seagrass shoot is several flat blades, not one round stem, so "diameter" there is a blade width and the drag coefficient has to absorb the difference. Use site measurements where they exist.</p>
+  <div class="note bad"><b>What a reviewer should hear about this stand-in.</b><br>1. <b>It is a proxy, not a vegetation model.</b> Published wave-damping results for vegetation come from drag-force models and flume tests, not from this porous shortcut. Treat results as comparative only.<br>2. <b>C<sub>D</sub> is the real unknown.</b> It changes with flow speed and wave period, and for flexible plants it must be reduced because blades bend. It can easily be wrong by a factor of two; run a low and a high value.<br>3. <b>A porous slab does things plants do not.</b> It resists vertical flow as much as horizontal, and the model adds an inertia effect sized for rock.<br>4. <b>Geometry errors dominate.</b> In Dominica an early vegetation layer was left hanging above the bed and acted like a floating breakwater; the results had to be redone with the layer draped on the ground. Check for water trapped under any layer.<br>5. <b>Height matters as much as density.</b> A layer that stands above the water acts differently from a submerged one; part of the Dominica marsh benefit came from the extra height of the layer.</div>
 </div></section>
 
 <section id="waves" class="tint"><div class="wrap">
@@ -267,6 +298,24 @@ footer{padding:30px 0 60px;color:var(--muted);font-size:14px}
   </ol>
   <figure class="fig"><img src="assets/transect_WHM0120.png" alt="Sea bed and wave model wave height along the station line seaward of the drawing" loading="lazy"><figcaption>Step 2 output for station 0+120. Black: surveyed bed, distance measured seaward from the edge of the drawing. Dotted black: paddle bed level; where the two cross (180 m) is the handoff point. Red: wave model wave height (right axis).</figcaption></figure>
   <div class="note bad"><b>Three weaknesses of this handoff that a reviewer should hear from you first.</b><br>1. <b>The cap cuts the wave.</b> 3.5 m against 4.67 m is 75 % of the height and about 56 % of the energy. Everywhere along the surveyed line the wave model wave is close to its depth limit, so a cap applies wherever the paddle is put; a deeper paddle would cut less.<br>2. <b>The water levels differ.</b> The wave model was run at +1.46 m (no storm surge); the tank runs at +2.38 m. The tank therefore puts a wave computed for shallower water into deeper water. A wave model run at +2.38 m would remove this.<br>3. <b>One direction only.</b> The tank assumes the waves travel straight along the station line. Refraction and spreading are in the wave model but not in the tank.</div>
+  <h3>How the paddle depth was chosen, and what the minimum is</h3>
+  <p class="narrow">Plainly: the paddle bed level of −5.5 m was a project default set before the wave data were examined, then checked against the rules below. It was not optimised. Four things limit how shallow a paddle can be:</p>
+  <ol class="steps">
+    <li><b>The depth must be able to carry the wave</b><span>An irregular sea cannot keep a significant wave height above roughly half the water depth; the biggest waves break. The workflow uses Hs ≤ 0.45 × depth. So the minimum depth for a target wave is Hs ÷ 0.45. For the full wave model value of 4.67 m that is 10.4 m; the tank has 7.88 m, which is why the paddle is given 3.5 m.</span></li>
+    <li><b>The paddle must be seaward of the breaker zone</b><span>The forcing script looks for the first point where the wave height reaches 0.62 × depth and warns if that falls on the paddle flat. If waves break at the paddle, the paddle is too shallow.</span></li>
+    <li><b>The waves should not be too non-linear at the paddle</b><span>The paddle signal is built from linear wave theory. A measure of non-linearity is the Ursell number, H × L² ÷ h³. Here it is about 120 (3.5 × 130² ÷ 7.88³), which is high: long, steep waves in shallow water. The paddle then also generates small unwanted extra waves. Deeper water lowers this number.</span></li>
+    <li><b>Cost</b><span>The sea bed here slopes at about 1 in 35, so each extra metre of depth adds about 35 m of tank and seven more rows of cells.</span></li>
+  </ol>
+  <div class="tablewrap"><table>
+    <tr><th>Paddle bed level</th><th>Depth</th><th>Wave model Hs there</th><th>Cap (0.45 × depth)</th><th>Share of wave height kept</th><th>Tank length</th><th>Ursell number</th></tr>
+    <tr><td class="num">−4.5 m</td><td class="num">6.88 m</td><td class="num">4.01 m</td><td class="num">3.10 m</td><td class="num">77 %</td><td class="num">about 316 m</td><td class="num">141</td></tr>
+    <tr><td class="num"><b>−5.5 m (used)</b></td><td class="num">7.88 m</td><td class="num">4.67 m</td><td class="num">3.55 m</td><td class="num">76 %</td><td class="num">353 m</td><td class="num">122</td></tr>
+    <tr><td class="num">−6.5 m</td><td class="num">8.88 m</td><td class="num">5.17 m</td><td class="num">4.00 m</td><td class="num">77 %</td><td class="num">about 406 m</td><td class="num">108</td></tr>
+    <tr><td class="num">−7.5 m</td><td class="num">9.88 m</td><td class="num">5.38 m</td><td class="num">4.45 m</td><td class="num">83 %</td><td class="num">about 438 m</td><td class="num">96</td></tr>
+    <tr><td class="num">−8.5 m</td><td class="num">10.88 m</td><td class="num">5.99 m</td><td class="num">4.90 m</td><td class="num">82 %</td><td class="num">about 500 m</td><td class="num">87</td></tr>
+  </table></div>
+  <p class="cap">Station 0+120, computed from the same surveyed line and wave model result the workflow uses (<code>C:\IH2VOF\Western head\03_forcing\forcing_confirmed.json</code>). Only the −5.5 m row has been run.</p>
+  <div class="note"><b>What the table shows.</b> Going deeper does not remove the cap here: the wave model wave grows offshore almost as fast as the depth, so the paddle keeps only 76 to 83 % of it at every level tried. The reason is that the wave model itself has waves at about 0.67 × depth at its own (lower) water level, well above what a paddle can generate. So the choice of −5.5 m is defensible as a compromise, but the more useful fix is elsewhere: rerun the wave model at +2.38 m and then compare the tank with it at the toe, which is the number the design actually uses.</div>
 </div></section>
 
 <section id="checks"><div class="wrap">
@@ -432,7 +481,34 @@ footer{padding:30px 0 60px;color:var(--muted);font-size:14px}
 
 <section id="videos"><div class="wrap">
   <p class="kicker">13. Video tutorial</p>
-  <h2>Every stage, in eight short videos</h2>
+  <h2>A click-through, then every stage in eight short videos</h2>
+  <h3>Start here: the click-through (15 minutes)</h3>
+  <p class="narrow">Recorded on the real computer, stage by stage. Each part opens with the script to run and the file it creates, and ends by showing the new file in File Explorer, so the handoff from one stage to the next is visible. It covers File Explorer, a script opened in Visual Studio Code, the geometry editor in the browser, the case builder that writes the .DAT file, the IH-2VOF program itself, the batch files, the run log and the result figures. A yellow circle marks the pointer and a coloured tag says whether to click, double-click, type or just read. 94 steps, about 22 minutes, no sound. It is made from a screenshot at each step, so it moves step by step.</p>
+  <figure class="fig"><video controls preload="none" playsinline poster="assets/tutorial/poster_clickthrough.jpg" src="assets/tutorial/clickthrough_tutorial.mp4"></video><figcaption>Click-through tutorial. Stages 2, 4a and 4b were done on a practice project (<code>C:\IH2VOF\CASES\_TUTORIAL_demo_project\</code> and the case <code>TUTORIAL_demo_case</code>) so the running project cases were not touched. Stages 0, 1, 3 and 5 show the real project folders; their scripts are pointed at, not rerun.</figcaption></figure>
+  <h3>The handoff chain</h3>
+  <figure class="fig"><img src="assets/handoff_map.png" alt="Table of each stage: what you run, what it creates and where" loading="lazy"><figcaption>What to run at each stage, the files it creates and where they appear. A stage is finished when its output file exists and its check has been made.</figcaption></figure>
+  <h3>How the .DAT file is made</h3>
+  <p class="narrow">The geometry editor only saves <code>geometry_spec.json</code>: the layers in section coordinates. The .DAT file is written one stage later by <code>build_cases.py</code>, which joins that file with the surveyed sea bed and paddle flat from <code>forcing_confirmed.json</code>, converts everything to model coordinates (x from the paddle, z from the tank floor) and writes one .DAT per case, with <code>case_config.json</code> and <code>CHECKLIST.txt</code> beside it.</p>
+  <figure class="fig"><img src="assets/dat_anatomy.png" alt="Annotated contents of the geometry file" loading="lazy"><figcaption>The .DAT is plain text. Each rock layer carries alpha, beta, added mass, D50, an unused zero and porosity, then its corner points.</figcaption></figure>
+  <h3>The black shape under the revetment in the first video</h3>
+  <p class="narrow">That was a drawing fault in the editor page, not something in the model. The editor had no colour for three materials (bedding, the "cut", and thin gap fills), and drew them black. The largest black shape was the <b>cut</b>: the existing ground that is dug out before the revetment is built. The case builder removes that ground from the solid bed; it is not a material in the tank. The page now colours every material and has a legend, and the video was re-recorded with it. The .DAT files and the runs were not affected.</p>
+  <figure class="fig"><img src="assets/editor_legend.png" alt="Geometry editor picture with legend" loading="lazy"><figcaption>The corrected editor picture. Red dashed outline: the cut. Tan: backfill and gap fills that close small spaces between drawn layers so no water is trapped under rock.</figcaption></figure>
+  <h3>Starting from Civil 3D, and drawings that are not layered properly</h3>
+  <p class="narrow">Sections normally live in Civil 3D, and exporting a DXF is faster and more exact than reading a PDF. Civil 3D section views are special objects that a plain DXF reader cannot see, so they are first exported as ordinary lines.</p>
+  <ol class="steps">
+    <li><b>Check the section view</b><span>Vertical exaggeration should be 1. If it is not, note the factor; all levels will be stretched by it.</span></li>
+    <li><b>Export as plain AutoCAD</b><span>Command <code>EXPORTTOAUTOCAD</code> (or Output, Export, Export Civil 3D Drawing). This writes a copy in which the section views are ordinary polylines, hatches and text. The original is untouched.</span></li>
+    <li><b>Name the layers</b><span>Put each outline on a layer named SECTION-ROLE-VARIANT, for example <code>A-ARMOUR-PROPOSED</code>, <code>A-EG-EXISTING</code>. Roles: EG, ARMOUR, TOE, FILTER, BEDDING, BACKFILL, WALL.</span></li>
+    <li><b>Save as DXF into 00_inputs and run <code>extract_sections.py</code></b><span>It lists every layer it could not interpret. Note one grid line of known level per section: the drawing height is not the level, and the difference is the "datum offset" the next script asks for.</span><em>Check: the preview picture against the drawing.</em></li>
+  </ol>
+  <div class="tablewrap"><table>
+    <tr><th>If the drawing is not layered properly</th><th>What to do</th><th>Time</th></tr>
+    <tr><td>Layers exist but have other names</td><td>Do not rename in CAD. Add each name and its role to "layer_roles" in <code>project.json</code> and rerun.</td><td>Minutes</td></tr>
+    <tr><td>Everything on one or two layers</td><td>In CAD use <code>BOUNDARY</code> (click inside each rock layer) to make one closed polyline per layer, or <code>HATCHGENERATEBOUNDARY</code> where a layer is drawn as a hatch. Join the existing ground into one open polyline. Move each to its named layer.</td><td>5 to 10 minutes per section</td></tr>
+    <tr><td>Linework unusable (blocks, images, broken lines)</td><td>Build the layers from the drawing dimensions in the geometry editor (shown in the click-through), or use the PDF route.</td><td>15 to 30 minutes per section</td></tr>
+  </table></div>
+  <p class="cap">The Civil 3D command names are from general knowledge of the program and were not tested in this project, which used the PDF route. Check them in your version. The times are estimates.</p>
+  <h3>Background: one slide video per stage</h3>
   <p class="narrow">One video per numbered folder, from collecting the inputs to the output figures and the standard video. They are captioned slides with real pictures and commands from the Western Head project; there is no sound, so pause as needed. Total about 13 minutes. A single joined version is <a href="assets/tutorial/tutorial_full.mp4">here</a>.</p>
   <div class="cards" style="grid-template-columns:repeat(auto-fit,minmax(300px,1fr))">
 <figure class="fig" style="margin:0"><video controls preload="none" playsinline poster="assets/tutorial/poster_0_overview.jpg" src="assets/tutorial/tutorial_0_overview.mp4"></video><figcaption><b>Part 1. The map: folders and the order of work</b> (1 min 25 s). Eight numbered folders. Each stage reads what the stage before it wrote.</figcaption></figure>
@@ -444,7 +520,7 @@ footer{padding:30px 0 60px;color:var(--muted);font-size:14px}
 <figure class="fig" style="margin:0"><video controls preload="none" playsinline poster="assets/tutorial/poster_6_run.jpg" src="assets/tutorial/tutorial_6_run.mp4"></video><figcaption><b>Part 7. Stage 5: batch runs</b> (1 min 16 s). Starting, queueing, watching and stopping the solver.</figcaption></figure>
 <figure class="fig" style="margin:0"><video controls preload="none" playsinline poster="assets/tutorial/poster_7_outputs.jpg" src="assets/tutorial/tutorial_7_outputs.mp4"></video><figcaption><b>Part 8. Stages 6 and 7: figures and the standard video</b> (2 min 03 s). Wave heights, overtopping, wall pressure, and the video with the drawing overlaid.</figcaption></figure>
   </div>
-  <div class="note"><b>Not in the videos yet:</b> live recordings of the IH2VOF program screens (mesh, wave series, paddle, input). The program was left untouched while the overnight batch was running. Part 6 gives the steps as the checklist the workflow writes for each case; the screens will be recorded the next time cases are prepared.</div>
+  <div class="note"><b>Not in the videos yet:</b> the mesh designer (New mesh, CORAL) where finer zones are set, Import wave series for a proposed case, and the PDF and DXF extraction scripts running. These are described in the text and the README files only.</div>
   <h3>The template folder</h3>
   <p class="narrow">A clean copy of the folder structure, with the scripts and a <code>README.txt</code> in every folder describing each file, is at <code>C:\IH2VOF\CASES\_TEMPLATE_design_runs\</code>. To start a project: copy it, rename it, edit <code>project.json</code>, and work through the folders in number order.</p>
   <div class="tablewrap"><table>
@@ -469,7 +545,7 @@ footer{padding:30px 0 60px;color:var(--muted);font-size:14px}
 <section id="refs" class="tint"><div class="wrap">
   <p class="kicker">15. References</p>
   <h2>Sources</h2>
-  <p class="narrow">Every journal link below was checked against the publisher or a citation index on 10 October 2026. Links marked <span class="pill ok">free to read</span> open the full text. Links marked <span class="pill">journal site</span> open the publisher page; the full text needs a subscription or a library request. Those papers are copyrighted, so copies are not stored on this page. Saved in a private folder they can be opened at an exact page by adding <code>#page=12</code> to the file address in a browser.</p>
+  <p class="narrow">Journal links below were checked against the publisher or a citation index on 10 October 2026; for the vegetation field-data papers (Infantes, Jadhav, Ohira, Yang) the titles and author lists are as found by search and should be checked before quoting. Links marked <span class="pill ok">free to read</span> open the full text. Links marked <span class="pill">journal site</span> open the publisher page; the full text needs a subscription or a library request. Those papers are copyrighted, so copies are not stored on this page. Saved in a private folder they can be opened at an exact page by adding <code>#page=12</code> to the file address in a browser.</p>
   <div class="note good"><b>If time is short, read these four in this order.</b> (1) EurOtop 2018, Chapter 6, for the overtopping check. (2) Losada et al. (2008), the IH2VOF family validated for overtopping of a rubble mound. (3) Castiglione et al. (2023), free, on how much the rock coefficients change overtopping. (4) Guanche et al. (2009), wave loads on a wall compared with tests and with Goda.</div>
   <ol class="refs">
     <li>Battjes, J.A., Groenendijk, H.W. (2000). Wave height distributions on shallow foreshores. <i>Coastal Engineering</i> 40, 161 to 182. <a href="https://doi.org/10.1016/S0378-3839(00)00007-7" target="_blank" rel="noopener">doi:10.1016/S0378-3839(00)00007-7</a> <span class="pill">journal site</span></li>
@@ -494,6 +570,15 @@ footer{padding:30px 0 60px;color:var(--muted);font-size:14px}
     <li>van der Meer, J.W. (1988). <i>Rock slopes and gravel beaches under wave attack</i>. Doctoral thesis, Delft University of Technology. <a href="https://repository.tudelft.nl/record/uuid:67e5692c-0905-4ddd-8487-37fdda9af6b4" target="_blank" rel="noopener">Delft repository</a> <span class="pill ok">free to read</span></li>
     <li>van Gent, M.R.A. (1995). Porous flow through rubble-mound material. <i>Journal of Waterway, Port, Coastal, and Ocean Engineering</i> 121(3), 176 to 181. <a href="https://doi.org/10.1061/(ASCE)0733-950X(1995)121:3(176)" target="_blank" rel="noopener">doi:10.1061/(ASCE)0733-950X(1995)121:3(176)</a> <span class="pill">journal site</span></li>
     <li>van Gent, M.R.A. (1995). <i>Wave interaction with permeable coastal structures</i>. Doctoral thesis, Delft University of Technology. <a href="https://repository.tudelft.nl/record/uuid:7bbff8e4-215d-4bfc-a3af-51cdecb754bd" target="_blank" rel="noopener">Delft repository</a>. The fuller story behind the porous-flow coefficients.</li>
+    <li>Chalmoukis, I.A., Leftheriotis, G.A., Dimas, A.A. (2023). Large-eddy simulation of wave attenuation and breaking on a beach with coastal vegetation modelled as porous medium. <i>Journal of Marine Science and Engineering</i> 11(3), 519. <a href="https://doi.org/10.3390/jmse11030519" target="_blank" rel="noopener">doi:10.3390/jmse11030519</a> <span class="pill ok">free to read</span></li>
+    <li>Infantes, E., Orfila, A., Simarro, G., Terrados, J., Luhar, M., Nepf, H. (2012). Effect of a seagrass (Posidonia oceanica) meadow on wave propagation. <i>Marine Ecology Progress Series</i> 456, 63 to 72. <a href="https://doi.org/10.3354/meps09754" target="_blank" rel="noopener">doi:10.3354/meps09754</a></li>
+    <li>Jadhav, R., Chen, Q. (2012). Field investigation of wave dissipation over salt marsh vegetation during tropical cyclone. <i>Coastal Engineering Proceedings</i> (33rd International Conference on Coastal Engineering).</li>
+    <li>Maza, M., Lara, J.L., Losada, I.J. (2013). A coupled model of submerged vegetation under oscillatory flow using Navier-Stokes equations. <i>Coastal Engineering</i> 80, 16 to 34. <a href="https://doi.org/10.1016/j.coastaleng.2013.04.009" target="_blank" rel="noopener">doi:10.1016/j.coastaleng.2013.04.009</a> <span class="pill">journal site</span> The IH2VOF vegetation paper.</li>
+    <li>Maza, M., Lara, J.L., Losada, I.J. (2015). Tsunami wave interaction with mangrove forests: a 3-D numerical approach. <i>Coastal Engineering</i> 98, 33 to 54. <a href="https://doi.org/10.1016/j.coastaleng.2015.01.002" target="_blank" rel="noopener">doi:10.1016/j.coastaleng.2015.01.002</a> <span class="pill">journal site</span></li>
+    <li>Maza, M., Lara, J.L., Losada, I.J. (2019). Experimental analysis of wave attenuation and drag forces in a realistic fringe Rhizophora mangrove forest. <i>Advances in Water Resources</i> 131, 103376. <a href="https://doi.org/10.1016/j.advwatres.2019.07.006" target="_blank" rel="noopener">doi:10.1016/j.advwatres.2019.07.006</a> <span class="pill">journal site</span></li>
+    <li>Mendez, F.J., Losada, I.J. (2004). An empirical model to estimate the propagation of random breaking and nonbreaking waves over vegetation fields. <i>Coastal Engineering</i> 51, 103 to 118. <a href="https://doi.org/10.1016/j.coastaleng.2003.11.003" target="_blank" rel="noopener">doi:10.1016/j.coastaleng.2003.11.003</a> <span class="pill">journal site</span> The hand formula for wave damping by vegetation.</li>
+    <li>Ohira, W., Honda, K., Nagai, M., Ratanasuwan, A. (2013). Mangrove stilt root morphology modeling for estimating hydraulic drag in tsunami inundation simulation. <i>Trees</i> 27(1), 141 to 148. <a href="https://doi.org/10.1007/s00468-012-0782-8" target="_blank" rel="noopener">doi:10.1007/s00468-012-0782-8</a></li>
+    <li>Yang, S.L., Shi, B.W., Bouma, T.J., Ysebaert, T., Luo, X.X. (2012). Wave attenuation at a salt marsh margin: a case study of an exposed coast on the Yangtze Estuary. <i>Estuaries and Coasts</i> 35(1), 169 to 182. <a href="https://doi.org/10.1007/s12237-011-9424-4" target="_blank" rel="noopener">doi:10.1007/s12237-011-9424-4</a></li>
     <li>IH2VOF model and publications page, IHCantabria: <a href="https://ih2vof.ihcantabria.com/">ih2vof.ihcantabria.com</a></li>
   </ol>
 </div></section>
@@ -567,6 +652,12 @@ function goda(){ const v=i=>+$('#'+i).value, Hs=v('gH'), Hm=Hs*v('gF'), T=v('gT'
   const P=0.5*(p1+p3)*hp+0.5*(p1+p4)*hcs, U=0.5*pu*B, f=n=>n.toFixed(n<10?2:1);
   $('#gOut').innerHTML=`Hmax = <b>${f(Hm)} m</b>, wavelength L = <b>${f(L)} m</b>, pressure reaches η* = <b>${f(eta)} m</b> above still water${eta>hc?' (higher than the crest, so the wall is overtopped)':''}.<br>α1 = <b>${a1.toFixed(2)}</b>, α2 = <b>${a2.toFixed(2)}</b>, α3 = <b>${a3.toFixed(2)}</b>.<br>p1 = <b>${f(p1)} kPa</b>, p3 = <b>${f(p3)} kPa</b>, p4 = <b>${f(p4)} kPa</b>, pu = <b>${f(pu)} kPa</b>.<br>Horizontal force = <b>${f(P)} kN per metre</b>. Uplift = <b>${f(U)} kN per metre</b>.<br><span class="cap">For scale: still water pressure at the wall base is ${f(rho*g*hp/1000)} kPa. Try halving the period, or raising the mound (smaller d), and watch α1 and α2.</span>`; }
 ['gH','gF','gT','gh','gd','gp','gb','gc','gB','ga'].forEach(i=>$('#'+i).addEventListener('input',goda)); goda();
+
+/* vegetation as porous stand-in */
+function veg(){ const N=+$('#vN').value,d=+$('#vD').value,C=+$('#vC').value,n=+$('#vP').value,B=+$('#vB').value;
+  const drag=0.5*C*N*d, D=B*(1-n)/(n**3*drag), ng=1-N*Math.PI*d*d/4;
+  $('#vOut').innerHTML=`Stem drag ½·C<sub>D</sub>·N·d = <b>${drag.toFixed(2)} per metre</b>. To match it with porosity ${n} and β ${B}, set <b>D50 = ${D.toFixed(3)} m</b>.<br>Geometric porosity of these stems would be <b>${ng.toFixed(3)}</b>.<br><span class="cap">The starting values reproduce the Dominica setting (D50 0.036 m). Try a mangrove root zone: 30 roots per m², diameter 0.035 m.</span>`; }
+['vN','vD','vC','vP','vB'].forEach(i=>$('#'+i).addEventListener('input',veg)); veg();
 
 /* self-test */
 [['What does IH2VOF actually solve?','The Reynolds-averaged Navier-Stokes equations in a two-dimensional vertical slice, with a volume-of-fluid method for the water surface and volume-averaged equations inside porous layers.','It computes velocity and pressure in every cell at every time step, so breaking, run-up, overtopping and flow through rock all come out of the same calculation instead of separate formulae. The price is run time and sensitivity to grid and coefficients.'],
