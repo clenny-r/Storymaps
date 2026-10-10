@@ -31,7 +31,7 @@ section{padding:54px 0;border-bottom:1px solid var(--line)}section.tint{backgrou
 table{border-collapse:collapse;width:100%;font-size:15px;min-width:560px}
 th,td{padding:9px 12px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
 th{font-size:13px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);background:var(--tint)}
-tr:last-child td{border-bottom:0}td.num{font-variant-numeric:tabular-nums;white-space:nowrap}
+tr:last-child td{border-bottom:0}td:first-child code{white-space:nowrap;word-break:normal}td.num{font-variant-numeric:tabular-nums;white-space:nowrap}
 .fig{margin:18px 0;background:var(--paper);border:1px solid var(--line);border-radius:var(--r);padding:12px}
 .fig img,.fig video{width:100%;height:auto;display:block;border-radius:8px;background:#fff}
 .fig figcaption,.cap{font-size:14px;color:var(--muted);margin-top:8px}
@@ -67,7 +67,7 @@ footer{padding:30px 0 60px;color:var(--muted);font-size:14px}
   <p style="opacity:.85;margin-top:18px;font-size:15px">Clenmar Rowe, P.Eng., CBCL Limited. Updated 10 October 2026. Worked example: main revetment, station 0+120, proposed design.</p>
 </div></header>
 <nav class="top"><div class="wrap">
-  <a href="#pitch">The pitch</a><a href="#workflow">Workflow</a><a href="#domain">The tank</a><a href="#grid">Grid</a><a href="#materials">Rock as numbers</a><a href="#waves">Waves</a><a href="#checks">Health checks</a><a href="#result">Example result</a><a href="#hand">Hand checks</a><a href="#trust">Reliability</a><a href="#limits">Limits</a><a href="#diy">Do it yourself</a><a href="#quiz">Self-test</a><a href="#refs">References</a>
+  <a href="#pitch">The pitch</a><a href="#workflow">Workflow</a><a href="#domain">The tank</a><a href="#grid">Grid</a><a href="#materials">Rock as numbers</a><a href="#waves">Waves</a><a href="#checks">Health checks</a><a href="#result">Example result</a><a href="#hand">Hand checks</a><a href="#trust">Reliability</a><a href="#limits">Limits</a><a href="#diy">Do it yourself</a><a href="#videos">Video tutorial</a><a href="#quiz">Self-test</a><a href="#refs">References</a>
 </div></nav>
 
 <section id="pitch"><div class="wrap">
@@ -124,6 +124,23 @@ footer{padding:30px 0 60px;color:var(--muted);font-size:14px}
     <tr><th>Feature</th><th>Size</th><th>Cells across it</th><th>Comment</th></tr>
   </table></div>
   <p class="narrow">Common guidance for this family of models is at least 10 cells per wave height (preferably 15 to 20), at least 70 to 100 cells per wavelength, and a cell length no more than about 2.5 to 5 times its height. This grid meets those for the waves. The weak spots are horizontal: the wall is under two cells wide and each rock layer is only a few cells thick measured along the slope.</p>
+  <h3>How this resolution was chosen</h3>
+  <p class="narrow">It was not found by a convergence study. The cell size was carried over from the earlier Dominica runs and then checked against rules of thumb and against run time. The reasoning, in the order it is done:</p>
+  <ol class="steps">
+    <li><b>Cell height from the wave height</b><span>Aim for 15 to 20 or more rows across the wave height at the paddle. 3.5 m ÷ 20 = 0.175 m, rounded down to 0.15 m, which gives 23 rows. Where the waves have broken down to about 2.2 m at the toe there are still about 15 rows.</span></li>
+    <li><b>Cell length from the cell shape</b><span>Keep length no more than about 2.5 to 5 times height, otherwise steep wave fronts and the sloping rock face are smeared. 0.15 m × 3.3 = 0.5 m.</span></li>
+    <li><b>Check the wavelength</b><span>130 m ÷ 0.5 m = 260 columns per wavelength at the paddle, well above the 70 to 100 minimum. In shallow water at the toe the wavelength is about 90 m, still 180 columns.</span></li>
+    <li><b>Check the cost</b><span>706 × 97 = 68,482 cells. The solver chooses its own time step (median 0.014 s here), so 600 s of storm needed 37,640 steps and 14.6 hours. That fits an overnight run per case, which was the practical limit for sixteen cases on one laptop.</span></li>
+    <li><b>Look at what is left under-resolved</b><span>The table above. The structure, not the waves, is the weak point.</span></li>
+  </ol>
+  <h3>How to vary it</h3>
+  <div class="tablewrap"><table>
+    <tr><th>Option</th><th>Where to change it</th><th>Rough cost for station 0+120 (estimates, not measured)</th></tr>
+    <tr><td>Finer everywhere (for example 0.25 m by 0.10 m)</td><td>Change <code>dx</code> and <code>dz</code> under "defaults" in <code>C:\IH2VOF\Western head\project.json</code>, or for one station in <code>C:\IH2VOF\Western head\02_geometry\geometry_spec.json</code>. Rerun <code>build_cases.py</code>, then regenerate the mesh, paddle and input in the IH2VOF program.</td><td>3 times the cells and a shorter time step: about 5 to 6 times the run time, roughly 3 days for 600 s.</td></tr>
+    <tr><td>Finer only near the structure (sub-zones)</td><td>On the mesh screen of the IH2VOF program, split the length into two zones (coarse offshore, fine over the last 40 m) and the height into three (fine between about −2 m and +7 m). Cell size should change gradually between zones, by no more than about 5 to 10 % from one cell to the next.</td><td>About 1.5 times the cells and a shorter time step: about 2.5 to 3 times the run time.</td></tr>
+    <tr><td>Coarser, for a quick look (1.0 m by 0.25 m)</td><td>As the first row.</td><td>About a quarter of the run time. Only for testing the set-up; not for results.</td></tr>
+  </table></div>
+  <div class="note"><b>Two cautions before using sub-zones.</b> (1) The automatic scripts in this workflow (case builder, input checker, gauge and pressure-zone positions) were written for a uniform grid, so a refined case has to be set up and checked by hand the first time. (2) Rows run the full length of the tank and columns the full height, so a fine band near the crest is also fine all the way out to the paddle. <b>The test that matters</b> is a grid sensitivity run: repeat one case on the finer grid with the same wave series and compare wave height at the gauges, peak wall force and overtopping volume. If they change by less than about 10 %, the coarse grid is good enough for that quantity; if not, say so and use the finer one.</div>
   <h3>Resolution zones: was the grid made finer near the structure?</h3>
   <p class="narrow"><b>No.</b> These runs use one uniform zone: the same 0.5 m by 0.15 m cell from the paddle to the basin and from the floor to the lid. The solid brackets below show that single zone. The dashed brackets show where a finer zone would normally be placed and was not.</p>
   <div class="chart" style="overflow-x:auto"><svg viewBox="0 0 1000 372" style="min-width:720px" role="img" aria-label="Tank outline with brackets showing one uniform resolution zone along the length and height, and dashed brackets where a finer zone is recommended near the structure">
@@ -215,6 +232,41 @@ footer{padding:30px 0 60px;color:var(--muted);font-size:14px}
       <li>The paddle wave (3.5 m) is smaller than the wave model has at that point (4.67 m). The tank relies on the foreshore to control what reaches the structure, which is reasonable when waves are depth-limited but should be shown, not assumed: compare the tank wave height where the bed is −2.5 m with the design value.</li>
       <li>About 47 waves is far short of the 500 to 1000 recommended for stable overtopping statistics. The largest wave group arrives at about 370 s; a 300 s run would miss it.</li>
     </ul></div>
+  <h3>The handoff from the spectral wave model, and why the tank was extended</h3>
+  <p class="narrow">The tender drawing ends 30 m seaward of the wall, where the bed is at −0.5 m and the water is under 3 m deep. A 3 m storm wave cannot exist there; the waves arriving at that point have already broken. A wave paddle placed at the edge of the drawing would have nothing sensible to generate. So the tank has to start further offshore, in water deep enough to hold the storm waves, and let them shoal and break over the real sea bed on the way in. That is the job the wave tank does better than the spectral model, which only carries averaged wave energy and a breaking rule.</p>
+  <div class="chart" style="overflow-x:auto"><svg viewBox="0 0 1000 330" style="min-width:720px" role="img" aria-label="The tank is three pieces joined together: an artificial flat bed at the paddle, the surveyed sea bed, and the drawing. The wave model values are handed over where the flat meets the surveyed bed.">
+    <polygon points="60,120 960,120 960,250 60,250" fill="var(--accent)" opacity=".15"/>
+    <polygon points="60,250 60,232 377,232 480,214 600,196 700,178 815,152 870,134 905,100 925,62 938,62 938,90 960,90 960,250" fill="#8a7a63"/>
+    <line x1="60" y1="120" x2="890" y2="120" stroke="var(--accent)" stroke-width="2"/>
+    <rect x="56" y="100" width="6" height="132" fill="var(--bad)"/>
+    <g stroke="var(--ink2)" stroke-dasharray="4 4"><line x1="377" y1="40" x2="377" y2="262"/><line x1="815" y1="40" x2="815" y2="262"/></g>
+    <circle cx="377" cy="232" r="7" fill="var(--bad)"/>
+    <g fill="none" stroke="var(--ink)" stroke-width="1.8">
+      <path d="M60,266 q0,8 8,8 L210,274 q8,0 8,8 q0,-8 8,-8 L369,274 q8,0 8,-8"/>
+      <path d="M377,266 q0,8 8,8 L588,274 q8,0 8,8 q0,-8 8,-8 L807,274 q8,0 8,-8"/>
+      <path d="M815,266 q0,8 8,8 L879,274 q8,0 8,8 q0,-8 8,-8 L952,274 q8,0 8,-8"/>
+    </g>
+    <g font-size="13.5" font-family="system-ui,sans-serif" fill="var(--ink)">
+      <text x="218" y="300" text-anchor="middle" font-weight="700">1. Added flat bed, 130 m</text><text x="218" y="318" text-anchor="middle" fill="var(--ink2)">one wavelength, bed −5.5 m</text>
+      <text x="596" y="300" text-anchor="middle" font-weight="700">2. Surveyed sea bed, 180 m</text><text x="596" y="318" text-anchor="middle" fill="var(--ink2)">1 m survey model along the station line</text>
+      <text x="887" y="300" text-anchor="middle" font-weight="700">3. Drawing, 44 m</text><text x="887" y="318" text-anchor="middle" fill="var(--ink2)">structure, wall, basin</text>
+      <text x="70" y="92">Wave paddle: Hs 3.5 m, Tp 15.1 s</text><text x="70" y="112" fill="var(--ink2)">depth 7.88 m</text>
+      <text x="387" y="34" font-weight="700" fill="var(--bad)">Handoff point</text><text x="387" y="52">wave model here: Hs 4.67 m, Tp 15.1 s</text><text x="387" y="70" fill="var(--ink2)">first place the surveyed bed reaches −5.5 m</text>
+      <text x="807" y="34" text-anchor="end" fill="var(--ink2)">edge of drawing (gauge G2)</text>
+      <text x="640" y="112" fill="var(--ink2)">Still water +2.38 m</text>
+    </g>
+  </svg></div>
+  <p class="cap">The tank for station 0+120 is three pieces joined end to end. Vertical scale stretched.</p>
+  <ol class="steps">
+    <li><b>Choose the paddle depth</b><span>The paddle bed was set at −5.5 m for every station (7.88 m of water). Deeper would carry bigger waves but, on a sea bed sloping at about 1 in 35, each extra metre of depth adds about 35 m of tank and more rows of cells.</span></li>
+    <li><b>Walk offshore from the edge of the drawing</b><span>The script <code>extract_transects_wh.py</code> starts at the seaward end of the drawn section and steps 5 m at a time along the station line (bearing 202°), reading the bed from the 1 m survey elevation model and the wave height and period from the spectral wave model result file at each step.</span><em>Check: the picture below. Does the surveyed bed meet the drawn ground without a step?</em></li>
+    <li><b>Find the handoff point</b><span>The first step where the bed is at or below −5.5 m: 180 m seaward of the drawing. The wave model has Hs 4.67 m and Tp 15.1 s there. Those two numbers are what is handed from the wave model to the wave tank.</span></li>
+    <li><b>Add a flat run-in for the paddle</b><span>One wavelength (130 m) of flat bed at −5.5 m is added seaward of the handoff point, so the paddle makes waves over a level bed before they meet the slope. The handed-over wave height is applied at the paddle, at the start of this flat.</span></li>
+    <li><b>Cap the wave height</b><span>A paddle cannot produce a stable irregular sea with Hs above about 0.45 × depth; the biggest waves just break at the paddle. 0.45 × 7.88 m = 3.55 m, rounded down to 3.5 m. So the tank is given 3.5 m, not 4.67 m.</span><em>Check: gauge G1 on the flat should read the target. It read 3.43 m.</em></li>
+    <li><b>Compare again at the edge of the drawing</b><span>Gauge G2 sits where the drawing starts. The tank gave Hs 2.15 m there; the wave model gave 1.23 m. They are not expected to match here because the wave model was run 0.92 m lower (see below), but the comparison is recorded for every case.</span></li>
+  </ol>
+  <figure class="fig"><img src="assets/transect_WHM0120.png" alt="Sea bed and wave model wave height along the station line seaward of the drawing" loading="lazy"><figcaption>Step 2 output for station 0+120. Black: surveyed bed, distance measured seaward from the edge of the drawing. Dotted black: paddle bed level; where the two cross (180 m) is the handoff point. Red: wave model wave height (right axis).</figcaption></figure>
+  <div class="note bad"><b>Three weaknesses of this handoff that a reviewer should hear from you first.</b><br>1. <b>The cap cuts the wave.</b> 3.5 m against 4.67 m is 75 % of the height and about 56 % of the energy. Everywhere along the surveyed line the wave model wave is close to its depth limit, so a cap applies wherever the paddle is put; a deeper paddle would cut less.<br>2. <b>The water levels differ.</b> The wave model was run at +1.46 m (no storm surge); the tank runs at +2.38 m. The tank therefore puts a wave computed for shallower water into deeper water. A wave model run at +2.38 m would remove this.<br>3. <b>One direction only.</b> The tank assumes the waves travel straight along the station line. Refraction and spreading are in the wave model but not in the tank.</div>
 </div></section>
 
 <section id="checks"><div class="wrap">
@@ -378,14 +430,44 @@ footer{padding:30px 0 60px;color:var(--muted);font-size:14px}
   </ol>
 </div></section>
 
+<section id="videos"><div class="wrap">
+  <p class="kicker">13. Video tutorial</p>
+  <h2>Every stage, in eight short videos</h2>
+  <p class="narrow">One video per numbered folder, from collecting the inputs to the output figures and the standard video. They are captioned slides with real pictures and commands from the Western Head project; there is no sound, so pause as needed. Total about 13 minutes. A single joined version is <a href="assets/tutorial/tutorial_full.mp4">here</a>.</p>
+  <div class="cards" style="grid-template-columns:repeat(auto-fit,minmax(300px,1fr))">
+<figure class="fig" style="margin:0"><video controls preload="none" playsinline poster="assets/tutorial/poster_0_overview.jpg" src="assets/tutorial/tutorial_0_overview.mp4"></video><figcaption><b>Part 1. The map: folders and the order of work</b> (1 min 25 s). Eight numbered folders. Each stage reads what the stage before it wrote.</figcaption></figure>
+<figure class="fig" style="margin:0"><video controls preload="none" playsinline poster="assets/tutorial/poster_1_inputs.jpg" src="assets/tutorial/tutorial_1_inputs.mp4"></video><figcaption><b>Part 2. Stage 0: collect the inputs</b> (0 min 45 s). Raw files only. Nothing in this folder is ever edited.</figcaption></figure>
+<figure class="fig" style="margin:0"><video controls preload="none" playsinline poster="assets/tutorial/poster_2_sections.jpg" src="assets/tutorial/tutorial_2_sections.mp4"></video><figcaption><b>Part 3. Stage 1: the structure from the drawing</b> (1 min 49 s). Reading the section linework out of a PDF, and fixing where it sits on the map.</figcaption></figure>
+<figure class="fig" style="margin:0"><video controls preload="none" playsinline poster="assets/tutorial/poster_3_geometry.jpg" src="assets/tutorial/tutorial_3_geometry.mp4"></video><figcaption><b>Part 4. Stage 2: layers, materials and instruments</b> (1 min 57 s). Building or correcting the structure by selecting points.</figcaption></figure>
+<figure class="fig" style="margin:0"><video controls preload="none" playsinline poster="assets/tutorial/poster_4_forcing.jpg" src="assets/tutorial/tutorial_4_forcing.mp4"></video><figcaption><b>Part 5. Stage 3: waves, water level and the longer tank</b> (1 min 48 s). Where the wave model hands over to the wave tank.</figcaption></figure>
+<figure class="fig" style="margin:0"><video controls preload="none" playsinline poster="assets/tutorial/poster_5_cases.jpg" src="assets/tutorial/tutorial_5_cases.mp4"></video><figcaption><b>Part 6. Stage 4: build the cases and prepare them</b> (1 min 42 s). From numbers to files the model can run, then a check of every setting.</figcaption></figure>
+<figure class="fig" style="margin:0"><video controls preload="none" playsinline poster="assets/tutorial/poster_6_run.jpg" src="assets/tutorial/tutorial_6_run.mp4"></video><figcaption><b>Part 7. Stage 5: batch runs</b> (1 min 16 s). Starting, queueing, watching and stopping the solver.</figcaption></figure>
+<figure class="fig" style="margin:0"><video controls preload="none" playsinline poster="assets/tutorial/poster_7_outputs.jpg" src="assets/tutorial/tutorial_7_outputs.mp4"></video><figcaption><b>Part 8. Stages 6 and 7: figures and the standard video</b> (2 min 03 s). Wave heights, overtopping, wall pressure, and the video with the drawing overlaid.</figcaption></figure>
+  </div>
+  <div class="note"><b>Not in the videos yet:</b> live recordings of the IH2VOF program screens (mesh, wave series, paddle, input). The program was left untouched while the overnight batch was running. Part 6 gives the steps as the checklist the workflow writes for each case; the screens will be recorded the next time cases are prepared.</div>
+  <h3>The template folder</h3>
+  <p class="narrow">A clean copy of the folder structure, with the scripts and a <code>README.txt</code> in every folder describing each file, is at <code>C:\IH2VOF\CASES\_TEMPLATE_design_runs\</code>. To start a project: copy it, rename it, edit <code>project.json</code>, and work through the folders in number order.</p>
+  <div class="tablewrap"><table>
+    <tr><th>Folder</th><th>What you do there</th><th>Main output</th><th>Your check</th></tr>
+    <tr><td><code>00_inputs</code></td><td>Collect drawings, rock sizing, wave model results, survey, footprint.</td><td>Raw files, never edited</td><td>Current issue? Same datum?</td></tr>
+    <tr><td><code>01_sections</code></td><td>Read the section linework from the drawing; fix the station position.</td><td><code>sections_pdf.json</code>, <code>stations_utm.json</code></td><td>Preview against drawing; position against survey.</td></tr>
+    <tr><td><code>02_geometry</code></td><td>Layers as closed outlines with materials; gauges; pressure zone.</td><td><code>geometry_spec.json</code></td><td>Levels and thicknesses; no gaps between layers.</td></tr>
+    <tr><td><code>03_forcing</code></td><td>Walk offshore to the handoff point; cap the wave; add the paddle flat.</td><td><code>forcing_confirmed.json</code></td><td>Cap ratio; water level of the wave model.</td></tr>
+    <tr><td><code>04_cases</code></td><td>Build case folders; prepare each in the IH2VOF program; check inputs.</td><td>Case folders, <code>CHECKLIST.txt</code></td><td>Input check prints PASS; zero trapped water cells.</td></tr>
+    <tr><td><code>05_run</code></td><td>Start and queue batches; watch; stop.</td><td>Run log, figures per case</td><td>Health checks (section 7).</td></tr>
+    <tr><td><code>06_analysis</code></td><td>Results table and report.</td><td><code>results.csv</code>, figures</td><td>EurOtop and Goda by hand (section 9).</td></tr>
+    <tr><td><code>07_hq_videos</code></td><td>Standard video with the drawing overlaid.</td><td><code>&lt;case&gt;_plan.mp4</code></td><td>One frame inspected before the full render.</td></tr>
+  </table></div>
+</div></section>
+
 <section id="quiz"><div class="wrap">
-  <p class="kicker">13. Self-test</p>
+  <p class="kicker">14. Self-test</p>
   <h2>Questions a manager or reviewer might ask</h2>
   <div id="qa"></div>
 </div></section>
 
 <section id="refs" class="tint"><div class="wrap">
-  <p class="kicker">14. References</p>
+  <p class="kicker">15. References</p>
   <h2>Sources</h2>
   <p class="narrow">Every journal link below was checked against the publisher or a citation index on 10 October 2026. Links marked <span class="pill ok">free to read</span> open the full text. Links marked <span class="pill">journal site</span> open the publisher page; the full text needs a subscription or a library request. Those papers are copyrighted, so copies are not stored on this page. Saved in a private folder they can be opened at an exact page by adding <code>#page=12</code> to the file address in a browser.</p>
   <div class="note good"><b>If time is short, read these four in this order.</b> (1) EurOtop 2018, Chapter 6, for the overtopping check. (2) Losada et al. (2008), the IH2VOF family validated for overtopping of a rubble mound. (3) Castiglione et al. (2023), free, on how much the rock coefficients change overtopping. (4) Guanche et al. (2009), wave loads on a wall compared with tests and with Goda.</div>
