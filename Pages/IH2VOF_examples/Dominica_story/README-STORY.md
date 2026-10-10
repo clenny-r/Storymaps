@@ -28,3 +28,5 @@ committed or pushed. Options: keep the folder out of git (add `Pages/IH2VOF_exam
 ## 2026-10-09 Wave forces section added
 - New section "Wave forces" (id `forces`) between "Other sites" and "Conclusions": force time series for docks SD1 and SD2 at +1.48 m and a comparison with the Goda hand calculation.
 - Data: `window.FORCES` at the end of `story.js`, built from `C:\IH2VOF\CASES\Portsmouth_SD1_proposed_WL148\post\pressure_forces.csv`, `C:\IH2VOF\CASES\Portsmouth_SD2_proposed_WL148\post\pressure_forces.csv` and `C:\IH2VOF\CASES\Dominica_design_runs\06_goda_check\goda_check.csv`.
+
+- 2026-10-09: added the "plan" layout clip (drawing overlay, location plan, whole tank) to "How we tested": videos\plan-pm-proposed.mp4 from C:\IH2VOF\CASES\Dominica_design_runs\04_hq_videos\Portsmouth_0150_proposed_WL078\Portsmouth_0150_proposed_WL078_plan.mp4 (a 17 second sample). Only this one plan clip and one run-up clip (S04, closed-wall batch, not used) exist.
