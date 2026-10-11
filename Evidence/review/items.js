@@ -2176,5 +2176,141 @@ window.REVIEW_ITEMS = [
    "No better",
    "Worse: go back"
   ]
+ },
+ {
+  "id": "fx-121",
+  "round": "round-3-2026-10-10",
+  "group": "Fixed",
+  "ep": 12,
+  "part": 1,
+  "a": 155,
+  "b": 162,
+  "old": "old/e12-p1-card.mp4",
+  "title": "Episode 12 Part 1: sources card and panels",
+  "why": "Rebuilt: the sources list starts below the episode tag; panel headings clear the tag; no one-word captions (\"Three hundred?\" is one caption now); the mountain forest cutaway is gone. Every line heard.",
+  "options": [
+   "Better: keep it",
+   "No better",
+   "Worse: go back"
+  ]
+ },
+ {
+  "id": "fx-061",
+  "round": "round-3-2026-10-10",
+  "group": "Fixed",
+  "ep": 6,
+  "part": 1,
+  "a": 150,
+  "b": 157,
+  "old": "old/e06-p1-card.mp4",
+  "title": "Episode 6 Part 1: sources card below the tag",
+  "why": "Rebuilt with the new card spacing, panel and caption rules. Every line heard.",
+  "options": [
+   "Better: keep it",
+   "No better",
+   "Worse: go back"
+  ]
+ },
+ {
+  "id": "fx-101",
+  "round": "round-3-2026-10-10",
+  "group": "Fixed",
+  "ep": 10,
+  "part": 1,
+  "a": 151,
+  "b": 158,
+  "old": "old/e10-p1-card.mp4",
+  "title": "Episode 10 Part 1: sources card below the tag",
+  "why": "Rebuilt with the new card spacing, panel and caption rules. Every line heard.",
+  "options": [
+   "Better: keep it",
+   "No better",
+   "Worse: go back"
+  ]
+ },
+ {
+  "id": "fx-193",
+  "round": "round-3-2026-10-10",
+  "group": "Fixed",
+  "ep": 19,
+  "part": 3,
+  "a": 41,
+  "b": 50,
+  "old": "old/e19-p3-opener.mp4",
+  "title": "Episode 19 Part 3: question card off the faces",
+  "why": "The question card on the opening shot stays at the top (faces are in the middle); in the conversation it now sits low, off the speaker's face. Panels on the right lines (Tertullian on line 11).",
+  "options": [
+   "Better: keep it",
+   "No better",
+   "Worse: go back"
+  ]
+ },
+ {
+  "id": "fx-243",
+  "round": "round-3-2026-10-10",
+  "group": "Fixed",
+  "ep": 24,
+  "part": 3,
+  "a": 41,
+  "b": 50,
+  "old": "old/e24-p3-opener.mp4",
+  "title": "Episode 24 Part 3: question card lower",
+  "why": "The question card now sits low so it does not cover Miguel's face; the Acts 10:35 panel shows where the verse is quoted.",
+  "options": [
+   "Better: keep it",
+   "No better",
+   "Worse: go back"
+  ]
+ },
+ {
+  "id": "fx-031",
+  "round": "round-3-2026-10-10",
+  "group": "Fixed",
+  "ep": 3,
+  "part": 1,
+  "a": 60,
+  "b": 69,
+  "old": "old/e03-p1-panel.mp4",
+  "title": "Episode 3 Part 1: panel source line above the captions",
+  "why": "Rebuilt: the five panels were remade so their small source lines sit above the captions, and the sources card starts below the episode tag. Every line heard.",
+  "options": [
+   "Better: keep it",
+   "No better",
+   "Worse: go back"
+  ]
+ },
+ {
+  "id": "fx-242",
+  "round": "round-3-2026-10-10",
+  "group": "Fixed",
+  "ep": 24,
+  "part": 2,
+  "a": 41,
+  "b": 50,
+  "old": "old/e24-p2-opener.mp4",
+  "title": "Episode 24 Part 2: question card off Miguel's face",
+  "why": "Rebuilt: the question card sits low in the conversation; \"Grace is the root\" panel moved from line 1 to line 12; the line 11 caption now matches what Miguel says (\"So the works still in it.\").",
+  "options": [
+   "Better: keep it",
+   "No better",
+   "Worse: go back"
+  ]
+ },
+ {
+  "id": "fx-113",
+  "round": "round-3-2026-10-10",
+  "group": "Fixed",
+  "ep": 11,
+  "part": 3,
+  "a": 96,
+  "b": 116,
+  "old": "old/e11-p3-pauses.mp4",
+  "title": "Episode 11 Part 3: shorter pause, panel on the right line",
+  "why": "Rebuilt: the 2.7 s pause before Miguel's line is now 1.8 s (with the wide-shot beat); the \"Nazareth, 2009\" panel moved from line 1 to the line about the 2009 dig. Every line heard.",
+  "options": [
+   "Better: keep it",
+   "No better",
+   "Worse: go back"
+  ]
  }
 ];
