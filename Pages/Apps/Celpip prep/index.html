@@ -326,34 +326,60 @@ const Voice = {
    tests/audio/<TEST>/<key>.mp3  for a listening recording (key = LP-0, L1-0, L1-1, L1-2, L2-0 ... L6-0)
    tests/audio/<TEST>/L5-0.mp4   for the Part 5 video
    tests/audio/<TEST>/<question id>.mp3 for a read-aloud question (LP.1, L1.1 ... L3.6) */
+const SILENT_WAV = 'data:audio/wav;base64,UklGRrQBAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YZABAACAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA';
 const Media = {
-  missing: new Set(),
+  missing: new Set(), aEl: null, vEl: null, unlocked: false,
+  aud() { if (!this.aEl) { this.aEl = document.createElement('audio'); this.aEl.preload = 'auto'; } return this.aEl; },
+  vid() { if (!this.vEl) { const v = document.createElement('video'); v.playsInline = true; v.setAttribute('playsinline', ''); v.preload = 'auto'; v.style.cssText = 'display:block;width:100%;height:auto;background:#000'; this.vEl = v; } return this.vEl; },
+  // Phones only let a page play sound after a tap. The first tap anywhere plays a silent clip on the shared players, which unlocks them for the rest of the test.
+  unlock() { if (this.unlocked) return; this.unlocked = true; for (const el of [this.aud(), this.vid()]) { try { el.src = SILENT_WAV; const pr = el.play(); if (pr) pr.then(() => el.pause()).catch(() => { this.unlocked = false; }); } catch (_) { this.unlocked = false; } } },
+  has(file) { return !REC_LIST || REC_LIST.has(file); },
   play(name, exts, holder, token, onProgress) {
     return new Promise(async res => {
       for (const ext of exts) {
-        const src = `tests/audio/${TEST.id}/${name}.${ext}`;
+        const file = `${name}.${ext}`;
+        const src = name.startsWith('_') ? `tests/audio/${file}` : `tests/audio/${TEST.id}/${file}`;
         if (this.missing.has(src)) continue;
+        if (!name.startsWith('_') && REC_LIST && !REC_LIST.has(file)) continue;
         const isVid = ext === 'mp4' || ext === 'webm';
-        const el = document.createElement(isVid ? 'video' : 'audio');
-        el.preload = 'auto'; if (isVid) { el.playsInline = true; el.style.cssText = 'display:block;width:100%;height:auto;background:#000'; }
-        const ok = await new Promise(r => { el.oncanplay = () => r(true); el.onerror = () => r(false); setTimeout(() => r(false), 3000); el.src = src; });
-        if (!ok) { this.missing.add(src); continue; }
+        const el = isVid ? this.vid() : this.aud();
+        el.onended = el.onerror = el.ontimeupdate = el.oncanplay = null;
+        if (!REC_LIST && !name.startsWith('_')) {
+          const ok = await new Promise(r => { el.onloadedmetadata = el.oncanplay = () => r(true); el.onerror = () => r(false); setTimeout(() => r(false), 4000); el.src = src; el.load(); });
+          el.onloadedmetadata = el.oncanplay = el.onerror = null;
+          if (!ok) { this.missing.add(src); continue; }
+        } else { el.src = src; }
         if (token.cancelled) return res('cancelled');
-        if (isVid && holder) { holder.innerHTML = ''; holder.appendChild(el); }
+        if (isVid && holder && typeof holder.appendChild === 'function') { holder.innerHTML = ''; holder.appendChild(el); }
         token.media = el;
-        el.ontimeupdate = () => { if (onProgress && el.duration) onProgress(el.currentTime / el.duration); };
+        el.ontimeupdate = () => { if (onProgress && el.duration && isFinite(el.duration)) onProgress(el.currentTime / el.duration); };
         const out = await new Promise(r => {
+          let started = false;
           const iv = setInterval(() => { if (token.cancelled) { clearInterval(iv); try { el.pause(); } catch (_) { } r('cancelled'); } }, 200);
+          el.onplaying = () => { started = true; };
           el.onended = () => { clearInterval(iv); r('played'); };
-          el.onerror = () => { clearInterval(iv); r('played'); };
-          el.play().catch(() => { clearInterval(iv); r('blocked'); });
+          el.onerror = () => { clearInterval(iv); r(started ? 'played' : 'error'); };
+          const pr = el.play(); if (pr) pr.catch(e => { clearInterval(iv); r(e && e.name === 'NotAllowedError' ? 'blocked' : 'error'); });
         });
+        if (out === 'error') { this.missing.add(src); continue; }
+        if (out === 'blocked') { const again = await tapToPlay(el, token); if (again) return res(again); }
         return res(out);
       }
       res('missing');
     });
   }
 };
+// If a phone still blocks sound, show a big button; the tap itself starts the recording.
+function tapToPlay(el, token) {
+  return new Promise(r => {
+    const d = document.createElement('div'); d.className = 'modal'; d.innerHTML = '<div class="box" style="text-align:center"><h3>Tap to play the recording</h3><p>Your device needs a tap before it can play sound.</p><button class="btn-blue" style="font-size:18px;padding:12px 28px">Play</button></div>';
+    document.body.appendChild(d);
+    d.querySelector('button').onclick = () => { d.remove(); Media.unlocked = true; el.onended = () => r('played'); el.onerror = () => r('played'); el.play().catch(() => r(null)); };
+    const iv = setInterval(() => { if (token.cancelled) { clearInterval(iv); d.remove(); r('cancelled'); } }, 300);
+  });
+}
+document.addEventListener('pointerdown', () => Media.unlock(), true);
+document.addEventListener('keydown', () => Media.unlock(), true);
 
 /* ============================== animated scene (the "video") ============================== */
 const Scene = {
@@ -569,6 +595,8 @@ const fileName = (label, ext) => `${STATE.folder}__${label}__saved-${clockOf()}.
 const LS_KEY = 'rowe-celpip-mock.session';
 let TEST = null, SCREENS = [], STATE = null, CUR = {}, TIMER = null, PAUSED = false;
 const AUDIO_URLS = {};
+let REC_READY = false, REC_LIST = null; // recorded natural voices for the chosen test, from tests/audio/<T>/manifest.json
+async function checkRecordings(id) { try { const r = await fetch(`tests/audio/${id}/manifest.json`, { cache: 'no-store' }); if (r.ok) { const m = await r.json(); REC_LIST = Array.isArray(m.list) ? new Set(m.list) : null; REC_READY = true; } else { REC_READY = false; REC_LIST = null; } } catch (_) { REC_READY = false; REC_LIST = null; } return REC_READY; }
 // MediaRecorder webm files have no duration header, so players show no length and cannot seek. Force the browser to measure it once.
 document.addEventListener('loadedmetadata', e => { const a = e.target; if (!(a instanceof HTMLMediaElement) || isFinite(a.duration) || a.dataset.durFix) return; a.dataset.durFix = '1'; const back = () => { a.removeEventListener('timeupdate', back); a.currentTime = 0; }; a.addEventListener('timeupdate', back); a.currentTime = 1e101; }, true);
 function newState(o) {
@@ -718,7 +746,7 @@ function rCheck() {
   $s('#saveInfo', f).innerHTML = Store.mode === 'folder'
     ? `Every answer is saved in <b>${esc(Store.where())}</b>. Each file name starts with <b>${esc(STATE.folder)}</b> and ends with the time it was saved, so nothing is overwritten.`
     : `No save folder is connected, so finished answers are downloaded to <b>your Downloads folder</b> with your name and the time in each file name. Progress is also kept in this browser.`;
-  $s('#sndBtn', f).onclick = async () => { $s('#sndMsg').textContent = 'Playing...'; Voice.cancel(); const tok = { cancelled: false }; CUR.cleanup = () => { tok.cancelled = true; Voice.cancel(); }; await Voice.playLines([['A', 'This is a sound check. If you can hear this voice clearly, your audio is working.']], { A: { g: 'f' } }, {}, tok); $s('#sndMsg').textContent = 'Done. Adjust the volume if needed.'; };
+  $s('#sndBtn', f).onclick = async () => { $s('#sndMsg').textContent = 'Playing...'; Voice.cancel(); const tok = { cancelled: false }; CUR.cleanup = () => { tok.cancelled = true; Voice.cancel(); }; const r = await Media.play('_common/soundcheck', ['mp3'], null, tok); if (r === 'missing' || r === 'blocked') await Voice.playLines([['A', 'This is a sound check. If you can hear this voice clearly, your audio is working.']], { A: { g: 'f' } }, {}, tok); $s('#sndMsg').textContent = 'Done. Adjust the volume if needed.'; };
   const needMic = STATE.sections.S;
   if (!needMic) $s('#micMsg', f).textContent = 'Not needed: Speaking is not selected.';
   $s('#micBtn', f).onclick = async () => {
@@ -748,8 +776,8 @@ function rAudio(sc) {
   const f = single(`<div class="instruction">${what} ${practiceMode ? 'Practice mode: you can replay it.' : 'You will hear it only <span class="key">once</span>.'}</div>
     ${isVideo ? '<div class="video" id="vidHolder"><canvas width="800" height="360" aria-label="Video of the discussion"></canvas></div>' : ''}
     <div class="sbox"><div class="ico">${ICON.play}</div><div class="txt"><div id="aState">Starting...</div><div class="pbar18"><i id="aProg"></i></div></div></div>
-    <div class="caption" id="cap" ${STATE.captions || !Voice.ok ? '' : 'hidden'}></div>
-    <div class="audio-status"><span class="small muted" id="aNote">${Voice.ok ? '' : 'No computer voices were found, so captions are shown instead of sound.'}</span>
+    <div class="caption" id="cap" ${STATE.captions || (!Voice.ok && !REC_READY) ? '' : 'hidden'}></div>
+    <div class="audio-status"><span class="small muted" id="aNote">${Voice.ok || REC_READY ? '' : 'No computer voices were found, so captions are shown instead of sound.'}</span>
     <span class="row">${practiceMode ? '<button class="btn" id="capBtn">Captions on/off</button><button class="btn" id="replayBtn">Replay</button>' : ''}</span></div>`, 'gray', false);
   if (isVideo) { Scene.labels = false; Scene.start($('canvas', f), part.setting, part.cast, part.board); }
   let tok = { cancelled: false };
@@ -775,7 +803,7 @@ function rAudio(sc) {
     else { $s('#aNote').textContent = 'Finished. Click NEXT for the questions, or Replay.'; }
   };
   if (practiceMode) {
-    $s('#capBtn').onclick = () => { STATE.captions = !STATE.captions; $s('#cap').hidden = !STATE.captions && Voice.ok; persist(); };
+    $s('#capBtn').onclick = () => { STATE.captions = !STATE.captions; $s('#cap').hidden = !STATE.captions && (Voice.ok || REC_READY); persist(); };
     $s('#replayBtn').onclick = () => play();
   }
   play();
@@ -787,7 +815,7 @@ function optionList(q, name) {
 }
 function rLQ(sc) {
   const q = sc.q, practiceMode = STATE.mode === 'practice';
-  const showText = practiceMode || !Voice.ok;
+  const showText = practiceMode || (!Voice.ok && !REC_READY);
   const f = split(`<div class="instruction">Listen to the question. You will hear it only <span class="key">once</span>.</div>
       <div class="sbox"><div class="ico" id="qIco">${ICON.play}</div><div class="txt"><div id="qState">Playing...</div><div class="pbar18"><i id="qProg"></i></div></div></div>
       ${practiceMode ? '<div class="row" style="justify-content:center"><button class="btn" id="qReplay">Replay question</button></div>' : ''}`,
@@ -805,7 +833,7 @@ function rLQ(sc) {
     if (STATE.timeLeft[sc.group.id] != null) { done(); return; }
     await sleep(500, my);
     const rec = await Media.play(q.id, ['mp3', 'm4a', 'wav'], null, my, p => { $s('#qProg').style.width = (p * 100) + '%'; });
-    if ((rec === 'missing' || rec === 'blocked') && Voice.ok) { $s('#qProg').style.width = '50%'; await Voice.say(q.q, Voice.narrator(), my); }
+    if ((rec === 'missing' || rec === 'blocked') && Voice.ok) { $s('#qProg').style.width = '50%'; await Voice.say(q.q, Voice.narrator(), my); } else if (rec === 'missing' || rec === 'blocked') { $s('#qText').hidden = false; }
     if (my.cancelled) return;
     done();
   };
@@ -1057,6 +1085,7 @@ function rResults() {
 function knownNames() { try { return JSON.parse(localStorage.getItem('rowe-celpip-mock.names') || '[]'); } catch (_) { return []; } }
 function rememberName(n) { try { const l = knownNames().filter(x => x !== n); l.unshift(n); localStorage.setItem('rowe-celpip-mock.names', JSON.stringify(l.slice(0, 6))); } catch (_) { } }
 function voiceLine() {
+  if (REC_READY) return '<div class="status ok">Natural recorded voices are ready for this test. Every conversation and question plays from a recording, the same on every device.</div>';
   if (!Voice.ok) return '<div class="status bad">No computer voices found. Open this page in Microsoft Edge.</div>';
   const ca = Voice.canadian(), nat = Voice.natural();
   if (ca.length) return `<div class="status ok">Natural Canadian voices found (${esc(ca.map(v => v.name.replace(/Microsoft |Online |\(Natural\)| - .*$/g, '').trim()).join(', '))}), plus ${nat.length - ca.length} other natural voices. Real recordings in the tests\\audio folder are used first when present.</div>`;
@@ -1105,7 +1134,9 @@ async function renderStart() {
       <li>Speaking: one audio file per task, plus a transcript.</li>
       <li>At the end: an <b>EVALUATION</b> file for Claude to grade, and a full record.</li></ul></div>
   </div></div>`);
-  $('#voiceTest', f).onclick = async () => { Voice.cancel(); const tok = { cancelled: false }; await Voice.playLines([['A', 'Hi there. This is how the listening recordings will sound.'], ['B', 'And this is a second speaker, so you can hear the difference.']], { A: { g: 'f' }, B: { g: 'm' } }, {}, tok); };
+  $('#voiceTest', f).onclick = async () => { Voice.cancel(); const tok = { cancelled: false }; const r = await Media.play('_common/sample', ['mp3'], null, tok); if (r === 'missing' || r === 'blocked') await Voice.playLines([['A', 'Hi there. This is how the listening recordings will sound.'], ['B', 'And this is a second speaker, so you can hear the difference.']], { A: { g: 'f' }, B: { g: 'm' } }, {}, tok); };
+  const refreshRec = async () => { await checkRecordings($('#cTest').value); const vl = $('#voiceLine'); if (vl) vl.innerHTML = voiceLine(); };
+  $('#cTest', f).onchange = refreshRec; refreshRec();
   $('#pickFolder', f).onclick = async () => { try { await Store.pick(); $('#folderLine').innerHTML = folderLine(); } catch (e) { if (e && e.name !== 'AbortError') $('#folderLine').innerHTML = `<div class="status bad">Could not open the folder: ${esc(e.message || e)}</div>`; } };
   if (saved) {
     $('#resumeAttempt', f).onclick = async () => {
@@ -1132,6 +1163,7 @@ async function renderStart() {
 async function beginExam(saved, opts) {
   STATE = saved || newState(opts);
   TEST = (window.MOCK_TESTS || []).find(t => t.id === STATE.testId) || window.MOCK_TESTS[0];
+  await checkRecordings(TEST.id);
   if (Store.root) await Store.open(STATE.folder); else Store.mode = 'download';
   SCREENS = buildScreens();
   $('#footWho').textContent = `${STATE.name} | ${TEST.title} | ${STATE.mode === 'exam' ? 'Exam mode' : 'Practice mode'} | Attempt ${STATE.stamp.replace('_', ' ')}`;

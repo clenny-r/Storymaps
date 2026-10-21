@@ -1,7 +1,7 @@
 # CELPIP Mock Exam: Lessons Learnt
 
 Folder: `C:\Users\ramne\Documents\Celpip test`
-Last updated: 2026-10-21 (session 1, fourth update)
+Last updated: 2026-10-21 (session 1, fifth update: recorded natural voices)
 
 ## What exists
 
@@ -54,6 +54,12 @@ Last updated: 2026-10-21 (session 1, fourth update)
 5. The mock now does all of this (engine updated 2026-10-21).
 
 ## Voices and media
+
+0. DECISION (2026-10-21 morning): the browser's built-in voices are no longer the main audio. Clenmar heard the phone's robot voice and rejected it. Every listening conversation and every spoken question for all 11 tests is now a recorded mp3 in tests\audio\<TEST>\ made with Kokoro (an 82M-parameter open neural voice model, ChatGPT-voice class) running in the cloud session on CPU (about 2x real time). The page checks tests/audio/<TEST>/manifest.json; when it exists it shows "Natural recorded voices are ready" and never falls back to the computer voice. The sound check and the "Hear a sample" button use tests/audio/_common/soundcheck.mp3 and sample.mp3.
+   How it was done: model files kokoro-v1.0.onnx and voices-v1.0.bin from the GitHub release thewh1teagle/kokoro-onnx (GitHub release downloads work from the cloud; HuggingFace and Microsoft's Edge voice server do not). Script: /home/claude/kk/gen_all.py (copy in tools\gen_kokoro_audio.py). Voices: women af_heart, af_bella, af_aoede, bf_emma, af_kore, af_nova; men am_michael, am_fenrir, am_puck, bm_george, bm_fable, am_liam; question narrator af_sarah. Each speaker in a test gets a distinct voice. 0.55 s pause between lines, loudness normalised to -18 LUFS, 56 kbps mono mp3. Kokoro also runs in Chrome on the laptop GPU (kokoro-js from jsDelivr, WebGPU) but the tab froze during a reload, so the cloud CPU route is the reliable one.
+   Accent: Kokoro has American and British voices, no Canadian. Canadian and American English sound alike for test purposes.
+   Check: every conversation was transcribed back offline (match 0.80 to 0.94 for Parts 2, 4 and 6 of all 11 tests, which is as high as the rough recogniser gets) and question audio reads the question.
+   Phones: phones block sound until the user taps. The page now uses one shared audio player and one shared video player, unlocked with a silent clip on the first tap anywhere; if a phone still blocks, a big "Tap to play the recording" button appears instead of falling back to the robot voice. manifest.json lists every recorded file ("list"), so the page plays files directly without probing (iPhones do not preload).
 
 1. Chrome on Windows only has robotic computer voices. Microsoft Edge has natural "Online (Natural)" voices, including Canadian English (Clara, Liam). The engine prefers natural voices and Canadian ones first, and the start screen says which voices it found.
 2. Real recordings in tests\audio\<TEST>\ are used first when present (file names in tests\audio\README.md).
