@@ -90,6 +90,12 @@ Last updated: 2026-10-21 (session 1, sixth update: Meta AI Part 5 videos for all
 5. Meta sometimes answers "couldn't be generated right now" or "safety check service temporarily unavailable"; just send the same prompt again. A first fetch can return a partial file under 1 MB; fetch again.
 6. Typing the prompt with computer type plus Return works; setting the textarea value from JavaScript does not register with Meta's page.
 
+## Reading upgrade (merged 2026-10-21, made by a parallel session)
+
+1. Reading in all 11 tests was rewritten to real CELPIP length and difficulty: answers no longer copy the text word for word (Part 4 answer copy 50 to 77 percent down to 19 to 42 percent), more inference and attitude questions, Test A passages lengthened, overlaps with Listening names and topics removed. Audit page: C:\Users\ramne\Documents\Celpip test\_parallel\content_audit.html.
+2. Listening, Writing and Speaking objects were checked identical before merging (so recordings and videos still match). Validator 0 errors on all 11; blind answer-key check 847 of 847; full screen-by-screen test of all 11 tests with 0 page errors.
+3. Working pattern that worked for two sessions at once: the second session only edits copies in _parallel\ and touches no browser, Downloads or GitHub; the main session merges, checks and pushes.
+
 ## Ideas not done yet
 
 2. Automatic grading of Writing and Speaking inside the page.
