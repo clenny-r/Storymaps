@@ -1,0 +1,471 @@
+/* Rowe CELPIP Mock Exam: Test K content.
+   Original practice material written in the CELPIP-General format. Not official CELPIP content.
+   Difficulty: slightly harder than the real test (CLB 8 to 11).
+   Authoring rule: in every multiple-choice item, the CORRECT option is listed FIRST.
+   The exam engine shuffles option order with a fixed seed, so the order on screen is stable.
+   Items marked fixed:true keep their order and use "a" (a letter) for the answer. */
+(function () {
+  window.MOCK_TESTS = window.MOCK_TESTS || [];
+
+  /* ---------- small SVG helpers for speaking pictures ---------- */
+  function person(x, y, o) {
+    o = o || {};
+    var s = o.s || 1, skin = o.skin || '#e0b48f', shirt = o.shirt || '#3d7cc9', pants = o.pants || '#38414d', hair = o.hair || '#3b2a20';
+    var arms = o.arms || 'down';
+    var a = arms === 'up' ? '<line x1="-7" y1="-30" x2="-16" y2="-50" /><line x1="7" y1="-30" x2="16" y2="-50" />'
+      : arms === 'right' ? '<line x1="-7" y1="-30" x2="-12" y2="-14" /><line x1="7" y1="-30" x2="24" y2="-36" />'
+      : arms === 'left' ? '<line x1="-7" y1="-30" x2="-24" y2="-36" /><line x1="7" y1="-30" x2="12" y2="-14" />'
+      : '<line x1="-7" y1="-30" x2="-12" y2="-14" /><line x1="7" y1="-30" x2="12" y2="-14" />';
+    var legs = o.sit ? '<line x1="-4" y1="-12" x2="-14" y2="-12" /><line x1="4" y1="-12" x2="-6" y2="-12" /><line x1="-14" y1="-12" x2="-14" y2="0" /><line x1="-6" y1="-12" x2="-6" y2="0" />'
+      : '<line x1="-4" y1="-12" x2="-7" y2="0" /><line x1="4" y1="-12" x2="7" y2="0" />';
+    return '<g transform="translate(' + x + ' ' + y + ') scale(' + s + ')">' +
+      '<g stroke="' + skin + '" stroke-width="4" stroke-linecap="round">' + a + '</g>' +
+      '<g stroke="' + pants + '" stroke-width="5" stroke-linecap="round">' + legs + '</g>' +
+      '<rect x="-8" y="-36" width="16" height="25" rx="5" fill="' + shirt + '"/>' +
+      '<circle cx="0" cy="-45" r="9" fill="' + skin + '"/>' +
+      '<path d="M-9 -46 a9 9 0 0 1 18 0 q-9 -6 -18 0z" fill="' + hair + '"/>' +
+      '</g>';
+  }
+
+  function pine(x, y, h, c) {
+    return '<rect x="' + (x - 3) + '" y="' + (y - 10) + '" width="6" height="10" fill="#4a3324"/>' +
+      '<polygon points="' + (x - h * 0.35) + ',' + (y - 8) + ' ' + x + ',' + (y - h) + ' ' + (x + h * 0.35) + ',' + (y - 8) + '" fill="' + (c || '#24452e') + '"/>';
+  }
+
+  var CAMPGROUND = (function () {
+    var p = '';
+    p += '<svg viewBox="0 0 640 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A campground by a lake in the evening">';
+    p += '<defs><linearGradient id="kSky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#46508a"/><stop offset="0.7" stop-color="#c98a8a"/><stop offset="1" stop-color="#f2b06e"/></linearGradient></defs>';
+    p += '<rect width="640" height="400" fill="url(#kSky)"/>';
+    /* moon and first stars */
+    p += '<circle cx="90" cy="48" r="16" fill="#f6f1d2"/><g fill="#ffffff"><circle cx="160" cy="30" r="1.6"/><circle cx="230" cy="55" r="1.4"/><circle cx="40" cy="95" r="1.4"/><circle cx="300" cy="25" r="1.6"/></g>';
+    /* dark storm clouds moving in from the right, with rain far away */
+    p += '<g fill="#3d4150"><ellipse cx="560" cy="55" rx="85" ry="32"/><ellipse cx="620" cy="70" rx="55" ry="28"/><ellipse cx="490" cy="72" rx="55" ry="24"/><ellipse cx="420" cy="62" rx="40" ry="18" opacity=".8"/></g>';
+    p += '<g stroke="#8e9ab0" stroke-width="2"><line x1="520" y1="100" x2="512" y2="130"/><line x1="550" y1="100" x2="542" y2="130"/><line x1="580" y1="98" x2="572" y2="128"/><line x1="610" y1="100" x2="602" y2="130"/></g>';
+    /* far hills and lake */
+    p += '<path d="M0 185 Q120 140 250 175 Q380 145 640 172 L640 210 L0 210z" fill="#2e4a3b"/>';
+    p += '<rect y="200" width="640" height="200" fill="#3e6a3a"/>';
+    p += '<ellipse cx="500" cy="222" rx="150" ry="30" fill="#5a7fb0"/><ellipse cx="500" cy="216" rx="110" ry="8" fill="#f2b06e" opacity=".35"/>';
+    /* canoe with a paddler on the lake */
+    p += '<path d="M455 222 Q500 236 545 222 Q500 228 455 222z" fill="#b83a2a" stroke="#7e2318" stroke-width="2"/>';
+    p += person(500, 226, { s: .6, sit: true, shirt: '#f1c40f', skin: '#c98c64', hair: '#1d1410', arms: 'right' });
+    p += '<line x1="512" y1="200" x2="526" y2="232" stroke="#6d4c2f" stroke-width="2.5"/>';
+    /* pine trees */
+    p += pine(20, 230, 70) + pine(330, 215, 55, '#2b5236') + pine(360, 212, 48) + pine(620, 250, 60, '#2b5236');
+    /* pitched tent with lantern on the left */
+    p += '<polygon points="30,300 85,228 140,300" fill="#e67e22"/><polygon points="85,228 85,300 66,300" fill="#b65f15"/><polygon points="85,300 72,262 98,300" fill="#5a2f0c"/>';
+    p += '<circle cx="118" cy="292" r="6" fill="#ffe08a"/><circle cx="118" cy="292" r="12" fill="#ffe08a" opacity=".35"/>';
+    /* half-built tent: fabric lying on the ground, a man holding up a pole */
+    p += '<path d="M165 300 L205 282 L250 296 L235 306 L180 308z" fill="#2e86c1"/>';
+    p += '<line x1="214" y1="232" x2="206" y2="292" stroke="#9aa3ad" stroke-width="3"/>';
+    p += person(230, 300, { shirt: '#7d3c98', skin: '#e3b28b', hair: '#6b4a2b', arms: 'up' });
+    p += '<text x="205" y="322" font-size="10" text-anchor="middle" font-family="sans-serif" fill="#e8f0e0">tent bag</text><rect x="186" y="304" width="38" height="8" rx="3" fill="#1f5f8b"/>';
+    /* campfire */
+    p += '<ellipse cx="330" cy="318" rx="60" ry="22" fill="#f5a142" opacity=".25"/>';
+    p += '<g stroke="#5b3a22" stroke-width="7" stroke-linecap="round"><line x1="308" y1="326" x2="352" y2="314"/><line x1="308" y1="314" x2="352" y2="326"/></g>';
+    p += '<path d="M314 318 Q318 290 330 278 Q342 292 346 318z" fill="#f39c12"/><path d="M321 318 Q324 300 330 292 Q336 302 339 318z" fill="#f9e04b"/>';
+    p += '<circle cx="324" cy="262" r="2" fill="#ffcc66"/><circle cx="338" cy="252" r="1.6" fill="#ffcc66"/>';
+    /* two people roasting marshmallows */
+    p += person(270, 336, { sit: true, shirt: '#c0392b', skin: '#8d5a3b', hair: '#120c08', arms: 'right' });
+    p += '<line x1="294" y1="300" x2="318" y2="292" stroke="#8b5a2b" stroke-width="2"/><ellipse cx="320" cy="291" rx="4" ry="3" fill="#ffffff"/>';
+    p += person(392, 338, { sit: true, shirt: '#16a085', skin: '#f0c9a6', hair: '#c49a42', arms: 'left', s: .85 });
+    p += '<line x1="372" y1="307" x2="344" y2="296" stroke="#8b5a2b" stroke-width="2"/><ellipse cx="341" cy="295" rx="4" ry="3" fill="#ffffff"/>';
+    /* woman playing guitar on a log */
+    p += '<rect x="420" y="344" width="56" height="12" rx="6" fill="#6d4c2f"/>';
+    p += person(452, 346, { sit: true, shirt: '#2c3e50', skin: '#a9714b', hair: '#2a1b12', arms: 'right' });
+    p += '<ellipse cx="452" cy="326" rx="9" ry="7" fill="#c68642" stroke="#7a4a1d" stroke-width="1.5"/><line x1="458" y1="322" x2="482" y2="306" stroke="#7a4a1d" stroke-width="3"/>';
+    /* cooler with a raccoon reaching for the lid */
+    p += '<rect x="520" y="330" width="58" height="34" rx="4" fill="#2f80c9"/><rect x="516" y="324" width="66" height="9" rx="3" fill="#ecf0f1"/><text x="549" y="352" font-size="10" text-anchor="middle" font-family="sans-serif" fill="#ffffff">COOLER</text>';
+    p += '<g><ellipse cx="610" cy="352" rx="20" ry="12" fill="#7f8689"/><circle cx="592" cy="336" r="10" fill="#8f9699"/><path d="M584 334 L600 334 L600 339 L584 339z" fill="#222"/><circle cx="588" cy="336" r="1.6" fill="#fff"/><circle cx="596" cy="336" r="1.6" fill="#fff"/>' +
+      '<polygon points="585,328 588,320 591,328" fill="#8f9699"/><polygon points="594,328 597,320 600,328" fill="#8f9699"/>' +
+      '<line x1="586" y1="340" x2="576" y2="326" stroke="#5e6467" stroke-width="4" stroke-linecap="round"/><circle cx="576" cy="326" r="3" fill="#3b3f41"/>' +
+      '<rect x="626" y="346" width="12" height="7" fill="#7f8689"/><rect x="630" y="346" width="4" height="7" fill="#222"/>' +
+      '<rect x="598" y="360" width="4" height="8" fill="#5e6467"/><rect x="618" y="360" width="4" height="8" fill="#5e6467"/></g>';
+    /* bag of marshmallows */
+    p += '<rect x="326" y="360" width="76" height="22" rx="4" fill="#fdfefe" stroke="#d5d8dc"/><text x="364" y="375" font-size="9" text-anchor="middle" font-family="sans-serif" fill="#c0392b">MARSHMALLOWS</text>';
+    p += '</svg>';
+    return p;
+  })();
+
+  var CAR = '<svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg"><rect width="200" height="120" fill="#dff1fb"/><rect y="88" width="200" height="32" fill="#7f8c8d"/><g fill="#f4f6f7"><rect x="20" y="102" width="26" height="4"/><rect x="80" y="102" width="26" height="4"/><rect x="140" y="102" width="26" height="4"/></g>' +
+    '<path d="M38 84 L50 62 Q56 54 70 54 L122 54 Q134 54 142 64 L154 76 L168 80 Q174 82 174 90 L174 94 L30 94 L30 88 Q30 84 38 84z" fill="#c0392b"/><g fill="#d6eaf8"><path d="M58 64 Q62 58 70 58 L92 58 L92 74 L52 74z"/><path d="M98 58 L120 58 Q130 58 136 66 L142 74 L98 74z"/></g>' +
+    '<circle cx="62" cy="94" r="12" fill="#2c3e50"/><circle cx="62" cy="94" r="5" fill="#bdc3c7"/><circle cx="146" cy="94" r="12" fill="#2c3e50"/><circle cx="146" cy="94" r="5" fill="#bdc3c7"/>' +
+    '<rect x="64" y="20" width="72" height="20" rx="4" fill="#ffffff" stroke="#c0392b"/><text x="100" y="34" font-size="10" text-anchor="middle" font-family="sans-serif" fill="#c0392b">CAR RENTAL</text></svg>';
+
+  var TRAIN = '<svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg"><rect width="200" height="120" fill="#eaf2e3"/><path d="M0 70 Q60 50 120 64 Q160 72 200 58 L200 120 L0 120z" fill="#9ccc7a"/>' +
+    '<rect y="98" width="200" height="4" fill="#6e5a46"/><g fill="#6e5a46">' + (function () { var t = ''; for (var i = 0; i < 10; i++) t += '<rect x="' + (i * 20 + 4) + '" y="102" width="10" height="6"/>'; return t; })() + '</g>' +
+    '<rect x="10" y="58" width="80" height="36" rx="10" fill="#1f618d"/><rect x="94" y="58" width="96" height="36" rx="4" fill="#2874a6"/><rect x="10" y="80" width="180" height="5" fill="#f4d03f"/>' +
+    '<g fill="#d6eaf8"><rect x="24" y="64" width="14" height="12"/><rect x="44" y="64" width="14" height="12"/><rect x="64" y="64" width="14" height="12"/><rect x="102" y="64" width="14" height="12"/><rect x="122" y="64" width="14" height="12"/><rect x="142" y="64" width="14" height="12"/><rect x="162" y="64" width="14" height="12"/></g>' +
+    '<g fill="#1b2631"><circle cx="30" cy="96" r="5"/><circle cx="70" cy="96" r="5"/><circle cx="114" cy="96" r="5"/><circle cx="170" cy="96" r="5"/></g>' +
+    '<text x="100" y="30" font-size="11" text-anchor="middle" font-family="sans-serif" fill="#1f618d">TRAIN</text></svg>';
+
+  var PLANE = '<svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg"><rect width="200" height="120" fill="#d4ecfa"/><g fill="#ffffff"><ellipse cx="40" cy="30" rx="26" ry="10"/><ellipse cx="160" cy="92" rx="30" ry="10"/></g>' +
+    '<g transform="rotate(-12 100 60)"><rect x="40" y="54" width="120" height="16" rx="8" fill="#f8f9f9" stroke="#7f8c8d"/><polygon points="150,56 170,34 176,34 164,58" fill="#2e86c1"/>' +
+    '<polygon points="88,62 66,96 80,96 112,62" fill="#aab7b8"/><polygon points="88,62 74,34 84,34 108,62" fill="#aab7b8"/><path d="M40 62 Q40 54 50 54 L52 62z" fill="#5d6d7e"/>' +
+    '<g fill="#5dade2"><circle cx="64" cy="61" r="2"/><circle cx="74" cy="61" r="2"/><circle cx="84" cy="61" r="2"/><circle cx="120" cy="61" r="2"/><circle cx="130" cy="61" r="2"/><circle cx="140" cy="61" r="2"/></g></g>' +
+    '<text x="100" y="114" font-size="11" text-anchor="middle" font-family="sans-serif" fill="#1b4f72">FLIGHT</text></svg>';
+
+  var ODDHAT = '<svg viewBox="0 0 640 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="An unusual hat in a gift shop">' +
+    '<rect width="640" height="400" fill="#f3ece1"/><rect y="310" width="640" height="90" fill="#c8b79e"/><rect x="120" y="300" width="400" height="14" fill="#8a6b4a"/>' +
+    '<rect x="24" y="28" width="150" height="56" rx="6" fill="#ffffff" stroke="#d4c4a8"/><text x="99" y="63" text-anchor="middle" font-family="sans-serif" font-size="20" fill="#7a4b2a">GIFT SHOP</text>' +
+    /* mannequin head */
+    '<rect x="300" y="250" width="40" height="52" fill="#d9d2c5"/><ellipse cx="320" cy="225" rx="52" ry="48" fill="#e6dfd2"/>' +
+    /* cap crown and sun visor brim */
+    '<path d="M262 212 Q264 140 320 136 Q376 140 378 212z" fill="#e2b13c"/><path d="M378 210 Q440 206 470 226 Q430 232 372 226z" fill="#2e86c1"/><path d="M262 210 L378 210 L378 220 L262 220z" fill="#c9962a"/>' +
+    /* small umbrella on top */
+    '<line x1="320" y1="136" x2="320" y2="92" stroke="#555" stroke-width="3"/><path d="M270 96 Q320 40 370 96 Q357 88 345 96 Q332 88 320 96 Q308 88 295 96 Q283 88 270 96z" fill="#e74c3c"/>' +
+    /* fan on the front */
+    '<circle cx="320" cy="178" r="20" fill="#ffffff" stroke="#7f8c8d" stroke-width="2"/><g fill="#5dade2"><ellipse cx="320" cy="168" rx="5" ry="9"/><ellipse cx="330" cy="182" rx="9" ry="5" transform="rotate(30 330 182)"/><ellipse cx="310" cy="182" rx="9" ry="5" transform="rotate(-30 310 182)"/></g><circle cx="320" cy="178" r="3" fill="#555"/>' +
+    /* radio on the left side */
+    '<rect x="200" y="166" width="58" height="36" rx="5" fill="#34495e"/><circle cx="216" cy="184" r="9" fill="#95a5a6"/><g stroke="#95a5a6" stroke-width="2"><line x1="232" y1="176" x2="250" y2="176"/><line x1="232" y1="184" x2="250" y2="184"/><line x1="232" y1="192" x2="250" y2="192"/></g><line x1="252" y1="166" x2="266" y2="128" stroke="#555" stroke-width="2"/><circle cx="266" cy="128" r="3" fill="#555"/>' +
+    /* cup holder with a drink on the right side */
+    '<rect x="370" y="172" width="36" height="8" fill="#7f8c8d"/><path d="M404 160 L438 160 L434 198 L408 198z" fill="#ffffff" stroke="#7f8c8d" stroke-width="2"/><rect x="402" y="176" width="40" height="8" rx="3" fill="#7f8c8d"/><line x1="426" y1="160" x2="432" y2="136" stroke="#e74c3c" stroke-width="3"/>' +
+    /* price tag hanging from the brim */
+    '<line x1="460" y1="228" x2="492" y2="262" stroke="#555" stroke-width="1.5"/><path d="M480 262 L540 262 L540 300 L480 300 L470 281z" fill="#f6d55c" stroke="#b7950b"/><circle cx="480" cy="281" r="3" fill="#f3ece1"/><text x="512" y="288" text-anchor="middle" font-family="sans-serif" font-size="18" fill="#333">$45</text>' +
+    '</svg>';
+
+  window.MOCK_TESTS.push({
+    id: 'K',
+    title: 'Mock Test K',
+    note: 'Original practice content in the CELPIP-General format. Written slightly above real test difficulty.',
+
+    /* =================== LISTENING =================== */
+    listening: {
+      practice: {
+        id: 'LP', title: 'Practice Task', setting: 'outdoor',
+        instructions: 'This practice task will not be scored. Listen to the short conversation, then answer one question. Use it to check that you can hear the audio clearly.',
+        cast: { MATEO: { name: 'Mateo', g: 'm', skin: '#c98c64', hair: '#2a1b12', shirt: '#2e86c1', style: 'short' }, INGRID: { name: 'Ingrid', g: 'f', skin: '#f2cfb0', hair: '#d9b56a', shirt: '#8e44ad', style: 'long' } },
+        segments: [{
+          lines: [
+            ['MATEO', 'Ugh, we just missed the 14. The next one isn\'t for another twenty minutes.'],
+            ['INGRID', 'The 9 stops across the street in five minutes. We\'d have to switch buses at the mall, but we\'d probably still get home sooner.'],
+            ['MATEO', 'Maybe, but with all these grocery bags? I\'m not running between stops at the mall. I\'d rather wait and get a seat the whole way.'],
+            ['INGRID', 'Fair enough. At least the shelter has a bench.']
+          ],
+          questions: [
+            { id: 'LP.1', q: 'Why does Mateo prefer to wait for the 14?', o: ['He does not want to change buses while carrying bags.', 'The 9 bus does not stop near their home.', 'The 14 bus will arrive in about five minutes.', 'He needs to buy more groceries at the mall.'] }
+          ]
+        }]
+      },
+      parts: [
+        {
+          id: 'L1', title: 'Part 1: Listening to Problem Solving', setting: 'office',
+          instructions: 'In this section, you will hear a conversation in three sections. You will hear each section only once. After each section, you will hear two to three questions. Choose the best answer to each question.',
+          cast: { KWAME: { name: 'Kwame', g: 'm', skin: '#6b4226', hair: '#120c08', shirt: '#27ae60', style: 'short' }, DANA: { name: 'Dana', g: 'f', skin: '#e8c3a0', hair: '#5a3825', shirt: '#d35400', style: 'curly' } },
+          segments: [
+            {
+              lines: [
+                ['KWAME', 'Dana, got a second? I just got off the phone with the city\'s special events office. It\'s about the permit for the run.'],
+                ['DANA', 'For the Harbourfront 5K? That\'s on the twenty-seventh. Please tell me it\'s good news.'],
+                ['KWAME', 'Not exactly. Our application\'s still under review. Because the route crosses Water Street, they need a traffic plan signed by the police before they can approve anything. And the officer who signs those is on vacation until next Monday.'],
+                ['DANA', 'So when would we hear?'],
+                ['KWAME', 'They said they can\'t promise anything before the twenty-fourth.'],
+                ['DANA', 'The twenty-fourth? That\'s three days before the race. We\'ve got two hundred and ten people registered, and every one of them has already paid. If the answer turns out to be no at that point, I don\'t even want to think about the refunds.'],
+                ['KWAME', 'I know. And there\'s another thing. The printer needs the T-shirt order confirmed by this Friday, which is almost a week before we\'d even hear from the city.'],
+                ['DANA', 'Okay. Let\'s not panic. So the only thing actually missing is the traffic plan?'],
+                ['KWAME', 'That\'s what they told me. Everything else in the application is fine.']
+              ],
+              questions: [
+                { id: 'L1.1', q: 'Why has the permit not been approved yet?', o: ['A required approval is still waiting for a signature.', 'The city has rejected the route along Water Street.', 'The police officer lost the original application.', 'Too many runners registered for the space available.'] },
+                { id: 'L1.2', q: 'Why is Dana especially worried about the timing?', o: ['A late refusal would affect people who have already paid.', 'The printer needs three days to finish the T-shirts.', 'The runners expect to receive the route a week ahead.', 'The police will be on vacation on the day of the race.'] },
+                { id: 'L1.3', q: 'What can be inferred about the T-shirt order?', o: ['It must be confirmed before they know if the permit is approved.', 'The printer has already started making the shirts for the race.', 'It will be cancelled automatically if the permit is delayed.', 'It can easily be changed after the city gives its answer.'] }
+              ]
+            },
+            {
+              lines: [
+                ['DANA', 'What if we change the route so it doesn\'t touch Water Street at all? No street crossing, no traffic plan.'],
+                ['KWAME', 'I actually looked at that last night. The boardwalk loop along the harbour is exactly two and a half kilometres. Two laps and you\'ve got your five K.'],
+                ['DANA', 'But is it wide enough? Two hundred people all trying to start at once on a boardwalk sounds like a mess.'],
+                ['KWAME', 'It\'s tight right at the start, yeah. But if we send people out in three waves, five minutes apart, it spreads out pretty quickly. Fast runners first, walkers last.'],
+                ['DANA', 'Hmm, I like that. Here\'s the catch, though: the boardwalk isn\'t city property. The marina association runs it, so it\'s their permission we\'d need, not the city\'s.'],
+                ['KWAME', 'Right, and that might actually work in our favour. Their manager, Lucille, helped us with the food drive last year. I\'ll email her this afternoon.'],
+                ['DANA', 'Great. I\'ll hold off on changing the route map on our website until she says yes. The last thing I want is to send two hundred people an update and then take it back.']
+              ],
+              questions: [
+                { id: 'L1.4', q: 'Why does Dana suggest using a different route?', o: ['It would remove the need for one approval.', 'The boardwalk is wider than the city streets.', 'Runners prefer a course beside the harbour.', 'The city can approve the boardwalk faster.'] },
+                { id: 'L1.5', q: 'How does Kwame respond to Dana\'s concern about space?', o: ['He proposes spreading out the start times.', 'He suggests limiting the number of runners.', 'He says the boardwalk is wider than it looks.', 'He offers to shorten each lap of the loop.'] },
+                { id: 'L1.6', q: 'Why will Dana wait before updating the website?', o: ['The new route has not been approved yet.', 'Lucille asked her to keep the plan private.', 'The marina will draw the new map for them.', 'Runners have not been told about the waves.'] }
+              ]
+            },
+            {
+              lines: [
+                ['KWAME', 'Okay, Lucille got back to me. We can use the boardwalk, but there\'s a condition. Everyone has to be off the course by ten-thirty, because the weekend market starts setting up on the boardwalk at eleven.'],
+                ['DANA', 'We were starting at nine. With three waves, the last group leaves at ten past. Even the slowest walkers should be done within the hour, so that\'s fine.'],
+                ['KWAME', 'She also wants a two-hundred-dollar damage deposit. We get it back as long as the boardwalk\'s left clean.'],
+                ['DANA', 'That\'s fair. I\'ll ask the high school volunteers to do a cleanup sweep right behind the last walker. And let\'s not withdraw the city application. Even if it\'s too late for this year, having a traffic plan approved will make next year a lot easier.']
+              ],
+              questions: [
+                { id: 'L1.7', q: 'Why must the race be over by 10:30?', o: ['The course will be needed for another activity.', 'The volunteers must leave for the market at eleven.', 'Lucille will close the boardwalk for cleaning then.', 'The damage deposit is only valid until that time.'] },
+                { id: 'L1.8', q: 'What does Dana\'s decision about the city application show?', o: ['She is planning ahead for future races.', 'She expects the permit to arrive in time.', 'She wants to avoid paying the deposit.', 'She would rather use the street route this year.'] }
+              ]
+            }
+          ]
+        },
+        {
+          id: 'L2', title: 'Part 2: Listening to a Daily Life Conversation', setting: 'office',
+          instructions: 'You will hear a conversation followed by five questions. You will hear the conversation only once. Choose the best answer to each question.',
+          cast: { AGENT: { name: 'Support agent', g: 'm', skin: '#d6a07a', hair: '#333333', shirt: '#1a5276', style: 'short' }, FARAH: { name: 'Farah', g: 'f', skin: '#b07850', hair: '#1d1410', shirt: '#a93226', style: 'long' } },
+          segments: [{
+            lines: [
+              ['AGENT', 'Thanks for calling technical support, my name is Diego. How can I help you today?'],
+              ['FARAH', 'Hi, Diego. My internet\'s been cutting out all week. It works for ten minutes or so, then drops for a few minutes, then comes back. I work from home, and I\'ve been kicked out of three video meetings today alone.'],
+              ['AGENT', 'I\'m sorry, that sounds really frustrating. Can I get the phone number on the account?'],
+              ['FARAH', 'Sure. It\'s under my husband\'s name, Victor Haddad. The number is 902 555 0148. And I should mention I called last Tuesday, and someone told me it was an outage in my area.'],
+              ['AGENT', 'Okay, I see that. There was an outage last Tuesday, but it was fixed the same afternoon. What you\'re describing sounds different. Have you been restarting the modem?'],
+              ['FARAH', 'Twice a day at least. It helps for maybe an hour.'],
+              ['AGENT', 'Right. I\'m running a test on the line now. Okay, the line itself looks healthy, but your modem is one of our older units, about six years old. Those have a habit of overheating. Where do you keep it?'],
+              ['FARAH', 'In a cabinet under the TV. With the doors closed, so you can\'t see the wires.'],
+              ['AGENT', 'That could be part of it. They need air around them. Honestly, though, the real fix is a new modem. Since you\'ve been with us for over five years, I can send you one at no charge.'],
+              ['FARAH', 'Oh, that would be great. How long does that take?'],
+              ['AGENT', 'Two to three business days by courier. Until then, try taking it out of the cabinet and putting it somewhere open. It may not solve everything, but it should help. I\'ve also added a fifteen-dollar credit to your next bill for the trouble.'],
+              ['FARAH', 'Thank you, Diego. You\'ve been much more helpful than the last person.']
+            ],
+            questions: [
+              { id: 'L2.1', q: 'What is Farah\'s main concern?', o: ['The unstable connection is disrupting her work.', 'Her husband cannot get into the account online.', 'Her modem was installed in the wrong cabinet.', 'Restarting the modem takes too long each day.'] },
+              { id: 'L2.2', q: 'Why does the agent ask where the modem is kept?', o: ['He suspects it may be getting too hot.', 'He believes there is an outage in her area.', 'He thinks the TV is causing interference.', 'He needs to send a technician to that room.'] },
+              { id: 'L2.3', q: 'Why is the replacement offered free of charge?', o: ['Farah has been a customer for a long time.', 'The modem is still covered by its warranty.', 'The last agent gave Farah wrong information.', 'Farah agreed to sign a longer contract.'] },
+              { id: 'L2.4', q: 'What does the agent imply about moving the modem?', o: ['It may help but is unlikely to fix everything.', 'It should fix the problem without a replacement.', 'It could damage the older modem if done wrong.', 'It needs to be done by a trained technician.'] },
+              { id: 'L2.5', q: 'How does Farah most likely feel at the end of the call?', o: ['Satisfied with how the call was handled', 'Annoyed that she has to wait for a courier', 'Worried about paying for the new modem', 'Confused about what the agent asked her to do'] }
+            ]
+          }]
+        },
+        {
+          id: 'L3', title: 'Part 3: Listening for Information', setting: 'studio',
+          instructions: 'You will hear a conversation followed by six questions. You will hear the conversation only once. Choose the best answer to each question.',
+          cast: { HOST: { name: 'Radio host', g: 'm', skin: '#f0c9a6', hair: '#4a3020', shirt: '#566573', style: 'short' }, MARISOL: { name: 'Marisol Bergeron', g: 'f', skin: '#c98c64', hair: '#2a1b12', shirt: '#117864', style: 'bun' } },
+          segments: [{
+            lines: [
+              ['HOST', 'My guest today is chef Marisol Bergeron, who opened a small restaurant called Low Tide in Lunenburg three years ago. Marisol, your menu changes every single day. Why?'],
+              ['MARISOL', 'Because I only cook what comes off the local boats that morning. If they land haddock, we serve haddock. If the weather\'s bad and nobody goes out, it might be mussels from the farm down the road, or a vegetable dish. People have learned to trust us.'],
+              ['HOST', 'That must have been a risk when you started.'],
+              ['MARISOL', 'Oh, a huge one. Those first few months, people would walk in asking for lobster, and if we didn\'t have it, some of them just turned around and left. It was close to a year before we had regulars who came in precisely because they didn\'t know what they\'d get.'],
+              ['HOST', 'And you\'re not even from the coast, are you?'],
+              ['MARISOL', 'No, I grew up in Alberta. I hardly ate fish as a kid. I actually trained as a pastry chef in Montreal. Then, to pay off my student loans, I took a summer job on a fishing boat out of Yarmouth, and I just fell in love with the whole thing. That\'s also where I saw how much good fish gets sold for almost nothing.'],
+              ['HOST', 'What do you mean?'],
+              ['MARISOL', 'Well, take mackerel, or sea cucumber. The boats catch plenty, but there\'s not much demand here, so most of it gets shipped off cheaply or ends up as bait. I\'d say half of what we serve is something our customers have never tried.'],
+              ['HOST', 'So how do you get people to order it?'],
+              ['MARISOL', 'We have a tasting plate, eight dollars, three of the less familiar fish. If you don\'t like it, you don\'t pay. In three years, I can count on one hand the people who\'ve taken us up on that.'],
+              ['HOST', 'What\'s next for you?'],
+              ['MARISOL', 'We close for two months every winter. This year, I\'ll be running free classes at the community school for families who want to cook local fish at home without spending much.']
+            ],
+            questions: [
+              { id: 'L3.1', q: 'Why does the restaurant\'s menu change daily?', o: ['It depends on what is available locally each morning.', 'The chef prefers to experiment with new recipes daily.', 'Customers asked for more variety in the dishes offered.', 'Fishermen only sell to the restaurant on certain days.'] },
+              { id: 'L3.2', q: 'What does Marisol say about the restaurant\'s early months?', o: ['Some customers were unhappy with what was available.', 'Regular customers came in specifically to be surprised.', 'Local fishermen refused to sell her their catch.', 'Lobster was the most popular dish on the menu.'] },
+              { id: 'L3.3', q: 'What is surprising about Marisol\'s background?', o: ['She was originally trained to make desserts.', 'She grew up in a family of Alberta fishermen.', 'She first learned to cook seafood in Montreal.', 'She started cooking to pay off her student loans.'] },
+              { id: 'L3.4', q: 'According to Marisol, what often happens to fish like mackerel?', o: ['They are undervalued and sold off cheaply.', 'They are too expensive for local restaurants.', 'They are rarely caught by the local boats.', 'They are mostly eaten by local families.'] },
+              { id: 'L3.5', q: 'What does Marisol imply about the tasting plate?', o: ['Very few customers have disliked it.', 'Most customers ask for their money back.', 'It is the most expensive item on the menu.', 'It always includes lobster and two other fish.'] },
+              { id: 'L3.6', q: 'What will Marisol do while the restaurant is closed?', o: ['Show families affordable ways to cook local fish', 'Open a second restaurant for the winter season', 'Return to work on a fishing boat for two months', 'Take a pastry course at the community school'] }
+            ]
+          }]
+        },
+        {
+          id: 'L4', title: 'Part 4: Listening to a News Item', setting: 'news',
+          instructions: 'You will hear a news item followed by five questions. You will hear the news item only once. Choose the best answer to each question.',
+          cast: { NEWS: { name: 'News reader', g: 'm', skin: '#8d5a3b', hair: '#1d1410', shirt: '#1f3a5f', style: 'bald' } },
+          segments: [{
+            lines: [
+              ['NEWS', 'A team of students from Cedar Ridge High School in Moncton is celebrating after taking first place at the national high school robotics championship, held this past weekend in Winnipeg.'],
+              ['NEWS', 'The eight-member team finished ahead of forty-one other schools from across the country. Their robot, which the students nicknamed Moose, had to sort a pile of mixed recycling into the correct bins in under three minutes, with no human control at all.'],
+              ['NEWS', 'Team captain Leila Osei, who is in grade eleven, says the turning point came during the semi-final, when one of Moose\'s wheels snapped. The team had just fifteen minutes to replace it. Luckily, they had printed a spare on the school\'s 3D printer the night before, just in case.'],
+              ['NEWS', 'Coach Daniel Fortier, who teaches physics at the school, points out that just two years ago, Cedar Ridge didn\'t even have a robotics club. It began with four students eating lunch in his classroom and taking apart an old vacuum cleaner.'],
+              ['NEWS', 'The win comes with a five-thousand-dollar prize, which under competition rules must be spent on equipment for the school. It also earns the team a place at the international finals in Singapore next April.'],
+              ['NEWS', 'However, travel for the eight students and two teachers is expected to cost about thirty-two thousand dollars, and the school is appealing to local businesses and residents for help. A fundraising barbecue will be held at the school next Saturday, where the public can watch Moose in action.']
+            ],
+            questions: [
+              { id: 'L4.1', q: 'What is the news item mainly about?', o: ['A school team\'s win and the challenge it now faces', 'The start of a new robotics club at a local school', 'A recycling program designed by high school students', 'An international robotics contest held in Winnipeg'] },
+              { id: 'L4.2', q: 'What did the robot have to do in the competition?', o: ['Work on its own to separate recyclables', 'Race other robots while students controlled it', 'Collect garbage from around the school grounds', 'Print its own replacement parts in three minutes'] },
+              { id: 'L4.3', q: 'Why does the captain mention the semi-final?', o: ['It showed that planning ahead had paid off.', 'The team was penalized for a broken wheel.', 'A teacher had to step in and repair the robot.', 'The team printed a whole new robot overnight.'] },
+              { id: 'L4.4', q: 'What does the coach\'s comment suggest?', o: ['The program has grown very quickly.', 'The club has always had many members.', 'Students should not work during lunch.', 'The team relies on donated old machines.'] },
+              { id: 'L4.5', q: 'Why does the school need help from the community?', o: ['The trip is costly, and the prize cannot pay for it.', 'The team must buy new equipment before April.', 'The barbecue costs more than the school expected.', 'The competition asked schools to raise $5,000.'] }
+            ]
+          }]
+        },
+        {
+          id: 'L5', title: 'Part 5: Listening to a Discussion', setting: 'meeting', board: 'Our food truck plan', video: true,
+          instructions: 'You will watch a two to three minute video of a discussion, followed by eight questions. You will watch the video only once. Choose the best answer to each question.',
+          cast: { AMA: { name: 'Ama', g: 'f', skin: '#5c3a21', hair: '#120c08', shirt: '#f39c12', style: 'curly' }, TOMASZ: { name: 'Tomasz', g: 'm', skin: '#f2cfb0', hair: '#a0703a', shirt: '#2c3e50', style: 'short' }, HYUN: { name: 'Hyun-woo', g: 'm', skin: '#e8c39e', hair: '#151515', shirt: '#c0392b', style: 'short' } },
+          segments: [{
+            lines: [
+              ['AMA', 'Okay. We\'ve all agreed we\'re really doing this, so tonight I want to settle three things: the truck, the menu, and where we park it. Tomasz, you looked at trucks?'],
+              ['TOMASZ', 'I did. A brand-new truck with a full kitchen is around a hundred and twenty thousand. The used one I found is fifty-five thousand, but it needs a new fryer and some electrical work, so add about ten.'],
+              ['HYUN', 'So sixty-five for the used one, all in. That\'s still roughly half the price. I vote used.'],
+              ['TOMASZ', 'My worry is this: if an old truck breaks down in July, we lose our busiest weeks of the year. A new one comes with a three-year warranty.'],
+              ['AMA', 'That\'s fair, but we\'re each putting in twenty thousand. That\'s sixty total. Either way, we\'re borrowing, and I\'d much rather owe the bank five thousand than sixty.'],
+              ['TOMASZ', 'Okay, that\'s hard to argue with. Used it is, as long as a mechanic goes over it first.'],
+              ['HYUN', 'Agreed. Now, the menu. I know Ama wants a bit of everything, but I really think we need to focus. Korean-style fried chicken, three sauces, a couple of sides. People remember a truck that does one thing really well.'],
+              ['AMA', 'I get that. But what about people who don\'t eat meat? Any group with one vegetarian in it is going to walk right past us.'],
+              ['HYUN', 'Okay, fair. What if we do a crispy tofu version with the same sauces? Same fryer, same prep, nothing extra to buy.'],
+              ['AMA', 'Now that I can live with.'],
+              ['TOMASZ', 'Last thing, location. The waterfront gets the most foot traffic, but the city charges eighteen hundred a month for a spot, and there\'s a waiting list until spring anyway.'],
+              ['HYUN', 'What about the business park out by the highway? Three office towers, hundreds of people, and almost nowhere to grab lunch.'],
+              ['AMA', 'Oh, that\'s smart for weekdays. And on weekends, we could book farmers\' markets and festivals instead.'],
+              ['TOMASZ', 'Good. I\'ll call the property manager out there tomorrow, and my cousin\'s a mechanic, so I\'ll ask him to look at the truck on Saturday.']
+            ],
+            questions: [
+              { id: 'L5.1', q: 'What had the friends already decided before this conversation?', o: ['To go into business together', 'To buy a used truck', 'To park at the waterfront', 'To sell Korean-style chicken'] },
+              { id: 'L5.2', q: 'How much would they need to borrow to buy and repair the used truck?', o: ['$5,000', '$10,000', '$55,000', '$65,000'] },
+              { id: 'L5.3', q: 'Why is Tomasz hesitant about a used truck?', o: ['A breakdown could cost them their best sales period.', 'The repairs would cost more than the seller claimed.', 'A mechanic has already found problems with the fryer.', 'The bank will not lend money for older trucks.'] },
+              { id: 'L5.4', q: 'What is Ama\'s main argument for the used truck?', o: ['It keeps their debt as low as possible.', 'It comes with a three-year warranty.', 'Her cousin can inspect it for free.', 'It already has a brand-new fryer.'] },
+              { id: 'L5.5', q: 'Why does Hyun-woo want a limited menu?', o: ['A clear specialty makes a truck memorable.', 'Fried chicken is the cheapest food to make.', 'The truck only has room for one fryer.', 'Ama does not know how to cook many dishes.'] },
+              { id: 'L5.6', q: 'How does Hyun-woo respond to Ama\'s objection?', o: ['By offering a meat-free option using the same equipment', 'By agreeing to serve a little bit of everything instead', 'By suggesting a separate truck for vegetarian customers', 'By arguing that vegetarian customers are a small market'] },
+              { id: 'L5.7', q: 'Why does Hyun-woo suggest the business park?', o: ['Workers there have few places to buy lunch.', 'The waterfront spot is too expensive for them.', 'It has the most foot traffic in the area.', 'Festivals are held there on the weekends.'] },
+              { id: 'L5.8', q: 'What is Ama\'s attitude toward the business park idea?', o: ['She approves and adds a plan for weekends.', 'She would rather wait for a waterfront spot.', 'She worries the office towers are too far away.', 'She thinks it should be used on weekends only.'] }
+            ]
+          }]
+        },
+        {
+          id: 'L6', title: 'Part 6: Listening to Viewpoints', setting: 'classroom', board: 'Should museums be free?',
+          instructions: 'You will hear a report about a topic, followed by six questions. You will hear the report only once. Choose the best answer to each question.',
+          cast: { NARR: { name: 'Reporter', g: 'f', skin: '#e3b28b', hair: '#3b2a20', shirt: '#5b2c6f', style: 'long' } },
+          segments: [{
+            lines: [
+              ['NARR', 'Several Canadian cities are debating whether public museums should stop charging admission, and the question is dividing museum professionals and taxpayers alike.'],
+              ['NARR', 'Supporters of free entry argue that ticket prices keep many families away. Lucia Ferreira directs a history museum that dropped its fees four years ago. She says attendance has nearly tripled since then, but what matters more to her is who is coming: far more newcomers to Canada and families with low incomes, groups that rarely visited before.'],
+              ['NARR', 'Ferreira argues that museum collections belong to the public, so people should not have to pay twice, once through their taxes and again at the door. She adds that free entry changes how people use a museum. Instead of feeling they must see everything to get their money\'s worth, visitors drop in for half an hour on a lunch break and come back another day.'],
+              ['NARR', 'Not everyone is convinced. Gordon Achebe, an accountant who once sat on a museum board, points out that admission fees can cover as much as a quarter of the operating costs at a mid-sized museum. If that money disappears, he says, either taxes go up, or museums cut staff, opening hours and new exhibits.'],
+              ['NARR', 'Achebe also questions who really benefits. He cites visitor surveys suggesting that when fees are removed, most of the extra visits come from people who were already regular museum-goers, not the new audiences supporters hoped to attract.'],
+              ['NARR', 'Rather than free entry for everyone, he favours targeted programs, such as museum passes that families can borrow from public libraries, or one free evening each week. Both sides agree on one thing: whatever cities decide, museums will need to explain clearly where their money comes from.']
+            ],
+            questions: [
+              { id: 'L6.1', q: 'What is the report mainly about?', o: ['Whether museums should charge for admission', 'How museums decide which exhibits to show', 'Why museum attendance has been falling', 'How public libraries lend free museum passes'] },
+              { id: 'L6.2', q: 'For Ferreira, what is the most important result of free entry?', o: ['The museum now reaches a wider range of people.', 'The number of visitors has nearly tripled.', 'The museum receives more money from taxes.', 'Visitors now spend less time in each exhibit.'] },
+              { id: 'L6.3', q: 'Why does Ferreira say the public should not pay at the door?', o: ['They already help fund museums through taxes.', 'Most visitors stay for only half an hour or so.', 'Many newcomers cannot afford the ticket prices.', 'Tickets cover only a small part of the costs.'] },
+              { id: 'L6.4', q: 'What does Ferreira suggest about visits to free museums?', o: ['People tend to make shorter visits more often.', 'People try to see every exhibit in one visit.', 'People mostly visit on weekends with their families.', 'People rarely come back for a second visit.'] },
+              { id: 'L6.5', q: 'What does Achebe conclude from the visitor surveys?', o: ['Free entry may not reach the people it was meant for.', 'Most new visitors are newcomers to Canada.', 'Regular visitors stop coming when fees are removed.', 'Surveys cannot measure attendance reliably.'] },
+              { id: 'L6.6', q: 'What does Achebe recommend instead of free entry for all?', o: ['Free access aimed at certain groups or times', 'Higher admission prices for visiting tourists', 'Charging library members a small entry fee', 'Closing museums one evening every week'] }
+            ]
+          }]
+        }
+      ]
+    },
+
+    /* =================== READING =================== */
+    reading: {
+      parts: [
+        {
+          id: 'R1', title: 'Part 1: Reading Correspondence', minutes: 11,
+          instructions: 'Read the following message. Answer questions 1 to 6 by choosing the best option from each drop-down menu. Then read the reply and complete it by choosing the best option for each blank (7 to 11).',
+          passage: '<h3>Message</h3><p><b>Subject:</b> Welcome to the team!</p><p>Hi Nikhil,</p><p>On behalf of everyone in the finance department at Seaview Logistics, welcome! We are delighted that you accepted our offer, and I wanted to share a few details before your first day on Monday, March 3.</p><p>Please arrive at 9:30 rather than at 8:30, our usual start time. Our building manager needs the first hour of the day to set up your security pass, so there is really no point in coming earlier. When you get here, go to the reception desk on the second floor and ask for Bernadette. She will take your photo for the pass and hand you your laptop.</p><p>Your first week will be mostly training. On Monday and Tuesday, you will shadow Felipe. He has been with us for eight years and understands our payment system better than anyone, myself included. On Wednesday afternoon, you will complete the company\'s online safety course, which takes about three hours. It is required before anyone can enter the warehouse, even though you will probably only go there a few times a year.</p><p>On Thursday, our department has its monthly team lunch. We take turns choosing the restaurant, and since it is your first week, everyone has agreed that you should pick. Please send me your choice by Tuesday so I can reserve a table for nine. Do not worry about the bill: the company covers it.</p><p>A couple of practical notes. Our parking lot is small and is usually full by 8:15, but there is a bus stop right outside the main entrance. The dress code is business casual from Monday to Thursday, and jeans are fine on Fridays.</p><p>Finally, I will be at a conference in Toronto on Friday, so our first one-on-one meeting will be the following Monday. If anything comes up before then, my cell number is in my signature below.</p><p>See you Monday,<br>Gwen Tremblay<br>Finance Manager</p>',
+          questions: [
+            { id: 'R1.1', q: 'Gwen asks Nikhil to arrive at 9:30 because', o: ['his pass will not be ready any earlier.', 'the office does not open until 9:30.', 'Bernadette does not start work until then.', 'he must first visit the warehouse.'] },
+            { id: 'R1.2', q: 'Gwen\'s comment about Felipe suggests that she', o: ['respects his knowledge.', 'plans to replace him soon.', 'finds the payment system easy.', 'will train Nikhil herself.'] },
+            { id: 'R1.3', q: 'The safety course is required even though Nikhil', o: ['will rarely need to go to the warehouse.', 'completed a similar course at his last job.', 'will be working in the warehouse on Wednesdays.', 'has not yet received his company laptop.'] },
+            { id: 'R1.4', q: 'For Thursday\'s lunch, Nikhil has been asked to', o: ['decide where the team will eat.', 'reserve a table for nine people.', 'bring food for the whole team.', 'pay for his own meal this time.'] },
+            { id: 'R1.5', q: 'Gwen\'s remark about parking implies that Nikhil', o: ['would struggle to find a space at 9:30.', 'must pay to use the company parking lot.', 'should park near the main entrance.', 'is expected to drive to work every day.'] },
+            { id: 'R1.6', q: 'Gwen and Nikhil will have their first one-on-one meeting', o: ['one week after he starts.', 'on his first Friday.', 'during the conference in Toronto.', 'on the Thursday of his first week.'] }
+          ],
+          reply: '<h3>Reply</h3><p>Hi Gwen,</p><p>Thank you so much for the warm welcome. I am really looking forward to Monday. I will arrive at 9:30 as you suggested and go straight to [[R1.7]] to find Bernadette.</p><p>I am glad I will be learning from [[R1.8]]. My last company used a completely different payment system, so two days of shadowing will be very helpful. Should I bring anything on Monday, such as my banking details for payroll? I will bring them just in case.</p><p>For Thursday, may I suggest Saffron House, the Indian restaurant on King Street? I called them, and they can seat a group of [[R1.9]] at noon. I will send you my final answer by [[R1.10]], as you asked.</p><p>Also, since I do not drive yet, the [[R1.11]] is perfect for me. I live on the same route, so my trip should take about twenty minutes.</p><p>Enjoy the conference, and I will see you for our meeting when you are back. And thank you for the note about Fridays; I will happily leave my tie at home.</p><p>Best regards,<br>Nikhil</p>',
+          blanks: [
+            { id: 'R1.7', o: ['the second floor', 'the warehouse', 'the parking lot', 'the main entrance'] },
+            { id: 'R1.8', o: ['someone so experienced', 'the finance manager herself', 'the building manager', 'a safety instructor'] },
+            { id: 'R1.9', o: ['nine', 'eight', 'ten', 'three'] },
+            { id: 'R1.10', o: ['Tuesday', 'Monday', 'Thursday', 'Friday'] },
+            { id: 'R1.11', o: ['bus stop by the main entrance', 'staff parking lot behind the building', 'Friday dress code', 'early start time'] }
+          ]
+        },
+        {
+          id: 'R2', title: 'Part 2: Reading to Apply a Diagram', minutes: 9,
+          instructions: 'Read the following information. Complete the email by choosing the best option for each blank (1 to 5). Then answer questions 6 to 8.',
+          passage: '<h3>Riverbend Community Centre: Summer Day Camps</h3><div class="tbl-wrap"><table class="diagram"><thead><tr><th>Camp</th><th>Ages</th><th>Weeks offered</th><th>Daily hours</th><th>Price per week</th><th>Extended care</th></tr></thead><tbody>' +
+            '<tr><td>Little Explorers</td><td>4 to 6</td><td>July 7 to August 15</td><td>9:00 a.m. to 12:00 p.m.</td><td>$120</td><td>Not available</td></tr>' +
+            '<tr><td>Outdoor Adventure</td><td>7 to 10</td><td>July 7 to August 22</td><td>9:00 a.m. to 4:00 p.m.</td><td>$210</td><td>Available</td></tr>' +
+            '<tr><td>Science and Robotics</td><td>8 to 12</td><td>July 14 to August 8</td><td>9:00 a.m. to 3:00 p.m.</td><td>$245</td><td>Available</td></tr>' +
+            '<tr><td>Art Studio</td><td>6 to 12</td><td>July 7 to August 22</td><td>10:00 a.m. to 3:00 p.m.</td><td>$180</td><td>Not available</td></tr>' +
+            '<tr><td>Leaders in Training</td><td>13 to 15</td><td>July 21 to August 15</td><td>8:30 a.m. to 4:30 p.m.</td><td>$150</td><td>Not available</td></tr>' +
+            '</tbody></table></div><ul class="notes"><li>Extended care runs from 7:30 a.m. until camp begins and from the end of camp until 5:30 p.m. It costs $35 per child per week.</li><li>Register a child for 3 or more weeks of the same camp and save 10% on that camp\'s fees. The discount does not apply to extended care.</li><li>Sibling discount: $15 off per week for each additional child from the same household registered in the same camp in the same week.</li><li>Cancellations made at least 14 days before a camp week begins receive a full refund minus a $25 processing fee. No refunds are given after that.</li></ul>',
+          reply: '<h3>Email</h3><p>Hi Marcus,</p><p>I have been going through the summer camps at Riverbend. Zoe is nine and loves building things, so [[R2.1]] looks like the best fit for her. It ends at 3:00, though, and neither of us finishes work before 5:00, so we would also need [[R2.2]].</p><p>If we sign her up for three weeks, the camp fees alone would come to [[R2.3]] after the multi-week discount, plus $105 for the extra care.</p><p>Sam is only five, so his only option is [[R2.4]]. Unfortunately, it finishes at noon and has no extended care, so [[R2.5]] on the days he attends. We will not get the sibling discount either, since the two of them would be in different camps.</p><p>Let\'s decide this weekend.</p><p>Priya</p>',
+          blanks: [
+            { id: 'R2.1', o: ['Science and Robotics', 'Outdoor Adventure', 'Art Studio', 'Leaders in Training'] },
+            { id: 'R2.2', o: ['extended care', 'a second camp', 'the sibling discount', 'a longer camp week'] },
+            { id: 'R2.3', o: ['$661.50', '$735.00', '$766.50', '$630.00'] },
+            { id: 'R2.4', o: ['Little Explorers', 'Art Studio', 'Outdoor Adventure', 'Science and Robotics'] },
+            { id: 'R2.5', o: ['we would need to collect him at midday', 'he could stay in extended care until 5:30', 'he could join Zoe\'s camp in the afternoons', 'we would pay an extra $35 for each week'] }
+          ],
+          questions: [
+            { id: 'R2.6', q: 'The earliest date a 14-year-old could start a camp is', o: ['July 21.', 'July 7.', 'July 14.', 'August 15.'] },
+            { id: 'R2.7', q: 'A parent cancels one week of Art Studio three weeks before it begins. The refund will be', o: ['$155.', '$180.', '$0.', '$145.'] },
+            { id: 'R2.8', q: 'Two brothers aged 8 and 10 attend Outdoor Adventure for the same two weeks, with no extended care. The family will pay', o: ['$810.', '$840.', '$780.', '$756.'] }
+          ]
+        },
+        {
+          id: 'R3', title: 'Part 3: Reading for Information', minutes: 10,
+          instructions: 'Read the following article. Decide which paragraph, A to D, contains the information in each statement. If the information is not given in any paragraph, choose E.',
+          passage: '<h3>The Wild Horses of Sable Island</h3><p><b>A.</b> About 300 kilometres southeast of Halifax, a thin crescent of sand rises out of the Atlantic Ocean. Sable Island is roughly 40 kilometres long but, at its widest point, only slightly more than a kilometre across. There are no trees, only grasses, low shrubs and shifting dunes. For centuries, the shallow sandbars around it were feared by sailors, and hundreds of vessels have been wrecked on them, earning the area the nickname "Graveyard of the Atlantic." Today the island is protected as a national park reserve.</p><p><b>B.</b> The island is best known for its wild horses. Historians generally believe that the first horses were brought there in the 1700s, although exactly who brought them is still debated. A popular legend says they swam ashore from shipwrecks, but there is little evidence to support it. Over the following two centuries, people regularly rounded up horses and shipped them to the mainland for sale. When a plan to remove the remaining herd became public around 1960, letters of protest poured in from across the country, and the horses were granted legal protection soon afterward. Since then, the rule has been simple: no one feeds them, treats them or interferes with them in any way.</p><p><b>C.</b> Living without human help is not easy. The horses form small family groups, usually one stallion with several mares and their young. They graze mainly on the tough grass that holds the dunes together, and in dry summers they dig holes in the sand to reach fresh water beneath the surface. Winters are long and stormy, and in harsh years many animals die. Scientists who study the herd recognize individual horses from photographs of their markings, which allows them to follow each animal over its lifetime. Most foals are born in late spring, when food is easiest to find. In recent years, the population has been estimated at around five hundred.</p><p><b>D.</b> Seeing the horses in person takes planning. The island can only be reached by small aircraft or by boat, and fog or high winds often delay arrivals for days. All visitors must register with park staff in advance and attend a short orientation when they land. Once on the island, they are required to stay at least 20 metres away from the horses, and they may not bring any plants, seeds or animals with them. There are no hotels or campsites for the public, so most visits last only a single day. As a result, only a few hundred people make the trip each year.</p>',
+          questions: [
+            { id: 'R3.1', q: 'Researchers can identify particular animals by their appearance in pictures.', fixed: true, a: 'C' },
+            { id: 'R3.2', q: 'Many ships have been lost in the waters near the island.', fixed: true, a: 'A' },
+            { id: 'R3.3', q: 'People who come to the island must keep a set distance from the animals.', fixed: true, a: 'D' },
+            { id: 'R3.4', q: 'People do not give the horses medical care.', fixed: true, a: 'B' },
+            { id: 'R3.5', q: 'In some seasons, the horses must work to find something to drink.', fixed: true, a: 'C' },
+            { id: 'R3.6', q: 'Public opinion played a role in saving the herd.', fixed: true, a: 'B' },
+            { id: 'R3.7', q: 'A trip to the island costs several thousand dollars per person.', fixed: true, a: 'E' },
+            { id: 'R3.8', q: 'The island has no forest of any kind.', fixed: true, a: 'A' },
+            { id: 'R3.9', q: 'Weather can force travellers to wait before reaching the island.', fixed: true, a: 'D' }
+          ]
+        },
+        {
+          id: 'R4', title: 'Part 4: Reading for Viewpoints', minutes: 13,
+          instructions: 'Read the following article. Answer questions 1 to 5 by choosing the best option. Then complete the reader\'s comment by choosing the best option for each blank (6 to 10).',
+          passage: '<h3>Should City Residents Be Allowed to Keep Chickens?</h3><p>When one Canadian city launched a two-year pilot project last spring allowing households to keep up to four hens, all sixty available permits were claimed within a week. Similar pilots have since appeared in cities across the country, and so has a lively debate over whether chickens belong in urban backyards.</p><p>Ingrid Solberg, who runs a community garden program and keeps three hens of her own, believes they reconnect city families with where their food comes from. "My kids collect the eggs every morning before school," she says. "They have learned more about responsibility from those birds than from any chore chart." She adds that hens eat kitchen scraps and garden pests, and that their droppings make excellent compost. Because most pilot rules ban roosters, she says noise is rarely an issue: "A hen is quieter than a barking dog."</p><p>Carol Whitfield, president of a neighbourhood association, is not convinced. She says her concern is not well-run coops like Solberg\'s, but the ones that are neglected once the excitement wears off. "Spilled feed attracts rats, and rats don\'t respect property lines." In the pilot city, she notes, bylaw officers received eleven complaints in the first year, most of them about smell and pests rather than noise. She also points out that hens lay far fewer eggs after three or four years but can live for eight or more, and that animal shelters in several pilot cities have reported a rise in surrendered chickens.</p><p>Solberg answers that rats are already common in neighbourhoods full of compost bins and bird feeders. In her view, a well-built coop with a solid floor and sealed feed containers attracts no more pests than an ordinary vegetable garden. "The problem is careless owners," she says, "not chickens."</p><p>Veterinarian Dr. Rahim Dossou sees merit on both sides. He says the risk of illness spreading from a small backyard flock to people is low when owners wash their hands and keep coops clean. His bigger worry is that very few city vets treat chickens, so sick birds often go without care. He recommends that cities require new owners to complete a short course before receiving a permit, something a few cities already do.</p><p>Solberg welcomes the idea of training, and even Whitfield says she could accept a permanent program with firm limits and regular inspections. "If the city is willing to enforce the rules, and not just write them," she says, "I would feel much better about it."</p>',
+          questions: [
+            { id: 'R4.1', q: 'The pilot project described at the start of the article', o: ['was in high demand from the beginning.', 'allowed up to six birds per household.', 'has already been made permanent.', 'was cancelled after two years.'] },
+            { id: 'R4.2', q: 'Solberg compares hens to dogs in order to', o: ['show that hens are not a noise problem.', 'argue that hens are better pets than dogs.', 'explain why roosters have been banned.', 'suggest that dogs should also be limited.'] },
+            { id: 'R4.3', q: 'Whitfield is mainly concerned about', o: ['owners who lose interest in their hens.', 'roosters that wake neighbours early.', 'the high price of eggs in city stores.', 'coops run by very experienced owners.'] },
+            { id: 'R4.4', q: 'Whitfield suggests that shelters receive more chickens because', o: ['hens live long after their best laying years.', 'rats have damaged many backyard coops.', 'owners are not permitted to keep roosters.', 'pilot programs are ending in many cities.'] },
+            { id: 'R4.5', q: 'Whitfield\'s final comment shows that she', o: ['could accept chickens under certain conditions.', 'has completely changed her mind about hens.', 'already trusts the city to enforce its rules.', 'wants backyard chickens banned everywhere.'] }
+          ],
+          reply: '<h3>Reader comment</h3><p>I have kept four hens for two years, so I read this article with great interest. I agree with Ms. Solberg that hens are [[R4.6]]: my neighbours did not even know I had them until I offered them eggs. Still, Ms. Whitfield makes a fair point about [[R4.7]]. When I visited our local shelter last month, there were a dozen hens waiting for new homes.</p><p>That is why I support Dr. Dossou\'s idea of [[R4.8]]. Many people simply do not realize how much work hens are. I also think owners should plan ahead for [[R4.9]], when the birds produce fewer eggs but still need care. Finally, like Ms. Whitfield, I believe rules only work if the city [[R4.10]].</p>',
+          blanks: [
+            { id: 'R4.6', o: ['quieter than many people expect', 'louder than most neighbours would like', 'expensive to feed properly', 'easy to keep inside a house'] },
+            { id: 'R4.7', o: ['hens that owners give up', 'rooster noise', 'cheap supermarket eggs', 'vet training'] },
+            { id: 'R4.8', o: ['a course for new owners', 'banning backyard flocks', 'free vet visits for hens', 'more animal shelters'] },
+            { id: 'R4.9', o: ['the years after laying slows', 'the first spring', 'the cold winter months', 'the busy summer gardening season'] },
+            { id: 'R4.10', o: ['actually enforces them', 'writes them down', 'charges owners a registration fee', 'bans roosters'] }
+          ]
+        }
+      ]
+    },
+
+    /* =================== WRITING =================== */
+    writing: {
+      tasks: [
+        {
+          id: 'W1', title: 'Task 1: Writing an Email', minutes: 27, minWords: 150, maxWords: 200,
+          prompt: '<p>You are a member of your local recreation centre. Over the past few weeks, several machines in the fitness room have been broken, and the floor in the change room has become unsafe.</p><p>Write an email to the manager of the recreation centre. In your email, do the following:</p><ul><li>Describe the problems with the equipment and the change room.</li><li>Explain how these problems have affected you or other members.</li><li>Suggest what the centre should do, and by when.</li></ul><p class="muted">Write 150 to 200 words.</p>'
+        },
+        {
+          id: 'W2', title: 'Task 2: Responding to Survey Questions', minutes: 26, minWords: 150, maxWords: 200,
+          prompt: '<p>Your provincial government has money to improve travel between two large cities in the province and is asking residents for their opinion. Choose the option you prefer. Explain the reasons for your choice.</p><p class="muted">Write 150 to 200 words.</p>',
+          options: [
+            { key: 'A', label: 'Option A', text: 'Build a new four-lane highway between the two cities to reduce traffic and shorten driving times.' },
+            { key: 'B', label: 'Option B', text: 'Improve passenger rail service between the two cities with more frequent, faster and more comfortable trains.' }
+          ]
+        }
+      ]
+    },
+
+    /* =================== SPEAKING =================== */
+    speaking: {
+      practice: { id: 'SP', title: 'Practice Task', prep: 30, speak: 60, prompt: 'Describe your favourite season of the year and what you like to do during it.' },
+      tasks: [
+        { id: 'S1', title: 'Task 1: Giving Advice', prep: 30, speak: 90, prompt: 'A friend of yours is starting a new job next week and is feeling nervous about it. Give your friend advice on how to make a good start in the new workplace.' },
+        { id: 'S2', title: 'Task 2: Talking about a Personal Experience', prep: 30, speak: 60, prompt: 'Talk about a time when you lost something that was important to you. What was it, what happened, and how did you feel?' },
+        { id: 'S3', title: 'Task 3: Describing a Scene', prep: 30, speak: 60, prompt: 'Describe some things that are happening in the picture below as well as you can. The person you are speaking to cannot see the picture.', image: CAMPGROUND },
+        { id: 'S4', title: 'Task 4: Making Predictions', prep: 30, speak: 60, prompt: 'In this picture, what do you think will most probably happen next?', image: CAMPGROUND },
+        {
+          id: 'S5', title: 'Task 5: Comparing and Persuading', type: 'compare', select: 60, prep: 60, speak: 60,
+          prompt: 'You and your partner are going to a cousin\'s wedding in another city, about 650 kilometres away, for three days. Choose the way of travelling you prefer. In the next section, you will need to persuade your partner that your choice is better.',
+          choices: [
+            { key: 'A', title: 'Rent a car', image: CAR, facts: ['Rental: $240 for 3 days, plus about $110 for gas', 'About 7 hours of driving each way', 'Leave whenever you want and stop along the way', 'Drive right to the wedding venue'] },
+            { key: 'B', title: 'Take the train', image: TRAIN, facts: ['Return ticket: $180 per person', 'About 9 hours each way', 'Free Wi-Fi, dining car and room to relax', 'Station is 15 minutes from the venue'] }
+          ],
+          third: { key: 'C', title: 'Fly', image: PLANE, facts: ['Return flight: $420 per person', '1.5-hour flight, plus about 2 hours at the airport', 'Airport is 1 hour from the venue', 'Checked bag: $35 each way'] },
+          persuade: 'Your partner thinks flying would be better. Persuade your partner that your choice is better. Explain why.'
+        },
+        { id: 'S6', title: 'Task 6: Dealing with a Difficult Situation', prep: 60, speak: 60, prompt: '<p>Weeks ago, you promised to drive your close friend to the airport at 6:00 a.m. this Saturday for an important trip. Today, your sister called. Her babysitter has cancelled, and she asked you to look after her two young children on Saturday morning so she can attend a job interview.</p><p><b>Choose ONE:</b></p><p><b>Option A:</b> Talk to your friend. Explain why you cannot drive them to the airport.</p><p><b>Option B:</b> Talk to your sister. Explain why you cannot look after her children.</p>' },
+        { id: 'S7', title: 'Task 7: Expressing Opinions', prep: 30, speak: 90, prompt: 'Some people think children\'s sports leagues should not keep score or name winners until the players are older. Others believe keeping score teaches children important lessons. Should children\'s sports leagues keep score? Explain your reasons.' },
+        { id: 'S8', title: 'Task 8: Describing an Unusual Situation', prep: 30, speak: 60, prompt: 'You are in a gift shop and see this unusual hat. Call your friend, who is going to an outdoor summer music festival next month. Describe the hat and explain whether you think your friend should buy it.', image: ODDHAT }
+      ]
+    }
+  });
+})();

@@ -1,0 +1,1152 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Rowe CELPIP Mock Exam</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+/* Layout traced from the official sample test: the page never scrolls. One bordered test window fills the screen:
+   a thin grey title strip (title left, time remaining + NEXT right), then two equal panels that each scroll on their own.
+   Left panel (grey) = instructions and media or passage. Right panel (pale blue-green) = questions and answers.
+   Deliberately single (light) theme, like the test software. */
+:root{
+  color-scheme: light;
+  --page:#e7e9ec; --win:#ffffff; --ink:#2f3337; --text:#53565a; --line:#cccccc;
+  --bar-1:#eeeef3; --bar-2:#d7dbe0; --gray:#f5f5f5; --bluebg:#eef8f9;
+  --instr:#1a578a; --key:#4789ac; --box:#d9dce1; --hover:#ddffb7; --sel:#c6e8ea; --prog:#00ccff;
+  --btn:#337ab7; --btn-d:#2e6da4; --dd:#003399; --dd-sel:#005338;
+  --ok:#2d7a4c; --ok-soft:#e5f3ea; --bad:#b2271d; --bad-soft:#fbe9e7; --warn:#9a5a00; --warn-soft:#fdf2df;
+  --font:'Fira Sans','Trebuchet MS','Helvetica Neue',Helvetica,Arial,sans-serif;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{height:100%}
+body{margin:0;background:var(--page);color:var(--text);font:16px/1.45 var(--font)}
+button,input,select,textarea{font:inherit;color:inherit}
+#app{display:flex;flex-direction:column;height:100%;padding-top:12px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.window{flex:1 1 auto;min-height:0;display:flex;flex-direction:column;width:100%;max-width:1180px;margin:0 auto;background:var(--win);border:1px solid var(--line)}
+.bar{flex:0 0 auto;display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:44px;padding:6px 20px;background:linear-gradient(var(--bar-1),var(--bar-2));border-bottom:1px solid var(--line);text-shadow:1px 1px 0 #fff}
+.bar-title{font-weight:700;color:#333;font-size:16px;min-width:0;text-wrap:balance}
+.bar-right{display:flex;align-items:center;gap:14px;flex:0 0 auto}
+.timer{font-variant-numeric:tabular-nums;font-size:15px;color:var(--ink);white-space:nowrap}
+.timer b{color:#000}
+.timer.low b{color:var(--bad)}
+.btn{border:1px solid #b9c0c8;background:#fff;border-radius:4px;padding:5px 14px;cursor:pointer;font-weight:600;text-shadow:none}
+.btn:hover{background:#f3f5f7}
+.btn:disabled{opacity:.5;cursor:default}
+.btn-blue,.next{background:var(--btn);border:1px solid var(--btn-d);color:#fff;border-radius:4px;padding:5px 22px;font-weight:600;letter-spacing:.03em;cursor:pointer;text-shadow:1px 1px 0 #000}
+.btn-blue:hover,.next:hover{background:#286090}
+.next:disabled{opacity:.45;cursor:default}
+:focus-visible{outline:3px solid #f0b429;outline-offset:2px}
+#stage{flex:1 1 auto;min-height:0;display:flex;overflow:hidden}
+#stage>.pane,#stage>.split{flex:1 1 auto;min-width:0}
+.split{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);height:100%;min-height:0}
+.pane{height:100%;min-height:0;overflow-y:auto}
+.pane-in{padding:20px 22px 30px}
+.pane.gray{background:var(--gray)}
+.pane.blue{background:var(--bluebg);border-left:1px solid var(--line)}
+.pane.white{background:#fff}
+.narrow{max-width:900px;margin:0 auto}
+.foot{flex:0 0 auto;display:flex;justify-content:space-between;flex-wrap:wrap;gap:4px 18px;font-size:13px;color:var(--text);max-width:1180px;width:100%;margin:0 auto;padding-block:6px 8px}
+.foot .saved{color:var(--ok)}
+.foot .unsaved{color:var(--warn)}
+@media (max-width:860px){
+  #stage{display:block;overflow:auto}
+  .split{display:block;height:auto}
+  .pane{height:auto;overflow:visible}
+  .pane.blue{border-left:0;border-top:1px solid var(--line)}
+}
+h1,h2,h3{text-wrap:balance;line-height:1.25;margin:0 0 .5em;color:var(--ink)}
+h1{font-size:26px} h2{font-size:21px} h3{font-size:18px}
+p{margin:0 0 .8em}
+.muted{color:#6b7177}
+.small{font-size:14px}
+.label{font-size:12.5px;text-transform:uppercase;letter-spacing:.08em;color:#6b7177;font-weight:700}
+.cols{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:20px}
+@media (max-width:860px){.cols{grid-template-columns:minmax(0,1fr)}}
+.panel{border:1px solid var(--line);border-radius:4px;background:var(--gray);padding:16px 18px;min-width:0}
+
+/* Test-software pieces */
+.instruction{position:relative;font-size:17px;font-weight:700;color:var(--instr);line-height:1.25;margin:0 0 16px;padding-left:24px}
+.instruction::before{content:"";position:absolute;left:3px;top:3px;border-style:solid;border-width:7px 0 7px 11px;border-color:transparent transparent transparent var(--key)}
+.key{color:var(--key)}
+.sbox{display:flex;align-items:center;gap:15px;background:var(--box);border-radius:10px;max-width:375px;margin:14px auto;padding:18px 20px;color:#000;font-size:1.1em}
+.ico{flex:0 0 65px;height:65px;background:#eee;border-radius:5px;display:grid;place-items:center}
+.ico svg{width:34px;height:34px}
+.sbox .txt{flex:1 1 auto;min-width:0;text-align:center}
+.pbar18{height:18px;background:#eee;margin-top:10px;overflow:hidden}
+.pbar18 i{display:block;height:100%;width:0;background:var(--prog);transition:width .25s linear}
+ul.intro{list-style:none;margin:6px 0 16px;padding:0;font-size:17px;font-weight:700;color:var(--instr)}
+ul.intro li{position:relative;padding:8px 10px 10px 34px;border-bottom:1px dotted #ccc;line-height:1.5}
+ul.intro li:last-child{border-bottom:0}
+ul.intro li::before{content:"\2022";position:absolute;left:8px;top:2px;color:#999;font:italic 700 25px Georgia,serif}
+
+/* Listening */
+.video{width:min(100%,820px,calc(58vh * 2.222));margin:0 auto;border:1px solid #333;background:#000}
+.video canvas{display:block;width:100%;height:auto;aspect-ratio:800/360}
+.thumb{width:min(100%,420px);margin:6px auto 0;border:1px solid #bbb}
+.thumb canvas{display:block;width:100%;height:auto;aspect-ratio:800/360}
+.caption{width:min(100%,820px);margin:10px auto 0;min-height:44px;padding:8px 12px;background:#1d2733;color:#fff;font-size:16px}
+.audio-status{width:min(100%,820px);margin:4px auto 0;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:center}
+.qhead{font-weight:700;color:var(--ink);margin-bottom:14px}
+.qtext{font-size:18px;font-weight:600;color:var(--ink);margin:0 0 12px}
+.opts{list-style:none;margin:0;padding:0;border-top:1px dotted #ccc}
+.opt{display:flex;gap:10px;align-items:flex-start;padding:8px 10px 8px 6px;border-bottom:1px dotted #ccc;cursor:pointer;color:#222}
+.opt input{appearance:none;-webkit-appearance:none;width:16px;height:16px;border:2px solid #7d8a96;border-radius:50%;margin:4px 0 0;flex:0 0 auto;background:#fff;cursor:pointer}
+.opt input:checked{border-color:var(--instr);background:radial-gradient(circle,var(--instr) 0 3.5px,#fff 4.5px)}
+.opt:hover{background:var(--hover)}
+.opt.sel{background:var(--sel);text-decoration:underline}
+
+/* Reading */
+.passage{font-size:16px;color:#222}
+.passage h3{color:var(--ink)}
+.qlist{display:grid;gap:18px}
+.qrow{display:grid;grid-template-columns:30px minmax(0,1fr);gap:6px;align-items:start;color:#222}
+.qrow .n{font-weight:700;color:var(--ink);padding-top:2px}
+select.dd{max-width:100%;padding:2px 6px;border:1px solid #c9d6de;border-bottom:1px dotted #888;border-radius:0;background:#fff;color:var(--dd);margin-top:4px;cursor:pointer}
+select.dd:hover{background:#ccfaff;border-color:#256360}
+select.dd.filled{font-weight:700;color:var(--dd-sel);background:#fff}
+.blank b{color:var(--ink);margin-right:3px}
+.blank select.dd{margin-top:0}
+.reply{margin-top:20px;padding-top:14px;border-top:1px dotted #bbb}
+.tbl-wrap{overflow-x:auto}
+table.diagram{border-collapse:collapse;width:100%;font-size:14.5px;font-variant-numeric:tabular-nums;background:#fff}
+table.diagram th,table.diagram td{border:1px solid #bbb;padding:6px 8px;text-align:left;vertical-align:top}
+table.diagram th{background:#e3e8ed}
+ul.notes{font-size:14.5px;padding-left:20px}
+
+/* Writing */
+.toolbar{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}
+.toolbar .btn{padding:3px 12px;font-size:14px}
+textarea.editor{width:100%;min-height:48vh;resize:vertical;padding:12px;border:1px solid #9fb0c2;background:#fff;color:#222;font:16px/1.55 var(--font)}
+.wcount{display:flex;justify-content:space-between;font-size:14px;margin-top:6px;font-variant-numeric:tabular-nums}
+.choice{display:flex;gap:10px;align-items:flex-start;border-bottom:1px dotted #ccc;padding:8px 6px;cursor:pointer;color:#222}
+.choice:hover{background:var(--hover)}
+.choice.sel{background:var(--sel)}
+
+/* Speaking */
+.pic{margin-top:12px;border:1px solid #bbb;background:#fff}
+.pic svg{display:block;width:100%;height:auto}
+.prep{display:flex;gap:16px;align-items:center;background:var(--box);border-radius:10px;max-width:350px;margin:30px auto 0;padding:20px}
+.prep .ico{flex-basis:75px;height:82px;background:#fff;border-radius:10px}
+.prep .txt{flex:1 1 auto;min-width:0;text-align:center;color:#000}
+.prep .pname{font-weight:700}
+.prep .count{font-size:30px;font-weight:700;font-variant-numeric:tabular-nums;line-height:1.2;margin:4px 0}
+.prep.rec .pname,.prep.rec .count{color:var(--bad)}
+.prep.rec .pbar18 i{background:var(--bad)}
+.meter{height:6px;margin-top:8px;background:#eee;overflow:hidden}
+.meter i{display:block;height:100%;width:0;background:var(--ok);transition:width .08s}
+.dot{display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--bad);margin-right:6px;animation:blink 1s infinite}
+@keyframes blink{50%{opacity:.25}}
+@media (prefers-reduced-motion:reduce){.dot{animation:none}.pbar18 i{transition:none}}
+.cards{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:10px;align-items:start;margin-top:12px}
+.cards .or{align-self:center;font-weight:700;color:var(--instr)}
+.card{border:2px solid #bbb;background:#fff;padding:8px;cursor:pointer;text-align:left;color:#222;min-width:0}
+.card svg{display:block;width:100%;height:auto}
+.card h4{margin:8px 0 4px;font-size:16px}
+.card ul{margin:0;padding-left:18px;font-size:14px}
+.card.sel{border-color:var(--btn);background:#d7ecff}
+.card.locked{cursor:default}
+
+/* Start + results */
+.start{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:24px}
+@media (max-width:860px){.start{grid-template-columns:minmax(0,1fr)}}
+.field{display:grid;gap:4px;margin-bottom:14px;color:#222}
+.field input[type=text],.field select{padding:7px 10px;border:1px solid #9fb0c2;border-radius:3px;background:#fff}
+.checks{display:flex;flex-wrap:wrap;gap:8px 18px}
+.checks label{display:flex;gap:6px;align-items:center;cursor:pointer}
+.status{padding:8px 12px;border-radius:3px;font-size:14.5px}
+.status.ok{background:var(--ok-soft);color:var(--ok)}
+.status.warn{background:var(--warn-soft);color:var(--warn)}
+.status.bad{background:var(--bad-soft);color:var(--bad)}
+.scores{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin:12px 0 18px}
+.score{border:1px solid var(--line);border-radius:4px;padding:12px 14px;background:var(--gray);color:#222}
+.score .big{font-size:30px;font-weight:700;font-variant-numeric:tabular-nums}
+.review{width:100%;border-collapse:collapse;font-size:14.5px;color:#222}
+.review th,.review td{border-bottom:1px solid var(--line);padding:6px 8px;text-align:left;vertical-align:top}
+.review td.ok{color:var(--ok);font-weight:700} .review td.bad{color:var(--bad);font-weight:700}
+details{border:1px solid var(--line);border-radius:3px;padding:8px 12px;margin:10px 0;background:#fff}
+details summary{cursor:pointer;font-weight:600;color:var(--ink)}
+.transcript p{margin:0 0 .4em;font-size:15px}
+.files{font-family:Consolas,'Courier New',monospace;font-size:13px;background:var(--gray);border:1px solid var(--line);padding:8px 10px;border-radius:3px;max-height:220px;overflow:auto;white-space:pre-wrap;word-break:break-all}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.modal{position:fixed;inset:0;background:rgba(20,28,38,.55);display:flex;align-items:center;justify-content:center;padding:16px;z-index:50}
+.modal .box{background:#fff;border-radius:6px;max-width:480px;width:100%;padding:20px 22px;border:1px solid var(--line);color:#222}
+.pause{position:fixed;inset:0;background:rgba(231,233,236,.97);display:flex;align-items:center;justify-content:center;z-index:40;flex-direction:column;gap:14px}
+</style>
+</head>
+<body>
+<div id="app">
+  <div class="window">
+    <header class="bar">
+      <div class="bar-title" id="barTitle">CELPIP-style Mock Exam</div>
+      <div class="bar-right">
+        <button class="btn" id="pauseBtn" hidden>Pause</button>
+        <div class="timer" id="timer" hidden></div>
+        <button class="next" id="nextBtn" hidden>NEXT</button>
+      </div>
+    </header>
+    <main id="stage"></main>
+  </div>
+  <footer class="foot"><span id="footWho">Unofficial practice exam. Original questions in the CELPIP-General format.</span><span id="footSave"></span></footer>
+</div>
+<div class="modal" id="modal" hidden><div class="box"><div id="modalBody"></div><div class="row" style="justify-content:flex-end;margin-top:16px"><button class="btn" id="modalNo">Go back</button><button class="btn-blue" id="modalYes">Continue</button></div></div></div>
+<div class="pause" id="pauseLayer" hidden><h2>Paused</h2><p class="muted">The timer is stopped. Practice mode only.</p><button class="btn-blue" id="resumeBtn">Resume</button></div>
+
+<!-- Test content files. Add more tests by dropping mock_test_B.js (and so on) into the tests folder. -->
+<script src="tests/mock_test_A.js"></script>
+<script src="tests/mock_test_B.js" onerror="this.remove()"></script>
+<script src="tests/mock_test_C.js" onerror="this.remove()"></script>
+<script src="tests/mock_test_D.js" onerror="this.remove()"></script>
+<script src="tests/mock_test_E.js" onerror="this.remove()"></script>
+<script src="tests/mock_test_F.js" onerror="this.remove()"></script>
+<script src="tests/mock_test_G.js" onerror="this.remove()"></script>
+<script src="tests/mock_test_H.js" onerror="this.remove()"></script>
+<script src="tests/mock_test_I.js" onerror="this.remove()"></script>
+<script src="tests/mock_test_J.js" onerror="this.remove()"></script>
+<script src="tests/mock_test_K.js" onerror="this.remove()"></script>
+<script>
+'use strict';
+/* ============================== utilities ============================== */
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+/* Safe lookup for timers and audio callbacks that may fire after the screen has changed. */
+const $s = s => document.querySelector(s) || { style: {}, classList: { add() { }, remove() { }, toggle() { } }, dataset: {} };
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const pad = n => String(n).padStart(2, '0');
+const stampOf = (d = new Date()) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}_${pad(d.getHours())}-${pad(d.getMinutes())}-${pad(d.getSeconds())}`;
+const clockOf = (d = new Date()) => `${pad(d.getHours())}-${pad(d.getMinutes())}-${pad(d.getSeconds())}`;
+const niceTime = (d = new Date()) => d.toLocaleString('en-CA', { dateStyle: 'medium', timeStyle: 'medium' });
+const safeName = n => (n || '').trim().replace(/[^A-Za-z0-9]+/g, '_').replace(/^_+|_+$/g, '') || 'Candidate';
+const wc = t => { const m = String(t || '').trim().match(/\S+/g); return m ? m.length : 0; };
+const fmtLong = sec => { sec = Math.max(0, Math.ceil(sec)); const m = Math.floor(sec / 60), s = sec % 60; return (m ? `${m} minute${m !== 1 ? 's' : ''} ` : '') + `${s} second${s !== 1 ? 's' : ''}`; };
+const fmtShort = sec => { sec = Math.max(0, Math.ceil(sec)); return `${Math.floor(sec / 60)}:${pad(sec % 60)}`; };
+const stripHtml = h => { const d = document.createElement('div'); d.innerHTML = h; return d.textContent.replace(/\s+\n/g, '\n').trim(); };
+function sleep(ms, token) { return new Promise(r => { const t0 = Date.now(); const iv = setInterval(() => { if ((token && token.cancelled) || Date.now() - t0 >= ms) { clearInterval(iv); r(); } }, 40); }); }
+function hash(str) { let h = 2166136261; for (let i = 0; i < str.length; i++) { h ^= str.charCodeAt(i); h = Math.imul(h, 16777619); } return h >>> 0; }
+function rng(seed) { return () => { seed = (seed + 0x6D2B79F5) | 0; let t = Math.imul(seed ^ (seed >>> 15), 1 | seed); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
+/* Authoring rule: correct option is first. Shuffle with a seed so the screen order is stable between visits. */
+function prepQ(q) {
+  if (q._prep) return q;
+  if (q.fixed) { q.opts = ['A', 'B', 'C', 'D', 'E (not given in any paragraph)']; q.correct = 'ABCDE'.indexOf(q.a); }
+  else {
+    const opts = q.o.map((t, i) => ({ t, ok: i === 0 })); const r = rng(hash((TEST ? TEST.id : 'X') + '|' + q.id));
+    for (let i = opts.length - 1; i > 0; i--) { const j = Math.floor(r() * (i + 1)); [opts[i], opts[j]] = [opts[j], opts[i]]; }
+    q.opts = opts.map(o => o.t); q.correct = opts.findIndex(o => o.ok);
+  }
+  q._prep = true; return q;
+}
+const qNum = id => Number(String(id).split('.').pop());
+
+/* ============================== computer voices (Listening audio) ============================== */
+const Voice = {
+  list: [], ok: false,
+  async init() {
+    if (!('speechSynthesis' in window)) return;
+    let v = speechSynthesis.getVoices();
+    if (!v.length) { await new Promise(r => { let done = false; const fin = () => { if (!done) { done = true; r(); } }; speechSynthesis.addEventListener('voiceschanged', fin, { once: true }); setTimeout(fin, 2500); }); v = speechSynthesis.getVoices(); }
+    this.list = v.filter(x => /^en/i.test(x.lang) && !/\bAna\b|Maisie|child|kid/i.test(x.name)); this.ok = this.list.length > 0;
+  },
+  gender(v) {
+    const n = v.name;
+    if (/female|zira|jenny|aria|hazel|susan|samantha|linda|heera|catherine|natasha|clara|emma|\bava\b|allison|karen|moira|tessa|fiona|libby|sonia|michelle|joanna|kimberly|salli|ivy|serena|victoria|google us english|jane|sara|nancy|amber|ashley|cora|elizabeth|monica|natasha|clara|leah|molly|emily/i.test(n)) return 'f';
+    if (/male|david|mark|george|guy|daniel|ryan|james|liam|christopher|eric|brian|matthew|justin|joey|fred|alex|thomas|william|richard|sean|connor|andrew|roger|steffan|davis|jason|tony|brandon|jacob/i.test(n)) return 'm';
+    return '?';
+  },
+  rank(v) {
+    let s = 0;
+    if (/en[-_]CA/i.test(v.lang)) s += 30; else if (/en[-_]US/i.test(v.lang)) s += 25; else if (/en[-_]GB/i.test(v.lang)) s += 12; else s += 6;
+    if (/natural|neural/i.test(v.name)) s += 60; else if (/online/i.test(v.name)) s += 40;
+    if (/google/i.test(v.name)) s += 8;
+    return s;
+  },
+  natural() { return this.list.filter(v => /natural|neural/i.test(v.name)); },
+  canadian() { return this.natural().filter(v => /en[-_]CA/i.test(v.lang)); },
+  narrator() { const en = [...this.list].sort((a, b) => this.rank(b) - this.rank(a)); return { voice: en[0] || null, pitch: 1, rate: 1 }; },
+  assign(cast) {
+    const en = [...this.list].sort((a, b) => this.rank(b) - this.rank(a));
+    const pool = { f: en.filter(v => this.gender(v) === 'f'), m: en.filter(v => this.gender(v) === 'm') };
+    const used = { f: 0, m: 0 }, out = {};
+    Object.entries(cast).forEach(([k, c]) => {
+      const g = c.g === 'm' ? 'm' : 'f';
+      const list = pool[g].length ? pool[g] : en;
+      const i = used[g]++;
+      const v = list.length ? list[i % list.length] : null;
+      let pitch = 1;
+      if (!pool[g].length) pitch = g === 'm' ? 0.72 : 1.25;
+      if (list.length && i >= list.length) pitch += (i % 2 ? -0.15 : 0.15);
+      out[k] = { voice: v, pitch, rate: v && /natural|neural/i.test(v.name) ? 1 : 0.96 };
+    });
+    return out;
+  },
+  chunk(text) {
+    if (text.length <= 190) return [text];
+    return (text.match(/[^.!?]+[.!?]+["']?\s*|[^.!?]+$/g) || [text]).map(s => s.trim()).filter(Boolean);
+  },
+  say(text, cfg, token) {
+    return new Promise(res => {
+      let fin = false, started = false, idle = 0;
+      const end = () => { if (fin) return; fin = true; clearInterval(poll); clearTimeout(wd); res(); };
+      const u = new SpeechSynthesisUtterance(text);
+      if (cfg && cfg.voice) { u.voice = cfg.voice; u.lang = cfg.voice.lang; } else u.lang = 'en-CA';
+      u.pitch = cfg ? cfg.pitch : 1; u.rate = cfg ? cfg.rate : 1;
+      u.onend = end; u.onerror = end; this._keep = u;
+      speechSynthesis.speak(u);
+      const poll = setInterval(() => {
+        if (token && token.cancelled) return end();
+        if (speechSynthesis.speaking || speechSynthesis.pending) { started = true; idle = 0; }
+        else if (started || ++idle > 14) end();
+      }, 250);
+      const wd = setTimeout(end, (wc(text) / 1.3 + 8) * 1000);
+    });
+  },
+  async playLines(lines, cast, hooks, token) {
+    const map = this.assign(cast);
+    const total = lines.reduce((s, l) => s + wc(l[1]), 0) || 1; let done = 0;
+    for (const [k, text] of lines) {
+      if (token.cancelled) return;
+      hooks.onLine && hooks.onLine(k, text);
+      for (const ch of this.chunk(text)) {
+        if (token.cancelled) return;
+        if (this.ok) await this.say(ch, map[k], token); else await sleep(wc(ch) / 2.6 * 1000, token);
+        done += wc(ch); hooks.onProgress && hooks.onProgress(done / total);
+      }
+      hooks.onLineEnd && hooks.onLineEnd(k);
+      await sleep(320, token);
+    }
+  },
+  cancel() { try { speechSynthesis.cancel(); } catch (_) { } }
+};
+
+/* ============================== recorded media (optional) ==============================
+   If a real recording exists it is used instead of the computer voice:
+   tests/audio/<TEST>/<key>.mp3  for a listening recording (key = LP-0, L1-0, L1-1, L1-2, L2-0 ... L6-0)
+   tests/audio/<TEST>/L5-0.mp4   for the Part 5 video
+   tests/audio/<TEST>/<question id>.mp3 for a read-aloud question (LP.1, L1.1 ... L3.6) */
+const Media = {
+  missing: new Set(),
+  play(name, exts, holder, token, onProgress) {
+    return new Promise(async res => {
+      for (const ext of exts) {
+        const src = `tests/audio/${TEST.id}/${name}.${ext}`;
+        if (this.missing.has(src)) continue;
+        const isVid = ext === 'mp4' || ext === 'webm';
+        const el = document.createElement(isVid ? 'video' : 'audio');
+        el.preload = 'auto'; if (isVid) { el.playsInline = true; el.style.cssText = 'display:block;width:100%;height:auto;background:#000'; }
+        const ok = await new Promise(r => { el.oncanplay = () => r(true); el.onerror = () => r(false); setTimeout(() => r(false), 3000); el.src = src; });
+        if (!ok) { this.missing.add(src); continue; }
+        if (token.cancelled) return res('cancelled');
+        if (isVid && holder) { holder.innerHTML = ''; holder.appendChild(el); }
+        token.media = el;
+        el.ontimeupdate = () => { if (onProgress && el.duration) onProgress(el.currentTime / el.duration); };
+        const out = await new Promise(r => {
+          const iv = setInterval(() => { if (token.cancelled) { clearInterval(iv); try { el.pause(); } catch (_) { } r('cancelled'); } }, 200);
+          el.onended = () => { clearInterval(iv); r('played'); };
+          el.onerror = () => { clearInterval(iv); r('played'); };
+          el.play().catch(() => { clearInterval(iv); r('blocked'); });
+        });
+        return res(out);
+      }
+      res('missing');
+    });
+  }
+};
+
+/* ============================== animated scene (the "video") ============================== */
+const Scene = {
+  c: null, x: null, raf: 0, cast: [], setting: 'office', speaker: null, t0: 0,
+  start(canvas, setting, castObj, board) {
+    this.stop(); this.c = canvas; this.board = board || '';
+    const dpr = Math.min(2, window.devicePixelRatio || 1);
+    canvas.width = 800 * dpr; canvas.height = 360 * dpr;
+    this.x = canvas.getContext('2d'); this.x.setTransform(dpr, 0, 0, dpr, 0, 0);
+    this.setting = setting; this.speaker = null;
+    const arr = Object.entries(castObj).map(([k, v]) => Object.assign({ key: k }, v));
+    const n = arr.length;
+    arr.forEach((p, i) => { p.px = n === 1 ? 400 : n === 2 ? (i ? 540 : 260) : 175 + i * 225; p.mouth = 0; p.ph = Math.random() * 1000; p.blink = 2600 + Math.random() * 2400; });
+    this.cast = arr; this.t0 = performance.now();
+    const reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const loop = t => { this.draw(t - this.t0, reduce); this.raf = requestAnimationFrame(loop); };
+    this.raf = requestAnimationFrame(loop);
+  },
+  stop() { if (this.raf) cancelAnimationFrame(this.raf); this.raf = 0; },
+  still(canvas, setting, castObj, board) { const keep = { c: this.c, x: this.x, cast: this.cast, setting: this.setting, raf: this.raf, board: this.board }; this.raf = 0; this.start(canvas, setting, castObj, board); this.draw(0, true); this.stop(); Object.assign(this, keep); },
+  rr(x, X, Y, W, H, R) { x.beginPath(); x.moveTo(X + R, Y); x.arcTo(X + W, Y, X + W, Y + H, R); x.arcTo(X + W, Y + H, X, Y + H, R); x.arcTo(X, Y + H, X, Y, R); x.arcTo(X, Y, X + W, Y, R); x.closePath(); },
+  draw(t, reduce) {
+    const x = this.x; if (!x) return;
+    x.clearRect(0, 0, 800, 360);
+    this.bg(x, t);
+    this.cast.forEach(p => this.person(x, p, reduce ? 0 : t));
+    this.fg(x, t);
+  },
+  bg(x, t) {
+    const s = this.setting;
+    if (s === 'office') {
+      x.fillStyle = '#dde6ee'; x.fillRect(0, 0, 800, 360);
+      x.fillStyle = '#9cc8e8'; x.fillRect(40, 36, 200, 150); x.strokeStyle = '#f7f9fb'; x.lineWidth = 8; x.strokeRect(40, 36, 200, 150);
+      x.beginPath(); x.moveTo(140, 36); x.lineTo(140, 186); x.stroke();
+      x.fillStyle = '#c9d6e3'; x.fillRect(600, 60, 170, 12); x.fillRect(600, 130, 170, 12);
+      ['#2b69b0', '#c0504d', '#f0b429', '#2d7a4c', '#7d3c98', '#5a6775'].forEach((c, i) => { x.fillStyle = c; x.fillRect(612 + i * 24, 76, 18, 54); });
+      x.fillStyle = '#4f9a45'; x.beginPath(); x.arc(330, 120, 26, 0, 7); x.fill(); x.fillStyle = '#a0522d'; x.fillRect(318, 140, 24, 30);
+    } else if (s === 'store') {
+      x.fillStyle = '#f2e8da'; x.fillRect(0, 0, 800, 360);
+      for (let r = 0; r < 3; r++) {
+        x.fillStyle = '#b48a62'; x.fillRect(30, 60 + r * 70, 740, 8);
+        for (let i = 0; i < 18; i++) { x.fillStyle = ['#2b69b0', '#c0504d', '#3a7d44', '#f0b429', '#7d3c98', '#e67e22'][(i + r) % 6]; x.fillRect(40 + i * 41, 22 + r * 70, 30, 38); }
+      }
+      x.fillStyle = '#5a3d2b'; x.fillRect(40, 250, 120, 40);
+    } else if (s === 'studio') {
+      x.fillStyle = '#353e49'; x.fillRect(0, 0, 800, 360);
+      x.fillStyle = '#2d343e'; for (let i = 0; i < 20; i++) for (let j = 0; j < 7; j++) if ((i + j) % 2) x.fillRect(i * 40, j * 40, 40, 40);
+      const on = Math.floor(t / 900) % 2 === 0;
+      x.fillStyle = on ? '#e2453a' : '#9b2d26'; this.rr(x, 340, 22, 120, 34, 6); x.fill();
+      x.fillStyle = '#fff'; x.font = '700 18px "Fira Sans", Arial'; x.textAlign = 'center'; x.fillText('ON AIR', 400, 46);
+    } else if (s === 'news') {
+      const g = x.createLinearGradient(0, 0, 0, 360); g.addColorStop(0, '#173a63'); g.addColorStop(1, '#2d659f'); x.fillStyle = g; x.fillRect(0, 0, 800, 360);
+      x.fillStyle = 'rgba(255,255,255,.12)';
+      [[20, 140, 50], [80, 110, 40], [130, 160, 60], [600, 120, 45], [655, 90, 50], [715, 150, 70]].forEach(([X, Y, W]) => x.fillRect(X, Y, W, 200));
+      x.fillStyle = '#e8eef5'; x.font = '700 20px "Fira Sans", Arial'; x.textAlign = 'left'; x.fillText('CITY NEWS', 28, 42);
+      x.fillStyle = '#e2453a'; x.fillRect(28, 50, 98, 4);
+    } else if (s === 'meeting') {
+      x.fillStyle = '#ebe5dc'; x.fillRect(0, 0, 800, 360);
+      x.fillStyle = '#ffffff'; x.fillRect(250, 26, 300, 118); x.strokeStyle = '#9aa5b1'; x.lineWidth = 4; x.strokeRect(250, 26, 300, 118);
+      x.fillStyle = '#2b69b0'; x.font = '700 18px "Fira Sans", Arial'; x.textAlign = 'center'; x.fillText(this.board || 'Agenda', 400, 60);
+      x.strokeStyle = '#c0504d'; x.lineWidth = 3; x.beginPath(); x.moveTo(290, 90); x.lineTo(380, 90); x.moveTo(290, 112); x.lineTo(500, 112); x.stroke();
+    } else if (s === 'classroom') {
+      x.fillStyle = '#efe6cf'; x.fillRect(0, 0, 800, 360);
+      x.fillStyle = '#2f5d47'; x.fillRect(160, 24, 480, 120); x.strokeStyle = '#8b6b4a'; x.lineWidth = 8; x.strokeRect(160, 24, 480, 120);
+      x.fillStyle = '#eef3ea'; x.font = '600 22px "Fira Sans", Arial'; x.textAlign = 'center'; x.fillText(this.board || 'Today\'s topic', 400, 92);
+    } else {
+      const g = x.createLinearGradient(0, 0, 0, 260); g.addColorStop(0, '#9fd3f2'); g.addColorStop(1, '#dff1fb'); x.fillStyle = g; x.fillRect(0, 0, 800, 360);
+      x.fillStyle = '#f6d55c'; x.beginPath(); x.arc(700, 60, 30, 0, 7); x.fill();
+      x.fillStyle = '#86c06c'; x.fillRect(0, 230, 800, 130);
+      x.fillStyle = '#7a5233'; x.fillRect(80, 120, 18, 120); x.fillStyle = '#4f9a45'; x.beginPath(); x.arc(89, 110, 55, 0, 7); x.fill();
+    }
+  },
+  fg(x) {
+    const s = this.setting;
+    const desk = { office: '#a47b55', store: '#6e7f8e', studio: '#262b32', news: '#1b2a3c', meeting: '#7a5c43', classroom: '#8b6b4a', outdoor: '#5d9a4c' }[s] || '#777';
+    if (s === 'outdoor') { x.fillStyle = desk; this.rr(x, -20, 290, 840, 120, 40); x.fill(); }
+    else { x.fillStyle = desk; x.fillRect(0, 288, 800, 72); x.fillStyle = 'rgba(255,255,255,.18)'; x.fillRect(0, 288, 800, 6); }
+    if (s === 'news') { x.fillStyle = '#e2453a'; x.fillRect(0, 320, 800, 6); }
+    if (s === 'studio') this.cast.forEach(p => { x.strokeStyle = '#111'; x.lineWidth = 5; x.beginPath(); x.moveTo(p.px + 62, 290); x.lineTo(p.px + 40, 205); x.stroke(); x.fillStyle = '#555'; this.rr(x, p.px + 28, 182, 22, 34, 10); x.fill(); });
+    if (this.labels) this.cast.forEach(p => {
+      const on = this.speaker === p.key; const w = Math.max(110, p.name.length * 9 + 26);
+      x.fillStyle = on ? '#2b69b0' : 'rgba(255,255,255,.92)'; this.rr(x, p.px - w / 2, 306, w, 28, 4); x.fill();
+      x.fillStyle = on ? '#fff' : '#1c2631'; x.font = '600 15px "Fira Sans", Arial'; x.textAlign = 'center'; x.fillText(p.name, p.px, 325);
+    });
+  },
+  person(x, p, t) {
+    const on = this.speaker === p.key;
+    const target = on && t ? 0.3 + 0.7 * Math.abs(Math.sin(t / 82 + p.ph)) * (0.55 + 0.45 * Math.sin(t / 240 + p.ph)) : 0;
+    p.mouth += (target - p.mouth) * 0.35;
+    const bob = on && t ? Math.sin(t / 320) * 2.2 : 0;
+    const X = p.px, Y = 150 + bob, skin = p.skin || '#e0b48f', hair = p.hair || '#3b2a20';
+    if (p.style === 'long') { x.fillStyle = hair; this.rr(x, X - 40, Y - 30, 80, 100, 26); x.fill(); }
+    x.fillStyle = p.shirt || '#3d7cc9'; this.rr(x, X - 62, 205 + bob * .4, 124, 170, 30); x.fill();
+    x.fillStyle = skin; x.fillRect(X - 12, Y + 22, 24, 36);
+    x.beginPath(); x.moveTo(X - 14, 206 + bob * .4); x.lineTo(X, 228 + bob * .4); x.lineTo(X + 14, 206 + bob * .4); x.fill();
+    x.beginPath(); x.arc(X, Y, 36, 0, Math.PI * 2); x.fill();
+    x.fillStyle = hair;
+    if (p.style === 'bun') { x.beginPath(); x.arc(X, Y - 40, 15, 0, 7); x.fill(); }
+    if (p.style === 'curly') { for (let i = 0; i < 9; i++) { const a = Math.PI + i * Math.PI / 8; x.beginPath(); x.arc(X + Math.cos(a) * 36, Y - 4 + Math.sin(a) * 36, 12, 0, 7); x.fill(); } }
+    else if (p.style !== 'bald') { x.beginPath(); x.arc(X, Y - 3, 38, Math.PI * 1.02, Math.PI * 1.98); x.quadraticCurveTo(X + 10, Y - 26, X - 37, Y - 8); x.fill(); }
+    else { x.beginPath(); x.arc(X - 33, Y - 4, 7, 0, 7); x.arc(X + 33, Y - 4, 7, 0, 7); x.fill(); }
+    const blink = t && ((t + p.ph) % p.blink) < 130;
+    x.fillStyle = '#1a1a1a';
+    if (blink) { x.fillRect(X - 17, Y - 4, 10, 2); x.fillRect(X + 7, Y - 4, 10, 2); }
+    else { x.beginPath(); x.arc(X - 12, Y - 4, 3.6, 0, 7); x.arc(X + 12, Y - 4, 3.6, 0, 7); x.fill(); }
+    x.strokeStyle = 'rgba(0,0,0,.35)'; x.lineWidth = 2; x.beginPath(); x.moveTo(X - 18, Y - 14); x.lineTo(X - 7, Y - 15); x.moveTo(X + 7, Y - 15); x.lineTo(X + 18, Y - 14); x.stroke();
+    if (p.mouth > 0.05) { x.fillStyle = '#5b1f1f'; x.beginPath(); x.ellipse(X, Y + 16, 8, 1.5 + p.mouth * 8, 0, 0, Math.PI * 2); x.fill(); }
+    else { x.strokeStyle = '#6b2b2b'; x.lineWidth = 2.5; x.beginPath(); x.arc(X, Y + 9, 10, 0.2 * Math.PI, 0.8 * Math.PI); x.stroke(); }
+    if (on && this.labels) { x.strokeStyle = 'rgba(111,176,255,.85)'; x.lineWidth = 3; x.beginPath(); x.arc(X, Y, 46, 0, Math.PI * 2); x.stroke(); }
+  }
+};
+
+/* ============================== microphone ============================== */
+const Mic = {
+  stream: null, ctx: null, analyser: null,
+  async ensure() {
+    if (this.stream && this.stream.getTracks().some(t => t.readyState === 'live')) return this.stream;
+    this.stream = await navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true } });
+    try { this.ctx = new (window.AudioContext || window.webkitAudioContext)(); const src = this.ctx.createMediaStreamSource(this.stream); this.analyser = this.ctx.createAnalyser(); this.analyser.fftSize = 512; src.connect(this.analyser); } catch (_) { }
+    return this.stream;
+  },
+  live() { return !!(this.stream && this.stream.getTracks().some(t => t.readyState === 'live')); },
+  level() { if (!this.analyser) return 0; const a = new Uint8Array(this.analyser.fftSize); this.analyser.getByteTimeDomainData(a); let s = 0; for (const v of a) { const d = (v - 128) / 128; s += d * d; } return Math.min(1, Math.sqrt(s / a.length) * 5); },
+  record(useSR) {
+    const mime = ['audio/webm;codecs=opus', 'audio/webm', 'audio/ogg;codecs=opus', 'audio/mp4', ''].find(m => !m || (window.MediaRecorder && MediaRecorder.isTypeSupported(m)));
+    const rec = new MediaRecorder(this.stream, mime ? { mimeType: mime } : undefined);
+    const chunks = []; rec.ondataavailable = e => { if (e.data && e.data.size) chunks.push(e.data); }; rec.start(1000);
+    const finals = []; let interim = '', active = true, sr = null;
+    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (useSR && SR) {
+      try {
+        sr = new SR(); sr.lang = 'en-CA'; sr.continuous = true; sr.interimResults = true;
+        sr.onresult = e => { interim = ''; for (let i = e.resultIndex; i < e.results.length; i++) { const r = e.results[i]; if (r.isFinal) finals.push(r[0].transcript.trim()); else interim += r[0].transcript; } };
+        sr.onerror = () => { }; sr.onend = () => { if (active) { try { sr.start(); } catch (_) { } } };
+        sr.start();
+      } catch (_) { sr = null; }
+    }
+    const t0 = Date.now();
+    return {
+      stop: () => new Promise(res => {
+        active = false; try { sr && sr.stop(); } catch (_) { }
+        const finish = () => setTimeout(() => res({ blob: new Blob(chunks, { type: rec.mimeType || 'audio/webm' }), transcript: (finals.join(' ') + ' ' + interim).replace(/\s+/g, ' ').trim(), mime: rec.mimeType || 'audio/webm', seconds: Math.round((Date.now() - t0) / 1000), srUsed: !!sr }), 600);
+        if (rec.state !== 'inactive') { rec.onstop = finish; rec.stop(); } else finish();
+      })
+    };
+  }
+};
+let beepCtx = null;
+function beep() { try { beepCtx = beepCtx || new (window.AudioContext || window.webkitAudioContext)(); const o = beepCtx.createOscillator(), g = beepCtx.createGain(); o.frequency.value = 880; g.gain.value = 0.12; o.connect(g); g.connect(beepCtx.destination); o.start(); o.stop(beepCtx.currentTime + 0.3); } catch (_) { } }
+
+/* Ask for every microphone permission up front, inside the Start click, so nothing pops up during a recording. */
+function primeSR() {
+  return new Promise(res => {
+    const SR = window.SpeechRecognition || window.webkitSpeechRecognition; if (!SR) return res('none');
+    let done = false; const fin = v => { if (done) return; done = true; try { r.abort(); } catch (_) { } res(v); };
+    let r; try { r = new SR(); r.lang = 'en-CA'; r.onstart = () => setTimeout(() => fin('ok'), 400); r.onerror = e => fin(e.error === 'not-allowed' || e.error === 'service-not-allowed' ? 'denied' : 'ok'); r.onend = () => fin('ok'); r.start(); } catch (_) { return res('none'); }
+    setTimeout(() => fin('ok'), 5000);
+  });
+}
+async function askPermissionsUpFront(needMic, transcribe) {
+  if (!needMic) return { mic: true, transcribe };
+  try { await Mic.ensure(); } catch (_) { return { mic: false, transcribe: false }; }
+  if (transcribe) { const s = await primeSR(); if (s !== 'ok') transcribe = false; }
+  return { mic: true, transcribe };
+}
+
+/* ============================== saving to the Celpip test folder ============================== */
+function idbOpen() { return new Promise((res, rej) => { const r = indexedDB.open('rowe-celpip-mock', 1); r.onupgradeneeded = () => r.result.createObjectStore('kv'); r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error); }); }
+async function idbGet(k) { const db = await idbOpen(); return new Promise((res, rej) => { const q = db.transaction('kv').objectStore('kv').get(k); q.onsuccess = () => res(q.result); q.onerror = () => rej(q.error); }); }
+async function idbSet(k, v) { const db = await idbOpen(); return new Promise((res, rej) => { const q = db.transaction('kv', 'readwrite').objectStore('kv').put(v, k); q.onsuccess = () => res(); q.onerror = () => rej(q.error); }); }
+
+const Store = {
+  root: null, dir: null, mode: 'none', queue: Promise.resolve(), written: [],
+  supported: () => typeof window.showDirectoryPicker === 'function',
+  async load() { try { this.root = (await idbGet('root')) || null; } catch (_) { this.root = null; } },
+  async pick() { const h = await window.showDirectoryPicker({ id: 'celpip-mock', mode: 'readwrite', startIn: 'documents' }); this.root = h; try { await idbSet('root', h); } catch (_) { } return h; },
+  async permitted(ask) {
+    if (!this.root) return false; const o = { mode: 'readwrite' };
+    try { if ((await this.root.queryPermission(o)) === 'granted') return true; if (!ask) return false; return (await this.root.requestPermission(o)) === 'granted'; } catch (_) { return false; }
+  },
+  async open(folder) {
+    if (!(await this.permitted(true))) { this.mode = 'download'; return false; }
+    try {
+      let base = this.root;
+      if (base.name.toLowerCase() !== 'responses') base = await base.getDirectoryHandle('responses', { create: true });
+      this.dir = await base.getDirectoryHandle(folder, { create: true }); this.mode = 'folder'; return true;
+    } catch (e) { console.warn(e); this.mode = 'download'; return false; }
+  },
+  where() { return this.mode === 'folder' ? `${this.root.name === 'responses' ? '' : this.root.name + '\\'}responses\\${STATE.folder}` : 'your Downloads folder'; },
+  /* important=false files (autosave) are skipped when there is no folder, so Downloads does not fill up. */
+  save(name, data, important = true) {
+    this.queue = this.queue.then(async () => {
+      const blob = data instanceof Blob ? data : new Blob([data], { type: name.endsWith('.json') ? 'application/json' : 'text/plain;charset=utf-8' });
+      if (this.mode === 'folder') {
+        try { const fh = await this.dir.getFileHandle(name, { create: true }); const w = await fh.createWritable(); await w.write(blob); await w.close(); this.note(name); return true; }
+        catch (e) { console.warn('Folder write failed', e); }
+      }
+      if (!important) return false;
+      try { const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = name; document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 5000); this.note(name, true); return true; }
+      catch (e) { console.warn(e); return false; }
+    }).catch(e => console.warn(e));
+    return this.queue;
+  },
+  note(name, dl) {
+    if (!/autosave-latest/.test(name) && !this.written.includes(name)) this.written.push(name);
+    STATE.savedFiles = this.written.slice(); STATE.lastSave = new Date().toISOString();
+    const f = $('#footSave'); if (f) { f.className = 'saved'; f.textContent = `Saved ${new Date().toLocaleTimeString('en-CA')} ${dl ? '(downloaded)' : 'to ' + this.where()}: ${name}`; }
+  }
+};
+const fileName = (label, ext) => `${STATE.folder}__${label}__saved-${clockOf()}.${ext}`;
+
+/* ============================== state ============================== */
+const LS_KEY = 'rowe-celpip-mock.session';
+let TEST = null, SCREENS = [], STATE = null, CUR = {}, TIMER = null, PAUSED = false;
+const AUDIO_URLS = {};
+function newState(o) {
+  const now = new Date(); const safe = safeName(o.name);
+  return { v: 1, name: o.name.trim(), safe, testId: o.testId, mode: o.mode, sections: o.sections, transcribe: o.transcribe, captions: o.mode === 'practice',
+    startedAt: now.toISOString(), stamp: stampOf(now), folder: `${safe}_${stampOf(now)}`, idx: 0, answers: {}, writing: {}, speaking: {}, timeLeft: {}, audioDone: {}, log: [], finished: false, savedFiles: [] };
+}
+let persistT = 0, dirty = false;
+function persist(now) {
+  dirty = true; if (!STATE) return;
+  const run = () => { try { localStorage.setItem(LS_KEY, JSON.stringify(STATE)); } catch (_) { } };
+  clearTimeout(persistT); if (now) run(); else persistT = setTimeout(run, 600);
+}
+function logEv(ev) { if (STATE) { STATE.log.push({ t: new Date().toISOString(), ev }); persist(); } }
+setInterval(() => { if (STATE && !STATE.finished && dirty && Store.mode === 'folder') { dirty = false; Store.save(`${STATE.folder}__autosave-latest.json`, JSON.stringify(STATE, null, 2), false); } }, 30000);
+
+/* ============================== exam structure ============================== */
+function buildScreens() {
+  const T = TEST, S = [], sel = STATE.sections;
+  S.push({ type: 'check', title: 'Sound and Microphone Check' });
+  if (sel.L) {
+    S.push({ type: 'info', sec: 'L', title: 'Listening Test', html: '<h2>Listening Test Instructions</h2><ul><li>The Listening Test has 6 parts, plus one unscored practice task.</li><li>Each recording plays <b>once</b>. Take notes on paper while you listen.</li><li>Parts 1 to 3: after each recording, every question is <b>read aloud once</b>, one question per screen. Choose from the four answers on the screen. You have 30 seconds after each question.</li><li>Parts 4 to 6: all the questions for the part appear together on one screen, with one timer.</li><li>Part 5 is a video. The speakers\' names are not shown, so keep track of them by where they sit.</li><li>When a timer reaches zero, the test moves on automatically. You cannot go back.</li></ul><p>Click <b>NEXT</b> to begin the practice task.</p>' });
+    const p = T.listening.practice;
+    S.push({ type: 'audio', sec: 'L', title: 'Listening Practice Task', part: p, seg: p.segments[0], key: 'LP-0', practice: true });
+    p.segments[0].questions.forEach((q, i, a) => S.push({ type: 'lq', sec: 'L', title: 'Listening Practice Task', q, part: p, num: i + 1, of: a.length, practice: true, group: { id: q.id, seconds: 30, waitAudio: true } }));
+    T.listening.parts.forEach((part, pi) => {
+      const total = part.segments.reduce((s, g) => s + g.questions.length, 0); let n = 0;
+      S.push({ type: 'info', sec: 'L', title: 'Listening ' + part.title, html: `<h2>${esc(part.title)}</h2><p>${esc(part.instructions)}</p>${part.video ? '<p class="muted">This part is a video. The speakers are not named on screen.</p>' : ''}<p>Click <b>NEXT</b> when you are ready. The ${part.video ? 'video' : 'recording'} will start immediately.</p>` });
+      part.segments.forEach((seg, si) => {
+        const sub = part.segments.length > 1 ? ` (Section ${si + 1} of ${part.segments.length})` : '';
+        S.push({ type: 'audio', sec: 'L', title: 'Listening ' + part.title + sub, part, seg, key: `${part.id}-${si}` });
+        if (pi < 3) seg.questions.forEach(q => { n++; S.push({ type: 'lq', sec: 'L', title: 'Listening ' + part.title, q, part, num: n, of: total, group: { id: q.id, seconds: 30, waitAudio: true } }); });
+        else S.push({ type: 'lset', sec: 'L', title: 'Listening ' + part.title, part, seg, group: { id: `${part.id}-q`, seconds: seg.questions.length * 30 + 60 } });
+      });
+    });
+    S.push({ type: 'end', sec: 'L', title: 'End of Listening Test' });
+  }
+  if (sel.R) {
+    S.push({ type: 'info', sec: 'R', title: 'Reading Test', html: '<h2>Reading Test Instructions</h2><ul><li>The Reading Test has 4 parts.</li><li>Read the passage on the left and answer the questions on the right using the drop-down menus.</li><li>Each part has its own timer. When it reaches zero, the test moves to the next part automatically.</li><li>You cannot go back to a previous part.</li></ul>' });
+    T.reading.parts.forEach(part => S.push({ type: 'reading', sec: 'R', title: 'Reading ' + part.title, part, group: { id: part.id, seconds: part.minutes * 60 } }));
+    S.push({ type: 'end', sec: 'R', title: 'End of Reading Test' });
+  }
+  if (sel.W) {
+    S.push({ type: 'info', sec: 'W', title: 'Writing Test', html: '<h2>Writing Test Instructions</h2><ul><li>The Writing Test has 2 tasks: an email (27 minutes) and a survey response (26 minutes).</li><li>There is no spell check, just like the real test. Leave time to reread your work.</li><li>Your writing is saved automatically every few seconds and saved to a file when each task ends.</li></ul>' });
+    T.writing.tasks.forEach(task => S.push({ type: 'writing', sec: 'W', title: 'Writing ' + task.title, task, group: { id: task.id, seconds: task.minutes * 60 } }));
+    S.push({ type: 'end', sec: 'W', title: 'End of Writing Test' });
+  }
+  if (sel.S) {
+    S.push({ type: 'info', sec: 'S', title: 'Speaking Test', html: '<h2>Speaking Test Instructions</h2><ul><li>The Speaking Test has 8 tasks, plus one unscored practice task.</li><li>Each task has <b>preparation time</b> and then <b>recording time</b>. A beep marks the start of recording.</li><li>Keep speaking until the recording time ends. Every response is saved as an audio file with your name and the time.</li><li>The screens move on automatically.</li></ul>' });
+    S.push({ type: 'speak', sec: 'S', title: 'Speaking Practice Task', task: T.speaking.practice, practice: true });
+    T.speaking.tasks.forEach(task => S.push({ type: 'speak', sec: 'S', title: 'Speaking ' + task.title, task }));
+    S.push({ type: 'end', sec: 'S', title: 'End of Speaking Test' });
+  }
+  S.push({ type: 'results', title: 'Test Complete' });
+  return S;
+}
+
+/* ============================== timer ============================== */
+function setTimerVisible(v) { $('#timer').hidden = !v; $('#pauseBtn').hidden = !(v && STATE && STATE.mode === 'practice'); }
+function syncTimer(sc) {
+  const g = sc.group;
+  if (!g) { TIMER = null; setTimerVisible(false); return; }
+  if (TIMER && TIMER.id === g.id) return;
+  if (g.waitAudio && STATE.timeLeft[g.id] == null) { TIMER = null; setTimerVisible(false); return; }
+  startTimer(g);
+}
+function startTimer(g) {
+  if (TIMER && TIMER.id === g.id) return;
+  const left = STATE.timeLeft[g.id] != null ? STATE.timeLeft[g.id] : g.seconds;
+  TIMER = { id: g.id, endAt: Date.now() + left * 1000 }; setTimerVisible(true); tick();
+}
+let lastPersistTick = 0;
+function tick() {
+  if (!TIMER || PAUSED) return;
+  const left = (TIMER.endAt - Date.now()) / 1000;
+  STATE.timeLeft[TIMER.id] = Math.max(0, left);
+  const t = $s('#timer'); t.innerHTML = `Time remaining: <b>${fmtLong(left)}</b>`; t.classList.toggle('low', left <= 60);
+  if (Date.now() - lastPersistTick > 4000) { lastPersistTick = Date.now(); persist(); }
+  if (left <= 0) { const id = TIMER.id; TIMER = null; logEv('time up: ' + id); timeUp(id); }
+}
+setInterval(tick, 250);
+function timeUp(gid) {
+  let last = -1; SCREENS.forEach((s, i) => { if (s.group && s.group.id === gid) last = i; });
+  toast('Time is up for this part. Moving on.'); go(last + 1);
+}
+function pause(on) {
+  if (!TIMER) return;
+  PAUSED = on; $('#pauseLayer').hidden = !on;
+  if (on) TIMER.left = (TIMER.endAt - Date.now()) / 1000; else TIMER.endAt = Date.now() + TIMER.left * 1000;
+}
+$('#pauseBtn').onclick = () => pause(true);
+$('#resumeBtn').onclick = () => pause(false);
+
+/* ============================== navigation ============================== */
+function setNext(show, label = 'NEXT', enabled = true) { const b = $('#nextBtn'); b.hidden = !show; b.textContent = label; b.disabled = !enabled; }
+$('#nextBtn').onclick = async () => {
+  const sc = SCREENS[STATE.idx]; if (!sc) return;
+  if (CUR.beforeNext && !(await CUR.beforeNext())) return;
+  go(STATE.idx + 1);
+};
+function leave() { const c = CUR; CUR = {}; if (c.cleanup) { try { c.cleanup(); } catch (e) { console.error(e); } } }
+function go(i) {
+  leave(); STATE.idx = Math.min(i, SCREENS.length - 1); persist(true); render();
+}
+function render() {
+  const sc = SCREENS[STATE.idx];
+  $('#barTitle').textContent = sc.title || 'Mock Exam';
+  $('#stage').scrollTop = 0;
+  syncTimer(sc);
+  ({ check: rCheck, info: rInfo, audio: rAudio, lq: rLQ, lset: rLSet, reading: rReading, writing: rWriting, speak: rSpeak, end: rEnd, results: rResults })[sc.type](sc);
+}
+/* Layout helpers: one full-width scrolling panel, or the two-panel test layout (each panel scrolls on its own). */
+function single(html, tone = 'gray', narrow = true) { $('#stage').innerHTML = `<section class="pane ${tone}"><div class="pane-in"><div class="${narrow ? 'narrow' : ''}">${html}</div></div></section>`; return $('#stage .pane'); }
+function split(left, right) { $('#stage').innerHTML = `<div class="split"><section class="pane gray" id="paneL"><div class="pane-in">${left}</div></section><section class="pane blue" id="paneR"><div class="pane-in">${right}</div></section></div>`; return $('#stage .split'); }
+const frame = html => single(html, 'white', false);
+const ICON = {
+  play: '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="#1a578a"/><path d="M9.5 7.5v9l7-4.5z" fill="#fff"/></svg>',
+  info: '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="#4789ac"/><rect x="10.8" y="10" width="2.4" height="7.5" fill="#fff"/><circle cx="12" cy="7.2" r="1.5" fill="#fff"/></svg>',
+  clock: '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#fff" stroke="#1a578a" stroke-width="2.2"/><path d="M12 6.5V12l3.8 2.4" stroke="#1a578a" stroke-width="2.2" fill="none" stroke-linecap="round"/></svg>',
+  mic: '<svg viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3" fill="#b2271d"/><path d="M6 11a6 6 0 0 0 12 0M12 17v4M8.5 21h7" stroke="#b2271d" stroke-width="2" fill="none" stroke-linecap="round"/></svg>'
+};
+function ask(html) {
+  return new Promise(res => {
+    $('#modalBody').innerHTML = html; $('#modal').hidden = false;
+    const done = v => { $('#modal').hidden = true; res(v); };
+    $('#modalYes').onclick = () => done(true); $('#modalNo').onclick = () => done(false); $('#modalYes').focus();
+  });
+}
+let toastT = 0;
+function toast(msg) { const f = $('#footSave'); if (!f) return; f.className = 'unsaved'; f.textContent = msg; clearTimeout(toastT); toastT = setTimeout(() => { if (f.textContent === msg) f.textContent = ''; }, 6000); }
+
+/* ============================== screens ============================== */
+function rCheck() {
+  const f = single(`<h2>Sound and Microphone Check</h2>
+    <p>Put on your headset before you start. This screen is not timed.</p>
+    <div class="cols">
+      <div class="panel"><div class="label">1. Sound</div><p>Click the button. You should hear a voice in your headset.</p>
+        <div class="row"><button class="btn" id="sndBtn">Play test sound</button><span class="small muted" id="sndMsg"></span></div>
+        <p class="small muted" style="margin-top:10px" id="voiceInfo"></p></div>
+      <div class="panel"><div class="label">2. Microphone</div><p>Click the button and say: <i>"My name is ${esc(STATE.name)}, and I am ready for the test."</i> Then listen to the playback.</p>
+        <div class="row"><button class="btn" id="micBtn">Record a 5-second test</button><span class="small" id="micMsg"></span></div>
+        <div class="meter"><i id="micMeter"></i></div><audio id="micPlay" controls style="width:100%;margin-top:10px" hidden></audio></div>
+    </div>
+    <div class="panel" style="margin-top:16px"><div class="label">3. Where your answers are saved</div><p id="saveInfo"></p></div>`);
+  const vi = $s('#voiceInfo', f);
+  vi.innerHTML = voiceLine();
+  $s('#saveInfo', f).innerHTML = Store.mode === 'folder'
+    ? `Every answer is saved in <b>${esc(Store.where())}</b>. Each file name starts with <b>${esc(STATE.folder)}</b> and ends with the time it was saved, so nothing is overwritten.`
+    : `No save folder is connected, so finished answers are downloaded to <b>your Downloads folder</b> with your name and the time in each file name. Progress is also kept in this browser.`;
+  $s('#sndBtn', f).onclick = async () => { $s('#sndMsg').textContent = 'Playing...'; Voice.cancel(); const tok = { cancelled: false }; CUR.cleanup = () => { tok.cancelled = true; Voice.cancel(); }; await Voice.playLines([['A', 'This is a sound check. If you can hear this voice clearly, your audio is working.']], { A: { g: 'f' } }, {}, tok); $s('#sndMsg').textContent = 'Done. Adjust the volume if needed.'; };
+  const needMic = STATE.sections.S;
+  if (!needMic) $s('#micMsg', f).textContent = 'Not needed: Speaking is not selected.';
+  $s('#micBtn', f).onclick = async () => {
+    const msg = $s('#micMsg');
+    try { await Mic.ensure(); } catch (e) { msg.className = 'small status bad'; msg.textContent = 'Microphone blocked. Click the camera or microphone icon in the address bar and allow it, then try again.'; return; }
+    msg.className = 'small'; msg.textContent = 'Recording...'; const r = Mic.record(false);
+    const iv = setInterval(() => { $s('#micMeter').style.width = (Mic.level() * 100) + '%'; }, 80);
+    await sleep(5000); clearInterval(iv); $s('#micMeter').style.width = '0';
+    const out = await r.stop(); const a = $s('#micPlay'); a.src = URL.createObjectURL(out.blob); a.hidden = false; a.play().catch(() => { });
+    msg.textContent = 'Listen to the playback. If you can hear yourself, the microphone works.';
+  };
+  setNext(true);
+  CUR.beforeNext = async () => {
+    if (needMic && !Mic.live()) {
+      try { await Mic.ensure(); } catch (_) { return ask('<h3>Microphone not available</h3><p>Speaking responses cannot be recorded without a microphone. You can continue, but the Speaking Test will run without recording.</p>'); }
+    }
+    return true;
+  };
+}
+function rInfo(sc) { single(sc.html.replace(/<ul>/g, '<ul class="intro">'), 'gray'); setNext(true);
+  if (sc.sec === 'S') CUR.beforeNext = async () => { if (!Mic.live()) { try { await Mic.ensure(); } catch (_) { return ask('<h3>Microphone not available</h3><p>Allow the microphone in the address bar to record. Continue without recording?</p>'); } } return true; }; if (sc.sec && !STATE['began' + sc.sec]) { STATE['began' + sc.sec] = true; logEv('start section ' + sc.sec); } }
+
+function rAudio(sc) {
+  const part = sc.part, seg = sc.seg, practiceMode = STATE.mode === 'practice';
+  const isVideo = !!part.video;
+  const what = isVideo ? 'Watch the video.' : part.id === 'L4' ? 'Listen to the news item.' : part.id === 'L6' ? 'Listen to the report.' : 'Listen to the conversation.';
+  const f = single(`<div class="instruction">${what} ${practiceMode ? 'Practice mode: you can replay it.' : 'You will hear it only <span class="key">once</span>.'}</div>
+    ${isVideo ? '<div class="video" id="vidHolder"><canvas width="800" height="360" aria-label="Video of the discussion"></canvas></div>' : ''}
+    <div class="sbox"><div class="ico">${ICON.play}</div><div class="txt"><div id="aState">Starting...</div><div class="pbar18"><i id="aProg"></i></div></div></div>
+    <div class="caption" id="cap" ${STATE.captions || !Voice.ok ? '' : 'hidden'}></div>
+    <div class="audio-status"><span class="small muted" id="aNote">${Voice.ok ? '' : 'No computer voices were found, so captions are shown instead of sound.'}</span>
+    <span class="row">${practiceMode ? '<button class="btn" id="capBtn">Captions on/off</button><button class="btn" id="replayBtn">Replay</button>' : ''}</span></div>`, 'gray', false);
+  if (isVideo) { Scene.labels = false; Scene.start($('canvas', f), part.setting, part.cast, part.board); }
+  let tok = { cancelled: false };
+  CUR.cleanup = () => { tok.cancelled = true; if (tok.media) { try { tok.media.pause(); } catch (_) { } } Voice.cancel(); Scene.stop(); };
+  setNext(practiceMode, 'NEXT', true);
+  const play = async () => {
+    tok.cancelled = true; if (tok.media) { try { tok.media.pause(); } catch (_) { } } Voice.cancel(); await sleep(150); tok = { cancelled: false }; const my = tok;
+    $s('#aProg').style.width = '0'; $s('#aState').textContent = 'Playing...';
+    await sleep(600, my);
+    const prog = p => { $s('#aProg').style.width = (p * 100) + '%'; };
+    const rec = await Media.play(sc.key, isVideo ? ['mp4', 'webm', 'mp3'] : ['mp3', 'm4a', 'wav'], isVideo ? $s('#vidHolder') : null, my, prog);
+    if (rec === 'missing' || rec === 'blocked') {
+      await Voice.playLines(seg.lines, part.cast, {
+        onLine: (k, text) => { Scene.speaker = k; $s('#cap').innerHTML = `<b>${esc(part.cast[k].name)}:</b> ${esc(text)}`; },
+        onLineEnd: () => { Scene.speaker = null; },
+        onProgress: prog
+      }, my);
+    }
+    if (my.cancelled) return;
+    Scene.speaker = null; STATE.audioDone[sc.key] = true; persist();
+    $s('#aState').textContent = 'Finished'; $s('#aProg').style.width = '100%';
+    if (!practiceMode) { $s('#aNote').textContent = 'The recording has finished. The questions will appear now.'; await sleep(1500, my); if (!my.cancelled) go(STATE.idx + 1); }
+    else { $s('#aNote').textContent = 'Finished. Click NEXT for the questions, or Replay.'; }
+  };
+  if (practiceMode) {
+    $s('#capBtn').onclick = () => { STATE.captions = !STATE.captions; $s('#cap').hidden = !STATE.captions && Voice.ok; persist(); };
+    $s('#replayBtn').onclick = () => play();
+  }
+  play();
+}
+
+function optionList(q, name) {
+  prepQ(q); const v = STATE.answers[q.id];
+  return `<div class="opts" role="radiogroup">${q.opts.map((o, i) => `<label class="opt ${v === i ? 'sel' : ''}"><input type="radio" name="${name}" value="${i}" ${v === i ? 'checked' : ''}><span>${esc(o)}</span></label>`).join('')}</div>`;
+}
+function rLQ(sc) {
+  const q = sc.q, practiceMode = STATE.mode === 'practice';
+  const showText = practiceMode || !Voice.ok;
+  const f = split(`<div class="instruction">Listen to the question. You will hear it only <span class="key">once</span>.</div>
+      <div class="sbox"><div class="ico" id="qIco">${ICON.play}</div><div class="txt"><div id="qState">Playing...</div><div class="pbar18"><i id="qProg"></i></div></div></div>
+      ${practiceMode ? '<div class="row" style="justify-content:center"><button class="btn" id="qReplay">Replay question</button></div>' : ''}`,
+    `<div class="qhead">${sc.practice ? 'Practice question (not scored)' : `Question ${sc.num} of ${sc.of}`}</div>
+      <div class="instruction">Choose the <span class="key">best</span> answer to the question.</div>
+      <div class="qtext" id="qText" ${showText ? '' : 'hidden'}>${esc(q.q)}</div>${optionList(q, 'lq')}`);
+  $$('input[name=lq]', f).forEach(inp => inp.onchange = () => { STATE.answers[q.id] = Number(inp.value); $$('.opt', f).forEach(l => l.classList.toggle('sel', l.contains(inp))); persist(); });
+  setNext(true);
+  let tok = { cancelled: false };
+  CUR.cleanup = () => { tok.cancelled = true; if (tok.media) { try { tok.media.pause(); } catch (_) { } } Voice.cancel(); };
+  const done = () => { $s('#qState').textContent = 'Choose your answer.'; $s('#qProg').style.width = '100%'; $s('#qIco').innerHTML = ICON.clock; startTimer(sc.group); };
+  const playQ = async () => {
+    tok.cancelled = true; Voice.cancel(); await sleep(120); tok = { cancelled: false }; const my = tok;
+    $s('#qState').textContent = 'Playing...'; $s('#qProg').style.width = '0'; $s('#qIco').innerHTML = ICON.play;
+    if (STATE.timeLeft[sc.group.id] != null) { done(); return; }
+    await sleep(500, my);
+    const rec = await Media.play(q.id, ['mp3', 'm4a', 'wav'], null, my, p => { $s('#qProg').style.width = (p * 100) + '%'; });
+    if ((rec === 'missing' || rec === 'blocked') && Voice.ok) { $s('#qProg').style.width = '50%'; await Voice.say(q.q, Voice.narrator(), my); }
+    if (my.cancelled) return;
+    done();
+  };
+  if (practiceMode) $s('#qReplay').onclick = () => { delete STATE.timeLeft[sc.group.id]; TIMER = null; setTimerVisible(false); playQ(); };
+  playQ();
+}
+
+/* Parts 4 to 6: every question for the part on one screen, one timer. */
+function rLSet(sc) {
+  const qs = sc.seg.questions;
+  const label = { L4: 'news item', L5: 'discussion', L6: 'report' }[sc.part.id] || 'recording';
+  const f = split(`<div class="instruction">Answer the questions about the ${label} you just heard. You can answer them in any order.</div>
+      <div class="sbox"><div class="ico">${ICON.info}</div><div class="txt">Click NEXT when you have finished. You cannot come back to these questions.</div></div>`,
+    `<div class="instruction">Choose the <span class="key">best</span> option to answer each question.</div>
+      <div class="qlist">${qs.map((q, i) => `<div class="qrow"><span class="n">${i + 1}.</span><div>${esc(q.q)}<br>${ddHtml(q, 'Question ' + (i + 1))}</div></div>`).join('')}</div>`);
+  $$('select.dd', f).forEach(s => s.onchange = () => { const id = s.dataset.q; if (s.value === '') delete STATE.answers[id]; else STATE.answers[id] = Number(s.value); s.classList.toggle('filled', s.value !== ''); persist(); });
+  setNext(true);
+  CUR.beforeNext = async () => {
+    const miss = qs.filter(q => STATE.answers[q.id] == null).length;
+    if (!miss) return true;
+    return ask(`<h3>${miss} question${miss > 1 ? 's are' : ' is'} not answered</h3><p>You cannot come back to this part. Leave ${miss > 1 ? 'them' : 'it'} blank and continue?</p>`);
+  };
+}
+
+function ddHtml(q, label) {
+  prepQ(q); const v = STATE.answers[q.id];
+  return `<select class="dd ${v != null ? 'filled' : ''}" data-q="${q.id}" aria-label="${esc(label)}"><option value="">Select an answer</option>${q.opts.map((o, i) => `<option value="${i}" ${v === i ? 'selected' : ''}>${esc(o)}</option>`).join('')}</select>`;
+}
+function rReading(sc) {
+  const p = sc.part;
+  const qs = (p.questions || []);
+  const blanks = (p.blanks || []);
+  const qHtml = qs.length ? `<div class="qlist">${qs.map(q => `<div class="qrow"><span class="n">${qNum(q.id)}.</span><div>${esc(q.q)}<br>${ddHtml(q, 'Question ' + qNum(q.id))}</div></div>`).join('')}</div>` : '';
+  let reply = p.reply || '';
+  blanks.forEach(b => { reply = reply.replace(`[[${b.id}]]`, `<span class="blank"><b>${qNum(b.id)}.</b>${ddHtml(b, 'Blank ' + qNum(b.id))}</span>`); });
+  const replyHtml = reply ? `<div class="passage ${qs.length ? 'reply' : ''}">${reply}</div>` : '';
+  const replyFirst = blanks.length && qs.length && qNum(blanks[0].id) < qNum(qs[0].id);
+  const right = replyFirst ? replyHtml.replace('passage reply', 'passage') + `<div class="reply">${qHtml}</div>` : qHtml + replyHtml;
+  const f = split(`<div class="instruction">${esc(p.instructions)}</div><div class="passage">${p.passage}</div>`, right);
+  $$('select.dd', f).forEach(s => s.onchange = () => { const id = s.dataset.q; if (s.value === '') delete STATE.answers[id]; else STATE.answers[id] = Number(s.value); s.classList.toggle('filled', s.value !== ''); persist(); });
+  setNext(true);
+  CUR.beforeNext = async () => {
+    const miss = [...qs, ...blanks].filter(q => STATE.answers[q.id] == null).length;
+    if (!miss) return true;
+    return ask(`<h3>${miss} question${miss > 1 ? 's are' : ' is'} not answered</h3><p>You cannot come back to this part. Leave ${miss > 1 ? 'them' : 'it'} blank and continue?</p>`);
+  };
+}
+
+function rWriting(sc) {
+  const t = sc.task; const W = STATE.writing[t.id] = STATE.writing[t.id] || { text: '', option: null, startedAt: new Date().toISOString(), drafts: 0 };
+  const optHtml = t.options ? `<div style="margin-bottom:10px">${t.options.map(o => `<label class="choice ${W.option === o.key ? 'sel' : ''}"><input type="radio" name="wopt" value="${o.key}" ${W.option === o.key ? 'checked' : ''}><span><b>${esc(o.label)}:</b> ${esc(o.text)}</span></label>`).join('')}</div>` : '';
+  const f = split(`<div class="instruction">Read the following information.</div><h3>${esc(t.title)}</h3><div class="passage">${t.prompt}</div>${t.options ? '<p><b>Choose one option on the right, then write your answer.</b></p>' : ''}`,
+    `${optHtml}<div class="toolbar"><button class="btn" data-cmd="cut">Cut</button><button class="btn" data-cmd="copy">Copy</button><button class="btn" data-cmd="paste">Paste</button><button class="btn" data-cmd="undo">Undo</button><button class="btn" data-cmd="redo">Redo</button></div>
+    <textarea class="editor" id="ed" spellcheck="false" autocomplete="off" autocorrect="off" autocapitalize="off" aria-label="Your response">${esc(W.text)}</textarea>
+    <div class="wcount"><span id="wc">Word count: 0</span><span id="wsave" class="muted"></span></div>`);
+  const ed = $('#ed', f);
+  const upd = () => { W.text = ed.value; W.words = wc(ed.value); const n = W.words; const el = $('#wc'); el.textContent = `Word count: ${n}`; el.style.color = n > t.maxWords ? 'var(--warn)' : ''; persist(); };
+  ed.oninput = upd; upd(); ed.focus();
+  $$('input[name=wopt]', f).forEach(r => r.onchange = () => { W.option = r.value; $$('.choice', f).forEach(c => c.classList.toggle('sel', c.contains(r))); persist(); });
+  $$('.toolbar .btn', f).forEach(b => b.onclick = async () => {
+    ed.focus(); const cmd = b.dataset.cmd;
+    if (cmd === 'paste') { try { const txt = await navigator.clipboard.readText(); document.execCommand('insertText', false, txt); } catch (_) { toast('Paste with Ctrl+V instead.'); } }
+    else document.execCommand(cmd); upd();
+  });
+  const draftIv = setInterval(() => {
+    if (!W.text.trim()) return; W.drafts++;
+    Store.save(fileName(`${t.id}-draft`, 'txt'), draftText(t, W, 'Draft snapshot'), false);
+    $('#wsave').textContent = `Draft saved at ${new Date().toLocaleTimeString('en-CA')}`;
+  }, 5 * 60 * 1000);
+  setNext(true);
+  CUR.beforeNext = async () => {
+    if (t.options && !W.option) return ask('<h3>No option selected</h3><p>You have not chosen Option A or Option B. Continue anyway?</p>');
+    if (W.words < t.minWords) return ask(`<h3>Your response has ${W.words} words</h3><p>The task asks for ${t.minWords} to ${t.maxWords} words. You cannot come back. Continue anyway?</p>`);
+    return true;
+  };
+  CUR.cleanup = () => {
+    clearInterval(draftIv); W.text = ed.value; W.words = wc(ed.value); W.endedAt = new Date().toISOString();
+    W.secondsUsed = Math.round(t.minutes * 60 - (STATE.timeLeft[t.id] || 0));
+    persist(true); logEv(`writing ${t.id} submitted (${W.words} words)`);
+    Store.save(fileName(t.id === 'W1' ? 'W1-email' : 'W2-survey', 'txt'), draftText(t, W, 'Final response'));
+  };
+}
+function draftText(t, W, kind) {
+  const opt = t.options && W.option ? `\nOption chosen: ${W.option} (${(t.options.find(o => o.key === W.option) || {}).text || ''})` : '';
+  return `${kind}\nCandidate: ${STATE.name}\nTest: ${TEST.title}, ${t.title}\nSaved: ${niceTime()}\nWords: ${wc(W.text)}${opt}\n\nPROMPT\n${stripHtml(t.prompt)}\n\nRESPONSE\n${W.text}\n`;
+}
+
+function rSpeak(sc) {
+  const t = sc.task, practiceMode = STATE.mode === 'practice', isCompare = t.type === 'compare';
+  const S = STATE.speaking[t.id] = STATE.speaking[t.id] || {};
+  const img = t.image ? `<div class="pic">${t.image}</div>` : '';
+  const cards = (list, cls) => `<div class="cards">${list.map(c => `<button class="card ${cls || ''} ${S.choice === c.key ? 'sel' : ''}" data-k="${c.key}">${c.image}<h4>${esc(c.title)}</h4><ul>${c.facts.map(x => `<li>${esc(x)}</li>`).join('')}</ul></button>`).join('<span class="or">or</span>')}</div>`;
+  const leftHtml = () => {
+    if (!isCompare) return `<div class="instruction">${esc(t.title)}</div><div class="prompt passage">${t.prompt.startsWith('<') ? t.prompt : `<p>${esc(t.prompt)}</p>`}</div>${img}`;
+    if (S.stage !== 'persuade') return `<h3>${esc(t.title)}</h3><p>${esc(t.prompt)}</p><p class="muted small">Click the option you prefer.</p>${cards(t.choices)}`;
+    const mine = t.choices.find(c => c.key === S.choice);
+    return `<h3>${esc(t.title)}</h3><p><b>${esc(t.persuade)}</b></p>${cards([mine || t.choices[0], t.third].filter(Boolean), 'locked')}<p class="small muted">${mine ? `Your choice: ${esc(mine.title)}.` : 'You did not choose an option. Pick one in your mind and argue for it.'}</p>`;
+  };
+  const f = split(`<div id="sLeft">${leftHtml()}</div>`,
+    `<div class="prep" id="ph"><div class="ico" id="pIco">${ICON.clock}</div><div class="txt"><div class="pname" id="pName">Preparation time</div><div class="count" id="pCount">0:00</div><div class="pbar18"><i id="pBar"></i></div><div class="meter" id="meterWrap" hidden><i id="meter"></i></div></div></div>
+      <p class="small" id="pMsg" style="text-align:center;margin:14px auto 0;max-width:350px"></p>
+      ${sc.practice ? '<p class="small muted" style="text-align:center">This practice task is recorded but not scored.</p>' : ''}
+      ${Mic.live() ? '' : '<p class="status warn small" style="max-width:350px;margin:10px auto 0">The microphone is off, so this response will not be recorded. Allow the microphone in the address bar to record.</p>'}`);
+  const bindCards = () => $$('.card:not(.locked)', f).forEach(b => b.onclick = () => { S.choice = b.dataset.k; $$('.card', f).forEach(x => x.classList.toggle('sel', x === b)); persist(); });
+  bindCards();
+  let cancelled = false, phaseEnd = null, skip = null, recorder = null, meterIv = 0;
+  CUR.cleanup = () => { cancelled = true; if (skip) skip(); clearInterval(meterIv); if (recorder) { const r = recorder; recorder = null; finishRec(r); } };
+  const runPhase = (name, secs, cls) => new Promise(res => {
+    const ph = $s('#ph'); ph.className = 'prep ' + (cls || ''); $s('#pIco').innerHTML = cls === 'rec' ? ICON.mic : ICON.clock; $s('#pName').innerHTML = cls === 'rec' ? `<span class="dot"></span>${name}` : name;
+    const end = Date.now() + secs * 1000; let done = false;
+    const fin = () => { if (done) return; done = true; clearInterval(iv); skip = null; res(); };
+    skip = fin;
+    const iv = setInterval(() => { if (cancelled) return fin(); const left = (end - Date.now()) / 1000; $s('#pCount').textContent = fmtShort(left); $s('#pBar').style.width = Math.min(100, (1 - left / secs) * 100) + '%'; if (left <= 0) fin(); }, 100);
+  });
+  const finishRec = async r => {
+    clearInterval(meterIv);
+    const out = await r.stop();
+    const label = `${t.id}-${t.title.replace(/^Task \d+:\s*/, '').replace(/[^A-Za-z]+/g, '-').replace(/-+$/, '').toLowerCase()}`;
+    const ext = /ogg/.test(out.mime) ? 'ogg' : /mp4/.test(out.mime) ? 'm4a' : 'webm';
+    const audioName = fileName(label, ext);
+    S.file = audioName; S.seconds = out.seconds; S.transcript = out.transcript; S.srUsed = out.srUsed; S.savedAt = new Date().toISOString();
+    AUDIO_URLS[t.id] = URL.createObjectURL(out.blob);
+    await Store.save(audioName, out.blob);
+    Store.save(fileName(label + '-transcript', 'txt'), `Automatic transcript (approximate, made by the browser's speech recognition)\nCandidate: ${STATE.name}\n${t.title}\nPrompt: ${stripHtml(t.prompt)}${S.choice ? `\nChoice: ${S.choice}` : ''}\nRecorded: ${niceTime()}\nLength: ${out.seconds} seconds\n\n${out.transcript || '(No transcript captured. Listen to the audio file.)'}\n`);
+    persist(true); logEv(`speaking ${t.id} saved`);
+  };
+  const flow = async () => {
+    setNext(practiceMode, 'SKIP', true);
+    CUR.beforeNext = async () => { if (skip) skip(); return false; };
+    if (isCompare && S.stage !== 'persuade') {
+      $s('#pMsg').textContent = 'Choose the option you prefer.';
+      await runPhase('Selection time', t.select);
+      if (cancelled) return;
+      S.stage = 'persuade'; persist(); $s('#sLeft').innerHTML = leftHtml();
+    }
+    $s('#pMsg').textContent = 'Plan what you will say. Recording starts after the beep.';
+    await runPhase('Preparation time', t.prep);
+    if (cancelled) return;
+    beep();
+    if (Mic.live()) {
+      try { recorder = Mic.record(STATE.transcribe); } catch (e) { console.warn(e); recorder = null; }
+      $s('#meterWrap').hidden = false; meterIv = setInterval(() => { const m = $s('#meter'); if (m) m.style.width = (Mic.level() * 100) + '%'; }, 90);
+    }
+    $s('#pMsg').textContent = recorder ? 'Speak now. Keep talking until the time ends.' : 'Speak now. (Not recorded: microphone is off.)';
+    await runPhase('Recording', t.speak, 'rec');
+    if (cancelled) return;
+    beep();
+    $s('#meterWrap').hidden = true;
+    if (recorder) { const r = recorder; recorder = null; $s('#pName').textContent = 'Saving'; $s('#pMsg').textContent = 'Saving your response...'; await finishRec(r); }
+    $s('#pName').textContent = 'Response saved'; $s('#pMsg').textContent = S.file ? `Saved as ${S.file}` : 'Moving to the next task.';
+    await sleep(1600);
+    if (!cancelled) go(STATE.idx + 1);
+  };
+  flow();
+}
+
+function rEnd(sc) {
+  const names = { L: 'Listening', R: 'Reading', W: 'Writing', S: 'Speaking' };
+  single(`<h2>End of the ${names[sc.sec]} Test</h2><p>Your ${names[sc.sec]} answers have been saved.</p><p>Click <b>NEXT</b> to continue.</p>`);
+  logEv('end section ' + sc.sec);
+  if (sc.sec === 'L' || sc.sec === 'R') { const s = score(sc.sec); Store.save(fileName(sc.sec === 'L' ? 'listening-answers' : 'reading-answers', 'json'), JSON.stringify({ candidate: STATE.name, test: TEST.title, section: names[sc.sec], raw: s.c, total: s.n, approxLevel: s.level, answers: s.rows.map(r => ({ q: r.q.id, chosen: r.a == null ? null : r.q.opts[r.a], correct: r.q.opts[r.q.correct], ok: r.ok })) }, null, 2)); }
+  setNext(true);
+}
+
+/* ============================== scoring + evaluation pack ============================== */
+const L_TABLE = [[37, 12], [36, 11], [35, 10], [33, 9], [30, 8], [27, 7], [22, 6], [17, 5], [11, 4], [7, 3]];
+const R_TABLE = [[37, 12], [35, 11], [33, 10], [31, 9], [28, 8], [24, 7], [19, 6], [15, 5], [10, 4], [8, 3]];
+function allQ(sec) {
+  if (sec === 'L') return TEST.listening.parts.flatMap(p => p.segments.flatMap(s => s.questions));
+  return TEST.reading.parts.flatMap(p => [...(p.questions || []), ...(p.blanks || [])].sort((a, b) => qNum(a.id) - qNum(b.id)).map(q => Object.assign(q, { part: p.id })));
+}
+function score(sec) {
+  const items = allQ(sec).map(prepQ); let c = 0;
+  const rows = items.map(q => { const a = STATE.answers[q.id]; const ok = a != null && a === q.correct; if (ok) c++; return { q, a, ok }; });
+  const n = items.length, raw38 = n === 38 ? c : Math.round(c * 38 / n);
+  const tbl = sec === 'L' ? L_TABLE : R_TABLE; let level = 'M (0 to 2)';
+  for (const [min, lv] of tbl) if (raw38 >= min) { level = String(lv); break; }
+  return { c, n, level, rows };
+}
+function evalPack() {
+  const L = STATE.sections.L ? score('L') : null, R = STATE.sections.R ? score('R') : null;
+  const out = [];
+  out.push(`# CELPIP Mock Exam: Evaluation Pack`, ``, `- Candidate: ${STATE.name}`, `- Test: ${TEST.title} (unofficial practice, original content)`, `- Mode: ${STATE.mode === 'exam' ? 'Exam (audio once, no pause)' : 'Practice'}`, `- Started: ${niceTime(new Date(STATE.startedAt))}`, `- Finished: ${niceTime()}`, `- Saved in: ${Store.where()}`, ``);
+  out.push(`## Automatic scores`, ``);
+  if (L) out.push(`- Listening: ${L.c} of ${L.n} correct. Approximate CELPIP level ${L.level}.`);
+  if (R) out.push(`- Reading: ${R.c} of ${R.n} correct. Approximate CELPIP level ${R.level}.`);
+  out.push(`- Writing and Speaking: need grading (see the request at the end).`, ``);
+  const reviewTable = (S, sec) => {
+    out.push(`| Question | Chosen | Correct answer | Result |`, `|---|---|---|---|`);
+    S.rows.forEach(r => out.push(`| ${sec === 'L' ? r.q.id : r.q.part + ' Q' + qNum(r.q.id)} | ${r.a == null ? '(blank)' : r.q.opts[r.a]} | ${r.q.opts[r.q.correct]} | ${r.ok ? 'Correct' : 'Wrong'} |`));
+    out.push('');
+  };
+  if (L) { out.push(`## Listening review`, ``); reviewTable(L, 'L'); }
+  if (R) { out.push(`## Reading review`, ``); reviewTable(R, 'R'); }
+  if (STATE.sections.W) {
+    out.push(`## Writing`, ``);
+    TEST.writing.tasks.forEach(t => {
+      const W = STATE.writing[t.id] || {};
+      out.push(`### ${t.title}`, ``, `**Prompt:** ${stripHtml(t.prompt).replace(/\n+/g, ' ')}`, ``);
+      if (t.options) out.push(`**Option chosen:** ${W.option || '(none)'}${W.option ? ' (' + t.options.find(o => o.key === W.option).text + ')' : ''}`, ``);
+      out.push(`**Word count:** ${wc(W.text)} (target ${t.minWords} to ${t.maxWords}). **Time used:** ${W.secondsUsed != null ? fmtLong(W.secondsUsed) : 'unknown'} of ${t.minutes} minutes.`, ``, '```text', W.text || '(no response)', '```', ``);
+    });
+  }
+  if (STATE.sections.S) {
+    out.push(`## Speaking`, ``, `Audio files are in the same folder as this file. Transcripts below were made automatically by the browser and may contain errors; the audio is the true record.`, ``);
+    [TEST.speaking.practice, ...TEST.speaking.tasks].forEach(t => {
+      const S = STATE.speaking[t.id] || {};
+      out.push(`### ${t.title}${t === TEST.speaking.practice ? ' (practice, not scored)' : ''}`, ``, `**Prompt:** ${stripHtml(t.prompt).replace(/\n+/g, ' ')}`, ``);
+      if (t.type === 'compare') out.push(`**Choice:** ${S.choice ? t.choices.find(c => c.key === S.choice).title : '(none)'}; persuading against: ${t.third.title}.`, ``);
+      out.push(`**Preparation:** ${t.prep} s. **Speaking time:** ${t.speak} s. **Recorded:** ${S.seconds != null ? S.seconds + ' s' : 'no recording'}. **Audio file:** ${S.file || '(none)'}`, ``, `> ${S.transcript ? S.transcript : '(no transcript)'}`, ``);
+    });
+  }
+  out.push(`## Exam log`, ``, ...STATE.log.map(l => `- ${new Date(l.t).toLocaleTimeString('en-CA')}: ${l.ev}`), ``);
+  out.push(`## Request for Claude`, ``, `Please grade this CELPIP-General mock exam for ${STATE.name}. For Writing and Speaking, use the official CELPIP performance standards (Content/Coherence, Vocabulary, Readability or Listenability, Task Fulfillment) and give each task an estimated CELPIP level with specific feedback and examples of better phrasing. Listen to the audio files, not just the transcripts. Then give an overall CLB summary for all four skills and a short study plan focused on the weakest skill.`);
+  return out.join('\n');
+}
+function grabRequest() {
+  return `Please grade my CELPIP mock exam. Read the evaluation pack and the audio files in C:\\Users\\ramne\\Documents\\Celpip test\\responses\\${STATE.folder}\\ (the file ending in __EVALUATION__...md), grade Writing and Speaking against the CELPIP performance standards, and give me levels and a study plan.`;
+}
+
+function rResults() {
+  setNext(false); setTimerVisible(false);
+  if (!STATE.finished) {
+    STATE.finished = true; STATE.finishedAt = new Date().toISOString(); logEv('test finished'); persist(true);
+    Store.save(fileName('EVALUATION', 'md'), evalPack());
+    Store.save(fileName('full-record', 'json'), JSON.stringify(STATE, null, 2));
+  }
+  const L = STATE.sections.L ? score('L') : null, R = STATE.sections.R ? score('R') : null;
+  const scoreCard = (name, S) => S ? `<div class="score"><div class="label">${name}</div><div class="big">${S.c} / ${S.n}</div><div>Approximate CELPIP level <b>${S.level}</b></div></div>` : '';
+  const wCard = STATE.sections.W ? `<div class="score"><div class="label">Writing</div>${TEST.writing.tasks.map(t => `<div>${esc(t.title.split(':')[0])}: <b>${wc((STATE.writing[t.id] || {}).text)}</b> words</div>`).join('')}<div class="small muted">Send to Claude for grading</div></div>` : '';
+  const sCard = STATE.sections.S ? `<div class="score"><div class="label">Speaking</div><div class="big">${TEST.speaking.tasks.filter(t => (STATE.speaking[t.id] || {}).file).length} / ${TEST.speaking.tasks.length}</div><div class="small muted">tasks recorded. Send to Claude for grading</div></div>` : '';
+  const review = (S, sec) => `<div class="tbl-wrap"><table class="review"><thead><tr><th>Question</th><th>Your answer</th><th>Correct answer</th><th></th></tr></thead><tbody>${S.rows.map(r => `<tr><td>${sec === 'L' ? esc(r.q.id) + ': ' + esc(r.q.q) : esc(r.q.part + ' #' + qNum(r.q.id)) + (r.q.q ? ': ' + esc(r.q.q) : '')}</td><td>${r.a == null ? '<i>blank</i>' : esc(r.q.opts[r.a])}</td><td>${esc(r.q.opts[r.q.correct])}</td><td class="${r.ok ? 'ok' : 'bad'}">${r.ok ? 'Correct' : 'Wrong'}</td></tr>`).join('')}</tbody></table></div>`;
+  const transcripts = STATE.sections.L ? `<details><summary>Listening transcripts</summary><div class="transcript">${TEST.listening.parts.map(p => `<h3>${esc(p.title)}</h3>${p.segments.map(s => s.lines.map(([k, t]) => `<p><b>${esc(p.cast[k].name)}:</b> ${esc(t)}</p>`).join('')).join('<hr>')}`).join('')}</div></details>` : '';
+  const speak = STATE.sections.S ? `<details open><summary>Your speaking recordings</summary>${TEST.speaking.tasks.map(t => { const S = STATE.speaking[t.id] || {}; return `<div style="margin:10px 0"><b>${esc(t.title)}</b>${AUDIO_URLS[t.id] ? `<br><audio controls src="${AUDIO_URLS[t.id]}" style="width:100%;max-width:520px"></audio>` : `<div class="small muted">${S.file ? 'Saved as ' + esc(S.file) : 'Not recorded'}</div>`}${S.transcript ? `<div class="small muted">Transcript: ${esc(S.transcript)}</div>` : ''}</div>`; }).join('')}</details>` : '';
+  frame(`<h1>Test complete, ${esc(STATE.name.split(' ')[0])}</h1>
+    <p>Everything has been saved to <b>${esc(Store.where())}</b>. The file ending in <b>__EVALUATION__</b> holds all your answers for grading.</p>
+    <div class="scores">${scoreCard('Listening', L)}${scoreCard('Reading', R)}${wCard}${sCard}</div>
+    <div class="row"><button class="btn-blue" id="copyReq">Copy grading request for Claude</button><button class="btn" id="resave">Save evaluation pack again</button><button class="btn" id="newAttempt">Start a new attempt</button><span class="small" id="copyMsg"></span></div>
+    <textarea id="reqText" class="files" style="width:100%;margin-top:10px" rows="3" readonly hidden></textarea>
+    <p class="small muted" style="margin-top:12px">Levels are estimates based on the published raw-score charts. Writing and Speaking need a human or Claude to grade.</p>
+    ${L ? `<details><summary>Listening answers</summary>${review(L, 'L')}</details>` : ''}${R ? `<details><summary>Reading answers</summary>${review(R, 'R')}</details>` : ''}${transcripts}${speak}
+    <details><summary>Files saved this attempt (${STATE.savedFiles.length})</summary><div class="files">${STATE.savedFiles.map(esc).join('\n') || 'None yet'}</div></details>`);
+  $('#copyReq').onclick = async () => { const txt = grabRequest(); try { await navigator.clipboard.writeText(txt); $('#copyMsg').textContent = 'Copied. Paste it into Claude.'; } catch (_) { const ta = $('#reqText'); ta.hidden = false; ta.value = txt; ta.select(); $('#copyMsg').textContent = 'Select and copy the text below.'; } };
+  $('#resave').onclick = () => { Store.save(fileName('EVALUATION', 'md'), evalPack()); $('#copyMsg').textContent = 'Saved again with a new time stamp.'; };
+  $('#newAttempt').onclick = () => { try { localStorage.removeItem(LS_KEY); } catch (_) { } location.reload(); };
+}
+
+/* ============================== start screen ============================== */
+function knownNames() { try { return JSON.parse(localStorage.getItem('rowe-celpip-mock.names') || '[]'); } catch (_) { return []; } }
+function rememberName(n) { try { const l = knownNames().filter(x => x !== n); l.unshift(n); localStorage.setItem('rowe-celpip-mock.names', JSON.stringify(l.slice(0, 6))); } catch (_) { } }
+function voiceLine() {
+  if (!Voice.ok) return '<div class="status bad">No computer voices found. Open this page in Microsoft Edge.</div>';
+  const ca = Voice.canadian(), nat = Voice.natural();
+  if (ca.length) return `<div class="status ok">Natural Canadian voices found (${esc(ca.map(v => v.name.replace(/Microsoft |Online |\(Natural\)| - .*$/g, '').trim()).join(', '))}), plus ${nat.length - ca.length} other natural voices. Real recordings in the tests\\audio folder are used first when present.</div>`;
+  if (nat.length) return `<div class="status ok">Natural voices found (${nat.length}), but no Canadian ones. For Canadian accents, open this page in Microsoft Edge.</div>`;
+  return '<div class="status warn">Only basic computer voices were found, so the listening audio will sound robotic. <b>Open this page in Microsoft Edge</b> (right-click the file, Open with, Microsoft Edge) to get natural Canadian voices.</div>';
+}
+async function renderStart() {
+  $('#barTitle').textContent = 'CELPIP-style Mock Exam'; setNext(false); setTimerVisible(false);
+  const tests = window.MOCK_TESTS || [];
+  let saved = null; try { saved = JSON.parse(localStorage.getItem(LS_KEY) || 'null'); } catch (_) { }
+  if (saved && saved.finished) saved = null;
+  const folderLine = () => !Store.supported() ? '<div class="status warn">This browser cannot save to a folder. Answers will be downloaded to your Downloads folder instead. Use Chrome or Edge for folder saving.</div>'
+    : Store.root ? `<div class="status ok">Save folder: <b>${esc(Store.root.name)}</b>. Answers go into <b>${esc(Store.root.name === 'responses' ? 'responses' : Store.root.name + '\\responses')}</b>. Chrome may ask you to allow access when you start.</div>`
+      : '<div class="status warn">No save folder chosen yet. Click <b>Choose save folder</b> and select your <b>Celpip test</b> folder in Documents.</div>';
+  const names = knownNames();
+  const f = frame(`<div class="start"><div>
+    <h1>CELPIP-style Mock Exam</h1>
+    <p class="muted">A full computer-based practice exam in the CELPIP-General format: Listening (with spoken audio and a video discussion), Reading, Writing and Speaking (recorded with your microphone). All questions are original practice material, not official CELPIP content.</p>
+    ${saved ? `<div class="panel" style="margin-bottom:16px;border-color:var(--blue)"><div class="label">Unfinished attempt</div><p><b>${esc(saved.name)}</b>, started ${esc(niceTime(new Date(saved.startedAt)))}. Stopped at screen ${saved.idx + 1}.</p><div class="row"><button class="btn-blue" id="resumeAttempt">Resume this attempt</button><button class="btn" id="discardAttempt">Discard it</button></div></div>` : ''}
+    <div class="field"><label for="cName"><b>Candidate name</b> (used in every saved file name)</label><input type="text" id="cName" list="nameList" autocomplete="off" value="${esc(names[0] || '')}" placeholder="For example: Shadene Rowe"><datalist id="nameList">${names.map(n => `<option value="${esc(n)}">`).join('')}</datalist></div>
+    <div class="field"><label for="cTest"><b>Test</b></label><select id="cTest">${tests.map(t => `<option value="${t.id}">${esc(t.title)}</option>`).join('')}</select></div>
+    <div class="field"><b>Sections</b><div class="checks">
+      <label><input type="checkbox" id="sL" checked> Listening (about 50 min)</label><label><input type="checkbox" id="sR" checked> Reading (about 45 min)</label>
+      <label><input type="checkbox" id="sW" checked> Writing (53 min)</label><label><input type="checkbox" id="sS" checked> Speaking (about 20 min)</label></div></div>
+    <div class="field"><b>Mode</b><div class="checks">
+      <label><input type="radio" name="mode" value="exam" checked> Exam: audio plays once, no pausing, no skipping</label>
+      <label><input type="radio" name="mode" value="practice"> Practice: replay audio, captions, pause and skip</label></div></div>
+    <div class="field"><label class="checks"><label><input type="checkbox" id="cSR" checked> Make an automatic transcript of each speaking answer (needs internet; the audio is always saved; turn off if the browser keeps asking for the microphone)</label></label></div>
+    <div class="field"><b>Listening voices</b><div id="voiceLine">${voiceLine()}</div><div class="row" style="margin-top:6px"><button class="btn" id="voiceTest">Hear a sample</button></div></div>
+    <div class="field"><b>Save folder</b><div id="folderLine">${folderLine()}</div><div class="row" style="margin-top:6px"><button class="btn" id="pickFolder" ${Store.supported() ? '' : 'disabled'}>Choose save folder</button></div></div>
+    <div class="row" style="margin-top:8px"><button class="btn-blue" id="startBtn">Start the test</button><span class="small" id="startMsg"></span></div>
+  </div>
+  <div>
+    <div class="panel"><div class="label">Proctor checklist</div><ol class="small" style="padding-left:18px;margin:6px 0 0">
+      <li>Use <b>Microsoft Edge</b> on the laptop (it has natural Canadian voices), with a headset and microphone.</li>
+      <li>Phone on silent and away from the desk. Paper and pen only.</li>
+      <li>The full test takes about 2 hours 50 minutes with no scheduled breaks. The clock keeps running.</li>
+      <li>Every screen moves forward with NEXT. There is no going back.</li>
+      <li>Each recording plays once in Exam mode. Take notes while listening.</li>
+      <li>Do not help with answers during the test.</li>
+      <li>When Chrome asks for the microphone or the folder, click <b>Allow</b>.</li></ol></div>
+    <div class="panel" style="margin-top:14px"><div class="label">What gets saved</div><ul class="small" style="padding-left:18px;margin:6px 0 0">
+      <li>A new folder for every attempt: <b>Name_date_time</b>.</li>
+      <li>Every file name includes the candidate name, the attempt time and the save time, so nothing is ever overwritten.</li>
+      <li>Writing: final text of each task, plus draft snapshots every 5 minutes.</li>
+      <li>Speaking: one audio file per task, plus a transcript.</li>
+      <li>At the end: an <b>EVALUATION</b> file for Claude to grade, and a full record.</li></ul></div>
+  </div></div>`);
+  $('#voiceTest', f).onclick = async () => { Voice.cancel(); const tok = { cancelled: false }; await Voice.playLines([['A', 'Hi there. This is how the listening recordings will sound.'], ['B', 'And this is a second speaker, so you can hear the difference.']], { A: { g: 'f' }, B: { g: 'm' } }, {}, tok); };
+  $('#pickFolder', f).onclick = async () => { try { await Store.pick(); $('#folderLine').innerHTML = folderLine(); } catch (e) { if (e && e.name !== 'AbortError') $('#folderLine').innerHTML = `<div class="status bad">Could not open the folder: ${esc(e.message || e)}</div>`; } };
+  if (saved) {
+    $('#resumeAttempt', f).onclick = async () => {
+      const msg = $('#startMsg'); msg.className = 'small'; msg.textContent = saved.sections.S ? 'Allow the microphone when Chrome asks...' : '';
+      const perm = await askPermissionsUpFront(saved.sections.S, saved.transcribe);
+      saved.transcribe = perm.transcribe; beginExam(saved);
+    };
+    $('#discardAttempt', f).onclick = () => { try { localStorage.removeItem(LS_KEY); } catch (_) { } renderStart(); };
+  }
+  $('#startBtn', f).onclick = async () => {
+    const name = $('#cName').value.trim(); const msg = $('#startMsg');
+    if (!name) { msg.className = 'small status bad'; msg.textContent = 'Enter the candidate name first.'; $('#cName').focus(); return; }
+    const sections = { L: $('#sL').checked, R: $('#sR').checked, W: $('#sW').checked, S: $('#sS').checked };
+    if (!Object.values(sections).some(Boolean)) { msg.className = 'small status bad'; msg.textContent = 'Choose at least one section.'; return; }
+    rememberName(name);
+    const opts = { name, testId: $('#cTest').value, sections, mode: $$('input[name=mode]').find(r => r.checked).value, transcribe: $('#cSR').checked };
+    msg.className = 'small'; msg.textContent = sections.S ? 'Allow the microphone when the browser asks. This is the only time it will ask.' : '';
+    askPermissionsUpFront(sections.S, opts.transcribe).then(async perm => {
+      if (sections.S && !perm.mic && !(await ask('<h3>Microphone blocked</h3><p>The Speaking answers cannot be recorded. Click the microphone icon in the address bar, choose Allow, then click Start again. Or continue without recording.</p>'))) { msg.textContent = ''; return; }
+      opts.transcribe = perm.transcribe; beginExam(null, opts);
+    });
+  };
+}
+async function beginExam(saved, opts) {
+  STATE = saved || newState(opts);
+  TEST = (window.MOCK_TESTS || []).find(t => t.id === STATE.testId) || window.MOCK_TESTS[0];
+  if (Store.root) await Store.open(STATE.folder); else Store.mode = 'download';
+  SCREENS = buildScreens();
+  $('#footWho').textContent = `${STATE.name} | ${TEST.title} | ${STATE.mode === 'exam' ? 'Exam mode' : 'Practice mode'} | Attempt ${STATE.stamp.replace('_', ' ')}`;
+  if (!saved) {
+    logEv('attempt started');
+    Store.save(fileName('attempt-started', 'json'), JSON.stringify({ candidate: STATE.name, test: TEST.title, mode: STATE.mode, sections: STATE.sections, started: STATE.startedAt, userAgent: navigator.userAgent, voices: Voice.list.map(v => v.name) }, null, 2), false);
+  } else logEv('attempt resumed');
+  persist(true); render();
+}
+window.addEventListener('beforeunload', e => { if (STATE && !STATE.finished) { persist(true); e.preventDefault(); e.returnValue = ''; } });
+
+(async function init() {
+  if (!(window.MOCK_TESTS || []).length) { frame('<h2>Test content not found</h2><p>Keep the <b>tests</b> folder next to this page. It must contain <b>mock_test_A.js</b>.</p>'); return; }
+  frame('<p class="muted">Loading voices...</p>');
+  await Promise.all([Voice.init(), Store.load()]);
+  renderStart();
+})();
+</script>
+</body>
+</html>
