@@ -1,7 +1,7 @@
 # CELPIP Mock Exam: Lessons Learnt
 
 Folder: `C:\Users\ramne\Documents\Celpip test`
-Last updated: 2026-10-21 (session 1, third update)
+Last updated: 2026-10-21 (session 1, fourth update)
 
 ## What exists
 
@@ -64,6 +64,16 @@ Last updated: 2026-10-21 (session 1, third update)
 ## Microphone
 
 1. The page now asks for the microphone (and primes speech recognition) when Start or Resume is clicked, so nothing pops up during a recording. On the https website the browser also remembers the permission.
+2. Recording test (2026-10-21, headless Chromium with a fake microphone playing real speech): all 9 Speaking files saved (practice plus S1 to S8), Opus 48 kHz, mean volume -18 to -27 dB, length matches the speaking time, and the speech in the file transcribes back to what was fed in. 0 page errors.
+3. MediaRecorder .webm files have no duration in their header (ffprobe shows N/A; players show no length and cannot seek). Fixed in the page: any audio or video with unknown duration is briefly seeked to the end to measure it, then reset to 0. Verified: a saved file now reports 11.94 s.
+4. In headless tests the transcript file says "No transcript captured" because there is no speech recognition there; on the laptop in Chrome or Edge the transcript is filled.
+
+## Audio check of the Test A Part 5 video (2026-10-21)
+
+1. The deployed tests/audio/A/L5-0.mp4 was cut back into its 21 lines and transcribed offline: 19 of 21 lines match the script closely (mean match 0.90).
+2. Voice pitch per line matches the speaker every time: Raj about 100 to 120 Hz (male), Hannah and Colette about 165 to 225 Hz (female).
+3. Two weak lines: "Raj, you had an idea?" (end of clip 2, quiet) and "I like that. And it leaves some money left over." (clip 18). Neither is needed for any of the 8 Part 5 questions; every answer comes from a clearly heard line. Numbers check: 8 x 800 = 6,400; 4,000 chairs + 4 x 800 = 7,200; 10,000 - 7,200 = 2,800 reserve.
+4. The live site serves the video (1280x720, 114 s) and it plays.
 
 ## Ideas not done yet
 

@@ -569,6 +569,8 @@ const fileName = (label, ext) => `${STATE.folder}__${label}__saved-${clockOf()}.
 const LS_KEY = 'rowe-celpip-mock.session';
 let TEST = null, SCREENS = [], STATE = null, CUR = {}, TIMER = null, PAUSED = false;
 const AUDIO_URLS = {};
+// MediaRecorder webm files have no duration header, so players show no length and cannot seek. Force the browser to measure it once.
+document.addEventListener('loadedmetadata', e => { const a = e.target; if (!(a instanceof HTMLMediaElement) || isFinite(a.duration) || a.dataset.durFix) return; a.dataset.durFix = '1'; const back = () => { a.removeEventListener('timeupdate', back); a.currentTime = 0; }; a.addEventListener('timeupdate', back); a.currentTime = 1e101; }, true);
 function newState(o) {
   const now = new Date(); const safe = safeName(o.name);
   return { v: 1, name: o.name.trim(), safe, testId: o.testId, mode: o.mode, sections: o.sections, transcribe: o.transcribe, captions: o.mode === 'practice',
