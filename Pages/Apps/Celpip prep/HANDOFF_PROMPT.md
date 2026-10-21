@@ -4,18 +4,19 @@ Copy everything inside the box below into a new Claude session.
 
 ```text
 I am continuing my CELPIP (Canadian English Language Proficiency Index Program) mock exam project. Link to my laptop.
-- Working copy: C:\Users\ramne\Documents\Celpip test
+- Working copy and my saved answers: C:\Users\ramne\Documents\Celpip test
 - Online copy (repo clenny-r/Storymaps, push with GitHub Desktop): C:\Users\ramne\Documents\GitHub\Storymaps\Pages\Apps\Celpip prep
 - Live: https://twcministries.net/Pages/Apps/Celpip%20prep/
 
-Read first, in this order:
-1. C:\Users\ramne\Documents\Celpip test\LESSONS.md (requirements, decisions, "Voices and media" item 0 explains the recorded voices)
-2. C:\Users\ramne\Documents\Celpip test\tools\META_AI_RUNBOOK.md (exact steps to make the Part 5 videos)
-3. C:\Users\ramne\Documents\Celpip test\tools\AUTHOR_SPEC.md and CELPIP_Mock_Exam.html
+Read first: C:\Users\ramne\Documents\Celpip test\LESSONS.md (requirements, decisions, voices, Meta AI videos), then tools\AUTHOR_SPEC.md.
 
-Status: 11 tests (A to K) are live. Two jobs are in progress:
-A. Natural recorded voices (Kokoro mp3s) for every listening part and spoken question, into tests\audio\<TEST>\ in BOTH folders with a manifest.json per test, plus tests\audio\_common\soundcheck.mp3 and sample.mp3. Check which test folders have manifest.json; regenerate any missing ones with tools\gen_kokoro_audio.py (model files kokoro-v1.0.onnx and voices-v1.0.bin from the GitHub release thewh1teagle/kokoro-onnx, tag model-files-v1.0; pip install kokoro-onnx soundfile). Verify samples by transcription, commit, push with GitHub Desktop, confirm the live start screen says "Natural recorded voices are ready".
-B. Meta AI videos for Listening Part 5 of Tests B to K (Test A is done). Prompts are in tools\meta_prompts_B_to_K.json. Follow META_AI_RUNBOOK.md exactly, one test at a time, push after each test.
+Status: all 11 tests (A to K) are live with natural recorded voices (Kokoro mp3s) for every listening conversation and spoken question, and a Meta AI video for Listening Part 5 of every test. Do NOT change any Listening text: it must match its recordings and videos (regenerate with tools\gen_kokoro_audio.py and tools\META_AI_RUNBOOK.md if a listening line ever changes).
 
-Ask all permissions up front in one batch (Chrome for meta.ai, folders Downloads, Celpip test and Storymaps, computer use for GitHub Desktop and File Explorer). No em dashes. Give full absolute paths. When done, update LESSONS.md and HANDOFF_PROMPT.md and give me the new handoff prompt.
+If a parallel session left files in C:\Users\ramne\Documents\Celpip test\_parallel\, read its README.md, check that Listening sections are byte-for-byte unchanged, run tools\validate.js and the blind check, then copy the changed tests\mock_test_X.js into BOTH folders and push with GitHub Desktop.
+
+Then check C:\Users\ramne\Documents\Celpip test\responses\ for attempt folders (Name_date_time). For each new attempt: read the __EVALUATION__ file, transcribe the speaking .webm files, grade Writing and Speaking against the CELPIP performance standards (Content/Coherence, Vocabulary, Readability or Listenability, Task Fulfillment), give a CELPIP level per task with specific feedback, a CLB (Canadian Language Benchmark) summary for all four skills, and a short study plan for the weakest skill.
+
+Known context: my official free CELPIP Practice Test A gave Listening 34/37 (level 9) and Reading 35/37 (level 10). My wife Shadene got Listening level 6.
+
+Ask all permissions up front in one batch. No em dashes. Spell out acronyms on first use. Give full absolute paths. When done, update LESSONS.md and HANDOFF_PROMPT.md and give me the new handoff prompt.
 ```

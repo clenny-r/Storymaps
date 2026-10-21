@@ -1,7 +1,7 @@
 # CELPIP Mock Exam: Lessons Learnt
 
 Folder: `C:\Users\ramne\Documents\Celpip test`
-Last updated: 2026-10-21 (session 1, fifth update: recorded natural voices)
+Last updated: 2026-10-21 (session 1, sixth update: Meta AI Part 5 videos for all 11 tests)
 
 ## What exists
 
@@ -81,8 +81,16 @@ Last updated: 2026-10-21 (session 1, fifth update: recorded natural voices)
 3. Two weak lines: "Raj, you had an idea?" (end of clip 2, quiet) and "I like that. And it leaves some money left over." (clip 18). Neither is needed for any of the 8 Part 5 questions; every answer comes from a clearly heard line. Numbers check: 8 x 800 = 6,400; 4,000 chairs + 4 x 800 = 7,200; 10,000 - 7,200 = 2,800 reserve.
 4. The live site serves the video (1280x720, 114 s) and it plays.
 
+## Meta AI Part 5 videos for all tests (done 2026-10-21 afternoon)
+
+1. Every test A to K now has tests/audio/<T>/L5-0.mp4: three real-looking people at a table, one 10-second Meta AI clip per line (about 280 clips in total), trimmed and joined. Lengths 2 to 2.7 minutes, close to the real exam.
+2. Checks per clip: offline transcription against the script (mean match 0.79 to 0.91 per test), voice pitch against the speaker's gender, a frame contact sheet for same people and seats, and OCR (tesseract) on the bottom of frames to catch burned-in subtitles. Two clips (H line 2, I line 15) had subtitles and were regenerated with "No captions, no subtitles, no on-screen text".
+3. Faster and safer download method: do NOT click Meta's Download button (it sometimes saved the previous clip). Instead, in the page, fetch the video element's src as a blob and save it with a chosen name, e.g. celpipB_07.mp4 (window.__fin2 in tools/META_AI_RUNBOOK.md). In a fresh chat the n-th video element is clip n. After a page reload the chat list is virtualised, so then take the LAST video instead.
+4. Meta sometimes repeats words after the line. The trimmer tries every pause as an end point and keeps the earliest one whose transcript is about as good as the best; this cut the videos from about 3.5 to about 2.3 minutes and raised match scores.
+5. Meta sometimes answers "couldn't be generated right now" or "safety check service temporarily unavailable"; just send the same prompt again. A first fetch can return a partial file under 1 MB; fetch again.
+6. Typing the prompt with computer type plus Return works; setting the textarea value from JavaScript does not register with Meta's page.
+
 ## Ideas not done yet
 
-1. Meta AI videos for Part 5 of Tests B to K, then audio for other parts if wanted.
 2. Automatic grading of Writing and Speaking inside the page.
 3. Progress history across attempts for both candidates.

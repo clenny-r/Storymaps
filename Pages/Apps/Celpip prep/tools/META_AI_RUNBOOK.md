@@ -32,7 +32,16 @@ Only <Name> (<seat>) speaks, in a natural Canadian English accent, saying exactl
 No captions, no music, no text on screen."
 Lines must be 21 words or fewer (split longer lines at a natural pause; the json already does this).
 
-## Automation that worked (Claude in Chrome javascript_tool, one clip per call)
+## STATUS: all 11 tests done (2026-10-21). Use this runbook only to redo a clip or make new tests.
+
+## Best method (used for C to K)
+Per clip, one browser_batch: click the prompt box (about x=800, y=596 in a 1568x698 view), computer type the prompt, key Return, wait 35 to 40 s, then javascript_tool `await window.__fin2('<T>', <clip number>)`:
+```js
+window.__fin2=async(T,c)=>{let t=0;const ready=()=>document.querySelectorAll('video').length>=c&&[...document.querySelectorAll('button')].some(b=>b.getAttribute('aria-label')==='Send');while(!ready()&&t<36){await new Promise(r=>setTimeout(r,2000));t+=2}if(!ready())return 'NOT READY vids='+document.querySelectorAll('video').length;await new Promise(r=>setTimeout(r,2500));const v=document.querySelectorAll('video')[c-1];let b=await (await fetch(v.currentSrc||v.src,{cache:'no-store'})).blob();if(b.size<1000000){await new Promise(r=>setTimeout(r,3000));b=await (await fetch(v.currentSrc||v.src,{cache:'no-store'})).blob();}const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=`celpip${T}_${String(c).padStart(2,'0')}.mp4`;document.body.appendChild(a);a.click();return 'saved '+c+' '+b.size+' t='+t}
+```
+If it returns NOT READY, call it again (or check the page text for a Meta error and resend the prompt). Then on the laptop shell: tar the celpip<T>_??.mp4 files from Downloads into Celpip test\_incoming, stage that one tar, and run /home/claude/meta/assemble.py <T> map_<T>.json (copy in tools\meta_assemble.py). Then scan for subtitles with tools\meta_capscan.py.
+
+## Older automation (kept for reference; the Download button method missed 5 of 25 clips)
 ```js
 // send a prompt
 const ta=document.querySelector('textarea'); const set=Object.getOwnPropertyDescriptor(HTMLTextAreaElement.prototype,'value').set;
