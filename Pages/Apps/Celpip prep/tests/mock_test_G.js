@@ -39,6 +39,9 @@
     /* house on the left */
     p += '<rect x="0" y="70" width="120" height="150" fill="#e8d7c0"/><polygon points="-10,72 60,30 130,72" fill="#9c4f3a"/>';
     p += '<rect x="20" y="100" width="34" height="30" fill="#bfe3f5" stroke="#fff" stroke-width="3"/><rect x="74" y="150" width="30" height="70" fill="#6d4c35"/>';
+    /* adult bringing a jug of juice out of the house */
+    p += person(89, 220, { s: .9, shirt: '#27ae60', skin: '#f0c9a6', hair: '#555555', arms: 'right' });
+    p += '<rect x="106" y="174" width="10" height="14" rx="2" fill="#f39c12" stroke="#fff" stroke-width="1"/>';
     /* banner */
     p += '<line x1="180" y1="40" x2="180" y2="200" stroke="#7a5233" stroke-width="4"/><line x1="470" y1="40" x2="470" y2="200" stroke="#7a5233" stroke-width="4"/>';
     p += '<rect x="215" y="30" width="220" height="30" rx="4" fill="#f26d9b"/><line x1="180" y1="44" x2="215" y2="44" stroke="#555"/><line x1="435" y1="44" x2="470" y2="44" stroke="#555"/>';
@@ -50,7 +53,7 @@
     p += '<line x1="62" y1="264" x2="72" y2="258" stroke="#555" stroke-width="3"/>';
     p += '<path d="M66 262 h46 a23 14 0 0 1 -46 0z" fill="#333"/><line x1="76" y1="274" x2="70" y2="300" stroke="#333" stroke-width="3"/><line x1="102" y1="274" x2="108" y2="300" stroke="#333" stroke-width="3"/>';
     p += '<g fill="#8b3a2b"><rect x="74" y="257" width="12" height="5" rx="2"/><rect x="92" y="257" width="12" height="5" rx="2"/></g>';
-    p += '<g stroke="#aaa" stroke-width="3" fill="none" opacity=".8"><path d="M80 250 q-6 -10 2 -20 q8 -10 0 -20"/><path d="M98 250 q6 -10 -2 -20 q-8 -10 0 -20"/></g>';
+    p += '<g stroke="#aaa" stroke-width="3" fill="none" opacity=".8"><path d="M80 252 q-6 -8 2 -16 q6 -6 0 -10"/><path d="M98 252 q6 -8 -2 -16 q-6 -6 0 -10"/></g>';
     /* child reaching for the escaping balloon */
     p += person(160, 330, { shirt: '#f39c12', s: .8, arms: 'up', skin: '#f0c9a6', hair: '#c49a42' });
     /* pile of presents */
@@ -74,6 +77,13 @@
     /* parent taking a photo */
     p += person(500, 318, { shirt: '#c64b73', skin: '#f2cfb0', hair: '#7a4a24', arms: 'left' });
     p += '<rect x="468" y="276" width="12" height="9" rx="2" fill="#333"/><circle cx="472" cy="280" r="2" fill="#9bd"/>';
+    /* grandmother cheering from a lawn chair */
+    p += '<rect x="562" y="266" width="30" height="5" fill="#2e86c1"/><rect x="590" y="236" width="5" height="35" fill="#2e86c1"/><g stroke="#555" stroke-width="2"><line x1="565" y1="271" x2="562" y2="292"/><line x1="590" y1="271" x2="594" y2="292"/></g>';
+    p += person(582, 280, { sit: true, s: .9, shirt: '#b87fb5', skin: '#e3b28b', hair: '#e6e6e6', arms: 'up' });
+    /* child shaking a present */
+    p += person(268, 334, { sit: true, s: .75, shirt: '#e74c3c', skin: '#a9714b', hair: '#1d1410', arms: 'left' });
+    p += '<rect x="242" y="302" width="12" height="10" fill="#f1c40f" transform="rotate(-15 248 307)"/>';
+    p += '<g stroke="#555" stroke-width="1.5"><line x1="242" y1="298" x2="238" y2="294"/><line x1="247" y1="295" x2="246" y2="290"/></g>';
     /* sack race */
     p += person(550, 360, { shirt: '#3fa3d6', s: .85, skin: '#d6a07a', hair: '#333', arms: 'up' });
     p += '<rect x="539" y="340" width="22" height="24" rx="3" fill="#b08550"/>';
@@ -154,17 +164,17 @@
             {
               lines: [
                 ['AMARA', 'Jordan, did you see the email from the festival people? About the Tidewaters concert?'],
-                ['JORDAN', 'No, I haven\'t checked my email since this morning. Why, what\'s up?'],
+                ['JORDAN', 'No, I haven\'t checked it since this morning. What\'s up?'],
                 ['AMARA', 'They\'ve moved it. You know that storm we had on Tuesday? Apparently it tore part of the roof off the stage at Point Pleasant Park, and they can\'t get it repaired in time.'],
                 ['JORDAN', 'You\'re kidding. So, is the whole thing cancelled?'],
                 ['AMARA', 'No, no. It\'s been pushed back to Sunday the twentieth, and it\'ll be indoors at the Harbourfront Arena instead of in the park.'],
                 ['JORDAN', 'Hang on. It was supposed to be Saturday, July twelfth, wasn\'t it?'],
-                ['AMARA', 'Yeah. And honestly, I\'m kind of gutted. The whole reason I wanted to go was to sit on the grass with a picnic and watch the sun go down over the water. A hockey arena just isn\'t the same, you know?'],
+                ['AMARA', 'Yeah. And honestly, I\'m kind of gutted. The whole reason I wanted to go was to sit on the grass with a picnic and watch the sun go down over the water. An arena just isn\'t the same.'],
                 ['JORDAN', 'I get that. Still, as long as the band\'s playing, I\'m happy. Did they say anything about our tickets? We paid a hundred and thirty for the two of them.'],
                 ['AMARA', 'They\'re still valid for the new date. Or we can ask for a full refund through the ticket website, but only until July fifteenth. After that, no refunds.']
               ],
               questions: [
-                { id: 'L1.1', q: 'Why has the concert been moved?', o: ['Bad weather damaged the stage.', 'The band had to change its plans.', 'Too few tickets had been sold.', 'The park was needed for an event.'] },
+                { id: 'L1.1', q: 'Why has the concert been moved?', o: ['The outdoor venue was harmed and cannot be fixed in time.', 'More storms are expected on the original date.', 'The band asked to play somewhere indoors.', 'The arena became free on an earlier date.'] },
                 { id: 'L1.2', q: 'What is true about the new arrangements?', o: ['The concert will be held eight days later.', 'The concert will be held a week earlier.', 'The concert will move to a different park.', 'The concert will now start on a Saturday.'] },
                 { id: 'L1.3', q: 'How does Amara feel about the change?', o: ['Let down, since the setting mattered to her', 'Relieved, because the park is often crowded', 'Annoyed, because a refund is not possible', 'Fine, as long as the band still performs'] }
               ]
@@ -177,11 +187,11 @@
                 ['AMARA', 'So let\'s not drive at all. The number nine bus stops right outside the garden centre and goes straight down Barrington. It\'s about twenty minutes.'],
                 ['JORDAN', 'True. But I\'d still be running in the door with dirt on my hands, and I hate rushing. Actually, you know what? Kelsey\'s been asking me to cover one of her Saturdays for weeks. Maybe she\'d take my Sunday in exchange.'],
                 ['AMARA', 'Oh, that would be perfect. Then the timing wouldn\'t matter at all.'],
-                ['JORDAN', 'Let me message her right now, before I forget.']
+                ['JORDAN', 'And she owes me one, so I doubt she\'ll say no. Hang on, where\'s my phone?']
               ],
               questions: [
-                { id: 'L1.4', q: 'What problem does Jordan have with the new date?', o: ['He is scheduled to work that afternoon.', 'He is going out of town that weekend.', 'He has already promised to help a friend.', 'He does not like concerts at the arena.'] },
-                { id: 'L1.5', q: 'Why does Amara suggest taking the bus?', o: ['Parking there is costly and fills up.', 'The bus is quicker than driving at rush hour.', 'Concert tickets include a free bus ride.', 'Jordan\'s car is being repaired that weekend.'] },
+                { id: 'L1.4', q: 'What problem does Jordan have with the new date?', o: ['His shift ends close to when the doors open.', 'He has promised to cover a coworker\'s Saturday.', 'He cannot find parking near the garden centre.', 'He does not enjoy concerts in a hockey arena.'] },
+                { id: 'L1.5', q: 'Why does Amara suggest taking the bus?', o: ['Leaving a car near the arena would be pricey and difficult.', 'The bus stops right outside the arena.', 'Concert tickets include a free bus ride.', 'Jordan would not have to rush after work.'] },
                 { id: 'L1.6', q: 'What will Jordan probably do next?', o: ['Ask a coworker to trade shifts', 'Ask his manager for the day off', 'Look up the bus schedule online', 'Request a refund for both tickets'] }
               ]
             },
@@ -190,13 +200,13 @@
                 ['JORDAN', 'Good news. Kelsey said yes. So I\'ll work her shift on Saturday the nineteenth, and I\'m free all day on the twentieth.'],
                 ['AMARA', 'Great! Oh, and I just read the rest of the email. The arena doesn\'t allow outside food or drinks, so the picnic basket is definitely staying home.'],
                 ['JORDAN', 'That\'s a shame. Anything else?'],
-                ['AMARA', 'Yeah, to apologize for the change, every ticket comes with a ten-dollar voucher for the food stands inside.'],
+                ['AMARA', 'Yeah, to apologize for the change, every ticket comes with a ten-dollar voucher for the food stands inside. Oh wait, no, I misread that. It\'s fifteen dollars a ticket.'],
                 ['JORDAN', 'Not bad. That\'ll cover a couple of drinks, anyway. But I\'d rather have a proper meal than nachos and hot dogs. What about that Thai place across the street from the arena? We could eat there first and then just walk over.'],
                 ['AMARA', 'Sounds good. If we get there around five, we\'ll have plenty of time.']
               ],
               questions: [
-                { id: 'L1.7', q: 'What is the total value of the vouchers they will receive?', o: ['$20', '$10', '$130', '$65'] },
-                { id: 'L1.8', q: 'Why does Jordan suggest the Thai restaurant?', o: ['He wants something more filling than snacks.', 'The arena food stands do not take vouchers.', 'Amara forgot to pack the picnic basket.', 'It offers a discount to concert ticket holders.'] }
+                { id: 'L1.7', q: 'What is the total value of the vouchers they will receive?', o: ['$30', '$20', '$15', '$25'] },
+                { id: 'L1.8', q: 'Why does Jordan suggest the Thai restaurant?', o: ['He wants a real dinner rather than arena snacks.', 'The vouchers cannot be used at the food stands.', 'Outside food is allowed at that restaurant only.', 'It would leave time to go home after his shift.'] }
               ]
             }
           ]
@@ -213,19 +223,22 @@
               ['BAINS', 'No, it cools the room just fine. The problem is the noise. Every few minutes it makes this loud rattling sound, and it wakes me up just as I\'m falling asleep. And if I turn it off, the room gets way too hot.'],
               ['CLERK', 'I understand. I can send someone from maintenance up to take a look. They\'re usually there within about twenty minutes.'],
               ['BAINS', 'I appreciate that, but I\'m giving a presentation at eight tomorrow morning, and I really need to get some sleep. Even if they come right away, they might not be able to fix it tonight. Is there any chance I could just switch rooms?'],
-              ['CLERK', 'Let me check. Yes, I have six twelve, on the sixth floor. It\'s the same type of room, one king bed, but it faces the courtyard instead of the street, so it\'s a lot quieter.'],
+              ['CLERK', 'Let me check. I have three oh five, but, no, that one\'s right beside the ice machine.'],
+              ['BAINS', 'That probably won\'t be much better.'],
+              ['CLERK', 'No. Ah, here we go. I have six twelve, on the sixth floor. It\'s the same type of room, one king bed, but it faces the courtyard instead of the street, so it\'s a lot quieter.'],
               ['BAINS', 'That sounds much better.'],
               ['CLERK', 'And because of the trouble, I\'d like to include breakfast in our restaurant tomorrow at no charge. It opens at six thirty, so you\'ll have time before your presentation.'],
-              ['BAINS', 'Oh, that\'s very kind. Thank you.'],
+              ['BAINS', 'Oh, that\'s very kind. Thank you. Is the restaurant easy to find? I\'ll be in a bit of a rush.'],
+              ['CLERK', 'It\'s just off the lobby, past the gift shop. And if you\'re really short on time, just ask them to pack something you can take with you.'],
               ['CLERK', 'Here are your new key cards. If you\'d like to go up and pack your things, I\'ll ask Luis from our bell staff to meet you at four eighteen with a cart in about ten minutes. Maintenance can deal with the old room in the morning.'],
               ['BAINS', 'Perfect. Thanks so much for your help.']
             ],
             questions: [
-              { id: 'L2.1', q: 'What is wrong with Mr. Bains\'s room?', o: ['The air conditioner is too noisy.', 'The air conditioner does not cool the room.', 'The room is too close to the elevator.', 'The window facing the street will not close.'] },
-              { id: 'L2.2', q: 'Why does Mr. Bains turn down the clerk\'s first offer?', o: ['He needs rest and doubts a quick repair.', 'He thinks maintenance will take too long to arrive.', 'He would prefer a room that faces the courtyard.', 'He is planning to check out early the next day.'] },
-              { id: 'L2.3', q: 'According to the clerk, why is room 612 quieter?', o: ['It does not face the street.', 'Its air conditioner was recently replaced.', 'It is at the end of a quiet hallway.', 'It has thicker walls than other rooms.'] },
-              { id: 'L2.4', q: 'What does the clerk do to make up for the problem?', o: ['Offers a free morning meal', 'Takes money off his bill', 'Gives him a later checkout', 'Moves him to a larger room'] },
-              { id: 'L2.5', q: 'Who will meet Mr. Bains at his room?', o: ['A bell staff member with a cart', 'A maintenance worker with tools', 'The hotel manager on duty tonight', 'A housekeeper with fresh towels'] }
+              { id: 'L2.1', q: 'What is Mr. Bains\'s main complaint?', o: ['A sound keeps interrupting his sleep.', 'The air conditioner does not cool the room.', 'The room becomes too hot during the night.', 'Traffic outside keeps him awake.'] },
+              { id: 'L2.2', q: 'Why does Mr. Bains turn down the clerk\'s first offer?', o: ['He has an early commitment and doubts it can be fixed tonight.', 'He thinks maintenance will take too long to arrive.', 'He would prefer a room that faces the courtyard.', 'He is planning to check out early the next day.'] },
+              { id: 'L2.3', q: 'According to the clerk, why is room 612 quieter?', o: ['It looks onto an inner courtyard.', 'Its air conditioner was recently replaced.', 'It is on a higher floor than room 305.', 'It is a larger room with a king bed.'] },
+              { id: 'L2.4', q: 'What does the clerk do to make up for the problem?', o: ['Offers him a complimentary morning meal', 'Takes one night off his bill', 'Packs him a lunch to take away', 'Moves him to a larger room'] },
+              { id: 'L2.5', q: 'Why will someone meet Mr. Bains at room 418?', o: ['To help him move his belongings', 'To look at the air conditioner tonight', 'To bring him his new key cards', 'To arrange his free breakfast'] }
             ]
           }]
         },
@@ -247,16 +260,18 @@
               ['THEO', 'Bringing in babies that don\'t need rescuing, without a doubt. People see a fawn lying alone in the grass and assume it\'s been abandoned. But the mother leaves it there on purpose while she feeds, and she comes back. So our advice is simple: before you touch anything, call our hotline and describe what you see. Very often the best thing to do is nothing at all.'],
               ['HOST', 'Do volunteers need special training?'],
               ['THEO', 'Everyone takes a two-day orientation, and then you start with birds and small animals. If you want to work with larger mammals, raccoons or foxes, for example, you also need a rabies vaccination, which the centre helps arrange.'],
+              ['HOST', 'Can people come and see the animals?'],
+              ['THEO', 'Not the animal areas, I\'m afraid. The less contact they have with people, the better their chances once they\'re released. But we do hold an open house every September, with talks and a tour of the outdoor flight cages.'],
               ['HOST', 'And what keeps you coming back every Saturday?'],
               ['THEO', 'Release days. When you\'ve spent weeks looking after an animal, and you open the box and watch it run, or fly, back into the woods, there\'s really nothing like it.']
             ],
             questions: [
               { id: 'L3.1', q: 'How did Théo first become involved with the centre?', o: ['He asked it for help with a hurt bird.', 'He studied animal care at college.', 'A neighbour invited him to volunteer.', 'He read about the centre in a newspaper.'] },
               { id: 'L3.2', q: 'How does Théo describe most of his regular work?', o: ['Ordinary rather than exciting', 'Stressful and often risky', 'Technical and highly skilled', 'Mostly done outdoors in the woods'] },
-              { id: 'L3.3', q: 'Why does the centre need more help from May to July?', o: ['Baby birds must be fed very often.', 'Many volunteers go on vacation then.', 'The centre stays open for longer hours.', 'More animals are released in the summer.'] },
-              { id: 'L3.4', q: 'According to Théo, what do people often do wrong?', o: ['Rescue young animals that are not abandoned', 'Feed wild animals bread and other human food', 'Release injured animals before they have healed', 'Keep injured wild animals in their homes as pets'] },
-              { id: 'L3.5', q: 'What extra requirement applies to volunteers who handle foxes?', o: ['They must get a rabies vaccination.', 'They must pay for their own training.', 'They must work only on weekday shifts.', 'They must complete a longer orientation.'] },
-              { id: 'L3.6', q: 'What does Théo find most rewarding?', o: ['Seeing animals he cared for go free', 'Feeding the baby birds in the spring', 'Answering calls on the centre\'s hotline', 'Teaching new volunteers about animals'] }
+              { id: 'L3.3', q: 'Why does the centre need more help from May to July?', o: ['Young birds need feeding at short intervals all day.', 'Many regular volunteers go on vacation then.', 'The open house takes place in those months.', 'More animals are released in the summer.'] },
+              { id: 'L3.4', q: 'According to Théo, what do people often do wrong?', o: ['Take away young animals whose mothers will return', 'Call the hotline before checking on an animal', 'Leave a hurt animal alone instead of boxing it', 'Release injured animals before they have healed'] },
+              { id: 'L3.5', q: 'What extra requirement applies to volunteers who handle foxes?', o: ['A medical step that the centre helps them arrange', 'A two-day orientation before their first shift', 'A full year of working with small animals first', 'A longer orientation focused on larger mammals'] },
+              { id: 'L3.6', q: 'What does Théo find most rewarding?', o: ['Watching animals he looked after return to the wild', 'Feeding the baby birds in the spring', 'Giving tours of the flight cages in September', 'Answering calls on the centre\'s hotline'] }
             ]
           }]
         },
@@ -269,16 +284,18 @@
               ['NEWS', 'Walkers and cyclists in Bridgewater have a new place to explore this week. The long-awaited LaHave Riverside Trail officially opened on Saturday morning.'],
               ['NEWS', 'The fourteen-kilometre paved trail follows the east bank of the river, linking the downtown waterfront with Riverbend Park to the south. Much of it runs along the route of an abandoned rail line.'],
               ['NEWS', 'The project cost three point two million dollars. It took two years to complete, about six months longer than planned, after spring flooding washed out sections of new work in its first year.'],
-              ['NEWS', 'Trail manager Denise Corkum says more than two thousand people used the trail on opening day. She reminds users that people on foot have the right of way, and cyclists must keep their speed under twenty kilometres an hour. Electric bicycles are allowed, but motorized scooters are not. Dogs are welcome, as long as they stay on a leash.'],
+              ['NEWS', 'Trail manager Denise Corkum says more than two thousand people used the trail on opening day. She reminds users that people on foot have the right of way, and cyclists must keep their speed under twenty kilometres an hour.'],
+              ['NEWS', 'Electric bicycles are allowed, but motorized scooters are not. Dogs are welcome, as long as they stay on a leash.'],
               ['NEWS', 'The first three kilometres, closest to downtown, are lit and stay open until eleven p.m. The rest of the trail closes at sunset.'],
+              ['NEWS', 'A twenty-space parking lot has been built at Riverbend Park, and portable toilets will stand at the halfway point until permanent washrooms are added next year.'],
               ['NEWS', 'Some homeowners whose properties back onto the trail have raised concerns about privacy and noise. The town says it will plant a row of trees along those sections this fall.'],
               ['NEWS', 'A second phase, which would extend the trail another six kilometres south, could begin in 2028, but only if the town can secure the necessary funding.']
             ],
             questions: [
-              { id: 'L4.1', q: 'What is the news item mainly about?', o: ['The opening of a new riverside trail', 'A plan to bring back an old railway line', 'Flood damage along the banks of the river', 'A cycling race in Bridgewater'] },
-              { id: 'L4.2', q: 'Why did the project take longer than expected?', o: ['High water destroyed some of the work.', 'Homeowners objected to the route.', 'The funding was approved late.', 'The old rail line had to be removed.'] },
-              { id: 'L4.3', q: 'Which statement about the trail rules is correct?', o: ['People walking have the right of way.', 'Cyclists may ride at up to 30 km/h.', 'Motorized scooters are allowed after dark.', 'Dogs may run freely on most sections.'] },
-              { id: 'L4.4', q: 'How will the town respond to homeowners\' concerns?', o: ['By planting trees beside parts of the trail', 'By closing the trail earlier near houses', 'By moving that section farther from homes', 'By banning bicycles near private property'] },
+              { id: 'L4.1', q: 'What is the news item mainly about?', o: ['The launch of a new route for walking and cycling', 'Plans to extend a trail farther south', 'Residents\' complaints about a new trail', 'Flood damage along the banks of the river'] },
+              { id: 'L4.2', q: 'Why did the project take longer than expected?', o: ['High water destroyed some of the early work.', 'Homeowners objected to the route along their yards.', 'The funding for the trail was approved late.', 'The old rail line had to be removed first.'] },
+              { id: 'L4.3', q: 'Which trail user is following the rules?', o: ['A cyclist going 18 km/h near downtown at 10 p.m.', 'A walker on the southern section at 10 p.m.', 'A rider on a motorized scooter at noon', 'An owner letting a calm dog walk off leash'] },
+              { id: 'L4.4', q: 'How will the town respond to homeowners\' concerns?', o: ['By adding a natural screen along some sections', 'By closing the trail at sunset near houses', 'By moving that section farther from homes', 'By banning bicycles near private property'] },
               { id: 'L4.5', q: 'What can be inferred about the second phase?', o: ['It is not yet certain to go ahead.', 'It will start before the trees are planted.', 'It will follow the west bank of the river.', 'It has already received full funding.'] }
             ]
           }]
@@ -310,10 +327,10 @@
               { id: 'L5.2', q: 'Why is Andre against a surprise party?', o: ['Their father disliked an earlier surprise.', 'Their mother does not like being around large crowds.', 'The community centre hall would cost far too much.', 'Their parents will be away for most of September.'] },
               { id: 'L5.3', q: 'Why does Simone mention the gardening shirt?', o: ['To agree with Andre about surprises', 'To suggest a gift idea for their father', 'To describe what Dad usually wears at home', 'To recall a funny story from the first date'] },
               { id: 'L5.4', q: 'Why does Simone suggest Café Rosalind?', o: ['It is where their parents first went out.', 'It is the cheapest place near Quinpool Road.', 'Their parents celebrated their wedding there.', 'It has the largest private room in the area.'] },
-              { id: 'L5.5', q: 'What is the purpose of the open house?', o: ['To include guests not invited to the dinner', 'To let their parents rest after a busy night out', 'To show everyone the slideshow of wedding photos', 'To save money by not paying for a large dinner'] },
-              { id: 'L5.6', q: 'How much will each sibling pay for the dinner?', o: ['$550', '$1,650', '$55', '$600'] },
-              { id: 'L5.7', q: 'What will Keisha be responsible for?', o: ['Making a slideshow of old photos', 'Booking the room upstairs at the café', 'Sending invitations to all the guests', 'Baking a cake for the open house'] },
-              { id: 'L5.8', q: 'What will Keisha most likely tell her parents?', o: ['That they are going out for dinner', 'That a big party is being held for them', 'That Aunt Pearl is coming to visit them', 'That the open house has been cancelled'] }
+              { id: 'L5.5', q: 'What is the purpose of the open house?', o: ['To make room for people who cannot fit at the dinner', 'To let their parents rest after a busy night out', 'To show everyone the slideshow of wedding photos', 'To give Andre more time to send the invitations'] },
+              { id: 'L5.6', q: 'What does Andre mean when he says "let\'s not pile much more on top"?', o: ['He wants to keep any further spending small.', 'He thinks three courses is too much food.', 'He wants fewer than thirty people invited.', 'He would like other relatives to share the cost.'] },
+              { id: 'L5.7', q: 'What will Keisha be responsible for?', o: ['Turning relatives\' old pictures into a presentation', 'Booking the room upstairs at the café', 'Sending invitations to all the guests', 'Preparing coffee and cake for the open house'] },
+              { id: 'L5.8', q: 'What will the parents most likely know before the evening?', o: ['That their children are taking them out to eat, but not who else will come', 'That a dinner with thirty guests is being held for them', 'Nothing at all until they walk into the café', 'That Aunt Pearl is bringing photos from their wedding'] }
             ]
           }]
         },
@@ -325,20 +342,30 @@
             lines: [
               ['NARR', 'Should fast food companies be allowed to advertise directly to children? As concern grows about children\'s eating habits, the question is getting serious attention across the country.'],
               ['NARR', 'Quebec has restricted commercial advertising aimed at children under thirteen since 1980, and some health groups would like to see similar rules everywhere. Dr. Nora Abiola, a pediatric dietitian in Winnipeg, is one of them.'],
-              ['NARR', 'She says young children often cannot tell the difference between an advertisement and regular entertainment, especially when ads appear inside games and videos. In her view, cartoon mascots and free toys teach children to connect happiness with salty, sugary food long before they are old enough to judge for themselves.'],
-              ['NARR', 'Abiola also argues that parents are simply outspent. A family trying to teach good habits at home is competing with marketing budgets worth millions of dollars. "We already accept that some products should not be sold to children," she says. "Cigarettes are the obvious example. Why should habits that can last a lifetime be any different?"'],
-              ['NARR', 'Not everyone agrees. Gavin Hartley owns two family restaurants in Saskatoon and teaches marketing at a local college. He says a ban would be very hard to define. Would a poster for a kids\' menu count? What about a children\'s hockey team whose jerseys are paid for by a restaurant?'],
+              ['NARR', 'She says young children often cannot tell the difference between an advertisement and regular entertainment, especially when ads appear inside games and videos.'],
+              ['NARR', 'In her view, cartoon mascots and free toys teach children to connect happiness with salty, sugary food long before they are old enough to judge for themselves.'],
+              ['NARR', 'Abiola also argues that parents are simply outspent. A family trying to teach good habits at home is competing with marketing budgets worth millions of dollars.'],
+              ['NARR', '"We already accept that some products should not be sold to children," she says. "Cigarettes are the obvious example. Why should habits that can last a lifetime be any different?"'],
+              ['NARR', 'Not everyone agrees. Gavin Hartley owns two family restaurants in Saskatoon and teaches marketing at a local college. He says a ban would be very hard to define.'],
+              ['NARR', 'Would a poster for a kids\' menu count? What about a children\'s hockey team whose jerseys are paid for by a restaurant?'],
+              ['NARR', 'Abiola rejects that argument. She points out that Quebec has applied its rules for more than forty years by asking a few practical questions: who the ad is aimed at, when and where it appears, and whether it uses things like cartoon characters or toys.'],
+              ['NARR', '"It is not perfect," she says, "but it is far from impossible."'],
               ['NARR', 'Hartley also predicts that large chains would simply move their marketing to places where the rules are weaker, such as social media accounts run from outside the country, while small businesses like his would lose one of their few affordable ways to attract families.'],
+              ['NARR', 'On that point, Abiola makes a concession. She admits that research from Quebec has produced mixed results, partly because children there still see a great deal of advertising online from companies based elsewhere.'],
+              ['NARR', 'Hartley says that is exactly his point: rules that stop at a border mostly punish the local businesses that cannot get around them.'],
+              ['NARR', 'Hartley does not defend every kind of marketing, however. He agrees that online games designed to keep children clicking on a burger brand go too far, and says he could accept limits on those.'],
+              ['NARR', 'What he opposes is a broad ban that treats a neighbourhood restaurant\'s menu poster in exactly the same way.'],
               ['NARR', 'In his view, the responsibility belongs with parents, and the money would be better spent on nutrition lessons in schools, so that children learn to make healthy choices for themselves.'],
+              ['NARR', 'Abiola supports nutrition lessons as well, but doubts they can compete with what children see every day. "One lesson a week against hundreds of ads," she says, "is not a fair fight."'],
               ['NARR', 'A research team in Halifax plans to publish a study next spring comparing children\'s eating habits in provinces with and without advertising limits.']
             ],
             questions: [
-              { id: 'L6.1', q: 'What issue does the report discuss?', o: ['Banning fast food ads aimed at children', 'Removing fast food from school cafeterias', 'Adding health warnings to restaurant menus', 'Raising taxes on sugary drinks and snacks'] },
-              { id: 'L6.2', q: 'According to Dr. Abiola, why are young children easily influenced by ads?', o: ['They often cannot recognize an ad as an ad.', 'They spend more hours watching TV than adults.', 'They have more pocket money than in the past.', 'They copy what they see their parents eating.'] },
-              { id: 'L6.3', q: 'Why does Dr. Abiola mention cigarettes?', o: ['To argue there is a precedent for such limits', 'To claim that fast food is as harmful as smoking', 'To suggest that parents who smoke set a bad example', 'To explain why mascots appear in video games'] },
-              { id: 'L6.4', q: 'What is one of Gavin Hartley\'s objections to a ban?', o: ['It would be hard to define clearly.', 'It would raise prices on kids\' menus.', 'It would hurt children\'s hockey teams.', 'It would close many large restaurant chains.'] },
-              { id: 'L6.5', q: 'What does Hartley predict large chains would do?', o: ['Move their ads where rules are weaker', 'Lower prices on their children\'s meals', 'Close many of their smaller locations', 'Sponsor more school nutrition programs'] },
-              { id: 'L6.6', q: 'What does Hartley think would be a better approach?', o: ['Nutrition lessons in schools', 'Warning labels on restaurant posters', 'Grants for families to buy healthy food', 'Free toys only with healthy kids\' meals'] }
+              { id: 'L6.1', q: 'What issue does the report discuss?', o: ['Whether restaurant marketing aimed at children should be restricted', 'Whether fast food should be removed from school cafeterias', 'Whether nutrition lessons should be added to school programs', 'Whether taxes on sugary drinks and snacks should rise'] },
+              { id: 'L6.2', q: 'According to Dr. Abiola, why are young children easily influenced by ads?', o: ['They may not realize they are being sold something.', 'They spend more hours watching TV than adults do.', 'They are given free toys in exchange for watching.', 'They copy what they see their parents eating.'] },
+              { id: 'L6.3', q: 'Why does Dr. Abiola mention cigarettes?', o: ['To show that limits on selling to children already exist', 'To claim that fast food is as harmful as smoking', 'To suggest that parents who smoke set a bad example', 'To explain why mascots appear in video games'] },
+              { id: 'L6.4', q: 'How does Abiola respond to the claim that a ban is hard to define?', o: ['She notes that one province has managed it for decades.', 'She admits the rules would need years of further study.', 'She proposes banning only cartoon mascots and toys.', 'She agrees that team sponsorships should be exempt.'] },
+              { id: 'L6.5', q: 'Why does Hartley say the Quebec research supports his view?', o: ['Children there are still reached by outside advertisers.', 'Restaurants there sell more kids\' meals than before.', 'Children there eat more fast food than elsewhere.', 'The Halifax study found no difference between provinces.'] },
+              { id: 'L6.6', q: 'Which program would Hartley most likely support?', o: ['A grade-five unit on reading food labels', 'Banning restaurant sponsorship of youth teams', 'Removing kids\' menu posters from restaurants', 'Taxing toys sold with children\'s meals'] }
             ]
           }]
         }
@@ -351,7 +378,7 @@
         {
           id: 'R1', title: 'Part 1: Reading Correspondence', minutes: 11,
           instructions: 'Read the following message. Answer questions 1 to 6 by choosing the best option from each drop-down menu. Then read the reply and complete it by choosing the best option for each blank (7 to 11).',
-          passage: '<h3>Message</h3><p>Hello Wildcats families,</p><p>Welcome to the spring season! I am thrilled to be coaching the Under-10 Wildcats for a third year, and I am looking forward to meeting the six girls who have moved up from our Under-8 program. Before our first practice, there are a few changes you should know about.</p><p>First, our practice schedule. The town is replacing the grass at Kinsmen Field with artificial turf, and the work will not be finished until mid-June at the earliest. Until then, we will practise at Oakridge Elementary School on Wednesdays from 5:30 to 6:45 p.m., rather than on Tuesdays. The school field has no washrooms, and the building itself is locked after 5:00, so please make sure your child goes before leaving home.</p><p>Second, equipment. Shin guards are required at every practice and game. This is a league rule rather than my own, and referees will not allow a player on the field without them. Please also send a full water bottle labelled with your child\'s name. New jerseys will be handed out at the first practice. The $35 fee covers the jersey and matching socks. It can be paid in cash or by e-transfer to our treasurer, Paulette Gauthier, and is due by May 16. Families with more than one child registered with the club pay only $20 for each additional child.</p><p>Third, our big event this season is the Hub City Tournament in Truro on Saturday, June 7. The first whistle is at 9:00 a.m., but I need every player there by 8:15 to warm up. Last year, two of our girls arrived after the warm-up and had to sit out the opening game, which was hard on everyone. I am also looking for four parents who can drive players who do not have a ride. If you can help, please reply by May 30 so that I can organize car groups.</p><p>Finally, weather. We play in light rain, but practice is cancelled if there is thunder or lightning. I will send a text by 4:00 p.m. if we need to cancel, so please make sure the club office has your current cell number. I no longer post cancellations on the club website, because it was often updated too late to be useful.</p><p>Thank you for trusting me with your daughters. Let\'s have a fun and safe season!</p><p>Coach Danielle Fortier</p>',
+          passage: '<h3>Message</h3><p>Hello Wildcats families,</p><p>Welcome to the spring season! I am thrilled to be coaching the Under-10 Wildcats for a third year, and I am looking forward to meeting the six girls who have moved up from our Under-8 program. Before our first practice, there are a few changes you should know about.</p><p>First, our practice schedule. The town is replacing the grass at Kinsmen Field with artificial turf, and the work will not be finished until mid-June at the earliest. Until then, we will practise at Oakridge Elementary School on Wednesdays from 5:30 to 6:45 p.m., rather than on Tuesdays. The school field has no washrooms, and the building itself is locked after 5:00, so please make sure your child goes before leaving home.</p><p>Second, equipment. Shin guards are required at every practice and game. This is a league rule rather than my own, and referees will not allow a player on the field without them. Please also send a full water bottle labelled with your child\'s name. New jerseys will be handed out at the first practice. The $35 fee covers the jersey and matching socks. It can be paid in cash or by e-transfer to our treasurer, Paulette Gauthier, and is due by May 16. Families with more than one child registered with the club pay only $20 for each additional child, whichever team that child plays on.</p><p>Third, our big event this season is the Hub City Tournament in Truro on Saturday, June 7. The first whistle is at 9:00 a.m., but I need every player there by 8:15 to warm up. Last year, two of our girls arrived after the warm-up and had to sit out the opening game, which was hard on everyone. I am also looking for four parents who can drive players who do not have a ride. If you can help, please reply by May 30 so that I can organize car groups.</p><p>Finally, weather. We play in light rain, but practice is cancelled if there is thunder or lightning. I will send a text by 4:00 p.m. if we need to cancel, so please make sure the club office has your current cell number. I no longer post cancellations on the club website, because it was often updated too late to be useful.</p><p>Thank you for trusting me with your daughters. Let\'s have a fun and safe season!</p><p>Coach Danielle Fortier</p>',
           questions: [
             { id: 'R1.1', q: 'The team must practise somewhere else until at least mid-June because', o: ['work on its usual playing surface will still be under way.', 'the school has reserved Kinsmen Field on Tuesday evenings.', 'the turf at Oakridge Elementary School is being replaced.', 'the town locks the gates of Kinsmen Field after 5:00.'] },
             { id: 'R1.2', q: 'The coach most likely mentions that the school building is locked after 5:00 because', o: ['players will have nowhere to use a toilet there.', 'families cannot wait indoors if it starts to rain.', 'practice has to end before the building closes.', 'equipment cannot be stored in the school overnight.'] },
@@ -377,17 +404,17 @@
             '<tr><td>103*</td><td>Mon to Fri</td><td>9:15 a.m.</td><td>10:40 a.m.</td><td>1:00 p.m.</td><td>$42</td><td>$66</td></tr>' +
             '<tr><td>105</td><td>Daily</td><td>1:30 p.m.</td><td>2:55 p.m.</td><td>5:15 p.m.</td><td>$48</td><td>$72</td></tr>' +
             '<tr><td>107*</td><td>Fri, Sat, Sun</td><td>5:45 p.m.</td><td>7:10 p.m.</td><td>9:30 p.m.</td><td>$55</td><td>$80</td></tr>' +
-            '</tbody></table></div><ul class="notes"><li>Children aged 2 to 11 pay half the Economy fare on any train. Children under 2 travel free on an adult\'s lap.</li><li>Seniors aged 65 and over receive 10% off any adult fare.</li><li>Economy tickets cannot be refunded. Flex tickets can be refunded in full up to 24 hours before departure.</li><li>Bicycles are carried only on trains marked *, for $12 per bicycle each way, and must be reserved when booking.</li></ul>',
-          reply: '<h3>Email</h3><p>Hi Jasmine,</p><p>I have finally booked my trip to see you in Moncton. I am leaving on Saturday, October 18, once my shift at the bakery ends at noon. Since I want to bring my bike so we can ride the trails together, I have no choice but to take train [[R2.1]], which gets in at [[R2.2]]. Could you pick us up at the station?</p><p>Leo is coming with me too. He turned eight last month, so his ticket will cost only [[R2.3]]. I chose Economy for both of us, even though those tickets [[R2.4]], because my days off are already approved and every dollar counts this month. With the bike, the total for both of us for the trip there comes to [[R2.5]].</p><p>I have not booked the trip home yet, because the return schedule is different. I will send you the details once I have them.</p><p>See you soon,<br>Nadine</p>',
+            '</tbody></table></div><ul class="notes"><li>Children aged 2 to 11 pay half the Economy fare on any train. Children under 2 travel free on an adult\'s lap.</li><li>Seniors aged 65 and over receive 10% off any adult fare.</li><li>Economy tickets cannot be refunded. Flex tickets can be refunded in full up to 24 hours before departure. After that, they cannot be refunded, but they can be moved to another date at no charge.</li><li>Bicycles are carried only on trains marked *, for $12 per bicycle each way, and must be reserved when booking.</li></ul>',
+          reply: '<h3>Email</h3><p>Hi Jasmine,</p><p>I have finally booked my trip to see you in Moncton. I am leaving on Saturday, October 18, once my shift at the bakery ends at noon. Since I want to bring my bike so we can ride the trails together, I have no choice but to take train [[R2.1]], which gets in at [[R2.2]]. Could you pick us up at the station?</p><p>Leo is coming with me too. He turned eight last month, so he [[R2.3]]. I chose Economy for both of us, even though those tickets [[R2.4]], because my days off are already approved and every dollar counts this month. With the bike, the total for both of us for the trip there comes to [[R2.5]].</p><p>I have not booked the trip home yet, because the return schedule is different. I will send you the details once I have them.</p><p>See you soon,<br>Nadine</p>',
           blanks: [
             { id: 'R2.1', o: ['107', '103', '101', '105'] },
             { id: 'R2.2', o: ['9:30 p.m.', '5:15 p.m.', '7:10 p.m.', '1:00 p.m.'] },
-            { id: 'R2.3', o: ['$27.50', '$55.00', '$24.00', '$40.00'] },
+            { id: 'R2.3', o: ['pays half of the Economy fare', 'can still ride free on my lap', 'pays the same fare as an adult', 'gets 10% off the adult fare'] },
             { id: 'R2.4', o: ['give no refunds', 'cost more than Flex', 'sell out quickly', 'exclude bicycles'] },
             { id: 'R2.5', o: ['$94.50', '$82.50', '$67.00', '$122.00'] }
           ],
           questions: [
-            { id: 'R2.6', q: 'A 70-year-old taking the earliest train with a Flex ticket will pay', o: ['$64.80.', '$72.00.', '$43.20.', '$48.00.'] },
+            { id: 'R2.6', q: 'A passenger with a Flex ticket for train 101 on Friday cancels at 8:00 p.m. on Thursday. She can', o: ['move the ticket to another date, but not get her money back.', 'get a full refund, since Flex tickets are refundable.', 'get her fare back minus the $12 bicycle charge.', 'get nothing at all, exactly as with an Economy ticket.'] },
             { id: 'R2.7', q: 'A woman travelling on a Tuesday with her bicycle and her one-year-old son on her lap, on the cheapest fare possible, will pay', o: ['$54.00.', '$42.00.', '$75.00.', '$60.00.'] },
             { id: 'R2.8', q: 'Nadine\'s reason for choosing Economy suggests that she', o: ['is confident her travel date will not change.', 'believes Flex tickets do not include bicycles.', 'expects a refund if she has to cancel.', 'thinks Economy seats are more comfortable.'] }
           ]
@@ -395,14 +422,14 @@
         {
           id: 'R3', title: 'Part 3: Reading for Information', minutes: 10,
           instructions: 'Read the following article. Decide which paragraph, A to D, contains the information in each statement. If the information is not given in any paragraph, choose E.',
-          passage: '<h3>Growing a Greener City</h3><p><b>A.</b> Across Canada, cities are setting ambitious goals for planting trees, and the reasons go well beyond appearance. On a hot summer afternoon, a street lined with mature trees can be several degrees cooler than a nearby street with none, which reduces the need for air conditioning. Tree roots and leaves also capture rainwater, slowing its flow into storm drains during heavy downpours. Some studies have even found that homes on leafy streets sell for slightly higher prices than similar homes on bare ones. Trees also trap dust and other pollutants, and researchers have linked green streets with lower stress among the people who live on them.</p><p><b>B.</b> Keeping those trees alive, however, is harder than planting them. A tree in a forest may live for more than a century, but one planted beside a downtown sidewalk often survives only fifteen to twenty years. Its roots are squeezed into a small pit of hard, packed soil, and each winter it is exposed to the salt spread on roads and sidewalks. To give roots more room, some cities now install underground frames, called soil cells, that hold loose soil beneath the pavement without letting it get crushed. The method is expensive, but so is failure: removing a dead street tree and replacing it can cost a city well over a thousand dollars.</p><p><b>C.</b> Where trees are planted also matters. When several Canadian cities mapped their tree cover using aerial photos, they found large differences between neighbourhoods. Older, wealthier areas often had thick canopies, while newer or lower-income areas, especially those near highways and industrial sites, had far less shade. As a result, a number of cities have changed their planting programs to give priority to the streets that need cooling the most. Planners stress that this is about more than comfort, since the hottest blocks during a heat wave are also where emergency calls for heat illness tend to rise.</p><p><b>D.</b> Residents can play a part too. Many municipalities offer free or low-cost trees to homeowners each spring, along with advice on where to plant them. Experts say the first three years are the most important, because young trees need regular deep watering until their roots are established. They also recommend planting a mix of species. When an insect pest spread through eastern Canada and killed millions of ash trees, neighbourhoods that had planted almost nothing else lost most of their shade within a few years.</p>',
+          passage: '<h3>Growing a Greener City</h3><p><b>A.</b> Across Canada, cities are setting ambitious goals for planting trees, and the reasons go well beyond appearance. On a hot summer afternoon, a street lined with mature trees can be several degrees cooler than a nearby street with none, which reduces the need for air conditioning. Shade also protects asphalt, which can soften and crack after weeks of summer heat. Tree roots and leaves also capture rainwater, slowing its flow into storm drains during heavy downpours. Some studies have even found that homes on leafy streets sell for slightly higher prices than similar homes on bare ones. Trees also trap dust and other pollutants, and researchers have linked green streets with lower stress among the people who live on them.</p><p><b>B.</b> Keeping those trees alive, however, is harder than planting them. Many cities now keep a digital record of every street tree, noting its species, age and condition. A tree in a forest may live for more than a century, but one planted beside a downtown sidewalk often survives only fifteen to twenty years. Its roots are squeezed into a small pit of hard, packed soil, and each winter it is exposed to the salt spread on roads and sidewalks. To give roots more room, some cities now install underground frames, called soil cells, that hold loose soil beneath the pavement without letting it get crushed. The method is expensive, but so is failure: removing a dead street tree and replacing it can cost a city well over a thousand dollars.</p><p><b>C.</b> Where trees are planted also matters. When several Canadian cities mapped their tree cover using aerial photos, they found large differences between neighbourhoods, sometimes only a few kilometres apart. Older, wealthier areas often had thick canopies, while newer or lower-income areas, especially those near highways and industrial sites, had far less shade. As a result, a number of cities have changed their planting programs to give priority to the streets that need cooling the most. Planners stress that this is about more than comfort, since the hottest blocks during a heat wave are also where emergency calls for heat illness tend to rise.</p><p><b>D.</b> Residents can play a part too. Many municipalities offer free or low-cost trees to homeowners each spring, along with advice on where to plant them, such as keeping trees several metres from the house so that roots do not damage the foundation. Experts say the first three years are the most important, because young trees need regular deep watering until their roots are established. They also recommend planting a mix of species. When an insect pest spread through eastern Canada and killed millions of ash trees, neighbourhoods that had planted almost nothing else lost most of their shade within a few years.</p>',
           questions: [
             { id: 'R3.1', q: 'Chemicals used to keep pavement safe in winter can harm trees.', fixed: true, a: 'B' },
             { id: 'R3.2', q: 'Trees can reduce the amount of water that reaches drains during storms.', fixed: true, a: 'A' },
             { id: 'R3.3', q: 'Depending on only one kind of tree can leave an area exposed.', fixed: true, a: 'D' },
             { id: 'R3.4', q: 'Images taken from the air revealed uneven tree cover.', fixed: true, a: 'C' },
-            { id: 'R3.5', q: 'Most new trees in Canadian cities are planted by volunteers.', fixed: true, a: 'E' },
-            { id: 'R3.6', q: 'Living near trees may increase the value of a property.', fixed: true, a: 'A' },
+            { id: 'R3.5', q: 'Cities usually replace a dead street tree with one of the same species.', fixed: true, a: 'E' },
+            { id: 'R3.6', q: 'Trees planted close to a house can lower its winter heating costs.', fixed: true, a: 'E' },
             { id: 'R3.7', q: 'Newly planted trees need a lot of water for a limited period.', fixed: true, a: 'D' },
             { id: 'R3.8', q: 'Trees beside city streets usually die much younger than trees in the wild.', fixed: true, a: 'B' },
             { id: 'R3.9', q: 'Some cities now plant first in the areas that most need shade.', fixed: true, a: 'C' }
@@ -436,14 +463,14 @@
       tasks: [
         {
           id: 'W1', title: 'Task 1: Writing an Email', minutes: 27, minWords: 150, maxWords: 200,
-          prompt: '<p>You are a member of a local fitness centre. Last week, a class you attend regularly was cancelled without any notice, and you arrived to find the room empty. When you checked your bank statement afterwards, you also noticed that your monthly membership charge was higher than usual.</p><p>Write an email to the fitness centre\'s manager. In your email, do the following:</p><ul><li>Describe the class and what happened when you arrived.</li><li>Explain the problem with your membership charge.</li><li>Say what you would like the fitness centre to do.</li></ul><p class="muted">Write 150 to 200 words.</p>'
+          prompt: '<p>You are a member of a local fitness centre. Last week, a class you attend regularly was cancelled without any notice, and you arrived to find the room empty. When you checked your bank statement afterwards, you also noticed that your monthly membership charge was $20 higher than usual, although nobody told you about a price increase. You have been a loyal member for six years, but a new gym has just opened closer to your home.</p><p>Write an email to the fitness centre\'s manager. In your email, do the following:</p><ul><li>Describe the class and what happened when you arrived.</li><li>Explain the problem with your membership charge.</li><li>Say what you would like the fitness centre to do, and what you will decide if nothing changes.</li></ul><p class="muted">Write 150 to 200 words.</p>'
         },
         {
           id: 'W2', title: 'Task 2: Responding to Survey Questions', minutes: 26, minWords: 150, maxWords: 200,
           prompt: '<p>Your company wants to offer employees a new benefit and has asked staff to choose between two options. Choose the option you prefer. Explain the reasons for your choice.</p><p class="muted">Write 150 to 200 words.</p>',
           options: [
-            { key: 'A', label: 'Option A', text: 'A free catered lunch for all employees every Friday, eaten together in the staff room.' },
-            { key: 'B', label: 'Option B', text: 'Flexible start times, so employees can begin work at any time between 7:00 and 10:00 a.m.' }
+            { key: 'A', label: 'Option A', text: 'A free catered lunch for all employees every Friday, eaten together in the staff room. To pay for it, the company would cancel the yearly holiday party, and staff who work from home on Fridays would not benefit.' },
+            { key: 'B', label: 'Option B', text: 'Flexible start times, so employees can begin work at any time between 7:00 and 10:00 a.m. However, all meetings would have to fit between 10:00 a.m. and 3:00 p.m., and each team would still need one person on the phones until 6:00 p.m.' }
           ]
         }
       ]
@@ -453,10 +480,10 @@
     speaking: {
       practice: { id: 'SP', title: 'Practice Task', prep: 30, speak: 60, prompt: 'Describe a place in your neighbourhood that you like to visit, and explain why you enjoy it.' },
       tasks: [
-        { id: 'S1', title: 'Task 1: Giving Advice', prep: 30, speak: 90, prompt: 'A friend of yours is about to move into their first apartment and has never lived alone before. Give your friend advice on how to prepare and manage their new home.' },
-        { id: 'S2', title: 'Task 2: Talking about a Personal Experience', prep: 30, speak: 60, prompt: 'Talk about a time when you made a mistake and learned something important from it. What happened, and what did you learn?' },
+        { id: 'S1', title: 'Task 1: Giving Advice', prep: 30, speak: 90, prompt: 'A friend of yours is about to move into their first apartment and has never lived alone before. The move is in two weeks, your friend is starting a new job the same week, and after rent there will be only about $400 a month left for everything else. Give your friend advice on how to prepare and manage their new home.' },
+        { id: 'S2', title: 'Task 2: Talking about a Personal Experience', prep: 30, speak: 60, prompt: 'Talk about a time when you made a mistake and learned something important from it. What happened, who else was affected, and what did you learn?' },
         { id: 'S3', title: 'Task 3: Describing a Scene', prep: 30, speak: 60, prompt: 'Describe some things that are happening in the picture below as well as you can. The person you are speaking to cannot see the picture.', image: PARTY },
-        { id: 'S4', title: 'Task 4: Making Predictions', prep: 30, speak: 60, prompt: 'In this picture, what do you think will most probably happen next?', image: PARTY },
+        { id: 'S4', title: 'Task 4: Making Predictions', prep: 30, speak: 60, prompt: 'In this picture, what do you think will most probably happen next? Think about the dog, the red balloon, and the cake on the table.', image: PARTY },
         {
           id: 'S5', title: 'Task 5: Comparing and Persuading', type: 'compare', select: 60, prep: 60, speak: 60,
           prompt: 'You and your partner are looking for a new place to rent. Choose the option you prefer. In the next section, you will need to persuade your partner that your choice is better.',
@@ -468,8 +495,8 @@
           persuade: 'Your partner suggests the condo by the water instead. Persuade your partner that your choice is better. Explain why.'
         },
         { id: 'S6', title: 'Task 6: Dealing with a Difficult Situation', prep: 60, speak: 60, prompt: '<p>Two months ago, you promised your neighbour that you would feed her cat and water her plants while she is away for two weeks. Her trip starts next Monday. Yesterday, your sister invited you to join her family on a week-long cottage trip during the same time, and she has already paid for your share.</p><p><b>Choose ONE:</b></p><p><b>Option A:</b> Talk to your neighbour. Explain why you cannot keep your promise.</p><p><b>Option B:</b> Talk to your sister. Explain why you cannot join the trip.</p>' },
-        { id: 'S7', title: 'Task 7: Expressing Opinions', prep: 30, speak: 90, prompt: 'Should all students be required to learn a second language in school? Explain your reasons.' },
-        { id: 'S8', title: 'Task 8: Describing an Unusual Situation', prep: 30, speak: 60, prompt: 'You are at a market and see this unusual pair of shoes for sale. Call your friend who loves unusual fashion. Describe the shoes and explain whether you think your friend should buy them.', image: ODDSHOES }
+        { id: 'S7', title: 'Task 7: Expressing Opinions', prep: 30, speak: 90, prompt: '<p>Your local school board is considering a plan to make a second language compulsory for every student from grade 1 to grade 12. Supporters say it would open up jobs and help children understand other cultures. Opponents say the extra class time would come from math and reading, and that older students should be free to choose their own courses.</p><p>The school board has asked parents and community members for their opinion. Should a second language be required for all students? Explain your reasons.</p>' },
+        { id: 'S8', title: 'Task 8: Describing an Unusual Situation', prep: 30, speak: 60, prompt: 'You are at a market and see this unusual pair of shoes for sale. Call your friend who loves unusual fashion and has said he or she needs comfortable shoes for a two-week walking trip next month. Describe the shoes and explain whether you think your friend should buy them.', image: ODDSHOES }
       ]
     }
   });

@@ -41,6 +41,10 @@
     p += '<g stroke="#ffffff" stroke-width="2" fill="none" opacity=".8"><path d="M20 175 q15 -8 30 0 q15 8 30 0"/><path d="M260 168 q15 -8 30 0 q15 8 30 0"/><path d="M470 180 q15 -8 30 0 q15 8 30 0"/><path d="M140 200 q15 -8 30 0 q15 8 30 0"/></g>';
     /* swimmer */
     p += '<circle cx="150" cy="186" r="8" fill="#a9714b"/><path d="M142 184 a8 8 0 0 1 16 0z" fill="#1d1410"/><line x1="158" y1="188" x2="172" y2="176" stroke="#a9714b" stroke-width="4" stroke-linecap="round"/><path d="M134 194 q16 -6 32 0" stroke="#ffffff" stroke-width="2" fill="none"/>';
+    /* paddleboarder pulling a paddle through the water */
+    p += '<ellipse cx="340" cy="199" rx="28" ry="4" fill="#e67e22"/>';
+    p += person(340, 197, { s: .6, arms: 'right', shirt: '#1abc9c', skin: '#c98c64', hair: '#2a1b12' });
+    p += '<line x1="350" y1="172" x2="362" y2="210" stroke="#555" stroke-width="2"/><rect x="359" y="204" width="6" height="10" rx="2" fill="#555" transform="rotate(-18 362 209)"/>';
     /* sand */
     p += '<path d="M0 222 Q320 206 640 224 L640 400 L0 400z" fill="#f1dca7"/>';
     /* kite and child */
@@ -79,6 +83,14 @@
     p += '<g fill="#a5713f"><ellipse cx="368" cy="362" rx="20" ry="9"/><circle cx="345" cy="352" r="8"/><ellipse cx="341" cy="345" rx="4" ry="7"/></g>';
     p += '<g stroke="#a5713f" stroke-width="4" stroke-linecap="round"><line x1="354" y1="368" x2="342" y2="378"/><line x1="360" y1="368" x2="354" y2="380"/><line x1="380" y1="368" x2="392" y2="378"/><line x1="384" y1="366" x2="398" y2="372"/><line x1="388" y1="358" x2="400" y2="350"/></g>';
     p += '<circle cx="342" cy="351" r="1.8" fill="#222"/>';
+    /* woman reading on a towel near the umbrella */
+    p += '<rect x="98" y="298" width="46" height="10" fill="#3498db" transform="skewX(-15)"/>';
+    p += person(40, 300, { sit: true, s: .85, arms: 'right', shirt: '#16a085', skin: '#f0c9a6', hair: '#7a4a24' });
+    p += '<rect x="56" y="262" width="12" height="15" fill="#ffffff" stroke="#555" stroke-width="1"/><line x1="62" y1="262" x2="62" y2="277" stroke="#555" stroke-width="1"/>';
+    /* owner calling the dog, holding an empty leash */
+    p += person(440, 372, { s: .9, arms: 'left', shirt: '#7f8c8d', skin: '#a9714b', hair: '#1d1410' });
+    p += '<path d="M419 340 q-6 14 -2 26" stroke="#c0392b" stroke-width="2" fill="none"/>';
+    p += '<g stroke="#555" stroke-width="2" fill="none"><path d="M410 318 q-6 4 0 8"/><path d="M404 314 q-10 8 0 16"/></g>';
     /* ice cream cart with a customer */
     p += '<rect x="462" y="330" width="76" height="40" rx="4" fill="#f4f1ea" stroke="#e84393" stroke-width="3"/>';
     p += '<line x1="500" y1="330" x2="500" y2="306" stroke="#555" stroke-width="3"/><path d="M462 310 q38 -34 76 0z" fill="#e84393"/>';
@@ -220,22 +232,26 @@
               ['LUCIA', 'Oh, great. So it\'s ready to go?'],
               ['ADVISOR', 'Almost. But while it was up on the lift, our technician noticed your front brake pads are pretty worn. They\'re down to about three millimetres, and we normally recommend replacing them at four.'],
               ['LUCIA', 'Hmm. I did hear a squeak last week, but I figured it was just the cold weather.'],
-              ['ADVISOR', 'That squeak is often the first warning. Front pads, parts and labour, come to two hundred and twenty dollars. We also spotted a small leak from the water pump. That one isn\'t urgent, but it should be looked at in the next few months. It\'s about four hundred and fifty.'],
+              ['ADVISOR', 'That squeak is often the first warning. Front pads, parts and labour, come to two hundred and forty... sorry, no, that\'s the price for the rear. The front is two hundred and twenty.'],
+              ['LUCIA', 'Two twenty. Okay.'],
+              ['ADVISOR', 'We also spotted a small leak from the water pump. That one isn\'t urgent, but it should be looked at in the next few months. It\'s about four hundred and fifty.'],
               ['LUCIA', 'Wow. My bill today was supposed to be ninety dollars. I wasn\'t expecting to hear about another six hundred and seventy.'],
               ['ADVISOR', 'I understand. If it were my car, I wouldn\'t put off the brakes, especially with winter coming. The water pump can wait. We could book it for later, whenever suits you.'],
               ['LUCIA', 'Okay. How long would the brakes take?'],
               ['ADVISOR', 'About an hour and a half. If you have somewhere to be, our shuttle can drop you off downtown.'],
               ['LUCIA', 'I have to pick up my son from school at three thirty. Will it be done by then?'],
-              ['ADVISOR', 'It\'s just after twelve now, so yes, no problem at all.'],
-              ['LUCIA', 'All right, go ahead with the brakes, and I\'ll take the shuttle. But could you write down the water pump price for me? I\'d like to see what a couple of other garages would charge before I decide.'],
+              ['ADVISOR', 'It\'s just after twelve now, so yes, no problem at all. The only catch is that our driver is booked solid this afternoon, so you\'d have to find your own way back here.'],
+              ['LUCIA', 'Then there\'s not much point going downtown. I\'ll just wait at the coffee shop across the street and answer some emails.'],
+              ['ADVISOR', 'Sounds good. So I\'ll go ahead with the brakes, then?'],
+              ['LUCIA', 'Yes, please. But could you write down the water pump price for me? I\'d like to see what a couple of other garages would charge before I decide.'],
               ['ADVISOR', 'Of course. I\'ll put it on your invoice as a recommendation.']
             ],
             questions: [
               { id: 'L2.1', q: 'How does Lucia react when she hears about the brake pads?', o: ['She remembers a noise she had dismissed.', 'She says the pads were replaced recently.', 'She blames cold weather for the damage.', 'She asks to see the worn pads herself.'] },
               { id: 'L2.2', q: 'What is true about Lucia\'s brake pads?', o: ['They are thinner than the shop advises.', 'They should be replaced within a few months.', 'They are leaking fluid from the front.', 'They are about four millimetres thick.'] },
-              { id: 'L2.3', q: 'If the shop does only the work Lucia approves, how much will her bill be today?', o: ['$310', '$220', '$760', '$540'] },
+              { id: 'L2.3', q: 'If the shop does only the work Lucia approves, how much will her bill be today?', o: ['$310', '$220', '$760', '$330'] },
               { id: 'L2.4', q: 'What is the advisor\'s view of the two repairs?', o: ['Only one of them should be done right away.', 'Both should be finished before winter starts.', 'Neither one is serious enough to do today.', 'The water pump is more urgent than the brakes.'] },
-              { id: 'L2.5', q: 'Why does Lucia ask for the water pump price in writing?', o: ['She may get prices from other garages.', 'She plans to pay for it on her next visit.', 'She needs to send it to her insurance company.', 'She thinks the advisor has made an error.'] }
+              { id: 'L2.5', q: 'Why does Lucia ask for the water pump price in writing?', o: ['She wants to compare it with other quotes.', 'She plans to pay for it on her next visit.', 'She needs to send it to her insurance company.', 'She thinks the advisor has quoted it wrongly.'] }
             ]
           }]
         },
@@ -280,19 +296,21 @@
             lines: [
               ['NEWS', 'The provincial government announced this morning that the minimum wage will rise in two steps over the coming year.'],
               ['NEWS', 'The current rate of fifteen dollars and twenty cents an hour will increase to fifteen dollars and ninety cents on April first, and then to sixteen dollars and fifty cents on October first.'],
+              ['NEWS', 'An earlier version of this report gave the April rate as fifteen eighty. The correct figure is fifteen ninety.'],
               ['NEWS', 'Employers will have until the end of February to update their payroll systems before the first change takes effect.'],
-              ['NEWS', 'According to the province, about forty-two thousand people currently earn the minimum wage, most of them in retail and food service.'],
-              ['NEWS', 'For someone working forty hours a week, the two increases together will add about fifty-two dollars to each weekly paycheque.'],
+              ['NEWS', 'According to the province, about forty-two thousand people currently earn the minimum wage, most of them in retail and food service. Close to a third of them are under the age of twenty-five.'],
+              ['NEWS', 'Labour Minister Carla Dube said the two-step approach is meant to give employers time to plan. "We heard clearly that a single large jump would be hard on small businesses," she said.'],
               ['NEWS', 'After that, the wage will no longer depend on a government announcement. Starting in 2028, it will be adjusted every April to match the rise in the cost of living.'],
               ['NEWS', 'Reaction has been mixed. Anti-poverty groups welcomed the news, but they say sixteen fifty still falls well short of what it takes to cover rent in the province\'s larger cities.'],
-              ['NEWS', 'Meanwhile, the Provincial Federation of Small Business warns that some owners may cut staff hours to cover the extra cost. The federation is asking the government to lower the small business tax rate to help employers adjust.']
+              ['NEWS', 'Meanwhile, the Provincial Federation of Small Business warns that some owners may cut staff hours to cover the extra cost.'],
+              ['NEWS', 'The federation is asking the government to lower the small business tax rate to help employers adjust, noting that many of its members are still recovering from several slow years.']
             ],
             questions: [
               { id: 'L4.1', q: 'What is the news item mainly about?', o: ['Upcoming raises for the lowest-paid workers', 'A new tax break for owners of small businesses', 'The rising cost of rent in the province\'s cities', 'A plan to reduce working hours in retail stores'] },
-              { id: 'L4.2', q: 'By how much will the hourly wage rise on October 1?', o: ['60 cents', '70 cents', '$1.30', '$1.60'] },
-              { id: 'L4.3', q: 'After both increases, how much more will a 40-hour weekly paycheque be?', o: ['About $52', 'About $28', 'About $42', 'About $130'] },
+              { id: 'L4.2', q: 'By how much will the hourly wage rise on October 1?', o: ['60 cents', '70 cents', '$1.30', '50 cents'] },
+              { id: 'L4.3', q: 'Why is the increase being made in two steps?', o: ['So that employers have time to adjust their budgets', 'Because the first figure announced was wrong', 'So that it can be linked to living costs', 'Because small businesses asked for a tax cut'] },
               { id: 'L4.4', q: 'What will happen beginning in 2028?', o: ['Raises will be tied to living costs each year.', 'Small businesses will pay a lower rate of tax.', 'The wage will rise to $16.50 per hour.', 'Workers will be paid every two weeks.'] },
-              { id: 'L4.5', q: 'What is the attitude of the anti-poverty groups?', o: ['Pleased, but they feel it falls short.', 'Worried that workers will lose shifts.', 'They want the raise delayed until 2028.', 'They believe rents will rise because of it.'] }
+              { id: 'L4.5', q: 'What is the attitude of the anti-poverty groups?', o: ['Supportive, but they say it is still not enough.', 'Worried that workers will lose shifts.', 'Hopeful that business taxes will be cut.', 'Concerned that rents will rise because of it.'] }
             ]
           }]
         },
@@ -334,19 +352,28 @@
           segments: [{
             lines: [
               ['NARR', 'Few public places spark debate quite like the zoo. Supporters describe zoos as centres of conservation, while critics argue that keeping wild animals on display no longer makes sense.'],
-              ['NARR', 'Doctor Ruth Abernathy, a conservation biologist who works with several Canadian zoos, says modern zoos are very different from the ones many adults remember. She points to breeding programs that have raised endangered frogs, turtles and birds in safe conditions and later released them into the wild.'],
-              ['NARR', 'Abernathy also stresses education. In her view, most children will never travel to see a tiger or a gorilla in its natural home. Seeing one in person, she says, can spark a lifelong interest in protecting nature in a way that a video simply cannot. She adds that ticket sales at many zoos help pay for research projects in the wild.'],
-              ['NARR', 'Simon Bergeron, who leads an animal welfare group, sees things differently. He argues that large animals such as elephants and polar bears travel enormous distances in the wild, and that even the best enclosure is tiny by comparison. Some animals, he says, develop repetitive behaviours like pacing back and forth, which he sees as a clear sign of stress.'],
-              ['NARR', 'Bergeron also notes that most species kept in zoos are not endangered at all. He believes the money would do more good if it were spent protecting habitats directly. For animals that cannot return to the wild, he favours sanctuaries: large protected spaces that are mostly closed to visitors.'],
+              ['NARR', 'Doctor Ruth Abernathy, a conservation biologist who works with several Canadian zoos, says modern zoos are very different from the ones many adults remember.'],
+              ['NARR', 'She points to breeding programs that have raised endangered frogs, turtles and birds in safe conditions and later released them into the wild. Some of those species, she says, had vanished completely from parts of their original range.'],
+              ['NARR', 'Abernathy also stresses education. In her view, most children will never travel to see a tiger or a gorilla in its natural home. Seeing one in person, she says, can spark a lifelong interest in nature in a way that a video cannot.'],
+              ['NARR', 'She adds that ticket sales at many zoos help pay for research projects in the wild, money that would be very hard to raise any other way.'],
+              ['NARR', 'Simon Bergeron, who leads an animal welfare group, sees things differently. He argues that large animals such as elephants and polar bears travel enormous distances in the wild, and that even the best enclosure is tiny by comparison.'],
+              ['NARR', 'Some animals, he says, walk the same short path back and forth for hours at a time. Keepers sometimes describe this as a harmless habit, but Bergeron sees it as proof that the enclosure itself is the problem.'],
+              ['NARR', 'He is also unconvinced by the education argument. He cites visitor studies showing that most people spend less than a minute at each enclosure, and that many leave remembering the playground and the snack bar better than any message about wildlife.'],
+              ['NARR', 'Bergeron also notes that most species kept in zoos are not endangered at all. He believes the money would do more good if it were spent protecting habitats directly.'],
+              ['NARR', 'For animals that cannot return to the wild, he favours sanctuaries: large protected spaces that are mostly closed to visitors.'],
+              ['NARR', 'He does give zoos some credit. He accepts that a few breeding programs have worked, but he points out that this kind of work could be done at research centres that do not sell tickets at all.'],
+              ['NARR', 'Abernathy has an answer to the habitat argument. Protecting forests and wetlands is essential, she agrees, but it is not always enough. She describes a small frog that was wiped out by a disease in its streams, even though the streams themselves were untouched.'],
+              ['NARR', 'Without a group of those frogs kept safe in zoos, she says, there would have been nothing left to return once scientists brought the disease under control.'],
+              ['NARR', 'She also makes a concession. Not every animal belongs in a zoo, she admits, and some of the largest, most wide-ranging species may be better off elsewhere. Several Canadian zoos have already stopped keeping elephants for that reason.'],
               ['NARR', 'Despite their differences, both experts agree on one point: some species are now so rare that they may not survive without human help. The real question, it seems, is where that help should happen.']
             ],
             questions: [
-              { id: 'L6.1', q: 'What is the report mainly about?', o: ['Opposing views on the value of zoos', 'The rising cost of building modern zoos', 'Rare animal species found only in Canada', 'How zoos are training their new staff'] },
-              { id: 'L6.2', q: 'According to Dr. Abernathy, how are modern zoos different?', o: ['Some now raise animals for release.', 'They now keep only Canadian species.', 'They now show their animals in videos.', 'They send most of their animals abroad.'] },
-              { id: 'L6.3', q: 'Why does Dr. Abernathy think zoos matter for children?', o: ['Seeing animals in person can inspire them.', 'A video works just as well as a real visit.', 'Children should travel to see wild animals.', 'Children can help zoo staff care for animals.'] },
-              { id: 'L6.4', q: 'According to Bergeron, what does pacing back and forth show?', o: ['That the animal is under stress', 'That the animal needs more food', 'That the animal is preparing to travel', 'That the animal wants to be seen'] },
-              { id: 'L6.5', q: 'What is Bergeron\'s view of the money spent on zoos?', o: ['It would help more if used on habitats.', 'It should go toward building larger enclosures.', 'It should mainly fund breeding programs.', 'It should be spent on rescuing polar bears.'] },
-              { id: 'L6.6', q: 'What does the reporter\'s final comment suggest?', o: ['They differ on where rare species should be helped.', 'Both experts want zoos to stop keeping large animals.', 'Neither expert thinks rare species can be saved.', 'Both experts think sanctuaries should replace zoos.'] }
+              { id: 'L6.1', q: 'What is the report mainly about?', o: ['Disagreement over whether zoos still serve a purpose', 'Plans to move zoo animals into sanctuaries', 'How zoos raise money for research in the wild', 'Which species Canadian zoos should stop keeping'] },
+              { id: 'L6.2', q: 'According to Dr. Abernathy, what sets modern zoos apart?', o: ['Some of the animals they raise end up back in nature.', 'They no longer keep any very large species.', 'They are funded mainly by research grants.', 'They teach children with videos as well as animals.'] },
+              { id: 'L6.3', q: 'What does Bergeron suggest about the education argument?', o: ['Most visitors take in little about conservation.', 'Videos teach children more than zoo visits do.', 'Zoos should spend more on teaching staff.', 'Children learn best from zoo playgrounds.'] },
+              { id: 'L6.4', q: 'Why does Bergeron mention animals walking back and forth?', o: ['To argue that the living space itself causes harm', 'To show that keepers ignore harmless habits', 'To suggest that the animals need more exercise', 'To show that the animals are bored by visitors'] },
+              { id: 'L6.5', q: 'Why does Dr. Abernathy describe the frog?', o: ['To show that saving habitat alone can fall short', 'To show that zoos can cure disease in the wild', 'To show that frogs breed easily in captivity', 'To show that streams must be protected first'] },
+              { id: 'L6.6', q: 'What concession does Bergeron make?', o: ['Some zoo breeding efforts have succeeded.', 'Zoos inspire children to care about nature.', 'Ticket sales pay for useful research.', 'Sanctuaries should be open to more visitors.'] }
             ]
           }]
         }
@@ -359,11 +386,11 @@
         {
           id: 'R1', title: 'Part 1: Reading Correspondence', minutes: 11,
           instructions: 'Read the following message. Answer questions 1 to 6 by choosing the best option from each drop-down menu. Then read the reply and complete it by choosing the best option for each blank (7 to 11).',
-          passage: '<h3>Message</h3><p>Hi Kofi,</p><p>I\'m sorry it has taken me so long to write back. You won\'t believe how busy the last month has been, but in the best possible way. The bakery is finally open!</p><p>We opened our doors three weeks ago in the old shoe repair shop on Lincoln Street. After twelve years of doing other people\'s taxes, it still feels strange to spend my days covered in flour instead of staring at spreadsheets. My old manager at the accounting firm told me I had lost my mind, and on some mornings I wonder whether he was right.</p><p>The hours are the hardest part. I start at four every morning so the bread is ready when we open at seven. On the first Saturday, the cinnamon buns were completely gone by nine thirty, and I had to apologize to a long line of disappointed customers. Since then, I have been making double batches on weekends. My nephew Theo, who is in his last year of high school, works behind the counter on Saturdays and Sundays. I honestly don\'t know how I would manage without him.</p><p>There is one big headache: the oven. It came with the shop, and it is at least thirty years old. The back heats up much faster than the front, so I have to turn every tray around halfway through baking. I would love to replace it, but a new commercial oven costs around nine thousand dollars, so it will have to wait until I have saved enough, probably sometime next spring.</p><p>Now, the real reason I am writing. I am planning a proper grand opening party on Saturday the 22nd, with free samples and live music. The problem is that the old shoe repair sign is still hanging above the door! You are the most talented designer I know. Would you be willing to create a logo and a new sign for me? I can\'t pay you much, but I can promise you free bread for the rest of your life.</p><p>Let me know what you think. And of course, you are invited to the party.</p><p>Love,<br>Ines</p>',
+          passage: '<h3>Message</h3><p>Hi Kofi,</p><p>I\'m sorry it has taken me so long to write back. You won\'t believe how busy the last month has been, but in the best possible way. The bakery is finally open!</p><p>We opened our doors three weeks ago in the old shoe repair shop on Lincoln Street. After twelve years of doing other people\'s taxes, it still feels strange to spend my days covered in flour instead of staring at spreadsheets. My old manager at the accounting firm told me I had lost my mind, and on some mornings I wonder whether he was right.</p><p>The hours are the hardest part. I start at four every morning so the bread is ready when we open at seven. Bread has to cool for half an hour before it can be sliced, so the last loaves must come out of the oven by six thirty. On the first Saturday, the cinnamon buns were completely gone by nine thirty, and I had to apologize to a long line of disappointed customers. Since then, I have been making double batches on weekends. My nephew Theo, who is in his last year of high school, works behind the counter on Saturdays and Sundays. I honestly don\'t know how I would manage without him.</p><p>There is one big headache: the oven. It came with the shop, and it is at least thirty years old. The back heats up much faster than the front, so I have to turn every tray around halfway through baking. I would love to replace it, but a new commercial oven costs around nine thousand dollars, so it will have to wait until I have saved enough, probably sometime next spring.</p><p>Now, the real reason I am writing. I am planning a proper grand opening party on Saturday the 22nd, with free samples and live music. The problem is that the old shoe repair sign is still hanging above the door! You are the most talented designer I know. Would you be willing to create a logo and a new sign for me? I can\'t pay you much, but I can promise you free bread for the rest of your life.</p><p>Let me know what you think. And of course, you are invited to the party.</p><p>Love,<br>Ines</p>',
           questions: [
             { id: 'R1.1', q: 'Ines suggests that her former manager', o: ['thought her career change was unwise.', 'helped her choose a spot for the bakery.', 'knew she disliked working with spreadsheets.', 'urged her to go into business for herself.'] },
             { id: 'R1.2', q: 'The first Saturday most likely showed Ines that', o: ['demand was greater than she had planned for.', 'customers preferred bread to cinnamon buns.', 'she needed to open well before seven o\'clock.', 'Theo could not handle the counter by himself.'] },
-            { id: 'R1.3', q: 'Ines\'s attitude toward her nephew\'s help is one of', o: ['deep gratitude.', 'mild disappointment.', 'polite tolerance.', 'growing concern.'] },
+            { id: 'R1.3', q: 'Ines\'s attitude toward her nephew\'s help is one of', o: ['appreciation for support she depends on.', 'reliance mixed with worry about his schooling.', 'polite tolerance of a family favour.', 'pride in how fast he has learned to bake.'] },
             { id: 'R1.4', q: 'The oven is a problem mainly because', o: ['it does not cook evenly.', 'it is too small for double batches.', 'the trays no longer fit inside it.', 'it needs an hour to warm up each day.'] },
             { id: 'R1.5', q: 'Ines expects to replace the oven', o: ['once her savings allow it.', 'right after the grand opening.', 'with a loan from her former firm.', 'before the end of this month.'] },
             { id: 'R1.6', q: 'Ines mentions free bread in order to', o: ['compensate for a modest fee.', 'promote the samples at the party.', 'thank Kofi for visiting the shop.', 'show how much bread goes unsold.'] }
@@ -371,7 +398,7 @@
           reply: '<h3>Reply</h3><p>Hi Ines,</p><p>Congratulations! I always knew you would do it. I have to admit, I still can\'t quite picture you leaving [[R1.7]], but from your message it sounds like you made the right choice. Starting work [[R1.8]] before the doors open sounds exhausting, though, so please make sure you get some rest. My sister walked past the shop last week, by the way, and she says the smell alone nearly made her late for work.</p><p>I am not surprised that the cinnamon buns sold out. Yours were always the best. Maybe you should [[R1.9]] for the party as well, so nobody goes home disappointed this time.</p><p>And yes, of course I will design your sign. It is about time [[R1.10]] came down. I will send you a few logo ideas by next weekend, which should give the sign company enough time to have everything up before [[R1.11]]. As for payment, free bread for life sounds like an excellent deal to me.</p><p>See you on the 22nd!</p><p>Kofi</p>',
           blanks: [
             { id: 'R1.7', o: ['a steady office career', 'the shop on Lincoln Street', 'your nephew at the counter', 'the bakery so soon'] },
-            { id: 'R1.8', o: ['three full hours', 'a full hour', 'half an hour', 'nearly five hours'] },
+            { id: 'R1.8', o: ['three full hours', 'two and a half hours', 'two full hours', 'half an hour'] },
             { id: 'R1.9', o: ['bake twice the usual amount', 'turn every tray around', 'skip the free samples', 'open the doors at nine thirty'] },
             { id: 'R1.10', o: ['the previous owner\'s sign', 'your thirty-year-old oven', 'the price of a new oven', 'the line outside your door'] },
             { id: 'R1.11', o: ['your big celebration', 'next spring', 'Theo finishes school', 'the new oven arrives'] }
@@ -386,33 +413,33 @@
             '<tr><td>Traveller</td><td>$55</td><td>15 GB</td><td>Unlimited</td><td>Included</td></tr>' +
             '<tr><td>Max</td><td>$75</td><td>50 GB</td><td>Unlimited</td><td>Included</td></tr>' +
             '</tbody></table></div><ul class="notes"><li>All plans include unlimited texts within Canada.</li><li>Extra data: $10 for each GB above your plan\'s limit.</li><li>24-month agreement: save $5 per month on any plan except Starter.</li><li>Each additional line on the same account: 20% off that plan\'s regular monthly price. This discount cannot be combined with the 24-month agreement saving.</li><li>Students with a valid student card receive 5 GB of bonus data each month on the Everyday plan only.</li></ul>',
-          reply: '<h3>Email</h3><p>Hi Marisol,</p><p>I finally compared the plans at Northwind Mobile. I use about 12 GB of data a month, and since I call my brother in Seattle every Sunday, I need U.S. calling. That means the cheapest plan that works for me is [[R2.1]]. If I sign a 24-month agreement, it will cost [[R2.2]] a month.</p><p>For Ana, the Everyday plan looks perfect. She uses about 14 GB a month, but because she is [[R2.3]], she would get 15 GB in total. Her phone would be the second line on my account, so her plan would cost [[R2.4]] a month.</p><p>I also checked whether the cheaper Starter plan could work for her, but she would need about 12 GB of extra data, which would add [[R2.5]] to her bill every month. So Everyday it is.</p><p>Let me know what you think before I sign anything.</p><p>Rosa</p>',
+          reply: '<h3>Email</h3><p>Hi Marisol,</p><p>I finally compared the plans at Northwind Mobile. I use about 12 GB of data a month, and since I call my brother in Seattle every Sunday, I need U.S. calling. That means the cheapest plan that works for me is [[R2.1]]. I don\'t mind signing a 24-month agreement, since it [[R2.2]].</p><p>For Ana, the Everyday plan looks perfect. She uses about 14 GB a month, but because she is [[R2.3]], she would get 15 GB in total. Her phone would be the second line on my account, so her plan would cost [[R2.4]] a month.</p><p>I also checked whether the cheaper Starter plan could work for her, but she would lose her bonus data, because [[R2.5]]. Paying for all that extra data would cost far more than Everyday, so Everyday it is.</p><p>Let me know what you think before I sign anything.</p><p>Rosa</p>',
           blanks: [
             { id: 'R2.1', o: ['Traveller', 'Everyday', 'Max', 'Starter'] },
-            { id: 'R2.2', o: ['$50', '$55', '$70', '$44'] },
+            { id: 'R2.2', o: ['lowers the monthly price of every plan except the cheapest', 'adds five gigabytes of bonus data every month', 'can be combined with the second-line discount', 'includes calls to the U.S. on every plan'] },
             { id: 'R2.3', o: ['able to show proof of enrolment', 'the second line on my account', 'signing a 24-month agreement too', 'a new customer this month'] },
             { id: 'R2.4', o: ['$32', '$35', '$40', '$27'] },
-            { id: 'R2.5', o: ['$120', '$140', '$100', '$20'] }
+            { id: 'R2.5', o: ['the student offer is limited to a single plan', 'Starter cannot be added as a second line', 'Starter includes only 300 minutes of calls', 'the bonus requires a 24-month agreement'] }
           ],
           questions: [
-            { id: 'R2.6', q: 'A student who uses about 16 GB a month and never calls the U.S. would probably pay the least on', o: ['Everyday.', 'Traveller.', 'Max.', 'Starter.'] },
+            { id: 'R2.6', q: 'A college student wants bonus data and also needs to text her family in Chicago. Based on the price list, she', o: ['cannot get both of these on a single Northwind plan.', 'should choose the Traveller plan.', 'should add a second line to Everyday.', 'must sign a 24-month agreement.'] },
             { id: 'R2.7', q: 'A customer on a 24-month agreement for the Everyday plan who is not a student and uses 13 GB in one month will pay', o: ['$65.', '$70.', '$35.', '$45.'] },
-            { id: 'R2.8', q: 'Over the full length of a 24-month agreement, the Max plan costs', o: ['$1,680.', '$1,800.', '$1,560.', '$840.'] }
+            { id: 'R2.8', q: 'A customer adding a second Traveller line asks for both the 24-month saving and the second-line discount on it. The store will refuse because', o: ['the two savings cannot be applied to the same line.', 'the 24-month saving does not apply to the Traveller plan.', 'the second-line discount is offered only on Everyday.', 'second lines must be on a cheaper plan than the first.'] }
           ]
         },
         {
           id: 'R3', title: 'Part 3: Reading for Information', minutes: 10,
           instructions: 'Read the following article. Decide which paragraph, A to D, contains the information in each statement. If the information is not given in any paragraph, choose E.',
-          passage: '<h3>Building the Trans-Canada Highway</h3><p><b>A.</b> In the early 1900s, driving from one side of Canada to the other was more of an expedition than a road trip. Paved roads were rare outside of cities, and in many regions there was simply no road at all. Motorists who attempted the journey sometimes had to load their cars onto trains to get past rivers, swamps and rocky stretches. Even into the 1940s, many drivers heading west from Ontario found it easier to cross into the United States and return to Canada farther along. The few people who completed the whole trip often wrote newspaper articles about it, which only added to the feeling that crossing the country by car was an achievement rather than an ordinary holiday.</p><p><b>B.</b> After the Second World War, pressure grew for a single national road that would connect every province. In 1949, Parliament passed the Trans-Canada Highway Act. Under the agreement, the federal government would share the cost of construction, while each province would be responsible for building and maintaining its own section. Ottawa also set basic standards, such as minimum lane widths and gentle slopes, so that the road would feel consistent from one province to the next. Choosing the route was not easy. Some provinces pushed for the highway to pass through their largest towns, while others preferred the shortest and cheapest path, and negotiations sometimes dragged on for years.</p><p><b>C.</b> Construction proved to be just as difficult. In northern Ontario, crews had to blast through the hard granite of the Canadian Shield, one section at a time. In British Columbia, the route through Rogers Pass in the Selkirk Mountains crossed one of the most avalanche-prone areas in the country, so engineers built long concrete sheds to protect drivers from sliding snow. The highway was officially opened at Rogers Pass in 1962, although some gaps remained, and it was not considered complete until 1971.</p><p><b>D.</b> Today, the main route stretches about 7,800 kilometres from Victoria, British Columbia, to St. John\'s, Newfoundland and Labrador, making it one of the longest national highways in the world. Ferries carry travellers across the water at both ends of the country. Drivers can recognize the route by its green and white signs featuring a maple leaf, and in Victoria a "Mile 0" marker shows where the journey begins. Although much of the highway is still only two lanes wide, several provinces are adding lanes to busy sections to improve safety.</p>',
+          passage: '<h3>Building the Trans-Canada Highway</h3><p><b>A.</b> In the early 1900s, driving from one side of Canada to the other was more of an expedition than a road trip. Paved roads were rare outside of cities, and in many regions there was simply no road at all. Motorists who attempted the journey sometimes had to load their cars onto trains to get past rivers, swamps and rocky stretches. Even into the 1940s, many drivers heading west from Ontario found it easier to cross into the United States and return to Canada farther along. The few people who completed the whole trip often wrote newspaper articles about it, which only added to the feeling that crossing the country by car was an achievement rather than an ordinary holiday.</p><p><b>B.</b> After the Second World War, pressure grew for a single national road that would connect every province. In 1949, Parliament passed the Trans-Canada Highway Act. Under the agreement, the federal government would share the cost of construction, originally paying half of each approved section, while each province would be responsible for building and maintaining its own section. Ottawa also set basic standards, such as minimum lane widths and gentle slopes, so that the road would feel consistent from one province to the next. Choosing the route was not easy. Some provinces pushed for the highway to pass through their largest towns, while others preferred the shortest and cheapest path, and negotiations sometimes dragged on for years.</p><p><b>C.</b> Construction proved to be just as difficult. In northern Ontario, crews had to blast through the hard granite of the Canadian Shield, one section at a time. In British Columbia, the route through Rogers Pass in the Selkirk Mountains crossed one of the most avalanche-prone areas in the country, so engineers built long concrete sheds to protect drivers from sliding snow. Soldiers were also brought in to fire artillery at loose snow on the slopes above, bringing it down before it could build up into a dangerous slide. The highway was officially opened at Rogers Pass in 1962, although some gaps remained, and it was not considered complete until 1971.</p><p><b>D.</b> Today, the main route stretches about 7,800 kilometres from Victoria, British Columbia, to St. John\'s, Newfoundland and Labrador, making it one of the longest national highways in the world. Ferries carry travellers across the water at both ends of the country. Drivers can recognize the route by its green and white signs featuring a maple leaf, and in Victoria a "Mile 0" marker shows where the journey begins. Although much of the highway is still only two lanes wide, several provinces are adding lanes to busy sections to improve safety. Each summer, cyclists and even a few runners attempt to cross the country along the route, often to raise money for charity.</p>',
           questions: [
             { id: 'R3.1', q: 'Some early travellers moved their vehicles by rail for parts of the trip.', fixed: true, a: 'A' },
             { id: 'R3.2', q: 'Provincial governments were in charge of constructing their own stretches of road.', fixed: true, a: 'B' },
             { id: 'R3.3', q: 'Explosives were needed to clear a path through rock.', fixed: true, a: 'C' },
             { id: 'R3.4', q: 'A complete cross-country trip on the route includes time on boats.', fixed: true, a: 'D' },
-            { id: 'R3.5', q: 'There was disagreement about which communities the road should serve.', fixed: true, a: 'B' },
+            { id: 'R3.5', q: 'The official opening had to be postponed because of avalanche danger.', fixed: true, a: 'E' },
             { id: 'R3.6', q: 'The road was formally opened before it was fully completed.', fixed: true, a: 'C' },
-            { id: 'R3.7', q: 'Tolls were charged on the highway in its early years.', fixed: true, a: 'E' },
-            { id: 'R3.8', q: 'Some heavily used parts of the road are being made wider.', fixed: true, a: 'D' },
+            { id: 'R3.7', q: 'Newspapers paid early motorists to write about crossing the country.', fixed: true, a: 'E' },
+            { id: 'R3.8', q: 'Several provinces plan to make the entire route four lanes wide.', fixed: true, a: 'E' },
             { id: 'R3.9', q: 'Drivers once had to leave the country to get across it.', fixed: true, a: 'A' }
           ]
         },
@@ -444,14 +471,14 @@
       tasks: [
         {
           id: 'W1', title: 'Task 1: Writing an Email', minutes: 27, minWords: 150, maxWords: 200,
-          prompt: '<p>You have signed up for a college course that will help you in your career. The classes take place on Tuesday and Thursday mornings from 9:00 to 11:00 a.m., which is during your usual working hours.</p><p>Write an email to your manager. In your email, do the following:</p><ul><li>Explain why you want to take the course.</li><li>Describe the change to your work schedule that you are asking for.</li><li>Explain how you will make sure your work is not affected.</li></ul><p class="muted">Write 150 to 200 words.</p>'
+          prompt: '<p>You have signed up for a college course that will help you in your career. The classes take place on Tuesday and Thursday mornings from 9:00 to 11:00 a.m., which is during your usual working hours. Your team is already one person short this season, and your manager has asked everyone to avoid taking time off until the spring.</p><p>Write an email to your manager. In your email, do the following:</p><ul><li>Explain why you want to take the course.</li><li>Describe the change to your work schedule that you are asking for.</li><li>Explain how you will make sure your work is not affected.</li></ul><p class="muted">Write 150 to 200 words.</p>'
         },
         {
           id: 'W2', title: 'Task 2: Responding to Survey Questions', minutes: 26, minWords: 150, maxWords: 200,
           prompt: '<p>Your local school board wants students to spend more time learning each year and is asking parents and community members for their opinion. Choose the option you prefer. Explain the reasons for your choice.</p><p class="muted">Write 150 to 200 words.</p>',
           options: [
-            { key: 'A', label: 'Option A', text: 'Make each school day one hour longer, from September to June.' },
-            { key: 'B', label: 'Option B', text: 'Shorten the summer break by three weeks and keep the school day the same length.' }
+            { key: 'A', label: 'Option A', text: 'Make each school day one hour longer, from September to June. Students would finish at about 4:30 p.m., after many sports and music programs have started.' },
+            { key: 'B', label: 'Option B', text: 'Shorten the summer break by three weeks and keep the school day the same length. Older students would lose part of their summer job season, and families would have less time for travel and camps.' }
           ]
         }
       ]
@@ -461,10 +488,10 @@
     speaking: {
       practice: { id: 'SP', title: 'Practice Task', prep: 30, speak: 60, prompt: 'Describe your favourite season of the year and explain why you like it.' },
       tasks: [
-        { id: 'S1', title: 'Task 1: Giving Advice', prep: 30, speak: 90, prompt: 'A friend of yours has a job interview next week for a position she really wants, but she is very nervous about it. Give her advice on how to prepare and how to stay calm.' },
-        { id: 'S2', title: 'Task 2: Talking about a Personal Experience', prep: 30, speak: 60, prompt: 'Talk about a time when you received some good news. What was the news, how did you find out, and how did you react?' },
+        { id: 'S1', title: 'Task 1: Giving Advice', prep: 30, speak: 90, prompt: 'A friend of yours has a job interview on Monday for a position she really wants, and she is very nervous about it. She works long shifts all weekend, so she has only about two hours to prepare. Give her advice on how to use that time well and how to stay calm.' },
+        { id: 'S2', title: 'Task 2: Talking about a Personal Experience', prep: 30, speak: 60, prompt: 'Talk about a time when you received some good news. What was the news, how did you find out, how did you react, and did it change any plans you had made?' },
         { id: 'S3', title: 'Task 3: Describing a Scene', prep: 30, speak: 60, prompt: 'Describe some things that are happening in the picture below as well as you can. The person you are speaking to cannot see the picture.', image: BEACH },
-        { id: 'S4', title: 'Task 4: Making Predictions', prep: 30, speak: 60, prompt: 'In this picture, what do you think will most probably happen next?', image: BEACH },
+        { id: 'S4', title: 'Task 4: Making Predictions', prep: 30, speak: 60, prompt: 'In this picture, what do you think will most probably happen next? Think about the wind, the dog, and the people near the water.', image: BEACH },
         {
           id: 'S5', title: 'Task 5: Comparing and Persuading', type: 'compare', select: 60, prep: 60, speak: 60,
           prompt: 'You need a better way to get to your new job, which is 12 kilometres from your home. Choose the option you prefer. In the next section, you will need to persuade a family member that your choice is better.',
@@ -476,8 +503,8 @@
           persuade: 'Your family member suggests the car-share membership instead. Persuade them that your choice is better. Explain why.'
         },
         { id: 'S6', title: 'Task 6: Dealing with a Difficult Situation', prep: 60, speak: 60, prompt: '<p>Your neighbour is going on vacation for two weeks, and you agreed to water her garden and feed her cat every day. Today, your manager told you that you must travel to another city for work during the second week of her vacation.</p><p><b>Choose ONE:</b></p><p><b>Option A:</b> Talk to your neighbour. Explain why you cannot help for the full two weeks.</p><p><b>Option B:</b> Talk to your manager. Explain why you cannot go on the work trip.</p>' },
-        { id: 'S7', title: 'Task 7: Expressing Opinions', prep: 30, speak: 90, prompt: 'Should parents pay their children for doing chores at home, such as washing dishes or cleaning their rooms? Explain your reasons.' },
-        { id: 'S8', title: 'Task 8: Describing an Unusual Situation', prep: 30, speak: 60, prompt: 'You are shopping for luggage and see this unusual suitcase. Call your friend who travels a lot for work. Describe the suitcase and explain whether you think your friend should buy it.', image: ODDCASE }
+        { id: 'S7', title: 'Task 7: Expressing Opinions', prep: 30, speak: 90, prompt: 'Your neighbours are trying to decide whether to pay their two children, aged nine and thirteen, for doing chores such as washing dishes and cleaning their rooms. One parent says a small weekly payment teaches children how to manage money. The other says helping at home is simply part of being a family and should not be paid. They have asked for your opinion. Should parents pay their children for doing chores? Explain your reasons.' },
+        { id: 'S8', title: 'Task 8: Describing an Unusual Situation', prep: 30, speak: 60, prompt: 'You are shopping for luggage and see this unusual suitcase. Call your friend who travels a lot for work. Your friend usually flies with only a carry-on bag, and most airlines limit carry-ons to 7 kilograms. Describe the suitcase and explain whether you think your friend should buy it.', image: ODDCASE }
       ]
     }
   });

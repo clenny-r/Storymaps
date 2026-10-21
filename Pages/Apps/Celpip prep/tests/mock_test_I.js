@@ -196,23 +196,23 @@
                 ['JUNO', 'It does. Tell her we\'ll take the Halifax seats before somebody else grabs them.']
               ],
               questions: [
-                { id: 'L1.4', q: 'Arif thinks driving from Toronto would be', o: ['impractical, since they would arrive worn out.', 'cheaper, but only if they shared the driving.', 'faster than waiting for tomorrow\'s flight.', 'risky, because the highways would be icy overnight.'] },
+                { id: 'L1.4', q: 'What does Arif think about driving from Toronto?', o: ['They would arrive too worn out to enjoy it.', 'It would be cheaper if they shared the driving.', 'It would be faster than waiting for tomorrow\'s flight.', 'The highways would be too icy overnight.'] },
                 { id: 'L1.5', q: 'What does the agent arrange for them?', o: ['A change of destination at no extra cost', 'A refund for the cancelled Moncton flight', 'A free night at a Toronto airport hotel', 'A connecting flight from Halifax to Moncton'] },
                 { id: 'L1.6', q: 'Why is the bus from Halifax unsuitable?', o: ['Juno would miss an earlier commitment.', 'It leaves Halifax before their plane even lands.', 'It does not stop in Moncton.', 'Arif prefers not to drive at night.'] }
               ]
             },
             {
               lines: [
-                ['JUNO', 'Okay, we\'re officially on the Halifax flight. Now the car. There\'s one at the airport for sixty-five dollars a day.'],
+                ['JUNO', 'Okay, we\'re officially on the Halifax flight. Now the car. The website showed a compact at fifty-five a day, but that\'s gone, so it\'s a mid-size at sixty-five.'],
                 ['ARIF', 'And we\'d leave it in Moncton, right? Since we\'re flying home from there on Sunday.'],
-                ['JUNO', 'Right, so there\'s a forty-dollar fee for dropping it off somewhere else. We\'d have it two days, so a hundred and seventy altogether.'],
+                ['JUNO', 'Right, so there\'s a forty-dollar fee for dropping it off somewhere else. And we\'d have it for two days.'],
                 ['ARIF', 'Split between us, that\'s not terrible. But the rental counter closes at one a.m., and we land at twelve thirty-five. That\'s tight.'],
                 ['JUNO', 'I\'ll call and ask them to hold the car. But here\'s my other idea. Instead of driving to Moncton half asleep at one in the morning, let\'s book the hotel right next to the airport, get a few hours of sleep, and head out at six.'],
                 ['ARIF', 'So we\'d roll into Moncton around eight thirty. That still gives you an hour and a half before the salon.'],
                 ['JUNO', 'Exactly. And I\'m texting Camille right now, before she hears about the cancellation from someone else and panics.']
               ],
               questions: [
-                { id: 'L1.7', q: 'How much will each of them pay for the rental car?', o: ['$85', '$65', '$170', '$105'] },
+                { id: 'L1.7', q: 'How much will each of them pay for the rental car?', o: ['$85', '$75', '$170', '$105'] },
                 { id: 'L1.8', q: 'Why does Juno suggest the airport hotel?', o: ['To avoid driving to Moncton overnight', 'To give the rental counter time to open', 'To be closer to the bus station', 'To meet Camille early in the morning'] }
               ]
             }
@@ -233,16 +233,22 @@
               ['LIB', 'Books are three weeks. DVDs and video games are one week. You can renew online twice, and each renewal gives you another full loan period. The only exception is when someone else has put a hold on the item. Then it has to come back on the due date.'],
               ['TOMAS', 'And late fees? At my old library they added up fast.'],
               ['LIB', 'We got rid of daily fines a couple of years ago. But once something is thirty days overdue, it\'s considered lost, and you\'re billed for the replacement cost.'],
+              ['TOMAS', 'Do I have to bring everything back to this branch?'],
+              ['LIB', 'No, any of our nine branches will take it. There\'s also a drop box by the front doors if you come by after we close.'],
               ['TOMAS', 'Good to know. Oh, one more thing. I need to improve my French for work. Is there anything for that?'],
               ['LIB', 'There is. Your card gives you free access to a language-learning app, and there\'s a French conversation circle here every Tuesday at six thirty. It\'s drop-in, so you don\'t have to sign up.'],
-              ['TOMAS', 'Tuesdays are perfect. I\'m off early that day. I\'ll see you then.']
+              ['TOMAS', 'Tuesdays are perfect. I\'m off early that day.'],
+              ['LIB', 'Oh, wait, I\'m sorry. I\'m looking at last year\'s calendar. The circle moved to Thursdays this fall. Same time, same room.'],
+              ['TOMAS', 'Thursdays. Hmm. That\'s my late shift. I don\'t finish until seven.'],
+              ['LIB', 'Well, the group runs until eight, and people come and go. Lots of them show up partway through.'],
+              ['TOMAS', 'Then I\'ll set up the app tonight and come for the second half on Thursday. Thanks for your help.']
             ],
             questions: [
               { id: 'L2.1', q: 'Why is Tomas\'s licence not enough on its own?', o: ['It shows an address he no longer uses.', 'It does not show his full legal name.', 'It has already expired.', 'It is not accepted as photo identification.'] },
               { id: 'L2.2', q: 'If no one reserves it, what is the longest Tomas could keep a video game?', o: ['Three weeks', 'One week', 'Two weeks', 'Nine weeks'] },
               { id: 'L2.3', q: 'In which situation must an item be returned on its due date?', o: ['Another member is waiting for it.', 'It has already been renewed once.', 'It is a DVD or a video game.', 'The member has thirty items out.'] },
-              { id: 'L2.4', q: 'What is the library\'s current policy on late items?', o: ['Members pay only if an item is treated as lost.', 'Small daily fines are charged after thirty days.', 'Members are blocked from borrowing after one week.', 'Fines were removed for children but not adults.'] },
-              { id: 'L2.5', q: 'What will Tomas probably do on Tuesday evening?', o: ['Practise speaking French with others', 'Sign up for a French course at the library', 'Download the language-learning app', 'Leave work early to return his books'] }
+              { id: 'L2.4', q: 'What is the library\'s current policy on late items?', o: ['Members are charged only when an item is so late it is written off.', 'Small daily fines are charged after thirty days.', 'Members are blocked from borrowing after one week.', 'Fines were removed for children but not adults.'] },
+              { id: 'L2.5', q: 'What will Tomas probably do on Thursday evening?', o: ['Join the French group after it has started', 'Attend the French circle from six thirty', 'Leave work early to reach the library', 'Sign up for the French conversation circle'] }
             ]
           }]
         },
@@ -259,21 +265,25 @@
               ['HOST', 'Let\'s start with work. What\'s the biggest barrier?'],
               ['IVANA', 'Honestly, the phrase "Canadian experience." People with ten or fifteen years in their profession apply for jobs and are told they need it, but of course they can\'t get it until someone gives them a first job here. It goes round and round.'],
               ['HOST', 'How do you help people get out of that loop?'],
-              ['IVANA', 'Mainly through mentorship. We pair each newcomer with a volunteer who works in the same field here, so an accountant with an accountant, a nurse with a nurse. The mentor explains how hiring really works in that industry, what employers look for that isn\'t in the job posting, and often introduces them to people. About two-thirds of our mentees are working in their field within a year.'],
+              ['IVANA', 'Mainly through mentorship. We pair each newcomer with a volunteer who works in the same field here, so an accountant with an accountant, a nurse with a nurse.'],
+              ['HOST', 'And what does a mentor actually do?'],
+              ['IVANA', 'They explain how hiring really works in that industry, what employers look for that isn\'t in the job posting, and they often introduce them to people. About two-thirds of our mentees are working in their field within a year.'],
               ['HOST', 'And people in regulated professions, like engineers or doctors?'],
               ['IVANA', 'They need their credentials assessed, and my advice is to start before you even land. The process can easily take six months or more, and every month you wait is a month you might spend in a job well below your skills.'],
               ['HOST', 'Now, housing. Why is that so hard?'],
               ['IVANA', 'A lot of landlords ask for a credit history, and newcomers simply don\'t have one yet. We write reference letters and explain tenants\' rights. And I always give one warning: never send a deposit for an apartment you haven\'t seen in person. Fake rental ads target newcomers constantly, because the scammers know they can\'t easily check.'],
               ['HOST', 'Are your services free?'],
-              ['IVANA', 'For permanent residents and their families, completely. And starting next month, we\'ll stay open until eight on Wednesdays, because so many of our clients work day shifts and simply can\'t come in during office hours.']
+              ['IVANA', 'For permanent residents and their families, completely. Some temporary residents qualify for part of what we offer, too, so it\'s always worth asking.'],
+              ['HOST', 'Anything new coming up?'],
+              ['IVANA', 'Yes. Starting next month, we\'ll stay open until eight on Wednesdays, because so many of our clients work day shifts and simply can\'t come in during office hours.']
             ],
             questions: [
               { id: 'L3.1', q: 'Why does Ivana mention her own arrival in Canada?', o: ['To show she understands her clients\' confusion', 'To explain why she chose to study counselling', 'To point out how much easier settling has become', 'To encourage listeners to volunteer as mentors'] },
               { id: 'L3.2', q: 'What point does Ivana make about "Canadian experience"?', o: ['It creates a cycle that is hard to break.', 'Most employers have stopped asking for it.', 'Professionals with long careers rarely need it.', 'It matters more in regulated professions.'] },
               { id: 'L3.3', q: 'What is suggested about the mentors?', o: ['They share inside knowledge of their industry.', 'They are usually retired professionals paid by the centre.', 'They hire most of their own mentees.', 'They must have been newcomers themselves.'] },
               { id: 'L3.4', q: 'Why does Ivana advise starting the credential assessment early?', o: ['The process can delay a career for months.', 'It is cheaper to complete it from abroad.', 'Employers will not interview people without it.', 'It cannot be started once you live in Canada.'] },
-              { id: 'L3.5', q: 'Why does Ivana warn newcomers about deposits?', o: ['Dishonest rental ads often target them.', 'Landlords rarely return deposits to tenants.', 'Deposits are illegal for most apartments.', 'Newcomers often pay more than the legal limit.'] },
-              { id: 'L3.6', q: 'What change is the centre making next month?', o: ['Extending its hours one evening a week', 'Opening on weekends for shift workers', 'Charging a fee to temporary residents', 'Hiring more counsellors for day shifts'] }
+              { id: 'L3.5', q: 'Why does Ivana warn newcomers about deposits?', o: ['They are a common target of rental fraud.', 'Landlords rarely return deposits to tenants.', 'Deposits are illegal for most apartments.', 'Newcomers often pay more than the legal limit.'] },
+              { id: 'L3.6', q: 'What change is the centre making next month?', o: ['Staying open later on one weekday', 'Opening on weekends for shift workers', 'Offering some services to temporary residents', 'Hiring more counsellors for day shifts'] }
             ]
           }]
         },
@@ -284,18 +294,21 @@
           segments: [{
             lines: [
               ['NEWS', 'Commuters who rely on the Harbourgate Bridge should prepare for longer trips, as a fourteen-month repair project gets underway this Saturday.'],
-              ['NEWS', 'Crews will replace the bridge\'s concrete deck, which has not been fully rebuilt since the bridge opened in 1968. Throughout the project, two of the bridge\'s four lanes will be closed, leaving a single lane in each direction. Officials estimate that about forty thousand vehicles cross the bridge on an average weekday.'],
-              ['NEWS', 'The bridge will also close completely on Friday and Saturday nights, from eleven p.m. to six a.m., while heavy equipment is moved into place. During those closures, drivers will be sent to the Mill Road crossing, a detour that adds roughly twenty minutes. Emergency vehicles will still be let through during the overnight closures.'],
-              ['NEWS', 'Trucks weighing more than ten tonnes will be banned from the bridge until the work is finished.'],
-              ['NEWS', 'To ease the pressure, the regional transit authority will run the harbour ferry every fifteen minutes during rush hour, instead of every thirty. The sidewalk on the east side of the bridge will remain open to pedestrians and cyclists.'],
-              ['NEWS', 'Project engineer Diane Fortier admits the disruption will be frustrating. But she says putting the work off would only raise the cost. "If we wait, we risk emergency repairs that could shut the bridge with no warning at all," she said.']
+              ['NEWS', 'Crews will replace the bridge\'s concrete deck, which has not been fully rebuilt since the bridge opened in 1968. Throughout the project, two of the bridge\'s four lanes will be closed, leaving a single lane in each direction.'],
+              ['NEWS', 'Officials estimate that about forty thousand vehicles cross the bridge on an average weekday.'],
+              ['NEWS', 'The bridge will also close completely on Friday and Saturday nights, from eleven p.m. to six a.m., while heavy equipment is moved into place. During those closures, drivers will be sent to the Mill Road crossing, a detour that adds roughly twenty minutes.'],
+              ['NEWS', 'Emergency vehicles will still be let through during the overnight closures. Trucks weighing more than ten tonnes will be banned from the bridge until the work is finished.'],
+              ['NEWS', 'To ease the pressure, the regional transit authority will run the harbour ferry every fifteen minutes during rush hour, instead of every thirty. Monthly bus passes will be accepted on the ferry for as long as the work continues.'],
+              ['NEWS', 'The sidewalk on the east side of the bridge will remain open to pedestrians and cyclists, although cyclists will be asked to walk their bikes across whenever crews are working close by.'],
+              ['NEWS', 'Project engineer Diane Fortier admits the disruption will be frustrating. She says the schedule was stretched from twelve months to fourteen so that crews can avoid pouring concrete in the coldest weeks of winter.'],
+              ['NEWS', 'But she says putting the work off would only raise the cost. "If we wait, we risk emergency repairs that could shut the bridge with no warning at all," she said.']
             ],
             questions: [
               { id: 'L4.1', q: 'What is the news item mainly about?', o: ['Disruption expected from a long bridge project', 'A plan to build a second harbour bridge', 'A temporary ferry service for commuters', 'Complaints from drivers about the Mill Road detour'] },
               { id: 'L4.2', q: 'How many lanes of the bridge will be open on a weekday morning?', o: ['Two', 'Four', 'One', 'None'] },
-              { id: 'L4.3', q: 'What will drivers have to do at midnight on a Saturday?', o: ['Use a longer route across the harbour', 'Wait for crews to move their equipment', 'Share a single lane in each direction', 'Pay a toll to use the Mill Road crossing'] },
-              { id: 'L4.4', q: 'Why will the ferry run more often?', o: ['To give commuters another way to cross', 'Because the sidewalk will be closed', 'To carry trucks that are banned from the bridge', 'Because Mill Road will close at rush hour'] },
-              { id: 'L4.5', q: 'What is Diane Fortier\'s view of the project?', o: ['Delays now are better than risks later.', 'The timing was chosen to suit commuters.', 'The bridge should have been replaced in 1968.', 'The work could be finished faster with more crews.'] }
+              { id: 'L4.3', q: 'What will drivers have to do just after midnight on Saturday night?', o: ['Take a slower route across the harbour', 'Wait for crews to move their equipment', 'Share a single lane in each direction', 'Pay a toll to use the Mill Road crossing'] },
+              { id: 'L4.4', q: 'Why will the ferry run more often?', o: ['To give commuters another way to cross', 'Because cyclists will not be allowed on the bridge', 'To carry trucks that are banned from the bridge', 'Because Mill Road will close at rush hour'] },
+              { id: 'L4.5', q: 'What is Diane Fortier\'s view of the project?', o: ['Short-term inconvenience is better than a sudden failure later.', 'The schedule was set mainly to suit commuters.', 'The work should have been kept to twelve months.', 'The work could be finished faster with more crews.'] }
             ]
           }]
         },
@@ -326,9 +339,9 @@
               { id: 'L5.3', q: 'Why does Jin have doubts about the scooter topic?', o: ['The available city data is out of date.', 'Most students do not use the scooters.', 'The city has already ended the program.', 'Scooters are not allowed on the campus.'] },
               { id: 'L5.4', q: 'Why does Jin mention last semester\'s survey?', o: ['To show a survey alone may not be reliable', 'To suggest they reuse the same questions', 'To remind Elodie that it was her idea', 'To argue that the professor dislikes all surveys'] },
               { id: 'L5.5', q: 'Why is Kwame\'s idea attractive to the group?', o: ['They already have permission to gather data.', 'The cafeteria manager will write the report.', 'Food waste is the professor\'s favourite topic.', 'It requires less work than the other ideas.'] },
-              { id: 'L5.6', q: 'Why does Elodie think her survey will work better this time?', o: ['People are more likely to answer in person.', 'The questions will be sent to more students.', 'The cafeteria manager will hand it out.', 'It will offer a prize for completing it.'] },
-              { id: 'L5.7', q: 'What can be inferred about Jin?', o: ['Jin prefers data work to meeting strangers.', 'Jin thinks the survey will fail again.', 'Jin wants to change the topic back to scooters.', 'Jin has already written part of the proposal.'] },
-              { id: 'L5.8', q: 'What will happen on Thursday?', o: ['The group will meet in a study room.', 'Kwame will start weighing the bins.', 'Elodie will hand in the proposal.', 'They will meet the cafeteria manager.'] }
+              { id: 'L5.6', q: 'Why does Elodie think her survey will work better this time?', o: ['Students find a person harder to brush off than a message.', 'The questions will be sent to more students.', 'The cafeteria manager will hand it out.', 'It will offer a prize for completing it.'] },
+              { id: 'L5.7', q: 'What can be inferred about Jin?', o: ['Jin is more at ease with numbers than with face-to-face contact.', 'Jin thinks the survey will fail again.', 'Jin wants to change the topic back to scooters.', 'Jin has already written part of the proposal.'] },
+              { id: 'L5.8', q: 'What will happen on Thursday?', o: ['The three will write up their plan at the library.', 'Kwame will begin weighing the bins.', 'Jin will present the first charts.', 'They will meet the cafeteria manager.'] }
             ]
           }]
         },
@@ -339,19 +352,27 @@
           segments: [{
             lines: [
               ['NARR', 'Across the country, cities are adding protected bike lanes, and very often the space comes from removing street parking. On busy main streets, that trade has become one of the most heated local debates.'],
-              ['NARR', 'Urban planner Doctor Mateo Silva supports the change. He points to a study of one mid-sized Canadian city, where the number of people cycling on a downtown street tripled within two years of a protected lane opening.'],
-              ['NARR', 'Silva argues that many people would happily cycle but feel unsafe sharing the road with cars, and that a physical barrier gives them the confidence to try. He also rejects the idea that cyclists are bad for business. In his research, customers who arrived by bike spent less on each visit, but they came back more often, so over a month they spent at least as much as drivers.'],
-              ['NARR', 'Bakery owner Joanne Lister is not persuaded. Under the city\'s current plan, her shop on Queen Street would lose eight of the twelve parking spaces out front. Many of her regulars are seniors, she says, and others pick up large cake orders that simply cannot go home on a bicycle.'],
-              ['NARR', 'Lister also points out that cycling drops sharply in winter, when, she says, the lanes sit mostly empty while drivers circle the block looking for a spot. She insists she is not against bike lanes. She would just like the city to put them on quieter side streets that run parallel to the main road.'],
-              ['NARR', 'The city will hold a public meeting next month. Until then, residents can share their views through an online survey, which closes on the thirtieth.']
+              ['NARR', 'Urban planner Doctor Mateo Silva supports the change. He points to a study of one mid-sized Canadian city, where the number of people cycling on a downtown street tripled within two years of a protected lane opening, while car traffic on that street barely changed.'],
+              ['NARR', 'Silva argues that many people would happily cycle but feel unsafe sharing the road with cars, and that a physical barrier gives them the confidence to try. Painted lines alone, he says, did almost nothing in the same study.'],
+              ['NARR', 'He also rejects the idea that cyclists are bad for business. In his research, customers who arrived by bike spent less on each visit, but they came back more often, so over a month they spent at least as much as drivers.'],
+              ['NARR', 'Silva\'s second argument is about safety for everyone. Streets with protected lanes, he says, tend to have slower traffic and fewer serious collisions, including those involving pedestrians, because drivers handle narrower lanes more carefully.'],
+              ['NARR', 'Bakery owner Joanne Lister is not persuaded. Under the city\'s current plan, her shop on Queen Street would lose eight of the twelve parking spaces out front.'],
+              ['NARR', 'Many of her regulars are seniors, she says, and others pick up large cake orders that simply cannot go home on a bicycle.'],
+              ['NARR', 'Lister also points out that cycling drops sharply in winter, when, she says, the lanes sit mostly empty while drivers circle the block looking for a spot.'],
+              ['NARR', 'Her second concern is deliveries. Trucks that bring flour and other supplies to the shops on Queen Street would have nowhere to stop, she says, and would end up double-parking in the one remaining traffic lane.'],
+              ['NARR', 'Silva answers that winter cycling is lower but far from zero, and that it grows in cities that clear the lanes of snow. He also suggests that a few parking spaces could become loading zones in the morning, when most deliveries arrive.'],
+              ['NARR', 'Lister admits that Silva\'s spending figures may hold for cafés and clothing shops. But a bakery, she says, depends on customers who buy a lot at once, and those are exactly the customers who drive.'],
+              ['NARR', 'She insists she is not against bike lanes. She would just like the city to put them on quieter side streets that run parallel to the main road.'],
+              ['NARR', 'Silva doubts that would work. Cyclists, he says, want to reach the same shops and offices as everyone else, and lanes on side streets tend to be ignored because they add distance to every trip.'],
+              ['NARR', 'The city will hold a public meeting early next month, and council expects to vote on the plan in the spring. Until then, residents can share their views through an online survey, which closes at the end of this month.']
             ],
             questions: [
-              { id: 'L6.1', q: 'What is the report mainly about?', o: ['Replacing parking with bike lanes', 'The rising cost of parking downtown', 'Safety rules for city cyclists', 'A new bakery on Queen Street'] },
-              { id: 'L6.2', q: 'Why does Dr. Silva mention the study?', o: ['To show that safer lanes can attract riders', 'To prove that cycling reduces downtown car traffic', 'To show how quickly lanes can be built', 'To compare Canadian and foreign cities'] },
-              { id: 'L6.3', q: 'According to Silva, how do customers who cycle behave?', o: ['They spend less per visit but come more often.', 'They spend more on each visit than drivers do, on average.', 'They visit less often than drivers.', 'They shop mostly in the winter.'] },
-              { id: 'L6.4', q: 'Why is Joanne Lister worried about the plan?', o: ['Many customers would find cycling hard.', 'Her shop is too small for bicycle racks.', 'The construction will close her shop.', 'She will lose all twelve parking spaces.'] },
-              { id: 'L6.5', q: 'What is Lister\'s overall position?', o: ['She accepts bike lanes, but not on her street.', 'She opposes cycling infrastructure entirely.', 'She wants parking fees to pay for lanes.', 'She thinks bike lanes should be removed every winter.'] },
-              { id: 'L6.6', q: 'What can residents do at this point?', o: ['Give their opinion online', 'Attend a meeting this week', 'Vote on the plan next month', 'Email Dr. Silva with questions'] }
+              { id: 'L6.1', q: 'What is the report mainly about?', o: ['Giving up parking spaces to make room for cyclists', 'The rising cost of parking downtown', 'Safety rules for city cyclists', 'Delivery problems on Queen Street'] },
+              { id: 'L6.2', q: 'Why does Dr. Silva mention the study?', o: ['To show that safer lanes can attract riders', 'To prove that cycling reduces downtown car traffic', 'To show that painted lines work well enough', 'To compare Canadian and foreign cities'] },
+              { id: 'L6.3', q: 'According to Silva, how do customers who cycle behave?', o: ['Their smaller purchases are balanced by more frequent visits.', 'They spend more on each visit than drivers do.', 'They visit less often than drivers.', 'They shop mostly at cafés and clothing stores.'] },
+              { id: 'L6.4', q: 'Why does Lister mention seniors and cake orders?', o: ['To show that many customers depend on driving', 'To explain why she wants loading zones', 'To show that her sales have fallen recently', 'To argue that parking fees are too high'] },
+              { id: 'L6.5', q: 'What is Lister\'s overall position?', o: ['She accepts bike lanes, but not on her street.', 'She opposes cycling infrastructure entirely.', 'She wants loading zones instead of bike lanes.', 'She thinks bike lanes should be removed every winter.'] },
+              { id: 'L6.6', q: 'What can residents do at this point?', o: ['Submit their views before the end of the month', 'Attend the public meeting later this month', 'Vote on the plan next month', 'Email Dr. Silva with questions'] }
             ]
           }]
         }
@@ -402,23 +423,23 @@
           ],
           questions: [
             { id: 'R2.6', q: 'Someone who is free on only one weekday evening per week would most likely choose', o: ['Spanish for Travellers.', 'Italian Conversation (Beginner).', 'English for the Workplace.', 'Mandarin Basics.'] },
-            { id: 'R2.7', q: 'A 70-year-old taking Mandarin Basics will pay, including materials,', o: ['$150.', '$110.', '$227.', '$260.'] },
-            { id: 'R2.8', q: 'A 40-year-old who registers for Italian Conversation (Beginner) on September 5 will pay, for the class and the book,', o: ['$315.', '$273.', '$280.', '$238.'] }
+            { id: 'R2.7', q: 'A 70-year-old who registers for Mandarin Basics on August 15 will', o: ['pay half the class fee and the full price for materials.', 'get 15% off and then half off the class fee.', 'pay half price for both the class and the materials.', 'have to choose the early discount, since it is larger.'] },
+            { id: 'R2.8', q: 'A student in Italian Conversation (Beginner) decides after the second class that it is not for her. Based on the notes, she', o: ['no longer qualifies for a refund of the class fee.', 'gets her class fee back, minus $25.', 'gets back only the $35 she paid for the book.', 'can get a refund if she takes the placement test.'] }
           ]
         },
         {
           id: 'R3', title: 'Part 3: Reading for Information', minutes: 10,
           instructions: 'Read the following article. Decide which paragraph, A to D, contains the information in each statement. If the information is not given in any paragraph, choose E.',
-          passage: '<h3>The Tides of the Bay of Fundy</h3><p><b>A.</b> The Bay of Fundy, which lies between New Brunswick and Nova Scotia, is known for having the highest tides on Earth. At Burntcoat Head, near the eastern end of the bay, the difference between low and high tide has been measured at more than sixteen metres, roughly the height of a five-storey building. Twice a day, about 160 billion tonnes of seawater flow into and out of the bay, which is more than the combined flow of all the freshwater rivers in the world.</p><p><b>B.</b> Scientists explain these extreme tides with two features of the bay. The first is its shape. The bay is long, and it becomes both narrower and shallower toward its end, so the incoming water is squeezed and forced upward. The second is a natural effect called resonance. Water in the bay rocks back and forth in a cycle of about thirteen hours, which is very close to the twelve-and-a-half-hour cycle of the ocean tides. Like a child on a swing who is pushed at just the right moment, each tide adds to the motion of the one before.</p><p><b>C.</b> The tides shape daily life along the shore. At low tide, visitors to places such as the Hopewell Rocks can walk on the ocean floor among tall rock formations, but they are warned to keep an eye on the clock, because the water returns quickly and can cut off anyone who wanders too far. In some fishing villages, boats sit on the mud twice a day, waiting for the sea to come back. The wide mud flats left by the falling tide also matter to wildlife. Every summer, huge numbers of small shorebirds stop here on their long migration to South America, feeding on tiny shrimp in the mud until they have nearly doubled their weight.</p><p><b>D.</b> Because so much water moves so quickly, the bay has long attracted interest as a source of clean energy. A tidal power station at Annapolis Royal produced electricity for more than thirty years before it closed in 2019. More recently, companies have tested underwater turbines in the Minas Passage, where the currents are especially strong. Progress has been slow: the powerful currents have damaged equipment, and fishing groups have raised concerns about how turbines might affect fish. Supporters believe that if these problems can be solved, the bay could one day supply power to thousands of homes.</p>',
+          passage: '<h3>The Tides of the Bay of Fundy</h3><p><b>A.</b> The Bay of Fundy, which lies between New Brunswick and Nova Scotia, is known for having the highest tides on Earth. At Burntcoat Head, near the eastern end of the bay, the difference between low and high tide has been measured at more than sixteen metres, roughly the height of a five-storey building. Twice a day, about 160 billion tonnes of seawater flow into and out of the bay, which is more than the combined flow of all the freshwater rivers in the world. Tide tables for the bay are published a year in advance, and many local businesses plan their days around them.</p><p><b>B.</b> Scientists explain these extreme tides with two features of the bay. The first is its shape. The bay is long, and it becomes both narrower and shallower toward its end, so the incoming water is squeezed and forced upward. Near the mouth of the bay, by contrast, the tide rises only a few metres. The second is a natural effect called resonance. Water in the bay rocks back and forth in a cycle of about thirteen hours, which is very close to the twelve-and-a-half-hour cycle of the ocean tides. Like a child on a swing who is pushed at just the right moment, each tide adds to the motion of the one before.</p><p><b>C.</b> The tides shape daily life along the shore. At low tide, visitors to places such as the Hopewell Rocks can walk on the ocean floor among tall rock formations, some shaped like giant flowerpots, which the rising water covers to a depth of more than ten metres a few hours later, but they are warned to keep an eye on the clock, because the water returns quickly and can cut off anyone who wanders too far. In some fishing villages, boats sit on the mud twice a day, waiting for the sea to come back. The wide mud flats left by the falling tide also matter to wildlife. Every summer, huge numbers of small shorebirds stop here on their long migration to South America, feeding on tiny shrimp in the mud until they have nearly doubled their weight.</p><p><b>D.</b> Because so much water moves so quickly, the bay has long attracted interest as a source of clean energy. A tidal power station at Annapolis Royal, which trapped water behind a dam and released it through a single large turbine, produced electricity for more than thirty years before it closed in 2019. More recently, companies have tested underwater turbines in the Minas Passage, where the currents are especially strong. Progress has been slow: the powerful currents have damaged equipment, and fishing groups have raised concerns about how turbines might affect fish. Supporters believe that if these problems can be solved, the bay could one day supply power to thousands of homes.</p>',
           questions: [
             { id: 'R3.1', q: 'The natural rhythm of the water in the bay closely matches that of the ocean tides.', fixed: true, a: 'B' },
             { id: 'R3.2', q: 'Some animals use the area to build up energy before a long journey.', fixed: true, a: 'C' },
             { id: 'R3.3', q: 'Newer attempts to generate electricity have run into practical problems.', fixed: true, a: 'D' },
             { id: 'R3.4', q: 'The volume of water moving in the bay exceeds that of all the world\'s rivers together.', fixed: true, a: 'A' },
-            { id: 'R3.5', q: 'Experts expect the bay\'s tides to grow even larger in the coming decades.', fixed: true, a: 'E' },
+            { id: 'R3.5', q: 'The tides at the Hopewell Rocks rise even higher than those at Burntcoat Head.', fixed: true, a: 'E' },
             { id: 'R3.6', q: 'People exploring the exposed sea floor need to pay attention to the time.', fixed: true, a: 'C' },
             { id: 'R3.7', q: 'The water gets less deep the farther it travels into the bay.', fixed: true, a: 'B' },
-            { id: 'R3.8', q: 'A facility that once turned the tides into power is no longer running.', fixed: true, a: 'D' },
+            { id: 'R3.8', q: 'The tidal power station at Annapolis Royal was shut down because of its effect on fish.', fixed: true, a: 'E' },
             { id: 'R3.9', q: 'At one site, the rise of the water can equal the height of a building several storeys high.', fixed: true, a: 'A' }
           ]
         },
@@ -450,14 +471,14 @@
       tasks: [
         {
           id: 'W1', title: 'Task 1: Writing an Email', minutes: 27, minWords: 150, maxWords: 200,
-          prompt: '<p>Your child\'s class is going on a field trip next week. After reading the permission form the school sent home, you have a concern about the trip.</p><p>Write an email to your child\'s teacher. In your email, do the following:</p><ul><li>Say which trip you are writing about and what you learned from the form.</li><li>Describe your concern and explain why it worries you.</li><li>Suggest what the school could do so that your child can take part safely.</li></ul><p class="muted">Write 150 to 200 words.</p>'
+          prompt: '<p>Your eight-year-old\'s class is going to a farm and corn maze next Thursday. The permission form says that lunch will be served by the farm\'s snack bar and must be signed and returned by Monday. Your child has a serious nut allergy. You work that day, so you cannot go along as a volunteer, and your child is very excited about the trip.</p><p>Write an email to your child\'s teacher. In your email, do the following:</p><ul><li>Say which trip you are writing about and what the form told you.</li><li>Explain your concern and why you cannot simply join the trip yourself.</li><li>Suggest how the school could keep your child safe without making them feel singled out.</li></ul><p class="muted">Write 150 to 200 words.</p>'
         },
         {
           id: 'W2', title: 'Task 2: Responding to Survey Questions', minutes: 26, minWords: 150, maxWords: 200,
           prompt: '<p>Your city\'s transit service will have extra money in next year\'s budget and is asking riders how it should be used. Choose the option you prefer. Explain the reasons for your choice.</p><p class="muted">Write 150 to 200 words.</p>',
           options: [
-            { key: 'A', label: 'Option A', text: 'Make buses more frequent, so that most routes run every 10 minutes instead of every 20 minutes.' },
-            { key: 'B', label: 'Option B', text: 'Lower fares, so that a single ride costs $2.00 instead of $3.25 and a monthly pass costs $60 instead of $95.' }
+            { key: 'A', label: 'Option A', text: 'Make buses more frequent, so that most routes run every 10 minutes instead of every 20 minutes. Fares would stay the same, and two little-used late-night routes would be cut.' },
+            { key: 'B', label: 'Option B', text: 'Lower fares, so that a single ride costs $2.00 instead of $3.25 and a monthly pass costs $60 instead of $95. Buses would still run every 20 minutes, and rush-hour crowding would likely get worse.' }
           ]
         }
       ]
@@ -467,23 +488,23 @@
     speaking: {
       practice: { id: 'SP', title: 'Practice Task', prep: 30, speak: 60, prompt: 'Describe a place in your neighbourhood that you enjoy visiting.' },
       tasks: [
-        { id: 'S1', title: 'Task 1: Giving Advice', prep: 30, speak: 90, prompt: 'A friend of yours wants to buy their first car but does not know much about cars. Give your friend advice on how to choose and buy one.' },
-        { id: 'S2', title: 'Task 2: Talking about a Personal Experience', prep: 30, speak: 60, prompt: 'Talk about a time when you met someone who had a strong influence on you. Who was this person, and how did they influence you?' },
+        { id: 'S1', title: 'Task 1: Giving Advice', prep: 30, speak: 90, prompt: 'A friend of yours wants to buy their first car but does not know much about cars. They have saved $8,000 and need the car within three weeks to start a new job outside the city, where there is no bus service. Give your friend advice on how to choose and buy one.' },
+        { id: 'S2', title: 'Task 2: Talking about a Personal Experience', prep: 30, speak: 60, prompt: 'Talk about a time when you met someone who had a strong influence on you. Who was this person, how did they influence you, and what is one thing you do differently today because of them?' },
         { id: 'S3', title: 'Task 3: Describing a Scene', prep: 30, speak: 60, prompt: 'Describe some things that are happening in the picture below as well as you can. The person you are speaking to cannot see the picture.', image: GROCERY },
         { id: 'S4', title: 'Task 4: Making Predictions', prep: 30, speak: 60, prompt: 'In this picture, what do you think will most probably happen next?', image: GROCERY },
         {
           id: 'S5', title: 'Task 5: Comparing and Persuading', type: 'compare', select: 60, prep: 60, speak: 60,
           prompt: 'Your family is deciding what to do for dinner this Friday. Choose the option you prefer. In the next section, you will need to persuade a family member that your choice is better.',
           choices: [
-            { key: 'A', title: 'Cook at home', image: COOK, facts: ['Groceries: about $35', '1 hour to cook, 20 minutes to clean up', 'Healthy recipe of your choice', 'Eat together at the kitchen table'] },
-            { key: 'B', title: 'Order takeout', image: TAKEOUT, facts: ['About $70 with delivery and tip', 'Arrives in 45 minutes', 'No cooking and no dishes', 'Few healthy choices on the menu'] }
+            { key: 'A', title: 'Cook at home', image: COOK, facts: ['Groceries: about $35', '1.5 hours to shop and cook after work', 'Healthy recipe of your choice', 'Someone still has to do the dishes'] },
+            { key: 'B', title: 'Order takeout', image: TAKEOUT, facts: ['About $70 with delivery and tip', 'Up to 60 minutes on Friday nights', 'Healthy bowls and salads available', 'No cooking and no dishes'] }
           ],
           third: { key: 'C', title: 'Buffet restaurant', image: BUFFET, facts: ['$28 per adult, $14 per child', '15-minute drive', 'Over 60 dishes and a dessert bar', 'Busy on Fridays: up to a 30-minute wait'] },
           persuade: 'Your family member wants to go to the buffet restaurant instead. Persuade them that your choice is better. Explain why.'
         },
         { id: 'S6', title: 'Task 6: Dealing with a Difficult Situation', prep: 60, speak: 60, prompt: '<p>You borrowed your sister\'s expensive camera for a weekend trip. While you were hiking, you dropped it, and now the lens is cracked. Your sister needs the camera next Saturday, because she has been paid to take photos at a friend\'s wedding.</p><p><b>Choose ONE:</b></p><p><b>Option A:</b> Talk to your sister. Explain what happened and what you will do about it.</p><p><b>Option B:</b> Talk to a friend who owns a similar camera. Ask your friend to lend it to your sister for the wedding.</p>' },
-        { id: 'S7', title: 'Task 7: Expressing Opinions', prep: 30, speak: 90, prompt: 'Some people believe workers should retire at 65. Others think people should keep working for as long as they are able and want to. What is your opinion? Explain your reasons.' },
-        { id: 'S8', title: 'Task 8: Describing an Unusual Situation', prep: 30, speak: 60, prompt: 'You are at an outdoor equipment store and see this unusual tent displayed on top of a car. Call your friend who loves camping. Describe the tent and explain whether you think your friend should buy it.', image: ROOFTENT }
+        { id: 'S7', title: 'Task 7: Expressing Opinions', prep: 30, speak: 90, prompt: 'Your company is reviewing its retirement policy. Some long-serving employees want to keep working past 65 because they enjoy their jobs and need the income. Younger employees say that senior positions almost never open up, so they leave for other companies. Your manager has asked for your opinion: should workers be expected to retire at 65, or keep working for as long as they are able and want to? Explain your reasons.' },
+        { id: 'S8', title: 'Task 8: Describing an Unusual Situation', prep: 30, speak: 60, prompt: 'You are at an outdoor equipment store and see this unusual tent displayed on top of a car. Call your friend who loves camping. Your friend drives a small hatchback with no roof rack and has about $1,000 to spend on new gear. Describe the tent and explain whether you think your friend should buy it.', image: ROOFTENT }
       ]
     }
   });

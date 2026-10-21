@@ -214,12 +214,12 @@
                 ['MARCUS', 'She said to put the wettest ones in freezer bags and freeze them. That stops the damage where it is, and then they can be thawed and air-dried slowly, a few at a time. She even offered to come help.'],
                 ['ANJALI', 'Strange, but okay. Meanwhile, the whole basement needs to dry out, or we\'ll have mould by next week. The hardware store rents dehumidifiers for forty-five dollars a day.'],
                 ['MARCUS', 'How long would we need one?'],
-                ['ANJALI', 'The guy on the phone said three days for a basement our size.'],
+                ['ANJALI', 'The guy on the phone first said two days, but once I mentioned the carpet, he said three for a basement our size.'],
                 ['MARCUS', 'Fine. Just hang on to the receipt. The insurance might cover that too.']
               ],
               questions: [
                 { id: 'L1.7', q: 'What is Lena\'s advice about the wettest photos?', o: ['Stop the damage now and dry them gradually later.', 'Dry them right away with gentle heat.', 'Bring them to the university to be restored.', 'Separate them before putting them in bags.'] },
-                { id: 'L1.8', q: 'How much will the dehumidifier cost in total?', o: ['$135', '$45', '$90', '$180'] }
+                { id: 'L1.8', q: 'How much will the dehumidifier cost in total?', o: ['$135', '$90', '$45', '$180'] }
               ]
             }
           ]
@@ -233,22 +233,26 @@
               ['TELLER', 'Good morning. What can I do for you today?'],
               ['FARAH', 'Hi. I think I lost my debit card yesterday. I\'ve gone through my whole apartment, and I called the gym, because that\'s the last place I remember using it, but nobody\'s turned it in.'],
               ['TELLER', 'Sorry to hear that. Have you done anything to block it yet?'],
-              ['FARAH', 'I locked it in the mobile app last night, as soon as I noticed it was gone.'],
-              ['TELLER', 'Good thinking. That\'s exactly what we recommend. Let me take a look at your recent activity. Okay, the last purchase was thirty-two dollars at a grocery store on Tuesday. Was that you?'],
-              ['FARAH', 'Yes, that was me.'],
+              ['FARAH', 'I locked it in the mobile app last night, as soon as I noticed it was gone. Then I lay awake wondering if that was enough.'],
+              ['TELLER', 'Honestly, I wish everyone thought that fast. That\'s what we tell everyone to do first. Let me take a look at your recent activity. Okay, the last purchase made with the card was thirty-two dollars at a grocery store on Tuesday. Was that you?'],
+              ['FARAH', 'Yes, that was me. But the app shows something from this morning, too. Eleven ninety-nine. That\'s after I locked it.'],
+              ['TELLER', 'That\'s a monthly payment to a music service. Automatic payments like that can still go through on a locked card. Does it sound familiar?'],
+              ['FARAH', 'Oh. Yes, that\'s mine. I forgot it even came out of this account.'],
               ['TELLER', 'Then nothing unusual has gone through. I\'ll cancel the old card for good and print you a new one right here. It only takes a few minutes.'],
-              ['FARAH', 'Oh, great. I thought I\'d have to wait for one in the mail. Is there a charge?'],
-              ['TELLER', 'Normally it\'s ten dollars, but replacements are free with your account package. You\'ll need to choose a new PIN on this keypad. And just so you know, tap won\'t work until you make one purchase with the chip and your PIN.'],
+              ['FARAH', 'Oh, great. I thought I\'d have to wait a week for one in the mail. Is there a charge?'],
+              ['TELLER', 'Your package includes one free replacement a year, and I see you already had one in February. Normally that would mean the ten-dollar fee, but since you reported this so quickly, I\'ll waive it.'],
+              ['FARAH', 'Thanks, I appreciate that. February was when a parking machine swallowed it.'],
+              ['TELLER', 'You\'ll need to choose a new PIN on this keypad. And just so you know, tap won\'t work until you make one purchase with the chip and your PIN.'],
               ['FARAH', 'Good to know. Will the card number be the same?'],
-              ['TELLER', 'No, it\'ll be a new number. So if you\'ve got any monthly payments set up with the old card, like your phone bill or online subscriptions, you\'ll need to update them.'],
+              ['TELLER', 'No, it\'ll be a new number. So any monthly payments set up with the old card, like your phone bill or that music service, you\'ll need to update.'],
               ['FARAH', 'Ugh, I have a few of those. I guess I know what I\'m doing tonight.']
             ],
             questions: [
-              { id: 'L2.1', q: 'Why did Farah call the gym?', o: ['She thought she might have left her card there.', 'She wanted to cancel her membership.', 'The gym had charged her card by mistake.', 'Staff had found a wallet in the locker room.'] },
-              { id: 'L2.2', q: 'How does the teller react to what Farah did the night before?', o: ['The teller approves of it.', 'The teller says it was unnecessary.', 'The teller is surprised by it.', 'The teller asks her to undo it.'] },
-              { id: 'L2.3', q: 'Why does the teller ask about the grocery purchase?', o: ['To confirm no one else has used the card', 'To check how much money is in the account', 'To find out where she lost the card', 'To refund the thirty-two dollars'] },
-              { id: 'L2.4', q: 'What is true about the replacement card?', o: ['Farah will pay nothing for it.', 'It will arrive by mail in a few days.', 'It works for tap payments right away.', 'It keeps the same card number.'] },
-              { id: 'L2.5', q: 'What can be inferred about Farah at the end?', o: ['She has several bills linked to her card.', 'She plans to close her account soon.', 'She will choose her PIN at home.', 'She will search her home again tonight.'] }
+              { id: 'L2.1', q: 'Why did Farah call the gym?', o: ['She thought she might have left her card there.', 'She wanted to update the card linked to her membership.', 'The gym had charged her card that morning.', 'Staff had found a wallet in the locker room.'] },
+              { id: 'L2.2', q: 'How does the teller react to what Farah did the night before?', o: ['The teller approves of it.', 'The teller says it was not enough.', 'The teller is surprised by it.', 'The teller asks her to undo it.'] },
+              { id: 'L2.3', q: 'Why does the teller ask about the grocery purchase?', o: ['To confirm no one else has used the card', 'To check how much money is left in the account', 'To find out where she lost the card', 'To explain the charge from this morning'] },
+              { id: 'L2.4', q: 'What does the teller decide about the replacement fee?', o: ['Farah will not be charged this time.', 'Farah must pay ten dollars for a second card this year.', 'There is no fee because it is her first replacement.', 'Farah will pay the fee when the card arrives by mail.'] },
+              { id: 'L2.5', q: 'What will Farah most likely do this evening?', o: ['Give her new card details to several companies', 'Cancel the music service she forgot about', 'Choose a new PIN using the mobile app', 'Search her apartment once more for the card'] }
             ]
           }]
         },
@@ -263,11 +267,17 @@
               ['HOST', 'So how did you end up on ski patrol?'],
               ['GABRIEL', 'Honestly, it started with an accident. About ten years ago, I fell and broke my wrist on a hill out west. The patroller who looked after me was so calm, and so kind, that I remember thinking, I want to be able to do that for someone.'],
               ['HOST', 'And what does it take? I\'m guessing you have to be a pretty good skier.'],
-              ['GABRIEL', 'You do need to be a strong intermediate skier or snowboarder, but believe it or not, that\'s the easy part. The real hurdle is first aid. New patrollers take an advanced course that runs about eighty hours, and then there\'s on-snow training, where you learn to bring an injured person down the hill in a toboggan.'],
+              ['GABRIEL', 'You do need to be a strong intermediate skier or snowboarder, but believe it or not, that\'s the easy part. The real hurdle is first aid.'],
+              ['HOST', 'How so?'],
+              ['GABRIEL', 'New patrollers take an advanced course that runs about eighty hours, mostly on weeknights. Then there\'s on-snow training, where you learn to bring an injured person down the hill in a toboggan.'],
+              ['HOST', 'And does the course cost anything?'],
+              ['GABRIEL', 'About four hundred dollars. That scares some people off, but the patrol pays back half once you finish your first full season.'],
               ['HOST', 'That\'s a big commitment for a volunteer.'],
-              ['GABRIEL', 'It is. We ask people for at least ten days a season. In return, they get a season pass, which is worth around six hundred dollars, so most people feel it\'s a fair trade.'],
+              ['GABRIEL', 'It is. We used to ask for ten days a season, but this year it went up to twelve. In return, volunteers get a season pass worth around six hundred dollars, so most people feel it\'s a fair trade.'],
               ['HOST', 'What does a typical day look like?'],
-              ['GABRIEL', 'We\'re there at seven thirty, before the lifts open, checking every trail for hazards, things like ice patches or fallen branches. During the day we respond to calls. Then at closing we do what\'s called a sweep: we ski every run one last time to make sure nobody\'s still out there.'],
+              ['GABRIEL', 'We\'re there at seven thirty, before the lifts open, checking every trail for hazards, things like ice patches or fallen branches. During the day we respond to calls.'],
+              ['HOST', 'And when the lifts close?'],
+              ['GABRIEL', 'Then we do what\'s called a sweep: we ski every run one last time to make sure nobody\'s still out there.'],
               ['HOST', 'What kinds of injuries do you see most?'],
               ['GABRIEL', 'For skiers, it\'s mostly knees. Snowboarders tend to hurt their wrists, because they put their hands out when they fall. And a lot of it doesn\'t need to happen. A lesson or two, wrist guards for new boarders, staying on runs that match your level. Simple things.'],
               ['HOST', 'And if listeners want to get involved?'],
@@ -276,8 +286,8 @@
             questions: [
               { id: 'L3.1', q: 'What made Gabriel want to become a patroller?', o: ['The way a patroller treated him after a fall', 'The chance to earn a free season pass', 'A friend who already worked on the patrol', 'A first aid course he took on a hill out west'] },
               { id: 'L3.2', q: 'What does Gabriel suggest about the skiing requirement?', o: ['It is less demanding than the first aid training.', 'It is the hardest part for most new volunteers.', 'Only expert skiers can meet it.', 'It is tested during the toboggan training.'] },
-              { id: 'L3.3', q: 'How does Gabriel describe the season pass arrangement?', o: ['Most volunteers think it is a reasonable exchange.', 'It is worth more than the first aid course.', 'Only volunteers who work ten days a month get one.', 'It is the main reason most people volunteer.'] },
-              { id: 'L3.4', q: 'What happens at the end of each day?', o: ['Patrollers ski each trail to check for people.', 'Patrollers clear ice patches and fallen branches.', 'Patrollers check the lifts before they close.', 'Patrollers write reports on all injuries.'] },
+              { id: 'L3.3', q: 'How does Gabriel describe the season pass arrangement?', o: ['Most volunteers see it as a reasonable exchange.', 'It goes only to volunteers who give ten days.', 'It pays back half the cost of the first aid course.', 'It is the main reason most people volunteer.'] },
+              { id: 'L3.4', q: 'What happens at the end of each day?', o: ['Patrollers make a final pass to be sure the hill is empty.', 'Patrollers clear ice patches and fallen branches.', 'Patrollers check the lifts before they close.', 'Patrollers write reports on all injuries.'] },
               { id: 'L3.5', q: 'What does Gabriel imply about many injuries?', o: ['Some could be prevented with basic precautions.', 'Most happen on the easier trails.', 'Snowboarders are hurt more often than skiers.', 'Knee injuries are the most serious kind.'] },
               { id: 'L3.6', q: 'Why does Gabriel mention January?', o: ['New recruits could start patrolling by then.', 'The information session takes place then.', 'The ski season usually begins then.', 'Training courses are held in that month.'] }
             ]
@@ -292,7 +302,8 @@
               ['NEWS', 'The province has confirmed that a new ferry route between Tidewater Point and Gull Island will begin service on the first of next month.'],
               ['NEWS', 'Until now, island residents without their own boat have relied on a private water taxi that runs only from May to September. The new ferry will operate year-round.'],
               ['NEWS', 'The vessel, the Harbour Light, can carry sixty vehicles and three hundred passengers. It will make four round trips a day, and the crossing will take about fifty minutes.'],
-              ['NEWS', 'Fares will be eighteen dollars for adult passengers and forty-five dollars for a car and driver. Island residents who register for a resident card will pay half the regular fare.'],
+              ['NEWS', 'Fares are slightly lower than first proposed. In the spring, officials suggested twenty dollars for adult passengers, but that figure was cut after public meetings on both sides of the crossing.'],
+              ['NEWS', 'Adult passengers will now pay eighteen dollars, and a car and driver forty-five. Island residents who register for a resident card will pay half the regular fare.'],
               ['NEWS', 'Reservations open online next Monday, and officials are urging drivers to book ahead for weekend sailings, which are expected to fill quickly in the summer months.'],
               ['NEWS', 'Not everyone in Tidewater Point is celebrating. Some residents near the terminal worry about traffic and parking on their narrow streets. In response, the province says a new one-hundred-and-twenty-space parking lot beside the terminal will open before the first sailing.'],
               ['NEWS', 'On Gull Island, however, business owners say year-round service could finally make it possible to keep their doors open through the winter, instead of closing every fall.'],
@@ -301,9 +312,9 @@
             questions: [
               { id: 'L4.1', q: 'What is the main topic of the report?', o: ['A ferry route opening next month', 'A water taxi ending its service', 'A bridge being built to an island', 'An increase in ferry fares'] },
               { id: 'L4.2', q: 'What is the main advantage of the ferry over the water taxi?', o: ['It will offer service in winter as well.', 'Its fares will be lower for everyone.', 'Its crossing will take less time.', 'It will carry island residents for free.'] },
-              { id: 'L4.3', q: 'How much will an adult island resident with a resident card pay to cross on foot?', o: ['$9', '$18', '$45', '$22.50'] },
-              { id: 'L4.4', q: 'How has the province responded to concerns in Tidewater Point?', o: ['By adding parking near the terminal', 'By reducing the number of sailings', 'By widening the streets near the dock', 'By delaying the launch of the route'] },
-              { id: 'L4.5', q: 'What do Gull Island business owners expect?', o: ['To stay open in the off-season', 'To attract more summer visitors', 'To get cheaper ferry tickets', 'To receive new parking spaces'] }
+              { id: 'L4.3', q: 'How much will an adult island resident with a resident card pay to cross on foot?', o: ['$9', '$10', '$18', '$22.50'] },
+              { id: 'L4.4', q: 'How has the province responded to concerns in Tidewater Point?', o: ['By providing off-street spaces for ferry users', 'By reducing the number of weekend sailings', 'By widening the narrow streets near the dock', 'By delaying the first sailing by a month'] },
+              { id: 'L4.5', q: 'What do Gull Island business owners expect?', o: ['To earn enough to operate all year', 'To attract more visitors in the summer', 'To pay half the fare with a resident card', 'To hire forty new workers from the island'] }
             ]
           }]
         },
@@ -330,11 +341,11 @@
             ],
             questions: [
               { id: 'L5.1', q: 'What is the main purpose of the discussion?', o: ['To pick a location for an event', 'To set the budget for an event', 'To plan the menu for an event', 'To decide who is invited to an event'] },
-              { id: 'L5.2', q: 'Why does Wei object to Riverside Park?', o: ['It has little shade and feels unsafe for kids.', 'It is too far for people to walk from work.', 'It charges a fee that is over the budget.', 'It was too crowded with other groups last year.'] },
+              { id: 'L5.2', q: 'Why does Wei object to Riverside Park?', o: ['It was uncomfortable and worrying for parents.', 'It is too far for people to walk from work.', 'It charges a fee that is over the budget.', 'It was too crowded with other groups last year.'] },
               { id: 'L5.3', q: 'What can be concluded about the farm option?', o: ['It would cost more than the budget allows.', 'It is closer to the office than the provincial park.', 'It does not offer any food.', 'It is only open on weekdays.'] },
               { id: 'L5.4', q: 'Why does Mateo raise a concern about the provincial park?', o: ['Some staff do not drive to work.', 'The drive would take over an hour.', 'The beach has no lifeguards.', 'The shelter costs too much.'] },
               { id: 'L5.5', q: 'About how much will the shelter and the bus cost together?', o: ['$550', '$400', '$150', '$2,000'] },
-              { id: 'L5.6', q: 'Why does Siobhan mention that the picnic is on a Saturday?', o: ['Lifeguards will be working that day.', 'More employees can come on weekends.', 'The bus is cheaper on Saturdays.', 'The farm is closed on Saturdays.'] },
+              { id: 'L5.6', q: 'Why does Siobhan mention that the picnic is on a Saturday?', o: ['Swimming will be supervised that day.', 'More employees can come on weekends.', 'The school bus is cheaper on Saturdays.', 'The shelter fee is lower on weekends.'] },
               { id: 'L5.7', q: 'What is Mateo\'s concern about rain?', o: ['The shelter is too small for everyone.', 'The bus company might cancel the trip.', 'The beach would be closed.', 'The forecast is often wrong.'] },
               { id: 'L5.8', q: 'Why does Mateo want more than one quote?', o: ['To check the price Wei mentioned', 'To find a bus with more seats', 'To compare it with the farm', 'To prove the park is too far'] }
             ]
@@ -346,22 +357,28 @@
           cast: { NARR: { name: 'Reporter', g: 'f', skin: '#8d5a3b', hair: '#1d1410', shirt: '#943126', style: 'curly' } },
           segments: [{
             lines: [
-              ['NARR', 'As temperatures drop, a familiar debate is returning: should winter tires be required by law in every province and territory?'],
+              ['NARR', 'As temperatures drop and the first snow reaches much of the country, a familiar debate is returning: should winter tires be required by law in every province and territory?'],
               ['NARR', 'Right now, the rules vary widely. Quebec requires winter tires on passenger vehicles for part of the year, while most other provinces leave the decision up to drivers.'],
               ['NARR', 'Among those calling for a national rule is Doctor Miriam Castellano, a road safety researcher. She explains that all-season tires begin to stiffen at around seven degrees Celsius, while winter tires stay flexible and grip far better on ice and snow.'],
-              ['NARR', 'Castellano argues that because so many Canadians drive between provinces, one national standard would be simpler and fairer. A crash caused by poor tires, she points out, affects everyone on the road, not just the driver who decided to save money.'],
+              ['NARR', 'Castellano also points to Quebec\'s experience. Studies carried out after its rule took effect found fewer winter crashes causing serious injury, and she says she has not seen a single study suggesting the rule made roads less safe.'],
+              ['NARR', 'Because so many Canadians drive between provinces, she argues, one national standard would be simpler and fairer. A crash caused by poor tires, she points out, affects everyone on the road, not just the driver who decided to save money.'],
               ['NARR', 'Not everyone agrees. Owen Fitzgerald, who runs a driving school in Victoria, says a one-size-fits-all rule makes little sense in a country this large. In parts of coastal British Columbia, he notes, snow may fall only a handful of days a year.'],
-              ['NARR', 'He also points to the cost. A set of winter tires on separate rims can run from eight hundred to twelve hundred dollars, plus storage and a change twice a year. For students and low-income families, he says, that money might do more good if it went toward brakes and regular maintenance.'],
+              ['NARR', 'He is also cautious about the Quebec figures. The same years, he says, brought anti-lock brakes and electronic stability control to most new cars, so it is hard to know how much of the improvement came from the tires alone.'],
+              ['NARR', 'Then there is the cost. A set of winter tires on separate rims can run from eight hundred to twelve hundred dollars, plus storage and a change twice a year.'],
+              ['NARR', 'For students and low-income families, Fitzgerald says, that money might do more good if it went toward brakes and regular maintenance. A car with worn brakes, he adds, is dangerous in every season, not only in January.'],
+              ['NARR', 'Fitzgerald is careful to say he is not against winter tires. Every car in his own school switches to them in November. What he objects to is a law that treats a Victoria commuter like a driver in northern Manitoba.'],
+              ['NARR', 'Castellano accepts that the cost is a real burden for some households. Her answer is a provincial rebate for low-income drivers, and she notes that a set of winter tires usually lasts four or five winters, which spreads out the expense.'],
               ['NARR', 'Fitzgerald believes that driver education, such as teaching people to slow down and leave more space, would save more lives than a new law. Castellano\'s response is that good habits and good tires are not an either-or choice.'],
-              ['NARR', 'For now, the provinces will continue to set their own rules.']
+              ['NARR', 'Even the most careful driver, she says, cannot stop safely on ice with tires that have gone hard in the cold.'],
+              ['NARR', 'For now, the provinces will continue to set their own rules, although transportation ministers are expected to discuss the issue at their meeting next spring.']
             ],
             questions: [
-              { id: 'L6.1', q: 'What is the report mainly about?', o: ['A debate over requiring winter tires', 'New rules for driving schools', 'A rise in winter car accidents', 'The rising cost of new tires in Canada'] },
-              { id: 'L6.2', q: 'According to Dr. Castellano, what happens to all-season tires in cold weather?', o: ['They get harder and grip less.', 'They wear out much faster.', 'They lose air pressure overnight.', 'They become too soft.'] },
-              { id: 'L6.3', q: 'Why does Castellano favour one national standard?', o: ['Many people drive from one province to another.', 'Quebec\'s rule has been very popular.', 'Winter tires would be cheaper if everyone bought them.', 'Insurance companies have asked for it.'] },
-              { id: 'L6.4', q: 'What is Owen Fitzgerald\'s main objection to a national rule?', o: ['It ignores differences between regions.', 'It should begin in coastal areas first.', 'It would only affect new drivers.', 'It would be too hard for police to enforce.'] },
-              { id: 'L6.5', q: 'What does Fitzgerald suggest some families should spend money on instead?', o: ['Brakes and regular maintenance', 'Lessons at a driving school nearby', 'All-season tires', 'Tire storage'] },
-              { id: 'L6.6', q: 'How does Castellano respond to Fitzgerald\'s view on education?', o: ['Drivers need both good habits and good tires.', 'Education is a waste of money.', 'Driving schools should be free for students.', 'Education matters more than tires.'] }
+              { id: 'L6.1', q: 'What is the report mainly about?', o: ['Whether winter tires should be required everywhere', 'How Quebec enforces its winter tire rule', 'Whether driving schools should teach winter skills', 'Who should pay for winter tire rebates'] },
+              { id: 'L6.2', q: 'Why does Castellano mention Quebec?', o: ['To show that a rule there has made winter roads safer', 'To show that many drivers cross into Quebec', 'To show that its rule applies all year round', 'To show that Quebec drivers pay less for tires'] },
+              { id: 'L6.3', q: 'Why does Castellano favour one national standard?', o: ['Travel between provinces is common.', 'Rebates would be easier to pay out nationally.', 'Winter tires would be cheaper if everyone bought them.', 'Insurance companies have asked for it.'] },
+              { id: 'L6.4', q: 'How does Fitzgerald respond to the Quebec findings?', o: ['Other safety improvements may explain them.', 'Quebec gets far more snow than the coast.', 'The studies were paid for by tire makers.', 'They prove the rule costs drivers too much.'] },
+              { id: 'L6.5', q: 'What is Fitzgerald\'s point about low-income families?', o: ['Their money could do more good on other car safety needs.', 'They should receive a provincial rebate for winter tires.', 'They should buy all-season tires instead.', 'They rarely need to drive in snow.'] },
+              { id: 'L6.6', q: 'How does Castellano respond to Fitzgerald\'s view on education?', o: ['She rejects the idea that it must be one or the other.', 'She agrees that education alone is enough.', 'She says driving schools should teach tire care.', 'She says laws work better than good habits.'] }
             ]
           }]
         }
@@ -377,11 +394,11 @@
           passage: '<h3>Message</h3><p>Dear Ethan,</p><p>By the time this letter reaches you, you will have finished your first week in Saskatoon. I hope your residence room is not too small and that your roommate does not snore! Your mother tells me the drive across the Prairies took three full days and that you slept through most of it in the back seat while she and your father took turns at the wheel. Some things never change.</p><p>I have been thinking about my own first year away from home. I was eighteen when I left our farm to study nursing in Halifax, and I cried myself to sleep every night for the first two weeks. What saved me was joining the choir. I could not sing very well, and the director politely placed me in the very back row, but I met my best friend there, and she is still my best friend sixty years later. So my one piece of advice is this: find one group outside your classes and stay with it, even in the weeks when you are busy and it feels like a chore.</p><p>I have mailed you a small package. Inside you will find the blue quilt from the cedar chest, since your mother says the heating in your building is unreliable, and a tin of the oatmeal cookies you like. Please share them. It is the quickest way I know to make friends. There is also a cheque for two hundred dollars. Your mother says textbooks are terribly expensive these days, so use it for those and not for pizza.</p><p>As you know, I am having my knee operation on October 8, so I will not be able to travel for Thanksgiving this year. The surgeon says it will be about six weeks before I can manage stairs again. Instead, my neighbour Mrs. Dube has been teaching me to use video calls on my tablet. I am improving, although last week I spent ten minutes talking to the ceiling. Could we try a call on Sunday evenings? Any time after seven o\'clock my time is best, once my television program is over. Remember that I am two hours ahead of you.</p><p>I am so proud of you, my dear. Study hard, but remember to sleep.</p><p>With all my love,<br>Grandma Lucille</p>',
           questions: [
             { id: 'R1.1', q: 'Lucille\'s remark "Some things never change" suggests that Ethan', o: ['has always tended to doze off on long car journeys.', 'still complains about long drives across the Prairies.', 'has never enjoyed travelling with his parents.', 'has always disliked sitting in the back seat.'] },
-            { id: 'R1.2', q: 'Lucille most likely mentions where the choir director placed her to show that', o: ['her voice was not a strong one.', 'the director was unkind to new members.', 'she preferred to stand at the back.', 'the choir was very large that year.'] },
+            { id: 'R1.2', q: 'Lucille most likely mentions where the choir director placed her to show that', o: ['she was not one of the stronger singers in the group.', 'the director was unkind to new members.', 'she preferred to stand at the back.', 'the choir was very large that year.'] },
             { id: 'R1.3', q: 'The main advice Lucille gives Ethan is to', o: ['keep attending one non-academic group through busy periods.', 'join a choir in his first year, just as she did.', 'make friends by sharing food with his classmates.', 'put his classes ahead of clubs when he is busy.'] },
             { id: 'R1.4', q: 'Lucille sent the quilt because', o: ['Ethan\'s building may not stay warm enough.', 'Ethan\'s roommate needed an extra blanket.', 'the cedar chest had no more room in it.', 'Ethan\'s mother forgot to pack his bedding.'] },
             { id: 'R1.5', q: 'Lucille implies that the cheque', o: ['is intended for course materials, not treats.', 'should be shared with the students on his floor.', 'will help pay for a trip home at Thanksgiving.', 'is partly a gift from Ethan\'s mother as well.'] },
-            { id: 'R1.6', q: 'Lucille will probably not visit Ethan this autumn because she', o: ['needs weeks to recover from surgery.', 'is still learning how to use her tablet.', 'has promised to help her neighbour.', 'does not enjoy long journeys by car.'] }
+            { id: 'R1.6', q: 'Lucille will probably not visit Ethan this autumn because she', o: ['will need several weeks to recover after her operation.', 'is still learning how to use her tablet.', 'has promised to help her neighbour.', 'does not enjoy long journeys by car.'] }
           ],
           reply: '<h3>Reply</h3><p>Dear Grandma,</p><p>Thank you so much for the package! It arrived yesterday, and the quilt is already on my bed. Mom was right to worry, because [[R1.7]]. The cookies lasted about an hour. I did what you suggested and offered them to everyone on my floor, and now I know almost all of their names.</p><p>I followed your other advice too. You will laugh, but I have signed up for [[R1.8]], even though I am probably about as musical as you were at eighteen. We rehearse every Thursday night, and I promise to keep going [[R1.9]].</p><p>Don\'t worry, your cheque went exactly where you wanted. I bought [[R1.10]] at the campus bookstore, and I still have a little left over. I resisted the pizza, I promise.</p><p>Good luck with your operation. I hope the six weeks pass quickly. Sunday evenings are perfect for me. Since you are ahead of me, I will call [[R1.11]], so you won\'t miss the end of your program. And please try to point the tablet at your face this time!</p><p>Love,<br>Ethan</p>',
           blanks: [
@@ -412,14 +429,14 @@
           ],
           questions: [
             { id: 'R2.6', q: 'Why would the Student plan not suit a 21-year-old full-time student who wants to swim on weekday evenings?', o: ['Its swimming is limited to Saturdays and Sundays.', 'Its members have to be at least 25 years old.', 'It offers just two group classes each month.', 'It does not accept a full-time student card.'] },
-            { id: 'R2.7', q: 'In a month when a Basic member takes three group classes, the total cost is', o: ['$65.', '$41.', '$29.', '$36.'] },
+            { id: 'R2.7', q: 'A Flex member who takes six group classes in one month will pay extra because', o: ['the plan covers only some of the classes each month.', 'group classes are not part of the Flex plan.', 'the joining fee is charged again that month.', 'Flex members pay $12 for every class they attend.'] },
             { id: 'R2.8', q: 'A Student plan member who wants to train at 11:00 p.m. would need to', o: ['move to a different membership.', 'pay an extra $12 late fee.', 'show a valid student card.', 'come on a weekend instead.'] }
           ]
         },
         {
           id: 'R3', title: 'Part 3: Reading for Information', minutes: 10,
           instructions: 'Read the following article. Decide which paragraph, A to D, contains the information in each statement. If the information is not given in any paragraph, choose E.',
-          passage: '<h3>From Tree to Table: The Story of Maple Syrup</h3><p><b>A.</b> Long before European settlers arrived, Indigenous peoples in what is now eastern Canada and the northeastern United States collected the sweet sap of maple trees each spring. They cut into the bark, gathered the sap in containers made of birch bark and concentrated it into syrup and sugar, using methods such as dropping heated stones into the liquid. Many early settlers learned the process from Indigenous communities, and by the 1800s maple sugar was a common sweetener on rural farms, where imported cane sugar was expensive and often hard to find.</p><p><b>B.</b> Sap only runs under particular weather conditions. Producers need a pattern of nights below freezing followed by days above zero. The repeated freezing and thawing builds pressure inside the tree, which pushes sap out through a small hole drilled into the trunk. In most years, this window lasts only four to six weeks, usually from early March to mid-April. Trees are generally not tapped until they are about 25 centimetres across, which can take forty years, and a healthy tree can be tapped every spring for generations without lasting harm.</p><p><b>C.</b> Fresh sap looks almost like water and contains only about two percent sugar. To turn it into syrup, producers boil it in a long, shallow pan called an evaporator, often for many hours at a time. It takes roughly forty litres of sap to make a single litre of syrup. Producers watch the temperature closely: the syrup is ready when it boils at about four degrees above the boiling point of water. Taken off the heat too early, it stays thin and may spoil; boiled too long, it starts to form crystals. The finished product is graded by colour and taste, from golden syrup with a delicate flavour to very dark syrup with a strong one. Sap collected toward the end of the season usually produces the darker grades.</p><p><b>D.</b> Today, few producers carry buckets from tree to tree. Most sugar bushes rely on networks of plastic tubing that carry sap directly to the sugar shack, sometimes with vacuum pumps to increase the flow. Quebec produces the large majority of the world\'s maple syrup, and producers there keep a strategic reserve of syrup to protect buyers against poor harvests. Researchers are also watching the effects of a warming climate, which in some regions is causing the season to start earlier and become harder to predict.</p>',
+          passage: '<h3>From Tree to Table: The Story of Maple Syrup</h3><p><b>A.</b> Long before European settlers arrived, Indigenous peoples in what is now eastern Canada and the northeastern United States collected the sweet sap of maple trees each spring. They cut into the bark, gathered the sap in containers made of birch bark and concentrated it into syrup and sugar, using methods such as dropping heated stones into the liquid. Many early settlers learned the process from Indigenous communities, and by the 1800s maple sugar was a common sweetener on rural farms, where imported cane sugar was expensive and often hard to find. Some communities still hold spring gatherings to mark the first run of sap.</p><p><b>B.</b> Sap only runs under particular weather conditions. Producers need a pattern of nights below freezing followed by days above zero. The repeated freezing and thawing builds pressure inside the tree, which pushes sap out through a small hole drilled into the trunk. In most years, this window lasts only four to six weeks, usually from early March to mid-April. Trees are generally not tapped until they are about 25 centimetres across, which can take forty years. A very large maple may carry two taps, but producers limit the number so the tree is not weakened, and a healthy tree can be tapped every spring for generations without lasting harm.</p><p><b>C.</b> Fresh sap looks almost like water and contains only about two percent sugar. To turn it into syrup, producers boil it in a long, shallow pan called an evaporator, often for many hours at a time. It takes roughly forty litres of sap to make a single litre of syrup. Producers watch the temperature closely: the syrup is ready when it boils at about four degrees above the boiling point of water. Taken off the heat too early, it stays thin and may spoil; boiled too long, it starts to form crystals. The finished product is graded by colour and taste, from golden syrup with a delicate flavour to very dark syrup with a strong one. Sap collected toward the end of the season usually produces the darker grades. Dark syrup is a favourite with bakers, while the golden grade is more often poured over pancakes.</p><p><b>D.</b> Today, few producers carry buckets from tree to tree. Most sugar bushes now rely on networks of plastic tubing, first tested in the 1950s, which carry sap directly to the sugar shack, sometimes with vacuum pumps to increase the flow. Quebec produces the large majority of the world\'s maple syrup, and producers there keep a strategic reserve of syrup to protect buyers against poor harvests. Researchers are also watching the effects of a warming climate, which in some regions is causing the season to start earlier and become harder to predict.</p>',
           questions: [
             { id: 'R3.1', q: 'Sap flow depends on temperatures swinging above and below freezing.', fixed: true, a: 'B' },
             { id: 'R3.2', q: 'A tree must reach a certain size before sap is taken from it.', fixed: true, a: 'B' },
@@ -427,8 +444,8 @@
             { id: 'R3.4', q: 'Maple sugar was once popular partly because other sweeteners were costly.', fixed: true, a: 'A' },
             { id: 'R3.5', q: 'Many producers no longer gather sap by hand.', fixed: true, a: 'D' },
             { id: 'R3.6', q: 'Syrup made late in the season tends to have a stronger colour.', fixed: true, a: 'C' },
-            { id: 'R3.7', q: 'Syrup is set aside in case a future harvest is small.', fixed: true, a: 'D' },
-            { id: 'R3.8', q: 'Maple syrup contains more vitamins than white sugar.', fixed: true, a: 'E' },
+            { id: 'R3.7', q: 'The darkest grades of syrup sell for the highest prices.', fixed: true, a: 'E' },
+            { id: 'R3.8', q: 'Syrup removed from the heat too soon may go bad.', fixed: true, a: 'C' },
             { id: 'R3.9', q: 'Newcomers to North America were taught how to make maple sugar.', fixed: true, a: 'A' }
           ]
         },
@@ -446,7 +463,7 @@
           reply: '<h3>Reader comment</h3><p>As the parent of a grade ten student, I read this article with great interest. At first I sided with Ms. Moreau, because my daughter takes two buses to school and I want to [[R4.6]]. Still, I have to admit Principal Fortin has a point: if every student phoned home during a crisis, [[R4.7]].</p><p>What I liked most was Mr. Asante\'s classroom. Rather than locking phones away, he [[R4.8]], which seems much closer to what our children will face at work. I also appreciated that Dr. Mehta did not oversell the Westbrook numbers, since a drop in bullying [[R4.9]].</p><p>My own view is that both sides could meet in the middle. A full ban might be sensible in [[R4.10]], while smaller schools could try Mr. Asante\'s method, perhaps combined with Maya\'s idea of rewarding students who have earned some trust.</p>',
           blanks: [
             { id: 'R4.6', o: ['know I can get hold of her fast if something goes wrong', 'collect her phone myself at the end of each school day', 'drive her to school on the days when the weather is bad', 'check everything she posts online during school hours'] },
-            { id: 'R4.7', o: ['responders might struggle to get through', 'parents would reach the school too slowly', 'the office could not contact any students', 'students would all forget their own numbers'] },
+            { id: 'R4.7', o: ['emergency responders might struggle to get their own calls through', 'parents would reach the school too slowly', 'the office could not contact any students', 'students would all forget their own numbers'] },
             { id: 'R4.8', o: ['has students keep devices idle until a task calls for them', 'takes every phone away for a week at the start of term', 'lets students use phones freely once their work is done', 'permits phones only at lunch and between their classes'] },
             { id: 'R4.9', o: ['could have causes other than the new rule', 'shows that the lockers have solved the issue', 'happened mainly among the senior students', 'was caused mostly by constant notifications'] },
             { id: 'R4.10', o: ['crowded rooms where one teacher cannot see every desk', 'computer science classes that use phones for experiments', 'schools where parents want written emergency plans', 'senior grades where students have a clean record'] }
@@ -460,14 +477,14 @@
       tasks: [
         {
           id: 'W1', title: 'Task 1: Writing an Email', minutes: 27, minWords: 150, maxWords: 200,
-          prompt: '<p>You recently stayed for two nights at a hotel while travelling to a family wedding. After you got home, you realized that you had left something valuable in your room. You also noticed a mistake on the bill that was charged to your credit card.</p><p>Write an email to the hotel manager. In your email, do the following:</p><ul><li>Describe the item you left behind and where you think it is.</li><li>Explain the mistake on your bill.</li><li>Say what you would like the hotel to do about both problems.</li></ul><p class="muted">Write 150 to 200 words.</p>'
+          prompt: '<p>Last weekend you stayed two nights at a hotel in another city while attending a family wedding. When you unpacked at home, you realized that a watch your grandfather gave you was missing; you last remember taking it off in the hotel room. You also noticed that your credit card was charged for three nights, not two. When you phoned the front desk, the clerk told you that lost items are kept for only 14 days and that billing questions must be sent to the manager in writing.</p><p>Write an email to the hotel manager. In your email, do the following:</p><ul><li>Describe the watch and where in the room you think you left it.</li><li>Explain the billing mistake and how you know it is a mistake.</li><li>Say what you want the hotel to do about both problems, keeping in mind that you cannot travel back to the city within the next 14 days.</li></ul><p class="muted">Write 150 to 200 words.</p>'
         },
         {
           id: 'W2', title: 'Task 2: Responding to Survey Questions', minutes: 26, minWords: 150, maxWords: 200,
           prompt: '<p>Your company is planning its end-of-year holiday celebration and has asked employees which event they would prefer. Choose the option you prefer. Explain the reasons for your choice.</p><p class="muted">Write 150 to 200 words.</p>',
           options: [
-            { key: 'A', label: 'Option A', text: 'An evening dinner for employees and their partners at a downtown restaurant, with a three-course meal and a short awards presentation.' },
-            { key: 'B', label: 'Option B', text: 'A Saturday family day at an indoor play centre, with lunch, games and activities for employees\' children.' }
+            { key: 'A', label: 'Option A', text: 'A Thursday evening dinner for employees and their partners at a downtown restaurant, with a three-course meal and a short awards presentation. It would end around 11:00 p.m., and staff with young children would need to arrange their own babysitters.' },
+            { key: 'B', label: 'Option B', text: 'A Saturday family day at an indoor play centre 45 minutes outside the city, with lunch, games and activities for employees\' children. It would take up part of a weekend, and staff without children may feel the event is not really for them.' }
           ]
         }
       ]
@@ -477,23 +494,23 @@
     speaking: {
       practice: { id: 'SP', title: 'Practice Task', prep: 30, speak: 60, prompt: 'Describe a place in your neighbourhood that you like to visit.' },
       tasks: [
-        { id: 'S1', title: 'Task 1: Giving Advice', prep: 30, speak: 90, prompt: 'Your cousin has received two job offers. One pays more but requires a long daily commute. The other pays less but is close to home and offers flexible hours. Give your cousin advice on how to choose.' },
-        { id: 'S2', title: 'Task 2: Talking about a Personal Experience', prep: 30, speak: 60, prompt: 'Talk about a time when you helped a stranger. What happened, and how did you feel afterward?' },
+        { id: 'S1', title: 'Task 1: Giving Advice', prep: 30, speak: 90, prompt: 'Your cousin has received two job offers and must answer both by Friday. One pays $8,000 a year more, but it is a 75-minute bus ride each way, and she does not own a car. The other pays less, but it is a 10-minute walk from home and has flexible hours, which matters because she must pick up her son from daycare by 5:30 p.m. Give your cousin advice on how to choose.' },
+        { id: 'S2', title: 'Task 2: Talking about a Personal Experience', prep: 30, speak: 60, prompt: 'Talk about a time when you helped a stranger. What happened, how did you feel afterward, and is there anything you would do differently if it happened again today?' },
         { id: 'S3', title: 'Task 3: Describing a Scene', prep: 30, speak: 60, prompt: 'Describe some things that are happening in the picture below as well as you can. The person you are speaking to cannot see the picture.', image: MARKET },
         { id: 'S4', title: 'Task 4: Making Predictions', prep: 30, speak: 60, prompt: 'In this picture, what do you think will most probably happen next?', image: MARKET },
         {
           id: 'S5', title: 'Task 5: Comparing and Persuading', type: 'compare', select: 60, prep: 60, speak: 60,
           prompt: 'Your family has decided to get a pet. Choose the option you prefer. In the next section, you will need to persuade a family member that your choice is better.',
           choices: [
-            { key: 'A', title: 'Adopt a cat', image: CAT, facts: ['Adoption fee: $150', 'Food and litter: about $60 a month', 'Can stay alone during a workday', 'Lives about 15 years'] },
-            { key: 'B', title: 'Adopt a dog', image: DOG, facts: ['Adoption fee: $350', 'Food and care: about $120 a month', 'Needs two 30-minute walks a day', 'Lives about 12 years'] }
+            { key: 'A', title: 'Adopt a cat', image: CAT, facts: ['Adoption fee: $150', 'Food and litter: about $60 a month', 'Can stay alone during a workday', 'One family member has a mild cat allergy'] },
+            { key: 'B', title: 'Adopt a dog', image: DOG, facts: ['Adoption fee: $350', 'Food and care: about $120 a month', 'Needs two 30-minute walks a day', 'Dog walker on long workdays: $20 a day'] }
           ],
           third: { key: 'C', title: 'Aquarium fish', image: FISH, facts: ['Tank and equipment: $250', 'Food and supplies: about $20 a month', 'Tank cleaning: 1 hour a week', 'Quiet and takes little space'] },
           persuade: 'Your family member suggests getting aquarium fish instead. Persuade them that your choice is better. Explain why.'
         },
         { id: 'S6', title: 'Task 6: Dealing with a Difficult Situation', prep: 60, speak: 60, prompt: '<p>Your best friend is moving overseas for work and is holding a farewell dinner next Saturday evening. You have just learned that your sister has planned a surprise party for your parents\' 35th wedding anniversary on the same evening, and she is counting on you to give a speech.</p><p><b>Choose ONE:</b></p><p><b>Option A:</b> Talk to your friend. Explain why you cannot come to the farewell dinner.</p><p><b>Option B:</b> Talk to your sister. Explain why you cannot come to the anniversary party.</p>' },
-        { id: 'S7', title: 'Task 7: Expressing Opinions', prep: 30, speak: 90, prompt: 'Should cities offer free public transit to everyone? Explain your reasons.' },
-        { id: 'S8', title: 'Task 8: Describing an Unusual Situation', prep: 30, speak: 60, prompt: 'You are at a kitchen store and see this unusual appliance. Call your friend who loves kitchen gadgets. Describe the appliance and explain whether you think your friend should buy it.', image: GADGET }
+        { id: 'S7', title: 'Task 7: Expressing Opinions', prep: 30, speak: 90, prompt: 'Your city council is considering making public transit free for everyone. Supporters say it would reduce traffic and help people with low incomes. Opponents say the cost, about $40 million a year, would mean higher property taxes or cuts to other services such as snow clearing. A local radio show has asked listeners to call in with their views. Should the city make public transit free? Explain your reasons.' },
+        { id: 'S8', title: 'Task 8: Describing an Unusual Situation', prep: 30, speak: 60, prompt: 'You are at a kitchen store and see this unusual appliance. It is the last one, it is a display model, and display models cannot be returned. Call your friend who loves kitchen gadgets but has a very small kitchen with little counter space. Describe the appliance and explain whether you think your friend should buy it.', image: GADGET }
       ]
     }
   });

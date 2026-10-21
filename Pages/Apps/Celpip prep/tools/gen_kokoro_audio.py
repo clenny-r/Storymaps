@@ -49,7 +49,9 @@ def gen(tid):
                 if c.get('g') == 'm': vmap[kk] = M[mi % len(M)]; mi += 1
                 else: vmap[kk] = F[fi % len(F)]; fi += 1
     os.makedirs(f'{OUT}/{tid}', exist_ok=True)
-    manifest = {'test': tid, 'voices': vmap, 'files': {}}
+    mp=f'{OUT}/{tid}/manifest.json'
+    old=json.load(open(mp)) if os.path.exists(mp) else {}
+    manifest = {'test': tid, 'voices': vmap, 'files': dict(old.get('files',{}))}
     for p in parts:
         for si, seg in enumerate(p['segments']):
             key = 'LP-0' if p['id'] == 'LP' else f"{p['id']}-{si}"
@@ -73,6 +75,7 @@ def gen(tid):
                     audio = np.concatenate([sil(0.25), say(q['q'], NARR), sil(0.3)])
                     write_mp3(qp, audio)
                     manifest['files'][q['id']] = round(len(audio) / SR, 1)
+    manifest['list']=sorted(f for f in os.listdir(f'{OUT}/{tid}') if f.endswith(('.mp3','.mp4')))
     json.dump(manifest, open(f'{OUT}/{tid}/manifest.json', 'w'), indent=1)
     print('DONE', tid, flush=True)
 

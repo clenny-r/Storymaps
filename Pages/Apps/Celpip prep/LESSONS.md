@@ -96,6 +96,21 @@ Last updated: 2026-10-21 (session 1, sixth update: Meta AI Part 5 videos for all
 2. Listening, Writing and Speaking objects were checked identical before merging (so recordings and videos still match). Validator 0 errors on all 11; blind answer-key check 847 of 847; full screen-by-screen test of all 11 tests with 0 page errors.
 3. Working pattern that worked for two sessions at once: the second session only edits copies in _parallel\ and touches no browser, Downloads or GitHub; the main session merges, checks and pushes.
 
+## Difficulty audit and rewrite to "slightly above the real exam" (2026-10-21 evening)
+
+1. Five independent reviewers (benchmark research, Listening A to F, Listening G to K, Reading, Writing and Speaking) rated every part against the official 2026 CELPIP Study Packs. Main findings: Listening Parts 4 and 6 were far too short (68 to 83 s and 85 to 135 s against about 90 s and 180 s), many Listening answers copied the recording word for word, wrong options were often off-topic, some numbers were said aloud, and 7 keys were wrong or debatable. Test A was the weakest, then J, G and E. Report page: C:\Users\ramne\Documents\Celpip test\celpip_audit.html.
+2. Rules now applied in every test (keep them for any new item):
+   - the correct option paraphrases or infers, never copies distinctive script words;
+   - wrong options reuse words that ARE in the recording but attach them to the wrong person, time, condition, or a figure that was said and then corrected;
+   - a number answer is never said aloud; the listener combines two facts or catches a correction;
+   - word targets: L1 430 to 520 (3 sections), L2 320 to 360, L3 360 to 420, L4 250 to 290, L6 480 to 540 (two arguments plus a concession per speaker);
+   - Reading Part 2 at most 2 calculation items, the rest rule-application; Reading Part 3 "not given" statements are near-misses and the count of E answers varies (1 to 3);
+   - Writing and Speaking prompts carry a real constraint or trade-off; S3 pictures have 9 to 12 people.
+3. Part 5 video lines were NOT changed (they are burned into Meta AI videos). Where a Part 5 answer was spoken, the question was rewritten instead.
+4. Only the changed Listening segments were re-recorded with Kokoro, with the same voices (voice assignment depends on the order of the cast objects, so never reorder or add cast). tools\gen_kokoro_audio.py skips files that already exist: delete the changed mp3s first, and keep the manifest's "list" up to date or the page will not play new files.
+5. Checks: blind solvers matched 836 of 836 keys; after the final Reading polish 418 of 418 again; a second independent rating found most parts at target and nothing well above; the full screen test of all 11 tests showed 0 page errors. One bug found and fixed: a stray ",," in F and G speaking lists made an empty task.
+6. Running editors in parallel worked well when each agent owned whole test files and wrote a changes_<T>.json listing which audio segments and spoken questions changed; audio was then regenerated in one queue (2 CPU cores, about 5 minutes per test).
+
 ## Ideas not done yet
 
 2. Automatic grading of Writing and Speaking inside the page.

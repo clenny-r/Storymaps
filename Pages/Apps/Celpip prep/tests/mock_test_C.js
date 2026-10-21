@@ -158,7 +158,7 @@
               questions: [
                 { id: 'L1.1', q: 'What has gone wrong for Kemi?', o: ['The rental company did not honour her reservation.', 'The rental company charged her for a larger truck.', 'The truck she booked online broke down overnight.', 'She reserved a truck that was too small for her things.'] },
                 { id: 'L1.2', q: 'How much will Kemi pay for the truck?', o: ['$70', '$100', '$30', '$130'] },
-                { id: 'L1.3', q: 'Why can the move not be put off until tomorrow?', o: ['Someone else is moving into the unit tonight.', 'The rental truck has to be back by four.', 'Jonah is only available for one day.', 'The landlord will charge her for an extra day.'] }
+                { id: 'L1.3', q: 'Why can the move not be put off until tomorrow?', o: ['The apartment has to be handed over today.', 'The rental truck has to be back by four.', 'Jonah is only available for one day.', 'The landlord will charge her for an extra day.'] }
               ]
             },
             {
@@ -174,7 +174,7 @@
                 ['JONAH', 'Already typing.']
               ],
               questions: [
-                { id: 'L1.4', q: 'Why does Kemi reject the idea of two trips?', o: ['It would cost more and mean moving the couch twice.', 'The new apartment is too far away to drive there twice.', 'Jonah has to leave before a second trip is finished.', 'The rental company does not allow any extra hours.'] },
+                { id: 'L1.4', q: 'Why does Kemi reject the idea of two trips?', o: ['It would risk extra hourly charges and more trips down the stairs.', 'The new apartment is too far away to drive there twice.', 'Theo\'s pickup would have to make the second trip.', 'The rental company does not allow any extra hours.'] },
                 { id: 'L1.5', q: 'Why is Jonah confident that Theo will agree?', o: ['Theo owes him for past help.', 'Theo has been promised payment.', 'Theo wants to see the new place.', 'Theo is free all Saturday morning.'] },
                 { id: 'L1.6', q: 'What does Kemi decide about the boxes of books?', o: ['To take them separately in her car', 'To pack them into the pickup with the bed', 'To leave them behind until another day', 'To load them first because they are heavy'] }
               ]
@@ -202,23 +202,27 @@
           segments: [{
             lines: [
               ['RECEP', 'Good morning, Northgate Physiotherapy, Lina speaking.'],
-              ['OMAR', 'Hi, I\'d like to book an appointment, please. I hurt my shoulder playing volleyball about a week ago, and it\'s not getting any better.'],
+              ['OMAR', 'Hi, I\'d like to book an appointment, please. I hurt my shoulder playing volleyball about a week ago. I figured it would settle down on its own, but if anything it\'s getting worse.'],
               ['RECEP', 'Sorry to hear that. Have you been to us before?'],
               ['OMAR', 'No, never.'],
-              ['RECEP', 'Okay, then you\'d start with an initial assessment. That\'s an hour long and it\'s a hundred and ten dollars. After that, follow-ups are thirty minutes at eighty-five.'],
+              ['RECEP', 'Okay, then you\'d start with an initial assessment. That\'s an hour long and it\'s a hundred and ten dollars. After that, follow-ups are thirty minutes at eighty. Sorry, eighty-five. Our prices went up on the first.'],
               ['OMAR', 'I\'m covered through my wife\'s plan at work, Coastline Benefits. Can you bill them directly, or do I pay and send in the receipt?'],
               ['RECEP', 'We bill Coastline directly, so that\'s easy. One thing, though: a lot of their plans won\'t pay for physio unless a doctor has referred you. It\'s worth checking before you come in, or you could end up paying the whole amount yourself.'],
               ['OMAR', 'Oh, good to know. I actually saw my doctor on Monday, and she gave me a note saying I should try physio. I just didn\'t think I\'d need it.'],
               ['RECEP', 'Hang on to that, then. Now, the earliest openings I have are Thursday at eight a.m. or Friday at two-fifteen.'],
               ['OMAR', 'Friday afternoon\'s tough. I\'m downtown at the office until five. Thursday at eight works, though. My manager\'s fine with me coming in a bit late now and then.'],
-              ['RECEP', 'Great, you\'re booked for Thursday at eight with Michel. Could you get here about fifteen minutes early? There are a few forms to fill out. And wear a T-shirt or something loose so he can see how the shoulder moves.'],
+              ['RECEP', 'Great, you\'re booked for Thursday at eight with Michel. Just so you know, we need a full day\'s notice if you have to cancel. Otherwise there\'s a forty-dollar fee, and insurance won\'t cover it.'],
+              ['OMAR', 'That\'s fair. Is there parking at the clinic? I\'ll be coming straight from home.'],
+              ['RECEP', 'There\'s a lot behind the building. The first hour is free, then it\'s two dollars an hour. Oh, and could you get here about fifteen minutes early? There are a few forms to fill out.'],
+              ['OMAR', 'Sure, no problem.'],
+              ['RECEP', 'And wear a T-shirt or something loose so Michel can see how the shoulder moves.'],
               ['OMAR', 'Will do. Thanks for your help.']
             ],
             questions: [
-              { id: 'L2.1', q: 'Why is Omar calling the clinic?', o: ['To arrange his first visit for an injury', 'To move an appointment he already has', 'To ask about a bill from a recent visit', 'To get a referral from a clinic doctor'] },
-              { id: 'L2.2', q: 'How much will Omar\'s first appointment cost before insurance?', o: ['$110', '$85', '$195', '$60'] },
-              { id: 'L2.3', q: 'Why does the receptionist mention a referral?', o: ['His plan might not pay without one.', 'The clinic only treats referred patients.', 'His doctor has to approve the times.', 'Without one, the first visit is shorter.'] },
-              { id: 'L2.4', q: 'Why is Thursday more convenient for Omar?', o: ['He is allowed to start work later.', 'He does not work on Thursdays.', 'His wife can drive him that day.', 'Michel only works on Thursdays.'] },
+              { id: 'L2.1', q: 'Why is Omar calling the clinic?', o: ['To arrange his first visit for an injury', 'To move an appointment he already has', 'To ask about a bill from a recent visit', 'To check whether his doctor sent a referral'] },
+              { id: 'L2.2', q: 'How much will Omar\'s first visit plus one follow-up cost before insurance?', o: ['$195', '$190', '$170', '$110'] },
+              { id: 'L2.3', q: 'Why does the receptionist mention a referral?', o: ['His plan might not pay without one.', 'The clinic only treats referred patients.', 'His wife\'s employer must approve it first.', 'Without one, the first visit is shorter.'] },
+              { id: 'L2.4', q: 'Why is Thursday more convenient for Omar?', o: ['His manager accepts the odd late start.', 'He works from home on Thursdays.', 'He is downtown until five on Thursdays.', 'Michel only works on Thursday mornings.'] },
               { id: 'L2.5', q: 'What will Omar most likely bring to the clinic?', o: ['The note from his doctor', 'A cheque for the full fee', 'A copy of his X-ray results', 'A form from his manager'] }
             ]
           }]
@@ -238,19 +242,23 @@
               ['HOST', 'It sounds isolating.'],
               ['GORDON', 'Less than you\'d expect. My wife was out there with me most of those years, and the supply boat came every two weeks. What really got to you was the winter storms. Sometimes you couldn\'t get off the island for a month.'],
               ['HOST', 'Then the lights were automated.'],
-              ['GORDON', 'Ours was, in ninety-eight. I won\'t pretend it didn\'t sting. But I can\'t argue with it, either. Those automatic lights are very dependable.'],
+              ['GORDON', 'Ours was, in ninety-eight. I won\'t pretend it didn\'t sting. But I can\'t argue with it, either. Those automatic lights are very dependable, and nobody has to ride out a February storm on that rock anymore.'],
               ['HOST', 'So where did the tours come from?'],
-              ['GORDON', 'Then one summer, long after the light went automatic, a carload of tourists knocked on my door asking about the old tower. I talked their ears off for two hours. Afterwards my daughter said, Dad, people would pay to hear that. So in 2015 we bought a boat and started with four trips a week.'],
-              ['HOST', 'And now?'],
+              ['GORDON', 'One summer, long after the light went automatic, a carload of tourists knocked on my door asking about the old tower. I talked their ears off for two hours.'],
+              ['HOST', 'I can imagine.'],
+              ['GORDON', 'Afterwards my daughter said, Dad, people would pay to hear that. I laughed at her. But in twenty fifteen we bought a boat and started with four trips a week.'],
+              ['HOST', 'And who comes along?'],
+              ['GORDON', 'All sorts. Families, mostly. We used to take only children over ten, but we bought proper child life jackets last year, so now it\'s anyone six and up.'],
+              ['HOST', 'And now, how big is the operation?'],
               ['GORDON', 'Two boats, three lighthouses per trip, about three hours out and back, June through September. One rule: if the swell is over two metres, we don\'t go. So call us the morning of your trip before you drive down.']
             ],
             questions: [
               { id: 'L3.1', q: 'How did Gordon come to work as a keeper?', o: ['An injury ended his career at sea.', 'His father had been a keeper before him.', 'He wanted to live somewhere quiet.', 'The coast guard paid more than fishing.'] },
-              { id: 'L3.2', q: 'What does Gordon suggest about people\'s idea of a keeper\'s work?', o: ['It makes the job seem easier than it was.', 'It is accurate about the weather reports.', 'It overstates the amount of upkeep.', 'It ignores the danger of fishing boats.'] },
-              { id: 'L3.3', q: 'According to Gordon, what was the most difficult part of the job?', o: ['Being stuck there in winter storms', 'Living far away from his wife', 'Waiting two weeks for the supply boat', 'Sending weather reports in the night'] },
-              { id: 'L3.4', q: 'How did Gordon feel about the automation of his lighthouse?', o: ['Hurt, but accepting of the decision', 'Relieved to finally be able to retire', 'Angry that the coast guard had lied', 'Worried that the new light would fail'] },
-              { id: 'L3.5', q: 'Who first came up with the idea of charging for tours?', o: ['His daughter', 'His wife', 'A group of tourists', 'A friend from the coast guard'] },
-              { id: 'L3.6', q: 'Why should people phone on the morning of a tour?', o: ['Rough water may cancel the trip.', 'Only four trips run each week.', 'The departure time often changes.', 'They must confirm the boat they want.'] }
+              { id: 'L3.2', q: 'What does Gordon suggest about people\'s idea of a keeper\'s work?', o: ['It is more relaxed than the reality of constant upkeep.', 'It is accurate about the weather reports.', 'It overstates the amount of upkeep.', 'It underestimates how lonely the job was.'] },
+              { id: 'L3.3', q: 'According to Gordon, what was the most difficult part of the job?', o: ['Being cut off for weeks in bad weather', 'Living far away from his wife', 'Waiting two weeks for the supply boat', 'Sending weather reports in the night'] },
+              { id: 'L3.4', q: 'How did Gordon feel about the automation of his lighthouse?', o: ['Hurt, but accepting of the decision', 'Relieved to retire from the coast guard', 'Angry that the coast guard had lied', 'Worried that the new light would fail'] },
+              { id: 'L3.5', q: 'What turned Gordon\'s chat with the tourists into a business?', o: ['His daughter realized visitors would pay for it.', 'The tourists offered him money for the talk.', 'His wife suggested they buy a boat.', 'The coast guard asked him to give tours.'] },
+              { id: 'L3.6', q: 'Why should people phone on the morning of a tour?', o: ['Rough water may cancel the trip.', 'Only four trips run each week.', 'They must confirm their children\'s ages.', 'The departure time often changes.'] }
             ]
           }]
         },
@@ -261,6 +269,7 @@
           segments: [{
             lines: [
               ['NEWS', 'Households in the Town of Riverbend will soon be able to set their food scraps out at the curb, as the town prepares to launch its first compost collection program in the first week of May.'],
+              ['NEWS', 'The program had originally been set to begin on April first, but a delay at the cart manufacturer pushed the launch back by about a month.'],
               ['NEWS', 'Every home will receive a green cart and a small kitchen container at no charge. Deliveries begin in April, and carts will be emptied weekly, on the same day as household garbage.'],
               ['NEWS', 'There is a trade-off, however. Garbage pickup will drop from every week to every second week. Town staff say food waste makes up roughly forty percent of what residents currently throw out, so most families should find they have plenty of room.'],
               ['NEWS', 'Fruit and vegetable peels, coffee grounds, eggshells, meat, bones and paper towels can all go in the cart. Plastic bags, including those labelled compostable, cannot, because they wrap around the equipment at the processing site.'],
@@ -268,11 +277,11 @@
               ['NEWS', 'Some residents have raised concerns about odours and raccoons. The town recommends keeping meat scraps in the freezer until collection day and rinsing carts with water and baking soda. Information sessions will be held at the public library on April eighth and fifteenth.']
             ],
             questions: [
-              { id: 'L4.1', q: 'What is the news item mainly about?', o: ['A new service for collecting food waste', 'A plan to close the regional landfill', 'A new bylaw on raccoon control', 'A rise in garbage collection fees'] },
-              { id: 'L4.2', q: 'What change to household garbage pickup is mentioned?', o: ['It will happen half as often.', 'It will move to a different day.', 'It will stop during the winter.', 'It will require new green carts.'] },
+              { id: 'L4.1', q: 'What is the news item mainly about?', o: ['A new service for collecting food waste', 'A delay in delivering new garbage carts', 'A plan to reduce fees at the regional landfill', 'A rise in garbage collection fees'] },
+              { id: 'L4.2', q: 'What change to household garbage pickup is mentioned?', o: ['It will happen half as often.', 'It will move to a different day of the week.', 'It will start a month later than planned.', 'It will require the new green carts.'] },
               { id: 'L4.3', q: 'Why will compostable plastic bags be refused?', o: ['They cause trouble for the machinery.', 'They take too long to break down.', 'They make the carts smell worse.', 'They attract raccoons and other animals.'] },
               { id: 'L4.4', q: 'What can be inferred about the program\'s cost?', o: ['Lower landfill fees will offset part of it.', 'Residents will pay for it through taxes.', 'It will be covered by selling compost.', 'The green carts make up most of it.'] },
-              { id: 'L4.5', q: 'What does the town advise residents to do with meat scraps?', o: ['Keep them frozen until pickup day', 'Put them in the garbage bin instead', 'Rinse them with baking soda first', 'Wrap them in compostable bags'] }
+              { id: 'L4.5', q: 'What does the town advise residents to do with meat scraps?', o: ['Store them somewhere cold until the cart is emptied', 'Put them in the garbage bin instead', 'Rinse them with baking soda first', 'Wrap them in compostable bags'] }
             ]
           }]
         },
@@ -301,11 +310,11 @@
             questions: [
               { id: 'L5.1', q: 'What is the main purpose of the discussion?', o: ['To consider where their mother should live', 'To plan a dinner for their mother\'s birthday', 'To decide which sibling will buy the house', 'To arrange repairs on their mother\'s house'] },
               { id: 'L5.2', q: 'Why is Daniel relieved that his mother wants to move?', o: ['He is afraid she could fall at home.', 'He wants to buy her house himself.', 'He thinks the yard costs too much to maintain.', 'He would like her to move in with him.'] },
-              { id: 'L5.3', q: 'Why does Leila not want to rush the decision?', o: ['Her mother\'s friends all live nearby.', 'She expects house prices to rise soon.', 'She has not seen the condo building yet.', 'Her mother has already refused to move.'] },
-              { id: 'L5.4', q: 'According to Ruth, how much is the house expected to sell for?', o: ['At least $600,000', 'At most $380,000', 'Just under $550,000', 'Around $400,000'] },
-              { id: 'L5.5', q: 'What is Daniel\'s concern about the condo?', o: ['The monthly costs are high.', 'It is too far from her friends.', 'The building has no elevator.', 'It is too close to busy roads.'] },
+              { id: 'L5.3', q: 'Why does Leila not want to rush the decision?', o: ['Her mother\'s social life is close to the house.', 'She expects house prices to rise soon.', 'She has not seen the condo building yet.', 'Her mother has already refused to move.'] },
+              { id: 'L5.4', q: 'Roughly how much would remain after selling the house and buying a condo?', o: ['At least $220,000', 'About $380,000', 'At least $600,000', 'At most $220,000'] },
+              { id: 'L5.5', q: 'What is Daniel\'s first concern about the condo?', o: ['The monthly fees would add up.', 'It is too far from her friends.', 'The building has no elevator.', 'Its price is more than the house is worth.'] },
               { id: 'L5.6', q: 'Why do Ruth and Leila reject the retirement residence for now?', o: ['Their mother is still quite independent.', 'It does not have a nurse working on site.', 'It is too close to Daniel\'s house.', 'There is a long waiting list for suites.'] },
-              { id: 'L5.7', q: 'What will Leila\'s role be if their mother moves to the condo?', o: ['Visiting her once a week', 'Visiting her on weekends', 'Helping to sell the house', 'Driving her to the garden club'] },
+              { id: 'L5.7', q: 'What will Leila\'s role be if their mother moves to the condo?', o: ['Checking on her in the middle of the week', 'Checking on her on weekends', 'Handling the sale of the house', 'Finding a unit near the elevator'] },
               { id: 'L5.8', q: 'What do the siblings finally agree on?', o: ['Their mother should make the choice.', 'Daniel will tour the residence first.', 'An agent should value the house now.', 'They will make an offer on the condo.'] }
             ]
           }]
@@ -317,20 +326,27 @@
           segments: [{
             lines: [
               ['NARR', 'Every fall, thousands of Canadian students begin college or university knowing they may graduate with tens of thousands of dollars in debt. Now some student groups are calling for tuition to be eliminated altogether, an idea that has divided educators and economists.'],
-              ['NARR', 'Marisol Duarte, who leads a national student association, says the price tag discourages capable young people before they even apply. In her experience, students from low-income families rarely lack ability. What they lack is the confidence to borrow money they are not sure they can repay.'],
-              ['NARR', 'Duarte also notes that graduates with large loans tend to put off buying a home or starting a family. Because university graduates go on to pay more in income tax over their careers, she argues, the public already benefits from their education and should share the cost from the start.'],
-              ['NARR', 'Economist Graham Whitfield sees it differently. He points out that students from higher-income households are more likely to attend university in the first place, so making tuition free for everyone would direct much of the money to families who could already afford it. The cost, he says, would run into the billions.'],
-              ['NARR', 'Whitfield would rather see larger grants aimed at students in financial need, combined with tutoring and mentoring that begin in high school or earlier. By the time students fill out university applications, he says, many of the gaps between rich and poor are already in place.'],
-              ['NARR', 'He also cautions that if governments covered the full cost, schools might have to cap enrolment or cut programs to stay within budget.'],
+              ['NARR', 'Marisol Duarte, who leads a national student association, says the price tag discourages capable young people before they even apply. Students from low-income families rarely lack ability. What they lack, she says, is the confidence to borrow money they are not sure they can repay.'],
+              ['NARR', 'Duarte also notes that graduates with large loans tend to put off buying a home or starting a family.'],
+              ['NARR', 'And because graduates go on to pay more in income tax over their careers, she argues, the public already benefits from their education and should share the cost from the start.'],
+              ['NARR', 'Economist Graham Whitfield sees it differently. He points out that students from higher-income households are more likely to attend university in the first place, so making tuition free for everyone would direct much of the money to families who could already afford it.'],
+              ['NARR', 'The cost, he says, would run into the billions of dollars every year.'],
+              ['NARR', 'Whitfield would rather see larger grants aimed at students in financial need, combined with tutoring and mentoring that begin in high school or earlier. By the time students fill out applications, he says, many of the gaps between rich and poor are already in place.'],
+              ['NARR', 'He also cautions that if governments covered the full cost, schools might have to cap enrolment or cut programs to stay within budget. A program that is free but full, he says, does nothing for the student who cannot get in.'],
+              ['NARR', 'Whitfield does not dismiss the debt problem. He supports tying loan repayments to income, so that a graduate earning a modest salary would pay back very little until their earnings rose.'],
+              ['NARR', 'But he rejects the idea that taxes alone settle the matter. Graduates, he notes, also earn considerably more than people without degrees, so it is reasonable for them to cover part of the cost of an education that benefits them first.'],
+              ['NARR', 'Duarte has heard these objections before. To the claim that free tuition mainly helps the wealthy, she replies that public schools and health care are open to rich and poor alike, and few people suggest charging wealthy families for them.'],
+              ['NARR', 'In her view, aid aimed only at the poor tends to come with long forms and strict deadlines, and the students who need it most are often the ones who never apply.'],
+              ['NARR', 'She also admits that free tuition would not solve everything. Students would still need money for rent, books and food, which in many cities can cost more than tuition itself. Whitfield says that is exactly why grants should cover living costs, not just fees.'],
               ['NARR', 'On one point, both agree: the current mix of loans, grants and bursaries is confusing, and families need much clearer information about the help that already exists.']
             ],
             questions: [
-              { id: 'L6.1', q: 'What is the report mainly about?', o: ['Whether students should pay tuition at all', 'How universities decide which students to admit', 'Why the cost of student housing keeps rising', 'How student loans are repaid after graduation'] },
-              { id: 'L6.2', q: 'According to Duarte, why do some capable students not apply?', o: ['They are afraid of taking on debt.', 'Their grades are not high enough.', 'They would rather start working.', 'They cannot find suitable programs.'] },
-              { id: 'L6.3', q: 'Why does Duarte believe the public should share the cost?', o: ['Graduates later contribute more in taxes.', 'Universities already have more money than they need.', 'Students cannot find part-time jobs.', 'Other countries already offer free tuition.'] },
-              { id: 'L6.4', q: 'What is Whitfield\'s main objection to free tuition for all?', o: ['Better-off families would gain the most.', 'Low-income students would gain the most.', 'It would lower the quality of high schools.', 'It would cost less than the current system.'] },
-              { id: 'L6.5', q: 'Why does Whitfield support help that starts earlier?', o: ['Inequality appears well before students apply.', 'High school students need tuition grants.', 'Universities prefer students who have tutors.', 'Mentoring is cheaper than paying for loans.'] },
-              { id: 'L6.6', q: 'What do the two sides agree on?', o: ['Families need clearer information about aid.', 'Tuition should be raised gradually.', 'Universities should accept more students every year.', 'Student loans should be cancelled.'] }
+              { id: 'L6.1', q: 'What is the report mainly about?', o: ['Whether students should pay tuition at all', 'How student aid forms could be made simpler', 'Whether universities should limit enrolment', 'How graduates should repay student loans'] },
+              { id: 'L6.2', q: 'According to Duarte, why do some capable students not apply?', o: ['They fear owing money they may never manage to repay.', 'Their marks are not strong enough for university.', 'They want to buy a home or start a family first.', 'They would rather start working right away.'] },
+              { id: 'L6.3', q: 'Why does Duarte believe the public should share the cost?', o: ['Society gains later through graduates\' higher taxes.', 'Graduates earn more and can easily repay their loans.', 'Universities already receive too little funding.', 'Other countries already offer free tuition.'] },
+              { id: 'L6.4', q: 'What is Whitfield\'s main objection to free tuition for all?', o: ['Much of the benefit would go to families who do not need it.', 'Low-income students would still not apply.', 'Graduates would pay less income tax later.', 'Universities would lose their independence from government.'] },
+              { id: 'L6.5', q: 'How does Duarte answer Whitfield\'s point about wealthier families?', o: ['She compares tuition to other public services open to all.', 'She says wealthy families rarely use universities.', 'She agrees that help should start in high school.', 'She suggests tying loan payments to income.'] },
+              { id: 'L6.6', q: 'What do Duarte and Whitfield share?', o: ['Doubts that families understand the aid that exists', 'Support for making tuition free', 'Concern about caps on enrolment', 'A wish to cut grants for students'] }
             ]
           }]
         }
@@ -381,24 +397,24 @@
           ],
           questions: [
             { id: 'R2.6', q: 'Hana will most likely have to take her children to the pool separately because', o: ['their lessons fall on different days of the week.', 'Karim\'s class begins two hours after Noor\'s does.', 'the pool is closed on Saturday, February 15.', 'their classes start in different months of the year.'] },
-            { id: 'R2.7', q: 'The final Swimmer 3 lesson of the session will take place on', o: ['March 8.', 'March 1.', 'February 22.', 'March 15.'] },
-            { id: 'R2.8', q: 'For a resident, each Swimmer 1 lesson works out to', o: ['$9.50.', '$9.00.', '$11.88.', '$12.00.'] }
+            { id: 'R2.7', q: 'The swim meet on February 15 will not affect children enrolled in', o: ['Swimmer 2.', 'Swimmer 3.', 'Splash 1.', 'Splash 2.'] },
+            { id: 'R2.8', q: 'Without taking the swim test, a seven-year-old who passed Splash 2 last session can join', o: ['Swimmer 1, but not Swimmer 2.', 'Swimmer 2, but not Swimmer 1.', 'either Swimmer 1 or Swimmer 2.', 'either Swimmer 1 or Swimmer 3.'] }
           ]
         },
         {
           id: 'R3', title: 'Part 3: Reading for Information', minutes: 10,
           instructions: 'Read the following article. Decide which paragraph, A to D, contains the information in each statement. If the information is not given in any paragraph, choose E.',
-          passage: '<h3>What Happens While We Sleep</h3><p><b>A.</b> Sleep is not a single, uniform state. Over the course of a typical night, the brain moves through a series of stages in cycles that last roughly ninety minutes. Light sleep comes first, followed by deep sleep, during which the body repairs tissue and the immune system is strengthened. Then comes rapid eye movement, or REM, sleep, when most vivid dreaming occurs. Deep sleep is concentrated in the early part of the night, while REM periods grow longer toward morning. As a result, someone who sets an alarm two hours earlier than usual loses a surprisingly large share of their REM sleep.</p><p><b>B.</b> One of sleep\'s most important jobs appears to be helping the brain hold on to what it learned during the day. In a common type of experiment, volunteers practise a list of words or a new physical skill, such as a typing sequence, and are tested again several hours later. Those who sleep between practice and testing consistently outperform those who stay awake for the same length of time. Scientists have also observed that fluid flows through the brain more quickly during deep sleep, which may help flush out waste products that build up during waking hours.</p><p><b>C.</b> Naps can offer some of the same benefits, but timing matters a great deal. A nap of ten to twenty minutes usually keeps the sleeper in light sleep, so they wake up feeling refreshed. A nap of forty-five minutes to an hour is more likely to end in deep sleep, producing a heavy, confused feeling known as sleep inertia that can last for half an hour. Experts generally recommend napping in the early afternoon, when most people experience a natural dip in alertness, and avoiding naps after about 3 p.m., since they can make it harder to fall asleep at bedtime.</p><p><b>D.</b> Despite this evidence, many adults treat sleep as something they can cut when life gets busy. Surveys suggest that about one in three adults regularly sleeps less than the recommended seven hours. Over time, too little sleep has been linked to weight gain, high blood pressure and a weaker response to infection. A few employers have started to pay attention, setting aside quiet rooms where staff can rest during their breaks. Sleep specialists insist, however, that the single most effective habit is consistency: going to bed and getting up at the same times every day, weekends included.</p>',
+          passage: '<h3>What Happens While We Sleep</h3><p><b>A.</b> Sleep is not a single, uniform state. Over the course of a typical night, the brain moves through a series of stages in cycles that last roughly ninety minutes. Light sleep comes first, followed by deep sleep, during which the body repairs tissue and the immune system is strengthened. Then comes rapid eye movement, or REM, sleep, when most vivid dreaming occurs. Newborn babies spend about half of their sleep in REM, compared with roughly a fifth for adults. Deep sleep is concentrated in the early part of the night, while REM periods grow longer toward morning. As a result, someone who sets an alarm two hours earlier than usual loses a surprisingly large share of their REM sleep.</p><p><b>B.</b> One of sleep\'s most important jobs appears to be helping the brain hold on to what it learned during the day. In a common type of experiment, volunteers practise a list of words or a new physical skill, such as a typing sequence, and are tested again several hours later. Those who sleep between practice and testing consistently outperform those who stay awake for the same length of time, and the benefit seems greatest when sleep comes within a few hours of learning. Scientists have also observed that fluid flows through the brain more quickly during deep sleep, which may help flush out waste products that build up during waking hours.</p><p><b>C.</b> Naps can offer some of the same benefits, but timing matters a great deal. Some people even drink a cup of coffee just before a short nap, so that the caffeine starts to work as they wake. A nap of ten to twenty minutes usually keeps the sleeper in light sleep, so they wake up feeling refreshed. A nap of forty-five minutes to an hour is more likely to end in deep sleep, producing a heavy, confused feeling known as sleep inertia that can last for half an hour. Experts generally recommend napping in the early afternoon, when most people experience a natural dip in alertness, and avoiding naps after about 3 p.m., since they can make it harder to fall asleep at bedtime.</p><p><b>D.</b> Despite this evidence, many adults treat sleep as something they can cut when life gets busy. Surveys suggest that about one in three adults regularly sleeps less than the recommended seven hours. Over time, too little sleep has been linked to weight gain, high blood pressure and a weaker response to infection. A few employers have started to pay attention, setting aside quiet rooms where staff can rest during their breaks. Companies that have tried this say the rooms are busiest in the mid-afternoon. Sleep specialists insist, however, that the single most effective habit is consistency: going to bed and getting up at the same times every day, weekends included.</p>',
           questions: [
             { id: 'R3.1', q: 'Getting up much earlier than normal can cut into the stage when people dream most.', fixed: true, a: 'A' },
             { id: 'R3.2', q: 'Some workplaces provide a place for employees to rest.', fixed: true, a: 'D' },
             { id: 'R3.3', q: 'Sleeping too long during the day can leave a person feeling foggy for a while.', fixed: true, a: 'C' },
             { id: 'R3.4', q: 'People who sleep after practising something tend to do better when tested on it.', fixed: true, a: 'B' },
-            { id: 'R3.5', q: 'Teenagers naturally fall asleep later than adults do.', fixed: true, a: 'E' },
+            { id: 'R3.5', q: 'Employers that provide quiet rooms report fewer sick days among staff.', fixed: true, a: 'E' },
             { id: 'R3.6', q: 'The body heals itself during one particular stage of sleep.', fixed: true, a: 'A' },
             { id: 'R3.7', q: 'The brain may clear away unwanted material while we sleep.', fixed: true, a: 'B' },
             { id: 'R3.8', q: 'Keeping the same sleep routine on days off is strongly advised.', fixed: true, a: 'D' },
-            { id: 'R3.9', q: 'Resting late in the day can interfere with sleep at night.', fixed: true, a: 'C' }
+            { id: 'R3.9', q: 'Short naps are more refreshing when taken lying down.', fixed: true, a: 'E' }
           ]
         },
         {
@@ -416,8 +432,8 @@
           blanks: [
             { id: 'R4.6', o: ['packing groceries bought over the internet', 'supervising the self-checkout area alone', 'watching the cameras for shoplifters', 'clearing snow from the parking lot'] },
             { id: 'R4.7', o: ['customers who find the technology hard', 'losses from theft at the machines', 'the thin profit margins of grocers', 'how much faster the lines have become'] },
-            { id: 'R4.8', o: ['use the scale properly', 'pay with a coupon', 'carry his own bags', 'find a cashier for help'] },
-            { id: 'R4.9', o: ['the lone cashier had a long line', 'one attendant was watching eight machines', 'the machines were switched off that evening', 'his order was over the fifteen-item limit'] },
+            { id: 'R4.8', o: ['weigh loose produce on the scale properly', 'stay under the fifteen-item limit', 'call over the attendant', 'enter a coupon code on the screen'] },
+            { id: 'R4.9', o: ['the lone cashier had a long line', 'the store was about to close for the night', 'the machines were switched off that evening', 'his order was over the fifteen-item limit'] },
             { id: 'R4.10', o: ['why so many shoppers there still complain', 'why losses at the store have dropped', 'why waits at peak hours have fallen', 'why prices there have not gone down'] }
           ]
         }
@@ -429,14 +445,14 @@
       tasks: [
         {
           id: 'W1', title: 'Task 1: Writing an Email', minutes: 27, minWords: 150, maxWords: 200,
-          prompt: '<p>During a windstorm last weekend, several large branches from your neighbour\'s tree fell into your yard and broke part of your fence. Your neighbour has not mentioned it.</p><p>Write an email to your neighbour. In your email, do the following:</p><ul><li>Describe what happened and the damage it caused.</li><li>Explain why you are worried about the tree in the future.</li><li>Suggest how the two of you could deal with the repair and its cost.</li></ul><p class="muted">Write 150 to 200 words.</p>'
+          prompt: '<p>During a windstorm last weekend, several large branches from your neighbour\'s maple tree fell into your yard and broke part of your fence. A fence company has quoted $900 for the repair, which is less than your home insurance deductible. Your neighbour, a retired man who lives alone and often helps you with snow clearing, has not mentioned the damage.</p><p>Write an email to your neighbour. In your email, do the following:</p><ul><li>Describe what happened and the damage it caused.</li><li>Explain why you are worried about the tree in the future.</li><li>Suggest how the two of you could share the repair and its cost without harming your good relationship.</li></ul><p class="muted">Write 150 to 200 words.</p>'
         },
         {
           id: 'W2', title: 'Task 2: Responding to Survey Questions', minutes: 26, minWords: 150, maxWords: 200,
-          prompt: '<p>Your employer wants to add one new benefit for all staff next year and is asking employees which one they would prefer. Choose the option you prefer. Explain the reasons for your choice.</p><p class="muted">Write 150 to 200 words.</p>',
+          prompt: '<p>Your employer has enough money in next year\'s budget to add one new benefit for all staff, and it is asking employees which one they would prefer. Choose the option you prefer. Explain the reasons for your choice.</p><p class="muted">Write 150 to 200 words.</p>',
           options: [
-            { key: 'A', label: 'Option A', text: 'A free yearly membership at a gym located near the office.' },
-            { key: 'B', label: 'Option B', text: 'One extra paid vacation day each year.' }
+            { key: 'A', label: 'Option A', text: 'A free yearly membership, worth about $600, at a gym two blocks from the office. The gym is often crowded at lunch and after work, and it has no location near most employees\' homes.' },
+            { key: 'B', label: 'Option B', text: 'One extra paid vacation day each year. The day must be taken between January and March, the company\'s quietest season, and it cannot be carried over to the next year.' }
           ]
         }
       ]
@@ -446,23 +462,23 @@
     speaking: {
       practice: { id: 'SP', title: 'Practice Task', prep: 30, speak: 60, prompt: 'Describe a place in your town or city where you like to spend free time.' },
       tasks: [
-        { id: 'S1', title: 'Task 1: Giving Advice', prep: 30, speak: 90, prompt: 'A friend of yours wants to start running, but she has never exercised regularly before. Give her advice on how to get started safely and how to stay motivated.' },
-        { id: 'S2', title: 'Task 2: Talking about a Personal Experience', prep: 30, speak: 60, prompt: 'Talk about a time when something did not go as planned while you were on a trip. What happened, and how did you deal with it?' },
+        { id: 'S1', title: 'Task 1: Giving Advice', prep: 30, speak: 90, prompt: 'A friend of yours wants to start running so she can join her coworkers in a 5-kilometre charity run in eight weeks. She has never exercised regularly, she works long shifts at a hospital, and one of her knees still bothers her after an old injury. Give her advice on how to get ready safely and how to stay motivated.' },
+        { id: 'S2', title: 'Task 2: Talking about a Personal Experience', prep: 30, speak: 60, prompt: 'Talk about a time when something did not go as planned while you were on a trip. What happened, how did you deal with it, and what would you plan differently on your next trip?' },
         { id: 'S3', title: 'Task 3: Describing a Scene', prep: 30, speak: 60, prompt: 'Describe some things that are happening in the picture below as well as you can. The person you are speaking to cannot see the picture.', image: AIRPORT },
         { id: 'S4', title: 'Task 4: Making Predictions', prep: 30, speak: 60, prompt: 'In this picture, what do you think will most probably happen next?', image: AIRPORT },
         {
           id: 'S5', title: 'Task 5: Comparing and Persuading', type: 'compare', select: 60, prep: 60, speak: 60,
           prompt: 'Your family is planning how to celebrate your father\'s 60th birthday. Choose the option you prefer. In the next section, you will need to persuade a family member that your choice is better.',
           choices: [
-            { key: 'A', title: 'Dinner at a restaurant', image: RESTAURANT, facts: ['Private table for 8 people', 'About $45 per person', 'Saturday, 7:00 to 9:00 p.m.', 'No cooking or cleaning up'] },
-            { key: 'B', title: 'Party at home', image: HOMEPARTY, facts: ['Up to 20 guests', 'Food and cake: about $200', 'Any time, no time limit', 'Music, games and decorations'] }
+            { key: 'A', title: 'Dinner at a restaurant', image: RESTAURANT, facts: ['Private table for 8 people only', 'About $45 per person, plus tip', 'Saturday, 7:00 to 9:00 p.m., strict end time', 'No cooking or cleaning up'] },
+            { key: 'B', title: 'Party at home', image: HOMEPARTY, facts: ['Up to 20 guests', 'Food and cake: about $200', 'Family does all the cooking and cleaning', 'No time limit, but a small living room'] }
           ],
           third: { key: 'C', title: 'Bowling alley', image: BOWLING, facts: ['2 lanes for 2 hours', '$180, shoe rental included', 'Sunday, 2:00 to 4:00 p.m.', 'Pizza and snacks available'] },
           persuade: 'Your family member suggests the bowling alley instead. Persuade them that your choice is better. Explain why.'
         },
         { id: 'S6', title: 'Task 6: Dealing with a Difficult Situation', prep: 60, speak: 60, prompt: '<p>For the past month, a coworker on your team has often left early and asked you to finish his tasks. Because of this, your own work has fallen behind. Today your manager asked you why your reports are late.</p><p><b>Choose ONE:</b></p><p><b>Option A:</b> Talk to your manager. Explain why your work is late without causing serious trouble for your coworker.</p><p><b>Option B:</b> Talk to your coworker. Explain why you cannot keep doing his tasks.</p>' },
-        { id: 'S7', title: 'Task 7: Expressing Opinions', prep: 30, speak: 90, prompt: 'Should stores be allowed to open on public holidays? Explain your reasons.' },
-        { id: 'S8', title: 'Task 8: Describing an Unusual Situation', prep: 30, speak: 60, prompt: 'You are in a used furniture store and see this unusual chair. Call your friend, who is looking for a chair for his new apartment. Describe the chair and explain whether you think he should buy it.', image: ODDCHAIR }
+        { id: 'S7', title: 'Task 7: Expressing Opinions', prep: 30, speak: 90, prompt: 'Your town council is debating whether large stores should be allowed to open on statutory holidays such as Canada Day and Thanksgiving. Store owners say shoppers want the convenience and staff can earn holiday pay. Many workers say they would lose one of the few days they can count on spending with family. The council has asked residents for their views. Should stores be allowed to open on public holidays? Explain your reasons.' },
+        { id: 'S8', title: 'Task 8: Describing an Unusual Situation', prep: 30, speak: 60, prompt: 'You are in a used furniture store and see this unusual chair. It costs $249, one of the speakers does not work, and the store accepts cash only with no returns. Call your friend, who is furnishing his new apartment on a tight budget and has a small living room. Describe the chair and explain whether you think he should buy it.', image: ODDCHAIR }
       ]
     }
   });

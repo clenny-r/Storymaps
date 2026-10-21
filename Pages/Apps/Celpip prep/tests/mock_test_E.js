@@ -47,6 +47,8 @@
     p += '<rect x="495" y="175" width="30" height="60" fill="#5b3a29"/><circle cx="519" cy="207" r="2.5" fill="#f2d16b"/>';
     p += '<g fill="#bfe1f2" stroke="#fff" stroke-width="3"><rect x="445" y="150" width="34" height="30"/><rect x="545" y="150" width="34" height="30"/></g>';
     p += '<rect x="503" y="235" width="14" height="66" fill="#d8cfbf"/>';
+    /* man holding the front door open */
+    p += person(510, 236, { s: .9, arms: 'right', shirt: '#27ae60', skin: '#a9714b', hair: '#1d1410' });
     /* SOLD sign */
     p += '<rect x="400" y="200" width="4" height="40" fill="#555"/><rect x="380" y="186" width="46" height="22" fill="#fff" stroke="#c0392b" stroke-width="2"/><text x="403" y="202" font-size="12" text-anchor="middle" font-family="sans-serif" fill="#c0392b">SOLD</text>';
     /* neighbour's house on the far right, partly visible */
@@ -60,6 +62,8 @@
     p += '<g fill="#222"><circle cx="50" cy="322" r="16"/><circle cx="130" cy="322" r="16"/><circle cx="215" cy="322" r="16"/></g><g fill="#aaa"><circle cx="50" cy="322" r="6"/><circle cx="130" cy="322" r="6"/><circle cx="215" cy="322" r="6"/></g>';
     /* ramp from the back of the truck */
     p += '<polygon points="245,309 300,324 300,328 245,315" fill="#9a9a9a"/>';
+    /* helper inside the truck reaching for a box */
+    p += person(232, 252, { s: .8, arms: 'right', shirt: '#7f8c8d', skin: '#f0c9a6', hair: '#c49a42' });
     /* boxes waiting inside the truck */
     p += box(220, 280, 22, 26) + box(220, 252, 22, 26);
     /* mover with a stack of boxes, top box about to fall */
@@ -85,6 +89,9 @@
     p += '<line x1="388" y1="324" x2="420" y2="324" stroke="#16a085" stroke-width="4"/><line x1="418" y1="324" x2="414" y2="290" stroke="#16a085" stroke-width="3"/><circle cx="390" cy="326" r="4" fill="#222"/><circle cx="418" cy="326" r="4" fill="#222"/>';
     p += person(400, 322, { shirt: '#f4d03f', skin: '#f2cfb0', hair: '#c49a42', s: .7, arms: 'right' });
     p += '<g fill="#a5713f"><ellipse cx="462" cy="314" rx="13" ry="6"/><circle cx="476" cy="308" r="6"/><rect x="452" y="317" width="3" height="8"/><rect x="467" y="317" width="3" height="8"/></g><path d="M449 312 q-6 -6 -2 -10" stroke="#a5713f" stroke-width="2" fill="none"/>';
+    /* cyclist riding past on the road */
+    p += '<g transform="translate(560 388)"><circle cx="-16" cy="0" r="10" fill="none" stroke="#333" stroke-width="3"/><circle cx="16" cy="0" r="10" fill="none" stroke="#333" stroke-width="3"/><path d="M-16 0 L-2 -14 L16 0 M-2 -14 L9 -14" stroke="#8e44ad" stroke-width="3" fill="none"/></g>';
+    p += person(558, 376, { s: .85, arms: 'right', shirt: '#e67e22', skin: '#7a4b31', hair: '#120c08' });
     /* lamp and plant waiting on the sidewalk */
     p += '<rect x="325" y="290" width="4" height="34" fill="#555"/><polygon points="317,290 337,290 332,276 322,276" fill="#f6e7a6" stroke="#b9a75a"/>';
     p += '<rect x="352" y="306" width="16" height="16" fill="#b5651d"/><g fill="#3f8f3a"><ellipse cx="356" cy="298" rx="6" ry="10"/><ellipse cx="365" cy="298" rx="6" ry="10"/></g>';
@@ -158,13 +165,15 @@
                 ['KWAME', 'Back in March. Site forty-two, right on the water, two nights. Seventy-eight dollars. I remember, because I was annoyed it had gone up since last summer.'],
                 ['ISABELLE', 'Okay, so just show her the confirmation email.'],
                 ['KWAME', 'That\'s the thing. I\'ve got no bars out here at all. My inbox won\'t even load, and of course I never took a screenshot.'],
+                ['ISABELLE', 'Couldn\'t she look it up by your phone number instead?'],
+                ['KWAME', 'She tried that too. But I changed numbers in April, remember? So that was a dead end as well.'],
                 ['ISABELLE', 'Great. And with Monday being a holiday, I bet every site in the park is taken.'],
                 ['KWAME', 'She said they\'ve been full since Wednesday. People have been phoning all week hoping somebody cancels.']
               ],
               questions: [
-                { id: 'L1.1', q: 'What problem do Kwame and Isabelle have?', o: ['The park cannot find their booking.', 'Their lakeside campsite has been flooded.', 'They have driven to the wrong park.', 'The park has closed for the season.'] },
+                { id: 'L1.1', q: 'What problem do Kwame and Isabelle have?', o: ['The park has no record of their booking.', 'Their site was given to another group.', 'They booked for the wrong weekend.', 'Their booking was cancelled in March.'] },
                 { id: 'L1.2', q: 'What does Kwame say about the price of the site?', o: ['It cost more than the year before.', 'It was less than he had expected.', 'It included a fee for the holiday.', 'It was charged twice in March.'] },
-                { id: 'L1.3', q: 'Why does Isabelle expect the park to be full?', o: ['It is a long weekend.', 'The weather is perfect.', 'A festival is on nearby.', 'Many sites are closed.'] }
+                { id: 'L1.3', q: 'Why does Isabelle expect the park to be full?', o: ['It is a long weekend.', 'The lakeside sites sold out in March.', 'The overflow area is already full.', 'Prices have gone up since last summer.'] }
               ]
             },
             {
@@ -191,12 +200,14 @@
                 ['ISABELLE', 'So what on earth happened?'],
                 ['KWAME', 'My last name. Whoever entered it typed Asanti, with an "i" at the end instead of an "e". So every time she searched for Asante, nothing came up.'],
                 ['ISABELLE', 'Unbelievable. So forty-two is still ours? Both nights?'],
-                ['KWAME', 'Both nights. And she was so apologetic that she threw in a free bundle of firewood. She said it was the least she could do.'],
+                ['KWAME', 'Both nights. She even offered us site forty-four instead, because it has more shade, but I said no thanks. Forty-two has the little beach.'],
+                ['ISABELLE', 'Good. I\'ve been thinking about that beach since March.'],
+                ['KWAME', 'And she was so apologetic about the whole mix-up that she threw in a free bundle of firewood. She said it was the least she could do.'],
                 ['ISABELLE', 'Well, that almost makes up for the last hour. It gets dark around eight thirty, so let\'s get the tent up first, and then I\'ll deal with the fire while you start dinner.']
               ],
               questions: [
-                { id: 'L1.7', q: 'Why couldn\'t the attendant find the booking at first?', o: ['Kwame\'s last name was misspelled.', 'It was made under Isabelle\'s name.', 'The reservation number was wrong.', 'It was booked for a different site.'] },
-                { id: 'L1.8', q: 'Why did the attendant give them firewood?', o: ['To make up for the problem', 'Because firewood comes with the site', 'Because the overflow area has none', 'To thank them for being patient'] }
+                { id: 'L1.7', q: 'Why couldn\'t the attendant find the booking at first?', o: ['His surname had been entered incorrectly.', 'His phone number had changed since booking.', 'The reservation number was wrong.', 'It was booked under Isabelle\'s name.'] },
+                { id: 'L1.8', q: 'Why did the attendant give them firewood?', o: ['She felt bad about the error.', 'Firewood comes with site forty-two.', 'Their site has no fire pit of its own.', 'They had booked for two nights.'] }
               ]
             }
           ]
@@ -211,22 +222,24 @@
               ['GORD', 'Sure, Mei-Lin. What\'s up?'],
               ['MEILIN', 'It\'s the laundry room. Machine number two stopped halfway through the cycle, and my clothes are stuck inside. The door\'s locked, and there\'s still water sitting in the drum.'],
               ['GORD', 'Ah, number two. Of course it is. Did you try the restart button on the front panel?'],
-              ['MEILIN', 'Twice. The lights flash, but nothing happens. And it had already taken two seventy-five off my laundry card.'],
-              ['GORD', 'Okay. First things first, I\'ll go down and drain it by hand so you can get your things out. Give me about ten minutes.'],
+              ['MEILIN', 'Twice. The lights flash, but nothing happens. And it had already taken two seventy-five off my laundry card. Then I tapped my card again, thinking that might restart it, and it charged me a second time.'],
+              ['GORD', 'Oh, no. Okay, first things first. I\'ll go down and drain it by hand so you can get your things out. Give me about ten minutes.'],
               ['MEILIN', 'Thank you. Is someone actually going to fix it this time, though? I\'m pretty sure it did the exact same thing last month.'],
-              ['GORD', 'It did. The repair company came out and patched it, and clearly that didn\'t hold. I called them first thing this morning. The earliest they can come is Thursday, and this time I\'m asking them to swap out the whole control panel.'],
-              ['MEILIN', 'That makes sense. And the two seventy-five?'],
-              ['GORD', 'Leave me your card number and I\'ll put it back on this afternoon.'],
-              ['MEILIN', 'Great. Honestly, I\'m not looking for money off my rent or anything. I just want my work clothes back before tomorrow.'],
+              ['GORD', 'The repair company came out and patched it, and clearly that didn\'t hold. I called them first thing this morning. The earliest they can come is Thursday, and this time I\'m asking them to swap out the whole control panel.'],
+              ['MEILIN', 'That makes sense. And the money on my card?'],
+              ['GORD', 'Leave me your card number and I\'ll put back everything it took this afternoon.'],
+              ['MEILIN', 'Great. Honestly, I\'m not looking for money off my rent or anything. I just want my work clothes back before tomorrow. I\'ve got a big presentation in the morning.'],
               ['GORD', 'Ha, fair enough. Machine three is free right now, by the way. Once I\'ve drained number two, you can move everything straight over and rewash it there.'],
+              ['MEILIN', 'Hmm, I think Mr. Okafor from the fourth floor just started a load in three. I saw him heading down with a basket.'],
+              ['GORD', 'Then use the one by the window, number five. It\'s the oldest one down there, but it\'s never given me any trouble.'],
               ['MEILIN', 'Perfect. I\'ll run up and grab my detergent, and I\'ll meet you down there.']
             ],
             questions: [
-              { id: 'L2.1', q: 'Why does Mei-Lin come to see Gord?', o: ['A washer broke with her clothes in it.', 'The laundry room door is stuck shut.', 'Her laundry card has no money left.', 'A dryer has damaged her favourite shirt.'] },
-              { id: 'L2.2', q: 'What can be inferred about machine number two?', o: ['It has broken down before.', 'It is the newest machine.', 'It only accepts coins.', 'It was repaired this morning.'] },
+              { id: 'L2.1', q: 'How much will Gord put back on Mei-Lin\'s card?', o: ['$5.50', '$2.75', '$8.25', '$3.75'] },
+              { id: 'L2.2', q: 'What can be inferred about machine number two?', o: ['It has failed in the same way before.', 'It is newer than the other machines.', 'It charges more than the other machines.', 'It was repaired this morning.'] },
               { id: 'L2.3', q: 'Why does Gord want the control panel replaced?', o: ['The last repair did not last.', 'The panel is no longer made.', 'Tenants keep pressing restart.', 'The repair company suggested it.'] },
-              { id: 'L2.4', q: 'What does Mei-Lin mean when she mentions her rent?', o: ['Her main concern is her clothes.', 'She expects money off her rent.', 'She thinks her rent is too high.', 'She wants Gord to pay her back.'] },
-              { id: 'L2.5', q: 'What will Mei-Lin most likely do next?', o: ['Get detergent and go downstairs', 'Wait in her apartment until Thursday', 'Drain machine two herself', 'Take her clothes to a laundromat'] }
+              { id: 'L2.4', q: 'What does Mei-Lin mean when she mentions her rent?', o: ['What matters most is getting her clothes back.', 'She expects money off her rent.', 'She thinks her rent is too high for the building.', 'She is unhappy about the price of laundry.'] },
+              { id: 'L2.5', q: 'Where will Mei-Lin most likely rewash her clothes?', o: ['In the oldest machine in the room', 'In machine three', 'In machine two after Thursday', 'At a laundromat nearby'] }
             ]
           }]
         },
@@ -239,25 +252,33 @@
               ['HOST', 'My guest today is Amara Bello, a registered nurse who works in remote communities in northern Manitoba. Amara, welcome.'],
               ['AMARA', 'Thanks for having me.'],
               ['HOST', 'Let\'s start with your schedule. You don\'t live up north full time, right?'],
-              ['AMARA', 'No. I work three weeks in, and then I\'m home in Winnipeg for three weeks. Most of the communities I work in don\'t have a year-round road, so I fly in on a small plane, usually with a couple of boxes of medical supplies on the seat beside me.'],
+              ['AMARA', 'No. I work three weeks in, and then I\'m home in Winnipeg for three weeks. Most of the communities I work in don\'t have a year-round road, so I fly in on a small plane.'],
+              ['HOST', 'On your own?'],
+              ['AMARA', 'Usually just me and a couple of boxes of medical supplies on the seat beside me. The pilots joke that the boxes are better company.'],
               ['HOST', 'What does a typical day look like?'],
-              ['AMARA', 'There isn\'t really a typical day. There\'s no doctor living in the community, so the two of us at the nursing station handle almost everything. In one morning I might give vaccines, stitch up a cut, check on a newborn and then talk to a doctor in the city by video about someone with chest pain.'],
+              ['AMARA', 'There isn\'t really a typical day. There\'s no doctor living in the community, so the two of us at the nursing station handle almost everything.'],
+              ['HOST', 'Such as?'],
+              ['AMARA', 'In one morning I might give vaccines, stitch up a cut, check on a newborn and then talk to a doctor in the city by video about someone with chest pain.'],
               ['HOST', 'And if someone is seriously ill?'],
               ['AMARA', 'Then we arrange a medical flight to a hospital in the south. The hard part is the weather. If there\'s fog or a storm, the plane simply can\'t land, and we might be looking after that patient ourselves for twelve hours or more.'],
               ['HOST', 'Is language ever a barrier?'],
-              ['AMARA', 'Sometimes. A lot of older patients are more comfortable in Cree. An elder named Rose volunteers at the station, and she interprets for us. She\'s also taught me a fair number of phrases, and patients really light up when I try them, even when I get them wrong.'],
+              ['AMARA', 'Sometimes. A lot of older patients are more comfortable in Cree. An elder named Rose volunteers at the station, and she interprets for us.'],
+              ['HOST', 'Have you picked up any Cree yourself?'],
+              ['AMARA', 'A fair number of phrases, thanks to Rose. And patients really light up when I try them, even when I get them wrong.'],
               ['HOST', 'What surprised you most when you started?'],
-              ['AMARA', 'Honestly? The price of food. A small carton of juice can be fourteen dollars. These days, half my suitcase is groceries before I even pack my clothes.'],
+              ['AMARA', 'Honestly? The price of food. A small carton of juice that costs me three fifty in Winnipeg can be fourteen dollars up there. These days, half my suitcase is groceries before I even pack my clothes.'],
+              ['HOST', 'And the hardest part?'],
+              ['AMARA', 'Leaving, actually. After three weeks you know everyone, and then you fly out and wonder how your patients are doing. The nurse who replaces me always sends a quick update, which helps.'],
               ['HOST', 'What would you tell a nurse who\'s thinking about this kind of work?'],
               ['AMARA', 'Get at least two years in an emergency department first. Up there, you\'re often the one making the call, with nobody down the hall to ask. But I\'d also tell them it\'s the most rewarding job I\'ve ever had.']
             ],
             questions: [
-              { id: 'L3.1', q: 'What can be inferred about the communities where Amara works?', o: ['Most are reached by air for much of the year.', 'Each one has its own small hospital.', 'They are all a short drive from Winnipeg.', 'They have a doctor living there in winter.'] },
-              { id: 'L3.2', q: 'What does Amara\'s description of a morning show?', o: ['Nurses there do many kinds of work.', 'Most patients come in for vaccines.', 'Doctors visit the station by plane.', 'The station is open only in mornings.'] },
-              { id: 'L3.3', q: 'Why might nurses look after a very sick patient for many hours?', o: ['Bad weather can stop planes from landing.', 'Patients often refuse to leave home.', 'Hospitals in the south are often full.', 'Medical flights only operate at night.'] },
-              { id: 'L3.4', q: 'How do patients react when Amara speaks Cree?', o: ['They appreciate her effort.', 'They correct her right away.', 'They ask Rose to interpret.', 'They prefer to use English.'] },
-              { id: 'L3.5', q: 'Why does Amara fill her suitcase with groceries?', o: ['Food up north costs a great deal.', 'The local store is often closed.', 'She follows a special diet.', 'Her clothes are kept at the station.'] },
-              { id: 'L3.6', q: 'Why does Amara recommend emergency experience?', o: ['Nurses there must often decide alone.', 'Northern clinics require it to hire.', 'It pays better in remote places.', 'It helps nurses cope with the cold.'] }
+              { id: 'L3.1', q: 'What can be inferred about the communities where Amara works?', o: ['Most are reached by air for much of the year.', 'Nurses there usually live in them full time.', 'Each one has a doctor who flies in weekly.', 'Supplies arrive by road every three weeks.'] },
+              { id: 'L3.2', q: 'What does Amara\'s description of a morning show?', o: ['The nurses handle a very wide range of care.', 'A city doctor treats most patients by video.', 'Vaccines take up most of the nurses\' time.', 'Two doctors share the work at the station.'] },
+              { id: 'L3.3', q: 'Why might nurses look after a very sick patient for many hours?', o: ['Conditions may keep a plane from reaching them.', 'Medical flights take twelve hours to arrive.', 'A doctor must approve each flight by video.', 'Hospitals in the south are often full.'] },
+              { id: 'L3.4', q: 'How do patients react when Amara speaks Cree?', o: ['They are pleased that she makes the effort.', 'They ask Rose to correct her mistakes.', 'They find her errors hard to follow.', 'They answer her in English instead.'] },
+              { id: 'L3.5', q: 'How does the juice price up north compare with Winnipeg?', o: ['It is about four times higher.', 'It is about fourteen dollars higher.', 'It is about three times higher.', 'It is about three fifty higher.'] },
+              { id: 'L3.6', q: 'Why does Amara recommend emergency experience?', o: ['Nurses there must often decide alone.', 'It is the most rewarding kind of nursing.', 'Northern clinics will not hire without it.', 'Doctors visit too rarely to train new nurses.'] }
             ]
           }]
         },
@@ -268,17 +289,20 @@
           segments: [{
             lines: [
               ['NEWS', 'The City of Port Alder is going electric. Starting in March, the first eight of twenty-four battery-electric buses will join the city\'s transit fleet, with the rest arriving over the following two years.'],
-              ['NEWS', 'Each bus costs roughly one point two million dollars, close to double the price of a diesel model. However, transit manager Lena Sorensen says the city expects to save about forty thousand dollars per bus every year on fuel and maintenance.'],
-              ['NEWS', 'The buses can travel up to two hundred and fifty kilometres on a single charge, which Sorensen says is enough for a full day of service on most routes. They will charge overnight at a new depot on Kent Street, now under construction beside the existing garage.'],
+              ['NEWS', 'Each bus costs roughly one point two million dollars, close to double the price of a diesel model. The federal government will cover half of that through its green transit fund.'],
+              ['NEWS', 'Transit manager Lena Sorensen says the city also expects to save about forty thousand dollars per bus every year on fuel and maintenance.'],
+              ['NEWS', 'The buses can travel up to two hundred and fifty kilometres on a single charge, which Sorensen says is enough for a full day of service on most routes.'],
+              ['NEWS', 'They will charge overnight at a new depot on Kent Street, now under construction beside the existing garage.'],
               ['NEWS', 'There is one open question. In extreme cold, battery range can fall by as much as thirty percent. Until the city has collected a full winter of data, diesel buses will stay on its two longest routes in January and February.'],
+              ['NEWS', 'Not everyone is convinced the money is well spent. The Port Alder Riders\' Association says the city should first add more buses to its crowded north-side routes, where riders are often left waiting at stops during the morning rush.'],
               ['NEWS', 'Drivers who tested the buses last fall describe them as noticeably quieter and smoother. Riders will soon be able to judge for themselves: fares on every route served by the new buses will be waived on launch day, March third.']
             ],
             questions: [
-              { id: 'L4.1', q: 'What is the news item mainly about?', o: ['New electric buses for the city', 'A new bus garage being built downtown', 'A rise in diesel fuel prices', 'Free bus service for the winter'] },
-              { id: 'L4.2', q: 'What does the report suggest about the cost of the electric buses?', o: ['They cost more to buy but less to run.', 'They are cheaper than diesel buses.', 'They will be paid for with higher fares.', 'Their purchase price will drop in two years.'] },
-              { id: 'L4.3', q: 'How many of the electric buses will arrive after March?', o: ['16', '8', '24', '2'] },
-              { id: 'L4.4', q: 'Why will diesel buses stay on two routes in January and February?', o: ['Range in the cold is still uncertain.', 'The electric buses cannot climb icy hills.', 'The new depot will not be finished.', 'Drivers find the diesel buses easier.'] },
-              { id: 'L4.5', q: 'What will happen on launch day?', o: ['Riders can use the new buses free.', 'Drivers will test the buses for the first time.', 'The depot on Kent Street will open.', 'All diesel buses will be retired.'] }
+              { id: 'L4.1', q: 'What is the news item mainly about?', o: ['New electric buses for the city', 'A new bus depot on Kent Street', 'Calls for more buses on busy routes', 'Free bus service for the winter'] },
+              { id: 'L4.2', q: 'What does the report suggest about the cost of the electric buses?', o: ['They cost more to buy but less to run.', 'The federal government will pay the full price.', 'They will be paid for with higher fares.', 'Their purchase price will drop in two years.'] },
+              { id: 'L4.3', q: 'How many of the electric buses will arrive after March?', o: ['16', '8', '24', '12'] },
+              { id: 'L4.4', q: 'Why will diesel buses stay on two routes in January and February?', o: ['It is unclear how far the new buses can go in deep cold.', 'The electric buses cannot climb icy hills.', 'The new depot will not be finished by then.', 'Drivers find the diesel buses easier to handle.'] },
+              { id: 'L4.5', q: 'What will happen on launch day?', o: ['Riders can try the new buses at no cost.', 'Drivers will test the buses for the first time.', 'The depot on Kent Street will open.', 'Extra buses will join the north-side routes.'] }
             ]
           }]
         },
@@ -307,14 +331,14 @@
               ['LUCIA', 'Wonderful. I\'ll email the whole group tonight with the June book and the new day, and I\'ll check with Harold myself that Tuesdays work for him.']
             ],
             questions: [
-              { id: 'L5.1', q: 'What is the main purpose of the discussion?', o: ['To pick a book and a place to meet', 'To plan a party for the library staff', 'To vote for a new club leader', 'To review last month\'s book'] },
-              { id: 'L5.2', q: 'Why does the club need a new meeting place?', o: ['The library room is being renovated.', 'The library has started charging a fee.', 'The group has become too large.', 'Harold cannot get into the library.'] },
+              { id: 'L5.1', q: 'What is the main purpose of the discussion?', o: ['To settle the club\'s summer arrangements', 'To plan the library\'s reopening in September', 'To choose a new leader for the club', 'To discuss why members did not finish a book'] },
+              { id: 'L5.2', q: 'Why does the club need a new meeting place?', o: ['Their usual room will be closed for building work.', 'The library has started charging a fee.', 'The group has become too large for the room.', 'Harold cannot get into the library.'] },
               { id: 'L5.3', q: 'What is Lucia\'s main concern about The Glass Mountain?', o: ['Few members would finish it in time.', 'It is a type of book few members like.', 'Several members have already read it.', 'It is too expensive for some members.'] },
-              { id: 'L5.4', q: 'How does Omar respond to Lucia\'s concern?', o: ['He proposes giving his book more time.', 'He agrees to drop his book completely.', 'He argues that his book is a fast read.', 'He offers to lend copies to everyone.'] },
+              { id: 'L5.4', q: 'How does Omar react to Beth\'s suggestion?', o: ['He welcomes it and fits it into a new plan.', 'He rejects it as too light for the group.', 'He says it should replace his book entirely.', 'He worries that it is too long to finish.'] },
               { id: 'L5.5', q: 'Why does Beth decide her home is not suitable?', o: ['Harold could not easily reach it.', 'Her living room is too small.', 'Her neighbours complain about noise.', 'She is having surgery in June.'] },
-              { id: 'L5.6', q: 'What can be inferred about the café on Thursdays?', o: ['It has live performances.', 'It closes too early.', 'The back room is booked.', 'Prices are much higher.'] },
-              { id: 'L5.7', q: 'What condition did the café owner set?', o: ['Every member must buy a drink.', 'The club must pay a small fee.', 'The group must meet on Thursdays.', 'The club must leave before nine.'] },
-              { id: 'L5.8', q: 'When will the group read The Glass Mountain?', o: ['During July and August', 'Starting in early June', 'After the library reopens', 'Once Harold has finished it'] }
+              { id: 'L5.6', q: 'What can be inferred about the café on Thursdays?', o: ['It has live performances.', 'The back room is booked by another club.', 'It is closed to the public that evening.', 'The owner charges for the back room.'] },
+              { id: 'L5.7', q: 'What condition did the café owner set?', o: ['Each member has to buy something to drink.', 'The club has to pay a small room fee.', 'The group has to meet on Thursdays.', 'The club has to book a week ahead.'] },
+              { id: 'L5.8', q: 'Why is The Glass Mountain scheduled later?', o: ['So members have twice as long to read it', 'Because the library reopens by then', 'Because Beth asked to have her book first', 'Because Harold has not finished it yet'] }
             ]
           }]
         },
@@ -326,20 +350,27 @@
             lines: [
               ['NARR', 'Most Canadian children now get their first smartphone at around eleven or twelve. But a growing number of parents are asking whether that is simply too early.'],
               ['NARR', 'Marcus Leblanc, a father of three in Kelowna, started a group in which parents at his children\'s school agree not to give their kids a smartphone before grade eight. More than two hundred families have signed on so far.'],
-              ['NARR', 'Leblanc says the first thing that pushed him was sleep. His oldest daughter, he discovered, was messaging friends well past midnight. He also argues that most of the pressure to own a phone comes from classmates, so it largely disappears when an entire class waits together.'],
+              ['NARR', 'Leblanc says the first thing that pushed him was sleep. His oldest daughter, he discovered, was messaging friends well past midnight and then struggling to stay awake in class.'],
+              ['NARR', 'His second argument is about pressure. Most of the push to own a phone, he says, comes from classmates, so it largely disappears when an entire class waits together. "Nobody wants to be the only kid without one. So we made sure nobody is."'],
               ['NARR', 'He is quick to add that he is not against technology. He recommends a basic phone that can only make calls and send texts, so that children can still reach their parents after school.'],
+              ['NARR', 'Leblanc does admit the plan has a cost. Some children in the group say they feel shut out of group chats that friends at other schools use, and a handful of families have quietly dropped out.'],
               ['NARR', 'Doctor Priya Raman, who studies child development at a university in Ottawa, sees things differently. She warns that simply delaying the phone does nothing to teach children how to use one well.'],
               ['NARR', 'In her research, teenagers who were handed full access all at once at thirteen or fourteen ran into more trouble online than those who had been introduced gradually, with clear rules and a parent close by.'],
-              ['NARR', 'Raman suggests beginning with a phone that sleeps in the kitchen overnight and holds only a few approved apps, then adding freedom as the child shows responsibility.'],
+              ['NARR', 'The teenagers who got everything at once were also less likely to tell a parent when something went wrong.'],
+              ['NARR', 'She also questions the idea of a whole class waiting. In her view, the pressure does not vanish. It simply moves to grade eight, when the agreement ends and everyone gets a smartphone in the same month, with no practice at all.'],
+              ['NARR', 'Leblanc\'s answer is that a basic phone is practice. Children learn to keep it charged, to answer when a parent calls and to put it away at dinner, long before they have to deal with social media.'],
+              ['NARR', 'Raman points out that smartphones are genuinely useful, too. Children use them for maps and bus schedules, and in many newcomer families, a video call is the only way to see grandparents overseas.'],
+              ['NARR', 'She does accept Leblanc\'s point about sleep. But she argues that a simple household rule solves that faster than a pact among two hundred families: the phone charges in the kitchen overnight, not in the bedroom.'],
+              ['NARR', 'Raman suggests starting with a phone that holds only a few approved apps, then adding freedom, one step at a time, as the child shows responsibility.'],
               ['NARR', 'On one point, the two agree: parents should talk to other families before deciding, so that no child ends up feeling singled out.']
             ],
             questions: [
-              { id: 'L6.1', q: 'What is the report mainly about?', o: ['The right age for a first smartphone', 'How schools teach online safety skills', 'The cost of smartphones for families', 'Why teenagers need more sleep'] },
-              { id: 'L6.2', q: 'What first led Leblanc to act?', o: ['His daughter was losing sleep.', 'His school banned all phones.', 'His son had trouble online.', 'Other parents asked for help.'] },
-              { id: 'L6.3', q: 'According to Leblanc, why does pressure to own a phone fade?', o: ['Nobody in the class has one yet.', 'Children start to prefer basic phones.', 'Teachers stop allowing phones.', 'Parents explain the risks clearly.'] },
-              { id: 'L6.4', q: 'What is Leblanc\'s attitude toward technology?', o: ['He accepts it with limits.', 'He opposes all devices for children.', 'He thinks it is mainly harmless.', 'He leaves it entirely to schools.'] },
-              { id: 'L6.5', q: 'What is Dr. Raman\'s main objection to delaying phones?', o: ['It does not build good habits.', 'It makes children feel isolated.', 'It is impossible for parents to enforce.', 'It leaves children unable to call home.'] },
-              { id: 'L6.6', q: 'What do Leblanc and Raman agree on?', o: ['Parents should consult other families.', 'Phones should be kept in the kitchen every night.', 'Children should get phones in grade eight.', 'Schools should set the rules for phone use.'] }
+              { id: 'L6.1', q: 'What is the report mainly about?', o: ['Whether children are getting smartphones too young', 'How schools teach children to stay safe online', 'Whether basic phones are better than no phone', 'Why so many teenagers are losing sleep'] },
+              { id: 'L6.2', q: 'What first led Leblanc to act?', o: ['His child\'s late-night messaging', 'Complaints from his children\'s teachers', 'A study from a university in Ottawa', 'Pressure from other parents at school'] },
+              { id: 'L6.3', q: 'How does Raman respond to the idea of a whole class waiting?', o: ['It only postpones the pressure to a later grade.', 'It removes most of the pressure from classmates.', 'It is too hard for parents to organize.', 'It leaves children unable to call home.'] },
+              { id: 'L6.4', q: 'What does Leblanc admit about his plan?', o: ['Some children feel left out because of it.', 'Most families have since left the group.', 'Basic phones have not improved sleep.', 'It gives children no practice with phones.'] },
+              { id: 'L6.5', q: 'Why does Raman mention maps and video calls?', o: ['To show that smartphones have real benefits', 'To show that newcomers need cheaper plans', 'To argue that basic phones are enough', 'To list apps that children should avoid'] },
+              { id: 'L6.6', q: 'What do Leblanc and Raman agree on?', o: ['Coordinating with other parents so no child is left out', 'Keeping phones in the kitchen overnight', 'Waiting until grade eight for a smartphone', 'Letting schools decide when phones are allowed'] }
             ]
           }]
         }
@@ -356,7 +387,7 @@
           questions: [
             { id: 'R1.1', q: 'Natalie suggests that Doris', o: ['has given her valuable local knowledge.', 'wrote one of the guidebooks Natalie read.', 'moved north from Ottawa thirty years ago.', 'is planning to leave the pharmacy soon.'] },
             { id: 'R1.2', q: 'The pharmacy is busier than Natalie expected mainly because', o: ['patients from outlying towns use it too.', 'it is the only pharmacy in the city.', 'several staff members quit this winter.', 'it fills orders for the local hospital.'] },
-            { id: 'R1.3', q: 'Natalie\'s comment about minus thirty-eight suggests that', o: ['low humidity makes it surprisingly bearable.', 'it is the coldest weather she has ever felt.', 'it keeps her from walking to work in December.', 'it bothers her more than the lack of daylight.'] },
+            { id: 'R1.3', q: 'Natalie\'s comment about minus thirty-eight suggests that', o: ['low humidity makes it surprisingly bearable.', 'it is the coldest weather she has ever felt.', 'it keeps her from walking to work in December.', 'it is milder than she had been warned.'] },
             { id: 'R1.4', q: 'Natalie implies that, compared with the cold, the darkness is', o: ['harder for her to handle.', 'easier to get used to.', 'a reason to stay indoors.', 'the best part of winter.'] },
             { id: 'R1.5', q: 'Natalie most likely orders dry goods in bulk in order to', o: ['spend less on food.', 'avoid shopping in the dark.', 'help Doris run the pharmacy.', 'supply her curling team.'] },
             { id: 'R1.6', q: 'Natalie thinks March would suit a visit partly because', o: ['there will be more sunshine by then.', 'the ice road will have melted away.', 'the aurora is brightest in the spring.', 'her job will be much quieter then.'] }
@@ -381,34 +412,34 @@
             '<tr><td>Child</td><td>5 and under</td><td>Free</td><td>Free</td></tr>' +
             '<tr><td>Family</td><td>2 adults and up to 3 youth from one household</td><td>$60</td><td>$80</td></tr>' +
             '</tbody></table></div><ul class="notes"><li>Open Tuesday to Sunday, 10:00 a.m. to 5:00 p.m., and Thursdays until 9:00 p.m. Closed on Mondays, except holiday Mondays.</li><li>Last entry is one hour before closing.</li><li>Thursday evenings, 5:00 to 9:00 p.m.: general admission is free for everyone. Ice Age Giants costs $10 per person aged 6 and over during these hours.</li><li>Groups of 10 or more save 15% on general admission when they book at least 48 hours in advance.</li></ul>',
-          reply: '<h3>Email</h3><p>Hi Tomas,</p><p>I have been looking at the Northgate Museum for your mom\'s visit. I first thought of Monday the 9th, but since that is not a holiday, it won\'t work, because the museum [[R2.1]]. Saturday it is, then.</p><p>For the two of us plus Ana (9) and Mateo (14), the cheapest choice is [[R2.2]]. Your mom turned 70 in the spring, so she will need [[R2.3]]. The kids are desperate to see the mammoths, so if all five of us add Ice Age Giants on Saturday, the total comes to [[R2.4]].</p><p>Here is another idea: we could go on Thursday evening after work instead. General admission would be free, and Ice Age Giants for all five of us would cost only [[R2.5]]. We would just need to get there before eight.</p><p>Let me know which you prefer.</p><p>Leila</p>',
+          reply: '<h3>Email</h3><p>Hi Tomas,</p><p>I have been looking at the Northgate Museum for your mom\'s visit. I first thought of Monday the 9th, but that is not a holiday, so [[R2.1]]. Saturday it is, then.</p><p>For the two of us plus Ana (9) and Mateo (14), the cheapest choice is [[R2.2]]. Your mom turned 70 in the spring, so she will need [[R2.3]]. The kids are desperate to see the mammoths, so if all five of us add Ice Age Giants on Saturday, the total comes to [[R2.4]].</p><p>Here is another idea: we could go on Thursday evening after work instead. General admission would be free, and Ice Age Giants would cost [[R2.5]]. We would just need to get there before eight.</p><p>Let me know which you prefer.</p><p>Leila</p>',
           blanks: [
-            { id: 'R2.1', o: ['is closed on regular Mondays', 'is too crowded on Mondays', 'opens late on Mondays', 'only opens for groups that day'] },
+            { id: 'R2.1', o: ['we would find the doors locked', 'we would need a group booking', 'the museum would open late', 'admission would be free'] },
             { id: 'R2.2', o: ['a family ticket', 'four adult tickets', 'two adult and two youth tickets', 'a group booking'] },
             { id: 'R2.3', o: ['a senior ticket', 'an adult ticket', 'no ticket at all', 'a youth ticket'] },
             { id: 'R2.4', o: ['$106', '$98', '$80', '$110'] },
-            { id: 'R2.5', o: ['$50', '$40', '$80', '$0'] }
+            { id: 'R2.5', o: ['the same flat price for every one of us', 'nothing for the two kids', 'less for your mom as a senior', 'the same as on Saturday'] }
           ],
           questions: [
             { id: 'R2.6', q: 'A group of 12 adults who book three days ahead will pay this much for general admission:', o: ['$224.40', '$264.00', '$237.60', '$198.00'] },
-            { id: 'R2.7', q: 'A full-time student with ID who visits on a Sunday and sees Ice Age Giants will pay', o: ['$23.', '$15.', '$30.', '$10.'] },
+            { id: 'R2.7', q: 'A full-time student with ID who arrives at 6:00 p.m. on a Thursday and wants to see Ice Age Giants will pay', o: ['$10.', '$23.', '$15.', '$8.'] },
             { id: 'R2.8', q: 'Leila most likely says they would need to arrive before eight because', o: ['nobody is admitted in the last hour.', 'the free admission period ends at eight.', 'Ice Age Giants is free only before eight.', 'the family ticket is not valid after eight.'] }
           ]
         },
         {
           id: 'R3', title: 'Part 3: Reading for Information', minutes: 10,
           instructions: 'Read the following article. Decide which paragraph, A to D, contains the information in each statement. If the information is not given in any paragraph, choose E.',
-          passage: '<h3>Chasing the Northern Lights</h3><p><b>A.</b> For thousands of years, people in the North have looked up at shimmering curtains of green, pink and purple light. Today we know that the northern lights, or aurora borealis, begin about 150 million kilometres away, on the sun. The sun constantly releases a stream of electrically charged particles. When these particles reach Earth, the planet\'s magnetic field guides many of them toward the poles, where they collide with gases between 100 and 300 kilometres above the ground. Each collision releases a tiny burst of light. The colour depends on the gas involved: oxygen usually glows green, while nitrogen produces shades of blue and purple.</p><p><b>B.</b> Canada is one of the best places in the world to see the aurora, because much of the North lies directly beneath the ring-shaped zone where the lights are most active. Yellowknife, Whitehorse and Churchill all see displays on many nights each year. Timing matters, however. In the far North, summer nights never become fully dark, so the viewing season runs roughly from late August to mid-April. The strongest displays usually appear between ten at night and two in the morning. Experts also recommend driving at least a short distance out of town, since street lights can wash out all but the brightest shows.</p><p><b>C.</b> The lights have also become big business. Aurora tourism in the Northwest Territories has grown steadily over the past two decades, and some lodges now offer heated cabins with large windows, so that guests can watch the sky without standing outside at minus thirty. Many visitors rely on aurora forecasts, which are based on satellite measurements of activity on the sun. These forecasts are useful for planning a trip, but guides caution that they are only truly reliable an hour or two in advance, because conditions in space can change quickly.</p><p><b>D.</b> Photography has changed how people experience the aurora as well. Modern cameras, including those in many phones, can gather light for several seconds, so they often record stronger colours than the human eye can detect on a faint night. Amateur photographers have even contributed to science. Several years ago, a group of sky watchers in Alberta began sharing images of an unusual purple ribbon of light. Researchers studied the pictures and concluded that it was a different phenomenon from the ordinary aurora. The group gave it a playful name: Steve.</p>',
+          passage: '<h3>Chasing the Northern Lights</h3><p><b>A.</b> For thousands of years, people in the North have looked up at shimmering curtains of green, pink and purple light. Today we know that the northern lights, or aurora borealis, begin about 150 million kilometres away, on the sun. The sun constantly releases a stream of electrically charged particles. When these particles reach Earth, the planet\'s magnetic field guides many of them toward the poles, where they collide with gases between 100 and 300 kilometres above the ground. Each collision releases a tiny burst of light. The colour depends on the gas involved: oxygen usually glows green, while nitrogen produces shades of blue and purple. The southern lights, seen from places such as New Zealand, form in exactly the same way.</p><p><b>B.</b> Canada is one of the best places in the world to see the aurora, because much of the North lies directly beneath the ring-shaped zone where the lights are most active. Yellowknife, Whitehorse and Churchill all see displays on many nights each year. Timing matters, however. In the far North, summer nights never become fully dark, so the viewing season runs roughly from late August to mid-April. The strongest displays usually appear between ten at night and two in the morning, and a clear sky is essential, since even thin cloud can hide a display completely. Experts also recommend driving at least a short distance out of town, since street lights can wash out all but the brightest shows.</p><p><b>C.</b> The lights have also become big business. Aurora tourism in the Northwest Territories has grown steadily over the past two decades. Churchill, long home to a research station where scientists study the lights, now also welcomes busloads of visitors, and some lodges now offer heated cabins with large windows, so that guests can watch the sky without standing outside at minus thirty. Many visitors rely on aurora forecasts, which are based on satellite measurements of activity on the sun. These forecasts are useful for planning a trip, but guides caution that they are only truly reliable an hour or two in advance, because conditions in space can change quickly.</p><p><b>D.</b> Photography has changed how people experience the aurora as well. Modern cameras, including those in many phones, can gather light for several seconds, so they often record stronger colours than the human eye can detect on a faint night. Amateur photographers have even contributed to science. Several years ago, a group of sky watchers in Alberta began sharing images of an unusual purple ribbon of light. Researchers studied the pictures and concluded that it was a different phenomenon from the ordinary aurora. The group gave it a playful name: Steve. It usually appears as a narrow ribbon running from east to west and fades in less than an hour.</p>',
           questions: [
             { id: 'R3.1', q: 'Different gases produce different colours.', fixed: true, a: 'A' },
             { id: 'R3.2', q: 'Predictions of a display cannot be trusted far ahead of time.', fixed: true, a: 'C' },
             { id: 'R3.3', q: 'Pictures taken by non-professionals helped researchers identify something new.', fixed: true, a: 'D' },
             { id: 'R3.4', q: 'The middle of the night is generally the best time to look up.', fixed: true, a: 'B' },
             { id: 'R3.5', q: 'Some visitors can enjoy the lights without being exposed to the cold.', fixed: true, a: 'C' },
-            { id: 'R3.6', q: 'Tour operators usually refund guests when no lights appear.', fixed: true, a: 'E' },
+            { id: 'R3.6', q: 'Heated viewing cabins were first built for scientists studying the lights.', fixed: true, a: 'E' },
             { id: 'R3.7', q: 'What causes the lights originates far beyond Earth.', fixed: true, a: 'A' },
             { id: 'R3.8', q: 'Artificial lighting can make the aurora harder to see.', fixed: true, a: 'B' },
-            { id: 'R3.9', q: 'A photo may show the aurora as more colourful than it appears in person.', fixed: true, a: 'D' }
+            { id: 'R3.9', q: 'The purple ribbon nicknamed Steve can be seen only from Alberta.', fixed: true, a: 'E' }
           ]
         },
         {
@@ -439,14 +470,14 @@
       tasks: [
         {
           id: 'W1', title: 'Task 1: Writing an Email', minutes: 27, minWords: 150, maxWords: 200,
-          prompt: '<p>You recently flew home from a trip, but your suitcase did not arrive with you. The airline promised to deliver it within 24 hours. It has now been five days, and you still have not received it or any update.</p><p>Write an email to the airline\'s customer service department. In your email, do the following:</p><ul><li>Describe your flight and your suitcase.</li><li>Explain how the delay has affected you.</li><li>Say what you want the airline to do.</li></ul><p class="muted">Write 150 to 200 words.</p>'
+          prompt: '<p>You recently flew home from a trip, but your suitcase did not arrive with you. The airline promised to deliver it within 24 hours. It has now been five days, and you still have not received it or any update. Your only suit, which you need for a job interview in two days, is inside it. The airline\'s website says it will pay up to $50 a day for necessary items, but only if customers send receipts. You have been borrowing clothes from a friend, so you have no receipts at all.</p><p>Write an email to the airline\'s customer service department. In your email, do the following:</p><ul><li>Describe your flight and your suitcase, including details that would help the airline find it.</li><li>Explain how the delay has affected you and why you have no receipts to send.</li><li>Say what you want the airline to do, given that you will have to buy a new suit tomorrow if the suitcase has not arrived.</li></ul><p class="muted">Write 150 to 200 words.</p>'
         },
         {
           id: 'W2', title: 'Task 2: Responding to Survey Questions', minutes: 26, minWords: 150, maxWords: 200,
           prompt: '<p>Your local community centre has received funding for one major addition and is asking residents which one it should build. Choose the option you prefer. Explain the reasons for your choice.</p><p class="muted">Write 150 to 200 words.</p>',
           options: [
-            { key: 'A', label: 'Option A', text: 'Build a new indoor swimming pool, with lessons and open swim times for all ages.' },
-            { key: 'B', label: 'Option B', text: 'Build a new library wing, with study rooms, public computers and a children\'s reading area.' }
+            { key: 'A', label: 'Option A', text: 'Build a new indoor swimming pool, with lessons and open swim times for all ages. Running costs would raise the yearly membership fee by about $40.' },
+            { key: 'B', label: 'Option B', text: 'Build a new library wing, with study rooms, public computers and a children\'s reading area. The outdoor basketball court would be removed to make space for it.' }
           ]
         }
       ]
@@ -456,10 +487,10 @@
     speaking: {
       practice: { id: 'SP', title: 'Practice Task', prep: 30, speak: 60, prompt: 'Describe your favourite season of the year and what you like to do during it.' },
       tasks: [
-        { id: 'S1', title: 'Task 1: Giving Advice', prep: 30, speak: 90, prompt: 'A friend of yours wants to save money, but by the end of every month she has nothing left. Give her advice on how she can save money.' },
-        { id: 'S2', title: 'Task 2: Talking about a Personal Experience', prep: 30, speak: 60, prompt: 'Talk about a time when you felt proud of yourself. What did you do, and why did it make you feel proud?' },
+        { id: 'S1', title: 'Task 1: Giving Advice', prep: 30, speak: 90, prompt: 'A friend of yours wants to save $3,000 by next summer for a trip home to see her family, but by the end of every month she has nothing left. She already works full time and does not want to give up her weekly dinner with friends. Give her advice on how she can reach her goal.' },
+        { id: 'S2', title: 'Task 2: Talking about a Personal Experience', prep: 30, speak: 60, prompt: 'Talk about a time when you felt proud of yourself. What did you do, what was the hardest part, and why did it make you feel proud?' },
         { id: 'S3', title: 'Task 3: Describing a Scene', prep: 30, speak: 60, prompt: 'Describe some things that are happening in the picture below as well as you can. The person you are speaking to cannot see the picture.', image: MOVING },
-        { id: 'S4', title: 'Task 4: Making Predictions', prep: 30, speak: 60, prompt: 'In this picture, what do you think will most probably happen next?', image: MOVING },
+        { id: 'S4', title: 'Task 4: Making Predictions', prep: 30, speak: 60, prompt: 'In this picture, what do you think will most probably happen next? Think about the mover\'s stack of boxes, the couch, and the people and animals on the sidewalk.', image: MOVING },
         {
           id: 'S5', title: 'Task 5: Comparing and Persuading', type: 'compare', select: 60, prep: 60, speak: 60,
           prompt: 'Your family is planning a one-week summer vacation. Choose the option you prefer. In the next section, you will need to persuade a family member that your choice is better.',
@@ -471,8 +502,8 @@
           persuade: 'Your family member would rather have a staycation at home. Persuade them that your choice is better. Explain why.'
         },
         { id: 'S6', title: 'Task 6: Dealing with a Difficult Situation', prep: 60, speak: 60, prompt: '<p>Two months ago, you agreed to look after your neighbour\'s dog for a week while she is away. Yesterday, your closest friend asked you to be in her wedding party. The wedding is in another city during that same week.</p><p><b>Choose ONE:</b></p><p><b>Option A:</b> Talk to your neighbour. Explain why you can no longer look after her dog.</p><p><b>Option B:</b> Talk to your friend. Explain why you cannot be in her wedding party.</p>' },
-        { id: 'S7', title: 'Task 7: Expressing Opinions', prep: 30, speak: 90, prompt: 'Should high school students be required to wear school uniforms? Explain your reasons.' },
-        { id: 'S8', title: 'Task 8: Describing an Unusual Situation', prep: 30, speak: 60, prompt: 'You are in a sports store and see this unusual backpack. Call your friend, who is going on a long hiking trip next month. Describe the backpack and explain whether you think your friend should buy it.', image: BACKPACK }
+        { id: 'S7', title: 'Task 7: Expressing Opinions', prep: 30, speak: 90, prompt: 'The high school in your neighbourhood is thinking about making uniforms mandatory. Some parents say uniforms would reduce pressure about clothing and save families money over time. Many students say uniforms take away a way to express themselves, and a full set costs about $250 at the start. The school council has asked local residents for their views. Should high school students be required to wear uniforms? Explain your reasons.' },
+        { id: 'S8', title: 'Task 8: Describing an Unusual Situation', prep: 30, speak: 60, prompt: 'You are in a sports store and see this unusual backpack. Call your friend, who is going on a ten-day hiking trip next month on rough, rocky mountain trails. The backpack weighs 4 kilograms empty, about twice as much as an ordinary hiking pack. Describe the backpack and explain whether you think your friend should buy it.', image: BACKPACK }
       ]
     }
   });

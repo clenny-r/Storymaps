@@ -130,47 +130,51 @@
           segments: [
             {
               lines: [
-                ['SAM', 'Leah, do you have a minute? I just got a call from Harbour View Bistro.'],
-                ['LEAH', 'About Margaret\'s retirement lunch on Friday? Is everything okay?'],
-                ['SAM', 'Not really. A pipe burst in their kitchen last night, and they\'re closed for at least two weeks. They\'ve cancelled all of their bookings.'],
-                ['LEAH', 'Oh no. We invited thirty-five people, and Margaret\'s family is driving in from Truro.'],
-                ['SAM', 'I know. The manager offered to refund our deposit, but that doesn\'t solve the problem of where to hold it.'],
-                ['LEAH', 'Well, the refund helps. We put down two hundred dollars, right?'],
-                ['SAM', 'Two hundred and fifty, actually. It should be back on the company card in about five business days.'],
-                ['LEAH', 'Okay. Let me think. Friday is only three days away. Most places will already be fully booked for lunch.']
+                ['SAM', 'Leah, got a minute? Harbour View Bistro just called, and it isn\'t good news.'],
+                ['LEAH', 'About Margaret\'s retirement lunch on Friday? Please don\'t tell me they double-booked us again.'],
+                ['SAM', 'Worse, I\'m afraid. A pipe burst in their kitchen overnight, and they can\'t reopen for at least two weeks. Every booking is cancelled.'],
+                ['LEAH', 'Oh no. We invited thirty-five people, and her whole family is driving in from Truro for it.'],
+                ['SAM', 'I know. The manager\'s giving us back everything we paid, but that doesn\'t give us anywhere to hold it.'],
+                ['LEAH', 'Well, at least we\'re not out of pocket. We only put down the two hundred for the deposit, didn\'t we?'],
+                ['SAM', 'That\'s what I thought too, but then we ordered the cake through them as well, remember? That was another fifty on top. It should all be back on the company card within a week.'],
+                ['LEAH', 'Right, the cake. Okay. Honestly, with Friday this close, I\'d be amazed if anywhere decent still has a table for thirty-five at lunchtime.']
               ],
               questions: [
-                { id: 'L1.1', q: 'What problem are Sam and Leah dealing with?', o: ['The restaurant they booked has closed temporarily.', 'They invited more guests than the restaurant can seat.', 'Margaret has asked them to cancel the party.', 'The restaurant refused to return their deposit.'] },
-                { id: 'L1.2', q: 'How much was the deposit?', o: ['$250', '$200', '$35', '$500'] },
-                { id: 'L1.3', q: 'Why is Leah worried about finding a new place?', o: ['The lunch is only three days away.', 'Margaret\'s family cannot travel.', 'The refund will take several weeks.', 'Most restaurants are too expensive.'] }
+                { id: 'L1.1', q: 'What problem are Sam and Leah dealing with?', o: ['Their chosen venue can no longer host the event.', 'The restaurant has double-booked their table.', 'Margaret\'s family can no longer attend the lunch.', 'The restaurant will not give back their money.'] },
+                { id: 'L1.2', q: 'How much money will the restaurant return?', o: ['$250', '$200', '$50', '$300'] },
+                { id: 'L1.3', q: 'What does Leah suggest about other restaurants?', o: ['They will be hard to book at this late stage.', 'They will not take a group without a deposit.', 'They will be too far for Margaret\'s family.', 'They usually charge more for a group at lunch.'] }
               ]
             },
             {
               lines: [
-                ['SAM', 'What about having it here, in the large boardroom on the fourth floor?'],
-                ['LEAH', 'I thought about that, but it only seats twenty people comfortably. And it feels too much like a regular meeting. Margaret has been here twenty-two years. She deserves something nicer.'],
-                ['SAM', 'Fair enough. My brother-in-law runs a catering company. He could bring food almost anywhere, even on short notice.'],
-                ['LEAH', 'That\'s really useful. So we just need a room. What about the community hall on Spring Street? It\'s only a five-minute walk from here.'],
-                ['SAM', 'The one next to the library? I think they rent it out by the hour, but I don\'t know if it\'s free on Friday.'],
-                ['LEAH', 'I\'ll call them right after this. If it\'s available, your brother-in-law could handle the food, and we could decorate it ourselves on Thursday evening.']
+                ['SAM', 'What if we just held it here? The big boardroom on the fourth floor is free on Friday.'],
+                ['LEAH', 'I thought of that, but it only seats about twenty. Besides, Margaret has given this company twenty-two years. Sandwiches next to the projector isn\'t much of a send-off.'],
+                ['SAM', 'Fair enough. My brother-in-law runs a catering business. He can bring food pretty much anywhere, and he\'s used to last-minute jobs.'],
+                ['LEAH', 'Really? That changes things. Then we don\'t need a restaurant at all, just a decent room.'],
+                ['SAM', 'Exactly. What about the community hall on Spring Street? It\'s only a five-minute walk from here.'],
+                ['LEAH', 'The one beside the library? I think they rent it by the hour. I have no idea whether it\'s free on Friday, though.'],
+                ['LEAH', 'I\'ll phone them right after this. If it\'s available, your brother-in-law can look after the food, and we can decorate on Thursday after work.'],
+                ['SAM', 'Sounds good. I\'ll give him a heads-up tonight so he can keep Friday open, but I won\'t promise him anything until you\'ve heard back.']
               ],
               questions: [
-                { id: 'L1.4', q: 'Why does Leah reject the boardroom?', o: ['It is too small and feels too formal.', 'It is being used for client meetings on Friday afternoon.', 'It is too far from where Margaret\'s family will park.', 'Margaret has asked not to have it at the office.'] },
-                { id: 'L1.5', q: 'What can Sam\'s brother-in-law offer?', o: ['Catering on short notice', 'A larger room', 'A discount on decorations', 'Transportation for the guests'] },
-                { id: 'L1.6', q: 'What will Leah do next?', o: ['Call the community hall', 'Ask the library about renting its meeting room', 'Email the guests about the new location', 'Phone Sam\'s brother-in-law about the menu'] }
+                { id: 'L1.4', q: 'Why does Leah reject the boardroom?', o: ['It is too cramped and too ordinary for the occasion.', 'It has been reserved for a client meeting on Friday.', 'The caterer would have trouble reaching the fourth floor.', 'Margaret has asked not to celebrate at the office.'] },
+                { id: 'L1.5', q: 'What makes Sam\'s brother-in-law useful?', o: ['He can supply food wherever they hold the lunch.', 'He can lend them the dining room at his company.', 'He can cater only if they use the boardroom.', 'He can help them decorate on Thursday evening.'] },
+                { id: 'L1.6', q: 'What will Sam probably do tonight?', o: ['Warn his brother-in-law without making a firm booking', 'Call the community hall to check whether it is free', 'Confirm the catering order for Friday afternoon', 'Meet Leah at the hall to start decorating'] }
               ]
             },
             {
               lines: [
-                ['LEAH', 'Okay, I just spoke to the hall. They\'re free on Friday from eleven until three, and it\'s sixty dollars an hour.'],
-                ['SAM', 'That works. Lunch was supposed to start at noon anyway. Should we book all four hours?'],
-                ['LEAH', 'We\'ll need time to set up and clean up, so yes. That\'s two hundred and forty dollars, almost the same as the deposit we\'re getting back.'],
-                ['SAM', 'Perfect. I\'ll email everyone the new address this afternoon and ask people to reply if they need directions.'],
-                ['LEAH', 'Good. And let\'s not tell Margaret about any of this. She would only worry.']
+                ['LEAH', 'Okay, I just called the hall. They\'re free on Friday from eleven until three, and it\'s fifty-five dollars an hour. Oh, sorry, no, I\'ve got that backwards. Fifty-five is their rate for charities. For us it\'s sixty.'],
+                ['SAM', 'Still reasonable. Lunch starts at noon anyway, so should we just book it from twelve to two?'],
+                ['LEAH', 'I was tempted, but we\'ll need an hour beforehand to set up and an hour afterwards to clear everything out. So I\'d take the whole block they have.'],
+                ['SAM', 'Makes sense. That\'s still a bit less than the bistro is refunding. I\'ll email everyone the new address this afternoon.'],
+                ['LEAH', 'Perfect. Now, what about Margaret? She\'s bound to hear that the bistro closed.'],
+                ['SAM', 'Should we just tell her what happened? She might feel better knowing.'],
+                ['LEAH', 'I\'d rather not. She\'d only fret, and she\'d probably insist on coming in early to help us set up. If she asks, let\'s just say the venue changed and leave it at that.']
               ],
               questions: [
-                { id: 'L1.7', q: 'How much will they pay for the hall in total?', o: ['$240', '$60', '$180', '$250'] },
-                { id: 'L1.8', q: 'What does Leah suggest about Margaret?', o: ['She should not be told about the change.', 'She should be asked to help decorate the hall on Thursday.', 'She should be the one to choose the new location.', 'She should be told so she can inform her family.'] }
+                { id: 'L1.7', q: 'How much will the hall cost them altogether?', o: ['$240', '$220', '$120', '$250'] },
+                { id: 'L1.8', q: 'How does Leah want to handle Margaret?', o: ['Give her as little explanation as possible', 'Invite her to help prepare the hall', 'Tell her about the bistro before she hears it elsewhere', 'Ask Sam to send her the new address first'] }
               ]
             }
           ]
@@ -181,23 +185,25 @@
           cast: { CLERK: { name: 'Store clerk', g: 'm', skin: '#e3b28b', hair: '#555555', shirt: '#2e4053', style: 'short' }, NADIA: { name: 'Nadia', g: 'f', skin: '#c98c64', hair: '#120c08', shirt: '#b03a2e', style: 'long' } },
           segments: [{
             lines: [
-              ['CLERK', 'Good afternoon. How can I help you today?'],
-              ['NADIA', 'Hi. I bought this coat here about three weeks ago, and the zipper has already broken. I\'d like to return it.'],
-              ['CLERK', 'I\'m sorry to hear that. Do you have your receipt?'],
-              ['NADIA', 'I have it on my phone. They sent me an email receipt. Here it is.'],
-              ['CLERK', 'Thanks. Okay, our return period is thirty days, so you\'re still within it. Would you like a refund, or would you prefer to exchange it for the same coat?'],
-              ['NADIA', 'Honestly, I liked the coat, but I\'m worried the same thing will happen again. Do you have something similar with a stronger zipper?'],
-              ['CLERK', 'We have the Northline parka. It\'s a bit heavier, and it has a two-way metal zipper. It\'s forty dollars more, though.'],
-              ['NADIA', 'Hmm. It gets really cold where I live, so a heavier one might actually be better. Could I try it on?'],
-              ['CLERK', 'Of course. The fitting rooms are just behind you. If you decide to take it, I\'ll apply the refund from this coat, and you\'ll only pay the difference.'],
-              ['NADIA', 'Great. Thank you so much.']
+              ['CLERK', 'Good afternoon. What can I do for you today?'],
+              ['NADIA', 'Hi. I bought this coat here a few weeks ago, and the zipper has already come apart at the bottom. I can\'t even do it up anymore. I\'d like to return it, if that\'s possible.'],
+              ['CLERK', 'Oh, that\'s frustrating, I\'m sorry. Do you have your receipt with you?'],
+              ['NADIA', 'Well, that\'s the other problem. The paper one was in my jeans pocket and went through the wash. But my husband asked the store to email him a copy, and he forwarded it to me this morning. Here.'],
+              ['CLERK', 'That\'s perfect, thanks. Let me see. You bought it on the third, so you\'re well inside our thirty-day window. Would you like your money back, or a new one of the same coat? We\'ve got one left in your size.'],
+              ['NADIA', 'Honestly, I loved the style, and it\'s really warm. But if one zipper went this fast, I\'m not sure I\'d trust the next one. Is there anything similar that\'s built a bit tougher?'],
+              ['CLERK', 'The Northline parka might suit you. It\'s longer and heavier, and it has a two-way metal zipper, so it\'s far less likely to split. It\'s normally two hundred and ten, but there\'s thirty dollars off until Sunday.'],
+              ['NADIA', 'Heavier, hmm. I take the bus everywhere, so I wasn\'t really looking for anything bulky. Then again, I wait at a stop down by the harbour every morning, and the wind there is brutal.'],
+              ['CLERK', 'A lot of our customers who commute say the same thing. And the hood zips off, so on milder days you can lose some of the bulk.'],
+              ['NADIA', 'That helps. And how would the money work? I paid a hundred and fifty for this one.'],
+              ['CLERK', 'I\'d put that whole amount toward the parka, so you\'d just cover what\'s left. And if it doesn\'t fit, I\'ll simply refund you instead.'],
+              ['NADIA', 'Okay. The fitting rooms are just behind me? I\'ll see how it looks, but I have a feeling I\'m walking out of here in it.']
             ],
             questions: [
-              { id: 'L2.1', q: 'Why is Nadia at the store?', o: ['To return a coat with a broken zipper', 'To exchange a coat for a smaller size', 'To complain that a coat was cheaper online', 'To pick up a parka she ordered three weeks ago'] },
-              { id: 'L2.2', q: 'How does Nadia show proof of purchase?', o: ['With an email receipt on her phone', 'With the paper receipt from her purse', 'With the credit card she used to pay', 'With the tag that is still attached to the coat'] },
-              { id: 'L2.3', q: 'Why doesn\'t Nadia want the same coat again?', o: ['She is afraid the same problem will happen.', 'The store no longer sells that coat.', 'She would prefer a coat in a different colour.', 'She wants a coat that costs less than the original one.'] },
-              { id: 'L2.4', q: 'What is true about the Northline parka?', o: ['It costs forty dollars more.', 'It is lighter than her coat.', 'It has a plastic zipper.', 'It is on sale this week.'] },
-              { id: 'L2.5', q: 'What will Nadia most likely do next?', o: ['Try on the parka', 'Leave the store', 'Ask for a full refund', 'Speak to a manager'] }
+              { id: 'L2.1', q: 'Why is Nadia at the store?', o: ['To deal with a coat that has failed too soon', 'To buy a heavier coat for her husband', 'To exchange a coat that is the wrong size', 'To collect an order her husband placed online'] },
+              { id: 'L2.2', q: 'How does Nadia prove she bought the coat?', o: ['She shows a copy her husband passed on to her.', 'She shows the paper receipt from her jeans.', 'The clerk finds the payment on her bank card.', 'She points to the tag still attached to the coat.'] },
+              { id: 'L2.3', q: 'How does Nadia feel about her original coat?', o: ['She liked it but doubts a new one would last.', 'She found it too heavy to wear on the bus.', 'She regrets choosing such a long style.', 'She would take it again in a different size.'] },
+              { id: 'L2.4', q: 'How much will Nadia pay if she takes the parka?', o: ['$30', '$60', '$180', '$40'] },
+              { id: 'L2.5', q: 'Why does Nadia mention the harbour?', o: ['To explain why extra warmth may be worth the weight', 'To explain why she wants a lighter coat', 'To say where she was when the zipper broke', 'To complain that her bus is often late'] }
             ]
           }]
         },
@@ -207,26 +213,29 @@
           cast: { HOST: { name: 'Radio host', g: 'm', skin: '#8d5a3b', hair: '#1d1410', shirt: '#5d6d7e', style: 'bald' }, REBECCA: { name: 'Rebecca Ellis', g: 'f', skin: '#f0c9a6', hair: '#c49a42', shirt: '#7d3c98', style: 'long' } },
           segments: [{
             lines: [
-              ['HOST', 'Today I\'m speaking with Rebecca Ellis, who runs the new tool library at the Eastside Community Centre. Rebecca, what exactly is a tool library?'],
-              ['REBECCA', 'It works just like a book library, except people borrow tools. Things like drills, ladders, lawn mowers, even pressure washers. Most people only need a tool like that once or twice a year, so it doesn\'t make sense for everyone to buy one.'],
-              ['HOST', 'How did the idea start?'],
-              ['REBECCA', 'A group of neighbours noticed that the same kinds of items kept getting thrown out on garbage day, often in perfect condition. We started collecting them in someone\'s garage, and within a year we had over four hundred tools. That\'s when the community centre offered us space.'],
-              ['HOST', 'How does someone become a member?'],
-              ['REBECCA', 'You need to live in the city and show a piece of identification with your address. Membership is twenty-five dollars a year, but it\'s free for students and seniors.'],
-              ['HOST', 'And how long can people keep the tools?'],
-              ['REBECCA', 'One week for most items. Larger equipment, like the lawn mowers, is limited to three days, because there\'s a waiting list all summer.'],
-              ['HOST', 'What happens if something breaks?'],
-              ['REBECCA', 'That\'s actually common, and we don\'t charge for normal wear. We hold volunteer repair nights every second Thursday, where retired tradespeople fix the tools and also teach members how to do basic repairs themselves.'],
-              ['HOST', 'That sounds great. What\'s next for the library?'],
-              ['REBECCA', 'We\'d like to open a second location in the north end next spring, but we need more volunteers first.']
+              ['HOST', 'Joining me today is Rebecca Ellis, who coordinates the new tool library at the Eastside Community Centre. Rebecca, for anyone who hasn\'t come across one, what is a tool library?'],
+              ['REBECCA', 'It\'s really just a library, except instead of books, people borrow things like drills, ladders, lawn mowers, even pressure washers. Most households need that kind of tool once or twice a year, so it\'s wasteful for every family on the street to own one.'],
+              ['HOST', 'And how did it get started?'],
+              ['REBECCA', 'A few neighbours kept noticing perfectly good equipment left at the curb on garbage day. So they started rescuing it and storing it in one woman\'s garage.'],
+              ['REBECCA', 'Within a year there were over four hundred items in there, and her husband wanted somewhere to park his car again. That\'s when the community centre offered us a room.'],
+              ['HOST', 'I can imagine. So how does someone join?'],
+              ['REBECCA', 'You need to live in the city and bring ID that shows your address. It\'s twenty-five dollars a year, but anyone with a student card or anyone over sixty-five pays nothing.'],
+              ['REBECCA', 'Oh, and if you volunteer ten hours with us, we waive your fee for the following year.'],
+              ['HOST', 'How long can people keep what they borrow?'],
+              ['REBECCA', 'Most things go out for a week. We used to do the same with the lawn mowers, but last summer some people were waiting nearly a month to get one, so now they\'re limited to three days.'],
+              ['HOST', 'And when something breaks? I imagine that happens.'],
+              ['REBECCA', 'All the time, and we don\'t charge for normal wear and tear, only if something has obviously been misused. Every second Thursday we hold a repair night. Retired electricians and carpenters fix whatever\'s broken and show members how to do simple repairs on their own.'],
+              ['HOST', 'What\'s next for the library?'],
+              ['REBECCA', 'People in the north end keep asking for a branch of their own. The city has already offered us space in the old fire hall, rent-free, and we have enough donated tools to stock it.'],
+              ['REBECCA', 'What we don\'t have is people. Right now the same twelve volunteers cover every shift here, and they\'re stretched pretty thin. Honestly, even two hours a month from a few more listeners would make a real difference.']
             ],
             questions: [
-              { id: 'L3.1', q: 'What is the main purpose of the tool library?', o: ['To let people borrow tools they rarely need', 'To sell used tools at low prices to residents', 'To train new tradespeople in basic repairs', 'To repair broken tools for people in the community'] },
-              { id: 'L3.2', q: 'How did the tool collection begin?', o: ['Neighbours collected tools that people were throwing away.', 'A local hardware store donated its unsold equipment.', 'The community centre bought tools with a city grant.', 'Residents lent their own tools from their garages.'] },
-              { id: 'L3.3', q: 'Who can join the library for free?', o: ['Students and seniors', 'Volunteers', 'Everyone in their first year', 'People who donate a tool'] },
-              { id: 'L3.4', q: 'Why are lawn mowers limited to three days?', o: ['Many people want them in the summer.', 'They are expensive to repair.', 'They are only available on weekends.', 'They need to be cleaned after each use.'] },
-              { id: 'L3.5', q: 'What happens on repair nights?', o: ['Retired tradespeople fix tools and teach skills.', 'Members pay a small fee to have broken tools repaired.', 'Volunteers decide which broken tools should be thrown out.', 'Students learn a trade from licensed instructors.'] },
-              { id: 'L3.6', q: 'What does the library need before it can open a second location?', o: ['More volunteers', 'More money', 'Permission from the city', 'A larger garage'] }
+              { id: 'L3.1', q: 'What is the main purpose of the tool library?', o: ['To share equipment that people use only now and then', 'To sell second-hand tools cheaply to residents', 'To train people for jobs in the trades', 'To rescue tools before they are thrown away'] },
+              { id: 'L3.2', q: 'Why did the collection move to the community centre?', o: ['It had outgrown the place where it was stored.', 'The city would not allow it to run from a garage.', 'The centre offered to buy all of the tools.', 'Neighbours complained about the equipment at the curb.'] },
+              { id: 'L3.3', q: 'Who could join without paying a fee?', o: ['A resident who is sixty-eight years old', 'Anyone who donates a tool to the library', 'Any new member during their first year', 'A volunteer who has given five hours'] },
+              { id: 'L3.4', q: 'Why are lawn mowers now lent for less time?', o: ['Too many people were kept waiting for one.', 'They break down more often than other tools.', 'They are needed for the repair nights.', 'Members used to keep them for a month.'] },
+              { id: 'L3.5', q: 'When might a member have to pay for a repair?', o: ['When a tool has clearly been used carelessly', 'When a tool wears out from ordinary use', 'When the repair is done on a Thursday', 'When a volunteer fixes the tool at home'] },
+              { id: 'L3.6', q: 'What is holding back the north-end branch?', o: ['A shortage of people to run it', 'A lack of donated equipment to stock it', 'The cost of renting the old fire hall', 'Waiting for approval from the city'] }
             ]
           }]
         },
@@ -236,19 +245,22 @@
           cast: { NEWS: { name: 'News reader', g: 'f', skin: '#7a4b31', hair: '#120c08', shirt: '#1f618d', style: 'bun' } },
           segments: [{
             lines: [
-              ['NEWS', 'Commuters in the downtown core will see changes starting next Monday, as the city begins a six-month trial of bus-only lanes on Barrington Road.'],
-              ['NEWS', 'During peak hours, from seven to nine in the morning and from four to six in the evening, the right-hand lane in both directions will be reserved for buses, taxis and bicycles. Outside those hours, the lanes will return to regular traffic and street parking.'],
-              ['NEWS', 'City transit director Alan Brooks says buses on the route currently run an average of eleven minutes late during rush hour. He expects the dedicated lanes to cut those delays by more than half.'],
-              ['NEWS', 'Drivers caught using the lanes during restricted hours will receive a warning for the first two weeks. After that, fines of one hundred and fifty dollars will apply.'],
-              ['NEWS', 'Not everyone is pleased. The Barrington Business Association says the loss of parking during the afternoon rush could hurt shops that depend on customers stopping on their way home. The association has asked the city to shorten the evening restriction by one hour.'],
-              ['NEWS', 'Councillors will review ridership numbers and business feedback at the end of the trial before deciding whether to make the lanes permanent.']
+              ['NEWS', 'Drivers and transit riders heading downtown will notice a change starting next Monday, when the city launches a six-month trial of bus-only lanes on Barrington Road.'],
+              ['NEWS', 'On weekdays from seven to nine in the morning and from four to six in the evening, the curb lane in both directions will be closed to private cars. Buses, taxis and cyclists will still be allowed to use it.'],
+              ['NEWS', 'Outside those hours, the lanes will go back to general traffic and street parking.'],
+              ['NEWS', 'Transit director Alan Brooks says buses on the route now run an average of eleven minutes behind schedule at rush hour.'],
+              ['NEWS', 'He says delays like these are the main reason people give for giving up on transit, and he expects the new lanes to cut that figure by more than half.'],
+              ['NEWS', 'For the first two weeks, drivers caught in the lanes during restricted hours will only get a warning. The city originally announced a one-hundred-dollar fine after that, but council raised the amount by fifty dollars at its meeting last week.'],
+              ['NEWS', 'Not everyone is pleased. The Barrington Business Association says losing parking during the afternoon rush could hurt shops that rely on commuters stopping on their way home.'],
+              ['NEWS', 'It has asked the city to end the evening restriction at five instead of six. Morning parking is less of a concern, the association says, since most stores on the street don\'t open until ten.'],
+              ['NEWS', 'Council will review ridership figures and feedback from local businesses when the trial wraps up in the spring, before deciding whether to make the lanes permanent.']
             ],
             questions: [
-              { id: 'L4.1', q: 'What is the news item mainly about?', o: ['A trial of bus-only lanes', 'A permanent change to downtown parking rules', 'A plan to close Barrington Road to traffic', 'An increase in fines for parking illegally'] },
-              { id: 'L4.2', q: 'Who can use the special lanes during peak hours?', o: ['Buses, taxis and bicycles', 'Only buses', 'Delivery trucks', 'Any car with two passengers'] },
-              { id: 'L4.3', q: 'According to Alan Brooks, what is the current problem?', o: ['Buses are about eleven minutes late at rush hour.', 'Buses are crowded because there are too few drivers.', 'Taxis and bicycles slow the buses down in the morning.', 'Buses take eleven minutes longer than cars on the route.'] },
-              { id: 'L4.4', q: 'What will happen during the first two weeks of the trial?', o: ['Drivers will only receive warnings.', 'Drivers who use the lanes will be fined $150.', 'The lanes will be open to all traffic at rush hour.', 'Street parking will be free during the evening rush.'] },
-              { id: 'L4.5', q: 'What does the business association want?', o: ['A shorter evening restriction', 'The cancellation of the six-month trial', 'More parking spaces for customers in the morning', 'Lower fines for drivers who use the bus lanes'] }
+              { id: 'L4.1', q: 'What is the news item mainly about?', o: ['A temporary test of lanes for certain vehicles', 'A permanent change to downtown parking rules', 'A plan to close Barrington Road to cars all day', 'An increase in fines for illegal parking downtown'] },
+              { id: 'L4.2', q: 'Who may NOT use the curb lane at peak hours?', o: ['A commuter driving her own car', 'A cyclist riding to work', 'A taxi carrying a passenger', 'A city bus on its regular route'] },
+              { id: 'L4.3', q: 'Why does Alan Brooks support the lanes?', o: ['He believes more reliable buses will keep riders on transit.', 'He wants fewer taxis on the road during rush hour.', 'He thinks riders are leaving mainly because of high fares.', 'He expects buses to run eleven minutes ahead of schedule.'] },
+              { id: 'L4.4', q: 'A driver caught in the lane in the third week of the trial would', o: ['be fined one hundred and fifty dollars.', 'receive only a warning.', 'be fined one hundred dollars.', 'be fined fifty dollars.'] },
+              { id: 'L4.5', q: 'What does the business association want?', o: ['Street parking to return an hour earlier in the evening', 'The morning restriction to begin at ten instead of seven', 'The trial to be cancelled before the spring', 'Lower fines for drivers during the first month'] }
             ]
           }]
         },
@@ -270,14 +282,14 @@
               ['HANNAH', 'About two thousand eight hundred, by my count. Let\'s keep that as a reserve until the fall, in case something comes up. I\'ll send the plan to head office tomorrow.']
             ],
             questions: [
-              { id: 'L5.1', q: 'What is the purpose of the meeting?', o: ['To decide how to spend a budget', 'To choose which staff will attend a training course', 'To review complaints about the new project software', 'To plan how to request more money from head office'] },
-              { id: 'L5.2', q: 'Why does Raj want to spend money on training?', o: ['Team members have trouble with the new software.', 'Head office has asked every team to take the course.', 'The free online videos are no longer available.', 'He believes the course will help him get promoted.'] },
-              { id: 'L5.3', q: 'What does Colette say about the online videos?', o: ['People do not take the time to watch them.', 'They do not explain the reporting features clearly.', 'They cost the company about eight hundred dollars each.', 'They are only available to people at head office.'] },
-              { id: 'L5.4', q: 'According to Raj, what do the videos not cover?', o: ['Reporting features', 'Basic features', 'Security settings', 'How to install the software'] },
-              { id: 'L5.5', q: 'Why does Colette want new furniture?', o: ['Several people have back pain.', 'The oldest chairs are broken and cannot be repaired.', 'Head office requires standing desks in every office.', 'Clients have complained about the look of the office.'] },
-              { id: 'L5.6', q: 'What is Hannah\'s attitude toward Colette\'s proposal?', o: ['She supports it because health comes first.', 'She thinks it costs too much and wants a cheaper quote.', 'She agrees only if the training is cancelled completely.', 'She prefers to spend the whole budget on training.'] },
-              { id: 'L5.7', q: 'What do they agree to do about training?', o: ['Send four people, who will then teach the others', 'Send all eight people, but later in the fall', 'Replace the course with the free online videos', 'Hire an outside trainer to teach the whole team at once'] },
-              { id: 'L5.8', q: 'What will happen to the remaining money?', o: ['It will be kept in reserve until the fall.', 'It will pay for four more people to take the course.', 'It will be returned to head office at the end of the month.', 'It will buy additional chairs and standing desks.'] }
+              { id: 'L5.1', q: 'What is the purpose of the meeting?', o: ['To agree on how to divide a yearly fund', 'To choose which staff will attend a training course', 'To review complaints about the new project software', 'To prepare a request for more money from head office'] },
+              { id: 'L5.2', q: 'How much will the agreed training cost?', o: ['$3,200', '$6,400', '$2,800', '$4,000'] },
+              { id: 'L5.3', q: 'What is Colette\'s view of the online videos?', o: ['They would help more if staff actually used them.', 'They are too basic for experienced staff.', 'They cost the company about eight hundred dollars each.', 'They are available only to people at head office.'] },
+              { id: 'L5.4', q: 'How does Raj respond to Colette?', o: ['He says the videos skip the area where the team wastes the most time.', 'He agrees the videos are enough for most of the team.', 'He says the videos cost more than the official course.', 'He says few people on the team can access the videos.'] },
+              { id: 'L5.5', q: 'Why does Colette raise the issue of furniture?', o: ['Several staff have recently reported physical discomfort.', 'The oldest chairs are broken and cannot be repaired.', 'Head office now requires standing desks in every office.', 'Clients have complained about the look of the office.'] },
+              { id: 'L5.6', q: 'What does Raj suggest about the chairs bought in the past?', o: ['They were not properly covered if something went wrong.', 'They cost more than four thousand dollars.', 'They were bought without Hannah\'s approval.', 'They came with standing desks that nobody used.'] },
+              { id: 'L5.7', q: 'Why does Raj think a smaller group may work better?', o: ['Colleagues can shape the lessons around the team\'s own work.', 'Four people can take the course at a group discount.', 'The official course accepts only four people at a time.', 'The rest of the team can learn from the free videos instead.'] },
+              { id: 'L5.8', q: 'What does Hannah decide about the money left over?', o: ['Hold it back for unexpected needs', 'Spend it on more chairs in the fall', 'Use it to train four more people', 'Return it to head office'] }
             ]
           }]
         },
@@ -287,20 +299,30 @@
           cast: { NARR: { name: 'Reporter', g: 'f', skin: '#d6a07a', hair: '#4a3020', shirt: '#943126', style: 'long' } },
           segments: [{
             lines: [
-              ['NARR', 'A growing number of elementary schools across Canada are reducing or even eliminating homework, and the change has sparked strong opinions on both sides.'],
-              ['NARR', 'Supporters of the change point to research suggesting that homework in the early grades has little effect on test scores. Doctor Felix Marchand, a child psychologist, argues that young children learn just as much through play, sports and family time.'],
-              ['NARR', 'He says long evenings of worksheets often lead to stress and arguments at home, and can turn children against learning before they even reach high school. In his view, schools should focus on making class time more effective, rather than sending work home.'],
-              ['NARR', 'Others are less convinced. Aisha Morgan has taught grade five for fifteen years. She agrees that hours of worksheets are not helpful, but she believes ten to twenty minutes of daily reading or practice builds habits that students will need later.'],
-              ['NARR', 'She also worries that a no-homework policy hurts children whose parents cannot afford tutors, because families with more money will simply fill the gap with private lessons. Morgan suggests a middle path: short, optional assignments that families can complete together.'],
-              ['NARR', 'For now, most school boards are leaving the decision to individual principals, and many say they will survey parents before the next school year.']
+              ['NARR', 'A growing number of elementary schools across Canada are cutting back on homework, and some have dropped it altogether. The change has divided parents and teachers alike. Some school boards say no topic has filled more parent meetings this year.'],
+              ['NARR', 'Doctor Felix Marchand, a child psychologist in Winnipeg, supports the trend. He points to research suggesting that homework in the early grades makes little measurable difference to how children do on tests.'],
+              ['NARR', 'Young children, he says, learn just as much from play, sports and time with their families as they do from another page of exercises.'],
+              ['NARR', 'His second concern is what homework does to the home. Marchand says that long evenings of assignments often end in tears and shouting matches between tired parents and tired children.'],
+              ['NARR', 'Over time, he argues, children begin to connect learning with conflict, and some have lost interest in school well before they ever reach high school.'],
+              ['NARR', 'Marchand does accept that many parents like homework because it shows them what their child is studying. But he says a short weekly note from the teacher would do that job just as well, without taking over the family\'s evening.'],
+              ['NARR', 'Aisha Morgan, who has taught grade five for fifteen years, sees things differently. She agrees that piles of worksheets do more harm than good. Where she parts ways with Marchand is on the value of a small, steady routine.'],
+              ['NARR', 'In her experience, ten to twenty minutes a night of reading or math practice teaches children to sit down and focus on their own, which is exactly what they will need in junior high.'],
+              ['NARR', 'Her second argument is about fairness. When schools stop sending work home, Morgan says, families with money simply hire tutors or sign their children up for private lessons.'],
+              ['NARR', 'Children whose parents can\'t afford that fall further behind, so a no-homework policy could actually widen the very gap it was meant to close.'],
+              ['NARR', 'Marchand has an answer to that, too. If schools are worried about fairness, he says, they should run free after-school reading clubs instead of relying on parents to supervise work at the kitchen table.'],
+              ['NARR', 'Morgan also questions the research that Marchand relies on. Those studies, she points out, mostly measure test results. They say little about habits like organization and persistence, and those are the things she sees homework building.'],
+              ['NARR', 'As for the arguments at home, she believes they come from assignments that are too long or too hard, not from homework itself.'],
+              ['NARR', 'Her proposal is a compromise: short, optional tasks that a parent and child can do together, such as reading aloud or following a recipe, with no marks attached.'],
+              ['NARR', 'Marchand calls that a reasonable step. However, he doubts that optional will stay optional for long, especially in schools where parents compare notes at the school gate.'],
+              ['NARR', 'For now, most school boards are not setting a single rule. They are leaving the decision to each principal, and many principals say they plan to ask parents for their views before September.']
             ],
             questions: [
-              { id: 'L6.1', q: 'What is the report mainly about?', o: ['A debate over homework in elementary schools', 'Research showing homework improves test scores in early grades', 'A new provincial rule that bans homework in all schools', 'The rising cost of private tutoring for young children'] },
-              { id: 'L6.2', q: 'According to Dr. Marchand, how do young children learn?', o: ['Through play, sports and family time as well as school', 'Mainly through short daily reading assignments at home', 'Best through worksheets completed with their parents', 'Mostly in class, so homework should replace play time'] },
-              { id: 'L6.3', q: 'What negative effect of homework does Dr. Marchand mention?', o: ['Stress and arguments at home', 'Lower test scores in high school', 'Less time for teachers to plan their lessons', 'Higher costs for families who must buy materials'] },
-              { id: 'L6.4', q: 'What does Aisha Morgan believe?', o: ['Short daily practice builds useful habits.', 'Homework should be banned.', 'Students need two hours of homework a night.', 'Reading at home is not important.'] },
-              { id: 'L6.5', q: 'Why does Morgan worry about a no-homework policy?', o: ['It may disadvantage families who cannot pay for tutors.', 'It may cause families with more money to stop paying for tutors.', 'It may make children less interested in reading for fun.', 'It may lead principals to ignore what parents want.'] },
-              { id: 'L6.6', q: 'Who will decide on homework policy for now?', o: ['Individual principals', 'The provincial government', 'Parents only', 'The students'] }
+              { id: 'L6.1', q: 'What is the report mainly about?', o: ['A disagreement over homework for young children', 'Research showing homework raises test scores in the early grades', 'A new provincial rule that bans homework in all schools', 'The rising cost of private tutoring for young children'] },
+              { id: 'L6.2', q: 'Why does Dr. Marchand mention a weekly note from the teacher?', o: ['To show that parents could stay informed without homework', 'To suggest that homework should be given once a week', 'To explain how teachers report test results to families', 'To argue that teachers send home too much paperwork'] },
+              { id: 'L6.3', q: 'According to Dr. Marchand, what is the long-term risk of heavy homework?', o: ['Children may come to link learning with unhappiness.', 'Children may score lower once they reach high school.', 'Parents may stop helping with schoolwork altogether.', 'Teachers may have less time to plan their lessons.'] },
+              { id: 'L6.4', q: 'Which view do Dr. Marchand and Ms. Morgan share?', o: ['Large amounts of worksheets are not helpful.', 'A short nightly routine builds useful habits.', 'Homework should be left to parents to set.', 'Test results are the best measure of learning.'] },
+              { id: 'L6.5', q: 'How does Ms. Morgan respond to the research Dr. Marchand cites?', o: ['It ignores the skills she believes homework develops.', 'It proves that homework raises test scores.', 'It was carried out only on high school students.', 'It shows that tutoring works better than homework.'] },
+              { id: 'L6.6', q: 'What is Dr. Marchand\'s concern about Ms. Morgan\'s compromise?', o: ['Families may feel pressure to do the tasks anyway.', 'The tasks are too short to make any difference.', 'Tasks without marks will not be taken seriously.', 'Principals will refuse to allow optional tasks.'] }
             ]
           }]
         }
@@ -315,20 +337,20 @@
           instructions: 'Read the following message. Answer questions 1 to 6 by choosing the best option from each drop-down menu. Then read the reply and complete it by choosing the best option for each blank (7 to 11).',
           passage: '<h3>Message</h3><p>Hi Owen,</p><p>I hope things are good in Calgary. It has been almost two months since we moved to Halifax, and I finally have a quiet evening to write properly.</p><p>The move itself was harder than expected. The truck carrying our furniture was delayed by a snowstorm in New Brunswick, so we spent our first five nights sleeping on air mattresses in an empty apartment. The kids thought it was a big adventure. My back did not. The moving company did offer us a partial refund, which helped a little, but I would think twice before hiring them again.</p><p>Things have improved a lot since then. Michael started his new job at the hospital in our second week, and he loves his team, although the night shifts are tiring. I am still looking for work, but I have had two interviews with engineering firms downtown, and one of them has asked me back for a second meeting next Tuesday. The commute would be longer than I hoped, but the projects sound exciting. Wish me luck!</p><p>The city itself is wonderful. We are only a ten-minute walk from the waterfront, and every Saturday we go to the farmers\' market, where the kids have become addicted to the blueberry scones. The only thing I miss is the dry Calgary air. Here, the wind off the ocean goes straight through your coat, so I have learned to dress in layers.</p><p>Now for my real reason for writing: we would love for you and Priya to visit this summer. Our new place has a spare room, and July would be perfect because the kids will be at day camp during the week, so we can explore together. Just avoid the first weekend of the month, since Michael\'s parents are already staying with us then. Let me know what dates might work, and I will start planning a trip to Peggy\'s Cove.</p><p>Hugs,<br>Jenna</p>',
           questions: [
-            { id: 'R1.1', q: 'Jenna\'s family slept on air mattresses because', o: ['bad weather held up the delivery of their belongings.', 'the building had not finished cleaning their new unit.', 'they wanted to save money before buying new furniture.', 'the children begged to camp out in the empty rooms.'] },
-            { id: 'R1.2', q: 'The children probably saw their first few nights in Halifax as', o: ['an exciting experience.', 'an uncomfortable ordeal.', 'a frightening time.', 'a long and boring wait.'] },
+            { id: 'R1.1', q: 'Jenna\'s family slept on air mattresses because', o: ['a storm along the route slowed the truck with their things.', 'the movers lost part of their furniture in New Brunswick.', 'they sent the furniture back in return for a partial refund.', 'the spare room was being kept ready for their guests.'] },
+            { id: 'R1.2', q: 'Jenna\'s remark "My back did not" suggests that she', o: ['found sleeping on the floor painful.', 'hurt herself carrying the furniture.', 'was too busy to rest that week.', 'disliked the new apartment.'] },
             { id: 'R1.3', q: 'What does Jenna imply about the moving company?', o: ['She was not fully happy with its service.', 'She would gladly use it again for her next move.', 'It refused to give the family any money back.', 'It delivered the furniture earlier than promised.'] },
-            { id: 'R1.4', q: 'About her job search, Jenna says that', o: ['one employer wants to meet with her again.', 'she has accepted a position at a firm downtown.', 'she would prefer to find work at the hospital.', 'she will start a new job next Tuesday morning.'] },
-            { id: 'R1.5', q: 'Jenna now wears several layers of clothing because', o: ['the sea breeze in Halifax feels very cold.', 'the air in Halifax is drier than in Calgary.', 'the market is held outdoors every Saturday.', 'her back has been sore since the long move.'] },
+            { id: 'R1.4', q: 'About her job search, Jenna says that', o: ['one of the two firms wants to meet with her again.', 'both firms have invited her back for next Tuesday.', 'she has an interview at the hospital where Michael works.', 'she turned one firm down because of the long commute.'] },
+            { id: 'R1.5', q: 'Jenna now wears several layers of clothing because', o: ['the wind from the water cuts through a single coat.', 'Halifax gets more snowstorms than Calgary does.', 'the Saturday market opens before the day warms up.', 'the walk to the waterfront is longer than she expected.'] },
             { id: 'R1.6', q: 'The main purpose of Jenna\'s message is to', o: ['give an update and ask her friends to stay.', 'ask Owen for advice about finding engineering work.', 'complain about the company that moved her family.', 'describe a trip she recently took to Peggy\'s Cove.'] }
           ],
-          reply: '<h3>Reply</h3><p>Hi Jenna,</p><p>It was great to hear from you! I am sorry the first week was so rough. Five nights on an air mattress sounds like [[R1.7]], and I am glad the movers at least gave you some money back. Good luck on Tuesday. With your background, I am sure the [[R1.8]] will be impressed, and a longer trip to work is a small price to pay for interesting projects.</p><p>Priya and I would love to visit. She has [[R1.9]], so how about the 14th to the 21st? Because of [[R1.10]], we have stayed away from the first weekend. We will start looking for flights this weekend and send you our times once we book.</p><p>Please don\'t plan anything big. Honestly, we would be happy just walking by the water, wandering through the Saturday market and trying those famous blueberry scones. And thanks for the warning about the wind. I will make sure to pack [[R1.11]].</p><p>Give the kids a hug from us, and tell Michael we hope the night shifts get easier.</p><p>See you soon,<br>Owen</p>',
+          reply: '<h3>Reply</h3><p>Hi Jenna,</p><p>It was great to hear from you! I am sorry the first week was so rough. Five nights on an air mattress sounds like [[R1.7]], and I am glad the movers at least gave you some money back. Good luck on Tuesday. I am sure you will impress them, and [[R1.8]].</p><p>Priya and I would love to visit. She has [[R1.9]], so how about the 14th to the 21st? Because of [[R1.10]], we have stayed away from the first weekend. We will start looking for flights this weekend and send you our times once we book.</p><p>Please don\'t plan anything big. Honestly, we would be happy just walking by the water, wandering through the Saturday market and trying those famous blueberry scones. And thanks for the warning about the wind. I will make sure to pack [[R1.11]].</p><p>Give the kids a hug from us, and tell Michael we hope the night shifts get easier.</p><p>See you soon,<br>Owen</p>',
           blanks: [
             { id: 'R1.7', o: ['a tough way to begin', 'a fun treat for everyone', 'a clever way to save money', 'a relaxing first week'] },
-            { id: 'R1.8', o: ['interviewers', 'hospital staff', 'market vendors', 'camp leaders'] },
+            { id: 'R1.8', o: ['a longer commute is worth it for exciting work', 'the hospital will be lucky to have you', 'the firm is only ten minutes from the waterfront', 'Michael can drive you there after his night shift'] },
             { id: 'R1.9', o: ['time off in the middle of July', 'already booked a tour of Peggy\'s Cove', 'a job at a day camp in July', 'no holidays until late August'] },
             { id: 'R1.10', o: ['your in-laws\' visit', 'the kids\' day camp', 'Michael\'s night shifts', 'your interview on Tuesday'] },
-            { id: 'R1.11', o: ['clothes I can layer', 'only light summer shirts', 'an extra air mattress', 'a heavy snow shovel'] }
+            { id: 'R1.11', o: ['several pieces I can wear on top of each other', 'only light summer clothing', 'my heaviest winter parka', 'a wide hat for the sun'] }
           ]
         },
         {
@@ -340,41 +362,41 @@
             '<tr><td>Youth Stroke Clinic</td><td>10 to 14</td><td>Wednesday 6:00 to 7:00 p.m.</td><td>10</td><td>$120</td><td>$150</td></tr>' +
             '<tr><td>Adult Learn-to-Swim</td><td>15 and over</td><td>Monday 7:30 to 8:30 p.m.</td><td>8</td><td>$96</td><td>$120</td></tr>' +
             '<tr><td>Aquafit (drop-in)</td><td>16 and over</td><td>Mon, Wed, Fri 10:00 to 11:00 a.m.</td><td>Drop-in</td><td>$8 per class</td><td>$10 per class</td></tr>' +
-            '</tbody></table></div><ul class="notes"><li>Registration opens online on January 6 at 8:00 a.m.</li><li>Family discount: when two or more children from the same household register, take 10% off the lower-priced program.</li><li>Children under 8 must have an adult present on the pool deck.</li></ul>',
-          reply: '<h3>Email</h3><p>Hi Ben,</p><p>I have been looking at the swim programs at Lakeside. Since we live in the city, we pay the resident price. For Lucas, who is seven, the best option is [[R2.1]], and Maya, who just turned eleven, could do the stroke clinic on [[R2.2]]. Because Lucas is under eight, one of us will need to [[R2.3]] during his lessons. His classes start at 4:30, so I can take him straight there after I pick him up from school.</p><p>Maya\'s program would normally be $120, but with the family discount it comes to [[R2.4]]. I was also thinking of joining Aquafit myself, but the classes are on weekday mornings, when I am at work, so I will [[R2.5]].</p><p>Registration opens on January 6, so let\'s sign up first thing that morning before the spots fill up.</p><p>Carla</p>',
+            '</tbody></table></div><ul class="notes"><li>Registration opens online on January 6 at 8:00 a.m.</li><li>Family discount: when two or more children from the same household register, take 10% off the lower-priced program.</li><li>Programs begin the week of January 13. Children are placed by their age on the first day of the program.</li><li>Children under 8 must have an adult present on the pool deck.</li></ul>',
+          reply: '<h3>Email</h3><p>Hi Ben,</p><p>I have been looking at the swim programs at Lakeside. Since we live in the city, we pay the resident price. Lucas is five right now, but he turns six on January 10, so the program for him is [[R2.1]], and Maya, who just turned eleven, could do the stroke clinic on [[R2.2]]. Because Lucas will still be under eight, one of us will need to [[R2.3]] during his lessons. His classes start at 4:30, so I can take him straight there after I pick him up from school.</p><p>Maya\'s program would normally be $120, but with the family discount it comes to [[R2.4]]. I was also thinking of joining Aquafit myself, but the classes are on weekday mornings, when I am at work, so I will [[R2.5]].</p><p>Registration opens on January 6, so let\'s sign up first thing that morning before the spots fill up.</p><p>Carla</p>',
           blanks: [
-            { id: 'R2.1', o: ['Junior Swim', 'Splash Starters', 'the Youth Stroke Clinic', 'Adult Learn-to-Swim'] },
+            { id: 'R2.1', o: ['Junior Swim', 'Splash Starters', 'the Youth Stroke Clinic', 'Splash Starters until he turns six'] },
             { id: 'R2.2', o: ['Wednesday evenings', 'Saturday mornings', 'Tuesday afternoons', 'Monday nights'] },
             { id: 'R2.3', o: ['stay on the pool deck', 'swim in the water with him', 'sign up for Adult Learn-to-Swim', 'wait in the parking lot until he finishes'] },
             { id: 'R2.4', o: ['$108', '$120', '$96', '$150'] },
             { id: 'R2.5', o: ['skip it for now', 'take it on Saturdays', 'pay the non-resident price', 'join the adult lessons instead'] }
           ],
           questions: [
-            { id: 'R2.6', q: 'A non-resident would pay this much for Splash Starters:', o: ['$80', '$64', '$8', '$96'] },
-            { id: 'R2.7', q: 'A 15-year-old who cannot swim should register for', o: ['Adult Learn-to-Swim.', 'the Youth Stroke Clinic.', 'Junior Swim.', 'Splash Starters.'] },
-            { id: 'R2.8', q: 'A resident who goes to Aquafit three times a week for four weeks will pay', o: ['$96.', '$120.', '$24.', '$80.'] }
+            { id: 'R2.6', q: 'A non-resident family registers a 4-year-old for Splash Starters and an 8-year-old for Junior Swim. They pay', o: ['$248.', '$256.', '$238.40.', '$201.60.'] },
+            { id: 'R2.7', q: 'A parent asks whether her 8-year-old can attend Junior Swim while she waits in the car. Based on the notes, the answer is', o: ['yes, because the adult rule covers only children younger than 8.', 'no, because an adult must be present on the pool deck.', 'only if she registers for Adult Learn-to-Swim at the same time.', 'yes, but only if the family pays the non-resident price.'] },
+            { id: 'R2.8', q: 'Carla\'s 15-year-old niece cannot come to Aquafit with her because', o: ['the class is limited to people aged 16 and over.', 'non-residents may not take drop-in classes.', 'she would first need to finish Adult Learn-to-Swim.', 'the class is held only on Monday evenings.'] }
           ]
         },
         {
           id: 'R3', title: 'Part 3: Reading for Information', minutes: 10,
           instructions: 'Read the following article. Decide which paragraph, A to D, contains the information in each statement. If the information is not given in any paragraph, choose E.',
-          passage: '<h3>Bees in the City</h3><p><b>A.</b> Beekeeping is no longer limited to farms. In the past decade, hives have appeared on apartment balconies, restaurant rooftops and even office towers in cities such as Toronto, Vancouver and Montreal. Supporters say urban bees benefit from the wide variety of flowers in parks and gardens, which can provide a richer diet than large farms planted with a single crop. A few companies now rent hives to offices that want to show they care about the environment, sending a trained keeper to check on the colonies every two weeks.</p><p><b>B.</b> However, keeping bees in the city comes with rules. Most municipalities require hives to be registered and placed a minimum distance from property lines, often around three metres. Some cities also limit the number of hives per property, and many require a solid fence or hedge at least two metres high, which forces bees to fly upward, well above the heads of people walking by. New beekeepers are strongly encouraged to take a course before buying equipment, as poorly managed colonies are more likely to spread disease to neighbouring hives. Starting a single hive, including the bees, protective clothing and tools, typically costs several hundred dollars.</p><p><b>C.</b> Not everyone welcomes the trend. Some scientists warn that a sudden rise in honeybee hives may harm wild native bees, which compete for the same flowers. Unlike honeybees, which live in colonies of thousands, many native species live alone and nest in the ground, and they play an important role in pollinating local plants. In one Montreal study, researchers found that as the number of hives in the city grew, the variety of wild bees visiting urban gardens declined. They suggest that cities should plant more flowers, not simply add more hives.</p><p><b>D.</b> For people who want to help pollinators without the commitment of a hive, experts recommend simple steps: growing native plants, avoiding chemical pesticides and leaving small patches of bare soil for ground-nesting bees. Choosing plants that bloom at different times, from early spring to late fall, makes sure that food is available throughout the season. Several cities now offer free seed packets each spring to residents who want to turn part of their lawn into a pollinator garden, and some schools have planted similar gardens so that students can watch bees up close.</p>',
+          passage: '<h3>Bees in the City</h3><p><b>A.</b> Beekeeping is no longer limited to farms. In the past decade, hives have appeared on apartment balconies, restaurant rooftops and even office towers in cities such as Toronto, Vancouver and Montreal. Supporters say urban bees benefit from the wide variety of flowers in parks and gardens, which can provide a richer diet than large farms planted with a single crop. A few companies now rent hives to offices that want to show they care about the environment, sending a trained keeper to check on the colonies every two weeks. Honey from city hives is often sold at farmers\' markets, and some keepers claim its flavour changes from one neighbourhood to the next.</p><p><b>B.</b> However, keeping bees in the city comes with rules. Most municipalities require hives to be registered, and an inspector may visit if a neighbour files a complaint. Hives must also be placed a minimum distance from property lines, often around three metres. Some cities also limit the number of hives per property, and many require a solid fence or hedge at least two metres high, which forces bees to fly upward, well above the heads of people walking by. New beekeepers are strongly encouraged to take a course before buying equipment, as poorly managed colonies are more likely to spread disease to neighbouring hives. Starting a single hive, including the bees, protective clothing and tools, typically costs several hundred dollars.</p><p><b>C.</b> Not everyone welcomes the trend. Some scientists warn that a sudden rise in honeybee hives may harm wild native bees, which compete for the same flowers. Unlike honeybees, which live in colonies of thousands, many native species live alone and nest in the ground, and they play an important role in pollinating local plants. Many of them also become active in early spring, when few garden flowers are open. In one Montreal study, which counted bees at more than one hundred gardens over three summers, researchers found that as the number of hives in the city grew, the variety of wild bees visiting urban gardens declined. They suggest that cities should plant more flowers, not simply add more hives.</p><p><b>D.</b> For people who want to help pollinators without the commitment of a hive, experts recommend simple steps: growing native plants, avoiding chemical pesticides and leaving small patches of bare soil for ground-nesting bees. Even a few pots of herbs on a balcony can feed bees for weeks. Choosing plants that bloom at different times, from early spring to late fall, makes sure that food is available throughout the season. Several cities now offer free seed packets each spring to residents who want to turn part of their lawn into a pollinator garden, and some schools have planted similar gardens so that students can watch bees up close.</p>',
           questions: [
             { id: 'R3.1', q: 'Many wild species are solitary and make their homes underground.', fixed: true, a: 'C' },
             { id: 'R3.2', q: 'City plantings may offer bees a more varied food supply than some farmland.', fixed: true, a: 'A' },
-            { id: 'R3.3', q: 'Some local governments hand out free seeds.', fixed: true, a: 'D' },
+            { id: 'R3.3', q: 'Some municipalities give residents the materials to start a garden at no cost.', fixed: true, a: 'D' },
             { id: 'R3.4', q: 'A tall barrier can keep bees flying above pedestrians.', fixed: true, a: 'B' },
-            { id: 'R3.5', q: 'Selling honey can be a profitable side business for city beekeepers.', fixed: true, a: 'E' },
+            { id: 'R3.5', q: 'Cities began requiring registration after neighbours complained about being stung.', fixed: true, a: 'E' },
             { id: 'R3.6', q: 'Beginners are advised to get some training first.', fixed: true, a: 'B' },
-            { id: 'R3.7', q: 'Research in one city linked a growth in hives to fewer kinds of wild bees.', fixed: true, a: 'C' },
-            { id: 'R3.8', q: 'Selecting flowers that open in different seasons keeps bees fed for longer.', fixed: true, a: 'D' },
+            { id: 'R3.7', q: 'A study found that city honeybee hives passed diseases on to wild native bees.', fixed: true, a: 'E' },
+            { id: 'R3.8', q: 'A city may cap how many colonies can be kept on a single lot.', fixed: true, a: 'B' },
             { id: 'R3.9', q: 'Some businesses pay to have hives placed at their workplace and looked after.', fixed: true, a: 'A' }
           ]
         },
         {
           id: 'R4', title: 'Part 4: Reading for Viewpoints', minutes: 13,
           instructions: 'Read the following article. Answer questions 1 to 5 by choosing the best option. Then complete the reader\'s comment by choosing the best option for each blank (6 to 10).',
-          passage: '<h3>Is the Four-Day Week Ready for Canada?</h3><p>When a mid-sized Ontario software company switched to a four-day work week last year, its owners expected some loss of productivity. Instead, they found the opposite. Over twelve months, the company reports that projects were completed on time more often, sick days fell by almost a third, and the number of job applications doubled. Employees kept their full salaries while working thirty-two hours instead of forty.</p><p>Not every employee was convinced at first. Project lead Lauren Moreau admits she expected the change to backfire. "I assumed I would be doing five days of work in four and going home exhausted," she says. What changed her mind was the company\'s decision to cancel most internal meetings and agree on a short list of goals at the start of each week. "Now I spend Fridays with my children, and on Monday I actually know what matters most."</p><p>Supporters argue that results like these are not unusual. Economist Dr. Sarah Lindqvist points to trials in several countries where most participating companies chose to keep the shorter week after the trial ended. "When people have a real weekend plus one extra day, they come back rested and more focused," she says. "Meetings get shorter because everyone knows time is limited." She also believes the model could help employers compete for skilled workers at a time when many industries face shortages.</p><p>Critics, however, say these success stories mostly come from office jobs. Retail manager Paul Okafor notes that a store must stay open six or seven days a week regardless of staff schedules. "For us, a four-day week just means hiring more people or paying more overtime," he explains. "That cost gets passed on to customers, and many small shops simply cannot afford it." He adds that several of his part-time employees have told him they would like more hours, not fewer, because they are saving for school. Hospitals, schools and factories face similar challenges, since their work cannot simply be compressed. Others worry that cramming forty hours of work into four ten-hour days, rather than truly reducing hours, could increase fatigue.</p><p>Lindqvist acknowledges that the model is not a universal solution. She suggests that industries unable to close for a day could still experiment with shorter shifts or rotating schedules. One small manufacturer she advised now runs two overlapping crews, so the plant stays open five days a week while each worker is on the floor for only four. "The goal is not a specific number of days," she says. "It is finding out whether we are measuring work by hours spent instead of results achieved."</p>',
+          passage: '<h3>Is the Four-Day Week Ready for Canada?</h3><p>When a mid-sized Ontario software company switched to a four-day work week last year, its owners expected some loss of productivity. Instead, they found the opposite. Over twelve months, the company reports that projects were completed on time more often, sick days fell by almost a third, and the number of job applications doubled. Employees kept their full salaries while working thirty-two hours instead of forty.</p><p>Not every employee was convinced at first. Project lead Lauren Moreau admits she expected the change to backfire. "I assumed I would be doing five days of work in four and going home exhausted," she says. What changed her mind was the company\'s decision to cancel most internal meetings and agree on a short list of goals at the start of each week. "Now I spend Fridays with my children, and on Monday I actually know what matters most."</p><p>Supporters argue that results like these are not unusual. Economist Dr. Sarah Lindqvist points to trials in several countries where most participating companies chose to keep the shorter week after the trial ended. "When people have a real weekend plus one extra day, they come back rested and more focused," she says. "Meetings get shorter because everyone knows time is limited." She also believes the model could help employers compete for skilled workers at a time when many industries face shortages.</p><p>Critics, however, say these success stories mostly come from office jobs. Retail manager Paul Okafor notes that a store must stay open six or seven days a week regardless of staff schedules. "For us, a four-day week just means hiring more people or paying more overtime," he explains. "That cost gets passed on to customers, and many small shops simply cannot afford it." He adds that several of his part-time employees have told him they would like more hours, not fewer, because they are saving for school. Hospitals, schools and factories face similar challenges, since their work cannot simply be compressed. Others worry that cramming forty hours of work into four ten-hour days, rather than truly reducing hours, could increase fatigue.</p><p>Even some supporters urge caution. Human resources consultant Mei Tanaka has helped three firms try the model, and one dropped it within six months. "Clients expected answers on Fridays, and nobody had planned for that," she says. "A shorter week only works if customers are told in advance and someone is always on call."</p><p>Lindqvist acknowledges that the model is not a universal solution. She suggests that industries unable to close for a day could still experiment with shorter shifts or rotating schedules. One small manufacturer she advised now runs two overlapping crews, so the plant stays open five days a week while each worker is on the floor for only four. "The goal is not a specific number of days," she says. "It is finding out whether we are measuring work by hours spent instead of results achieved."</p>',
           questions: [
             { id: 'R4.1', q: 'What can be concluded about the trial at the Ontario software company?', o: ['Staff were ill less often, and more people wanted to work there.', 'Projects took longer, but employees said they were much happier.', 'Employees accepted lower salaries in exchange for a shorter week.', 'The owners decided to return to a five-day schedule after a year.'] },
             { id: 'R4.2', q: 'Why did Lauren Moreau change her opinion of the shorter week?', o: ['Her employer cut back on meetings and set clear weekly priorities.', 'She found that she could finish five days of work in only four.', 'Her children started school and she needed Fridays to drive them.', 'The company agreed to pay her extra for working ten-hour days.'] },
@@ -384,10 +406,10 @@
           ],
           reply: '<h3>Reader comment</h3><p>I work as a nurse, so I read this article with mixed feelings. Like Mr. Okafor, I do not see how my workplace could [[R4.6]]. Patients need care around the clock, and our unit is already short of staff. Still, I agree with Dr. Lindqvist that [[R4.7]]. After a string of long shifts, I know I am not at my best. That is why I like her idea of [[R4.8]] for workplaces that cannot shut down.</p><p>What worries me is the idea of squeezing forty hours into four days. In healthcare, [[R4.9]] can lead to serious mistakes. I also noticed that Ms. Moreau only came around once her company [[R4.10]]. Hospital managers should learn from that before they change anyone\'s schedule. Simply moving the same workload into fewer days will not help anyone, least of all our patients.</p>',
           blanks: [
-            { id: 'R4.6', o: ['close one extra day', 'hire fewer nurses each year', 'double its job applications', 'cut its meetings in half'] },
+            { id: 'R4.6', o: ['close one extra day', 'attract twice as many applicants', 'cancel most of its weekly meetings', 'run two overlapping crews'] },
             { id: 'R4.7', o: ['well-rested staff concentrate better', 'nurses should work four ten-hour shifts', 'hospitals should hire more part-time staff', 'shorter meetings save the most time'] },
             { id: 'R4.8', o: ['shifts that rotate', 'longer but fewer shifts', 'paying staff more overtime', 'closing the ward on weekends'] },
-            { id: 'R4.9', o: ['exhaustion', 'boredom', 'short meetings', 'extra vacation'] },
+            { id: 'R4.9', o: ['working while worn out', 'cancelling team meetings', 'rotating staff between units', 'setting new goals each week'] },
             { id: 'R4.10', o: ['rethought how the work was planned', 'gave every employee a large raise', 'hired extra staff for weekend shifts', 'switched everyone to ten-hour days'] }
           ]
         }
@@ -398,14 +420,14 @@
       tasks: [
         {
           id: 'W1', title: 'Task 1: Writing an Email', minutes: 27, minWords: 150, maxWords: 200,
-          prompt: '<p>You recently ordered a piece of furniture online. When it was delivered, it was damaged and some parts were missing.</p><p>Write an email to the company\'s customer service department. In your email, do the following:</p><ul><li>Describe what you ordered and when it arrived.</li><li>Explain what is wrong with the item.</li><li>Say what you would like the company to do.</li></ul><p class="muted">Write 150 to 200 words.</p>'
+          prompt: '<p>Three weeks ago, you ordered a $480 solid wood bookshelf online as a birthday present for your daughter. Her birthday is this Saturday. The bookshelf arrived yesterday with a cracked side panel, and the bag of screws was missing. The company\'s website says damaged items can only be returned in their original box, but you have already put the box out for recycling.</p><p>Write an email to the company\'s customer service department. In your email, do the following:</p><ul><li>Describe what you ordered and what was wrong when it arrived.</li><li>Explain why you can no longer return it in the original box.</li><li>Say what you would like the company to do, and by when.</li></ul><p class="muted">Write 150 to 200 words.</p>'
         },
         {
           id: 'W2', title: 'Task 2: Responding to Survey Questions', minutes: 26, minWords: 150, maxWords: 200,
-          prompt: '<p>Your city has an empty lot downtown and is asking residents how it should be used. Choose the option you prefer. Explain the reasons for your choice.</p><p class="muted">Write 150 to 200 words.</p>',
+          prompt: '<p>Your city owns an empty lot downtown and is asking residents how it should be used. Each option has costs as well as benefits. Choose the option you prefer. Explain the reasons for your choice.</p><p class="muted">Write 150 to 200 words.</p>',
           options: [
-            { key: 'A', label: 'Option A', text: 'Build a public park with a playground, trees and an open lawn for events.' },
-            { key: 'B', label: 'Option B', text: 'Build a parking garage with small shops and cafés on the ground floor.' }
+            { key: 'A', label: 'Option A', text: 'Build a public park with a playground, trees and an open lawn for events. The city would pay for it, and keeping it up would add about $40 a year to the average property tax bill.' },
+            { key: 'B', label: 'Option B', text: 'Let a private developer build a parking garage with small shops and cafés on the ground floor. It would cost taxpayers nothing and bring in rent, but construction would take about three years and add traffic to nearby streets.' }
           ]
         }
       ]
@@ -415,23 +437,23 @@
     speaking: {
       practice: { id: 'SP', title: 'Practice Task', prep: 30, speak: 60, prompt: 'Describe some things you enjoy doing with your friends.' },
       tasks: [
-        { id: 'S1', title: 'Task 1: Giving Advice', prep: 30, speak: 90, prompt: 'A friend of yours is moving to a new city where he does not know anyone. Give him advice on how to meet people and settle in.' },
-        { id: 'S2', title: 'Task 2: Talking about a Personal Experience', prep: 30, speak: 60, prompt: 'Talk about a time when you had to learn something new very quickly. What was it, and how did you manage?' },
+        { id: 'S1', title: 'Task 1: Giving Advice', prep: 30, speak: 90, prompt: 'A friend of yours has just moved to a new city for work, where he does not know anyone. He works long hours, including some weekends, and he is trying to save money for a car. Give him advice on how to meet people and settle in.' },
+        { id: 'S2', title: 'Task 2: Talking about a Personal Experience', prep: 30, speak: 60, prompt: 'Talk about a time when you had to learn something new very quickly, for example for a job, a move or a family situation. What did you have to learn, what made it difficult, and how did you manage?' },
         { id: 'S3', title: 'Task 3: Describing a Scene', prep: 30, speak: 60, prompt: 'Describe some things that are happening in the picture below as well as you can. The person you are speaking to cannot see the picture.', image: PARK },
         { id: 'S4', title: 'Task 4: Making Predictions', prep: 30, speak: 60, prompt: 'In this picture, what do you think will most probably happen next?', image: PARK },
         {
           id: 'S5', title: 'Task 5: Comparing and Persuading', type: 'compare', select: 60, prep: 60, speak: 60,
           prompt: 'Your family is planning a weekend activity. Choose the option you prefer. In the next section, you will need to persuade a family member that your choice is better.',
           choices: [
-            { key: 'A', title: 'Camping at Keji Lake', image: CAMP, facts: ['2 nights in a tent', 'Campsite: $90', '2-hour drive', 'Swimming, hiking, campfire'] },
-            { key: 'B', title: 'City hotel weekend', image: HOTEL, facts: ['2 nights in a hotel', 'Cost: $320', '1-hour drive', 'Museums, restaurants, indoor pool'] }
+            { key: 'A', title: 'Camping at Keji Lake', image: CAMP, facts: ['2 nights in a tent', 'Campsite: $90', '2-hour drive', 'Swimming, hiking, campfire', 'Rain possible on Saturday'] },
+            { key: 'B', title: 'City hotel weekend', image: HOTEL, facts: ['2 nights in a hotel', 'Cost: $320, plus $25 a night for parking', '1-hour drive', 'Museums, restaurants, indoor pool'] }
           ],
           third: { key: 'C', title: 'Indoor water park', image: WATERPARK, facts: ['1 day only', 'Tickets: $150 for the family', '30-minute drive', 'Water slides, wave pool, arcade'] },
           persuade: 'Your family member suggests the indoor water park instead. Persuade them that your choice is better. Explain why.'
         },
         { id: 'S6', title: 'Task 6: Dealing with a Difficult Situation', prep: 60, speak: 60, prompt: '<p>You promised to help your coworker move to a new apartment this Saturday. Today, your manager asked you to work on Saturday to meet an important client. Doing this could help you get a promotion.</p><p><b>Choose ONE:</b></p><p><b>Option A:</b> Talk to your coworker. Explain why you cannot help on Saturday.</p><p><b>Option B:</b> Talk to your manager. Explain why you cannot work on Saturday.</p>' },
-        { id: 'S7', title: 'Task 7: Expressing Opinions', prep: 30, speak: 90, prompt: 'Should employers allow all staff to work from home at least two days a week? Explain your reasons.' },
-        { id: 'S8', title: 'Task 8: Describing an Unusual Situation', prep: 30, speak: 60, prompt: 'You are at a garage sale and see this unusual bicycle. Call your friend who collects bicycles. Describe the bicycle and explain whether you think your friend should buy it.', image: ODDBIKE }
+        { id: 'S7', title: 'Task 7: Expressing Opinions', prep: 30, speak: 90, prompt: 'Your company is deciding whether to let all staff work from home two days a week. Some managers say it would save commuting time and help employees with families. Others worry that teamwork would suffer and that new employees would be harder to train. Your manager has asked for your opinion. Should the company allow it? Explain your reasons.' },
+        { id: 'S8', title: 'Task 8: Describing an Unusual Situation', prep: 30, speak: 60, prompt: 'You are at a garage sale and see this unusual bicycle for $75. Your friend collects bicycles, but he has only $100 to spend this month and very little space left in his garage. Call your friend. Describe the bicycle and explain whether you think he should buy it.', image: ODDBIKE }
       ]
     }
   });

@@ -54,6 +54,8 @@
     p += '<ellipse cx="160" cy="304" rx="34" ry="14" fill="#ffffff" stroke="#c8d3de"/>';
     p += '<g stroke="#ffffff" stroke-width="2"><line x1="70" y1="300" x2="56" y2="290"/><line x1="72" y1="304" x2="54" y2="302"/></g>';
     p += '<text x="118" y="284" font-size="9" text-anchor="middle" fill="#ffffff" font-family="sans-serif">STUCK</text>';
+    /* driver at the wheel */
+    p += '<circle cx="118" cy="262" r="5" fill="#f0c9a6"/><path d="M113 261 a5 5 0 0 1 10 0z" fill="#555555"/>';
     p += person(42, 312, { s: .9, shirt: '#8e44ad', skin: '#8d5a3b', hair: '#1d1410', arms: 'right' }) + toque(42, 312, .9, '#e67e22');
     /* bus arriving at the stop */
     p += '<rect x="425" y="236" width="190" height="62" rx="8" fill="#2e6fb5"/><rect x="425" y="282" width="190" height="8" fill="#f1c40f"/>';
@@ -63,6 +65,12 @@
     p += '<g stroke="#5f6b78" stroke-width="2" opacity=".7"><line x1="620" y1="250" x2="638" y2="250"/><line x1="620" y1="265" x2="636" y2="265"/><line x1="620" y1="280" x2="638" y2="280"/></g>';
     p += '<rect x="402" y="272" width="3" height="66" fill="#555555"/><rect x="390" y="262" width="28" height="16" rx="2" fill="#2e6fb5"/><text x="404" y="274" font-size="9" text-anchor="middle" fill="#ffffff" font-family="sans-serif">BUS</text>';
     p += person(378, 356, { s: .9, shirt: '#34495e', skin: '#e3b28b', hair: '#555555' }) + toque(378, 356, .9, '#c0392b');
+    /* commuter running for the bus and waving */
+    p += person(462, 392, { s: .9, shirt: '#16a085', skin: '#d6a07a', hair: '#2a1b12', arms: 'up' }) + toque(462, 392, .9, '#34495e');
+    /* woman walking a dog along the sidewalk */
+    p += person(120, 392, { s: .9, shirt: '#2980b9', skin: '#f2cfb0', hair: '#7a4a24', arms: 'right' }) + toque(120, 392, .9, '#e84393');
+    p += '<line x1="141" y1="360" x2="164" y2="378" stroke="#8a2d2d" stroke-width="2"/>';
+    p += '<g fill="#5b4636"><ellipse cx="172" cy="384" rx="12" ry="6"/><circle cx="166" cy="377" r="5"/><rect x="163" y="388" width="3" height="8"/><rect x="177" y="388" width="3" height="8"/></g>';
     /* children building a snowman */
     p += '<circle cx="250" cy="370" r="22" fill="#ffffff" stroke="#b9c6d3"/><circle cx="250" cy="337" r="16" fill="#ffffff" stroke="#b9c6d3"/><circle cx="250" cy="312" r="11" fill="#ffffff" stroke="#b9c6d3"/>';
     p += '<rect x="241" y="294" width="18" height="8" fill="#222222"/><rect x="237" y="301" width="26" height="3" fill="#222222"/><polygon points="250,312 262,315 250,316" fill="#e67e22"/><circle cx="246" cy="309" r="1.5" fill="#222222"/><circle cx="254" cy="309" r="1.5" fill="#222222"/>';
@@ -171,7 +179,7 @@
                 ['DANIEL', 'That\'s a thought. I just don\'t want to ask her to do it five days a week for nothing. That\'s a lot, even for a good neighbour.'],
                 ['AMARA', 'I agree. There\'s also the before-school program in the gym. It opens at seven thirty, and it\'s twelve dollars a day.'],
                 ['DANIEL', 'Twelve a day adds up fast, though. Every single day, that\'s sixty a week.'],
-                ['AMARA', 'True. Maybe some kind of mix? Let me give Marta a call tonight and just be upfront about what we need. If she says no, at least we\'ll know.']
+                ['AMARA', 'True. Maybe some kind of mix? Marta\'s always been kind to us, so maybe the simplest thing is to be upfront about what we need. If she says no, at least we\'ll know.']
               ],
               questions: [
                 { id: 'L1.4', q: 'How does Daniel feel about changing his work hours?', o: ['He doubts it could last for long.', 'He is sure his supervisor will agree.', 'He thinks it would cost the family too much.', 'He would rather start work earlier.'] },
@@ -213,14 +221,16 @@
               ['KWAME', 'You know what, that sounds great. Let\'s do that. And could you write "Happy Birthday, Ama" on it?'],
               ['BAKER', 'Of course. Oh, I should mention, we do bake with nuts in this kitchen, so we can\'t guarantee that any of our cakes are nut-free.'],
               ['KWAME', 'Ah, good to know. There\'s one boy in her class with a nut allergy. I\'ll give his parents a heads-up so they can send something else for him.'],
-              ['BAKER', 'That\'s probably wise. We take half the payment today as a deposit, and you can pick it up any time on Saturday after nine.']
+              ['BAKER', 'That\'s probably wise. We take half the payment today as a deposit, and you can pick it up any time on Saturday after nine.'],
+              ['KWAME', 'Great. The party doesn\'t start until two, so I\'ll probably swing by around eleven, after her soccer game.'],
+              ['BAKER', 'That works. Just keep it in the fridge until about an hour before you serve it. The filling is made with fresh strawberries, so it won\'t sit out on a warm counter the way a plain chocolate cake would.']
             ],
             questions: [
               { id: 'L2.1', q: 'Why does the baker recommend a half sheet cake?', o: ['A round cake would not feed everyone.', 'It is cheaper than two round cakes.', 'It is easier to put a picture on.', 'The round cakes need five days\' notice.'] },
               { id: 'L2.2', q: 'Why can\'t the bakery make a sculpted unicorn?', o: ['The order is too close to the party.', 'The decorator is away until Saturday.', 'It would not fit on a half sheet cake.', 'It costs more than Kwame wants to pay.'] },
-              { id: 'L2.3', q: 'What does the baker suggest about the printed picture?', o: ['Children often prefer it.', 'It takes most of a day to make.', 'It is free with a half sheet.', 'It should be ordered in advance.'] },
-              { id: 'L2.4', q: 'What will the cake cost in total?', o: ['$73', '$65', '$81', '$36.50'] },
-              { id: 'L2.5', q: 'What will Kwame probably do because of the nut warning?', o: ['Contact a classmate\'s family', 'Order a second nut-free cake', 'Look for a different bakery', 'Ask for a cake with no filling'] }
+              { id: 'L2.3', q: 'What does the baker suggest about the printed picture?', o: ['Young guests often like it better than the sculpted kind.', 'It takes the decorator most of a day.', 'It comes free with a half sheet cake.', 'It needs five days\' notice as well.'] },
+              { id: 'L2.4', q: 'How much will Kwame pay today?', o: ['$36.50', '$32.50', '$73', '$65'] },
+              { id: 'L2.5', q: 'What will Kwame probably do because of the nut warning?', o: ['Warn the parents of one guest', 'Order a second cake without nuts', 'Ask for a cake with no filling', 'Keep the cake in the fridge'] }
             ]
           }]
         },
@@ -242,6 +252,8 @@
               ['LUCIA', 'Honestly, cash goes the furthest. We buy directly from wholesalers, so every dollar lets us buy about three dollars\' worth of food. If people would rather give food, we\'re always short on protein: peanut butter, canned fish, beans. We get plenty of pasta.'],
               ['HOST', 'And volunteers?'],
               ['LUCIA', 'Weekday sorting shifts fill up fast, which is wonderful. Where we struggle is Saturday mornings. We need people with their own vehicles to collect donations from local grocery stores. A few more drivers would make a huge difference.'],
+              ['HOST', 'Is that a big commitment?'],
+              ['LUCIA', 'Not really. We ask drivers for two Saturdays a month, about three hours each. There\'s a short food safety course first, but it\'s online now, so most people finish it in an evening. It used to take a full day in person.'],
               ['HOST', 'Anything coming up that people should know about?'],
               ['LUCIA', 'Our Fill the Bus drive is on November second. We\'ll park a city bus outside the Portland Street library and try to fill it, seats and all.']
             ],
@@ -251,7 +263,7 @@
               { id: 'L3.3', q: 'According to Lucia, how do clients feel about the new system?', o: ['It allows them more dignity.', 'It takes them too much time.', 'It offers less food than before.', 'It is harder to understand.'] },
               { id: 'L3.4', q: 'Why does Lucia prefer donations of money?', o: ['The food bank can get food for less.', 'Money is easier to store than food.', 'Donated food is often out of date.', 'Cash pays for the grocery store layout.'] },
               { id: 'L3.5', q: 'What can be inferred about pasta?', o: ['The food bank does not need much more.', 'It is the most requested food item.', 'It is bought cheaply from wholesalers.', 'Clients rarely choose it from shelves.'] },
-              { id: 'L3.6', q: 'Which kind of help is hardest for the food bank to find?', o: ['Weekend drivers with cars', 'Weekday sorting volunteers', 'Bus drivers for the drive', 'Staff for the library event'] }
+              { id: 'L3.6', q: 'Which kind of help is hardest for the food bank to find?', o: ['People who can pick up store donations on weekends', 'Volunteers to sort food on weekday shifts', 'Drivers for the city bus on November second', 'Trainers to run the food safety course'] }
             ]
           }]
         },
@@ -262,17 +274,19 @@
           segments: [{
             lines: [
               ['NEWS', 'The province has banned all campfires and open burning, effective immediately, as wildfire season arrives several weeks earlier than usual.'],
-              ['NEWS', 'Officials say this has been the driest spring in more than fifty years. As of this morning, crews are fighting eleven wildfires across the province. Three are considered out of control, including one near Shelburne that has grown to roughly four hundred hectares.'],
+              ['NEWS', 'Officials say this has been the driest spring in more than fifty years. As of this morning, crews are fighting eleven wildfires across the province.'],
+              ['NEWS', 'Three are considered out of control, including one near Shelburne that has grown to roughly four hundred hectares. Two water bombers arrived from New Brunswick yesterday, and firefighters from Ontario are expected by the weekend.'],
               ['NEWS', 'The ban applies everywhere: provincial parks, private campgrounds and residential backyards. Fire pits and wood-burning chimineas are included. Propane camp stoves and barbecues, however, are still permitted, as long as they can be shut off with a valve.'],
               ['NEWS', 'Anyone caught breaking the ban could face a fine of up to ten thousand dollars. Officials stress that the vast majority of wildfires in the province are started by people, not by lightning.'],
+              ['NEWS', 'In the past week alone, officers have handed out fourteen tickets, most of them to homeowners burning brush in their own yards.'],
               ['NEWS', 'The ban will stay in place until at least August fifteenth, and will be reviewed weekly after that, depending on rainfall.'],
               ['NEWS', 'Residents are also being asked not to use gas-powered tools, such as chainsaws, in wooded areas between noon and six p.m., when hot, dry conditions make sparks most dangerous.'],
               ['NEWS', 'Campground owners say cancellations are already coming in. The province is reminding visitors that campgrounds remain open, and that camping is still allowed, provided people cook on approved stoves.']
             ],
             questions: [
               { id: 'L4.1', q: 'What is the main purpose of the news item?', o: ['To announce limits on fires across the province', 'To report that campgrounds will close this summer', 'To explain how firefighters control large fires', 'To warn residents near Shelburne to leave home'] },
-              { id: 'L4.2', q: 'What is true about the fire near Shelburne?', o: ['Crews have not yet contained it.', 'It was started by a lightning strike.', 'It is the only fire in the province.', 'It began at a private campground.'] },
-              { id: 'L4.3', q: 'Which of these would still be legal under the ban?', o: ['Grilling on a barbecue with a shut-off valve', 'A small campfire in a provincial campground', 'Burning wood in a backyard chiminea', 'A fire pit used only in the early morning'] },
+              { id: 'L4.2', q: 'What is true about the fire near Shelburne?', o: ['Crews have not yet brought it under control.', 'It was started by a lightning strike.', 'Firefighters from Ontario are already fighting it.', 'It began when a homeowner burned brush.'] },
+              { id: 'L4.3', q: 'Which of these would still be allowed under the new rules?', o: ['Cooking supper at a campsite on a stove that can be turned off', 'Grilling over a small wood fire in a provincial park','Burning dry brush in a backyard early in the morning', 'A small fire in a chiminea at a private campground'] },
               { id: 'L4.4', q: 'What does the report suggest about the end of the ban?', o: ['It could be later than August 15.', 'It will end once it rains heavily.', 'It is set for the end of this week.', 'It depends on the number of fines paid.'] },
               { id: 'L4.5', q: 'Why does the province remind people that campgrounds are open?', o: ['Some campers have been cancelling their trips.', 'Campground owners have asked for the ban to end.', 'Most fires were started outside of campgrounds.', 'Visitors must now register their camp stoves.'] }
             ]
@@ -300,12 +314,12 @@
             questions: [
               { id: 'L5.1', q: 'What is the main goal of the meeting?', o: ['To agree on where the team will work', 'To discuss hiring junior designers', 'To plan the team\'s training sessions', 'To negotiate a lower rent for March'] },
               { id: 'L5.2', q: 'Why does Tariq first prefer the Bayers Lake space?', o: ['It is bigger and less expensive.', 'It is close to most of their clients.', 'It is near the bus and ferry routes.', 'It already includes a training room.'] },
-              { id: 'L5.3', q: 'How much more per month would the downtown space cost?', o: ['$900', '$180', '$4,900', '$5,800'] },
+              { id: 'L5.3', q: 'Including one monthly parking spot, how much more per month would the downtown space cost?', o: ['$1,080', '$900', '$720', '$1,260'] },
               { id: 'L5.4', q: 'What does Mei\'s survey suggest?', o: ['Free parking would help only a minority.', 'Most staff would prefer Bayers Lake.', 'Nine staff members want a training room.', 'Fourteen staff members drive to work.'] },
               { id: 'L5.5', q: 'How does Tariq react to the survey results?', o: ['He did not expect them.', 'He says they are wrong.', 'He asks for a new survey.', 'He finds them irrelevant.'] },
               { id: 'L5.6', q: 'Why does Olivia mention job candidates?', o: ['A suburban office could be harder for them to reach.', 'They have asked for a larger training room.', 'They expect the company to pay for parking.', 'Most of them have said they live near Bayers Lake.'] },
               { id: 'L5.7', q: 'How does Mei answer Tariq\'s concern about training?', o: ['She explains how an unused area could be converted.', 'She suggests holding all training sessions online.', 'She proposes renting a room in Bayers Lake.', 'She says the team rarely needs any training.'] },
-              { id: 'L5.8', q: 'What is Tariq\'s attitude at the end of the discussion?', o: ['He accepts the decision as reasonable.', 'He is still trying to change Olivia\'s mind.', 'He is upset that his idea was ignored.', 'He is unsure whether parking will be free.'] }
+              { id: 'L5.8', q: 'What is Tariq\'s attitude at the end of the discussion?', o: ['He accepts the outcome and may change how he gets to work.', 'He agrees only because two parking spots will be free.', 'He still hopes Olivia will reconsider Bayers Lake.', 'He plans to keep driving and pay for his own spot.'] }
             ]
           }]
         },
@@ -316,19 +330,31 @@
           segments: [{
             lines: [
               ['NARR', 'Should stores still be allowed to hand out single-use plastic bags? Several town councils in the region are debating a ban, and residents are sharply divided.'],
-              ['NARR', 'Marine biologist Doctor Naomi Clarke strongly supports a ban. She says plastic bags are among the most common items collected during beach clean-ups along the Atlantic coast. Over time, sunlight and waves break them into tiny fragments called microplastics, which are almost impossible to remove from the water once they are there.'],
-              ['NARR', 'Clarke also points to how brief a bag\'s useful life is. On average, she says, a plastic bag is used for about twelve minutes, yet it can stay in the environment for hundreds of years. In her view, a small change in shopping habits is a reasonable price to pay.'],
+              ['NARR', 'Marine biologist Doctor Naomi Clarke strongly supports a ban. She says plastic bags are among the most common items collected during beach clean-ups along the Atlantic coast.'],
+              ['NARR', 'Over time, sunlight and waves break them into tiny fragments called microplastics, which are almost impossible to remove from the water once they are there.'],
+              ['NARR', 'Clarke also points to how brief a bag\'s useful life is. On average, she says, a plastic bag is used for about twelve minutes, yet it can stay in the environment for hundreds of years.'],
+              ['NARR', 'In her view, a small change in shopping habits is a reasonable price to pay.'],
+              ['NARR', 'She adds that bans have already worked elsewhere. On one stretch of the South Shore, volunteers found roughly two thirds fewer bags within three years of a local ban.'],
+              ['NARR', 'Clarke admits the ban was not the only change there, since a school clean-up program began the same year, but she believes the ban did most of the work.'],
               ['NARR', 'Not everyone agrees. Victor Huang owns a small grocery store in a rural community. He says a paper bag costs him about ten cents, compared with two cents for a plastic one, and that difference adds up quickly for a business like his.'],
-              ['NARR', 'Huang also questions whether a ban actually helps the environment. Many of his customers, he says, reuse their shopping bags to line garbage cans or to pick up after their dogs. When the free bags disappear, people simply buy thicker plastic bags for those jobs. He adds that a cotton tote has to be used many times before it does less harm than plastic.'],
-              ['NARR', 'Instead of a ban, Huang would like to see a charge of around twenty-five cents per bag, which he believes would encourage people to bring their own without forcing anyone. Councils are expected to hold public meetings this spring before making a decision.']
+              ['NARR', 'Huang also questions whether a ban actually helps the environment. Many of his customers, he says, reuse their shopping bags to line garbage cans or to pick up after their dogs.'],
+              ['NARR', 'When the free bags disappear, people simply buy thicker plastic bags for those jobs. He adds that a cotton tote has to be used many times before it does less harm than plastic.'],
+              ['NARR', 'Clarke has heard that argument before. She accepts that many households give a grocery bag a second use, but says a second use only delays the moment it is thrown away.'],
+              ['NARR', 'As for totes, she agrees they only make sense if people keep using them, which is why she recommends sturdy bags that last for years, not a new tote every week.'],
+              ['NARR', 'Huang has a second concern that he feels councils tend to overlook. Many of his customers are seniors who shop once a week and buy a lot at a time.'],
+              ['NARR', 'If they forget their bags, a ban leaves them juggling groceries in the parking lot, and a few have told him they would rather drive forty minutes to a large store in town.'],
+              ['NARR', 'Still, Huang does not dismiss the environmental problem. He lives near the coast himself, and he says the bags he sees caught in fences after a storm bother him as much as anyone.'],
+              ['NARR', 'He simply believes the people who litter should be targeted, not every shopper.'],
+              ['NARR', 'Instead of a ban, Huang would like to see a charge of around twenty-five cents per bag, which he believes would encourage people to bring their own without forcing anyone.'],
+              ['NARR', 'Clarke calls that a reasonable first step, but doubts it would go far enough on its own. Councils are expected to hold public meetings this spring before making a decision.']
             ],
             questions: [
-              { id: 'L6.1', q: 'What does Dr. Clarke say happens to plastic bags in the ocean?', o: ['They break down into pieces that are hard to remove.', 'They sink quickly and are collected by volunteers.', 'They dissolve completely within a few hundred years.', 'They are carried by waves back onto local beaches.'] },
-              { id: 'L6.2', q: 'What point is Clarke making with the figure of twelve minutes?', o: ['Bags are used briefly but last a very long time.', 'Most shoppers reuse their bags twelve times.', 'Bags break apart soon after they reach the water.', 'Shoppers spend little time choosing their bags.'] },
-              { id: 'L6.3', q: 'Why does Victor Huang object to switching to paper bags?', o: ['The extra cost is significant for a small store.', 'His customers find paper bags too weak to carry.', 'Paper bags are harder to recycle in rural areas.', 'Paper bags cost about two cents more each.'] },
-              { id: 'L6.4', q: 'According to Huang, what happens when free plastic bags are banned?', o: ['People buy other plastic bags instead.', 'People stop picking up after their dogs.', 'People switch to cotton bags right away.', 'People return their bags to the store.'] },
-              { id: 'L6.5', q: 'What does Huang believe a bag charge would do?', o: ['Change habits without leaving people no choice', 'Pay for public meetings on the bag issue', 'Cover the full cost of paper bags for stores', 'Make thicker plastic bags easier to buy'] },
-              { id: 'L6.6', q: 'Which statement best describes the two speakers?', o: ['They disagree about whether a ban would work.', 'They agree that plastic bags should be banned.', 'They both think the charge should be higher.', 'They disagree about how long bags are used.'] }
+              { id: 'L6.1', q: 'What point is Clarke making with the figure of twelve minutes?', o: ['A bag does its job briefly but survives for centuries.', 'Most shoppers reuse a plastic bag about twelve times.', 'Bags begin to break apart soon after reaching the water.', 'Shoppers spend very little time choosing their bags.'] },
+              { id: 'L6.2', q: 'What does Clarke admit about the South Shore results?', o: ['Another effort may also have reduced the number of bags.', 'The number of bags found on the beach did not really change.', 'Volunteers stopped counting the bags after three years.', 'The local ban was cancelled after a school program began.'] },
+              { id: 'L6.3', q: 'Why does Victor Huang object to switching to paper bags?', o: ['The extra cost is significant for a store of his size.', 'His customers find paper bags too weak for heavy items.', 'Paper bags are harder to recycle in rural areas.', 'Paper bags cost him about two cents more each.'] },
+              { id: 'L6.4', q: 'How does Clarke respond to the point that people reuse their bags at home?', o: ['A second use only postpones the bag being thrown out.', 'Very few households actually reuse their grocery bags.', 'Cotton totes should be used for those jobs instead.', 'Thicker plastic bags are less harmful than thin ones.'] },
+              { id: 'L6.5', q: 'Why does Huang mention his older customers?', o: ['A ban could push some of them to shop elsewhere.', 'They are the most likely to litter after shopping.', 'They could not afford a twenty-five cent charge.', 'They usually prefer paper bags to plastic ones.'] },
+              { id: 'L6.6', q: 'On which point do Clarke and Huang agree?', o: ['Bag litter along the coast is a genuine problem.', 'A bag charge would be enough on its own.', 'Reusing bags as liners largely solves the issue.', 'Rural stores should be exempt from any ban.'] }
             ]
           }]
         }
@@ -341,7 +367,7 @@
         {
           id: 'R1', title: 'Part 1: Reading Correspondence', minutes: 11,
           instructions: 'Read the following message. Answer questions 1 to 6 by choosing the best option from each drop-down menu. Then read the reply and complete it by choosing the best option for each blank (7 to 11).',
-          passage: '<h3>Message</h3><p>Hi Gabriel,</p><p>I hope you are well and that the warehouse is surviving without me! It has been almost two years since I left Atlantic Freight because my husband\'s job took our family to Ottawa, and I still miss our Friday coffee runs.</p><p>I am writing to ask a favour. After staying home with our son for the past year and a half, I am finally ready to go back to work. Now that he has a spot at a daycare near our apartment, I have applied for a project coordinator position with Capital Homes Co-operative, a non-profit that builds affordable housing. My first interview was on Monday, and I think it went well, although the panel seemed a little worried about the gap in my résumé. They have asked for two references by the end of the week.</p><p>Normally I would ask Mr. Doucet, since he was my supervisor, but he retired last spring and now spends most of the year sailing. I have emailed him twice without a reply, so I do not think I can count on him in time. My other reference will be the instructor from the evening course in project management that I finished in March, but she only knows my schoolwork. You and I worked side by side for three years, and you know my work better than anyone else there.</p><p>If you agree, the hiring manager, Ms. Okonkwo, will phone you on Wednesday or Thursday between 9:00 a.m. and 4:00 p.m. Eastern time. Since Moncton is an hour ahead, that would be 10:00 to 5:00 for you. If a call is difficult, she said she would be just as happy with a short email.</p><p>The job involves a lot of scheduling and working with outside contractors, so it would really help if you could mention the inventory software project. I know you remember how stressful that spring was, but we trained all thirty staff in six weeks and still finished under budget.</p><p>Please do not feel any pressure. If you are too busy, I completely understand. Either way, we are coming to Moncton in December to visit my parents, and I would love to catch up over lunch.</p><p>Thank you so much,<br>Fatima</p>',
+          passage: '<h3>Message</h3><p>Hi Gabriel,</p><p>I hope you are well and that the warehouse is surviving without me! It has been almost two years since I left Atlantic Freight because my husband\'s job took our family to Ottawa, and I still miss our Friday coffee runs.</p><p>I am writing to ask a favour. After staying home with our son for the past year and a half, I am finally ready to go back to work. Now that he has a spot at a daycare near our apartment, I have applied for a project coordinator position with Capital Homes Co-operative, a non-profit that builds affordable housing. My first interview was on Monday, and I think it went well, although the panel seemed a little worried about the gap in my résumé. They have asked for two references by the end of the week.</p><p>Normally I would ask Mr. Doucet, since he was my supervisor, but he retired last spring and now spends most of the year sailing. I have emailed him twice without a reply, so I do not think I can count on him in time. My other reference will be the instructor from the evening course in project management that I finished in March, but she only knows my schoolwork. You and I worked side by side for three years, and you know my work better than anyone else there.</p><p>If you agree, the hiring manager, Ms. Okonkwo, will phone you on Wednesday or Thursday between 9:00 a.m. and 4:00 p.m. Eastern time. Remember that Moncton is an hour ahead of us. If a call is difficult, she said she would be just as happy with a short email.</p><p>The job involves a lot of scheduling and working with outside contractors, so it would really help if you could mention the inventory software project. I know you remember how stressful that spring was, but we trained all thirty staff in six weeks and still finished under budget.</p><p>Please do not feel any pressure. If you are too busy, I completely understand. Either way, we are coming to Moncton in December to visit my parents, and I would love to catch up over lunch.</p><p>Thank you so much,<br>Fatima</p>',
           questions: [
             { id: 'R1.1', q: 'Fatima left Atlantic Freight because', o: ['her partner\'s work required a move.', 'she wished to stay home with her son.', 'the software project was too stressful.', 'a housing non-profit had hired her.'] },
             { id: 'R1.2', q: 'Fatima suggests that she is looking for work now because', o: ['her child has a place in childcare.', 'her evening course has just ended.', 'Mr. Doucet retired last spring.', 'the co-operative contacted her first.'] },
@@ -372,30 +398,30 @@
           blanks: [
             { id: 'R2.1', o: ['$4.00', '$3.00', '$2.50', '$2.00'] },
             { id: 'R2.2', o: ['$12.00', '$9.00', '$12.35', '$9.35'] },
-            { id: 'R2.3', o: ['Dad\'s accessible permit', 'the summer weekend rate', 'the free evening parking', 'the BayPark app session'] },
+            { id: 'R2.3', o: ['the accessible permit Dad was given', 'the summer weekend rate', 'the free evening parking', 'the BayPark app session'] },
             { id: 'R2.4', o: ['$12.50', '$10.00', '$7.50', '$13.50'] },
             { id: 'R2.5', o: ['for one hour', 'for two hours', 'the daytime rate', 'the app fee only'] }
           ],
           questions: [
-            { id: 'R2.6', q: 'A driver who parks in Zone A on a Tuesday from 1:00 to 3:00 p.m. and pays with the app will pay', o: ['$8.35.', '$8.00.', '$4.35.', '$5.35.'] },
+            { id: 'R2.6', q: 'Which of these drivers would break the maximum-stay rule?', o: ['One parked in Zone A from noon to 3:00 p.m. on a Thursday', 'One parked in Zone C from 10:00 a.m. to 2:00 p.m. on a Monday', 'One parked in Zone A from 9:00 p.m. to midnight on a Friday', 'One with an accessible permit parked in Zone B for four hours on a Sunday'] },
             { id: 'R2.7', q: 'A commuter who must park from 8:00 a.m. to 5:00 p.m. every weekday would most likely use', o: ['Zone D.', 'Zone C.', 'Zone B.', 'Zone A.'] },
-            { id: 'R2.8', q: 'Parking in Zone B for two hours on a Sunday afternoon in October costs', o: ['$6.00.', '$8.00.', '$4.00.', '$5.00.'] }
+            { id: 'R2.8', q: 'According to the chart, Zone B is the only zone where', o: ['the weekend price depends on the time of year.', 'evening parking is cheaper than daytime parking.', 'the weekend rate is lower than the weekday rate.', 'drivers may stay for three hours or longer.'] }
           ]
         },
         {
           id: 'R3', title: 'Part 3: Reading for Information', minutes: 10,
           instructions: 'Read the following article. Decide which paragraph, A to D, contains the information in each statement. If the information is not given in any paragraph, choose E.',
-          passage: '<h3>Giving Time, Gaining More</h3><p><b>A.</b> Every year, millions of Canadians give their time to sports clubs, hospitals, food banks, festivals and animal shelters. Most say they began volunteering simply to help others or to support a cause they care about. Yet researchers are finding that volunteers themselves gain a surprising number of benefits. In interviews, many people report that they signed up for one reason and stayed for a completely different one, such as the friendships they formed or the confidence they gained along the way. Organizations, in turn, depend heavily on this help: many local charities could not run their programs without it.</p><p><b>B.</b> Some of the clearest benefits are related to health. Studies of older adults have linked regular volunteering with lower blood pressure and fewer symptoms of depression. One likely explanation is social contact: volunteering gets people out of the house and into conversation with others, which helps protect against loneliness. Researchers add a word of caution, however. The benefits seem to level off at around two to three hours a week, and people who take on far more than that may end up feeling worn out rather than refreshed.</p><p><b>C.</b> For young people and newcomers to Canada, volunteering can also be a bridge to paid work. It provides local work experience, a chance to practise workplace English or French, and supervisors who can later speak to a person\'s abilities. Employment counsellors recommend choosing roles that connect to a person\'s career goals. An accountant, for example, will gain more from helping a charity with its bookkeeping than from sorting donated clothing. Many hiring managers say they value volunteer experience as much as paid experience, as long as it is clearly described on a résumé.</p><p><b>D.</b> Experts suggest that beginners start small. Instead of committing to a weekly shift right away, new volunteers can try a one-day event, such as a park clean-up or a charity run, to discover what suits them. Most community centres keep lists of local organizations looking for help, and several websites match people with roles based on their skills and availability. Before agreeing to a position, volunteers should also ask whether training is provided and whether the organization covers expenses such as parking or bus fare. Finally, experts stress that there is nothing wrong with trying a role and moving on if it turns out not to be the right fit.</p>',
+          passage: '<h3>Giving Time, Gaining More</h3><p><b>A.</b> Every year, millions of Canadians give their time to sports clubs, hospitals, food banks, festivals and animal shelters. Most say they began volunteering simply to help others or to support a cause they care about. Yet researchers are finding that volunteers themselves gain a surprising number of benefits. In interviews, many people report that they signed up for one reason and stayed for a completely different one, such as the friendships they formed or the confidence they gained along the way. Surveys also suggest that people who volunteered with their parents as children are more likely to volunteer as adults. Organizations, in turn, depend heavily on this help: many local charities could not run their programs without it.</p><p><b>B.</b> Some of the clearest benefits are related to health. Studies of older adults have linked regular volunteering with lower blood pressure and fewer symptoms of depression. One likely explanation is social contact: volunteering gets people out of the house and into conversation with others, which helps protect against loneliness. Researchers add a word of caution, however. The benefits seem to level off at around two to three hours a week, and people who take on far more than that may end up feeling worn out rather than refreshed. A few studies have followed volunteers for many years, but researchers say more work is needed before firm conclusions can be drawn about long-term health.</p><p><b>C.</b> For young people and newcomers to Canada, volunteering can also be a bridge to paid work. It provides local work experience, a chance to practise workplace English or French, and supervisors who can later speak to a person\'s abilities. Employment counsellors recommend choosing roles that connect to a person\'s career goals. An accountant, for example, will gain more from helping a charity with its bookkeeping than from sorting donated clothing. Many hiring managers say they value volunteer experience as much as paid experience, as long as it is clearly described on a résumé. Some companies even give their staff a paid day off each year to volunteer.</p><p><b>D.</b> Experts suggest that beginners start small. Instead of committing to a weekly shift right away, new volunteers can try a one-day event, such as a park clean-up or a charity run, to discover what suits them. Most community centres keep lists of local organizations looking for help, and several websites match people with roles based on their skills and availability. Before agreeing to a position, volunteers should also ask whether training is provided and whether the organization covers expenses such as parking or bus fare. Finally, experts stress that there is nothing wrong with trying a role and moving on if it turns out not to be the right fit.</p>',
           questions: [
             { id: 'R3.1', q: 'Taking on too much volunteer work may leave people exhausted.', fixed: true, a: 'B' },
             { id: 'R3.2', q: 'People sometimes continue volunteering for reasons other than the ones that first motivated them.', fixed: true, a: 'A' },
             { id: 'R3.3', q: 'A single short commitment can help a person test what kind of role they enjoy.', fixed: true, a: 'D' },
             { id: 'R3.4', q: 'Volunteer work can lead to recommendations from people who have seen a person\'s work.', fixed: true, a: 'C' },
-            { id: 'R3.5', q: 'Many organizations provide free meals to volunteers during their shifts.', fixed: true, a: 'E' },
+            { id: 'R3.5', q: 'Older adults who volunteer regularly tend to live longer than those who do not.', fixed: true, a: 'E' },
             { id: 'R3.6', q: 'Spending time with others may partly explain why volunteering is good for health.', fixed: true, a: 'B' },
             { id: 'R3.7', q: 'Volunteers benefit most from tasks connected to the work they hope to do.', fixed: true, a: 'C' },
             { id: 'R3.8', q: 'It is worth asking whether an organization will pay back travel costs.', fixed: true, a: 'D' },
-            { id: 'R3.9', q: 'Volunteers usually find their first role through their employer.', fixed: true, a: 'E' }
+            { id: 'R3.9', q: 'Online services can pair people with roles that fit their abilities and schedule.', fixed: true, a: 'D' }
           ]
         },
         {
@@ -412,7 +438,7 @@
           reply: '<h3>Reader comment</h3><p>As a mother of two who went back to university at thirty-five, I can relate to Mr. Watanabe. We live well outside the city, so without online courses I would have to [[R4.6]] twice a week, which is simply not possible with my children\'s schedules. Being able to [[R4.7]] the recordings late at night, after the kids are asleep, has saved me more than once.</p><p>That said, Dr. Mackay makes a fair point about first-year students. My nephew took all his first-year courses online, and with nobody checking on him, he had [[R4.8]] by November. As a biology student, I also agree that [[R4.9]] cannot really be replaced by a video. And Ms. Bellerose is right about money. I pay exactly the same fees as my neighbour, who attends every class in person, so I would like to see [[R4.10]]. Still, in the end, the best approach is the one Watanabe describes: let students choose for themselves.</p>',
           blanks: [
             { id: 'R4.6', o: ['spend hours on the road to campus', 'move into a student residence', 'give up my full-time job', 'hire a private tutor at home'] },
-            { id: 'R4.7', o: ['stop and replay', 'download and sell', 'record and share', 'skip and delete'] },
+            { id: 'R4.7', o: ['stop and replay', 'join small groups to discuss', 'meet weekly deadlines for', 'attend live office hours for'] },
             { id: 'R4.8', o: ['lost track of his coursework', 'formed a hallway study group', 'found a research assistant job', 'moved out of residence for good'] },
             { id: 'R4.9', o: ['hands-on experiments', 'a recorded lecture series', 'online discussion groups', 'a weekly deadline schedule'] },
             { id: 'R4.10', o: ['some savings go to extra support', 'my fees rise to pay for office hours', 'more courses taught in lecture halls', 'empty classrooms rented to the public'] }
@@ -426,14 +452,14 @@
       tasks: [
         {
           id: 'W1', title: 'Task 1: Writing an Email', minutes: 27, minWords: 150, maxWords: 200,
-          prompt: '<p>You hired a contractor to renovate your kitchen. The work was supposed to be finished three weeks ago, but several jobs are still incomplete, and the contractor has stopped returning your calls.</p><p>Write an email to the contractor. In your email, do the following:</p><ul><li>Describe the work you agreed on and what is still unfinished.</li><li>Explain how the delay is affecting you and your household.</li><li>Say what you want the contractor to do, and by when.</li></ul><p class="muted">Write 150 to 200 words.</p>'
+          prompt: '<p>You hired a contractor to renovate your kitchen and have already paid 80% of the $14,000 price. The work was supposed to be finished three weeks ago, but the countertops are not installed and the sink is not connected, and the contractor has stopped returning your calls. Your parents arrive from overseas in two weeks to stay with you for a month, but you would still prefer to keep working with this contractor rather than start over with someone new.</p><p>Write an email to the contractor. In your email, do the following:</p><ul><li>Describe the work you agreed on and what is still unfinished.</li><li>Explain how the delay is affecting you and your household.</li><li>Say what you want the contractor to do, by when, and what you will do if this does not happen.</li></ul><p class="muted">Write 150 to 200 words.</p>'
         },
         {
           id: 'W2', title: 'Task 2: Responding to Survey Questions', minutes: 26, minWords: 150, maxWords: 200,
           prompt: '<p>A small piece of city-owned land in your neighbourhood has been empty for several years. The city is asking residents how it should be used. Choose the option you prefer. Explain the reasons for your choice.</p><p class="muted">Write 150 to 200 words.</p>',
           options: [
-            { key: 'A', label: 'Option A', text: 'Build a fenced dog park with benches, a water fountain and separate areas for large and small dogs.' },
-            { key: 'B', label: 'Option B', text: 'Create a community garden with plots that residents can rent, a shared tool shed and space for gardening workshops.' }
+            { key: 'A', label: 'Option A', text: 'Build a fenced dog park with benches, a water fountain and separate areas for large and small dogs. It would be free to use, but the nearest houses are only 20 metres away, and barking would start as early as 6:00 a.m.' },
+            { key: 'B', label: 'Option B', text: 'Create a community garden with plots that residents can rent, a shared tool shed and space for gardening workshops. Plots would cost $60 a season, there would be room for only 25 households, and the garden would sit unused from November to April.' }
           ]
         }
       ]
@@ -443,23 +469,23 @@
     speaking: {
       practice: { id: 'SP', title: 'Practice Task', prep: 30, speak: 60, prompt: 'Describe a place in your neighbourhood that you enjoy visiting, and explain why you like it.' },
       tasks: [
-        { id: 'S1', title: 'Task 1: Giving Advice', prep: 30, speak: 90, prompt: 'A friend of yours has decided to learn how to cook, but has never prepared a full meal before. Give your friend advice on how to get started.' },
-        { id: 'S2', title: 'Task 2: Talking about a Personal Experience', prep: 30, speak: 60, prompt: 'Talk about a time when you had to make a difficult decision. What were your choices, what did you decide, and how do you feel about the decision now?' },
+        { id: 'S1', title: 'Task 1: Giving Advice', prep: 30, speak: 90, prompt: 'A friend of yours has decided to learn how to cook, but has never prepared a full meal before. Your friend works long shifts, gets home around 7:00 p.m., and has only about $60 a week to spend on groceries. Give your friend advice on how to get started.' },
+        { id: 'S2', title: 'Task 2: Talking about a Personal Experience', prep: 30, speak: 60, prompt: 'Talk about a time when you had to make a difficult decision. What were your choices, what did you decide, who did you turn to for advice, and how do you feel about the decision now?' },
         { id: 'S3', title: 'Task 3: Describing a Scene', prep: 30, speak: 60, prompt: 'Describe some things that are happening in the picture below as well as you can. The person you are speaking to cannot see the picture.', image: SNOWSTREET },
-        { id: 'S4', title: 'Task 4: Making Predictions', prep: 30, speak: 60, prompt: 'In this picture, what do you think will most probably happen next?', image: SNOWSTREET },
+        { id: 'S4', title: 'Task 4: Making Predictions', prep: 30, speak: 60, prompt: 'In this picture, what do you think will most probably happen next? Think about the icy patch, the stuck car, and the bus that is pulling in.', image: SNOWSTREET },
         {
           id: 'S5', title: 'Task 5: Comparing and Persuading', type: 'compare', select: 60, prep: 60, speak: 60,
           prompt: 'You and your brother are planning a gift for your parents\' 30th wedding anniversary. Choose the option you prefer. In the next section, you will need to persuade your brother that your choice is better.',
           choices: [
-            { key: 'A', title: 'Harbour dinner cruise', image: CRUISE, facts: ['3-hour evening cruise for two', 'Cost: $240', 'Three-course dinner and live music', 'Departs Saturdays at 6:00 p.m.'] },
-            { key: 'B', title: 'Custom family photo album', image: ALBUM, facts: ['60 pages of family photos', 'Cost: $95', 'Ready in 10 days', 'Notes from relatives can be added'] }
+            { key: 'A', title: 'Harbour dinner cruise', image: CRUISE, facts: ['3-hour evening cruise with dinner and live music', 'Cost: $240', 'Departs Saturdays at 6:00 p.m., on the anniversary date', 'Cancelled in rough weather; rebooking only, no refund'] },
+            { key: 'B', title: 'Custom family photo album', image: ALBUM, facts: ['60 pages of family photos with notes from relatives', 'Cost: $220', 'Needs photos collected from 12 relatives', 'Ready in 4 weeks, after the anniversary date'] }
           ],
           third: { key: 'C', title: 'Spa day for two', image: SPA, facts: ['Massage and lunch for two', 'Cost: $310', 'Full day, 9:00 a.m. to 4:00 p.m.', '45-minute drive from home'] },
           persuade: 'Your brother would rather give your parents a spa day instead. Persuade him that your choice is better. Explain why.'
         },
         { id: 'S6', title: 'Task 6: Dealing with a Difficult Situation', prep: 60, speak: 60, prompt: '<p>You share an apartment with a roommate who often has friends over late on weeknights. The noise has been keeping you awake before work. Today, your landlord called to say the downstairs neighbour has complained, and that both of you could receive a formal warning.</p><p><b>Choose ONE:</b></p><p><b>Option A:</b> Talk to your roommate. Explain the problem and suggest a solution you can both accept.</p><p><b>Option B:</b> Talk to your landlord. Explain the situation and ask for time to fix it before any warning is given.</p>' },
-        { id: 'S7', title: 'Task 7: Expressing Opinions', prep: 30, speak: 90, prompt: 'Should cities fine people who use their phones while crossing busy streets? Explain your reasons.' },
-        { id: 'S8', title: 'Task 8: Describing an Unusual Situation', prep: 30, speak: 60, prompt: 'You are at a garden centre and see this unusual lawn mower. Your neighbour is looking for a new lawn mower. Call your neighbour, describe the lawn mower, and explain whether you think he or she should buy it.', image: ODDMOWER }
+        { id: 'S7', title: 'Task 7: Expressing Opinions', prep: 30, speak: 90, prompt: '<p>After several pedestrians were hit at busy downtown crossings, your city council is considering a $75 fine for anyone caught looking at a phone while crossing a street. Supporters say it would save lives and change habits quickly. Opponents say it would be hard to enforce fairly and that the money would be better spent on safer crossings and lower speed limits.</p><p>A local radio station has asked residents to share their views. Do you support the fine? Explain your reasons.</p>' },
+        { id: 'S8', title: 'Task 8: Describing an Unusual Situation', prep: 30, speak: 60, prompt: 'You are at a garden centre and see this unusual lawn mower. Your neighbour is looking for a new lawn mower for a small, sloped backyard and has said he or she does not want to spend more than about $1,500. Call your neighbour, describe the lawn mower, and explain whether you think he or she should buy it.', image: ODDMOWER }
       ]
     }
   });

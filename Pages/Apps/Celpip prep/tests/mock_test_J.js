@@ -86,6 +86,16 @@
     p += suitcase(506, 300, 22, 22, '#6c3483');
     p += '<g transform="rotate(20 604 262)"><rect x="590" y="254" width="30" height="16" fill="#fdfefe" stroke="#c0392b" stroke-width="1.5"/><text x="605" y="266" text-anchor="middle" font-family="sans-serif" font-size="7" fill="#c0392b">TICKET</text></g>';
     p += '<g stroke="#566573" stroke-width="2" fill="none"><path d="M570 262 q8 -6 16 0"/><path d="M574 276 q8 -6 16 0"/></g>';
+    /* woman on a bench reading a newspaper */
+    p += '<rect x="200" y="262" width="56" height="6" fill="#6e4b2a"/><rect x="204" y="268" width="4" height="12" fill="#555"/><rect x="248" y="268" width="4" height="12" fill="#555"/>';
+    p += person(232, 268, { sit: true, s: .8, shirt: '#d35400', skin: '#f0c9a6', hair: '#dcdcdc', arms: 'left' });
+    p += '<rect x="206" y="230" width="18" height="14" fill="#fdfefe" stroke="#7f8c8d"/><g stroke="#aab7b8" stroke-width="1"><line x1="209" y1="235" x2="221" y2="235"/><line x1="209" y1="239" x2="221" y2="239"/></g>';
+    /* station worker pointing at the child near the edge */
+    p += person(614, 386, { s: .9, shirt: '#1b2631', skin: '#7a4b31', hair: '#120c08', arms: 'left' });
+    p += '<path d="M604 346 a10 7 0 0 1 20 0 l6 0 l0 3 l-26 0z" fill="#1b2631"/>';
+    /* cleaner mopping the platform */
+    p += person(400, 398, { s: .85, shirt: '#5dade2', skin: '#d6a07a', hair: '#2a1b12', arms: 'right' });
+    p += '<line x1="420" y1="368" x2="430" y2="396" stroke="#7e5109" stroke-width="3"/><rect x="422" y="394" width="18" height="5" fill="#bdc3c7"/>';
     /* couple with luggage near the back */
     p += person(470, 270, { shirt: '#17a589', s: .85, skin: '#d6a07a', hair: '#333333' });
     p += suitcase(482, 254, 16, 18, '#922b21');
@@ -164,47 +174,48 @@
               lines: [
                 ['TARIQ', 'Solène, did you see the letter from the landlord? It was under the door this morning.'],
                 ['SOLENE', 'No, I left early for my shift. What does it say?'],
-                ['TARIQ', 'Our rent\'s going up when the lease renews on September first. From sixteen hundred a month to eighteen hundred and fifty.'],
-                ['SOLENE', 'Wow. Two hundred and fifty more? Can he even do that?'],
+                ['TARIQ', 'Our rent\'s going up when the lease renews on September first. From sixteen hundred a month to eighteen hundred. No, wait, sorry, I read that wrong. Eighteen hundred and fifty.'],
+                ['SOLENE', 'Wow. That\'s a big jump. Can he even do that?'],
                 ['TARIQ', 'I checked. He gave us the three months\' notice he has to give, so, yeah, it\'s allowed.'],
-                ['SOLENE', 'Great. So that\'s, what, an extra hundred and twenty-five each, every month?'],
+                ['SOLENE', 'Great. And since we split everything down the middle, it comes straight out of both our pockets, every month.'],
                 ['TARIQ', 'Yep. And he wants to know by the end of June whether we\'re staying. So we\'ve got about five weeks to decide.'],
                 ['SOLENE', 'Okay. Well, I\'m not saying no right away. I really like this place. The bus stop is right outside, and I can get to the hospital in fifteen minutes.'],
                 ['TARIQ', 'I know. It\'s not like my commute is bad either. I just don\'t want to pay more than we have to.']
               ],
               questions: [
-                { id: 'L1.1', q: 'What problem are Tariq and Solène dealing with?', o: ['Their housing costs are about to rise.', 'Their landlord gave them too little notice.', 'Their lease will not be renewed.', 'Solène\'s commute is getting longer.'] },
-                { id: 'L1.2', q: 'Under the landlord\'s proposal, how much more would each roommate pay per month?', o: ['$125', '$250', '$1,850', '$150'] },
-                { id: 'L1.3', q: 'What is Solène\'s attitude toward the increase at this point?', o: ['She is open to staying anyway.', 'She wants to move out right away.', 'She thinks the landlord broke a rule.', 'She expects Tariq to cover it.'] }
+                { id: 'L1.1', q: 'What problem are Tariq and Solène dealing with?', o: ['They face a higher monthly cost for their home.', 'Their landlord gave them too little notice.', 'Their lease will not be renewed in September.', 'Solène\'s trip to work is getting longer.'] },
+                { id: 'L1.2', q: 'Under the landlord\'s proposal, how much more would each roommate pay per month?', o: ['$125', '$250', '$100', '$200'] },
+                { id: 'L1.3', q: 'What is Solène\'s attitude toward the increase at this point?', o: ['She is willing to consider staying.', 'She wants to start looking for a new place.', 'She believes the landlord broke a rule.', 'She expects Tariq to cover the difference.'] }
               ]
             },
             {
               lines: [
-                ['TARIQ', 'So I\'ve been looking online, just to compare. There\'s a two-bedroom near the university for seventeen hundred. That\'s a hundred and fifty less than what he\'s asking.'],
+                ['TARIQ', 'So I\'ve been looking online. There\'s a two-bedroom near the university for seventeen hundred. That\'s a hundred and fifty less than what he\'s asking.'],
                 ['SOLENE', 'Hmm. But are utilities included? Here, heat and hot water are covered.'],
-                ['TARIQ', 'Good question. The ad says tenants pay for heat, and it\'s electric. My cousin lives over there, and he says heating runs about a hundred a month in the winter.'],
-                ['SOLENE', 'So in winter it\'s almost the same price. And then we\'d have to pay for movers.'],
-                ['TARIQ', 'True. Last time it cost us about six hundred dollars, and I had to take two days off work.'],
+                ['TARIQ', 'Good question. The ad says tenants pay for heat, and it\'s electric. My cousin lives in the same building, and he says heating runs about a hundred a month in the winter.'],
+                ['SOLENE', 'So for half the year, we\'d barely be ahead. And then we\'d have to pay for movers.'],
+                ['TARIQ', 'True. Last time it cost us about six hundred dollars, and I had to take two days off work without pay.'],
                 ['SOLENE', 'Honestly, I\'d rather not go through that again unless the savings are real. Could we talk to the landlord first? Maybe he\'d agree to a smaller increase if we sign for longer, like two years.'],
-                ['TARIQ', 'It\'s worth a try. He\'s always telling us we\'re the easiest tenants he\'s ever had.']
+                ['TARIQ', 'It\'s worth a try. He\'s always telling us we\'re the easiest tenants he\'s ever had. He said it again just last month, when he came by to fix the sink.']
               ],
               questions: [
-                { id: 'L1.4', q: 'Why might the cheaper apartment not save them much money?', o: ['Heating bills would cancel most savings.', 'Its rent is likely to rise next year.', 'Hot water there costs extra each month.', 'The cousin\'s unit is not free until winter.'] },
-                { id: 'L1.5', q: 'Why does Tariq mention their last move?', o: ['To point out that moving has extra costs', 'To show that the movers were reliable', 'To suggest that his cousin could help', 'To complain about his employer'] },
-                { id: 'L1.6', q: 'Why does Tariq think Solène\'s idea might work?', o: ['The landlord values them as tenants.', 'The landlord owes them a favour.', 'Two-year leases are required by law.', 'The landlord cannot find new tenants.'] }
+                { id: 'L1.4', q: 'Why might the cheaper apartment not save them much money?', o: ['Extra costs could wipe out much of the saving.', 'Its rent is higher than their landlord is now asking.', 'Heating there costs about a hundred dollars all year.', 'Hot water there would be billed separately.'] },
+                { id: 'L1.5', q: 'Why does Tariq mention their last move?', o: ['To show that relocating costs both money and time', 'To suggest that they hire the same movers again', 'To explain why his cousin chose that building', 'To complain that his employer refused him leave'] },
+                { id: 'L1.6', q: 'Why does Tariq think Solène\'s idea might work?', o: ['The landlord is pleased with them as renters.', 'The landlord owes them a favour for the sink.', 'Two-year leases are required by law.', 'The landlord cannot find new tenants.'] }
               ]
             },
             {
               lines: [
                 ['TARIQ', 'Okay, I called him on my lunch break. He says he can\'t go back to sixteen hundred, but if we sign for two years, he\'ll make it seventeen fifty.'],
-                ['SOLENE', 'Seventeen fifty. So that\'s seventy-five dollars more each, not a hundred and twenty-five.'],
-                ['TARIQ', 'Right. And he promised the rent won\'t change again until the two years are up.'],
-                ['SOLENE', 'That\'s actually fair. Once you add heat at the other place, we\'d barely save anything by moving. I say we stay.'],
-                ['TARIQ', 'Agreed. I\'ll email him tonight so we have it in writing, and then we can both sign the new lease this weekend.']
+                ['SOLENE', 'Seventeen fifty. So that\'s a hundred and fifty more a month than now, instead of two-fifty.'],
+                ['TARIQ', 'Right. And he promised the rent won\'t change again until the two years are up. I asked about the parking spot too, but he wouldn\'t budge on that. It stays at forty a month.'],
+                ['SOLENE', 'That\'s actually fair. Once you add heat at the other place, and the movers, we\'d barely save anything by moving. I say we stay.'],
+                ['TARIQ', 'Agreed. But I don\'t want to rely on a phone call. I\'ll email him tonight and ask him to confirm all of it, and then we can both sign the new lease this weekend.'],
+                ['SOLENE', 'Good idea. Last time, he somehow forgot what he\'d promised us about the dishwasher.']
               ],
               questions: [
                 { id: 'L1.7', q: 'Compared with the landlord\'s first proposal, how much will each roommate save per month under the new deal?', o: ['$50', '$75', '$100', '$150'] },
-                { id: 'L1.8', q: 'What does Tariq want to make sure of?', o: ['That the deal is documented', 'That Solène signs first', 'That the rent returns to $1,600', 'That his cousin hears about it'] }
+                { id: 'L1.8', q: 'What does Tariq want to make sure of?', o: ['That the agreement is on record', 'That Solène signs the lease first', 'That the rent returns to $1,600', 'That the parking fee is dropped'] }
               ]
             }
           ]
@@ -220,20 +231,24 @@
               ['CLERK', 'Oh, I\'m sorry to hear that. Do you mind if I ask why you\'re leaving?'],
               ['DESMOND', 'Not at all. My company is transferring me to our Moncton office next month, so I won\'t be living here anymore.'],
               ['CLERK', 'I see. Well, we do have a location in Moncton. I could transfer your membership there at no charge.'],
-              ['DESMOND', 'Really? I didn\'t know that. But I\'ll be living outside the city, about a forty-minute drive away, so I honestly don\'t think I\'d use it.'],
+              ['DESMOND', 'Really? I didn\'t know that. But I\'ll be living outside the city, about a forty-minute drive away, so I honestly don\'t think I\'d use it. I\'ll probably just run on the country roads.'],
               ['CLERK', 'That makes sense. Okay, so you\'re on the monthly plan, which needs thirty days\' notice. Your next payment comes out on the fifteenth, and that will be your last one.'],
-              ['DESMOND', 'So I still pay for one more month?'],
-              ['CLERK', 'That\'s right, but you can keep using the gym until the fifteenth of next month. Oh, and I see you also rent a locker. Do you want to cancel that today too?'],
-              ['DESMOND', 'Yes, please. I\'ll clear it out before I leave the gym today.'],
-              ['CLERK', 'Perfect. I just need your signature on this form, and I\'ll email you a confirmation. Hang on to that email, just in case there\'s ever a billing question.'],
-              ['DESMOND', 'Will do. Thanks for making this so easy.']
+              ['DESMOND', 'So I still pay for one more month? I was hoping today would be the end of it.'],
+              ['CLERK', 'I understand. But you can keep using the gym until the fifteenth of next month, so you won\'t lose anything. Oh, and I see you still have two personal training sessions on your account.'],
+              ['DESMOND', 'Right, I\'d forgotten about those. Can I get my money back for them?'],
+              ['CLERK', 'Unfortunately, prepaid sessions aren\'t refundable. You can give them to a family member, though, or use them before your last day.'],
+              ['DESMOND', 'My wife\'s already moving out there ahead of me, so that won\'t work. I\'ll book them both for next week, then. Might as well get my money\'s worth.'],
+              ['CLERK', 'Good plan. And the locker you rent, do you want to cancel that today too?'],
+              ['DESMOND', 'Yes, please. There\'s not much in it. I\'ll clear it out before I leave today.'],
+              ['CLERK', 'Perfect. I just need your signature on this form, and I\'ll email you a confirmation. Hang on to that email, just in case there\'s ever a question about your billing.'],
+              ['DESMOND', 'Will do. Thanks for making this so easy. I was expecting a sales pitch.']
             ],
             questions: [
-              { id: 'L2.1', q: 'Why is Desmond cancelling his membership?', o: ['His employer is relocating him.', 'He is moving to the city centre.', 'He finds the monthly plan too costly.', 'He would rather join the Moncton gym.'] },
-              { id: 'L2.2', q: 'Why does Desmond turn down the transfer?', o: ['He will live too far from that gym.', 'The transfer would cost him extra.', 'He plans to exercise at home now.', 'His new office has its own gym.'] },
-              { id: 'L2.3', q: 'What can be inferred about Desmond\'s final payment?', o: ['It buys him another month of use.', 'It will be refunded once he signs.', 'It is a penalty for leaving early.', 'It is waived because he is moving.'] },
-              { id: 'L2.4', q: 'What will happen with Desmond\'s locker?', o: ['He will empty it today.', 'He will keep it until next month.', 'It will be moved to the Moncton gym.', 'The clerk will clear it out for him.'] },
-              { id: 'L2.5', q: 'Why does the clerk tell Desmond to keep the email?', o: ['It may help with a later billing issue.', 'He will need it to enter the Moncton gym.', 'It includes a discount for rejoining.', 'He must show it to cancel the locker.'] }
+              { id: 'L2.1', q: 'Why is Desmond cancelling his membership?', o: ['His employer is sending him to another city.', 'His new office has a gym of its own.', 'He finds the monthly plan too costly.', 'He would rather join a gym near his new home.'] },
+              { id: 'L2.2', q: 'Why does Desmond turn down the transfer?', o: ['The gym would be inconvenient to reach from his home.', 'The transfer would cost him an extra fee.', 'His wife already has a membership there.', 'He wants to keep renting his current locker.'] },
+              { id: 'L2.3', q: 'What can be inferred about Desmond\'s final payment?', o: ['It covers another month of gym access.', 'It will be refunded once he signs the form.', 'It is a penalty for giving short notice.', 'It is waived because he is moving away.'] },
+              { id: 'L2.4', q: 'What will Desmond do with his training sessions?', o: ['Use them himself before he leaves', 'Pass them on to his wife', 'Ask for a refund later by email', 'Transfer them to the Moncton gym'] },
+              { id: 'L2.5', q: 'Why does the clerk tell Desmond to keep the email?', o: ['It could settle a future question about charges.', 'He will need it to enter the Moncton gym.', 'It proves that his training sessions were used.', 'He must show it to cancel the locker.'] }
             ]
           }]
         },
@@ -244,25 +259,28 @@
           segments: [{
             lines: [
               ['HOST', 'My guest today is Owen Mackenzie, an amateur astronomer who runs free stargazing nights at Birchwood Provincial Park. Owen, how did you first get into astronomy?'],
-              ['OWEN', 'It started when I was about ten. My grandfather gave me a pair of old binoculars, and one night he pointed them at the moon. I could see the craters, and that was it. I was hooked. I\'m actually an electrician by trade, so this has always been a hobby.'],
+              ['OWEN', 'It started when I was about ten. My grandfather gave me a pair of old binoculars, and one night he pointed them at the moon. I could see the craters. I\'m an electrician by trade, so this has always been a hobby.'],
               ['HOST', 'And how did the public nights begin?'],
-              ['OWEN', 'About six years ago, I set up my telescope at a campground, and people kept wandering over to ask what I was looking at. By the end of the night there was a line of twenty people. The park staff noticed and asked if I\'d do it regularly.'],
+              ['OWEN', 'About six years ago, I set up my telescope at a campground, and people kept wandering over to ask what I was looking at. By midnight, twenty people were lined up. The park staff noticed and asked if I\'d do it regularly.'],
               ['HOST', 'What happens on a typical night?'],
               ['OWEN', 'We start at sunset with a short talk about what\'s in the sky that month. Then, once it\'s properly dark, people take turns at four telescopes. Volunteers from our astronomy club help run them. Saturn\'s rings are always the favourite. People actually gasp.'],
+              ['HOST', 'How many people usually come out?'],
+              ['OWEN', 'Usually around eighty. Except last August, during the meteor shower, we had over three hundred, and cars were parked along the highway. So now that one night needs online registration. Every other night, you just show up.'],
               ['HOST', 'Do people need to bring anything?'],
               ['OWEN', 'Just warm clothes, even in July, because it gets cold once you\'re sitting still. And we ask people to use red flashlights, or put red tape over a regular one. White light ruins everyone\'s night vision for about twenty minutes.'],
               ['HOST', 'What if it\'s cloudy?'],
               ['OWEN', 'That\'s the hardest part. We decide by four in the afternoon and post it on the club website. If we cancel, we try to reschedule for the next clear night that week.'],
               ['HOST', 'Any advice for someone who wants to start?'],
-              ['OWEN', 'Don\'t rush out and buy an expensive telescope. Start with binoculars and a star map, and learn the sky first. A lot of people spend a thousand dollars and then give up because the equipment is too complicated.']
+              ['OWEN', 'Don\'t rush out and buy an expensive telescope. Start with binoculars and a star map, and learn the sky first. A lot of people spend a thousand dollars, and then the equipment sits in the closet because it\'s too complicated.'],
+              ['OWEN', 'And come to one of our nights before you buy anything. You can try four different telescopes and ask the volunteers what they actually like using.']
             ],
             questions: [
-              { id: 'L3.1', q: 'How did Owen become interested in astronomy?', o: ['A family member got him started.', 'His work as an electrician led to it.', 'A school course sparked his interest.', 'He saw craters through a telescope at ten.'] },
-              { id: 'L3.2', q: 'How did the public stargazing nights start?', o: ['Campers became curious about his telescope.', 'The park wanted to attract more tourists.', 'His club needed to raise money.', 'A school asked him to teach students.'] },
+              { id: 'L3.1', q: 'How did Owen become interested in astronomy?', o: ['A relative introduced him to the night sky.', 'His work as an electrician led to it.', 'A school course sparked his interest.', 'He saw craters through a telescope at ten.'] },
+              { id: 'L3.2', q: 'How did the public stargazing nights start?', o: ['Campers became curious about his equipment.', 'The park wanted to attract more tourists.', 'His club needed to raise money.', 'Park staff hired him to give talks at sunset.'] },
               { id: 'L3.3', q: 'What does Owen mean when he says, "People actually gasp"?', o: ['Visitors are amazed by what they see.', 'Visitors find the cold hard to bear.', 'Visitors are shocked by the long lines.', 'Visitors struggle to use the telescopes.'] },
-              { id: 'L3.4', q: 'Why are visitors asked to use red light?', o: ['White light harms night vision.', 'Park rules ban white flashlights.', 'White light attracts more insects.', 'Red light helps telescopes focus.'] },
-              { id: 'L3.5', q: 'How are cloudy nights handled?', o: ['A decision is posted online by late afternoon.', 'Visitors vote at sunset on whether to stay.', 'The park office phones each registered guest.', 'Events always move to the following weekend.'] },
-              { id: 'L3.6', q: 'What is Owen\'s view of buying costly equipment early?', o: ['It often leads beginners to give up.', 'It is a wise long-term investment.', 'The club should provide it instead.', 'It is easier to learn than binoculars.'] }
+              { id: 'L3.4', q: 'What would probably happen if a visitor used a white flashlight?', o: ['Others would struggle to see the sky for a while.', 'The telescopes would need to be refocused.', 'Park staff would ask the visitor to leave.', 'Saturn would be hidden for the rest of the night.'] },
+              { id: 'L3.5', q: 'How are cloudy nights handled?', o: ['A decision is shared online during the afternoon.', 'Visitors must register online to hear about changes.', 'The park office phones each visitor.', 'Events always move to the following weekend.'] },
+              { id: 'L3.6', q: 'What is Owen\'s view of buying costly equipment early?', o: ['Complicated gear often ends up unused by beginners.', 'It is a wise long-term investment.', 'The club should lend equipment instead.', 'Binoculars are harder to learn than telescopes.'] }
             ]
           }]
         },
@@ -273,18 +291,20 @@
           segments: [{
             lines: [
               ['NEWS', 'Weather officials have issued a heat warning for the region, with daytime highs expected to reach thirty-four degrees starting tomorrow. With the humidity, it will feel closer to forty.'],
-              ['NEWS', 'The warning is expected to last at least three days. Overnight temperatures are forecast to stay above twenty degrees, which means homes without air conditioning will not cool down at night. During a similar stretch of heat last summer, local emergency rooms reported more than sixty heat-related visits in just four days.'],
-              ['NEWS', 'In response, the city will open five cooling centres beginning tomorrow at noon. The centres will be set up in community centres and public libraries, and will stay open until nine p.m. each day.'],
-              ['NEWS', 'The city\'s medical officer of health, Doctor Hélène Bouchard, is urging residents to check on older neighbours and anyone who lives alone, as they face the greatest risk. She also reminds parents never to leave children or pets in a parked car, even for a few minutes.'],
+              ['NEWS', 'The warning is expected to last at least three days. Overnight temperatures are forecast to stay above twenty degrees, which means homes without air conditioning will not cool down at night.'],
+              ['NEWS', 'During a similar stretch of heat last summer, local emergency rooms reported more than sixty heat-related visits in just four days.'],
+              ['NEWS', 'In response, the city will open cooling centres beginning tomorrow at noon. The centres will be set up in community centres and public libraries, and will stay open until nine p.m. each day.'],
+              ['NEWS', 'The city had planned to open four centres, but a fifth was added this afternoon at the Westside Arena after the forecast worsened. Residents who cannot get to a centre on their own can call the city\'s information line to book a free ride.'],
+              ['NEWS', 'The city\'s medical officer of health, Doctor Hélène Bouchard, is urging residents to check on older neighbours and anyone who lives alone, as they face the greatest risk. She also reminds parents never to leave children or pets in a parked car.'],
               ['NEWS', 'Bottled water will be available at every centre, and pets on a leash are welcome. Outdoor public pools will also extend their hours until ten p.m. while the warning is in effect.'],
-              ['NEWS', 'A full list of locations is available on the city\'s website, or by calling the city\'s information line.']
+              ['NEWS', 'A full list of locations, including the new arena, is available on the city\'s website, or by calling the same information line.']
             ],
             questions: [
-              { id: 'L4.1', q: 'What is the news item mainly about?', o: ['How the city is preparing for extreme heat', 'Why community centres are closing early', 'The opening of new public libraries', 'A shortage of drinking water in the region'] },
-              { id: 'L4.2', q: 'Why are the nights a concern?', o: ['Some homes will get no relief at night.', 'Power may be shut off overnight.', 'Cooling centres will close at sunset.', 'Humidity will be highest after dark.'] },
-              { id: 'L4.3', q: 'How many hours a day will the cooling centres be open?', o: ['Nine', 'Ten', 'Twelve', 'Three'] },
-              { id: 'L4.4', q: 'Who does Dr. Bouchard say is most at risk?', o: ['Older adults and those on their own', 'Parents with young children', 'People who leave pets in cars', 'Residents without air conditioning'] },
-              { id: 'L4.5', q: 'Which statement about the city\'s measures is true?', o: ['Some pools will stay open later.', 'Some centres are inside public pools.', 'Pets are not allowed in the centres.', 'Visitors must bring their own water.'] }
+              { id: 'L4.1', q: 'What is the news item mainly about?', o: ['How the city is responding to a period of extreme heat', 'Why community centres will close early this week', 'The opening of a new arena on the west side', 'A shortage of bottled water across the region'] },
+              { id: 'L4.2', q: 'Why are the nights a concern?', o: ['Some homes will get no relief after dark.', 'Power may be shut off overnight.', 'Cooling centres will close at sunset.', 'Humidity will be highest after dark.'] },
+              { id: 'L4.3', q: 'How many hours a day will the cooling centres be open?', o: ['Nine', 'Ten', 'Twelve', 'Five'] },
+              { id: 'L4.4', q: 'Who does Dr. Bouchard say is most at risk?', o: ['Older adults and people without company at home', 'Parents with young children', 'People who leave pets in cars', 'Residents without air conditioning'] },
+              { id: 'L4.5', q: 'Which statement about the city\'s measures is true?', o: ['Some pools will stay open later than usual.', 'The number of centres was later reduced.', 'Pets are not allowed in the centres.', 'Rides to the centres must be paid for.'] }
             ]
           }]
         },
@@ -310,12 +330,12 @@
             ],
             questions: [
               { id: 'L5.1', q: 'What is the main purpose of the meeting?', o: ['To choose a fundraising event', 'To plan a party for hospital staff', 'To decorate a children\'s playroom', 'To hire a caterer for the hospital'] },
-              { id: 'L5.2', q: 'What will the money be used for?', o: ['A new playroom for children', 'New beds for the third floor', 'A summer camp for sick children', 'Medical equipment for the hospital'] },
+              { id: 'L5.2', q: 'Why does Amara mention her sister-in-law?', o: ['To show that the cost of the meal can be reduced', 'To suggest a place to hold the dinner', 'To offer a prize for the silent auction', 'To recommend a caterer charging $20 a person'] },
               { id: 'L5.3', q: 'Why does Luc suggest a fun run?', o: ['His old workplace raised money with one.', 'He is training for a marathon himself.', 'Runs are cheaper than other events.', 'The hospital asked for a sports event.'] },
               { id: 'L5.4', q: 'What concerns does Noor have about the run?', o: ['Unreliable weather and a slow approval', 'The high cost of renting the roads', 'Too few families willing to take part', 'The difficulty of finding enough prizes'] },
               { id: 'L5.5', q: 'How does Luc react to Noor\'s point about the permit?', o: ['He accepts that she is right.', 'He says he can get one quickly.', 'He thinks a permit is not needed.', 'He becomes annoyed with her.'] },
               { id: 'L5.6', q: 'If the hall is full and the restaurant supplies the food, about how much will the meals cost?', o: ['$1,440', '$2,400', '$6,000', '$1,200'] },
-              { id: 'L5.7', q: 'Why does Noor choose to handle posters and ticket sales?', o: ['She dislikes asking people for donations.', 'She has worked as a graphic designer.', 'She knows many local shop owners.', 'She prefers to work from home.'] },
+              { id: 'L5.7', q: 'Why does Noor choose to handle posters and ticket sales?', o: ['She feels uncomfortable requesting favours.', 'She already knows the community centre staff.', 'She knows many shop owners on Main Street.', 'She thinks the auction prizes are already arranged.'] },
               { id: 'L5.8', q: 'What does Amara\'s reply to Luc\'s last suggestion show?', o: ['She wants to focus on one event first.', 'She thinks a spring run is a bad idea.', 'She would rather hold the run in November.', 'She is annoyed that Luc changed his mind.'] }
             ]
           }]
@@ -326,20 +346,28 @@
           cast: { NARR: { name: 'Reporter', g: 'f', skin: '#e3b28b', hair: '#5d4037', shirt: '#117864', style: 'bun' } },
           segments: [{
             lines: [
-              ['NARR', 'Every summer, thousands of visitors pour into small fishing villages along Canada\'s coasts. For some residents, tourism is a lifeline. For others, it is changing their communities in ways they don\'t welcome.'],
-              ['NARR', 'Marguerite Doucet owns a bakery and café in a village of about nine hundred people. She says that without summer visitors, her business, and many others, would have closed years ago. In her view, tourism has replaced many of the jobs that disappeared when the fishing industry declined.'],
-              ['NARR', 'Doucet also points out that visitor spending helps pay for things the whole town uses, such as a new walking trail and the restored wharf. And because young people can now find summer work at home, she says fewer of them leave for the city after high school.'],
-              ['NARR', 'Not everyone sees it that way. Graham Whitley, a retired fisherman who now sits on town council, says housing has become the town\'s biggest problem. Many homes are now rented to tourists by the night, and he says local workers, including teachers and nurses, can\'t find a place to live year-round.'],
-              ['NARR', 'Whitley also notes that most tourism jobs are seasonal and low-paying, and they are gone by October. He would like the town to limit short-term rentals and to focus on attracting businesses that operate all year.'],
-              ['NARR', 'Both agree on one thing: the town needs a plan. Council will hold a public meeting next month to hear from residents before any new rules are written.']
+              ['NARR', 'Every summer, thousands of visitors pour into small fishing villages along Canada\'s coasts. For some residents, tourism is a lifeline. For others, it is changing their communities in ways they never asked for.'],
+              ['NARR', 'Marguerite Doucet owns a bakery and café in a village of about nine hundred people. She remembers the years after the fish plant closed, when half the shops on the main street had boards over their windows.'],
+              ['NARR', 'Today, she says, those same buildings hold a gift shop, a kayak rental and two restaurants. In her view, visitors brought work at exactly the moment the fishery stopped providing it, and without them, her own business would have closed long ago.'],
+              ['NARR', 'Doucet\'s second argument is about the whole community. Money from visitors helped pay for a new walking trail and the restored wharf, projects she says a village this size could never have afforded on its own.'],
+              ['NARR', 'She also points to young people. When she was a teenager, almost everyone in her class left for Halifax or Toronto after graduation. Now, she says, many stay at least into their early twenties, because they can earn decent money each summer.'],
+              ['NARR', 'Doucet admits that tourism has its costs. Traffic in July can be terrible, she agrees, and some outsiders buy houses they use for only a few weeks a year. But she sees these as problems to manage, not reasons to turn visitors away.'],
+              ['NARR', 'Graham Whitley sees things very differently. A retired fisherman who now sits on town council, he says housing has become the village\'s most urgent problem.'],
+              ['NARR', 'As more homes are rented to tourists by the night, fewer are left for people who live and work here all year. Last fall, the village school nearly lost its new teacher because she could not find an apartment for the winter.'],
+              ['NARR', 'A nurse at the local clinic, he adds, now drives forty minutes each way from the next county, because there was nothing for her to rent in the village.'],
+              ['NARR', 'Whitley\'s second concern is the kind of work tourism offers. Most of the jobs are seasonal and poorly paid, and they disappear by Thanksgiving. Young people may stay for a summer or two, he says, but nobody can build a life on five months of work.'],
+              ['NARR', 'He does not deny that visitors have brought money into the village, and he gives Doucet credit for pushing to get the wharf restored. But he believes the town now depends far too heavily on a few busy months.'],
+              ['NARR', 'Whitley would like council to cap the number of short-term rentals, and to offer tax breaks to businesses that operate all year, such as a boat repair shop that is thinking of moving to the area.'],
+              ['NARR', 'Doucet worries that a cap would simply push visitors, and their spending, to the next town along the coast. Still, the two agree that leaving things exactly as they are is not an option.'],
+              ['NARR', 'Council will hold a public meeting next month to hear from residents before any new rules are drafted.']
             ],
             questions: [
-              { id: 'L6.1', q: 'What is the report mainly about?', o: ['The effects of tourism on coastal towns', 'The decline of the Canadian fishing industry', 'A new walking trail built for visitors', 'Rising housing prices in large cities'] },
-              { id: 'L6.2', q: 'According to Doucet, what has tourism done for jobs?', o: ['Replaced jobs lost in fishing', 'Created jobs on fishing boats', 'Reduced jobs for older workers', 'Moved jobs away to the city'] },
-              { id: 'L6.3', q: 'What does Doucet say about young people?', o: ['More of them stay because of summer work.', 'Most of them move away after high school.', 'They prefer to work in the fishing industry.', 'They helped to build the new walking trail.'] },
-              { id: 'L6.4', q: 'What is Whitley\'s main concern?', o: ['Year-round homes are hard to find.', 'Teachers and nurses earn too little.', 'The wharf needs costly repairs.', 'Tourists rent homes for too long.'] },
-              { id: 'L6.5', q: 'Which project would Whitley most likely support?', o: ['A business that hires staff all year', 'A larger summer festival for visitors', 'More vacation rentals near the wharf', 'Extra spending on the walking trail'] },
-              { id: 'L6.6', q: 'On what point do Doucet and Whitley agree?', o: ['The town needs a plan.', 'Rentals should be limited.', 'Young people are leaving.', 'Tourism jobs pay too little.'] }
+              { id: 'L6.1', q: 'What is the report mainly about?', o: ['How tourism is reshaping small coastal communities', 'The closing of a fish plant in a small village', 'Plans to build a new walking trail for visitors', 'Rising housing prices in large Canadian cities'] },
+              { id: 'L6.2', q: 'According to Doucet, what has tourism done for jobs?', o: ['It filled a gap left by a shrinking industry.', 'It created year-round jobs in fishing.', 'It kept older workers employed.', 'It paid for the wharf repairs.'] },
+              { id: 'L6.3', q: 'Why does Whitley mention the teacher and the nurse?', o: ['To show that the housing shortage affects essential workers', 'To argue that teachers and nurses are paid too little', 'To show that the school and clinic need more staff', 'To complain that driving from the next county is costly'] },
+              { id: 'L6.4', q: 'How does Whitley answer Doucet\'s point about young people?', o: ['Summer earnings alone are not enough to settle down on.', 'Most graduates still leave for Halifax or Toronto.', 'Young people would rather work in the fishery.', 'Teenagers should not have jobs during the summer.'] },
+              { id: 'L6.5', q: 'Which proposal would Whitley most likely support?', o: ['Support for a business that would employ people outside the tourist season', 'A larger summer festival to draw more visitors', 'More vacation rentals near the restored wharf', 'Extra spending to extend the walking trail'] },
+              { id: 'L6.6', q: 'On what do Doucet and Whitley agree?', o: ['The current situation should not simply continue.', 'Short-term rentals should be limited.', 'Tourism keeps young people at home.', 'Seasonal jobs are the main problem.'] }
             ]
           }]
         }
@@ -352,10 +380,10 @@
         {
           id: 'R1', title: 'Part 1: Reading Correspondence', minutes: 11,
           instructions: 'Read the following message. Answer questions 1 to 6 by choosing the best option from each drop-down menu. Then read the reply and complete it by choosing the best option for each blank (7 to 11).',
-          passage: '<h3>Message</h3><p>Dear Diane and Paul,</p><p>I arrived home in Bogotá on Sunday night, and after sleeping for almost fourteen hours, the first thing I wanted to do was write to you. Thank you for the most wonderful three months of my life.</p><p>When I first arrived in Saskatoon in September, I was very nervous. My English was not as good as I had hoped, and I was afraid I would not understand anyone. You were so patient with me. I still remember Paul drawing pictures on a napkin at dinner to explain the word "toboggan." And Diane, your idea of watching the evening news together with the subtitles on helped me more than any textbook.</p><p>I also want to thank Émile for teaching me to skate. I fell at least thirty times on the outdoor rink, but by December I could go all the way around without holding on to the boards. He was a much stricter teacher than anyone at my language school!</p><p>My mother asked me to tell you how grateful she is that you took care of me when I had the flu in November. She was so worried, but when I told her that Diane made me soup every day and called the clinic for me, she said she could finally sleep.</p><p>Now I have some news. The language school has offered me a place in its summer program for university students, from July 2 to August 15. If I accept, I will need a homestay again. I know it is a lot to ask, and please say no if it is not possible, but I would love to stay with you again. This time I could also help more around the house, maybe by cooking some Colombian dishes for all of you.</p><p>There is one complication. The cheapest flight I can find lands on June 28, four days before classes begin. The school says it can put me in a student residence for those nights, so please do not feel that you have to take me early.</p><p>I have mailed a small package with coffee from my uncle\'s farm and a scarf for Diane. It should arrive in about three weeks. The school needs my answer by March 1, so I will wait to hear from you before I reply to them.</p><p>With love and gratitude,<br>Lucía</p>',
+          passage: '<h3>Message</h3><p>Dear Diane and Paul,</p><p>I arrived home in Bogotá on Sunday night, and after sleeping for almost fourteen hours, the first thing I wanted to do was write to you. Thank you for the most wonderful three months of my life.</p><p>When I first arrived in Saskatoon in September, I was very nervous. My English was not as good as I had hoped, and I was afraid I would not understand anyone. You were so patient with me. I still remember Paul drawing pictures on a napkin at dinner to explain the word "toboggan." And Diane, your idea of watching the evening news together with the subtitles on helped me more than any textbook.</p><p>I also want to thank Émile for teaching me to skate. I fell at least thirty times on the outdoor rink, but by December I could go all the way around without holding on to the boards. He was a much stricter teacher than anyone at my language school!</p><p>My mother asked me to tell you how grateful she is that you took care of me when I had the flu in November. She was so worried, but when I told her that Diane made me soup every day and called the clinic for me, she said she could finally sleep.</p><p>Now I have some news. The language school has offered me a place in its summer program for university students, from July 2 to August 15. If I accept, I will need a homestay again. I know it is a lot to ask, and please say no if it is not possible, but I would love to stay with you again. This time I could also help more around the house, maybe by cooking some Colombian dishes for all of you.</p><p>There is one complication. The cheapest flight I can find lands on June 28, four days before classes begin. The school says it can put me in a student residence for those nights, so please do not feel that you have to take me early.</p><p>I have mailed a small package with coffee from my uncle\'s farm and a scarf for Diane. It should arrive in about three weeks. The school wants my answer within two weeks of its letter, which arrived on February 15, so I will wait to hear from you before I reply to them.</p><p>With love and gratitude,<br>Lucía</p>',
           questions: [
             { id: 'R1.1', q: 'Lucía most likely wrote so soon after getting home because she', o: ['was eager to say how much the visit meant.', 'was worried the package had gone missing.', 'had promised her mother to write at once.', 'needed to book her flight that same week.'] },
-            { id: 'R1.2', q: 'When she first came to Saskatoon, Lucía feared that she', o: ['would struggle to follow what people said.', 'would find the winter far too cold.', 'would fail her courses at the school.', 'would miss her mother too much.'] },
+            { id: 'R1.2', q: 'Paul\'s napkin drawings suggest that, at first, Lucía', o: ['sometimes needed new words shown to her in pictures.', 'enjoyed drawing more than speaking English.', 'could not read the menu at dinner.', 'preferred to speak Spanish at meals.'] },
             { id: 'R1.3', q: 'Lucía suggests that Diane\'s idea worked well because it', o: ['let her hear and read English together.', 'replaced the textbook used in her classes.', 'taught her to draw pictures of new words.', 'kept her up to date on local events.'] },
             { id: 'R1.4', q: 'Lucía\'s tone when she describes Émile\'s lessons is', o: ['playful and fond.', 'quietly critical.', 'mostly apologetic.', 'rather anxious.'] },
             { id: 'R1.5', q: 'Lucía\'s mother felt relieved once she learned that', o: ['someone was looking after her daughter.', 'Lucía had fully recovered from the flu.', 'the clinic had phoned Diane every day.', 'Diane would call her with any news.'] },
@@ -389,24 +417,24 @@
             { id: 'R2.5', o: ['no limit on distance', '200 free kilometres a day', 'a full tank of gas', 'free child car seats'] }
           ],
           questions: [
-            { id: 'R2.6', q: 'For a group of five friends, the economy car would probably be unsuitable because it', o: ['has room for only four people.', 'charges extra for each kilometre.', 'costs more per day than the compact.', 'offers just 200 kilometres a day.'] },
+            { id: 'R2.6', q: 'Five friends, two of them under 25, want a car for 4 days and expect to drive about 1,200 km in total. The cheapest suitable choice is', o: ['the mid-size SUV.', 'the compact car.', 'the economy car.', 'the minivan.'] },
             { id: 'R2.7', q: 'A 23-year-old who rents a compact car for 6 days and drives 1,500 km will pay a total of', o: ['$525.', '$450.', '$405.', '$600.'] },
-            { id: 'R2.8', q: 'A customer who brings a car back with half a tank of gas will', o: ['owe a fee of $40.', 'lose the weekly rate.', 'pay $0.25 per kilometre.', 'pay an extra $10 a day.'] }
+            { id: 'R2.8', q: 'A 45-year-old rents a minivan for 5 days and will share the driving with his wife and his 30-year-old brother. The extra driver charges will total', o: ['$50.', '$100.', '$0.', '$150.'] }
           ]
         },
         {
           id: 'R3', title: 'Part 3: Reading for Information', minutes: 10,
           instructions: 'Read the following article. Decide which paragraph, A to D, contains the information in each statement. If the information is not given in any paragraph, choose E.',
-          passage: '<h3>Lobster Seasons in the Maritimes</h3><p><b>A.</b> Many visitors to the Maritimes are surprised to learn that lobster cannot be caught whenever a fisher wishes. The coastline is divided into dozens of lobster fishing areas, and the federal government sets a separate season for each one. Most seasons last only about two months. Limiting the fishing period protects lobsters during sensitive times in their life cycle, such as the weeks when they shed their old shells and grow new ones. Because the seasons are spread across the calendar, however, lobster is being landed somewhere in the region during most of the year. This steady supply allows processing plants and buyers to keep operating for much longer than any single season would allow.</p><p><b>B.</b> The largest and most valuable areas, in southwestern Nova Scotia, are an exception. Their season opens in late November and runs until the end of May. Opening day there is known locally as "Dumping Day," when hundreds of boats leave the harbours at dawn, loaded with traps, while families and neighbours wave from the wharves. Winter fishing is cold and dangerous work, and if strong winds are forecast, officials may postpone the opening until conditions are safer. Even after the season begins, crews often stay in port for days at a time when storms move through.</p><p><b>C.</b> In the southern Gulf of St. Lawrence, which includes the waters around Prince Edward Island and parts of New Brunswick and northern Nova Scotia, most areas fish in the spring, usually from late April or May until late June or early July. One area along the Northumberland Strait has a season from August to October instead. Since a season may cover only eight or nine weeks, many fishers in these communities also farm, build boats or work in other trades for the rest of the year.</p><p><b>D.</b> Several rules apply in every area. Each lobster must be measured along its shell, from the eye socket to the back of the body, and any lobster below the legal minimum size must be released. Females carrying eggs must also go back into the water. The number of traps per licence is limited, and traps must include an opening that allows small lobsters to escape. Scientists say these measures have helped keep catches high in recent years, although they continue to study how warmer ocean temperatures may affect lobster in the future.</p>',
+          passage: '<h3>Lobster Seasons in the Maritimes</h3><p><b>A.</b> Many visitors to the Maritimes are surprised to learn that lobster cannot be caught whenever a fisher wishes. The coastline is divided into dozens of lobster fishing areas, and the federal government sets a separate season for each one. Most seasons last only about two months. Limiting the fishing period protects lobsters during sensitive times in their life cycle, such as the weeks when they shed their old shells and grow new ones. Because the seasons are spread across the calendar, however, lobster is being landed somewhere in the region during most of the year. Prices at the wharf rise and fall with the seasons, often peaking when few areas are open. This steady supply allows processing plants and buyers to keep operating for much longer than any single season would allow.</p><p><b>B.</b> The largest and most valuable areas, in southwestern Nova Scotia, are an exception. Their season opens in late November and runs until the end of May. Opening day there is known locally as "Dumping Day," when hundreds of boats leave the harbours at dawn, loaded with traps, while families and neighbours wave from the wharves. In some towns, schools once closed for the morning so that children could watch the boats leave. Winter fishing is cold and dangerous work, and if strong winds are forecast, officials may postpone the opening until conditions are safer. Even after the season begins, crews often stay in port for days at a time when storms move through.</p><p><b>C.</b> In the southern Gulf of St. Lawrence, which includes the waters around Prince Edward Island and parts of New Brunswick and northern Nova Scotia, most areas fish in the spring, usually from late April or May until late June or early July. One area along the Northumberland Strait has a season from August to October instead. In several Island harbours, the spring season begins with a blessing of the fleet. Since a season may cover only eight or nine weeks, many fishers in these communities also farm, build boats or work in other trades for the rest of the year.</p><p><b>D.</b> Several rules apply in every area. Each lobster must be measured along its shell, from the eye socket to the back of the body, and any lobster below the legal minimum size must be released. Females carrying eggs must also go back into the water. The number of traps per licence is limited, each trap must carry a tag showing which licence it belongs to, and traps must include an opening that allows small lobsters to escape. Scientists say these measures have helped keep catches high in recent years, although they continue to study how warmer ocean temperatures may affect lobster in the future.</p>',
           questions: [
             { id: 'R3.1', q: 'The first day of the season in one area has a special local name.', fixed: true, a: 'B' },
             { id: 'R3.2', q: 'Some fishers earn a living in other ways when their season is over.', fixed: true, a: 'C' },
             { id: 'R3.3', q: 'Lobsters that are too small have to be put back.', fixed: true, a: 'D' },
             { id: 'R3.4', q: 'Fishing dates are not the same in every part of the coast.', fixed: true, a: 'A' },
             { id: 'R3.5', q: 'Bad weather can delay the start of fishing.', fixed: true, a: 'B' },
-            { id: 'R3.6', q: 'Restaurants pay the highest prices for lobster in the summer.', fixed: true, a: 'E' },
+            { id: 'R3.6', q: 'Opening day in southwestern Nova Scotia is an official public holiday.', fixed: true, a: 'E' },
             { id: 'R3.7', q: 'Traps are built so that young lobsters can get out.', fixed: true, a: 'D' },
-            { id: 'R3.8', q: 'One area fishes in late summer and autumn.', fixed: true, a: 'C' },
+            { id: 'R3.8', q: 'Researchers are examining how changing sea temperatures could affect lobster.', fixed: true, a: 'D' },
             { id: 'R3.9', q: 'Seasons are timed to protect lobsters while they are changing shells.', fixed: true, a: 'A' }
           ]
         },
@@ -438,14 +466,14 @@
       tasks: [
         {
           id: 'W1', title: 'Task 1: Writing an Email', minutes: 27, minWords: 150, maxWords: 200,
-          prompt: '<p>You are applying for a program or scholarship that requires a recommendation letter. You would like to ask a teacher who taught you several years ago to write one for you.</p><p>Write an email to your former teacher. In your email, do the following:</p><ul><li>Remind the teacher who you are and when they taught you.</li><li>Explain what you are applying for and why it is important to you.</li><li>Say what information you can provide and when you need the letter.</li></ul><p class="muted">Write 150 to 200 words.</p>'
+          prompt: '<p>You are applying to a college program that requires a recommendation letter from a former teacher. The teacher who knew your work best taught you five years ago, and you have not been in touch since. The application deadline is only ten days away.</p><p>Write an email to your former teacher. In your email, do the following:</p><ul><li>Remind the teacher who you are, including something about your work they may remember.</li><li>Explain what you are applying for and why it matters to you now.</li><li>Acknowledge the short notice and say what you can send to make the letter easier to write.</li></ul><p class="muted">Write 150 to 200 words.</p>'
         },
         {
           id: 'W2', title: 'Task 2: Responding to Survey Questions', minutes: 26, minWords: 150, maxWords: 200,
           prompt: '<p>Your company has a budget for one special staff event this year and is asking employees which type of event they would prefer. Choose the option you prefer. Explain the reasons for your choice.</p><p class="muted">Write 150 to 200 words.</p>',
           options: [
-            { key: 'A', label: 'Option A', text: 'A two-day team-building retreat at a lakeside lodge, with workshops, group activities and shared meals.' },
-            { key: 'B', label: 'Option B', text: 'A one-day charity volunteer event, where staff work together to help a local food bank and a youth centre.' }
+            { key: 'A', label: 'Option A', text: 'A two-day team-building retreat at a lakeside lodge, with workshops, group activities and shared meals. The lodge is a three-hour drive away, and staff would spend one night away from home.' },
+            { key: 'B', label: 'Option B', text: 'A one-day charity volunteer event, where staff help a local food bank and a youth centre. Most of the day would be physical work, such as sorting and moving boxes, in small groups with people from the same department.' }
           ]
         }
       ]
@@ -455,10 +483,10 @@
     speaking: {
       practice: { id: 'SP', title: 'Practice Task', prep: 30, speak: 60, prompt: 'Describe your favourite season of the year and explain why you like it.' },
       tasks: [
-        { id: 'S1', title: 'Task 1: Giving Advice', prep: 30, speak: 90, prompt: 'A friend of yours often feels tired because she does not get enough sleep. Give her advice on how to get more and better sleep.' },
-        { id: 'S2', title: 'Task 2: Talking about a Personal Experience', prep: 30, speak: 60, prompt: 'Talk about a time when you had to work as part of a team. What was the task, what was your role, and how did the team work together?' },
+        { id: 'S1', title: 'Task 1: Giving Advice', prep: 30, speak: 90, prompt: 'A friend of yours often feels tired because she does not get enough sleep. She works until 11 p.m. three nights a week, has to be up at 6:30 a.m. to take her son to school, and says she cannot afford to see a sleep specialist. Give her advice on how to get more and better sleep.' },
+        { id: 'S2', title: 'Task 2: Talking about a Personal Experience', prep: 30, speak: 60, prompt: 'Talk about a time when you had to work as part of a team. What was the task, what was your role, how did the team work together, and what would you change if you did it again?' },
         { id: 'S3', title: 'Task 3: Describing a Scene', prep: 30, speak: 60, prompt: 'Describe some things that are happening in the picture below as well as you can. The person you are speaking to cannot see the picture.', image: STATION },
-        { id: 'S4', title: 'Task 4: Making Predictions', prep: 30, speak: 60, prompt: 'In this picture, what do you think will most probably happen next?', image: STATION },
+        { id: 'S4', title: 'Task 4: Making Predictions', prep: 30, speak: 60, prompt: 'In this picture, what do you think will most probably happen next? Think about the child near the edge of the platform, the arriving train, and the ticket in the air.', image: STATION },
         {
           id: 'S5', title: 'Task 5: Comparing and Persuading', type: 'compare', select: 60, prep: 60, speak: 60,
           prompt: 'Your family has saved money for one home improvement project this year. Choose the option you prefer. In the next section, you will need to persuade a family member that your choice is better.',
@@ -470,8 +498,8 @@
           persuade: 'Your family member suggests replacing the roof instead. Persuade them that your choice is better. Explain why.'
         },
         { id: 'S6', title: 'Task 6: Dealing with a Difficult Situation', prep: 60, speak: 60, prompt: '<p>Your neighbour is going away for one week and asked you to look after her dog in your apartment. You agreed. Today, your roommate told you that he is allergic to dogs and does not want the dog in the apartment.</p><p><b>Choose ONE:</b></p><p><b>Option A:</b> Talk to your neighbour. Explain why you can no longer look after her dog.</p><p><b>Option B:</b> Talk to your roommate. Explain why you want to keep your promise to your neighbour.</p>' },
-        { id: 'S7', title: 'Task 7: Expressing Opinions', prep: 30, speak: 90, prompt: 'Should schools be allowed to sell junk food, such as chips, candy and soft drinks, to students? Explain your reasons.' },
-        { id: 'S8', title: 'Task 8: Describing an Unusual Situation', prep: 30, speak: 60, prompt: 'You are at a home and garden show and see this unusual mailbox. Call a family member who needs a new mailbox. Describe the mailbox and explain whether you think they should buy it.', image: FISHBOX }
+        { id: 'S7', title: 'Task 7: Expressing Opinions', prep: 30, speak: 90, prompt: '<p>Your local school board is deciding whether high school cafeterias and vending machines should stop selling junk food, such as chips, candy and soft drinks. A parents\' group says the change would improve students\' health. The student council says students would simply buy the same snacks at the store across the street, and the school would lose about $15,000 a year that now pays for sports equipment.</p><p>Should schools stop selling junk food to students? Explain your reasons.</p>' },
+        { id: 'S8', title: 'Task 8: Describing an Unusual Situation', prep: 30, speak: 60, prompt: 'You are at a home and garden show and see this unusual mailbox. Call a family member who needs a new mailbox. Their house is on a windy street near the ocean, and they wanted to spend no more than $100. Describe the mailbox and explain whether you think they should buy it.', image: FISHBOX }
       ]
     }
   });
