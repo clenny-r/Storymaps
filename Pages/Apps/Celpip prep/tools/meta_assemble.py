@@ -36,9 +36,10 @@ for i in range(1, len(lines) + 1):
     x = load(w); sr = 16000; hop = 320
     env = np.array([np.sqrt((x[j:j + hop] ** 2).mean()) for j in range(0, len(x) - hop, hop)])
     thr = max(1000, 0.25 * np.percentile(env, 95))
-    act = env > thr
-    idx = np.where(act)[0]
-    start = max(0, idx[0] * hop / sr - 0.15) if len(idx) else 0
+    idx_hi = np.where(env > thr)[0]
+    start = max(0, idx_hi[0] * hop / sr - 0.15) if len(idx_hi) else 0
+    idx = np.where(env > max(500, 0.15 * np.percentile(env, 95)))[0]
+    idx = idx[idx >= (idx_hi[0] if len(idx_hi) else 0)]
     end = min(len(x) / sr, (idx[-1] + 1) * hop / sr + 0.35) if len(idx) else len(x) / sr
     # Meta sometimes repeats part of the line after a pause. Try every pause as an end point and keep the earliest
     # one whose transcript is (almost) as good as the best, so the repeat is cut off.
@@ -54,9 +55,11 @@ for i in range(1, len(lines) + 1):
             sg = x[int(start * sr):int(ce * sr)].astype(np.int16)
             dec.start_utt(); dec.process_raw(sg.tobytes(), full_utt=True); dec.end_utt()
             hh = dec.hyp().hypstr if dec.hyp() else ''
-            cands.append((ce, difflib.SequenceMatcher(None, norm(lines[i - 1]), norm(hh)).ratio()))
+            cands.append((ce, difflib.SequenceMatcher(None, norm(lines[i - 1]), norm(hh)).ratio(), len(norm(hh))))
         best = max(c[1] for c in cands)
-        end = min(c[0] for c in cands if c[1] >= best - 0.05)
+        nexp = len(norm(lines[i - 1]))
+        okc = [c for c in cands if c[1] >= best - 0.05 and c[2] >= 0.8 * nexp] or [c for c in cands if c[1] >= best - 0.05]
+        end = min(c[0] for c in okc)
     seg = x[int(start * sr):int(end * sr)].astype(np.int16)
     dec.start_utt(); dec.process_raw(seg.tobytes(), full_utt=True); dec.end_utt()
     hyp = dec.hyp().hypstr if dec.hyp() else ''
