@@ -6,128 +6,7 @@
 (function () {
   window.MOCK_TESTS = window.MOCK_TESTS || [];
 
-  /* ---------- small SVG helpers for speaking pictures ---------- */
-  function person(x, y, o) {
-    o = o || {};
-    var s = o.s || 1, skin = o.skin || '#e0b48f', shirt = o.shirt || '#3d7cc9', pants = o.pants || '#38414d', hair = o.hair || '#3b2a20';
-    var arms = o.arms || 'down';
-    var a = arms === 'up' ? '<line x1="-7" y1="-30" x2="-16" y2="-50" /><line x1="7" y1="-30" x2="16" y2="-50" />'
-      : arms === 'right' ? '<line x1="-7" y1="-30" x2="-12" y2="-14" /><line x1="7" y1="-30" x2="24" y2="-36" />'
-      : arms === 'left' ? '<line x1="-7" y1="-30" x2="-24" y2="-36" /><line x1="7" y1="-30" x2="12" y2="-14" />'
-      : '<line x1="-7" y1="-30" x2="-12" y2="-14" /><line x1="7" y1="-30" x2="12" y2="-14" />';
-    var legs = o.sit ? '<line x1="-4" y1="-12" x2="-14" y2="-12" /><line x1="4" y1="-12" x2="-6" y2="-12" /><line x1="-14" y1="-12" x2="-14" y2="0" /><line x1="-6" y1="-12" x2="-6" y2="0" />'
-      : '<line x1="-4" y1="-12" x2="-7" y2="0" /><line x1="4" y1="-12" x2="7" y2="0" />';
-    return '<g transform="translate(' + x + ' ' + y + ') scale(' + s + ')">' +
-      '<g stroke="' + skin + '" stroke-width="4" stroke-linecap="round">' + a + '</g>' +
-      '<g stroke="' + pants + '" stroke-width="5" stroke-linecap="round">' + legs + '</g>' +
-      '<rect x="-8" y="-36" width="16" height="25" rx="5" fill="' + shirt + '"/>' +
-      '<circle cx="0" cy="-45" r="9" fill="' + skin + '"/>' +
-      '<path d="M-9 -46 a9 9 0 0 1 18 0 q-9 -6 -18 0z" fill="' + hair + '"/>' +
-      '</g>';
-  }
-
-  function box(x, y, w, h, extra) {
-    return '<g' + (extra || '') + '><rect x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" fill="#c99a5b" stroke="#8a6331" stroke-width="2"/><line x1="' + x + '" y1="' + (y + h / 2) + '" x2="' + (x + w) + '" y2="' + (y + h / 2) + '" stroke="#e8d3a8" stroke-width="3"/></g>';
-  }
-
-  var MOVING = (function () {
-    var p = '';
-    p += '<svg viewBox="0 0 640 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Moving day on a residential street">';
-    p += '<rect width="640" height="400" fill="#cbe7f6"/>';
-    p += '<circle cx="590" cy="45" r="24" fill="#f7d35c"/>';
-    p += '<g fill="#fff" opacity=".9"><ellipse cx="300" cy="50" rx="45" ry="16"/><ellipse cx="335" cy="42" rx="30" ry="14"/></g>';
-    /* lawn, sidewalk, road */
-    p += '<rect y="220" width="640" height="90" fill="#8cc56d"/>';
-    p += '<rect y="300" width="640" height="26" fill="#c9c6bf"/>';
-    p += '<rect y="326" width="640" height="74" fill="#6b6e73"/>';
-    p += '<g fill="#f1f1f1"><rect x="30" y="368" width="50" height="5"/><rect x="290" y="368" width="50" height="5"/><rect x="420" y="368" width="50" height="5"/><rect x="550" y="368" width="50" height="5"/></g>';
-    /* the new house */
-    p += '<rect x="430" y="125" width="160" height="110" fill="#e9dcc3" stroke="#9b8a6a" stroke-width="2"/>';
-    p += '<polygon points="420,128 510,70 600,128" fill="#a0443a"/>';
-    p += '<rect x="495" y="175" width="30" height="60" fill="#5b3a29"/><circle cx="519" cy="207" r="2.5" fill="#f2d16b"/>';
-    p += '<g fill="#bfe1f2" stroke="#fff" stroke-width="3"><rect x="445" y="150" width="34" height="30"/><rect x="545" y="150" width="34" height="30"/></g>';
-    p += '<rect x="503" y="235" width="14" height="66" fill="#d8cfbf"/>';
-    /* man holding the front door open */
-    p += person(510, 236, { s: .9, arms: 'right', shirt: '#27ae60', skin: '#a9714b', hair: '#1d1410' });
-    /* SOLD sign */
-    p += '<rect x="400" y="200" width="4" height="40" fill="#555"/><rect x="380" y="186" width="46" height="22" fill="#fff" stroke="#c0392b" stroke-width="2"/><text x="403" y="202" font-size="12" text-anchor="middle" font-family="sans-serif" fill="#c0392b">SOLD</text>';
-    /* neighbour's house on the far right, partly visible */
-    p += '<rect x="610" y="140" width="40" height="95" fill="#c7d6e6"/><polygon points="600,142 640,110 640,142" fill="#4d6a8a"/>';
-    /* moving truck (cab on the left, cargo box with open back on the right) */
-    p += '<rect x="80" y="190" width="170" height="125" fill="#f4f4f4" stroke="#999" stroke-width="2"/>';
-    p += '<rect x="215" y="196" width="30" height="113" fill="#4a3b2f"/>';
-    p += '<text x="150" y="245" font-size="20" text-anchor="middle" font-family="sans-serif" fill="#2e86c1" font-weight="bold">MOVING</text>';
-    p += '<text x="150" y="268" font-size="11" text-anchor="middle" font-family="sans-serif" fill="#2e86c1">TRUCK RENTAL</text>';
-    p += '<path d="M80 230 L48 230 L22 262 L22 315 L80 315 Z" fill="#2e86c1"/><rect x="34" y="238" width="34" height="22" fill="#bfe1f2"/>';
-    p += '<g fill="#222"><circle cx="50" cy="322" r="16"/><circle cx="130" cy="322" r="16"/><circle cx="215" cy="322" r="16"/></g><g fill="#aaa"><circle cx="50" cy="322" r="6"/><circle cx="130" cy="322" r="6"/><circle cx="215" cy="322" r="6"/></g>';
-    /* ramp from the back of the truck */
-    p += '<polygon points="245,309 300,324 300,328 245,315" fill="#9a9a9a"/>';
-    /* helper inside the truck reaching for a box */
-    p += person(232, 252, { s: .8, arms: 'right', shirt: '#7f8c8d', skin: '#f0c9a6', hair: '#c49a42' });
-    /* boxes waiting inside the truck */
-    p += box(220, 280, 22, 26) + box(220, 252, 22, 26);
-    /* mover with a stack of boxes, top box about to fall */
-    p += person(290, 322, { shirt: '#2f8f83', skin: '#7a4b31', hair: '#120c08', arms: 'up' });
-    p += box(272, 246, 34, 24) + box(274, 222, 30, 24);
-    p += box(288, 194, 28, 22, ' transform="rotate(28 302 205)"');
-    p += '<g stroke="#555" stroke-width="2" stroke-linecap="round"><line x1="324" y1="190" x2="334" y2="184"/><line x1="328" y1="202" x2="340" y2="200"/><line x1="322" y1="178" x2="328" y2="170"/></g>';
-    /* two people carrying a couch toward the house */
-    p += person(340, 300, { shirt: '#c0504d', skin: '#f0c9a6', hair: '#7a4a24', arms: 'right' });
-    p += person(430, 296, { shirt: '#3d5a99', skin: '#c98c64', hair: '#2a1b12', arms: 'left' });
-    p += '<rect x="352" y="252" width="66" height="18" rx="4" fill="#7d6bb0"/><rect x="352" y="240" width="66" height="14" rx="4" fill="#6a589c"/><rect x="346" y="244" width="10" height="26" rx="4" fill="#5a4a88"/><rect x="414" y="244" width="10" height="26" rx="4" fill="#5a4a88"/>';
-    /* woman with a clipboard on the front path */
-    p += person(478, 286, { shirt: '#f2a33a', skin: '#e3b28b', hair: '#3b2a20', arms: 'left' });
-    p += '<rect x="446" y="242" width="14" height="18" fill="#fff" stroke="#7a5233" stroke-width="2"/>';
-    /* child sitting in an empty box on the lawn */
-    p += '<rect x="548" y="262" width="40" height="30" fill="#c99a5b" stroke="#8a6331" stroke-width="2"/><polygon points="548,262 536,250 548,252" fill="#d9ac6c"/><polygon points="588,262 600,250 588,252" fill="#d9ac6c"/>';
-    p += person(568, 286, { shirt: '#e74c3c', skin: '#8d5a3b', hair: '#1d1410', s: .7, arms: 'up' });
-    p += '<rect x="548" y="270" width="40" height="22" fill="#c99a5b" stroke="#8a6331" stroke-width="2"/>';
-    /* neighbour bringing a tray of lemonade */
-    p += person(626, 300, { shirt: '#9b59b6', skin: '#d6a07a', hair: '#dcdcdc', arms: 'left' });
-    p += '<rect x="586" y="260" width="26" height="4" fill="#888"/><g fill="#f7e36b" stroke="#bbb"><rect x="589" y="250" width="6" height="10"/><rect x="599" y="250" width="6" height="10"/></g>';
-    /* child on a scooter on the sidewalk, with a dog running beside */
-    p += '<line x1="388" y1="324" x2="420" y2="324" stroke="#16a085" stroke-width="4"/><line x1="418" y1="324" x2="414" y2="290" stroke="#16a085" stroke-width="3"/><circle cx="390" cy="326" r="4" fill="#222"/><circle cx="418" cy="326" r="4" fill="#222"/>';
-    p += person(400, 322, { shirt: '#f4d03f', skin: '#f2cfb0', hair: '#c49a42', s: .7, arms: 'right' });
-    p += '<g fill="#a5713f"><ellipse cx="462" cy="314" rx="13" ry="6"/><circle cx="476" cy="308" r="6"/><rect x="452" y="317" width="3" height="8"/><rect x="467" y="317" width="3" height="8"/></g><path d="M449 312 q-6 -6 -2 -10" stroke="#a5713f" stroke-width="2" fill="none"/>';
-    /* cyclist riding past on the road */
-    p += '<g transform="translate(560 388)"><circle cx="-16" cy="0" r="10" fill="none" stroke="#333" stroke-width="3"/><circle cx="16" cy="0" r="10" fill="none" stroke="#333" stroke-width="3"/><path d="M-16 0 L-2 -14 L16 0 M-2 -14 L9 -14" stroke="#8e44ad" stroke-width="3" fill="none"/></g>';
-    p += person(558, 376, { s: .85, arms: 'right', shirt: '#e67e22', skin: '#7a4b31', hair: '#120c08' });
-    /* lamp and plant waiting on the sidewalk */
-    p += '<rect x="325" y="290" width="4" height="34" fill="#555"/><polygon points="317,290 337,290 332,276 322,276" fill="#f6e7a6" stroke="#b9a75a"/>';
-    p += '<rect x="352" y="306" width="16" height="16" fill="#b5651d"/><g fill="#3f8f3a"><ellipse cx="356" cy="298" rx="6" ry="10"/><ellipse cx="365" cy="298" rx="6" ry="10"/></g>';
-    p += '</svg>';
-    return p;
-  })();
-
-  var CRUISE = '<svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg"><rect width="200" height="120" fill="#cfeaf7"/><rect y="82" width="200" height="38" fill="#3b8fd0"/><circle cx="170" cy="22" r="11" fill="#f6d55c"/><path d="M28 70 L172 70 L158 94 L42 94 Z" fill="#fff" stroke="#2c3e50" stroke-width="2"/><rect x="52" y="52" width="96" height="18" fill="#fff" stroke="#2c3e50" stroke-width="2"/><rect x="70" y="38" width="56" height="14" fill="#fff" stroke="#2c3e50" stroke-width="2"/><rect x="104" y="22" width="12" height="16" fill="#c0392b"/><g fill="#2e86c1"><circle cx="60" cy="80" r="3"/><circle cx="76" cy="80" r="3"/><circle cx="92" cy="80" r="3"/><circle cx="108" cy="80" r="3"/><circle cx="124" cy="80" r="3"/><circle cx="140" cy="80" r="3"/></g><path d="M10 104 q10 -5 20 0 q10 5 20 0 M140 108 q10 -5 20 0 q10 5 20 0" stroke="#fff" stroke-width="2" fill="none"/></svg>';
-  var ROADTRIP = '<svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg"><rect width="200" height="120" fill="#e3f1f9"/><polygon points="0,80 45,30 90,80" fill="#8fa3b8"/><polygon points="60,80 115,20 170,80" fill="#7a8fa6"/><polygon points="103,34 115,20 127,34" fill="#fff"/><rect y="78" width="200" height="42" fill="#7fbf6a"/><path d="M60 120 C80 100 130 98 150 78" stroke="#555" stroke-width="18" fill="none"/><path d="M60 120 C80 100 130 98 150 78" stroke="#f6e7a6" stroke-width="2" stroke-dasharray="6 6" fill="none"/><rect x="88" y="88" width="34" height="14" rx="4" fill="#e74c3c"/><rect x="95" y="81" width="20" height="9" rx="3" fill="#e74c3c"/><rect x="92" y="76" width="26" height="5" fill="#8a6331"/><circle cx="96" cy="103" r="4" fill="#222"/><circle cx="114" cy="103" r="4" fill="#222"/></svg>';
-  var STAYCATION = '<svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg"><rect width="200" height="120" fill="#e8f4fb"/><rect y="84" width="200" height="36" fill="#86c66f"/><rect x="24" y="44" width="80" height="50" fill="#f2e3c6" stroke="#9b8a6a"/><polygon points="16,46 64,14 112,46" fill="#a0443a"/><rect x="56" y="66" width="16" height="28" fill="#5b3a29"/><rect x="34" y="56" width="14" height="12" fill="#bfe1f2"/><rect x="80" y="56" width="14" height="12" fill="#bfe1f2"/><path d="M128 98 L170 98 L162 84 L136 84 Z" fill="#f39c12"/><line x1="134" y1="98" x2="130" y2="108" stroke="#8a6331" stroke-width="3"/><line x1="164" y1="98" x2="168" y2="108" stroke="#8a6331" stroke-width="3"/><line x1="150" y1="84" x2="150" y2="40" stroke="#555" stroke-width="2"/><path d="M122 46 Q150 18 178 46 Z" fill="#e74c3c"/><text x="64" y="10" font-size="9" text-anchor="middle" font-family="sans-serif" fill="#2c3e50">HOME</text></svg>';
-
-  var BACKPACK = '<svg viewBox="0 0 640 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="An unusual backpack in a sports store">' +
-    '<rect width="640" height="400" fill="#eef1ec"/><rect y="340" width="640" height="60" fill="#b9b2a6"/>' +
-    '<rect x="20" y="130" width="150" height="40" rx="6" fill="#2f6f4f"/><text x="95" y="156" text-anchor="middle" font-family="sans-serif" font-size="16" fill="#fff">OUTDOOR GEAR</text>' +
-    /* telescoping pull handle behind the bag */
-    '<rect x="372" y="40" width="8" height="120" fill="#888"/><rect x="342" y="34" width="44" height="12" rx="6" fill="#444"/>' +
-    /* umbrella attached to the left side */
-    '<line x1="232" y1="170" x2="196" y2="48" stroke="#555" stroke-width="5"/><path d="M120 76 Q170 -6 262 30 Q236 34 214 50 Q190 50 168 62 Q144 62 120 76z" fill="#2e86c1"/>' +
-    /* backpack body */
-    '<rect x="230" y="90" width="170" height="240" rx="34" fill="#e67e22" stroke="#a65410" stroke-width="4"/>' +
-    '<path d="M240 140 Q315 100 390 140 L390 170 L240 170 Z" fill="#d35400"/>' +
-    /* solar panels on the top flap */
-    '<g stroke="#9fc0ea" stroke-width="1.5"><rect x="262" y="118" width="106" height="44" fill="#1f3b73"/><line x1="288" y1="118" x2="288" y2="162"/><line x1="315" y1="118" x2="315" y2="162"/><line x1="342" y1="118" x2="342" y2="162"/><line x1="262" y1="140" x2="368" y2="140"/></g>' +
-    /* front light with beams */
-    '<circle cx="315" cy="215" r="18" fill="#f6f6f6" stroke="#555" stroke-width="4"/><circle cx="315" cy="215" r="9" fill="#f7e36b"/>' +
-    '<g stroke="#f1c40f" stroke-width="3" stroke-linecap="round"><line x1="290" y1="200" x2="276" y2="192"/><line x1="340" y1="200" x2="354" y2="192"/><line x1="315" y1="190" x2="315" y2="178"/></g>' +
-    /* front pocket */
-    '<rect x="258" y="250" width="114" height="56" rx="12" fill="#ca6a16" stroke="#a65410" stroke-width="3"/><line x1="268" y1="262" x2="362" y2="262" stroke="#7a3d0b" stroke-width="3"/>' +
-    /* water bottle holder on the right */
-    '<rect x="398" y="210" width="34" height="70" rx="8" fill="#555"/><rect x="404" y="176" width="22" height="80" rx="6" fill="#5dade2"/><rect x="408" y="166" width="14" height="12" fill="#2c3e50"/>' +
-    /* wheels */
-    '<circle cx="262" cy="340" r="18" fill="#222"/><circle cx="262" cy="340" r="7" fill="#aaa"/><circle cx="368" cy="340" r="18" fill="#222"/><circle cx="368" cy="340" r="7" fill="#aaa"/>' +
-    /* price tag */
-    '<line x1="400" y1="110" x2="470" y2="96" stroke="#555" stroke-width="2"/><polygon points="470,80 540,80 552,98 540,116 470,116" fill="#f6d55c" stroke="#b9962a" stroke-width="2"/><circle cx="476" cy="98" r="4" fill="#eef1ec"/><text x="510" y="106" text-anchor="middle" font-family="sans-serif" font-size="20" fill="#333">$189</text>' +
-    '</svg>';
-
+  /* Speaking pictures are image files in tests/img/E/ (scene, object, opt_A to opt_C). */
   window.MOCK_TESTS.push({
     id: 'E',
     title: 'Mock Test E',
@@ -489,21 +368,21 @@
       tasks: [
         { id: 'S1', title: 'Task 1: Giving Advice', prep: 30, speak: 90, prompt: 'A friend of yours wants to save $3,000 by next summer for a trip home to see her family, but by the end of every month she has nothing left. She already works full time and does not want to give up her weekly dinner with friends. Give her advice on how she can reach her goal.' },
         { id: 'S2', title: 'Task 2: Talking about a Personal Experience', prep: 30, speak: 60, prompt: 'Talk about a time when you felt proud of yourself. What did you do, what was the hardest part, and why did it make you feel proud?' },
-        { id: 'S3', title: 'Task 3: Describing a Scene', prep: 30, speak: 60, prompt: 'Describe some things that are happening in the picture below as well as you can. The person you are speaking to cannot see the picture.', image: MOVING },
-        { id: 'S4', title: 'Task 4: Making Predictions', prep: 30, speak: 60, prompt: 'In this picture, what do you think will most probably happen next? Think about the mover\'s stack of boxes, the couch, and the people and animals on the sidewalk.', image: MOVING },
+        { id: 'S3', title: 'Task 3: Describing a Scene', prep: 30, speak: 60, prompt: 'Describe some things that are happening in the picture below as well as you can. The person you are speaking to cannot see the picture.', image: '<img src="tests/img/E/scene.jpg" alt="Moving day on a residential street">' },
+        { id: 'S4', title: 'Task 4: Making Predictions', prep: 30, speak: 60, prompt: 'In this picture, what do you think will most probably happen next? Think about the mover\'s stack of boxes, the couch, and the people and animals on the sidewalk.', image: '<img src="tests/img/E/scene.jpg" alt="Moving day on a residential street">' },
         {
           id: 'S5', title: 'Task 5: Comparing and Persuading', type: 'compare', select: 60, prep: 60, speak: 60,
           prompt: 'Your family is planning a one-week summer vacation. Choose the option you prefer. In the next section, you will need to persuade a family member that your choice is better.',
           choices: [
-            { key: 'A', title: 'Pacific coast cruise', image: CRUISE, facts: ['7 days at sea and in ports', 'Cost: $3,200 for the family', 'Meals and shows included', 'Fly to Vancouver to board'] },
-            { key: 'B', title: 'Road trip through the Rockies', image: ROADTRIP, facts: ['7 days on the road', 'Cost: $2,100 for gas, motels and food', 'Stop wherever you like', 'About 5 hours of driving a day'] }
+            { key: 'A', title: 'Pacific coast cruise', image: '<img src="tests/img/E/opt_A.jpg" alt="Photo: Pacific coast cruise">', facts: ['7 days at sea and in ports', 'Cost: $3,200 for the family', 'Meals and shows included', 'Fly to Vancouver to board'] },
+            { key: 'B', title: 'Road trip through the Rockies', image: '<img src="tests/img/E/opt_B.jpg" alt="Photo: Road trip through the Rockies">', facts: ['7 days on the road', 'Cost: $2,100 for gas, motels and food', 'Stop wherever you like', 'About 5 hours of driving a day'] }
           ],
-          third: { key: 'C', title: 'Staycation at home', image: STAYCATION, facts: ['7 days at home', 'Cost: $600 for day trips', 'No travel time', 'Local beaches, parks and museums'] },
+          third: { key: 'C', title: 'Staycation at home', image: '<img src="tests/img/E/opt_C.jpg" alt="Photo: Staycation at home">', facts: ['7 days at home', 'Cost: $600 for day trips', 'No travel time', 'Local beaches, parks and museums'] },
           persuade: 'Your family member would rather have a staycation at home. Persuade them that your choice is better. Explain why.'
         },
         { id: 'S6', title: 'Task 6: Dealing with a Difficult Situation', prep: 60, speak: 60, prompt: '<p>Two months ago, you agreed to look after your neighbour\'s dog for a week while she is away. Yesterday, your closest friend asked you to be in her wedding party. The wedding is in another city during that same week.</p><p><b>Choose ONE:</b></p><p><b>Option A:</b> Talk to your neighbour. Explain why you can no longer look after her dog.</p><p><b>Option B:</b> Talk to your friend. Explain why you cannot be in her wedding party.</p>' },
         { id: 'S7', title: 'Task 7: Expressing Opinions', prep: 30, speak: 90, prompt: 'The high school in your neighbourhood is thinking about making uniforms mandatory. Some parents say uniforms would reduce pressure about clothing and save families money over time. Many students say uniforms take away a way to express themselves, and a full set costs about $250 at the start. The school council has asked local residents for their views. Should high school students be required to wear uniforms? Explain your reasons.' },
-        { id: 'S8', title: 'Task 8: Describing an Unusual Situation', prep: 30, speak: 60, prompt: 'You are in a sports store and see this unusual backpack. Call your friend, who is going on a ten-day hiking trip next month on rough, rocky mountain trails. The backpack weighs 4 kilograms empty, about twice as much as an ordinary hiking pack. Describe the backpack and explain whether you think your friend should buy it.', image: BACKPACK }
+        { id: 'S8', title: 'Task 8: Describing an Unusual Situation', prep: 30, speak: 60, prompt: 'You are in a sports store and see this unusual backpack. Call your friend, who is going on a ten-day hiking trip next month on rough, rocky mountain trails. The backpack weighs 4 kilograms empty, about twice as much as an ordinary hiking pack. Describe the backpack and explain whether you think your friend should buy it.', image: '<img src="tests/img/E/object.jpg" alt="An unusual backpack in a sports store">' }
       ]
     }
   });

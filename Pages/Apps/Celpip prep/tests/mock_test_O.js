@@ -7,126 +7,7 @@
 (function () {
   window.MOCK_TESTS = window.MOCK_TESTS || [];
 
-  /* ---------- small SVG helpers for speaking pictures ---------- */
-  function person(x, y, o) {
-    o = o || {};
-    var s = o.s || 1, skin = o.skin || '#e0b48f', shirt = o.shirt || '#3d7cc9', pants = o.pants || '#38414d', hair = o.hair || '#3b2a20';
-    var arms = o.arms || 'down';
-    var a = arms === 'up' ? '<line x1="-7" y1="-30" x2="-16" y2="-50" /><line x1="7" y1="-30" x2="16" y2="-50" />'
-      : arms === 'right' ? '<line x1="-7" y1="-30" x2="-12" y2="-14" /><line x1="7" y1="-30" x2="24" y2="-36" />'
-      : arms === 'left' ? '<line x1="-7" y1="-30" x2="-24" y2="-36" /><line x1="7" y1="-30" x2="12" y2="-14" />'
-      : arms === 'front' ? '<line x1="-7" y1="-30" x2="14" y2="-28" /><line x1="7" y1="-30" x2="20" y2="-26" />'
-      : '<line x1="-7" y1="-30" x2="-12" y2="-14" /><line x1="7" y1="-30" x2="12" y2="-14" />';
-    var legs = o.sit ? '<line x1="-4" y1="-12" x2="-14" y2="-12" /><line x1="4" y1="-12" x2="-6" y2="-12" /><line x1="-14" y1="-12" x2="-14" y2="0" /><line x1="-6" y1="-12" x2="-6" y2="0" />'
-      : o.walk ? '<line x1="-4" y1="-12" x2="-10" y2="0" /><line x1="4" y1="-12" x2="10" y2="0" />'
-      : '<line x1="-4" y1="-12" x2="-7" y2="0" /><line x1="4" y1="-12" x2="7" y2="0" />';
-    return '<g transform="translate(' + x + ' ' + y + ') scale(' + s + ')">' +
-      '<g stroke="' + skin + '" stroke-width="4" stroke-linecap="round">' + a + '</g>' +
-      '<g stroke="' + pants + '" stroke-width="5" stroke-linecap="round">' + legs + '</g>' +
-      '<rect x="-8" y="-36" width="16" height="25" rx="5" fill="' + shirt + '"/>' +
-      '<circle cx="0" cy="-45" r="9" fill="' + skin + '"/>' +
-      '<path d="M-9 -46 a9 9 0 0 1 18 0 q-9 -6 -18 0z" fill="' + hair + '"/>' +
-      '</g>';
-  }
-
-  function helmet(x, y, s, c) {
-    s = s || 1;
-    return '<g transform="translate(' + x + ' ' + y + ') scale(' + s + ')"><path d="M-12 0 a12 11 0 0 1 24 0z" fill="' + (c || '#f1c40f') + '"/><rect x="-16" y="-2" width="32" height="4" rx="2" fill="' + (c || '#f1c40f') + '"/></g>';
-  }
-
-  var FIREHALL = (function () {
-    var p = '';
-    p += '<svg viewBox="0 0 640 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A busy open house at a small-town fire hall">';
-    p += '<rect width="640" height="400" fill="#cfe8f7"/>';
-    p += '<g fill="#ffffff"><ellipse cx="420" cy="50" rx="60" ry="16"/><ellipse cx="560" cy="80" rx="45" ry="12"/></g>';
-    /* paved lot and grass */
-    p += '<rect y="250" width="640" height="150" fill="#b8b8b0"/><rect y="244" width="640" height="8" fill="#8fbf6a"/>';
-    /* fire hall building */
-    p += '<rect x="20" y="96" width="240" height="156" fill="#b5523b"/><polygon points="10,100 140,52 270,100" fill="#7b2d1f"/>';
-    p += '<rect x="60" y="150" width="110" height="102" fill="#3b3b3b"/><g stroke="#555" stroke-width="2"><line x1="60" y1="170" x2="170" y2="170"/><line x1="60" y1="190" x2="170" y2="190"/></g>';
-    p += '<rect x="186" y="160" width="50" height="40" fill="#d6eaf8" stroke="#7b2d1f" stroke-width="3"/>';
-    p += '<rect x="70" y="106" width="140" height="24" rx="3" fill="#ffffff"/><text x="140" y="123" font-size="14" text-anchor="middle" font-family="sans-serif" fill="#a93226">FIRE HALL</text>';
-    /* bunting being hung by a man on a ladder */
-    p += '<path d="M20 140 Q60 152 100 142" stroke="#555" stroke-width="1.5" fill="none"/><g><polygon points="30,143 38,143 34,153" fill="#e74c3c"/><polygon points="48,147 56,147 52,157" fill="#f1c40f"/><polygon points="66,148 74,148 70,158" fill="#3498db"/><polygon points="84,146 92,146 88,156" fill="#2ecc71"/></g>';
-    p += '<g stroke="#9a7d0a" stroke-width="3"><line x1="22" y1="252" x2="8" y2="150"/><line x1="38" y1="252" x2="24" y2="150"/></g><g stroke="#9a7d0a" stroke-width="2"><line x1="20" y1="232" x2="36" y2="232"/><line x1="17" y1="210" x2="33" y2="210"/><line x1="14" y1="188" x2="30" y2="188"/><line x1="11" y1="166" x2="27" y2="166"/></g>';
-    p += person(24, 196, { shirt: '#27ae60', skin: '#c98c64', hair: '#2a1b12', arms: 'right', s: .85 });
-    /* fire truck */
-    p += '<rect x="250" y="190" width="200" height="56" rx="6" fill="#d62c1a"/><rect x="400" y="166" width="54" height="50" rx="6" fill="#d62c1a"/><rect x="410" y="174" width="36" height="22" fill="#d6eaf8"/>';
-    p += '<g stroke="#bdc3c7" stroke-width="3"><line x1="262" y1="182" x2="392" y2="182"/><line x1="262" y1="190" x2="392" y2="190"/></g><g stroke="#bdc3c7" stroke-width="2"><line x1="280" y1="182" x2="280" y2="190"/><line x1="310" y1="182" x2="310" y2="190"/><line x1="340" y1="182" x2="340" y2="190"/><line x1="370" y1="182" x2="370" y2="190"/></g>';
-    p += '<rect x="262" y="214" width="120" height="6" fill="#f4f6f7"/><circle cx="290" cy="250" r="15" fill="#2c3e50"/><circle cx="290" cy="250" r="6" fill="#bdc3c7"/><circle cx="420" cy="250" r="15" fill="#2c3e50"/><circle cx="420" cy="250" r="6" fill="#bdc3c7"/>';
-    /* child in the cab, waving */
-    p += '<circle cx="428" cy="186" r="7" fill="#f2cfb0"/><path d="M421 185 a7 7 0 0 1 14 0z" fill="#d9b56a"/><line x1="434" y1="190" x2="442" y2="178" stroke="#f2cfb0" stroke-width="3" stroke-linecap="round"/>';
-    /* firefighter spraying a hose */
-    p += helmet(484, 228, 1, '#f1c40f');
-    p += person(484, 286, { shirt: '#c0392b', pants: '#2c3e50', skin: '#8d5a3b', hair: '#120c08', arms: 'front' });
-    p += '<path d="M450 286 Q470 262 502 258" stroke="#566573" stroke-width="5" fill="none"/>';
-    p += '<path d="M506 256 Q560 214 604 296" stroke="#5dade2" stroke-width="5" fill="none" opacity=".85"/><g fill="#5dade2"><circle cx="600" cy="300" r="3"/><circle cx="608" cy="292" r="2.5"/><circle cx="596" cy="306" r="2.5"/></g>';
-    /* target cones */
-    p += '<polygon points="616,300 624,280 632,300" fill="#e67e22"/>';
-    /* man carrying a cake walking into the spray */
-    p += person(580, 330, { shirt: '#f4d03f', skin: '#f0c9a6', hair: '#5d4037', arms: 'front', walk: true });
-    p += '<rect x="586" y="288" width="34" height="18" rx="3" fill="#fdfefe" stroke="#e8a0b0" stroke-width="2"/><rect x="584" y="304" width="38" height="4" fill="#bdc3c7"/><g fill="#e74c3c"><circle cx="594" cy="286" r="2"/><circle cx="604" cy="286" r="2"/><circle cx="614" cy="286" r="2"/></g><text x="603" y="300" font-size="7" text-anchor="middle" font-family="sans-serif" fill="#c0392b">CAKE</text>';
-    /* face painting table */
-    p += '<rect x="30" y="318" width="96" height="8" fill="#8e44ad"/><g stroke="#5b2c6f" stroke-width="3"><line x1="38" y1="326" x2="38" y2="350"/><line x1="118" y1="326" x2="118" y2="350"/></g><rect x="40" y="290" width="76" height="16" rx="3" fill="#ffffff" stroke="#8e44ad"/><text x="78" y="302" font-size="9" text-anchor="middle" font-family="sans-serif" fill="#8e44ad">FACE PAINTING</text>';
-    p += person(40, 372, { sit: true, shirt: '#e91e63', skin: '#a9714b', hair: '#1d1410', arms: 'right' });
-    p += person(118, 372, { sit: true, shirt: '#2980b9', skin: '#f2cfb0', hair: '#c49a42', s: .75 });
-    p += '<g fill="#e74c3c"><circle cx="112" cy="337" r="2"/><circle cx="116" cy="340" r="2"/></g>';
-    /* barbecue with smoke */
-    p += '<rect x="186" y="318" width="56" height="20" rx="4" fill="#2c3e50"/><g stroke="#2c3e50" stroke-width="3"><line x1="192" y1="338" x2="188" y2="364"/><line x1="236" y1="338" x2="240" y2="364"/></g><g fill="#8b4513"><ellipse cx="200" cy="316" rx="7" ry="3"/><ellipse cx="214" cy="316" rx="7" ry="3"/><ellipse cx="228" cy="316" rx="7" ry="3"/></g>';
-    p += '<g fill="#d5d8dc" opacity=".8"><circle cx="206" cy="300" r="8"/><circle cx="216" cy="286" r="10"/><circle cx="208" cy="270" r="9"/></g>';
-    p += person(262, 360, { shirt: '#ffffff', skin: '#6b4226', hair: '#120c08', arms: 'left' });
-    p += '<line x1="238" y1="324" x2="230" y2="314" stroke="#7f8c8d" stroke-width="3"/>';
-    /* Dalmatian dog eyeing the barbecue */
-    p += '<g><ellipse cx="166" cy="372" rx="18" ry="9" fill="#ffffff" stroke="#333" stroke-width="1"/><circle cx="184" cy="362" r="8" fill="#ffffff" stroke="#333" stroke-width="1"/><g fill="#222"><circle cx="160" cy="370" r="2.5"/><circle cx="170" cy="374" r="2"/><circle cx="154" cy="374" r="2"/><circle cx="186" cy="360" r="1.6"/></g><rect x="154" y="378" width="3" height="10" fill="#fff" stroke="#333" stroke-width=".5"/><rect x="174" y="378" width="3" height="10" fill="#fff" stroke="#333" stroke-width=".5"/></g>';
-    /* child trying on a big helmet with a firefighter helping */
-    p += person(330, 392, { shirt: '#16a085', skin: '#c98c64', hair: '#1d1410', s: .7 });
-    p += helmet(330, 362, 1.4, '#f1c40f');
-    p += person(372, 392, { shirt: '#c0392b', pants: '#2c3e50', skin: '#f0c9a6', hair: '#8b5a2b', arms: 'left' });
-    /* girl whose balloon is floating away */
-    p += person(470, 392, { shirt: '#f39c12', skin: '#e3b28b', hair: '#3b2a20', s: .75, arms: 'up' });
-    p += '<ellipse cx="500" cy="318" rx="12" ry="15" fill="#e74c3c"/><path d="M500 333 q-6 10 2 18 q-6 8 -2 14" stroke="#555" stroke-width="1" fill="none"/>';
-    p += '</svg>';
-    return p;
-  })();
-
-  var CLINIC = '<svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg"><rect width="200" height="120" fill="#eef5fb"/><rect y="100" width="200" height="20" fill="#bdc3c7"/>' +
-    '<rect x="20" y="30" width="160" height="72" fill="#ffffff" stroke="#2e86c1" stroke-width="2"/><rect x="20" y="16" width="160" height="18" fill="#2e86c1"/><text x="100" y="29" font-size="10" text-anchor="middle" font-family="sans-serif" fill="#ffffff">EYE CLINIC</text>' +
-    '<rect x="34" y="44" width="40" height="50" fill="#fdfefe" stroke="#7f8c8d"/><text x="54" y="58" font-size="11" text-anchor="middle" font-family="sans-serif" fill="#333">E</text><text x="54" y="72" font-size="8" text-anchor="middle" font-family="sans-serif" fill="#333">F P</text><text x="54" y="84" font-size="6" text-anchor="middle" font-family="sans-serif" fill="#333">T O Z</text>' +
-    '<g stroke="#333" stroke-width="3" fill="none"><circle cx="118" cy="68" r="12"/><circle cx="152" cy="68" r="12"/><line x1="130" y1="68" x2="140" y2="68"/></g></svg>';
-
-  var ONLINE = '<svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg"><rect width="200" height="120" fill="#f4f1fa"/>' +
-    '<rect x="40" y="18" width="120" height="74" rx="4" fill="#34495e"/><rect x="46" y="24" width="108" height="62" fill="#ecf0f1"/><rect x="28" y="92" width="144" height="8" rx="3" fill="#7f8c8d"/>' +
-    '<g stroke="#8e44ad" stroke-width="3" fill="none"><circle cx="82" cy="54" r="11"/><circle cx="114" cy="54" r="11"/><line x1="93" y1="54" x2="103" y2="54"/></g><rect x="70" y="72" width="60" height="9" rx="3" fill="#27ae60"/><text x="100" y="79" font-size="6" text-anchor="middle" font-family="sans-serif" fill="#ffffff">ORDER NOW</text>' +
-    '<rect x="150" y="80" width="36" height="26" fill="#d4a76a" stroke="#a0784a"/><line x1="150" y1="88" x2="186" y2="88" stroke="#a0784a"/></svg>';
-
-  var OPTICAL = '<svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg"><rect width="200" height="120" fill="#e9f7ef"/><rect y="98" width="200" height="22" fill="#95a5a6"/>' +
-    '<rect x="10" y="26" width="180" height="74" fill="#d5dbdb"/><rect x="10" y="14" width="180" height="16" fill="#1e8449"/><text x="100" y="26" font-size="9" text-anchor="middle" font-family="sans-serif" fill="#ffffff">SUPERSTORE OPTICAL</text>' +
-    '<rect x="78" y="56" width="44" height="44" fill="#d6eaf8" stroke="#7f8c8d"/><text x="100" y="48" font-size="8" text-anchor="middle" font-family="sans-serif" fill="#1e8449">READY TOMORROW</text>' +
-    '<g stroke="#2c3e50" stroke-width="2" fill="none"><path d="M24 70 L32 70 L40 90 L62 90 L66 76 L36 76"/><circle cx="44" cy="96" r="3"/><circle cx="58" cy="96" r="3"/></g></svg>';
-
-  var STROLLER = '<svg viewBox="0 0 640 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="An unusual three-wheeled stroller in a baby store">' +
-    '<rect width="640" height="400" fill="#fbf3ea"/><rect y="330" width="640" height="70" fill="#d7ccc8"/>' +
-    '<rect x="24" y="24" width="170" height="52" rx="6" fill="#ffffff" stroke="#d7b899"/><text x="109" y="57" text-anchor="middle" font-family="sans-serif" font-size="19" fill="#8d6e63">BABY STORE</text>' +
-    /* solar panel canopy */
-    '<path d="M220 170 Q250 90 340 92 L340 170z" fill="#1f3a5f"/><g stroke="#5dade2" stroke-width="1.5"><line x1="250" y1="120" x2="340" y2="120"/><line x1="236" y1="145" x2="340" y2="145"/><line x1="280" y1="98" x2="280" y2="170"/><line x1="310" y1="93" x2="310" y2="170"/></g><rect x="254" y="124" width="72" height="16" rx="3" fill="#f4d03f"/><text x="290" y="136" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#1f3a5f">SOLAR PANEL</text>' +
-    /* seat */
-    '<path d="M222 170 L340 170 L330 236 L236 236z" fill="#16a085"/><rect x="246" y="186" width="70" height="40" rx="8" fill="#1abc9c"/>' +
-    /* handle with a horn and a cup holder */
-    '<line x1="340" y1="170" x2="420" y2="90" stroke="#555" stroke-width="7" stroke-linecap="round"/><rect x="408" y="80" width="34" height="14" rx="6" fill="#2c3e50"/>' +
-    '<circle cx="446" cy="76" r="9" fill="#e74c3c"/><path d="M455 72 L478 62 L478 90 L455 80z" fill="#f1c40f"/>' +
-    '<rect x="380" y="118" width="22" height="26" rx="3" fill="#ffffff" stroke="#7f8c8d" stroke-width="2"/><rect x="383" y="108" width="16" height="12" fill="#a0522d"/>' +
-    /* dog leash hook with a leash */
-    '<path d="M362 150 q10 0 10 10" stroke="#555" stroke-width="3" fill="none"/><path d="M372 160 Q390 220 420 250" stroke="#c0392b" stroke-width="3" fill="none"/><circle cx="422" cy="252" r="5" fill="#7f8c8d"/>' +
-    /* frame, cooler basket, standing step */
-    '<line x1="280" y1="236" x2="250" y2="318" stroke="#555" stroke-width="6"/><line x1="320" y1="236" x2="372" y2="318" stroke="#555" stroke-width="6"/><line x1="280" y1="236" x2="170" y2="318" stroke="#555" stroke-width="6"/>' +
-    '<rect x="248" y="254" width="92" height="40" rx="5" fill="#3498db"/><rect x="248" y="250" width="92" height="8" rx="3" fill="#ecf0f1"/><text x="294" y="279" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#ffffff">COOLER</text>' +
-    '<rect x="350" y="296" width="60" height="10" rx="3" fill="#7f8c8d"/><text x="380" y="292" text-anchor="middle" font-family="sans-serif" font-size="9" fill="#555">STEP</text>' +
-    /* three wheels */
-    '<circle cx="170" cy="328" r="22" fill="#2c3e50"/><circle cx="170" cy="328" r="8" fill="#bdc3c7"/><circle cx="250" cy="328" r="22" fill="#2c3e50"/><circle cx="250" cy="328" r="8" fill="#bdc3c7"/><circle cx="378" cy="328" r="22" fill="#2c3e50"/><circle cx="378" cy="328" r="8" fill="#bdc3c7"/>' +
-    /* price tag */
-    '<line x1="442" y1="94" x2="500" y2="150" stroke="#555" stroke-width="1.5"/><path d="M500 136 L580 136 L580 176 L500 176 L490 156z" fill="#f6d55c" stroke="#b7950b"/><circle cx="500" cy="156" r="3" fill="#fbf3ea"/><text x="538" y="163" text-anchor="middle" font-family="sans-serif" font-size="20" fill="#333">$340</text>' +
-    '</svg>';
-
+  /* Speaking pictures are image files in tests/img/O/ (scene, object, opt_A to opt_C). */
   window.MOCK_TESTS.push({
     id: 'O',
     title: 'Mock Test O',
@@ -494,21 +375,21 @@
       tasks: [
         { id: 'S1', title: 'Task 1: Giving Advice', prep: 30, speak: 90, prompt: 'A friend of yours wants to adopt a dog from the local animal shelter. He lives alone in a one-bedroom apartment on the sixth floor, works ten-hour shifts four days a week, and says he can spend about $150 a month on a pet. Give your friend advice about whether and how he should adopt a dog.' },
         { id: 'S2', title: 'Task 2: Talking about a Personal Experience', prep: 30, speak: 60, prompt: 'Talk about a time when you helped plan or organize an event, such as a party, a trip or a community activity. What went wrong, how did you deal with it, and what would you do differently next time?' },
-        { id: 'S3', title: 'Task 3: Describing a Scene', prep: 30, speak: 60, prompt: 'Describe some things that are happening in the picture below as well as you can. The person you are speaking to cannot see the picture.', image: FIREHALL },
-        { id: 'S4', title: 'Task 4: Making Predictions', prep: 30, speak: 60, prompt: 'In this picture, what do you think will most probably happen next? Think about the man carrying the cake, the dog near the barbecue, the balloon and the man on the ladder.', image: FIREHALL },
+        { id: 'S3', title: 'Task 3: Describing a Scene', prep: 30, speak: 60, prompt: 'Describe some things that are happening in the picture below as well as you can. The person you are speaking to cannot see the picture.', image: '<img src="tests/img/O/scene.jpg" alt="A busy open house at a small-town fire hall">' },
+        { id: 'S4', title: 'Task 4: Making Predictions', prep: 30, speak: 60, prompt: 'In this picture, what do you think will most probably happen next? Think about the man carrying the cake, the dog near the barbecue, the balloon and the man on the ladder.', image: '<img src="tests/img/O/scene.jpg" alt="A busy open house at a small-town fire hall">' },
         {
           id: 'S5', title: 'Task 5: Comparing and Persuading', type: 'compare', select: 60, prep: 60, speak: 60,
           prompt: 'You need new glasses before you start a new job in three weeks, where you will spend most of the day at a computer. Your workplace plan will pay up to $200, but not until after your first month. Choose the option you prefer. In the next section, you will need to persuade your partner that your choice is better.',
           choices: [
-            { key: 'A', title: 'Optometrist\'s clinic', image: CLINIC, facts: ['Frames and lenses: $380', 'Ready in 10 days', 'Measured and fitted in person; free adjustments for a year', 'Anti-glare screen coating included'] },
-            { key: 'B', title: 'Online order', image: ONLINE, facts: ['Frames and lenses: $95', 'Arrives in about 3 weeks', 'You must measure your own eyes using a phone app', 'Returns within 30 days, with a $20 fee'] }
+            { key: 'A', title: 'Optometrist\'s clinic', image: '<img src="tests/img/O/opt_A.jpg" alt="Photo: Optometrist&#x27;s clinic">', facts: ['Frames and lenses: $380', 'Ready in 10 days', 'Measured and fitted in person; free adjustments for a year', 'Anti-glare screen coating included'] },
+            { key: 'B', title: 'Online order', image: '<img src="tests/img/O/opt_B.jpg" alt="Photo: Online order">', facts: ['Frames and lenses: $95', 'Arrives in about 3 weeks', 'You must measure your own eyes using a phone app', 'Returns within 30 days, with a $20 fee'] }
           ],
-          third: { key: 'C', title: 'Superstore optical counter', image: OPTICAL, facts: ['Frames and lenses: $220', 'Ready the next day', 'Small choice of frames', 'Screen coating: $60 extra'] },
+          third: { key: 'C', title: 'Superstore optical counter', image: '<img src="tests/img/O/opt_C.jpg" alt="Photo: Superstore optical counter">', facts: ['Frames and lenses: $220', 'Ready the next day', 'Small choice of frames', 'Screen coating: $60 extra'] },
           persuade: 'Your partner thinks the superstore optical counter would be better. Persuade your partner that your choice is better. Explain why.'
         },
         { id: 'S6', title: 'Task 6: Dealing with a Difficult Situation', prep: 60, speak: 60, prompt: '<p>Months ago, you promised to help your friend run his food booth at the town\'s folk festival this Saturday. He paid $400 for the booth and is counting on you, because his other helper has already cancelled. This morning, your elderly neighbour told you that her basement flooded, and the insurance adjuster can only visit on Saturday. She does not speak English well and has asked you to be there to help her explain the damage.</p><p><b>Choose ONE:</b></p><p><b>Option A:</b> Talk to your friend. Explain why you cannot help at his booth on Saturday.</p><p><b>Option B:</b> Talk to your neighbour. Explain why you cannot be there for the adjuster\'s visit.</p>' },
         { id: 'S7', title: 'Task 7: Expressing Opinions', prep: 30, speak: 90, prompt: '<p>For forty years, your town\'s summer festival has ended with a fireworks show. This year, the festival committee is considering replacing the fireworks with a light show using hundreds of small drones, which would cost about the same. Supporters say drones are quieter for pets and young children and carry no risk of starting grass fires in a dry summer. Others say fireworks are a tradition that families look forward to, and that a drone show would feel less exciting.</p><p>The committee has asked residents for their views before it decides next month. Should the festival replace the fireworks with a drone show? Explain your reasons.</p>' },
-        { id: 'S8', title: 'Task 8: Describing an Unusual Situation', prep: 30, speak: 60, prompt: 'You are in a baby store and see this unusual stroller. Call your sister, who has a two-year-old and a four-year-old, owns a large dog, and lives on the third floor of a building with no elevator. The stroller costs $340, weighs 15 kilograms, and folds down to just over a metre long. Her car has a small trunk. Describe the stroller and explain whether you think your sister should buy it.', image: STROLLER }
+        { id: 'S8', title: 'Task 8: Describing an Unusual Situation', prep: 30, speak: 60, prompt: 'You are in a baby store and see this unusual stroller. Call your sister, who has a two-year-old and a four-year-old, owns a large dog, and lives on the third floor of a building with no elevator. The stroller costs $340, weighs 15 kilograms, and folds down to just over a metre long. Her car has a small trunk. Describe the stroller and explain whether you think your sister should buy it.', image: '<img src="tests/img/O/object.jpg" alt="An unusual three-wheeled stroller in a baby store">' }
       ]
     }
   });

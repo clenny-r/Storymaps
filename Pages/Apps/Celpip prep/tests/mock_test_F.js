@@ -7,121 +7,7 @@
 (function () {
   window.MOCK_TESTS = window.MOCK_TESTS || [];
 
-  /* ---------- small SVG helpers for speaking pictures ---------- */
-  function person(x, y, o) {
-    o = o || {};
-    var s = o.s || 1, skin = o.skin || '#e0b48f', shirt = o.shirt || '#3d7cc9', pants = o.pants || '#38414d', hair = o.hair || '#3b2a20';
-    var arms = o.arms || 'down';
-    var a = arms === 'up' ? '<line x1="-7" y1="-30" x2="-16" y2="-50" /><line x1="7" y1="-30" x2="16" y2="-50" />'
-      : arms === 'right' ? '<line x1="-7" y1="-30" x2="-12" y2="-14" /><line x1="7" y1="-30" x2="24" y2="-36" />'
-      : arms === 'left' ? '<line x1="-7" y1="-30" x2="-24" y2="-36" /><line x1="7" y1="-30" x2="12" y2="-14" />'
-      : '<line x1="-7" y1="-30" x2="-12" y2="-14" /><line x1="7" y1="-30" x2="12" y2="-14" />';
-    var legs = o.sit ? '<line x1="-4" y1="-12" x2="-14" y2="-12" /><line x1="4" y1="-12" x2="-6" y2="-12" /><line x1="-14" y1="-12" x2="-14" y2="0" /><line x1="-6" y1="-12" x2="-6" y2="0" />'
-      : '<line x1="-4" y1="-12" x2="-7" y2="0" /><line x1="4" y1="-12" x2="7" y2="0" />';
-    return '<g transform="translate(' + x + ' ' + y + ') scale(' + s + ')">' +
-      '<g stroke="' + skin + '" stroke-width="4" stroke-linecap="round">' + a + '</g>' +
-      '<g stroke="' + pants + '" stroke-width="5" stroke-linecap="round">' + legs + '</g>' +
-      '<rect x="-8" y="-36" width="16" height="25" rx="5" fill="' + shirt + '"/>' +
-      '<circle cx="0" cy="-45" r="9" fill="' + skin + '"/>' +
-      '<path d="M-9 -46 a9 9 0 0 1 18 0 q-9 -6 -18 0z" fill="' + hair + '"/>' +
-      '</g>';
-  }
-  /* winter hat (toque) drawn on top of a person() at the same x, y and scale */
-  function toque(x, y, s, c) {
-    return '<g transform="translate(' + x + ' ' + y + ') scale(' + s + ')"><path d="M-10 -46 a10 10 0 0 1 20 0z" fill="' + c + '"/><circle cx="0" cy="-57" r="3.5" fill="#ffffff"/></g>';
-  }
-
-  var SNOWSTREET = (function () {
-    var p = '';
-    p += '<svg viewBox="0 0 640 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A residential street on a snowy winter morning">';
-    p += '<rect width="640" height="400" fill="#dfe7ef"/>';
-    /* houses with snow on the roofs */
-    p += '<rect x="15" y="135" width="130" height="80" fill="#b5654a"/><polygon points="5,138 80,85 155,138" fill="#6b4a3a"/><path d="M5 138 L80 85 L155 138 L148 138 L80 93 L12 138z" fill="#ffffff"/><rect x="35" y="160" width="26" height="22" fill="#f6e7a6"/><rect x="95" y="170" width="26" height="45" fill="#4a3426"/>';
-    p += '<rect x="255" y="140" width="120" height="75" fill="#7f9bb3"/><polygon points="245,143 315,95 385,143" fill="#4f5d6b"/><path d="M245 143 L315 95 L385 143 L378 143 L315 103 L252 143z" fill="#ffffff"/><rect x="270" y="165" width="24" height="20" fill="#f6e7a6"/><rect x="335" y="165" width="24" height="20" fill="#f6e7a6"/>';
-    p += '<rect x="470" y="130" width="140" height="85" fill="#c9b27c"/><polygon points="460,133 540,80 620,133" fill="#7a5a3a"/><path d="M460 133 L540 80 L620 133 L613 133 L540 88 L467 133z" fill="#ffffff"/><rect x="490" y="155" width="24" height="20" fill="#f6e7a6"/>';
-    /* snowy yards, road, sidewalk */
-    p += '<rect y="215" width="640" height="32" fill="#f7f9fb"/>';
-    p += '<rect y="247" width="640" height="70" fill="#8e969e"/><g fill="#ffffff" opacity=".7"><rect x="20" y="280" width="40" height="4"/><rect x="200" y="280" width="40" height="4"/><rect x="380" y="280" width="40" height="4"/></g>';
-    p += '<path d="M0 317 Q160 307 320 317 T640 317 L640 324 L0 324z" fill="#ffffff"/>';
-    p += '<rect y="324" width="640" height="76" fill="#eef2f6"/>';
-    /* person shovelling the driveway between the houses */
-    p += '<path d="M205 240 q15 -22 32 0z" fill="#ffffff" stroke="#c8d3de"/>';
-    p += person(185, 242, { s: .85, shirt: '#c0392b', skin: '#f0c9a6', hair: '#6b4a2a', arms: 'right' }) + toque(185, 242, .85, '#2e86c1');
-    p += '<line x1="203" y1="212" x2="214" y2="238" stroke="#6b4a2a" stroke-width="3"/><rect x="208" y="234" width="16" height="7" fill="#555555"/>';
-    /* car stuck in a snowbank, one person pushing */
-    p += '<path d="M78 268 L98 250 L138 250 L154 268z" fill="#2c7a7b"/><rect x="62" y="266" width="112" height="26" rx="6" fill="#2f8f83"/><rect x="104" y="254" width="28" height="13" fill="#cfe3ef"/>';
-    p += '<circle cx="86" cy="294" r="10" fill="#333333"/><circle cx="152" cy="294" r="10" fill="#333333"/>';
-    p += '<ellipse cx="160" cy="304" rx="34" ry="14" fill="#ffffff" stroke="#c8d3de"/>';
-    p += '<g stroke="#ffffff" stroke-width="2"><line x1="70" y1="300" x2="56" y2="290"/><line x1="72" y1="304" x2="54" y2="302"/></g>';
-    p += '<text x="118" y="284" font-size="9" text-anchor="middle" fill="#ffffff" font-family="sans-serif">STUCK</text>';
-    /* driver at the wheel */
-    p += '<circle cx="118" cy="262" r="5" fill="#f0c9a6"/><path d="M113 261 a5 5 0 0 1 10 0z" fill="#555555"/>';
-    p += person(42, 312, { s: .9, shirt: '#8e44ad', skin: '#8d5a3b', hair: '#1d1410', arms: 'right' }) + toque(42, 312, .9, '#e67e22');
-    /* bus arriving at the stop */
-    p += '<rect x="425" y="236" width="190" height="62" rx="8" fill="#2e6fb5"/><rect x="425" y="282" width="190" height="8" fill="#f1c40f"/>';
-    p += '<g fill="#cfe3ef"><rect x="440" y="246" width="30" height="22"/><rect x="478" y="246" width="30" height="22"/><rect x="516" y="246" width="30" height="22"/><rect x="554" y="246" width="30" height="22"/></g>';
-    p += '<circle cx="430" cy="290" r="4" fill="#fff6a8"/><circle cx="465" cy="300" r="12" fill="#333333"/><circle cx="580" cy="300" r="12" fill="#333333"/>';
-    p += '<rect x="590" y="242" width="20" height="14" fill="#1b3f66"/><text x="600" y="253" font-size="9" text-anchor="middle" fill="#ffffff" font-family="sans-serif">12</text>';
-    p += '<g stroke="#5f6b78" stroke-width="2" opacity=".7"><line x1="620" y1="250" x2="638" y2="250"/><line x1="620" y1="265" x2="636" y2="265"/><line x1="620" y1="280" x2="638" y2="280"/></g>';
-    p += '<rect x="402" y="272" width="3" height="66" fill="#555555"/><rect x="390" y="262" width="28" height="16" rx="2" fill="#2e6fb5"/><text x="404" y="274" font-size="9" text-anchor="middle" fill="#ffffff" font-family="sans-serif">BUS</text>';
-    p += person(378, 356, { s: .9, shirt: '#34495e', skin: '#e3b28b', hair: '#555555' }) + toque(378, 356, .9, '#c0392b');
-    /* commuter running for the bus and waving */
-    p += person(462, 392, { s: .9, shirt: '#16a085', skin: '#d6a07a', hair: '#2a1b12', arms: 'up' }) + toque(462, 392, .9, '#34495e');
-    /* woman walking a dog along the sidewalk */
-    p += person(120, 392, { s: .9, shirt: '#2980b9', skin: '#f2cfb0', hair: '#7a4a24', arms: 'right' }) + toque(120, 392, .9, '#e84393');
-    p += '<line x1="141" y1="360" x2="164" y2="378" stroke="#8a2d2d" stroke-width="2"/>';
-    p += '<g fill="#5b4636"><ellipse cx="172" cy="384" rx="12" ry="6"/><circle cx="166" cy="377" r="5"/><rect x="163" y="388" width="3" height="8"/><rect x="177" y="388" width="3" height="8"/></g>';
-    /* children building a snowman */
-    p += '<circle cx="250" cy="370" r="22" fill="#ffffff" stroke="#b9c6d3"/><circle cx="250" cy="337" r="16" fill="#ffffff" stroke="#b9c6d3"/><circle cx="250" cy="312" r="11" fill="#ffffff" stroke="#b9c6d3"/>';
-    p += '<rect x="241" y="294" width="18" height="8" fill="#222222"/><rect x="237" y="301" width="26" height="3" fill="#222222"/><polygon points="250,312 262,315 250,316" fill="#e67e22"/><circle cx="246" cy="309" r="1.5" fill="#222222"/><circle cx="254" cy="309" r="1.5" fill="#222222"/>';
-    p += '<g stroke="#6b4a2a" stroke-width="2"><line x1="236" y1="335" x2="220" y2="325"/><line x1="264" y1="335" x2="280" y2="325"/></g>';
-    p += person(205, 392, { s: .7, shirt: '#e74c3c', skin: '#c98c64', hair: '#2a1b12', arms: 'right' }) + toque(205, 392, .7, '#f1c40f');
-    p += person(295, 392, { s: .7, shirt: '#27ae60', skin: '#f2cfb0', hair: '#c49a42', arms: 'up' }) + toque(295, 392, .7, '#8e44ad');
-    /* person with a coffee stepping onto an icy patch */
-    p += '<ellipse cx="545" cy="389" rx="48" ry="7" fill="#a9d8f2"/><g stroke="#ffffff" stroke-width="2"><line x1="520" y1="388" x2="534" y2="386"/><line x1="552" y1="391" x2="570" y2="388"/></g>';
-    p += '<g transform="rotate(-14 530 388)">' + person(530, 388, { shirt: '#d35400', skin: '#7a4b31', hair: '#120c08', arms: 'up' }) + '</g>';
-    p += '<rect x="505" y="326" width="8" height="10" fill="#ffffff" stroke="#7a5a3a"/>';
-    /* falling snow */
-    p += '<g fill="#ffffff">';
-    var flakes = [[30, 30], [90, 60], [150, 20], [210, 55], [270, 25], [330, 60], [390, 30], [450, 50], [510, 20], [570, 45], [620, 70], [60, 100], [180, 95], [300, 80], [420, 100], [600, 110], [240, 120], [120, 125], [360, 115], [500, 105]];
-    flakes.forEach(function (f) { p += '<circle cx="' + f[0] + '" cy="' + f[1] + '" r="3"/>'; });
-    p += '</g>';
-    p += '</svg>';
-    return p;
-  })();
-
-  var CRUISE = '<svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg"><rect width="200" height="120" fill="#2c3e66"/><circle cx="165" cy="22" r="10" fill="#f6e7a6"/><rect y="80" width="200" height="40" fill="#1f5f8b"/><path d="M30 70 L170 70 L155 92 L45 92z" fill="#ffffff"/><rect x="60" y="52" width="80" height="18" fill="#ecf0f1"/><rect x="82" y="38" width="36" height="14" fill="#ecf0f1"/><g fill="#f6d55c"><rect x="66" y="57" width="8" height="6"/><rect x="80" y="57" width="8" height="6"/><rect x="94" y="57" width="8" height="6"/><rect x="108" y="57" width="8" height="6"/><rect x="122" y="57" width="8" height="6"/></g><g stroke="#f6d55c" stroke-width="1" opacity=".6"><line x1="50" y1="100" x2="80" y2="100"/><line x1="110" y1="106" x2="150" y2="106"/></g><text x="100" y="114" font-size="9" text-anchor="middle" font-family="sans-serif" fill="#ffffff">DINNER CRUISE</text></svg>';
-  var ALBUM = '<svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg"><rect width="200" height="120" fill="#f4ede1"/><rect x="25" y="25" width="150" height="80" rx="4" fill="#8b4a3a"/><rect x="31" y="30" width="67" height="70" fill="#ffffff"/><rect x="102" y="30" width="67" height="70" fill="#ffffff"/><rect x="38" y="38" width="52" height="34" fill="#9ccbe0"/><circle cx="56" cy="52" r="5" fill="#e0b48f"/><circle cx="72" cy="52" r="5" fill="#8d5a3b"/><rect x="109" y="38" width="24" height="24" fill="#d8b98a"/><rect x="138" y="38" width="24" height="24" fill="#a8d08d"/><rect x="109" y="66" width="53" height="26" fill="#f2c4c4"/><g stroke="#999999"><line x1="38" y1="82" x2="90" y2="82"/><line x1="38" y1="90" x2="80" y2="90"/></g><text x="100" y="17" font-size="9" text-anchor="middle" font-family="sans-serif" fill="#5a3a2a">PHOTO ALBUM</text></svg>';
-  var SPA = '<svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg"><rect width="200" height="120" fill="#e6f2ee"/><rect x="20" y="70" width="70" height="14" rx="4" fill="#ffffff" stroke="#b7d3c9"/><rect x="24" y="56" width="62" height="14" rx="4" fill="#cfe8df" stroke="#b7d3c9"/><rect x="28" y="42" width="54" height="14" rx="4" fill="#ffffff" stroke="#b7d3c9"/><g fill="#7f8c8d"><ellipse cx="135" cy="88" rx="26" ry="9"/><ellipse cx="135" cy="74" rx="20" ry="7"/><ellipse cx="135" cy="62" rx="14" ry="5"/></g><rect x="160" y="40" width="14" height="30" fill="#f8f3e6"/><path d="M167 40 q-5 -8 0 -14 q5 6 0 14z" fill="#f39c12"/><path d="M110 40 q10 -20 20 0 q-10 6 -20 0z" fill="#6ab187"/><text x="100" y="110" font-size="10" text-anchor="middle" font-family="sans-serif" fill="#2f6f5e">SPA</text></svg>';
-
-  var ODDMOWER = '<svg viewBox="0 0 640 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="An unusual ride-on lawn mower at a hardware store">' +
-    '<rect width="640" height="400" fill="#eef1e8"/><rect y="330" width="640" height="70" fill="#b8b2a4"/>' +
-    '<rect x="30" y="30" width="170" height="44" rx="6" fill="#ffffff" stroke="#c9bfae"/><text x="115" y="58" text-anchor="middle" font-family="sans-serif" font-size="17" fill="#3d6b35">GARDEN CENTRE</text>' +
-    /* price tag */
-    '<line x1="560" y1="20" x2="560" y2="60" stroke="#777777" stroke-width="2"/><path d="M520 60 L600 60 L600 120 L520 120 L506 90z" fill="#f6d55c" stroke="#b38f1e" stroke-width="2"/><circle cx="520" cy="90" r="4" fill="#ffffff"/><text x="560" y="98" text-anchor="middle" font-family="sans-serif" font-size="22" fill="#333333">$2,999</text>' +
-    /* umbrella over the seat */
-    '<line x1="400" y1="195" x2="392" y2="95" stroke="#555555" stroke-width="4"/><path d="M290 110 Q392 20 494 105 Q443 92 392 102 Q341 92 290 110z" fill="#e74c3c"/><path d="M341 96 Q392 36 443 96 Q418 92 392 102 Q366 92 341 96z" fill="#f1c40f"/>' +
-    /* light beams from the headlights */
-    '<polygon points="160,250 40,215 40,300" fill="#fff6a8" opacity=".7"/>' +
-    /* cutting deck and body */
-    '<rect x="190" y="300" width="250" height="22" rx="6" fill="#7f8c8d"/>' +
-    '<path d="M170 300 L170 255 Q175 232 210 228 L460 228 L470 300z" fill="#2e8b3a"/>' +
-    '<circle cx="176" cy="250" r="10" fill="#fff6a8" stroke="#b38f1e" stroke-width="2"/><circle cx="176" cy="276" r="10" fill="#fff6a8" stroke="#b38f1e" stroke-width="2"/>' +
-    /* wheels */
-    '<circle cx="225" cy="318" r="24" fill="#333333"/><circle cx="225" cy="318" r="9" fill="#cccccc"/><circle cx="430" cy="305" r="42" fill="#333333"/><circle cx="430" cy="305" r="14" fill="#cccccc"/>' +
-    /* seat with backrest */
-    '<rect x="365" y="205" width="70" height="20" rx="8" fill="#222222"/><rect x="420" y="160" width="18" height="60" rx="6" fill="#222222"/>' +
-    /* steering wheel */
-    '<line x1="300" y1="228" x2="320" y2="185" stroke="#555555" stroke-width="6"/><ellipse cx="322" cy="182" rx="26" ry="8" fill="none" stroke="#222222" stroke-width="5"/>' +
-    /* cup holder with a cup */
-    '<rect x="452" y="206" width="26" height="8" fill="#555555"/><rect x="456" y="184" width="18" height="24" rx="2" fill="#3498db"/><path d="M474 190 q8 4 0 12" stroke="#3498db" stroke-width="3" fill="none"/>' +
-    /* radio with antenna and music notes */
-    '<rect x="230" y="200" width="50" height="28" rx="4" fill="#34495e"/><circle cx="244" cy="214" r="8" fill="#95a5a6"/><rect x="258" y="207" width="16" height="5" fill="#f1c40f"/><line x1="276" y1="200" x2="290" y2="165" stroke="#555555" stroke-width="2"/>' +
-    '<text x="215" y="185" font-family="sans-serif" font-size="22" fill="#34495e">&#9835;</text><text x="250" y="170" font-family="sans-serif" font-size="18" fill="#34495e">&#9834;</text>' +
-    /* cut grass */
-    '<g stroke="#5aa84e" stroke-width="2"><line x1="480" y1="330" x2="484" y2="318"/><line x1="490" y1="330" x2="488" y2="316"/><line x1="500" y1="330" x2="505" y2="319"/><line x1="140" y1="330" x2="138" y2="318"/><line x1="150" y1="330" x2="154" y2="317"/></g>' +
-    '</svg>';
-
+  /* Speaking pictures are image files in tests/img/F/ (scene, object, opt_A to opt_C). */
   window.MOCK_TESTS.push({
     id: 'F',
     title: 'Mock Test F',
@@ -471,21 +357,21 @@
       tasks: [
         { id: 'S1', title: 'Task 1: Giving Advice', prep: 30, speak: 90, prompt: 'A friend of yours has decided to learn how to cook, but has never prepared a full meal before. Your friend works long shifts, gets home around 7:00 p.m., and has only about $60 a week to spend on groceries. Give your friend advice on how to get started.' },
         { id: 'S2', title: 'Task 2: Talking about a Personal Experience', prep: 30, speak: 60, prompt: 'Talk about a time when you had to make a difficult decision. What were your choices, what did you decide, who did you turn to for advice, and how do you feel about the decision now?' },
-        { id: 'S3', title: 'Task 3: Describing a Scene', prep: 30, speak: 60, prompt: 'Describe some things that are happening in the picture below as well as you can. The person you are speaking to cannot see the picture.', image: SNOWSTREET },
-        { id: 'S4', title: 'Task 4: Making Predictions', prep: 30, speak: 60, prompt: 'In this picture, what do you think will most probably happen next? Think about the icy patch, the stuck car, and the bus that is pulling in.', image: SNOWSTREET },
+        { id: 'S3', title: 'Task 3: Describing a Scene', prep: 30, speak: 60, prompt: 'Describe some things that are happening in the picture below as well as you can. The person you are speaking to cannot see the picture.', image: '<img src="tests/img/F/scene.jpg" alt="A residential street on a snowy winter morning">' },
+        { id: 'S4', title: 'Task 4: Making Predictions', prep: 30, speak: 60, prompt: 'In this picture, what do you think will most probably happen next? Think about the icy patch, the stuck car, and the bus that is pulling in.', image: '<img src="tests/img/F/scene.jpg" alt="A residential street on a snowy winter morning">' },
         {
           id: 'S5', title: 'Task 5: Comparing and Persuading', type: 'compare', select: 60, prep: 60, speak: 60,
           prompt: 'You and your brother are planning a gift for your parents\' 30th wedding anniversary. Choose the option you prefer. In the next section, you will need to persuade your brother that your choice is better.',
           choices: [
-            { key: 'A', title: 'Harbour dinner cruise', image: CRUISE, facts: ['3-hour evening cruise with dinner and live music', 'Cost: $240', 'Departs Saturdays at 6:00 p.m., on the anniversary date', 'Cancelled in rough weather; rebooking only, no refund'] },
-            { key: 'B', title: 'Custom family photo album', image: ALBUM, facts: ['60 pages of family photos with notes from relatives', 'Cost: $220', 'Needs photos collected from 12 relatives', 'Ready in 4 weeks, after the anniversary date'] }
+            { key: 'A', title: 'Harbour dinner cruise', image: '<img src="tests/img/F/opt_A.jpg" alt="Photo: Harbour dinner cruise">', facts: ['3-hour evening cruise with dinner and live music', 'Cost: $240', 'Departs Saturdays at 6:00 p.m., on the anniversary date', 'Cancelled in rough weather; rebooking only, no refund'] },
+            { key: 'B', title: 'Custom family photo album', image: '<img src="tests/img/F/opt_B.jpg" alt="Photo: Custom family photo album">', facts: ['60 pages of family photos with notes from relatives', 'Cost: $220', 'Needs photos collected from 12 relatives', 'Ready in 4 weeks, after the anniversary date'] }
           ],
-          third: { key: 'C', title: 'Spa day for two', image: SPA, facts: ['Massage and lunch for two', 'Cost: $310', 'Full day, 9:00 a.m. to 4:00 p.m.', '45-minute drive from home'] },
+          third: { key: 'C', title: 'Spa day for two', image: '<img src="tests/img/F/opt_C.jpg" alt="Photo: Spa day for two">', facts: ['Massage and lunch for two', 'Cost: $310', 'Full day, 9:00 a.m. to 4:00 p.m.', '45-minute drive from home'] },
           persuade: 'Your brother would rather give your parents a spa day instead. Persuade him that your choice is better. Explain why.'
         },
         { id: 'S6', title: 'Task 6: Dealing with a Difficult Situation', prep: 60, speak: 60, prompt: '<p>You share an apartment with a roommate who often has friends over late on weeknights. The noise has been keeping you awake before work. Today, your landlord called to say the downstairs neighbour has complained, and that both of you could receive a formal warning.</p><p><b>Choose ONE:</b></p><p><b>Option A:</b> Talk to your roommate. Explain the problem and suggest a solution you can both accept.</p><p><b>Option B:</b> Talk to your landlord. Explain the situation and ask for time to fix it before any warning is given.</p>' },
         { id: 'S7', title: 'Task 7: Expressing Opinions', prep: 30, speak: 90, prompt: '<p>After several pedestrians were hit at busy downtown crossings, your city council is considering a $75 fine for anyone caught looking at a phone while crossing a street. Supporters say it would save lives and change habits quickly. Opponents say it would be hard to enforce fairly and that the money would be better spent on safer crossings and lower speed limits.</p><p>A local radio station has asked residents to share their views. Do you support the fine? Explain your reasons.</p>' },
-        { id: 'S8', title: 'Task 8: Describing an Unusual Situation', prep: 30, speak: 60, prompt: 'You are at a garden centre and see this unusual lawn mower. Your neighbour is looking for a new lawn mower for a small, sloped backyard and has said he or she does not want to spend more than about $1,500. Call your neighbour, describe the lawn mower, and explain whether you think he or she should buy it.', image: ODDMOWER }
+        { id: 'S8', title: 'Task 8: Describing an Unusual Situation', prep: 30, speak: 60, prompt: 'You are at a garden centre and see this unusual lawn mower. Your neighbour is looking for a new lawn mower for a small, sloped backyard and has said he or she does not want to spend more than about $1,500. Call your neighbour, describe the lawn mower, and explain whether you think he or she should buy it.', image: '<img src="tests/img/F/object.jpg" alt="An unusual ride-on lawn mower at a hardware store">' }
       ]
     }
   });

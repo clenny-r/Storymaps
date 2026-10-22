@@ -6,113 +6,7 @@
 (function () {
   window.MOCK_TESTS = window.MOCK_TESTS || [];
 
-  /* ---------- small SVG helpers for speaking pictures ---------- */
-  function person(x, y, o) {
-    o = o || {};
-    var s = o.s || 1, skin = o.skin || '#e0b48f', shirt = o.shirt || '#3d7cc9', pants = o.pants || '#38414d', hair = o.hair || '#3b2a20';
-    var arms = o.arms || 'down';
-    var a = arms === 'up' ? '<line x1="-7" y1="-30" x2="-16" y2="-50" /><line x1="7" y1="-30" x2="16" y2="-50" />'
-      : arms === 'right' ? '<line x1="-7" y1="-30" x2="-12" y2="-14" /><line x1="7" y1="-30" x2="24" y2="-36" />'
-      : arms === 'left' ? '<line x1="-7" y1="-30" x2="-24" y2="-36" /><line x1="7" y1="-30" x2="12" y2="-14" />'
-      : '<line x1="-7" y1="-30" x2="-12" y2="-14" /><line x1="7" y1="-30" x2="12" y2="-14" />';
-    var legs = o.sit ? '<line x1="-4" y1="-12" x2="-14" y2="-12" /><line x1="4" y1="-12" x2="-6" y2="-12" /><line x1="-14" y1="-12" x2="-14" y2="0" /><line x1="-6" y1="-12" x2="-6" y2="0" />'
-      : '<line x1="-4" y1="-12" x2="-7" y2="0" /><line x1="4" y1="-12" x2="7" y2="0" />';
-    return '<g transform="translate(' + x + ' ' + y + ') scale(' + s + ')">' +
-      '<g stroke="' + skin + '" stroke-width="4" stroke-linecap="round">' + a + '</g>' +
-      '<g stroke="' + pants + '" stroke-width="5" stroke-linecap="round">' + legs + '</g>' +
-      '<rect x="-8" y="-36" width="16" height="25" rx="5" fill="' + shirt + '"/>' +
-      '<circle cx="0" cy="-45" r="9" fill="' + skin + '"/>' +
-      '<path d="M-9 -46 a9 9 0 0 1 18 0 q-9 -6 -18 0z" fill="' + hair + '"/>' +
-      '</g>';
-  }
-  function suitcase(x, y, c) {
-    return '<rect x="' + x + '" y="' + (y - 26) + '" width="18" height="26" rx="3" fill="' + c + '"/><line x1="' + (x + 9) + '" y1="' + (y - 26) + '" x2="' + (x + 9) + '" y2="' + (y - 40) + '" stroke="#555" stroke-width="2"/>';
-  }
-
-  var AIRPORT = (function () {
-    var p = '';
-    p += '<svg viewBox="0 0 640 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A busy airport departure area with a flight delay">';
-    p += '<rect width="640" height="400" fill="#e6eaf0"/>';
-    p += '<rect y="250" width="640" height="150" fill="#c3c7cd"/>';
-    /* big window with a plane outside */
-    p += '<rect x="250" y="25" width="380" height="150" fill="#a9d4f0" stroke="#7b8794" stroke-width="5"/>';
-    p += '<g stroke="#7b8794" stroke-width="4"><line x1="377" y1="25" x2="377" y2="175"/><line x1="503" y1="25" x2="503" y2="175"/></g>';
-    p += '<rect x="252" y="150" width="376" height="23" fill="#8a9099"/>';
-    p += '<ellipse cx="440" cy="130" rx="100" ry="14" fill="#ffffff"/><polygon points="340,130 325,95 355,118" fill="#d0462f"/><polygon points="430,132 395,160 420,160 460,134" fill="#dfe4ea"/>';
-    p += '<g fill="#5a6b7c"><circle cx="470" cy="127" r="3"/><circle cx="485" cy="127" r="3"/><circle cx="500" cy="127" r="3"/><circle cx="515" cy="127" r="3"/></g>';
-    /* departures board */
-    p += '<rect x="18" y="20" width="215" height="112" rx="4" fill="#1f2a36"/>';
-    p += '<text x="125" y="40" font-size="13" text-anchor="middle" fill="#f6d55c" font-family="sans-serif">DEPARTURES</text>';
-    p += '<g font-size="11" font-family="sans-serif" fill="#ffffff">' +
-      '<text x="28" y="65">TORONTO</text><text x="118" y="65">10:15</text>' +
-      '<text x="28" y="88">CALGARY</text><text x="118" y="88">10:40</text>' +
-      '<text x="28" y="111">REGINA</text><text x="118" y="111">11:05</text></g>';
-    p += '<g font-size="11" font-family="sans-serif"><text x="158" y="65" fill="#ff5a4a">DELAYED</text><text x="158" y="88" fill="#6fdc8c">ON TIME</text><text x="158" y="111" fill="#6fdc8c">ON TIME</text></g>';
-    /* gate sign */
-    p += '<rect x="50" y="150" width="100" height="26" rx="3" fill="#2e5d9a"/><text x="100" y="168" font-size="13" text-anchor="middle" fill="#fff" font-family="sans-serif">GATE 12</text>';
-    /* row of seats with two travellers */
-    p += '<rect x="255" y="268" width="170" height="10" fill="#4a5662"/><g fill="#5f6f80"><rect x="258" y="240" width="38" height="28" rx="4"/><rect x="300" y="240" width="38" height="28" rx="4"/><rect x="342" y="240" width="38" height="28" rx="4"/><rect x="384" y="240" width="38" height="28" rx="4"/></g><rect x="268" y="278" width="5" height="22" fill="#4a5662"/><rect x="405" y="278" width="5" height="22" fill="#4a5662"/>';
-    p += person(286, 290, { shirt: '#8e44ad', sit: true, skin: '#f0c9a6', hair: '#c49a42', arms: 'right' });
-    p += '<rect x="302" y="248" width="14" height="11" fill="#f4f1ea" stroke="#999"/>';
-    p += person(362, 290, { shirt: '#2f8f83', sit: true, skin: '#8d5a3b', hair: '#1d1410' });
-    p += '<g stroke="#1d1410" stroke-width="1.5"><line x1="357" y1="245" x2="361" y2="245"/><line x1="364" y1="245" x2="368" y2="245"/></g>';
-    p += '<text x="374" y="225" font-size="13" fill="#555" font-family="sans-serif">z z z</text>';
-    /* traveller on the phone */
-    p += person(450, 300, { shirt: '#c0392b', skin: '#c98c64', hair: '#2a1b12', arms: 'up' });
-    p += suitcase(462, 300, '#34495e');
-    /* cafe */
-    p += '<rect x="510" y="186" width="120" height="22" rx="3" fill="#7a4b2a"/><text x="570" y="202" font-size="13" text-anchor="middle" fill="#fff" font-family="sans-serif">CAFE</text>';
-    p += person(585, 262, { shirt: '#ffffff', skin: '#e3b28b', hair: '#3b2a20', arms: 'left' });
-    p += '<rect x="520" y="235" width="110" height="60" fill="#a8743e"/><rect x="520" y="230" width="110" height="7" fill="#7a4b2a"/>';
-    p += '<rect x="545" y="219" width="8" height="11" fill="#fff" stroke="#999"/>';
-    p += person(500, 318, { shirt: '#16a085', skin: '#7a4b31', hair: '#120c08', arms: 'right' });
-    /* traveller pulling a suitcase in the background */
-    p += person(185, 285, { shirt: '#d35400', skin: '#e0b48f', hair: '#555', arms: 'right', s: .9 });
-    p += suitcase(203, 285, '#7f8c8d');
-    /* moving walkway */
-    p += '<polygon points="10,335 230,335 250,385 10,385" fill="#58626d"/><rect x="10" y="325" width="225" height="8" rx="3" fill="#2c3e50"/>';
-    p += '<g fill="#f6d55c"><polygon points="40,355 55,360 40,365"/><polygon points="90,355 105,360 90,365"/><polygon points="140,355 155,360 140,365"/><polygon points="190,355 205,360 190,365"/></g>';
-    p += '<text x="120" y="320" font-size="11" text-anchor="middle" fill="#2c3e50" font-family="sans-serif">MOVING WALKWAY</text>';
-    /* child running toward the walkway, parent reaching after */
-    p += person(282, 382, { shirt: '#f1c40f', skin: '#a9714b', hair: '#120c08', arms: 'left', s: .7 });
-    p += '<g fill="#a5713f"><circle cx="318" cy="380" r="6"/><circle cx="314" cy="373" r="2.5"/><circle cx="322" cy="373" r="2.5"/></g>';
-    p += person(370, 390, { shirt: '#3d7cc9', skin: '#a9714b', hair: '#120c08', arms: 'left' });
-    p += suitcase(388, 390, '#9b59b6');
-    /* cleaner with wet floor sign */
-    p += person(590, 388, { shirt: '#7f8c8d', skin: '#f0c9a6', hair: '#d8d8d8', arms: 'left' });
-    p += '<line x1="566" y1="352" x2="556" y2="392" stroke="#7a5233" stroke-width="3"/><rect x="546" y="388" width="20" height="6" fill="#bdc3c7"/>';
-    p += '<polygon points="510,392 522,350 534,392" fill="#f1c40f"/><text x="522" y="383" font-size="7" text-anchor="middle" fill="#333" font-family="sans-serif">WET</text>';
-    p += '</svg>';
-    return p;
-  })();
-
-  var RESTAURANT = '<svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg"><rect width="200" height="120" fill="#3b2f3f"/><rect y="78" width="200" height="42" fill="#5a4636"/><ellipse cx="100" cy="80" rx="70" ry="16" fill="#f4f1ea"/><rect x="96" y="56" width="8" height="18" fill="#fdf3d6"/><path d="M100 46 q5 6 0 10 q-5 -4 0 -10z" fill="#f6d55c"/><g fill="#ffffff" stroke="#bbb"><ellipse cx="62" cy="80" rx="13" ry="5"/><ellipse cx="138" cy="80" rx="13" ry="5"/></g><g fill="#c0392b"><rect x="76" y="66" width="5" height="12" rx="2"/><rect x="119" y="66" width="5" height="12" rx="2"/></g><text x="100" y="24" font-size="12" text-anchor="middle" font-family="sans-serif" fill="#f6d55c">RESTAURANT</text></svg>';
-  var HOMEPARTY = '<svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg"><rect width="200" height="120" fill="#d8eefa"/><rect y="98" width="200" height="22" fill="#79b86a"/><rect x="50" y="52" width="100" height="56" fill="#f4e3c3"/><polygon points="40,54 100,16 160,54" fill="#b5523b"/><rect x="88" y="78" width="22" height="30" fill="#7a4b2a"/><rect x="60" y="64" width="18" height="16" fill="#a9d4f0"/><rect x="122" y="64" width="18" height="16" fill="#a9d4f0"/><g stroke="#666" stroke-width="1"><line x1="28" y1="60" x2="40" y2="100"/><line x1="18" y1="48" x2="40" y2="100"/><line x1="172" y1="58" x2="160" y2="100"/></g><circle cx="28" cy="52" r="10" fill="#e74c3c"/><circle cx="16" cy="40" r="9" fill="#f1c40f"/><circle cx="174" cy="50" r="10" fill="#3498db"/><text x="100" y="12" font-size="10" text-anchor="middle" font-family="sans-serif" fill="#2c3e50">PARTY AT HOME</text></svg>';
-  var BOWLING = '<svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg"><rect width="200" height="120" fill="#2c3e50"/><polygon points="70,120 130,120 115,40 85,40" fill="#d9b382"/><g fill="#ffffff"><ellipse cx="100" cy="46" rx="4" ry="8"/><ellipse cx="92" cy="50" rx="4" ry="8"/><ellipse cx="108" cy="50" rx="4" ry="8"/><ellipse cx="86" cy="54" rx="4" ry="8"/><ellipse cx="114" cy="54" rx="4" ry="8"/></g><g fill="#c0392b"><rect x="97" y="43" width="6" height="2"/><rect x="89" y="47" width="6" height="2"/><rect x="105" y="47" width="6" height="2"/></g><circle cx="100" cy="102" r="12" fill="#2980b9"/><g fill="#1b4f72"><circle cx="96" cy="98" r="2"/><circle cx="103" cy="97" r="2"/><circle cx="100" cy="103" r="2"/></g><text x="100" y="24" font-size="12" text-anchor="middle" font-family="sans-serif" fill="#f6d55c">BOWLING</text></svg>';
-
-  var ODDCHAIR = '<svg viewBox="0 0 640 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="An unusual armchair in a used furniture store">' +
-    '<rect width="640" height="400" fill="#f1ece4"/><rect y="320" width="640" height="80" fill="#b9a68f"/>' +
-    '<rect x="455" y="30" width="165" height="56" rx="6" fill="#fff" stroke="#c9bfae"/><text x="537" y="54" text-anchor="middle" font-family="sans-serif" font-size="15" fill="#7a4b2a">USED</text><text x="537" y="74" text-anchor="middle" font-family="sans-serif" font-size="15" fill="#7a4b2a">FURNITURE</text>' +
-    /* umbrella on a pole */
-    '<line x1="205" y1="215" x2="175" y2="65" stroke="#555" stroke-width="5"/><path d="M80 85 Q170 0 270 60 Q225 52 175 64 Q125 62 80 85z" fill="#16a085"/>' +
-    /* backrest with speakers */
-    '<rect x="215" y="95" width="210" height="140" rx="22" fill="#c0392b"/>' +
-    '<circle cx="255" cy="130" r="20" fill="#2c3e50"/><circle cx="255" cy="130" r="9" fill="#7f8c8d"/><circle cx="385" cy="130" r="20" fill="#2c3e50"/><circle cx="385" cy="130" r="9" fill="#7f8c8d"/>' +
-    '<g stroke="#2c3e50" stroke-width="2" fill="none"><path d="M226 116 q-8 14 0 28"/><path d="M219 110 q-12 20 0 40"/><path d="M414 116 q8 14 0 28"/><path d="M421 110 q12 20 0 40"/></g>' +
-    /* seat and arms */
-    '<rect x="215" y="225" width="210" height="45" rx="10" fill="#a93226"/>' +
-    '<rect x="190" y="190" width="38" height="80" rx="10" fill="#922b21"/><rect x="412" y="190" width="38" height="80" rx="10" fill="#922b21"/>' +
-    /* cup holder on right arm */
-    '<rect x="450" y="200" width="34" height="14" rx="4" fill="#7f8c8d"/><rect x="456" y="178" width="20" height="24" rx="3" fill="#f4f1ea" stroke="#999"/>' +
-    /* footrest sticking out */
-    '<line x1="300" y1="270" x2="320" y2="300" stroke="#555" stroke-width="5"/><rect x="290" y="298" width="110" height="14" rx="5" fill="#922b21"/>' +
-    /* legs with wheels */
-    '<g stroke="#555" stroke-width="6"><line x1="225" y1="270" x2="225" y2="318"/><line x1="415" y1="270" x2="415" y2="318"/></g>' +
-    '<g fill="#222"><circle cx="225" cy="326" r="11"/><circle cx="415" cy="326" r="11"/></g><g fill="#999"><circle cx="225" cy="326" r="4"/><circle cx="415" cy="326" r="4"/></g>' +
-    /* price tag */
-    '<line x1="190" y1="240" x2="140" y2="262" stroke="#666" stroke-width="1.5"/><rect x="70" y="250" width="80" height="40" rx="5" fill="#f6d55c"/><text x="110" y="277" text-anchor="middle" font-family="sans-serif" font-size="20" fill="#333">$249</text>' +
-    '</svg>';
-
+  /* Speaking pictures are image files in tests/img/C/ (scene, object, opt_A to opt_C). */
   window.MOCK_TESTS.push({
     id: 'C',
     title: 'Mock Test C',
@@ -464,21 +358,21 @@
       tasks: [
         { id: 'S1', title: 'Task 1: Giving Advice', prep: 30, speak: 90, prompt: 'A friend of yours wants to start running so she can join her coworkers in a 5-kilometre charity run in eight weeks. She has never exercised regularly, she works long shifts at a hospital, and one of her knees still bothers her after an old injury. Give her advice on how to get ready safely and how to stay motivated.' },
         { id: 'S2', title: 'Task 2: Talking about a Personal Experience', prep: 30, speak: 60, prompt: 'Talk about a time when something did not go as planned while you were on a trip. What happened, how did you deal with it, and what would you plan differently on your next trip?' },
-        { id: 'S3', title: 'Task 3: Describing a Scene', prep: 30, speak: 60, prompt: 'Describe some things that are happening in the picture below as well as you can. The person you are speaking to cannot see the picture.', image: AIRPORT },
-        { id: 'S4', title: 'Task 4: Making Predictions', prep: 30, speak: 60, prompt: 'In this picture, what do you think will most probably happen next?', image: AIRPORT },
+        { id: 'S3', title: 'Task 3: Describing a Scene', prep: 30, speak: 60, prompt: 'Describe some things that are happening in the picture below as well as you can. The person you are speaking to cannot see the picture.', image: '<img src="tests/img/C/scene.jpg" alt="A busy airport departure area with a flight delay">' },
+        { id: 'S4', title: 'Task 4: Making Predictions', prep: 30, speak: 60, prompt: 'In this picture, what do you think will most probably happen next?', image: '<img src="tests/img/C/scene.jpg" alt="A busy airport departure area with a flight delay">' },
         {
           id: 'S5', title: 'Task 5: Comparing and Persuading', type: 'compare', select: 60, prep: 60, speak: 60,
           prompt: 'Your family is planning how to celebrate your father\'s 60th birthday. Choose the option you prefer. In the next section, you will need to persuade a family member that your choice is better.',
           choices: [
-            { key: 'A', title: 'Dinner at a restaurant', image: RESTAURANT, facts: ['Private table for 8 people only', 'About $45 per person, plus tip', 'Saturday, 7:00 to 9:00 p.m., strict end time', 'No cooking or cleaning up'] },
-            { key: 'B', title: 'Party at home', image: HOMEPARTY, facts: ['Up to 20 guests', 'Food and cake: about $200', 'Family does all the cooking and cleaning', 'No time limit, but a small living room'] }
+            { key: 'A', title: 'Dinner at a restaurant', image: '<img src="tests/img/C/opt_A.jpg" alt="Photo: Dinner at a restaurant">', facts: ['Private table for 8 people only', 'About $45 per person, plus tip', 'Saturday, 7:00 to 9:00 p.m., strict end time', 'No cooking or cleaning up'] },
+            { key: 'B', title: 'Party at home', image: '<img src="tests/img/C/opt_B.jpg" alt="Photo: Party at home">', facts: ['Up to 20 guests', 'Food and cake: about $200', 'Family does all the cooking and cleaning', 'No time limit, but a small living room'] }
           ],
-          third: { key: 'C', title: 'Bowling alley', image: BOWLING, facts: ['2 lanes for 2 hours', '$180, shoe rental included', 'Sunday, 2:00 to 4:00 p.m.', 'Pizza and snacks available'] },
+          third: { key: 'C', title: 'Bowling alley', image: '<img src="tests/img/C/opt_C.jpg" alt="Photo: Bowling alley">', facts: ['2 lanes for 2 hours', '$180, shoe rental included', 'Sunday, 2:00 to 4:00 p.m.', 'Pizza and snacks available'] },
           persuade: 'Your family member suggests the bowling alley instead. Persuade them that your choice is better. Explain why.'
         },
         { id: 'S6', title: 'Task 6: Dealing with a Difficult Situation', prep: 60, speak: 60, prompt: '<p>For the past month, a coworker on your team has often left early and asked you to finish his tasks. Because of this, your own work has fallen behind. Today your manager asked you why your reports are late.</p><p><b>Choose ONE:</b></p><p><b>Option A:</b> Talk to your manager. Explain why your work is late without causing serious trouble for your coworker.</p><p><b>Option B:</b> Talk to your coworker. Explain why you cannot keep doing his tasks.</p>' },
         { id: 'S7', title: 'Task 7: Expressing Opinions', prep: 30, speak: 90, prompt: 'Your town council is debating whether large stores should be allowed to open on statutory holidays such as Canada Day and Thanksgiving. Store owners say shoppers want the convenience and staff can earn holiday pay. Many workers say they would lose one of the few days they can count on spending with family. The council has asked residents for their views. Should stores be allowed to open on public holidays? Explain your reasons.' },
-        { id: 'S8', title: 'Task 8: Describing an Unusual Situation', prep: 30, speak: 60, prompt: 'You are in a used furniture store and see this unusual chair. It costs $249, one of the speakers does not work, and the store accepts cash only with no returns. Call your friend, who is furnishing his new apartment on a tight budget and has a small living room. Describe the chair and explain whether you think he should buy it.', image: ODDCHAIR }
+        { id: 'S8', title: 'Task 8: Describing an Unusual Situation', prep: 30, speak: 60, prompt: 'You are in a used furniture store and see this unusual chair. It costs $249, one of the speakers does not work, and the store accepts cash only with no returns. Call your friend, who is furnishing his new apartment on a tight budget and has a small living room. Describe the chair and explain whether you think he should buy it.', image: '<img src="tests/img/C/object.jpg" alt="An unusual armchair in a used furniture store">' }
       ]
     }
   });

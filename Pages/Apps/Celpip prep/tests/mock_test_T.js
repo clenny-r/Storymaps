@@ -7,143 +7,7 @@
 (function () {
   window.MOCK_TESTS = window.MOCK_TESTS || [];
 
-  /* ---------- small SVG helpers for speaking pictures ---------- */
-  function person(x, y, o) {
-    o = o || {};
-    var s = o.s || 1, skin = o.skin || '#e0b48f', shirt = o.shirt || '#3d7cc9', pants = o.pants || '#38414d', hair = o.hair || '#3b2a20';
-    var arms = o.arms || 'down';
-    var a = arms === 'up' ? '<line x1="-7" y1="-30" x2="-16" y2="-50" /><line x1="7" y1="-30" x2="16" y2="-50" />'
-      : arms === 'right' ? '<line x1="-7" y1="-30" x2="-12" y2="-14" /><line x1="7" y1="-30" x2="24" y2="-36" />'
-      : arms === 'left' ? '<line x1="-7" y1="-30" x2="-24" y2="-36" /><line x1="7" y1="-30" x2="12" y2="-14" />'
-      : '<line x1="-7" y1="-30" x2="-12" y2="-14" /><line x1="7" y1="-30" x2="12" y2="-14" />';
-    var legs = o.sit ? '<line x1="-4" y1="-12" x2="-14" y2="-12" /><line x1="4" y1="-12" x2="-6" y2="-12" /><line x1="-14" y1="-12" x2="-14" y2="0" /><line x1="-6" y1="-12" x2="-6" y2="0" />'
-      : '<line x1="-4" y1="-12" x2="-7" y2="0" /><line x1="4" y1="-12" x2="7" y2="0" />';
-    return '<g transform="translate(' + x + ' ' + y + ') scale(' + s + ')">' +
-      '<g stroke="' + skin + '" stroke-width="4" stroke-linecap="round">' + a + '</g>' +
-      '<g stroke="' + pants + '" stroke-width="5" stroke-linecap="round">' + legs + '</g>' +
-      '<rect x="-8" y="-36" width="16" height="25" rx="5" fill="' + shirt + '"/>' +
-      '<circle cx="0" cy="-45" r="9" fill="' + skin + '"/>' +
-      '<path d="M-9 -46 a9 9 0 0 1 18 0 q-9 -6 -18 0z" fill="' + hair + '"/>' +
-      '</g>';
-  }
-
-  function car(x, y, c) {
-    return '<g transform="translate(' + x + ' ' + y + ')">' +
-      '<path d="M0 0 L4 -12 Q6 -18 14 -18 L38 -18 Q44 -18 48 -12 L56 -10 Q60 -9 60 -4 L60 0z" fill="' + c + '"/>' +
-      '<path d="M10 -12 L14 -16 L26 -16 L26 -11z M30 -16 L40 -16 L45 -11 L30 -11z" fill="#d6eaf8"/>' +
-      '<circle cx="14" cy="1" r="5" fill="#222"/><circle cx="46" cy="1" r="5" fill="#222"/></g>';
-  }
-
-  function gull(x, y, s) {
-    s = s || 1;
-    return '<g transform="translate(' + x + ' ' + y + ') scale(' + s + ')"><path d="M-14 -4 Q-7 -12 0 -2 Q7 -12 14 -4" stroke="#555" stroke-width="2.5" fill="none"/><ellipse cx="0" cy="0" rx="5" ry="3" fill="#ffffff" stroke="#888"/><polygon points="5,0 10,1 5,2" fill="#f1c40f"/></g>';
-  }
-
-  var FERRYDOCK = (function () {
-    var p = '';
-    p += '<svg viewBox="0 0 640 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A busy ferry terminal as the ferry arrives">';
-    p += '<rect width="640" height="400" fill="#bfe3f5"/>';
-    p += '<circle cx="580" cy="40" r="22" fill="#fce38a"/>';
-    p += '<g fill="#ffffff"><ellipse cx="300" cy="40" rx="50" ry="13"/><ellipse cx="340" cy="34" rx="34" ry="11"/><ellipse cx="460" cy="70" rx="40" ry="10"/></g>';
-    /* far island and sea */
-    p += '<path d="M380 140 Q450 100 520 128 Q570 110 640 130 L640 145 L380 145z" fill="#5f8f5a"/>';
-    p += '<rect y="140" width="640" height="105" fill="#3f7fb5"/>';
-    p += '<g stroke="#8fc1e3" stroke-width="2"><line x1="40" y1="170" x2="70" y2="170"/><line x1="120" y1="200" x2="150" y2="200"/><line x1="230" y1="160" x2="255" y2="160"/></g>';
-    /* the ferry, ramp being lowered toward the dock */
-    p += '<polygon points="360,182 620,182 605,222 380,222" fill="#ffffff" stroke="#34495e" stroke-width="2"/>';
-    p += '<rect x="380" y="214" width="225" height="8" fill="#1f618d"/>';
-    p += '<rect x="420" y="150" width="160" height="32" fill="#f4f6f7" stroke="#34495e" stroke-width="2"/>';
-    p += '<g fill="#5dade2"><rect x="432" y="158" width="16" height="10"/><rect x="456" y="158" width="16" height="10"/><rect x="480" y="158" width="16" height="10"/><rect x="504" y="158" width="16" height="10"/><rect x="528" y="158" width="16" height="10"/><rect x="552" y="158" width="16" height="10"/></g>';
-    p += '<rect x="560" y="124" width="18" height="26" fill="#c0392b"/><rect x="560" y="124" width="18" height="6" fill="#222"/>';
-    p += '<text x="490" y="207" font-size="13" text-anchor="middle" font-family="sans-serif" fill="#1f618d">ISLAND FERRY</text>';
-    p += '<polygon points="360,182 330,226 342,230 372,186" fill="#7f8c8d"/>';
-    /* someone waving from the deck */
-    p += person(596, 182, { s: .55, shirt: '#e67e22', skin: '#c98c64', hair: '#1d1410', arms: 'up' });
-    /* pavement and dock edge */
-    p += '<rect y="240" width="640" height="160" fill="#b9b3a6"/><rect y="236" width="640" height="8" fill="#7a5a3a"/>';
-    p += '<g stroke="#f4f6f7" stroke-width="3" stroke-dasharray="14 10"><line x1="190" y1="300" x2="430" y2="300"/></g>';
-    /* terminal building with departure board */
-    p += '<rect x="14" y="120" width="150" height="120" fill="#d5dbdb" stroke="#7f8c8d" stroke-width="2"/><polygon points="6,122 89,92 172,122" fill="#566573"/>';
-    p += '<rect x="30" y="132" width="118" height="20" fill="#1f618d"/><text x="89" y="146" font-size="11" text-anchor="middle" font-family="sans-serif" fill="#ffffff">FERRY TERMINAL</text>';
-    p += '<rect x="34" y="160" width="110" height="34" fill="#17202a"/><text x="89" y="174" font-size="9" text-anchor="middle" font-family="sans-serif" fill="#f7dc6f">NEXT SAILING</text><text x="89" y="188" font-size="11" text-anchor="middle" font-family="sans-serif" fill="#f7dc6f">3:15 BOARDING</text>';
-    p += '<rect x="70" y="204" width="38" height="36" fill="#85929e"/>';
-    /* lineup of cars waiting to board */
-    p += car(200, 290, '#c0392b') + car(268, 290, '#2e86c1') + car(336, 290, '#27ae60');
-    /* worker in a safety vest waving cars on */
-    p += person(430, 300, { shirt: '#f39c12', skin: '#8d5a3b', hair: '#120c08', arms: 'up' });
-    p += '<rect x="424" y="270" width="12" height="4" fill="#f4f6f7"/>';
-    /* coffee kiosk with vendor and customer */
-    p += '<rect x="500" y="262" width="96" height="58" fill="#a04000"/><rect x="494" y="252" width="108" height="12" fill="#f5cba7"/><rect x="510" y="272" width="76" height="24" fill="#fdebd0"/>';
-    p += '<text x="548" y="312" font-size="11" text-anchor="middle" font-family="sans-serif" fill="#ffffff">COFFEE</text>';
-    p += person(548, 296, { s: .6, shirt: '#ffffff', skin: '#e3b28b', hair: '#5d4037', arms: 'left' });
-    p += person(616, 340, { shirt: '#16a085', skin: '#b07850', hair: '#1d1410', arms: 'left', s: .85 });
-    /* man running with a suitcase */
-    p += person(300, 350, { shirt: '#2c3e50', skin: '#f2cfb0', hair: '#7b5a3a', arms: 'right' });
-    p += '<rect x="320" y="322" width="22" height="18" rx="3" fill="#7d3c98"/><line x1="324" y1="314" x2="331" y2="322" stroke="#555" stroke-width="2"/>';
-    p += '<g stroke="#7f8c8d" stroke-width="2"><line x1="268" y1="322" x2="282" y2="322"/><line x1="264" y1="332" x2="280" y2="332"/></g>';
-    /* bench: man with a sandwich and a gull diving at it */
-    p += '<rect x="30" y="360" width="90" height="8" fill="#6e4b2a"/><rect x="34" y="368" width="6" height="16" fill="#6e4b2a"/><rect x="110" y="368" width="6" height="16" fill="#6e4b2a"/>';
-    p += person(70, 372, { sit: true, shirt: '#2874a6', skin: '#e0b48f', hair: '#7f7f7f', arms: 'right' });
-    p += '<rect x="90" y="330" width="14" height="7" rx="2" fill="#f5cba7"/><rect x="90" y="332" width="14" height="2" fill="#58d68d"/>';
-    p += gull(108, 312, 1.3);
-    /* a woman with a dog pulling toward the gull */
-    p += person(170, 392, { shirt: '#c0392b', skin: '#f0c9a6', hair: '#2a1b12', arms: 'left' });
-    p += '<line x1="146" y1="356" x2="132" y2="372" stroke="#333" stroke-width="1.5"/><g fill="#a0522d"><ellipse cx="126" cy="378" rx="11" ry="6"/><circle cx="116" cy="372" r="5"/><rect x="118" y="382" width="3" height="8"/><rect x="130" y="382" width="3" height="8"/></g>';
-    /* cyclist walking a bike toward the ramp */
-    p += person(232, 392, { shirt: '#f1c40f', skin: '#6b4226', hair: '#120c08', arms: 'right' });
-    p += '<g stroke="#2c3e50" stroke-width="2.5" fill="none"><circle cx="252" cy="380" r="11"/><circle cx="290" cy="380" r="11"/><path d="M252 380 L266 362 L284 362 L290 380 M266 362 L272 380 L284 362"/></g>';
-    /* child with a balloon */
-    p += person(380, 392, { s: .7, shirt: '#e91e63', skin: '#c98c64', hair: '#1d1410', arms: 'up' });
-    p += '<line x1="391" y1="357" x2="400" y2="318" stroke="#555" stroke-width="1"/><ellipse cx="400" cy="306" rx="11" ry="14" fill="#e74c3c"/>';
-    /* couple taking a selfie by the railing */
-    p += person(470, 392, { shirt: '#5dade2', skin: '#f2cfb0', hair: '#c49a42', arms: 'up' });
-    p += person(500, 392, { shirt: '#6c3483', skin: '#a9714b', hair: '#2a1b12' });
-    p += '<rect x="480" y="334" width="8" height="12" rx="1" fill="#222"/>';
-    p += '</svg>';
-    return p;
-  })();
-
-  var EBIKE = '<svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg"><rect width="200" height="120" fill="#e8f6f3"/><rect y="96" width="200" height="24" fill="#aab7b8"/>' +
-    '<g stroke="#1b4f72" stroke-width="4" fill="none"><circle cx="60" cy="80" r="20"/><circle cx="140" cy="80" r="20"/><path d="M60 80 L85 50 L125 50 L140 80 M85 50 L100 80 L125 50 M120 40 L125 50"/><path d="M80 44 L94 44"/><path d="M114 40 L128 38"/></g>' +
-    '<rect x="88" y="58" width="22" height="12" rx="3" fill="#27ae60"/><text x="99" y="67" font-size="8" text-anchor="middle" font-family="sans-serif" fill="#ffffff">E</text>' +
-    '<text x="100" y="22" font-size="12" text-anchor="middle" font-family="sans-serif" fill="#1b4f72">E-BIKE</text></svg>';
-
-  var BUS = '<svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg"><rect width="200" height="120" fill="#fdf2e9"/><rect y="96" width="200" height="24" fill="#95a5a6"/>' +
-    '<rect x="26" y="40" width="148" height="52" rx="8" fill="#2e86c1"/><rect x="26" y="78" width="148" height="6" fill="#f4d03f"/>' +
-    '<g fill="#d6eaf8"><rect x="34" y="48" width="20" height="18"/><rect x="60" y="48" width="20" height="18"/><rect x="86" y="48" width="20" height="18"/><rect x="112" y="48" width="20" height="18"/><rect x="146" y="48" width="20" height="26"/></g>' +
-    '<g fill="#1b2631"><circle cx="56" cy="94" r="9"/><circle cx="144" cy="94" r="9"/></g>' +
-    '<text x="100" y="26" font-size="12" text-anchor="middle" font-family="sans-serif" fill="#1b4f72">BUS PASS</text></svg>';
-
-  var CARPOOL = '<svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg"><rect width="200" height="120" fill="#f4ecf7"/><rect y="96" width="200" height="24" fill="#7f8c8d"/>' +
-    '<path d="M36 90 L48 66 Q54 58 68 58 L124 58 Q136 58 144 68 L156 78 L168 82 Q172 84 172 92 L172 94 L30 94 L30 90z" fill="#8e44ad"/>' +
-    '<g fill="#d6eaf8"><path d="M56 68 Q60 62 68 62 L92 62 L92 78 L50 78z"/><path d="M98 62 L122 62 Q130 62 136 70 L142 78 L98 78z"/></g>' +
-    '<g fill="#e0b48f"><circle cx="76" cy="70" r="5"/><circle cx="114" cy="70" r="5"/></g>' +
-    '<g fill="#2c3e50"><circle cx="62" cy="96" r="11"/><circle cx="144" cy="96" r="11"/></g>' +
-    '<text x="100" y="30" font-size="12" text-anchor="middle" font-family="sans-serif" fill="#6c3483">CARPOOL</text></svg>';
-
-  var ODDCAMERA = '<svg viewBox="0 0 640 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="An unusual camera in a second-hand shop">' +
-    '<rect width="640" height="400" fill="#efe9df"/><rect y="320" width="640" height="80" fill="#a98b6b"/><rect x="90" y="312" width="460" height="12" fill="#7b5b3c"/>' +
-    '<rect x="22" y="24" width="190" height="50" rx="6" fill="#ffffff" stroke="#c7b9a3"/><text x="117" y="56" text-anchor="middle" font-family="sans-serif" font-size="17" fill="#5d4037">SECOND-HAND</text>' +
-    /* folding tripod legs under the body */
-    '<g stroke="#555" stroke-width="5" stroke-linecap="round"><line x1="320" y1="250" x2="262" y2="312"/><line x1="320" y1="250" x2="320" y2="312"/><line x1="320" y1="250" x2="378" y2="312"/></g>' +
-    /* boxy body */
-    '<rect x="200" y="140" width="240" height="112" rx="12" fill="#2c3e50"/><rect x="200" y="200" width="240" height="10" fill="#d35400"/>' +
-    /* main lens */
-    '<circle cx="320" cy="190" r="44" fill="#1b2631" stroke="#95a5a6" stroke-width="6"/><circle cx="320" cy="190" r="26" fill="#2e4053"/><circle cx="310" cy="180" r="8" fill="#5dade2" opacity=".7"/>' +
-    /* solar panel on top */
-    '<rect x="226" y="112" width="110" height="26" fill="#1f3a93" stroke="#aab7b8" stroke-width="2"/><g stroke="#aab7b8" stroke-width="1"><line x1="253" y1="112" x2="253" y2="138"/><line x1="281" y1="112" x2="281" y2="138"/><line x1="308" y1="112" x2="308" y2="138"/><line x1="226" y1="125" x2="336" y2="125"/></g>' +
-    /* large flash shaped like a desk lamp */
-    '<line x1="400" y1="140" x2="414" y2="96" stroke="#7f8c8d" stroke-width="5"/><path d="M398 70 L446 70 L436 96 L406 96z" fill="#f4d03f" stroke="#b7950b" stroke-width="2"/>' +
-    /* hand crank on the right side */
-    '<line x1="440" y1="180" x2="476" y2="180" stroke="#7f8c8d" stroke-width="6"/><line x1="476" y1="180" x2="476" y2="214" stroke="#7f8c8d" stroke-width="6"/><circle cx="476" cy="218" r="8" fill="#c0392b"/>' +
-    /* printed photo coming out of a slot at the bottom left */
-    '<rect x="214" y="246" width="56" height="6" fill="#111"/><rect x="220" y="250" width="44" height="44" fill="#ffffff" stroke="#7f8c8d"/><rect x="225" y="255" width="34" height="26" fill="#85c1e9"/><circle cx="242" cy="268" r="6" fill="#f5b041"/>' +
-    /* side mirror for selfies on the left */
-    '<line x1="200" y1="170" x2="172" y2="150" stroke="#7f8c8d" stroke-width="4"/><circle cx="162" cy="142" r="16" fill="#d6eaf8" stroke="#7f8c8d" stroke-width="3"/>' +
-    /* price tag */
-    '<line x1="440" y1="240" x2="486" y2="262" stroke="#555" stroke-width="1.5"/><path d="M480 258 L560 258 L560 300 L480 300 L468 279z" fill="#f6d55c" stroke="#b7950b"/><circle cx="480" cy="279" r="3" fill="#efe9df"/><text x="518" y="286" text-anchor="middle" font-family="sans-serif" font-size="20" fill="#333">$85</text>' +
-    '</svg>';
-
+  /* Speaking pictures are image files in tests/img/T/ (scene, object, opt_A to opt_C). */
   window.MOCK_TESTS.push({
     id: 'T',
     title: 'Mock Test T',
@@ -507,21 +371,21 @@
       tasks: [
         { id: 'S1', title: 'Task 1: Giving Advice', prep: 30, speak: 90, prompt: 'A friend of yours is going to a one-day hiring event at a new hospital next Thursday, hoping to find a job in accounting. More than 30 departments will be meeting applicants. He is quite shy, and his shift at his current job ends at 2:00 p.m., while the event closes at 4:00 p.m. Give your friend advice on how to prepare for the event and how to make the most of the short time he will have there.' },
         { id: 'S2', title: 'Task 2: Talking about a Personal Experience', prep: 30, speak: 60, prompt: 'Talk about a time when bad weather or a power outage disrupted your plans. What happened, how did you cope, and what would you do differently if the same thing happened again?' },
-        { id: 'S3', title: 'Task 3: Describing a Scene', prep: 30, speak: 60, prompt: 'Describe some things that are happening in the picture below as well as you can. The person you are speaking to cannot see the picture.', image: FERRYDOCK },
-        { id: 'S4', title: 'Task 4: Making Predictions', prep: 30, speak: 60, prompt: 'In this picture, what do you think will most probably happen next? Think about the man on the bench, the man with the suitcase, the dog, and the ferry that has just arrived.', image: FERRYDOCK },
+        { id: 'S3', title: 'Task 3: Describing a Scene', prep: 30, speak: 60, prompt: 'Describe some things that are happening in the picture below as well as you can. The person you are speaking to cannot see the picture.', image: '<img src="tests/img/T/scene.jpg" alt="A busy ferry terminal as the ferry arrives">' },
+        { id: 'S4', title: 'Task 4: Making Predictions', prep: 30, speak: 60, prompt: 'In this picture, what do you think will most probably happen next? Think about the man on the bench, the man with the suitcase, the dog, and the ferry that has just arrived.', image: '<img src="tests/img/T/scene.jpg" alt="A busy ferry terminal as the ferry arrives">' },
         {
           id: 'S5', title: 'Task 5: Comparing and Persuading', type: 'compare', select: 60, prep: 60, speak: 60,
           prompt: 'You have started a new job 9 kilometres from your home, and you need a reliable way to get there all year. Choose the option you prefer. In the next section, you will need to persuade a family member that your choice is better.',
           choices: [
-            { key: 'A', title: 'Buy an e-bike', image: EBIKE, facts: ['Costs $2,200 up front, about $5 a month to charge', 'About 25 minutes each way', 'Showers and locked bike storage at work', 'Hard to use on icy roads in January and February'] },
-            { key: 'B', title: 'Monthly bus pass', image: BUS, facts: ['$105 per month', 'About 45 minutes each way, with one transfer', 'Buses every 15 minutes at rush hour', 'Time to read or rest on the way'] }
+            { key: 'A', title: 'Buy an e-bike', image: '<img src="tests/img/T/opt_A.jpg" alt="Photo: Buy an e-bike">', facts: ['Costs $2,200 up front, about $5 a month to charge', 'About 25 minutes each way', 'Showers and locked bike storage at work', 'Hard to use on icy roads in January and February'] },
+            { key: 'B', title: 'Monthly bus pass', image: '<img src="tests/img/T/opt_B.jpg" alt="Photo: Monthly bus pass">', facts: ['$105 per month', 'About 45 minutes each way, with one transfer', 'Buses every 15 minutes at rush hour', 'Time to read or rest on the way'] }
           ],
-          third: { key: 'C', title: 'Carpool with a coworker', image: CARPOOL, facts: ['$60 per month toward gas', 'About 20 minutes each way', 'Must leave home at 7:15 a.m. and leave work at 4:30 p.m.', 'Coworker may move to another office next year'] },
+          third: { key: 'C', title: 'Carpool with a coworker', image: '<img src="tests/img/T/opt_C.jpg" alt="Photo: Carpool with a coworker">', facts: ['$60 per month toward gas', 'About 20 minutes each way', 'Must leave home at 7:15 a.m. and leave work at 4:30 p.m.', 'Coworker may move to another office next year'] },
           persuade: 'A family member thinks carpooling with your coworker would be better. Persuade this family member that your choice is better. Explain why.'
         },
         { id: 'S6', title: 'Task 6: Dealing with a Difficult Situation', prep: 60, speak: 60, prompt: '<p>For the past month, you have been tutoring your neighbour\'s teenage son in math every Saturday morning for free. His final exam is in nine days, and this Saturday\'s session was meant to be the last full review. Today, the leader of your photography club asked you to photograph a family reunion this Saturday morning in her place, because she is sick. The family will pay $300, and the club leader has helped you many times before.</p><p><b>Choose ONE:</b></p><p><b>Option A:</b> Talk to your neighbour. Explain why you cannot tutor her son this Saturday.</p><p><b>Option B:</b> Talk to the club leader. Explain why you cannot photograph the reunion.</p>' },
         { id: 'S7', title: 'Task 7: Expressing Opinions', prep: 30, speak: 90, prompt: '<p>Your town council is deciding whether to close the main street to cars on Saturdays and Sundays from May to October and turn it into a pedestrian zone. Several shop owners say customers who drive would simply go to the mall on the highway instead, and that they cannot afford to lose weekend sales. Supporters say more people on foot would bring more visitors downtown, which would help every business on the street.</p><p>The council has asked residents to share their views before it votes next month. Should the main street be closed to cars on weekends? Explain your reasons.</p>' },
-        { id: 'S8', title: 'Task 8: Describing an Unusual Situation', prep: 30, speak: 60, prompt: 'You are in a second-hand shop and see this unusual camera for $85. Call your friend, who has just joined a photography club and wants a camera for a two-week cycling trip next month. The camera weighs almost two kilograms, and each printed photo costs about $2 in paper. Describe the camera and explain whether you think your friend should buy it.', image: ODDCAMERA }
+        { id: 'S8', title: 'Task 8: Describing an Unusual Situation', prep: 30, speak: 60, prompt: 'You are in a second-hand shop and see this unusual camera for $85. Call your friend, who has just joined a photography club and wants a camera for a two-week cycling trip next month. The camera weighs almost two kilograms, and each printed photo costs about $2 in paper. Describe the camera and explain whether you think your friend should buy it.', image: '<img src="tests/img/T/object.jpg" alt="An unusual camera in a second-hand shop">' }
       ]
     }
   });

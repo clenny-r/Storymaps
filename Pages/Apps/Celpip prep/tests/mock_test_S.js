@@ -7,142 +7,7 @@
 (function () {
   window.MOCK_TESTS = window.MOCK_TESTS || [];
 
-  /* ---------- small SVG helpers for speaking pictures ---------- */
-  function person(x, y, o) {
-    o = o || {};
-    var s = o.s || 1, skin = o.skin || '#e0b48f', shirt = o.shirt || '#3d7cc9', pants = o.pants || '#38414d', hair = o.hair || '#3b2a20';
-    var arms = o.arms || 'down';
-    var a = arms === 'up' ? '<line x1="-7" y1="-30" x2="-16" y2="-50" /><line x1="7" y1="-30" x2="16" y2="-50" />'
-      : arms === 'right' ? '<line x1="-7" y1="-30" x2="-12" y2="-14" /><line x1="7" y1="-30" x2="24" y2="-36" />'
-      : arms === 'left' ? '<line x1="-7" y1="-30" x2="-24" y2="-36" /><line x1="7" y1="-30" x2="12" y2="-14" />'
-      : '<line x1="-7" y1="-30" x2="-12" y2="-14" /><line x1="7" y1="-30" x2="12" y2="-14" />';
-    var legs = o.sit ? '<line x1="-4" y1="-12" x2="-14" y2="-12" /><line x1="4" y1="-12" x2="-6" y2="-12" /><line x1="-14" y1="-12" x2="-14" y2="0" /><line x1="-6" y1="-12" x2="-6" y2="0" />'
-      : '<line x1="-4" y1="-12" x2="-7" y2="0" /><line x1="4" y1="-12" x2="7" y2="0" />';
-    return '<g transform="translate(' + x + ' ' + y + ') scale(' + s + ')">' +
-      '<g stroke="' + skin + '" stroke-width="4" stroke-linecap="round">' + a + '</g>' +
-      '<g stroke="' + pants + '" stroke-width="5" stroke-linecap="round">' + legs + '</g>' +
-      '<rect x="-8" y="-36" width="16" height="25" rx="5" fill="' + shirt + '"/>' +
-      '<circle cx="0" cy="-45" r="9" fill="' + skin + '"/>' +
-      '<path d="M-9 -46 a9 9 0 0 1 18 0 q-9 -6 -18 0z" fill="' + hair + '"/>' +
-      '</g>';
-  }
-
-  function seat(x, y) {
-    return '<rect x="' + x + '" y="' + (y - 34) + '" width="34" height="20" rx="3" fill="#1e5aa8"/><rect x="' + x + '" y="' + (y - 16) + '" width="34" height="6" rx="2" fill="#2f6fc1"/>' +
-      '<line x1="' + (x + 17) + '" y1="' + (y - 10) + '" x2="' + (x + 17) + '" y2="' + y + '" stroke="#78909c" stroke-width="3"/>';
-  }
-
-  var GATE = (function () {
-    var p = '';
-    p += '<svg viewBox="0 0 640 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A busy airport departure gate during a flight delay">';
-    p += '<rect width="640" height="400" fill="#e3e8ee"/>';
-    /* big window with a plane and a fuel truck outside */
-    p += '<rect x="250" y="16" width="380" height="150" fill="#9fd3f0" stroke="#90a4ae" stroke-width="6"/><rect x="250" y="126" width="380" height="40" fill="#9e9e9e"/>';
-    p += '<g stroke="#90a4ae" stroke-width="4"><line x1="377" y1="16" x2="377" y2="166"/><line x1="503" y1="16" x2="503" y2="166"/></g>';
-    p += '<rect x="290" y="92" width="230" height="30" rx="15" fill="#ffffff" stroke="#b0bec5"/><polygon points="500,92 530,52 548,52 530,94" fill="#c62828"/><polygon points="380,110 340,148 372,148 430,110" fill="#cfd8dc"/>';
-    p += '<g fill="#64b5f6"><circle cx="320" cy="104" r="3"/><circle cx="336" cy="104" r="3"/><circle cx="352" cy="104" r="3"/><circle cx="440" cy="104" r="3"/><circle cx="456" cy="104" r="3"/><circle cx="472" cy="104" r="3"/></g>';
-    p += '<rect x="548" y="118" width="58" height="26" fill="#f9a825"/><rect x="590" y="108" width="20" height="18" fill="#f9a825"/><circle cx="560" cy="146" r="6" fill="#212121"/><circle cx="598" cy="146" r="6" fill="#212121"/><path d="M548 128 Q530 130 520 116" fill="none" stroke="#424242" stroke-width="3"/>';
-    /* departures board */
-    p += '<rect x="16" y="20" width="220" height="104" rx="4" fill="#1c2833"/><text x="126" y="40" text-anchor="middle" font-family="sans-serif" font-size="12" fill="#f4d03f">DEPARTURES</text>';
-    p += '<g font-family="sans-serif" font-size="10"><text x="24" y="64" fill="#ffffff">VANCOUVER</text><text x="104" y="64" fill="#ffffff">GATE 12</text><text x="166" y="64" fill="#ff5252">DELAYED</text>';
-    p += '<text x="24" y="86" fill="#ffffff">TORONTO</text><text x="104" y="86" fill="#ffffff">GATE 14</text><text x="166" y="86" fill="#69f0ae">BOARDING</text>';
-    p += '<text x="24" y="108" fill="#ffffff">WINNIPEG</text><text x="104" y="108" fill="#ffffff">GATE 15</text><text x="166" y="108" fill="#ffffff">ON TIME</text></g>';
-    /* floor */
-    p += '<rect y="196" width="640" height="204" fill="#cfd8dc"/>';
-    /* gate desk with an agent speaking into a microphone */
-    p += person(64, 196, { shirt: '#283593', skin: '#a9714b', hair: '#1d1410', arms: 'right' });
-    p += '<rect x="20" y="168" width="110" height="44" fill="#455a64"/><text x="75" y="194" text-anchor="middle" font-family="sans-serif" font-size="12" fill="#ffffff">GATE 12</text>';
-    p += '<line x1="88" y1="168" x2="96" y2="148" stroke="#212121" stroke-width="2"/><circle cx="96" cy="146" r="3" fill="#212121"/>';
-    /* two travellers waiting in line at the desk */
-    p += person(152, 232, { shirt: '#6d4c41', skin: '#f0c9a6', hair: '#c49a42', arms: 'left' });
-    p += person(184, 236, { shirt: '#00897b', skin: '#5c3a21', hair: '#120c08' });
-    p += '<rect x="194" y="214" width="18" height="22" rx="3" fill="#7b1fa2"/><line x1="203" y1="214" x2="203" y2="204" stroke="#424242" stroke-width="2"/>';
-    /* row of seats */
-    p += seat(236, 288) + seat(272, 288) + seat(308, 288) + seat(352, 288) + seat(388, 288) + seat(424, 288);
-    /* man asleep across three seats */
-    p += '<g transform="rotate(-90 290 254)">' + person(290, 254, { shirt: '#c62828', skin: '#e3b28b', hair: '#5d4037', s: .95 }) + '</g>';
-    p += '<rect x="244" y="232" width="18" height="12" rx="4" fill="#ffffff"/>';
-    /* woman reading a book */
-    p += person(374, 288, { sit: true, shirt: '#8e24aa', skin: '#ecc9a2', hair: '#111111', arms: 'right' });
-    p += '<rect x="384" y="246" width="14" height="10" fill="#fdd835" stroke="#795548"/>';
-    /* man eating a sandwich */
-    p += person(446, 288, { sit: true, shirt: '#2e7d32', skin: '#8d5a3b', hair: '#120c08', arms: 'up', s: .95 });
-    p += '<path d="M452 236 l14 0 l-7 -8z" fill="#ffe082" stroke="#a1887f"/>';
-    /* woman charging her phone at a wall outlet */
-    p += '<rect x="604" y="214" width="12" height="16" rx="2" fill="#ffffff" stroke="#90a4ae"/>';
-    p += person(586, 262, { shirt: '#ef6c00', skin: '#f2cfb0', hair: '#7a4a1d', arms: 'right' });
-    p += '<path d="M610 226 Q612 248 606 236" fill="none" stroke="#212121" stroke-width="2"/><rect x="606" y="224" width="8" height="12" rx="2" fill="#212121"/>';
-    /* low table with a coffee cup near the edge and a toddler reaching for it */
-    p += '<rect x="70" y="318" width="96" height="8" fill="#8d6e63"/><g stroke="#6d4c41" stroke-width="4"><line x1="78" y1="326" x2="78" y2="350"/><line x1="158" y1="326" x2="158" y2="350"/></g>';
-    p += '<path d="M150 302 l14 0 l-2 16 l-10 0z" fill="#ffffff" stroke="#795548"/><path d="M152 300 q5 -10 0 -16 M158 300 q5 -10 0 -16" fill="none" stroke="#b0bec5" stroke-width="1.5"/>';
-    p += person(174, 352, { s: .6, shirt: '#f06292', skin: '#c98c64', hair: '#2a1b12', arms: 'left' });
-    p += '<rect x="86" y="304" width="26" height="14" rx="3" fill="#5d4037"/>';
-    /* child running with a toy plane */
-    p += person(286, 390, { s: .75, shirt: '#fbc02d', skin: '#e8c39e', hair: '#151515', arms: 'up' });
-    p += '<g transform="translate(298 330)"><rect x="-10" y="-3" width="20" height="6" rx="3" fill="#e53935"/><polygon points="-2,-3 4,-3 0,-12" fill="#e53935"/><polygon points="-3,0 4,0 1,10" fill="#e53935"/></g>';
-    /* pilot pulling a suitcase */
-    p += person(380, 380, { shirt: '#ffffff', skin: '#d6a07a', hair: '#3b2a20', arms: 'left', pants: '#1c2833' });
-    p += '<rect x="370" y="318" width="20" height="5" fill="#1c2833"/><line x1="356" y1="344" x2="340" y2="356" stroke="#424242" stroke-width="2"/><rect x="322" y="354" width="24" height="30" rx="3" fill="#37474f"/><circle cx="326" cy="386" r="3" fill="#212121"/><circle cx="342" cy="386" r="3" fill="#212121"/>';
-    /* cleaner mopping a wet patch next to a warning sign */
-    p += '<ellipse cx="500" cy="372" rx="54" ry="12" fill="#81d4fa" opacity=".7"/>';
-    p += person(470, 366, { shirt: '#43a047', skin: '#5c3a21', hair: '#120c08', arms: 'right' });
-    p += '<line x1="490" y1="332" x2="508" y2="368" stroke="#8d6e63" stroke-width="3"/><rect x="500" y="366" width="18" height="6" fill="#bdbdbd"/>';
-    p += '<polygon points="520,330 506,370 534,370" fill="#fdd835" stroke="#f57f17"/><text x="520" y="362" text-anchor="middle" font-family="sans-serif" font-size="7" fill="#212121">WET</text>';
-    /* man walking toward the wet floor while looking at his phone */
-    p += person(590, 384, { shirt: '#3949ab', skin: '#e0b48f', hair: '#212121', arms: 'left' });
-    p += '<rect x="560" y="344" width="7" height="11" rx="1" fill="#212121"/><rect x="606" y="352" width="14" height="22" rx="3" fill="#795548"/>';
-    p += '</svg>';
-    return p;
-  })();
-
-  var SCIENCE = '<svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg"><rect width="200" height="120" fill="#e8eaf6"/><rect y="98" width="200" height="22" fill="#b0bec5"/>' +
-    '<rect x="36" y="48" width="128" height="52" fill="#ffffff" stroke="#5c6bc0" stroke-width="2"/><path d="M60 48 Q100 14 140 48z" fill="#7986cb"/><rect x="88" y="72" width="24" height="28" fill="#3949ab"/>' +
-    '<g fill="none" stroke="#ff7043" stroke-width="2"><ellipse cx="100" cy="36" rx="14" ry="5"/><ellipse cx="100" cy="36" rx="14" ry="5" transform="rotate(60 100 36)"/><ellipse cx="100" cy="36" rx="14" ry="5" transform="rotate(-60 100 36)"/></g>' +
-    '<text x="100" y="64" font-size="10" text-anchor="middle" font-family="sans-serif" fill="#283593">SCIENCE CENTRE</text></svg>';
-
-  var CAMP = '<svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg"><rect width="200" height="120" fill="#e0f2f1"/><rect y="78" width="200" height="42" fill="#81c784"/><ellipse cx="160" cy="96" rx="40" ry="10" fill="#4fc3f7"/>' +
-    '<polygon points="20,80 36,40 52,80" fill="#2e7d32"/><polygon points="44,80 62,34 80,80" fill="#1b5e20"/>' +
-    '<polygon points="88,92 112,60 136,92" fill="#ff8f00"/><polygon points="112,60 112,92 104,92" fill="#e65100"/>' +
-    '<path d="M140 94 Q160 102 180 94 Q160 98 140 94z" fill="#c62828"/>' +
-    '<text x="100" y="22" font-size="11" text-anchor="middle" font-family="sans-serif" fill="#1b5e20">OUTDOOR CAMP</text></svg>';
-
-  var FARM = '<svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg"><rect width="200" height="120" fill="#fffde7"/><rect y="86" width="200" height="34" fill="#9ccc65"/>' +
-    '<rect x="60" y="50" width="80" height="48" fill="#c62828"/><polygon points="54,52 100,22 146,52" fill="#8e1b1b"/><rect x="88" y="66" width="24" height="32" fill="#ffffff"/><line x1="88" y1="66" x2="112" y2="98" stroke="#c62828" stroke-width="3"/><line x1="112" y1="66" x2="88" y2="98" stroke="#c62828" stroke-width="3"/>' +
-    '<g stroke="#8d6e63" stroke-width="2"><line x1="0" y1="96" x2="56" y2="96"/><line x1="144" y1="96" x2="200" y2="96"/><line x1="10" y1="88" x2="10" y2="104"/><line x1="40" y1="88" x2="40" y2="104"/><line x1="160" y1="88" x2="160" y2="104"/><line x1="190" y1="88" x2="190" y2="104"/></g>' +
-    '<text x="100" y="116" font-size="11" text-anchor="middle" font-family="sans-serif" fill="#33691e">FARM</text></svg>';
-
-  var STROLLER = '<svg viewBox="0 0 640 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="An unusual three-wheeled running stroller with a baby seat and sun canopy in a sports store">' +
-    '<rect width="640" height="400" fill="#eef2f7"/><rect y="338" width="640" height="62" fill="#b0bec5"/>' +
-    '<rect x="24" y="24" width="190" height="50" rx="6" fill="#ffffff" stroke="#546e7a"/><text x="119" y="56" text-anchor="middle" font-family="sans-serif" font-size="20" fill="#263238">SPORTS STORE</text>' +
-    /* frame: front fork, bottom bar and rear upright to the handlebar */
-    '<g stroke="#37474f" stroke-width="7" stroke-linecap="round" fill="none"><line x1="220" y1="316" x2="305" y2="205"/><line x1="220" y1="316" x2="450" y2="296"/><line x1="450" y1="296" x2="530" y2="108"/></g>' +
-    /* foam handlebar grip with a hand brake */
-    '<line x1="530" y1="108" x2="584" y2="104" stroke="#212121" stroke-width="11" stroke-linecap="round"/><path d="M548 112 q14 10 30 4" fill="none" stroke="#c62828" stroke-width="3"/>' +
-    /* basket underneath the seat */
-    '<path d="M312 258 L424 258 L414 292 L322 292z" fill="#d7ccc8" fill-opacity=".4" stroke="#795548" stroke-width="3"/><g stroke="#795548" stroke-width="1.5"><line x1="340" y1="258" x2="342" y2="292"/><line x1="368" y1="258" x2="368" y2="292"/><line x1="396" y1="258" x2="394" y2="292"/><line x1="316" y1="275" x2="420" y2="275"/></g>' +
-    /* fabric seat with a baby sitting in it */
-    '<path d="M305 200 L332 252 L440 252 L488 198z" fill="#00897b" stroke="#00695c" stroke-width="2"/>' +
-    '<rect x="383" y="197" width="26" height="32" rx="7" fill="#ffd54f"/><circle cx="396" cy="184" r="13" fill="#e0b48f"/><path d="M384 181 a12 12 0 0 1 24 0 q-12 -6 -24 0z" fill="#6d4c41"/><circle cx="391" cy="185" r="1.6" fill="#212121"/><circle cx="401" cy="185" r="1.6" fill="#212121"/>' +
-    '<line x1="388" y1="210" x2="374" y2="222" stroke="#e0b48f" stroke-width="4" stroke-linecap="round"/><line x1="404" y1="210" x2="418" y2="222" stroke="#e0b48f" stroke-width="4" stroke-linecap="round"/>' +
-    /* sun canopy arching over the baby */
-    '<path d="M296 206 Q296 116 400 114 Q482 116 492 196 L470 198 Q462 142 400 140 Q324 142 318 206z" fill="#ff7043" stroke="#e64a19" stroke-width="2"/>' +
-    /* solar panel on top of the canopy */
-    '<polygon points="350,104 418,96 430,114 360,122" fill="#1a237e" stroke="#9fa8da" stroke-width="2"/><g stroke="#9fa8da" stroke-width="1"><line x1="373" y1="101" x2="384" y2="119"/><line x1="396" y1="99" x2="407" y2="117"/></g>' +
-    /* small fan clipped inside the canopy */
-    '<circle cx="446" cy="160" r="11" fill="#ffffff" stroke="#607d8b" stroke-width="2"/><g fill="#4fc3f7"><ellipse cx="446" cy="154" rx="3" ry="5"/><ellipse cx="451" cy="164" rx="5" ry="3"/><ellipse cx="441" cy="164" rx="5" ry="3"/></g>' +
-    /* speaker on the rear upright */
-    '<rect x="478" y="210" width="30" height="40" rx="5" fill="#263238"/><circle cx="493" cy="224" r="7" fill="#78909c"/><circle cx="493" cy="240" r="4" fill="#78909c"/>' +
-    /* phone holder above the grip and two cup holders below it */
-    '<line x1="556" y1="100" x2="556" y2="90" stroke="#424242" stroke-width="3"/><rect x="546" y="60" width="20" height="32" rx="3" fill="#212121"/><rect x="549" y="64" width="14" height="22" fill="#4fc3f7"/>' +
-    '<path d="M532 114 l16 0 l-2 18 l-12 0z" fill="#ffffff" stroke="#757575"/><path d="M566 112 l16 0 l-2 18 l-12 0z" fill="#ffffff" stroke="#757575"/>' +
-    /* one small front wheel and a large rear wheel with spokes */
-    '<circle cx="220" cy="316" r="22" fill="none" stroke="#212121" stroke-width="8"/><circle cx="220" cy="316" r="5" fill="#9e9e9e"/>' +
-    '<circle cx="450" cy="296" r="40" fill="none" stroke="#212121" stroke-width="10"/><g stroke="#9e9e9e" stroke-width="1.5"><line x1="450" y1="260" x2="450" y2="332"/><line x1="414" y1="296" x2="486" y2="296"/><line x1="425" y1="271" x2="475" y2="321"/><line x1="475" y1="271" x2="425" y2="321"/></g><circle cx="450" cy="296" r="6" fill="#9e9e9e"/>' +
-    /* price tag on a string from the handlebar */
-    '<line x1="584" y1="104" x2="590" y2="186" stroke="#555" stroke-width="1.5"/><path d="M540 186 L632 186 L632 272 L540 272 L528 229z" fill="#fff176" stroke="#f9a825"/>' +
-    '<text x="584" y="204" text-anchor="middle" font-family="sans-serif" font-size="9" fill="#333">RUNNING STROLLER</text><text x="584" y="238" text-anchor="middle" font-family="sans-serif" font-size="22" fill="#333">$389</text><text x="584" y="262" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#c62828">DOES NOT FOLD</text>' +
-    '</svg>';
-
+  /* Speaking pictures are image files in tests/img/S/ (scene, object, opt_A to opt_C). */
   window.MOCK_TESTS.push({
     id: 'S',
     title: 'Mock Test S',
@@ -511,21 +376,21 @@
       tasks: [
         { id: 'S1', title: 'Task 1: Giving Advice', prep: 30, speak: 90, prompt: 'A friend of yours is getting married in four months. She and her partner have saved $8,000 for the wedding and would like about 50 guests, but her parents want to invite 150 people and expect a large celebration. Give your friend advice on how to plan the wedding and how to handle the disagreement with her parents.' },
         { id: 'S2', title: 'Task 2: Talking about a Personal Experience', prep: 30, speak: 60, prompt: 'Talk about a time when technology let you down at an important moment, for example a computer that crashed, a phone that died or a file that disappeared. What happened, how did you solve the problem, and what would you do differently now?' },
-        { id: 'S3', title: 'Task 3: Describing a Scene', prep: 30, speak: 60, prompt: 'Describe some things that are happening in the picture below as well as you can. The person you are speaking to cannot see the picture.', image: GATE },
-        { id: 'S4', title: 'Task 4: Making Predictions', prep: 30, speak: 60, prompt: 'In this picture, what do you think will most probably happen next? Think about the man looking at his phone, the small child near the table and the departures board.', image: GATE },
+        { id: 'S3', title: 'Task 3: Describing a Scene', prep: 30, speak: 60, prompt: 'Describe some things that are happening in the picture below as well as you can. The person you are speaking to cannot see the picture.', image: '<img src="tests/img/S/scene.jpg" alt="A busy airport departure gate during a flight delay">' },
+        { id: 'S4', title: 'Task 4: Making Predictions', prep: 30, speak: 60, prompt: 'In this picture, what do you think will most probably happen next? Think about the man looking at his phone, the small child near the table and the departures board.', image: '<img src="tests/img/S/scene.jpg" alt="A busy airport departure gate during a flight delay">' },
         {
           id: 'S5', title: 'Task 5: Comparing and Persuading', type: 'compare', select: 60, prep: 60, speak: 60,
           prompt: 'You are a member of your child\'s parent council, which must choose an end-of-year trip for 60 grade 5 students. Choose the option you prefer. In the next section, you will need to persuade another council member that your choice is better.',
           choices: [
-            { key: 'A', title: 'Science centre', image: SCIENCE, facts: ['$14 per student, plus $600 for the bus', 'Indoors, so the weather does not matter', 'Many students visited a similar centre last year', 'Back at school by 2:30 p.m.'] },
-            { key: 'B', title: 'Overnight outdoor camp', image: CAMP, facts: ['$65 per student, meals included', 'Canoeing, hiking and a campfire', 'Needs 8 parent volunteers to stay overnight', 'Some families may find the cost too high'] }
+            { key: 'A', title: 'Science centre', image: '<img src="tests/img/S/opt_A.jpg" alt="Photo: Science centre">', facts: ['$14 per student, plus $600 for the bus', 'Indoors, so the weather does not matter', 'Many students visited a similar centre last year', 'Back at school by 2:30 p.m.'] },
+            { key: 'B', title: 'Overnight outdoor camp', image: '<img src="tests/img/S/opt_B.jpg" alt="Photo: Overnight outdoor camp">', facts: ['$65 per student, meals included', 'Canoeing, hiking and a campfire', 'Needs 8 parent volunteers to stay overnight', 'Some families may find the cost too high'] }
           ],
-          third: { key: 'C', title: 'Working farm', image: FARM, facts: ['$8 per student, plus $450 for the bus', 'Students feed animals and plant crops', 'Mostly outdoors, with no shelter if it rains', '45 minutes each way by bus'] },
+          third: { key: 'C', title: 'Working farm', image: '<img src="tests/img/S/opt_C.jpg" alt="Photo: Working farm">', facts: ['$8 per student, plus $450 for the bus', 'Students feed animals and plant crops', 'Mostly outdoors, with no shelter if it rains', '45 minutes each way by bus'] },
           persuade: 'Another council member thinks the farm would be better. Persuade this person that your choice is better. Explain why.'
         },
         { id: 'S6', title: 'Task 6: Dealing with a Difficult Situation', prep: 60, speak: 60, prompt: '<p>Six months ago, you promised your close friend that you would take the photos at her small wedding this Saturday, so she did not hire a photographer. Today, your manager asked you to work all day Saturday. The company is moving to a new computer system that weekend, and you are the only person who understands how the old system stores client records.</p><p><b>Choose ONE:</b></p><p><b>Option A:</b> Talk to your friend. Explain why you cannot take the photos at her wedding.</p><p><b>Option B:</b> Talk to your manager. Explain why you cannot work on Saturday.</p>' },
         { id: 'S7', title: 'Task 7: Expressing Opinions', prep: 30, speak: 90, prompt: '<p>The regional airport near your city wants permission to allow flights between midnight and 6:00 a.m. Airport managers say night flights would attract new airlines, create about 300 jobs and make cheaper fares possible. Residents who live under the flight path say the noise would wake them several times a night, and some say they would have to move.</p><p>City council has asked residents for their opinion before it decides. Should the airport be allowed to operate night flights? Explain your reasons.</p>' },
-        { id: 'S8', title: 'Task 8: Describing an Unusual Situation', prep: 30, speak: 60, prompt: 'You are in a sports store and see this unusual running stroller. Call your friend, who has a one-year-old son and wants to start running again. She lives in a small apartment, her car has a small trunk, and she has said she can spend about $300. Describe the stroller and explain whether you think your friend should buy it.', image: STROLLER }
+        { id: 'S8', title: 'Task 8: Describing an Unusual Situation', prep: 30, speak: 60, prompt: 'You are in a sports store and see this unusual running stroller. Call your friend, who has a one-year-old son and wants to start running again. She lives in a small apartment, her car has a small trunk, and she has said she can spend about $300. Describe the stroller and explain whether you think your friend should buy it.', image: '<img src="tests/img/S/object.jpg" alt="An unusual three-wheeled running stroller with a baby seat and sun canopy in a sports store">' }
       ]
     }
   });

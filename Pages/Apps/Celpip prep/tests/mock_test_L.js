@@ -7,139 +7,7 @@
 (function () {
   window.MOCK_TESTS = window.MOCK_TESTS || [];
 
-  /* ---------- small SVG helpers for speaking pictures ---------- */
-  function person(x, y, o) {
-    o = o || {};
-    var s = o.s || 1, skin = o.skin || '#e0b48f', shirt = o.shirt || '#3d7cc9', pants = o.pants || '#38414d', hair = o.hair || '#3b2a20';
-    var arms = o.arms || 'down';
-    var a = arms === 'up' ? '<line x1="-7" y1="-30" x2="-16" y2="-50" /><line x1="7" y1="-30" x2="16" y2="-50" />'
-      : arms === 'right' ? '<line x1="-7" y1="-30" x2="-12" y2="-14" /><line x1="7" y1="-30" x2="24" y2="-36" />'
-      : arms === 'left' ? '<line x1="-7" y1="-30" x2="-24" y2="-36" /><line x1="7" y1="-30" x2="12" y2="-14" />'
-      : '<line x1="-7" y1="-30" x2="-12" y2="-14" /><line x1="7" y1="-30" x2="12" y2="-14" />';
-    var legs = o.sit ? '<line x1="-4" y1="-12" x2="-14" y2="-12" /><line x1="4" y1="-12" x2="-6" y2="-12" /><line x1="-14" y1="-12" x2="-14" y2="0" /><line x1="-6" y1="-12" x2="-6" y2="0" />'
-      : '<line x1="-4" y1="-12" x2="-7" y2="0" /><line x1="4" y1="-12" x2="7" y2="0" />';
-    return '<g transform="translate(' + x + ' ' + y + ') scale(' + s + ')">' +
-      '<g stroke="' + skin + '" stroke-width="4" stroke-linecap="round">' + a + '</g>' +
-      '<g stroke="' + pants + '" stroke-width="5" stroke-linecap="round">' + legs + '</g>' +
-      '<rect x="-8" y="-36" width="16" height="25" rx="5" fill="' + shirt + '"/>' +
-      '<circle cx="0" cy="-45" r="9" fill="' + skin + '"/>' +
-      '<path d="M-9 -46 a9 9 0 0 1 18 0 q-9 -6 -18 0z" fill="' + hair + '"/>' +
-      '</g>';
-  }
-
-  function tentRoof(x1, x2, top, colour, label) {
-    var mid = (x1 + x2) / 2;
-    return '<polygon points="' + (x1 - 10) + ',120 ' + mid + ',86 ' + (x2 + 10) + ',120" fill="' + colour + '"/>' +
-      '<rect x="' + (x1 - 10) + '" y="120" width="' + (x2 - x1 + 20) + '" height="14" fill="' + colour + '" opacity=".85"/>' +
-      '<g fill="#ffffff" opacity=".55">' + (function () { var t = ''; for (var i = x1 - 10; i < x2 + 10; i += 24) t += '<rect x="' + i + '" y="120" width="12" height="14"/>'; return t; })() + '</g>' +
-      '<text x="' + mid + '" y="114" font-size="11" text-anchor="middle" font-family="sans-serif" fill="#ffffff">' + label + '</text>';
-  }
-
-  var MARKET = (function () {
-    var p = '';
-    p += '<svg viewBox="0 0 640 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A busy outdoor farmers market on a windy morning">';
-    p += '<rect width="640" height="400" fill="#cfe8f7"/>';
-    p += '<circle cx="70" cy="45" r="22" fill="#f9d56e"/>';
-    p += '<g fill="#ffffff"><ellipse cx="250" cy="40" rx="40" ry="12"/><ellipse cx="420" cy="55" rx="34" ry="10"/></g>';
-    /* buildings and trees behind the market */
-    p += '<rect x="0" y="130" width="640" height="110" fill="#b9a58d"/><g fill="#8fa7b8"><rect x="20" y="150" width="20" height="24"/><rect x="60" y="150" width="20" height="24"/><rect x="520" y="150" width="20" height="24"/><rect x="560" y="150" width="20" height="24"/><rect x="600" y="150" width="20" height="24"/></g>';
-    p += '<rect y="236" width="640" height="164" fill="#d9ccb6"/>';
-    /* wind lines on the right */
-    p += '<g stroke="#ffffff" stroke-width="3" stroke-linecap="round" opacity=".9"><line x1="560" y1="70" x2="630" y2="64"/><line x1="575" y1="90" x2="636" y2="86"/><line x1="540" y1="104" x2="600" y2="100"/></g>';
-    /* tent 1: vegetables */
-    p += '<g stroke="#7f8c8d" stroke-width="4"><line x1="30" y1="130" x2="30" y2="262"/><line x1="190" y1="130" x2="190" y2="262"/></g>';
-    p += tentRoof(30, 190, 86, '#27ae60', 'VEGETABLES');
-    p += person(82, 250, { shirt: '#f39c12', skin: '#8d5a3b', hair: '#120c08', arms: 'right' });
-    p += '<rect x="102" y="210" width="16" height="18" rx="2" fill="#c8a97e"/>';
-    p += '<rect x="36" y="232" width="150" height="12" fill="#8b5a2b"/><g stroke="#6d4c2f" stroke-width="4"><line x1="44" y1="244" x2="44" y2="264"/><line x1="178" y1="244" x2="178" y2="264"/></g>';
-    p += '<g fill="#58d68d"><circle cx="50" cy="226" r="7"/><circle cx="64" cy="226" r="7"/></g><g fill="#e74c3c"><circle cx="140" cy="228" r="5"/><circle cx="151" cy="228" r="5"/><circle cx="162" cy="228" r="5"/><circle cx="146" cy="220" r="5"/></g><g fill="#e67e22"><rect x="170" y="218" width="4" height="14"/><rect x="176" y="218" width="4" height="14"/></g>';
-    /* customer taking a paper bag */
-    p += person(150, 300, { shirt: '#8e44ad', skin: '#f0c9a6', hair: '#c49a42', arms: 'left' });
-    p += '<rect x="118" y="252" width="14" height="16" rx="2" fill="#c8a97e"/>';
-    /* tent 2: apples */
-    p += '<g stroke="#7f8c8d" stroke-width="4"><line x1="240" y1="130" x2="240" y2="262"/><line x1="400" y1="130" x2="400" y2="262"/></g>';
-    p += tentRoof(240, 400, 86, '#c0392b', 'APPLES');
-    p += person(330, 250, { shirt: '#1abc9c', skin: '#e3b28b', hair: '#6b4a2b', arms: 'right' });
-    p += '<rect x="346" y="212" width="22" height="6" fill="#95a5a6"/><line x1="357" y1="218" x2="357" y2="230" stroke="#7f8c8d" stroke-width="2"/>';
-    p += '<rect x="246" y="232" width="150" height="12" fill="#8b5a2b"/><g stroke="#6d4c2f" stroke-width="4"><line x1="254" y1="244" x2="254" y2="264"/><line x1="388" y1="244" x2="388" y2="264"/></g>';
-    p += '<g fill="#c0392b"><circle cx="262" cy="226" r="5"/><circle cx="273" cy="226" r="5"/><circle cx="284" cy="226" r="5"/><circle cx="295" cy="226" r="5"/></g>';
-    /* tall pile of apples on the ground, a toddler pulling one from the bottom */
-    p += (function () { var t = '<g fill="#d63a2f" stroke="#8e1f17" stroke-width="1">'; var rows = [5, 4, 3, 2, 1]; for (var r = 0; r < rows.length; r++) { for (var i = 0; i < rows[r]; i++) { t += '<circle cx="' + (300 + r * 7 + i * 14) + '" cy="' + (300 - r * 12) + '" r="7"/>'; } } return t + '</g>'; })();
-    p += '<rect x="292" y="306" width="72" height="6" fill="#8b5a2b"/>';
-    p += person(372, 318, { s: .6, shirt: '#f1c40f', skin: '#c98c64', hair: '#2a1b12', arms: 'left' });
-    p += '<circle cx="384" cy="298" r="6" fill="#d63a2f"/>';
-    /* the toddler's parent, looking at a phone */
-    p += person(420, 330, { shirt: '#34495e', skin: '#c98c64', hair: '#1d1410', arms: 'right' });
-    p += '<rect x="440" y="290" width="7" height="11" rx="1" fill="#222"/>';
-    /* tent 3: flowers and honey, roof lifting in the wind */
-    p += '<g transform="rotate(-14 450 130)">' + tentRoof(450, 610, 86, '#2e86c1', 'FLOWERS + HONEY') + '</g>';
-    p += '<g stroke="#7f8c8d" stroke-width="4"><line x1="450" y1="130" x2="450" y2="262"/><line x1="612" y1="94" x2="612" y2="236"/></g>';
-    p += person(596, 262, { shirt: '#e74c3c', skin: '#f2cfb0', hair: '#5d4037', arms: 'up' });
-    p += '<rect x="456" y="232" width="130" height="12" fill="#8b5a2b"/><g stroke="#6d4c2f" stroke-width="4"><line x1="464" y1="244" x2="464" y2="264"/><line x1="578" y1="244" x2="578" y2="264"/></g>';
-    p += '<g><rect x="466" y="214" width="16" height="18" fill="#2c3e50"/><circle cx="470" cy="206" r="5" fill="#f06292"/><circle cx="478" cy="204" r="5" fill="#f4d03f"/><circle cx="474" cy="198" r="5" fill="#e74c3c"/></g>';
-    p += '<g fill="#f5b041" stroke="#b9770e" stroke-width="1"><rect x="510" y="218" width="12" height="14" rx="2"/><rect x="526" y="218" width="12" height="14" rx="2"/><rect x="542" y="218" width="12" height="14" rx="2"/></g><text x="532" y="212" font-size="9" text-anchor="middle" font-family="sans-serif" fill="#7e5109">HONEY</text>';
-    p += '<rect x="500" y="70" width="18" height="14" fill="#ffffff" transform="rotate(20 509 77)"/>';
-    /* busker playing guitar with an open case */
-    p += '<rect x="22" y="372" width="26" height="6" fill="#6d4c2f"/><g stroke="#6d4c2f" stroke-width="3"><line x1="26" y1="378" x2="24" y2="394"/><line x1="44" y1="378" x2="46" y2="394"/></g>';
-    p += person(40, 372, { sit: true, shirt: '#16a085', skin: '#6b4226', hair: '#120c08', arms: 'right' });
-    p += '<ellipse cx="42" cy="352" rx="10" ry="8" fill="#c68642" stroke="#7a4a1d" stroke-width="1.5"/><line x1="48" y1="348" x2="72" y2="332" stroke="#7a4a1d" stroke-width="3"/>';
-    p += '<rect x="58" y="368" width="44" height="14" rx="3" fill="#2c3e50"/><rect x="62" y="371" width="36" height="8" fill="#922b21"/><g fill="#f4d03f"><circle cx="72" cy="375" r="2"/><circle cx="82" cy="374" r="2"/></g>';
-    /* woman pushing a stroller */
-    p += person(140, 392, { shirt: '#d35400', skin: '#e8c3a0', hair: '#2a1b12', arms: 'right' });
-    p += '<line x1="162" y1="356" x2="176" y2="350" stroke="#555" stroke-width="3"/><path d="M174 352 L210 352 Q210 376 190 378 L178 378 Q172 366 174 352z" fill="#5dade2"/><g fill="#333"><circle cx="180" cy="386" r="6"/><circle cx="204" cy="386" r="6"/></g>';
-    /* man carrying a crate of pumpkins */
-    p += person(232, 330, { shirt: '#7f8c8d', skin: '#f2cfb0', hair: '#a0703a', arms: 'right' });
-    p += '<rect x="244" y="282" width="34" height="18" fill="#a9744f"/><g fill="#e67e22"><circle cx="252" cy="280" r="7"/><circle cx="268" cy="280" r="7"/></g>';
-    /* child with a balloon */
-    p += person(274, 392, { s: .65, shirt: '#e91e63', skin: '#8d5a3b', hair: '#120c08', arms: 'up' });
-    p += '<line x1="284" y1="358" x2="290" y2="312" stroke="#555" stroke-width="1"/><ellipse cx="290" cy="302" rx="10" ry="12" fill="#9b59b6"/>';
-    /* man with a sausage on a bun, and a dog jumping for it */
-    p += person(488, 392, { shirt: '#2980b9', skin: '#d6a07a', hair: '#333333', arms: 'left' });
-    p += '<rect x="456" y="350" width="16" height="6" rx="3" fill="#e5b56b"/><rect x="458" y="348" width="12" height="4" rx="2" fill="#a0402a"/>';
-    p += '<g><ellipse cx="438" cy="372" rx="18" ry="9" fill="#b9770e" transform="rotate(-30 438 372)"/><circle cx="452" cy="356" r="8" fill="#b9770e"/><ellipse cx="458" cy="360" rx="5" ry="3" fill="#935116"/><circle cx="451" cy="353" r="1.6" fill="#222"/>' +
-      '<g stroke="#935116" stroke-width="4" stroke-linecap="round"><line x1="430" y1="380" x2="424" y2="392"/><line x1="444" y1="370" x2="452" y2="376"/><line x1="424" y1="378" x2="412" y2="372"/></g></g>';
-    /* dog owner holding the leash */
-    p += person(392, 396, { shirt: '#27ae60', skin: '#f0c9a6', hair: '#d9b56a', arms: 'right' });
-    p += '<line x1="416" y1="360" x2="446" y2="362" stroke="#c0392b" stroke-width="2"/>';
-    p += '</svg>';
-    return p;
-  })();
-
-  var THEATRE = '<svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg"><rect width="200" height="120" fill="#5b2c6f"/><path d="M0 0 L40 0 Q30 60 40 120 L0 120z" fill="#922b21"/><path d="M200 0 L160 0 Q170 60 160 120 L200 120z" fill="#922b21"/>' +
-    '<ellipse cx="82" cy="58" rx="22" ry="26" fill="#f9e79f"/><g fill="#5b2c6f"><ellipse cx="74" cy="50" rx="4" ry="3"/><ellipse cx="90" cy="50" rx="4" ry="3"/></g><path d="M70 66 Q82 80 94 66z" fill="#5b2c6f"/>' +
-    '<ellipse cx="122" cy="62" rx="22" ry="26" fill="#aed6f1"/><g fill="#5b2c6f"><ellipse cx="114" cy="56" rx="4" ry="3"/><ellipse cx="130" cy="56" rx="4" ry="3"/></g><path d="M110 78 Q122 66 134 78z" fill="#5b2c6f"/>' +
-    '<text x="100" y="110" font-size="11" text-anchor="middle" font-family="sans-serif" fill="#ffffff">THEATRE CAMP</text></svg>';
-
-  var GUITAR = '<svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg"><rect width="200" height="120" fill="#fdf2e9"/>' +
-    '<g transform="rotate(-35 100 60)"><rect x="96" y="6" width="8" height="58" fill="#6e2c00"/><rect x="92" y="0" width="16" height="12" rx="2" fill="#4a2000"/>' +
-    '<ellipse cx="100" cy="78" rx="22" ry="18" fill="#dc7633"/><ellipse cx="100" cy="100" rx="28" ry="20" fill="#dc7633"/><circle cx="100" cy="84" r="7" fill="#4a2000"/><rect x="92" y="100" width="16" height="4" fill="#4a2000"/></g>' +
-    '<text x="150" y="112" font-size="11" text-anchor="middle" font-family="sans-serif" fill="#6e2c00">GUITAR</text></svg>';
-
-  var POOL = '<svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg"><rect width="200" height="120" fill="#e8f6f3"/><rect x="14" y="30" width="172" height="76" rx="4" fill="#5dade2"/>' +
-    '<g stroke="#ffffff" stroke-width="2" stroke-dasharray="6 4"><line x1="14" y1="55" x2="186" y2="55"/><line x1="14" y1="80" x2="186" y2="80"/></g>' +
-    '<circle cx="80" cy="67" r="6" fill="#f0c9a6"/><path d="M74 64 a6 6 0 0 1 12 0z" fill="#e74c3c"/><g stroke="#f0c9a6" stroke-width="3" stroke-linecap="round"><line x1="86" y1="66" x2="100" y2="60"/><line x1="74" y1="68" x2="62" y2="72"/></g>' +
-    '<text x="100" y="22" font-size="11" text-anchor="middle" font-family="sans-serif" fill="#1b4f72">SWIMMING</text></svg>';
-
-  var ODDSHOVEL = '<svg viewBox="0 0 640 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="An unusual snow shovel in a hardware store">' +
-    '<rect width="640" height="400" fill="#eef2f5"/><rect y="320" width="640" height="80" fill="#b8c2cc"/>' +
-    '<rect x="24" y="24" width="190" height="52" rx="6" fill="#ffffff" stroke="#c7d0d9"/><text x="119" y="57" text-anchor="middle" font-family="sans-serif" font-size="18" fill="#c0392b">HARDWARE</text><rect x="24" y="90" width="190" height="30" rx="4" fill="#d6eaf8"/><text x="119" y="110" text-anchor="middle" font-family="sans-serif" font-size="14" fill="#1b4f72">WINTER TOOLS</text>' +
-    /* long handle with a phone holder and a heated grip */
-    '<line x1="250" y1="290" x2="470" y2="70" stroke="#566573" stroke-width="10" stroke-linecap="round"/>' +
-    '<rect x="452" y="44" width="70" height="22" rx="10" fill="#e74c3c" transform="rotate(-45 487 55)"/><g stroke="#f5b7b1" stroke-width="2"><line x1="470" y1="70" x2="478" y2="62"/><line x1="480" y1="60" x2="488" y2="52"/></g>' +
-    '<rect x="390" y="104" width="34" height="50" rx="5" fill="#222" transform="rotate(-45 407 129)"/><rect x="396" y="110" width="22" height="34" fill="#5dade2" transform="rotate(-45 407 129)"/>' +
-    /* battery pack */
-    '<rect x="326" y="176" width="44" height="28" rx="4" fill="#27ae60"/><rect x="332" y="182" width="8" height="16" fill="#ffffff"/><rect x="344" y="182" width="8" height="16" fill="#ffffff"/><rect x="356" y="182" width="8" height="16" fill="#d5f5e3"/>' +
-    /* salt box with a spinner underneath */
-    '<path d="M268 214 L312 214 L304 250 L276 250z" fill="#f4d03f" stroke="#b7950b" stroke-width="2"/><text x="290" y="236" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#7d6608">SALT</text><ellipse cx="290" cy="256" rx="14" ry="4" fill="#7f8c8d"/><g fill="#ffffff"><circle cx="276" cy="266" r="2"/><circle cx="292" cy="270" r="2"/><circle cx="306" cy="264" r="2"/></g>' +
-    /* wide blade with a headlight */
-    '<path d="M150 260 L330 260 L340 330 L140 330z" fill="#2e86c1"/><path d="M140 330 L340 330 L336 340 L144 340z" fill="#1b4f72"/>' +
-    '<circle cx="240" cy="282" r="12" fill="#fdfefe" stroke="#7f8c8d" stroke-width="2"/><polygon points="228,282 150,252 150,312" fill="#fff9c4" opacity=".6"/>' +
-    /* two wheels */
-    '<circle cx="170" cy="344" r="16" fill="#2c3e50"/><circle cx="170" cy="344" r="6" fill="#bdc3c7"/><circle cx="312" cy="344" r="16" fill="#2c3e50"/><circle cx="312" cy="344" r="6" fill="#bdc3c7"/>' +
-    /* price tag */
-    '<line x1="468" y1="80" x2="520" y2="150" stroke="#555" stroke-width="1.5"/><path d="M510 150 L580 150 L580 192 L510 192 L498 171z" fill="#f6d55c" stroke="#b7950b"/><circle cx="510" cy="171" r="3" fill="#eef2f5"/><text x="544" y="178" text-anchor="middle" font-family="sans-serif" font-size="18" fill="#333">$89</text>' +
-    '</svg>';
-
+  /* Speaking pictures are image files in tests/img/L/ (scene, object, opt_A to opt_C). */
   window.MOCK_TESTS.push({
     id: 'L',
     title: 'Mock Test L',
@@ -503,21 +371,21 @@
       tasks: [
         { id: 'S1', title: 'Task 1: Giving Advice', prep: 30, speak: 90, prompt: 'A friend of yours wants to start selling her homemade hot sauces at local markets. She has saved $2,000 for the business, but she plans to keep her full-time job, so she can only work on it in the evenings and on Sundays. Give your friend advice on how to get her small business started.' },
         { id: 'S2', title: 'Task 2: Talking about a Personal Experience', prep: 30, speak: 60, prompt: 'Talk about a time when something important in your home broke or stopped working. What happened, how did you deal with it, and what would you do differently if it happened again?' },
-        { id: 'S3', title: 'Task 3: Describing a Scene', prep: 30, speak: 60, prompt: 'Describe some things that are happening in the picture below as well as you can. The person you are speaking to cannot see the picture.', image: MARKET },
-        { id: 'S4', title: 'Task 4: Making Predictions', prep: 30, speak: 60, prompt: 'In this picture, what do you think will most probably happen next? Think about the wind, the small child near the apples, the dog, and what the people around them are doing.', image: MARKET },
+        { id: 'S3', title: 'Task 3: Describing a Scene', prep: 30, speak: 60, prompt: 'Describe some things that are happening in the picture below as well as you can. The person you are speaking to cannot see the picture.', image: '<img src="tests/img/L/scene.jpg" alt="A busy outdoor farmers market on a windy morning">' },
+        { id: 'S4', title: 'Task 4: Making Predictions', prep: 30, speak: 60, prompt: 'In this picture, what do you think will most probably happen next? Think about the wind, the small child near the apples, the dog, and what the people around them are doing.', image: '<img src="tests/img/L/scene.jpg" alt="A busy outdoor farmers market on a windy morning">' },
         {
           id: 'S5', title: 'Task 5: Comparing and Persuading', type: 'compare', select: 60, prep: 60, speak: 60,
           prompt: 'Your family wants to sign up your ten-year-old for one activity this summer. Choose the option you prefer. In the next section, you will need to persuade a family member that your choice is better.',
           choices: [
-            { key: 'A', title: 'Theatre day camp', image: THEATRE, facts: ['$340 for 2 weeks, Monday to Friday', '9:00 a.m. to 3:00 p.m., 25 minutes away by car', 'Ends with a show for families', 'Only 4 spots left; registration closes Friday'] },
-            { key: 'B', title: 'Guitar lessons', image: GUITAR, facts: ['$30 per lesson for 10 weeks', '45 minutes on Saturday mornings, 5-minute walk', 'Guitar rental: $15 per month', '20 minutes of practice at home every day'] }
+            { key: 'A', title: 'Theatre day camp', image: '<img src="tests/img/L/opt_A.jpg" alt="Photo: Theatre day camp">', facts: ['$340 for 2 weeks, Monday to Friday', '9:00 a.m. to 3:00 p.m., 25 minutes away by car', 'Ends with a show for families', 'Only 4 spots left; registration closes Friday'] },
+            { key: 'B', title: 'Guitar lessons', image: '<img src="tests/img/L/opt_B.jpg" alt="Photo: Guitar lessons">', facts: ['$30 per lesson for 10 weeks', '45 minutes on Saturday mornings, 5-minute walk', 'Guitar rental: $15 per month', '20 minutes of practice at home every day'] }
           ],
-          third: { key: 'C', title: 'Swimming lessons', image: POOL, facts: ['$95 for 8 lessons', 'Tuesdays and Thursdays at 5:30 p.m.', 'Pool is 15 minutes away by bus', 'Children earn a swimming level certificate'] },
+          third: { key: 'C', title: 'Swimming lessons', image: '<img src="tests/img/L/opt_C.jpg" alt="Photo: Swimming lessons">', facts: ['$95 for 8 lessons', 'Tuesdays and Thursdays at 5:30 p.m.', 'Pool is 15 minutes away by bus', 'Children earn a swimming level certificate'] },
           persuade: 'A family member thinks swimming lessons would be better. Persuade this family member that your choice is better. Explain why.'
         },
         { id: 'S6', title: 'Task 6: Dealing with a Difficult Situation', prep: 60, speak: 60, prompt: '<p>You volunteer as the organizer of the community garden behind your apartment building. There are 12 plots and a waiting list of 9 people. The garden rule, which every member signs, says that any plot not planted by June 1 goes to the next person on the list. It is now June 6. The plot of Walter, an elderly neighbour who has gardened there for six years, is still empty, because he spent most of May in hospital. The first family on the waiting list has already bought seeds and seedlings and is asking you when they can start.</p><p><b>Choose ONE:</b></p><p><b>Option A:</b> Talk to Walter. Explain that his plot will go to the family this year.</p><p><b>Option B:</b> Talk to the family. Explain why they will have to wait another year.</p>' },
         { id: 'S7', title: 'Task 7: Expressing Opinions', prep: 30, speak: 90, prompt: '<p>Your public library plans to remove about a third of its bookshelves to make room for four bookable study rooms and a workshop with sewing machines and 3D printers. Supporters, including many students and small business owners, say fewer people borrow printed books and the library should offer what the community needs now. Opponents, many of them older residents, say that quiet reading space is disappearing and that books which are not on the shelves are much harder to discover.</p><p>The library board has asked residents to comment before it makes a final decision. Should the library go ahead with the plan? Explain your reasons.</p>' },
-        { id: 'S8', title: 'Task 8: Describing an Unusual Situation', prep: 30, speak: 60, prompt: 'You are in a hardware store and see this unusual snow shovel for $89. Call your friend, who has just moved into a small house with a long driveway and has asked you to look for a shovel for her. The shovel weighs 9 kilograms, the battery lasts about 30 minutes, and your friend only has a small closet for storage. Describe the shovel and explain whether you think she should buy it.', image: ODDSHOVEL }
+        { id: 'S8', title: 'Task 8: Describing an Unusual Situation', prep: 30, speak: 60, prompt: 'You are in a hardware store and see this unusual snow shovel for $89. Call your friend, who has just moved into a small house with a long driveway and has asked you to look for a shovel for her. The shovel weighs 9 kilograms, the battery lasts about 30 minutes, and your friend only has a small closet for storage. Describe the shovel and explain whether you think she should buy it.', image: '<img src="tests/img/L/object.jpg" alt="An unusual snow shovel in a hardware store">' }
       ]
     }
   });

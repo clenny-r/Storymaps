@@ -7,142 +7,7 @@
 (function () {
   window.MOCK_TESTS = window.MOCK_TESTS || [];
 
-  /* ---------- small SVG helpers for speaking pictures ---------- */
-  function person(x, y, o) {
-    o = o || {};
-    var s = o.s || 1, skin = o.skin || '#e0b48f', shirt = o.shirt || '#3d7cc9', pants = o.pants || '#38414d', hair = o.hair || '#3b2a20';
-    var arms = o.arms || 'down';
-    var a = arms === 'up' ? '<line x1="-7" y1="-30" x2="-16" y2="-50" /><line x1="7" y1="-30" x2="16" y2="-50" />'
-      : arms === 'right' ? '<line x1="-7" y1="-30" x2="-12" y2="-14" /><line x1="7" y1="-30" x2="24" y2="-36" />'
-      : arms === 'left' ? '<line x1="-7" y1="-30" x2="-24" y2="-36" /><line x1="7" y1="-30" x2="12" y2="-14" />'
-      : '<line x1="-7" y1="-30" x2="-12" y2="-14" /><line x1="7" y1="-30" x2="12" y2="-14" />';
-    var legs = o.sit ? '<line x1="-4" y1="-12" x2="-14" y2="-12" /><line x1="4" y1="-12" x2="-6" y2="-12" /><line x1="-14" y1="-12" x2="-14" y2="0" /><line x1="-6" y1="-12" x2="-6" y2="0" />'
-      : '<line x1="-4" y1="-12" x2="-7" y2="0" /><line x1="4" y1="-12" x2="7" y2="0" />';
-    return '<g transform="translate(' + x + ' ' + y + ') scale(' + s + ')">' +
-      '<g stroke="' + skin + '" stroke-width="4" stroke-linecap="round">' + a + '</g>' +
-      '<g stroke="' + pants + '" stroke-width="5" stroke-linecap="round">' + legs + '</g>' +
-      '<rect x="-8" y="-36" width="16" height="25" rx="5" fill="' + shirt + '"/>' +
-      '<circle cx="0" cy="-45" r="9" fill="' + skin + '"/>' +
-      '<path d="M-9 -46 a9 9 0 0 1 18 0 q-9 -6 -18 0z" fill="' + hair + '"/>' +
-      '</g>';
-  }
-
-  function pine(x, y, h, c) {
-    return '<rect x="' + (x - 3) + '" y="' + (y - 10) + '" width="6" height="10" fill="#4a3324"/>' +
-      '<polygon points="' + (x - h * 0.35) + ',' + (y - 8) + ' ' + x + ',' + (y - h) + ' ' + (x + h * 0.35) + ',' + (y - 8) + '" fill="' + (c || '#24452e') + '"/>';
-  }
-
-  var CAMPGROUND = (function () {
-    var p = '';
-    p += '<svg viewBox="0 0 640 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A busy campground by a lake in the evening as a storm moves in">';
-    p += '<defs><linearGradient id="kSky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#46508a"/><stop offset="0.7" stop-color="#c98a8a"/><stop offset="1" stop-color="#f2b06e"/></linearGradient></defs>';
-    p += '<rect width="640" height="400" fill="url(#kSky)"/>';
-    /* moon and first stars */
-    p += '<circle cx="90" cy="48" r="16" fill="#f6f1d2"/><g fill="#ffffff"><circle cx="160" cy="30" r="1.6"/><circle cx="230" cy="55" r="1.4"/><circle cx="40" cy="95" r="1.4"/><circle cx="300" cy="25" r="1.6"/></g>';
-    /* dark storm clouds moving in from the right, with rain far away */
-    p += '<g fill="#3d4150"><ellipse cx="560" cy="55" rx="85" ry="32"/><ellipse cx="620" cy="70" rx="55" ry="28"/><ellipse cx="490" cy="72" rx="55" ry="24"/><ellipse cx="420" cy="62" rx="40" ry="18" opacity=".8"/></g>';
-    p += '<g stroke="#8e9ab0" stroke-width="2"><line x1="520" y1="100" x2="512" y2="130"/><line x1="550" y1="100" x2="542" y2="130"/><line x1="580" y1="98" x2="572" y2="128"/><line x1="610" y1="100" x2="602" y2="130"/></g>';
-    /* far hills and lake */
-    p += '<path d="M0 185 Q120 140 250 175 Q380 145 640 172 L640 210 L0 210z" fill="#2e4a3b"/>';
-    p += '<rect y="200" width="640" height="200" fill="#3e6a3a"/>';
-    p += '<ellipse cx="500" cy="222" rx="150" ry="30" fill="#5a7fb0"/><ellipse cx="500" cy="216" rx="110" ry="8" fill="#f2b06e" opacity=".35"/>';
-    /* canoe with a paddler on the lake */
-    p += '<path d="M455 222 Q500 236 545 222 Q500 228 455 222z" fill="#b83a2a" stroke="#7e2318" stroke-width="2"/>';
-    p += person(500, 226, { s: .6, sit: true, shirt: '#f1c40f', skin: '#c98c64', hair: '#1d1410', arms: 'right' });
-    p += '<line x1="512" y1="200" x2="526" y2="232" stroke="#6d4c2f" stroke-width="2.5"/>';
-    /* pine trees */
-    p += pine(20, 230, 70) + pine(330, 215, 55, '#2b5236') + pine(360, 212, 48) + pine(620, 250, 60, '#2b5236');
-    /* pitched tent with lantern on the left */
-    p += '<polygon points="30,300 85,228 140,300" fill="#e67e22"/><polygon points="85,228 85,300 66,300" fill="#b65f15"/><polygon points="85,300 72,262 98,300" fill="#5a2f0c"/>';
-    p += '<circle cx="118" cy="292" r="6" fill="#ffe08a"/><circle cx="118" cy="292" r="12" fill="#ffe08a" opacity=".35"/>';
-    /* half-built tent: fabric lying on the ground, a man holding up a pole */
-    p += '<path d="M165 300 L205 282 L250 296 L235 306 L180 308z" fill="#2e86c1"/>';
-    p += '<line x1="214" y1="232" x2="206" y2="292" stroke="#9aa3ad" stroke-width="3"/>';
-    p += person(230, 300, { shirt: '#7d3c98', skin: '#e3b28b', hair: '#6b4a2b', arms: 'up' });
-    p += '<text x="205" y="322" font-size="10" text-anchor="middle" font-family="sans-serif" fill="#e8f0e0">tent bag</text><rect x="186" y="304" width="38" height="8" rx="3" fill="#1f5f8b"/>';
-    /* campfire */
-    p += '<ellipse cx="330" cy="318" rx="60" ry="22" fill="#f5a142" opacity=".25"/>';
-    p += '<g stroke="#5b3a22" stroke-width="7" stroke-linecap="round"><line x1="308" y1="326" x2="352" y2="314"/><line x1="308" y1="314" x2="352" y2="326"/></g>';
-    p += '<path d="M314 318 Q318 290 330 278 Q342 292 346 318z" fill="#f39c12"/><path d="M321 318 Q324 300 330 292 Q336 302 339 318z" fill="#f9e04b"/>';
-    p += '<circle cx="324" cy="262" r="2" fill="#ffcc66"/><circle cx="338" cy="252" r="1.6" fill="#ffcc66"/>';
-    /* two people roasting marshmallows */
-    p += person(270, 336, { sit: true, shirt: '#c0392b', skin: '#8d5a3b', hair: '#120c08', arms: 'right' });
-    p += '<line x1="294" y1="300" x2="318" y2="292" stroke="#8b5a2b" stroke-width="2"/><ellipse cx="320" cy="291" rx="4" ry="3" fill="#ffffff"/>';
-    p += person(392, 338, { sit: true, shirt: '#16a085', skin: '#f0c9a6', hair: '#c49a42', arms: 'left', s: .85 });
-    p += '<line x1="372" y1="307" x2="344" y2="296" stroke="#8b5a2b" stroke-width="2"/><ellipse cx="341" cy="295" rx="4" ry="3" fill="#ffffff"/>';
-    /* woman playing guitar on a log */
-    p += '<rect x="420" y="344" width="56" height="12" rx="6" fill="#6d4c2f"/>';
-    p += person(452, 346, { sit: true, shirt: '#2c3e50', skin: '#a9714b', hair: '#2a1b12', arms: 'right' });
-    p += '<ellipse cx="452" cy="326" rx="9" ry="7" fill="#c68642" stroke="#7a4a1d" stroke-width="1.5"/><line x1="458" y1="322" x2="482" y2="306" stroke="#7a4a1d" stroke-width="3"/>';
-    /* cooler with a raccoon reaching for the lid */
-    p += '<rect x="520" y="330" width="58" height="34" rx="4" fill="#2f80c9"/><rect x="516" y="324" width="66" height="9" rx="3" fill="#ecf0f1"/><text x="549" y="352" font-size="10" text-anchor="middle" font-family="sans-serif" fill="#ffffff">COOLER</text>';
-    p += '<g><ellipse cx="610" cy="352" rx="20" ry="12" fill="#7f8689"/><circle cx="592" cy="336" r="10" fill="#8f9699"/><path d="M584 334 L600 334 L600 339 L584 339z" fill="#222"/><circle cx="588" cy="336" r="1.6" fill="#fff"/><circle cx="596" cy="336" r="1.6" fill="#fff"/>' +
-      '<polygon points="585,328 588,320 591,328" fill="#8f9699"/><polygon points="594,328 597,320 600,328" fill="#8f9699"/>' +
-      '<line x1="586" y1="340" x2="576" y2="326" stroke="#5e6467" stroke-width="4" stroke-linecap="round"/><circle cx="576" cy="326" r="3" fill="#3b3f41"/>' +
-      '<rect x="626" y="346" width="12" height="7" fill="#7f8689"/><rect x="630" y="346" width="4" height="7" fill="#222"/>' +
-      '<rect x="598" y="360" width="4" height="8" fill="#5e6467"/><rect x="618" y="360" width="4" height="8" fill="#5e6467"/></g>';
-    /* small dock with a person fishing from it */
-    p += '<rect x="352" y="226" width="44" height="6" fill="#7a5a3a"/><g stroke="#5b3f26" stroke-width="3"><line x1="358" y1="232" x2="358" y2="244"/><line x1="390" y1="232" x2="390" y2="244"/></g>';
-    p += person(378, 226, { s: .6, shirt: '#e74c3c', skin: '#d6a07a', hair: '#3b2a20', arms: 'right' });
-    p += '<line x1="392" y1="205" x2="432" y2="184" stroke="#4a3324" stroke-width="2"/><line x1="432" y1="184" x2="438" y2="224" stroke="#dfe6ec" stroke-width="1"/>';
-    /* someone reading the tent instructions beside the half-built tent */
-    p += person(152, 332, { shirt: '#f4d03f', skin: '#f0c9a6', hair: '#2a1b12', arms: 'right', s: .9 });
-    p += '<rect x="166" y="290" width="16" height="20" fill="#ffffff" stroke="#7f8c8d"/><g stroke="#95a5a6" stroke-width="1"><line x1="169" y1="296" x2="179" y2="296"/><line x1="169" y1="300" x2="179" y2="300"/><line x1="169" y1="304" x2="176" y2="304"/></g>';
-    /* child shining a flashlight */
-    p += person(60, 386, { s: .7, shirt: '#e91e63', skin: '#8d5a3b', hair: '#120c08', arms: 'right' });
-    p += '<rect x="74" y="358" width="8" height="5" fill="#34495e"/><polygon points="82,358 140,338 140,378" fill="#fff6a8" opacity=".45"/>';
-    /* person carrying firewood toward the fire */
-    p += person(200, 392, { shirt: '#6d4c41', skin: '#c98c64', hair: '#3b2a20', arms: 'right' });
-    p += '<g fill="#8b5a2b" stroke="#5b3a22" stroke-width="1"><rect x="214" y="350" width="26" height="6" rx="3"/><rect x="216" y="344" width="24" height="6" rx="3"/><rect x="218" y="338" width="20" height="6" rx="3"/></g>';
-    /* picnic table with someone chopping vegetables */
-    p += person(532, 300, { shirt: '#a3e4d7', skin: '#e3b28b', hair: '#5d4037', arms: 'right', s: .9 });
-    p += '<rect x="490" y="276" width="84" height="6" fill="#8b5a2b"/><g stroke="#6d4c2f" stroke-width="4"><line x1="498" y1="282" x2="492" y2="302"/><line x1="566" y1="282" x2="572" y2="302"/></g>';
-    p += '<rect x="540" y="270" width="20" height="6" fill="#d4a76a"/><g fill="#e67e22"><circle cx="546" cy="268" r="2.5"/><circle cx="552" cy="268" r="2.5"/></g><ellipse cx="506" cy="272" rx="9" ry="4" fill="#ecf0f1"/>';
-    /* child pointing at the storm clouds */
-    p += person(600, 302, { s: .75, shirt: '#3498db', skin: '#f2cfb0', hair: '#c49a42', arms: 'right' });
-    /* bag of marshmallows */
-    p += '<rect x="326" y="360" width="76" height="22" rx="4" fill="#fdfefe" stroke="#d5d8dc"/><text x="364" y="375" font-size="9" text-anchor="middle" font-family="sans-serif" fill="#c0392b">MARSHMALLOWS</text>';
-    p += '</svg>';
-    return p;
-  })();
-
-  var CAR = '<svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg"><rect width="200" height="120" fill="#dff1fb"/><rect y="88" width="200" height="32" fill="#7f8c8d"/><g fill="#f4f6f7"><rect x="20" y="102" width="26" height="4"/><rect x="80" y="102" width="26" height="4"/><rect x="140" y="102" width="26" height="4"/></g>' +
-    '<path d="M38 84 L50 62 Q56 54 70 54 L122 54 Q134 54 142 64 L154 76 L168 80 Q174 82 174 90 L174 94 L30 94 L30 88 Q30 84 38 84z" fill="#c0392b"/><g fill="#d6eaf8"><path d="M58 64 Q62 58 70 58 L92 58 L92 74 L52 74z"/><path d="M98 58 L120 58 Q130 58 136 66 L142 74 L98 74z"/></g>' +
-    '<circle cx="62" cy="94" r="12" fill="#2c3e50"/><circle cx="62" cy="94" r="5" fill="#bdc3c7"/><circle cx="146" cy="94" r="12" fill="#2c3e50"/><circle cx="146" cy="94" r="5" fill="#bdc3c7"/>' +
-    '<rect x="64" y="20" width="72" height="20" rx="4" fill="#ffffff" stroke="#c0392b"/><text x="100" y="34" font-size="10" text-anchor="middle" font-family="sans-serif" fill="#c0392b">CAR RENTAL</text></svg>';
-
-  var TRAIN = '<svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg"><rect width="200" height="120" fill="#eaf2e3"/><path d="M0 70 Q60 50 120 64 Q160 72 200 58 L200 120 L0 120z" fill="#9ccc7a"/>' +
-    '<rect y="98" width="200" height="4" fill="#6e5a46"/><g fill="#6e5a46">' + (function () { var t = ''; for (var i = 0; i < 10; i++) t += '<rect x="' + (i * 20 + 4) + '" y="102" width="10" height="6"/>'; return t; })() + '</g>' +
-    '<rect x="10" y="58" width="80" height="36" rx="10" fill="#1f618d"/><rect x="94" y="58" width="96" height="36" rx="4" fill="#2874a6"/><rect x="10" y="80" width="180" height="5" fill="#f4d03f"/>' +
-    '<g fill="#d6eaf8"><rect x="24" y="64" width="14" height="12"/><rect x="44" y="64" width="14" height="12"/><rect x="64" y="64" width="14" height="12"/><rect x="102" y="64" width="14" height="12"/><rect x="122" y="64" width="14" height="12"/><rect x="142" y="64" width="14" height="12"/><rect x="162" y="64" width="14" height="12"/></g>' +
-    '<g fill="#1b2631"><circle cx="30" cy="96" r="5"/><circle cx="70" cy="96" r="5"/><circle cx="114" cy="96" r="5"/><circle cx="170" cy="96" r="5"/></g>' +
-    '<text x="100" y="30" font-size="11" text-anchor="middle" font-family="sans-serif" fill="#1f618d">TRAIN</text></svg>';
-
-  var PLANE = '<svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg"><rect width="200" height="120" fill="#d4ecfa"/><g fill="#ffffff"><ellipse cx="40" cy="30" rx="26" ry="10"/><ellipse cx="160" cy="92" rx="30" ry="10"/></g>' +
-    '<g transform="rotate(-12 100 60)"><rect x="40" y="54" width="120" height="16" rx="8" fill="#f8f9f9" stroke="#7f8c8d"/><polygon points="150,56 170,34 176,34 164,58" fill="#2e86c1"/>' +
-    '<polygon points="88,62 66,96 80,96 112,62" fill="#aab7b8"/><polygon points="88,62 74,34 84,34 108,62" fill="#aab7b8"/><path d="M40 62 Q40 54 50 54 L52 62z" fill="#5d6d7e"/>' +
-    '<g fill="#5dade2"><circle cx="64" cy="61" r="2"/><circle cx="74" cy="61" r="2"/><circle cx="84" cy="61" r="2"/><circle cx="120" cy="61" r="2"/><circle cx="130" cy="61" r="2"/><circle cx="140" cy="61" r="2"/></g></g>' +
-    '<text x="100" y="114" font-size="11" text-anchor="middle" font-family="sans-serif" fill="#1b4f72">FLIGHT</text></svg>';
-
-  var ODDHAT = '<svg viewBox="0 0 640 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="An unusual hat in a gift shop">' +
-    '<rect width="640" height="400" fill="#f3ece1"/><rect y="310" width="640" height="90" fill="#c8b79e"/><rect x="120" y="300" width="400" height="14" fill="#8a6b4a"/>' +
-    '<rect x="24" y="28" width="150" height="56" rx="6" fill="#ffffff" stroke="#d4c4a8"/><text x="99" y="63" text-anchor="middle" font-family="sans-serif" font-size="20" fill="#7a4b2a">GIFT SHOP</text>' +
-    /* mannequin head */
-    '<rect x="300" y="250" width="40" height="52" fill="#d9d2c5"/><ellipse cx="320" cy="225" rx="52" ry="48" fill="#e6dfd2"/>' +
-    /* cap crown and sun visor brim */
-    '<path d="M262 212 Q264 140 320 136 Q376 140 378 212z" fill="#e2b13c"/><path d="M378 210 Q440 206 470 226 Q430 232 372 226z" fill="#2e86c1"/><path d="M262 210 L378 210 L378 220 L262 220z" fill="#c9962a"/>' +
-    /* small umbrella on top */
-    '<line x1="320" y1="136" x2="320" y2="92" stroke="#555" stroke-width="3"/><path d="M270 96 Q320 40 370 96 Q357 88 345 96 Q332 88 320 96 Q308 88 295 96 Q283 88 270 96z" fill="#e74c3c"/>' +
-    /* fan on the front */
-    '<circle cx="320" cy="178" r="20" fill="#ffffff" stroke="#7f8c8d" stroke-width="2"/><g fill="#5dade2"><ellipse cx="320" cy="168" rx="5" ry="9"/><ellipse cx="330" cy="182" rx="9" ry="5" transform="rotate(30 330 182)"/><ellipse cx="310" cy="182" rx="9" ry="5" transform="rotate(-30 310 182)"/></g><circle cx="320" cy="178" r="3" fill="#555"/>' +
-    /* radio on the left side */
-    '<rect x="200" y="166" width="58" height="36" rx="5" fill="#34495e"/><circle cx="216" cy="184" r="9" fill="#95a5a6"/><g stroke="#95a5a6" stroke-width="2"><line x1="232" y1="176" x2="250" y2="176"/><line x1="232" y1="184" x2="250" y2="184"/><line x1="232" y1="192" x2="250" y2="192"/></g><line x1="252" y1="166" x2="266" y2="128" stroke="#555" stroke-width="2"/><circle cx="266" cy="128" r="3" fill="#555"/>' +
-    /* cup holder with a drink on the right side */
-    '<rect x="370" y="172" width="36" height="8" fill="#7f8c8d"/><path d="M404 160 L438 160 L434 198 L408 198z" fill="#ffffff" stroke="#7f8c8d" stroke-width="2"/><rect x="402" y="176" width="40" height="8" rx="3" fill="#7f8c8d"/><line x1="426" y1="160" x2="432" y2="136" stroke="#e74c3c" stroke-width="3"/>' +
-    /* price tag hanging from the brim */
-    '<line x1="460" y1="228" x2="492" y2="262" stroke="#555" stroke-width="1.5"/><path d="M480 262 L540 262 L540 300 L480 300 L470 281z" fill="#f6d55c" stroke="#b7950b"/><circle cx="480" cy="281" r="3" fill="#f3ece1"/><text x="512" y="288" text-anchor="middle" font-family="sans-serif" font-size="18" fill="#333">$45</text>' +
-    '</svg>';
-
+  /* Speaking pictures are image files in tests/img/K/ (scene, object, opt_A to opt_C). */
   window.MOCK_TESTS.push({
     id: 'K',
     title: 'Mock Test K',
@@ -488,21 +353,21 @@
       tasks: [
         { id: 'S1', title: 'Task 1: Giving Advice', prep: 30, speak: 90, prompt: 'A friend of yours is starting a new job next week and is feeling nervous about it. The job is in a field she has never worked in, and for the first two weeks she will work from home, meeting her team only on video calls. Give your friend advice on how to make a good start in the new workplace.' },
         { id: 'S2', title: 'Task 2: Talking about a Personal Experience', prep: 30, speak: 60, prompt: 'Talk about a time when you lost something that was important to you. What was it, what happened, how did you feel, and did the experience change how you look after important things?' },
-        { id: 'S3', title: 'Task 3: Describing a Scene', prep: 30, speak: 60, prompt: 'Describe some things that are happening in the picture below as well as you can. The person you are speaking to cannot see the picture.', image: CAMPGROUND },
-        { id: 'S4', title: 'Task 4: Making Predictions', prep: 30, speak: 60, prompt: 'In this picture, what do you think will most probably happen next? Think about the sky, the campers who are not ready for the night, and what is going on around the campsite.', image: CAMPGROUND },
+        { id: 'S3', title: 'Task 3: Describing a Scene', prep: 30, speak: 60, prompt: 'Describe some things that are happening in the picture below as well as you can. The person you are speaking to cannot see the picture.', image: '<img src="tests/img/K/scene.jpg" alt="A busy campground by a lake in the evening as a storm moves in">' },
+        { id: 'S4', title: 'Task 4: Making Predictions', prep: 30, speak: 60, prompt: 'In this picture, what do you think will most probably happen next? Think about the sky, the campers who are not ready for the night, and what is going on around the campsite.', image: '<img src="tests/img/K/scene.jpg" alt="A busy campground by a lake in the evening as a storm moves in">' },
         {
           id: 'S5', title: 'Task 5: Comparing and Persuading', type: 'compare', select: 60, prep: 60, speak: 60,
           prompt: 'You and your partner are going to a cousin\'s wedding in another city, about 650 kilometres away, for three days. Choose the way of travelling you prefer. In the next section, you will need to persuade your partner that your choice is better.',
           choices: [
-            { key: 'A', title: 'Rent a car', image: CAR, facts: ['Rental: $240 for 3 days, plus about $110 for gas', 'About 7 hours of driving each way', 'Leave whenever you want and stop along the way', 'Drive right to the wedding venue'] },
-            { key: 'B', title: 'Take the train', image: TRAIN, facts: ['Return ticket: $180 per person', 'About 9 hours each way', 'Free Wi-Fi, dining car and room to relax', 'Station is 15 minutes from the venue'] }
+            { key: 'A', title: 'Rent a car', image: '<img src="tests/img/K/opt_A.jpg" alt="Photo: Rent a car">', facts: ['Rental: $240 for 3 days, plus about $110 for gas', 'About 7 hours of driving each way', 'Leave whenever you want and stop along the way', 'Drive right to the wedding venue'] },
+            { key: 'B', title: 'Take the train', image: '<img src="tests/img/K/opt_B.jpg" alt="Photo: Take the train">', facts: ['Return ticket: $180 per person', 'About 9 hours each way', 'Free Wi-Fi, dining car and room to relax', 'Station is 15 minutes from the venue'] }
           ],
-          third: { key: 'C', title: 'Fly', image: PLANE, facts: ['Return flight: $420 per person', '1.5-hour flight, plus about 2 hours at the airport', 'Airport is 1 hour from the venue', 'Checked bag: $35 each way'] },
+          third: { key: 'C', title: 'Fly', image: '<img src="tests/img/K/opt_C.jpg" alt="Photo: Fly">', facts: ['Return flight: $420 per person', '1.5-hour flight, plus about 2 hours at the airport', 'Airport is 1 hour from the venue', 'Checked bag: $35 each way'] },
           persuade: 'Your partner thinks flying would be better. Persuade your partner that your choice is better. Explain why.'
         },
         { id: 'S6', title: 'Task 6: Dealing with a Difficult Situation', prep: 60, speak: 60, prompt: '<p>Weeks ago, you promised to drive your close friend to the airport at 6:00 a.m. this Saturday for an important trip. Today, your sister called. Her babysitter has cancelled, and she asked you to look after her two young children on Saturday morning so she can attend a job interview.</p><p><b>Choose ONE:</b></p><p><b>Option A:</b> Talk to your friend. Explain why you cannot drive them to the airport.</p><p><b>Option B:</b> Talk to your sister. Explain why you cannot look after her children.</p>' },
         { id: 'S7', title: 'Task 7: Expressing Opinions', prep: 30, speak: 90, prompt: '<p>Your local minor soccer league is voting on whether to stop keeping score and naming winners in games for players under 10. Some coaches say that losing by eight goals makes young players quit, and that the early years should be about learning skills. Many parents reply that the children keep score in their heads anyway, and that they need to learn how to lose as well as how to win.</p><p>The league has asked parents and community members for their input before the vote. Should the league keep score in under-10 games? Explain your reasons.</p>' },
-        { id: 'S8', title: 'Task 8: Describing an Unusual Situation', prep: 30, speak: 60, prompt: 'You are in a gift shop and see this unusual hat. Call your friend, who is going to a three-day outdoor summer music festival next month and has said she has only $60 left to spend on anything for the trip. The fan and radio need four AA batteries, and the hat weighs almost a kilogram. Describe the hat and explain whether you think your friend should buy it.', image: ODDHAT }
+        { id: 'S8', title: 'Task 8: Describing an Unusual Situation', prep: 30, speak: 60, prompt: 'You are in a gift shop and see this unusual hat. Call your friend, who is going to a three-day outdoor summer music festival next month and has said she has only $60 left to spend on anything for the trip. The fan and radio need four AA batteries, and the hat weighs almost a kilogram. Describe the hat and explain whether you think your friend should buy it.', image: '<img src="tests/img/K/object.jpg" alt="An unusual hat in a gift shop">' }
       ]
     }
   });

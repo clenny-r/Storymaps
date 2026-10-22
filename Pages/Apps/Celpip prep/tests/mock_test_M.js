@@ -7,117 +7,7 @@
 (function () {
   window.MOCK_TESTS = window.MOCK_TESTS || [];
 
-  /* ---------- small SVG helpers for speaking pictures ---------- */
-  function person(x, y, o) {
-    o = o || {};
-    var s = o.s || 1, skin = o.skin || '#e0b48f', shirt = o.shirt || '#3d7cc9', pants = o.pants || '#38414d', hair = o.hair || '#3b2a20';
-    var arms = o.arms || 'down';
-    var a = arms === 'up' ? '<line x1="-7" y1="-30" x2="-16" y2="-50" /><line x1="7" y1="-30" x2="16" y2="-50" />'
-      : arms === 'right' ? '<line x1="-7" y1="-30" x2="-12" y2="-14" /><line x1="7" y1="-30" x2="24" y2="-36" />'
-      : arms === 'left' ? '<line x1="-7" y1="-30" x2="-24" y2="-36" /><line x1="7" y1="-30" x2="12" y2="-14" />'
-      : '<line x1="-7" y1="-30" x2="-12" y2="-14" /><line x1="7" y1="-30" x2="12" y2="-14" />';
-    var legs = o.sit ? '<line x1="-4" y1="-12" x2="-14" y2="-12" /><line x1="4" y1="-12" x2="-6" y2="-12" /><line x1="-14" y1="-12" x2="-14" y2="0" /><line x1="-6" y1="-12" x2="-6" y2="0" />'
-      : '<line x1="-4" y1="-12" x2="-7" y2="0" /><line x1="4" y1="-12" x2="7" y2="0" />';
-    return '<g transform="translate(' + x + ' ' + y + ') scale(' + s + ')">' +
-      '<g stroke="' + skin + '" stroke-width="4" stroke-linecap="round">' + a + '</g>' +
-      '<g stroke="' + pants + '" stroke-width="5" stroke-linecap="round">' + legs + '</g>' +
-      '<rect x="-8" y="-36" width="16" height="25" rx="5" fill="' + shirt + '"/>' +
-      '<circle cx="0" cy="-45" r="9" fill="' + skin + '"/>' +
-      '<path d="M-9 -46 a9 9 0 0 1 18 0 q-9 -6 -18 0z" fill="' + hair + '"/>' +
-      '</g>';
-  }
-
-  /* a winter hat drawn over a person's head */
-  function toque(x, y, s, c) {
-    s = s || 1;
-    return '<g transform="translate(' + x + ' ' + y + ') scale(' + s + ')"><path d="M-10 -48 Q0 -64 10 -48z" fill="' + c + '"/><circle cx="0" cy="-60" r="3" fill="#ffffff"/></g>';
-  }
-
-  var SNOWSTREET = (function () {
-    var p = '';
-    p += '<svg viewBox="0 0 640 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A residential street the morning after a heavy snowfall">';
-    p += '<rect width="640" height="400" fill="#dfe9f3"/>';
-    p += '<g fill="#ffffff">' + (function () { var t = ''; var pts = [[30, 20], [90, 50], [150, 15], [230, 40], [300, 18], [360, 55], [430, 25], [500, 45], [580, 20], [620, 60], [260, 80], [470, 90]]; for (var i = 0; i < pts.length; i++) t += '<circle cx="' + pts[i][0] + '" cy="' + pts[i][1] + '" r="2.5"/>'; return t; })() + '</g>';
-    /* house 1 with heavy snow about to slide off the roof over the front door */
-    p += '<rect x="30" y="120" width="170" height="120" fill="#c0392b"/><polygon points="18,122 115,62 212,122" fill="#5d4037"/><path d="M18 122 L115 62 L212 122 L212 112 L115 52 L18 112z" fill="#ffffff"/>';
-    p += '<path d="M132 70 L218 120 L218 140 Q208 150 196 144 Q184 150 174 140 L160 118 L132 84z" fill="#ffffff" stroke="#b3c7d6" stroke-width="1.5"/><path d="M150 82 L158 92 L152 100 L160 108" fill="none" stroke="#8fa7b8" stroke-width="2"/><g fill="#ffffff" stroke="#b3c7d6" stroke-width=".8"><circle cx="190" cy="156" r="3"/><circle cx="200" cy="164" r="2.5"/></g>';
-    p += '<rect x="166" y="190" width="26" height="50" fill="#4e342e"/><rect x="50" y="150" width="40" height="34" fill="#f9e79f" stroke="#ffffff" stroke-width="3"/><rect x="104" y="150" width="40" height="34" fill="#f9e79f" stroke="#ffffff" stroke-width="3"/>';
-    p += person(184, 252, { shirt: '#2c3e50', skin: '#c98c64', hair: '#1d1410', arms: 'right' }) + toque(184, 252, 1, '#e67e22');
-    p += '<rect x="203" y="212" width="10" height="7" rx="2" fill="#7f8c8d"/>';
-    /* house 2 */
-    p += '<rect x="400" y="130" width="170" height="110" fill="#2e86c1"/><polygon points="388,132 485,74 582,132" fill="#5d4037"/><path d="M388 132 L485 74 L582 132 L582 122 L485 64 L388 122z" fill="#ffffff"/>';
-    p += '<rect x="420" y="160" width="40" height="34" fill="#f9e79f" stroke="#ffffff" stroke-width="3"/><rect x="520" y="185" width="26" height="55" fill="#1b2631"/>';
-    /* snowy front yards and driveways */
-    p += '<rect y="240" width="640" height="44" fill="#f4f8fb"/>';
-    p += '<rect x="250" y="240" width="80" height="44" fill="#a6acaf"/><g fill="#ffffff"><ellipse cx="244" cy="266" rx="12" ry="18"/><ellipse cx="336" cy="266" rx="12" ry="18"/></g>';
-    /* man who has just finished shovelling his driveway */
-    p += person(290, 282, { shirt: '#27ae60', skin: '#f0c9a6', hair: '#a0522d', arms: 'right' }) + toque(290, 282, 1, '#c0392b');
-    p += '<line x1="312" y1="246" x2="326" y2="278" stroke="#6d4c2f" stroke-width="3"/><rect x="320" y="276" width="16" height="6" fill="#2c3e50"/>';
-    /* car in the second driveway, a woman scraping the windshield */
-    p += '<path d="M430 270 L440 252 Q446 246 456 246 L500 246 Q510 246 516 254 L524 266 L530 270 L530 280 L426 280z" fill="#7d3c98"/><path d="M446 254 L458 250 L498 250 L510 258 L510 264 L446 264z" fill="#ecf0f1"/><g fill="#1b2631"><circle cx="446" cy="282" r="7"/><circle cx="512" cy="282" r="7"/></g>';
-    p += person(548, 284, { shirt: '#f1c40f', skin: '#8d5a3b', hair: '#120c08', arms: 'left' }) + toque(548, 284, 1, '#2e86c1');
-    p += '<line x1="524" y1="248" x2="514" y2="258" stroke="#e74c3c" stroke-width="3"/>';
-    /* mail carrier */
-    p += person(226, 286, { shirt: '#1f618d', skin: '#e3b28b', hair: '#3b2a20', arms: 'down' });
-    p += '<rect x="210" y="262" width="12" height="14" rx="2" fill="#7e5109"/><line x1="216" y1="262" x2="228" y2="244" stroke="#7e5109" stroke-width="2"/>';
-    /* older woman spreading salt */
-    p += person(372, 286, { shirt: '#a569bd', skin: '#f2cfb0', hair: '#bdc3c7', arms: 'right' });
-    p += '<rect x="390" y="246" width="12" height="12" fill="#5d6d7e"/><g fill="#ffffff" stroke="#95a5a6" stroke-width=".5"><circle cx="398" cy="266" r="1.5"/><circle cx="404" cy="272" r="1.5"/><circle cx="392" cy="276" r="1.5"/></g>';
-    /* street with a snowplow coming toward the cleared driveway */
-    p += '<rect y="284" width="640" height="54" fill="#85929e"/><g fill="#d5d8dc"><rect x="20" y="309" width="30" height="4"/><rect x="100" y="309" width="30" height="4"/><rect x="180" y="309" width="30" height="4"/></g>';
-    p += '<path d="M362 336 Q380 300 410 296 Q440 300 452 336z" fill="#ffffff"/>';
-    p += '<g><rect x="490" y="290" width="120" height="38" rx="4" fill="#e67e22"/><rect x="552" y="270" width="48" height="26" rx="3" fill="#e67e22"/><rect x="558" y="275" width="20" height="14" fill="#d6eaf8"/><circle cx="567" cy="282" r="4" fill="#c98c64"/>' +
-      '<polygon points="452,334 486,292 496,292 470,334" fill="#7f8c8d"/><rect x="574" y="262" width="10" height="8" fill="#f1c40f"/>' +
-      '<g fill="#1b2631"><circle cx="512" cy="330" r="10"/><circle cx="590" cy="330" r="10"/></g><text x="548" y="316" font-size="11" text-anchor="middle" font-family="sans-serif" fill="#ffffff">PLOW</text></g>';
-    p += '<g fill="#ffffff"><circle cx="440" cy="290" r="4"/><circle cx="430" cy="282" r="3"/><circle cx="446" cy="278" r="3"/></g>';
-    /* lower snowy area: sledding hill, snowman, dog walker, jogger */
-    p += '<rect y="338" width="640" height="62" fill="#f4f8fb"/><path d="M0 338 L0 345 Q70 350 150 400 L0 400z" fill="#e3edf5"/>';
-    p += person(70, 386, { sit: true, s: .7, shirt: '#e91e63', skin: '#f0c9a6', hair: '#c49a42', arms: 'right' }) + toque(70, 386, .7, '#16a085');
-    p += '<path d="M48 388 L92 388 Q100 386 100 380" fill="none" stroke="#c0392b" stroke-width="4"/>';
-    p += '<g fill="#ffffff" stroke="#b3c7d6" stroke-width="1.5"><circle cx="260" cy="378" r="16"/><circle cx="260" cy="352" r="11"/></g><g fill="#222"><circle cx="256" cy="349" r="1.5"/><circle cx="264" cy="349" r="1.5"/></g><polygon points="260,352 272,354 260,356" fill="#e67e22"/>';
-    p += person(232, 396, { s: .65, shirt: '#2980b9', skin: '#6b4226', hair: '#120c08', arms: 'right' }) + toque(232, 396, .65, '#f1c40f');
-    p += person(290, 396, { s: .65, shirt: '#e74c3c', skin: '#e8c3a0', hair: '#5a3825', arms: 'up' }) + toque(290, 396, .65, '#8e44ad');
-    p += '<rect x="276" y="356" width="5" height="10" fill="#4a3324"/><path d="M270 352 L286 352 L284 358 L272 358z" fill="#222"/>';
-    p += person(420, 396, { shirt: '#5d6d7e', skin: '#d6a07a', hair: '#333333', arms: 'right' }) + toque(420, 396, 1, '#27ae60');
-    p += '<line x1="444" y1="360" x2="470" y2="380" stroke="#c0392b" stroke-width="2"/><g><ellipse cx="484" cy="384" rx="14" ry="7" fill="#212f3c"/><circle cx="472" cy="378" r="6" fill="#212f3c"/><g stroke="#212f3c" stroke-width="3"><line x1="476" y1="390" x2="476" y2="398"/><line x1="492" y1="390" x2="492" y2="398"/><line x1="498" y1="382" x2="506" y2="376"/></g></g>';
-    p += person(586, 396, { shirt: '#f39c12', skin: '#a9714b', hair: '#2a1b12', arms: 'right' }) + toque(586, 396, 1, '#2c3e50');
-    p += '</svg>';
-    return p;
-  })();
-
-  var FARMBOX = '<svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg"><rect width="200" height="120" fill="#eef6e4"/>' +
-    '<path d="M50 60 L150 60 L140 104 L60 104z" fill="#b9874e" stroke="#7e5109" stroke-width="2"/><g stroke="#7e5109" stroke-width="1.5"><line x1="56" y1="76" x2="144" y2="76"/><line x1="58" y1="90" x2="142" y2="90"/></g>' +
-    '<g fill="#58d68d"><circle cx="70" cy="56" r="10"/><circle cx="88" cy="52" r="9"/></g><g fill="#e67e22"><rect x="104" y="36" width="6" height="26" rx="3" transform="rotate(15 107 49)"/><rect x="114" y="38" width="6" height="24" rx="3" transform="rotate(25 117 50)"/></g><g fill="#c0392b"><circle cx="130" cy="56" r="7"/><circle cx="140" cy="58" r="6"/></g>' +
-    '<text x="100" y="22" font-size="11" text-anchor="middle" font-family="sans-serif" fill="#1e8449">FARM BOX</text></svg>';
-
-  var MARKETSTALL = '<svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg"><rect width="200" height="120" fill="#fef5e7"/>' +
-    '<polygon points="30,40 100,16 170,40" fill="#c0392b"/><rect x="30" y="40" width="140" height="10" fill="#e74c3c"/><g stroke="#7f8c8d" stroke-width="3"><line x1="36" y1="50" x2="36" y2="104"/><line x1="164" y1="50" x2="164" y2="104"/></g>' +
-    '<rect x="40" y="78" width="120" height="8" fill="#8b5a2b"/><g fill="#f4d03f"><circle cx="56" cy="72" r="6"/><circle cx="68" cy="72" r="6"/></g><g fill="#27ae60"><circle cx="96" cy="72" r="6"/><circle cx="108" cy="72" r="6"/></g><g fill="#e67e22"><circle cx="136" cy="72" r="6"/><circle cx="148" cy="72" r="6"/></g>' +
-    '<text x="100" y="116" font-size="11" text-anchor="middle" font-family="sans-serif" fill="#922b21">FARMERS\' MARKET</text></svg>';
-
-  var DELIVERY = '<svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg"><rect width="200" height="120" fill="#ebf5fb"/><rect y="96" width="200" height="24" fill="#aab7b8"/>' +
-    '<rect x="40" y="46" width="90" height="48" fill="#2874a6"/><path d="M130 60 L156 60 L170 78 L170 94 L130 94z" fill="#1f618d"/><rect x="138" y="64" width="16" height="12" fill="#d6eaf8"/>' +
-    '<g fill="#1b2631"><circle cx="64" cy="96" r="9"/><circle cx="150" cy="96" r="9"/></g><text x="85" y="76" font-size="11" text-anchor="middle" font-family="sans-serif" fill="#ffffff">GROCERY</text>' +
-    '<text x="100" y="26" font-size="11" text-anchor="middle" font-family="sans-serif" fill="#1b4f72">DELIVERY</text></svg>';
-
-  var ODDBIN = '<svg viewBox="0 0 640 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="An unusual sorting bin in a home store">' +
-    '<rect width="640" height="400" fill="#f4f1ea"/><rect y="330" width="640" height="70" fill="#cdbfa8"/>' +
-    '<rect x="24" y="24" width="180" height="52" rx="6" fill="#ffffff" stroke="#d8cdb8"/><text x="114" y="57" text-anchor="middle" font-family="sans-serif" font-size="18" fill="#1e8449">HOME STORE</text>' +
-    /* solar panel lid */
-    '<rect x="200" y="70" width="240" height="18" rx="4" fill="#5d6d7e"/><rect x="214" y="52" width="212" height="20" fill="#1b4f72"/><g stroke="#5dade2" stroke-width="1"><line x1="256" y1="52" x2="256" y2="72"/><line x1="298" y1="52" x2="298" y2="72"/><line x1="340" y1="52" x2="340" y2="72"/><line x1="382" y1="52" x2="382" y2="72"/></g>' +
-    /* four coloured compartments */
-    '<rect x="206" y="88" width="57" height="226" fill="#2e86c1"/><rect x="263" y="88" width="57" height="226" fill="#27ae60"/><rect x="320" y="88" width="57" height="226" fill="#f4d03f"/><rect x="377" y="88" width="57" height="226" fill="#7f8c8d"/>' +
-    '<g font-family="sans-serif" font-size="11" text-anchor="middle" fill="#ffffff"><text x="234" y="120">PAPER</text><text x="291" y="120">FOOD</text><text x="348" y="120" fill="#7d6608">CANS</text><text x="405" y="120">TRASH</text></g>' +
-    /* digital scale screen */
-    '<rect x="268" y="150" width="104" height="34" rx="4" fill="#111"/><text x="320" y="173" text-anchor="middle" font-family="sans-serif" font-size="16" fill="#58d68d">2.4 kg</text>' +
-    /* foot pedal and wheels */
-    '<rect x="290" y="314" width="60" height="12" rx="4" fill="#424949"/><circle cx="222" cy="330" r="14" fill="#2c3e50"/><circle cx="418" cy="330" r="14" fill="#2c3e50"/><circle cx="222" cy="330" r="5" fill="#bdc3c7"/><circle cx="418" cy="330" r="5" fill="#bdc3c7"/>' +
-    /* speaker grille on the side */
-    '<g fill="#d5d8dc"><circle cx="404" cy="220" r="3"/><circle cx="414" cy="220" r="3"/><circle cx="404" cy="230" r="3"/><circle cx="414" cy="230" r="3"/></g>' +
-    /* price tag */
-    '<line x1="434" y1="100" x2="486" y2="150" stroke="#555" stroke-width="1.5"/><path d="M478 150 L552 150 L552 192 L478 192 L466 171z" fill="#f6d55c" stroke="#b7950b"/><circle cx="478" cy="171" r="3" fill="#f4f1ea"/><text x="515" y="178" text-anchor="middle" font-family="sans-serif" font-size="18" fill="#333">$140</text>' +
-    '</svg>';
-
+  /* Speaking pictures are image files in tests/img/M/ (scene, object, opt_A to opt_C). */
   window.MOCK_TESTS.push({
     id: 'M',
     title: 'Mock Test M',
@@ -492,21 +382,21 @@
       tasks: [
         { id: 'S1', title: 'Task 1: Giving Advice', prep: 30, speak: 90, prompt: 'A friend of yours wants to go back to school to finish a college diploma that she started years ago. She works full time, has two young children, and has only $1,500 saved for tuition and books. The classes she needs are offered in the evenings or online. Give your friend advice on how to make this plan work.' },
         { id: 'S2', title: 'Task 2: Talking about a Personal Experience', prep: 30, speak: 60, prompt: 'Talk about a time when you had a disagreement with a neighbour or a roommate. What was the disagreement about, how was it resolved, and what would you do differently if it happened again?' },
-        { id: 'S3', title: 'Task 3: Describing a Scene', prep: 30, speak: 60, prompt: 'Describe some things that are happening in the picture below as well as you can. The person you are speaking to cannot see the picture.', image: SNOWSTREET },
-        { id: 'S4', title: 'Task 4: Making Predictions', prep: 30, speak: 60, prompt: 'In this picture, what do you think will most probably happen next? Think about the snowplow, the man who has just cleared his driveway, the roof of the red house, and what the other people are doing.', image: SNOWSTREET },
+        { id: 'S3', title: 'Task 3: Describing a Scene', prep: 30, speak: 60, prompt: 'Describe some things that are happening in the picture below as well as you can. The person you are speaking to cannot see the picture.', image: '<img src="tests/img/M/scene.jpg" alt="A residential street the morning after a heavy snowfall">' },
+        { id: 'S4', title: 'Task 4: Making Predictions', prep: 30, speak: 60, prompt: 'In this picture, what do you think will most probably happen next? Think about the snowplow, the man who has just cleared his driveway, the roof of the red house, and what the other people are doing.', image: '<img src="tests/img/M/scene.jpg" alt="A residential street the morning after a heavy snowfall">' },
         {
           id: 'S5', title: 'Task 5: Comparing and Persuading', type: 'compare', select: 60, prep: 60, speak: 60,
           prompt: 'Your family wants to eat more fresh, local food this summer. Choose the option you prefer. In the next section, you will need to persuade a family member that your choice is better.',
           choices: [
-            { key: 'A', title: 'Weekly farm box', image: FARMBOX, facts: ['$38 per week, 16 weeks paid in advance', 'Pick up Thursdays, 6:00 to 7:00 p.m., 10 minutes away', 'The farmer chooses what goes in each box', 'No refunds for weeks when you are away'] },
-            { key: 'B', title: 'Saturday farmers\' market', image: MARKETSTALL, facts: ['Choose exactly what you want, about $45 per week', 'Open Saturdays, 8:00 a.m. to 1:00 p.m., 25 minutes by bus', 'Meet the farmers and bakers in person', 'Popular items often sold out by 10:00 a.m.'] }
+            { key: 'A', title: 'Weekly farm box', image: '<img src="tests/img/M/opt_A.jpg" alt="Photo: Weekly farm box">', facts: ['$38 per week, 16 weeks paid in advance', 'Pick up Thursdays, 6:00 to 7:00 p.m., 10 minutes away', 'The farmer chooses what goes in each box', 'No refunds for weeks when you are away'] },
+            { key: 'B', title: 'Saturday farmers\' market', image: '<img src="tests/img/M/opt_B.jpg" alt="Photo: Saturday farmers&#x27; market">', facts: ['Choose exactly what you want, about $45 per week', 'Open Saturdays, 8:00 a.m. to 1:00 p.m., 25 minutes by bus', 'Meet the farmers and bakers in person', 'Popular items often sold out by 10:00 a.m.'] }
           ],
-          third: { key: 'C', title: 'Grocery delivery', image: DELIVERY, facts: ['$9.99 delivery fee per order', 'Delivered to your door within a 2-hour window', 'Wide choice, but most produce is imported', 'Order by 9:00 p.m. for next-day delivery'] },
+          third: { key: 'C', title: 'Grocery delivery', image: '<img src="tests/img/M/opt_C.jpg" alt="Photo: Grocery delivery">', facts: ['$9.99 delivery fee per order', 'Delivered to your door within a 2-hour window', 'Wide choice, but most produce is imported', 'Order by 9:00 p.m. for next-day delivery'] },
           persuade: 'A family member thinks grocery delivery would be better. Persuade this family member that your choice is better. Explain why.'
         },
         { id: 'S6', title: 'Task 6: Dealing with a Difficult Situation', prep: 60, speak: 60, prompt: '<p>Months ago, you agreed to run the stage lights for your friend\'s community theatre group on the opening night of its new play this Friday. You are the only volunteer who knows how to use the lighting board. Today, your brother called. His car has broken down, and he needs you to drive him to the airport on Friday evening for a flight to a job interview in another province.</p><p><b>Choose ONE:</b></p><p><b>Option A:</b> Talk to your friend. Explain why you cannot run the lights on Friday.</p><p><b>Option B:</b> Talk to your brother. Explain why you cannot drive him to the airport.</p>' },
         { id: 'S7', title: 'Task 7: Expressing Opinions', prep: 30, speak: 90, prompt: '<p>Your city council is considering lowering the speed limit on all residential streets from 50 km/h to 30 km/h. Many parents and seniors support the idea, saying that slower cars give drivers more time to stop and make walking and cycling safer. Many commuters and delivery drivers are against it, saying that trips will take longer, that most streets are already safe, and that the police cannot enforce the new limit everywhere.</p><p>The council is holding an online survey before it votes next month. Should the city lower the speed limit on residential streets? Explain your reasons.</p>' },
-        { id: 'S8', title: 'Task 8: Describing an Unusual Situation', prep: 30, speak: 60, prompt: 'You are in a home store and see this unusual sorting bin for $140. Call your friend, who wants to start composting and recycling more but lives in a small apartment with a narrow kitchen. The bin is 1.2 metres tall, and the solar lid only charges when it gets direct sunlight. Describe the bin and explain whether you think your friend should buy it.', image: ODDBIN }
+        { id: 'S8', title: 'Task 8: Describing an Unusual Situation', prep: 30, speak: 60, prompt: 'You are in a home store and see this unusual sorting bin for $140. Call your friend, who wants to start composting and recycling more but lives in a small apartment with a narrow kitchen. The bin is 1.2 metres tall, and the solar lid only charges when it gets direct sunlight. Describe the bin and explain whether you think your friend should buy it.', image: '<img src="tests/img/M/object.jpg" alt="An unusual sorting bin in a home store">' }
       ]
     }
   });

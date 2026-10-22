@@ -7,131 +7,7 @@
 (function () {
   window.MOCK_TESTS = window.MOCK_TESTS || [];
 
-  /* ---------- small SVG helpers for speaking pictures ---------- */
-  function person(x, y, o) {
-    o = o || {};
-    var s = o.s || 1, skin = o.skin || '#e0b48f', shirt = o.shirt || '#3d7cc9', pants = o.pants || '#38414d', hair = o.hair || '#3b2a20';
-    var arms = o.arms || 'down';
-    var a = arms === 'up' ? '<line x1="-7" y1="-30" x2="-16" y2="-50" /><line x1="7" y1="-30" x2="16" y2="-50" />'
-      : arms === 'right' ? '<line x1="-7" y1="-30" x2="-12" y2="-14" /><line x1="7" y1="-30" x2="24" y2="-36" />'
-      : arms === 'left' ? '<line x1="-7" y1="-30" x2="-24" y2="-36" /><line x1="7" y1="-30" x2="12" y2="-14" />'
-      : '<line x1="-7" y1="-30" x2="-12" y2="-14" /><line x1="7" y1="-30" x2="12" y2="-14" />';
-    var legs = o.sit ? '<line x1="-4" y1="-12" x2="-14" y2="-12" /><line x1="4" y1="-12" x2="-6" y2="-12" /><line x1="-14" y1="-12" x2="-14" y2="0" /><line x1="-6" y1="-12" x2="-6" y2="0" />'
-      : '<line x1="-4" y1="-12" x2="-7" y2="0" /><line x1="4" y1="-12" x2="7" y2="0" />';
-    return '<g transform="translate(' + x + ' ' + y + ') scale(' + s + ')">' +
-      '<g stroke="' + skin + '" stroke-width="4" stroke-linecap="round">' + a + '</g>' +
-      '<g stroke="' + pants + '" stroke-width="5" stroke-linecap="round">' + legs + '</g>' +
-      '<rect x="-8" y="-36" width="16" height="25" rx="5" fill="' + shirt + '"/>' +
-      '<circle cx="0" cy="-45" r="9" fill="' + skin + '"/>' +
-      '<path d="M-9 -46 a9 9 0 0 1 18 0 q-9 -6 -18 0z" fill="' + hair + '"/>' +
-      '</g>';
-  }
-
-  function awning(x, y, w, c1, c2) {
-    var t = '', n = Math.round(w / 20);
-    for (var i = 0; i < n; i++) t += '<rect x="' + (x + i * 20) + '" y="' + y + '" width="20" height="22" fill="' + (i % 2 ? c2 : c1) + '"/>';
-    return t;
-  }
-
-  var MARKET = (function () {
-    var p = '';
-    p += '<svg viewBox="0 0 640 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A busy outdoor market with a bakery stall and a food truck">';
-    p += '<rect width="640" height="400" fill="#cfe8f7"/>';
-    p += '<g fill="#ffffff"><ellipse cx="120" cy="40" rx="46" ry="12"/><ellipse cx="420" cy="30" rx="56" ry="13"/></g>';
-    /* buildings in the background */
-    p += '<rect x="0" y="70" width="140" height="110" fill="#c39b77"/><rect x="140" y="50" width="120" height="130" fill="#a3b18a"/><rect x="260" y="80" width="150" height="100" fill="#d7bde2"/><rect x="410" y="60" width="230" height="120" fill="#b0a8b9"/>';
-    p += '<g fill="#eaf2f8">' + (function () { var t = ''; [20, 60, 100, 160, 200, 280, 330, 370, 430, 480, 530, 580].forEach(function (x) { t += '<rect x="' + x + '" y="92" width="22" height="26"/>'; }); return t; })() + '</g>';
-    /* ground */
-    p += '<rect y="180" width="640" height="220" fill="#d5c9b1"/>';
-    /* bakery stall */
-    p += awning(20, 170, 180, '#c0392b', '#fdfefe');
-    p += '<rect x="24" y="192" width="4" height="70" fill="#7b5b3c"/><rect x="192" y="192" width="4" height="70" fill="#7b5b3c"/>';
-    p += '<rect x="56" y="150" width="108" height="20" rx="4" fill="#fdebd0" stroke="#a04000"/><text x="110" y="165" font-size="13" text-anchor="middle" font-family="sans-serif" fill="#a04000">BAKERY</text>';
-    p += person(110, 250, { shirt: '#ffffff', skin: '#c98c64', hair: '#1d1410', arms: 'right', s: .9 });
-    p += '<rect x="20" y="250" width="180" height="40" fill="#8b5a2b"/>';
-    p += '<g fill="#d68910"><ellipse cx="44" cy="248" rx="14" ry="7"/><ellipse cx="74" cy="248" rx="14" ry="7"/><ellipse cx="150" cy="248" rx="14" ry="7"/><ellipse cx="180" cy="248" rx="12" ry="6"/></g>';
-    p += '<rect x="124" y="214" width="16" height="10" rx="4" fill="#d68910"/>';
-    /* customer paying at the bakery */
-    p += person(232, 300, { shirt: '#2e86c1', skin: '#f2cfb0', hair: '#9c7a54', arms: 'left' });
-    p += '<rect x="198" y="258" width="10" height="7" fill="#52be80"/>';
-    /* basket of buns on the ground with a dog sniffing it */
-    p += '<path d="M40 330 L84 330 L78 352 L46 352z" fill="#a0522d"/><g fill="#e59866"><circle cx="52" cy="328" r="6"/><circle cx="64" cy="326" r="6"/><circle cx="76" cy="328" r="6"/></g>';
-    p += '<g fill="#5d4037"><ellipse cx="112" cy="344" rx="16" ry="8"/><circle cx="94" cy="336" r="7"/><polygon points="90,330 93,322 97,330"/><rect x="102" y="350" width="3" height="10"/><rect x="118" y="350" width="3" height="10"/><path d="M127 340 Q136 330 132 324" stroke="#5d4037" stroke-width="3" fill="none"/></g>';
-    /* food truck */
-    p += '<rect x="440" y="170" width="190" height="96" rx="8" fill="#f4d03f"/><rect x="452" y="186" width="110" height="46" fill="#2c3e50"/><rect x="448" y="232" width="118" height="6" fill="#7f8c8d"/>';
-    p += '<rect x="574" y="186" width="44" height="58" fill="#d6eaf8"/><g fill="#1b2631"><circle cx="480" cy="268" r="14"/><circle cx="596" cy="268" r="14"/></g>';
-    p += '<text x="507" y="182" font-size="11" text-anchor="middle" font-family="sans-serif" fill="#7d6608">FOOD TRUCK</text>';
-    p += person(508, 230, { s: .75, shirt: '#e74c3c', skin: '#8d5a3b', hair: '#120c08', arms: 'left' });
-    p += '<rect x="470" y="244" width="40" height="0" fill="none"/>';
-    /* line of three people at the truck */
-    p += person(420, 320, { shirt: '#8e44ad', skin: '#e8c39e', hair: '#151515' });
-    p += person(388, 326, { shirt: '#16a085', skin: '#6b4226', hair: '#120c08', arms: 'right' });
-    p += '<rect x="404" y="282" width="7" height="12" rx="1" fill="#222"/>';
-    p += person(356, 330, { shirt: '#e67e22', skin: '#f0c9a6', hair: '#c49a42' });
-    /* busker playing guitar on a crate with an open case */
-    p += '<rect x="282" y="232" width="34" height="22" fill="#a04000"/>';
-    p += person(300, 240, { sit: true, shirt: '#34495e', skin: '#a9714b', hair: '#2a1b12', arms: 'right' });
-    p += '<ellipse cx="302" cy="222" rx="9" ry="7" fill="#c68642" stroke="#7a4a1d" stroke-width="1.5"/><line x1="308" y1="218" x2="330" y2="204" stroke="#7a4a1d" stroke-width="3"/>';
-    p += '<path d="M252 250 L280 250 L276 262 L256 262z" fill="#1b2631"/><g fill="#f4d03f"><circle cx="262" cy="256" r="2"/><circle cx="270" cy="257" r="2"/></g>';
-    /* father with a child on his shoulders */
-    p += person(560, 372, { shirt: '#1f618d', skin: '#d6a07a', hair: '#3b2a20', arms: 'up' });
-    p += person(560, 330, { s: .55, shirt: '#f1948a', skin: '#d6a07a', hair: '#3b2a20', arms: 'up', sit: true });
-    /* woman carrying a tall, tilting stack of pie boxes */
-    p += person(170, 390, { shirt: '#c0392b', skin: '#5c3a21', hair: '#120c08', arms: 'up' });
-    p += '<g transform="translate(-30 0) rotate(14 200 330)" fill="#fdfefe" stroke="#a6acaf"><rect x="182" y="328" width="36" height="12"/><rect x="183" y="316" width="36" height="12"/><rect x="185" y="304" width="36" height="12"/><rect x="188" y="292" width="36" height="12"/><rect x="192" y="280" width="36" height="12"/></g>';
-    /* cyclist with a delivery basket */
-    p += '<g stroke="#2c3e50" stroke-width="2.5" fill="none"><circle cx="268" cy="380" r="13"/><circle cx="318" cy="380" r="13"/><path d="M268 380 L284 360 L306 360 L318 380 M284 360 L292 380 L306 360"/></g>';
-    p += person(292, 368, { s: .8, shirt: '#27ae60', skin: '#e3b28b', hair: '#4a3020', arms: 'right' });
-    p += '<rect x="308" y="348" width="18" height="12" fill="#a0522d"/>';
-    /* person photographing the busker */
-    p += person(470, 386, { shirt: '#5b2c6f', skin: '#f2cfb0', hair: '#7b5a3a', arms: 'left' });
-    p += '<rect x="440" y="344" width="14" height="10" rx="2" fill="#222"/><circle cx="444" cy="349" r="3" fill="#85c1e9"/>';
-    p += '</svg>';
-    return p;
-  })();
-
-  var BANDB = '<svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg"><rect width="200" height="120" fill="#e8f8f5"/><rect y="96" width="200" height="24" fill="#82c785"/>' +
-    '<rect x="50" y="52" width="100" height="46" fill="#f5cba7"/><polygon points="42,54 100,22 158,54" fill="#a04000"/>' +
-    '<g fill="#d6eaf8"><rect x="62" y="62" width="18" height="14"/><rect x="120" y="62" width="18" height="14"/></g><rect x="92" y="72" width="16" height="26" fill="#6e2c00"/>' +
-    '<g fill="#e74c3c"><circle cx="58" cy="94" r="4"/><circle cx="68" cy="95" r="4"/><circle cx="134" cy="94" r="4"/><circle cx="144" cy="95" r="4"/></g>' +
-    '<rect x="160" y="70" width="30" height="16" fill="#ffffff" stroke="#a04000"/><text x="175" y="82" font-size="10" text-anchor="middle" font-family="sans-serif" fill="#a04000">B&amp;B</text><line x1="175" y1="86" x2="175" y2="98" stroke="#6e2c00" stroke-width="2"/></svg>';
-
-  var HOTEL = '<svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg"><rect width="200" height="120" fill="#ebf5fb"/><rect y="100" width="200" height="20" fill="#aab7b8"/>' +
-    '<rect x="60" y="20" width="80" height="80" fill="#5d6d7e"/>' +
-    '<g fill="#f9e79f">' + (function () { var t = ''; for (var r = 0; r < 4; r++) for (var c = 0; c < 4; c++) t += '<rect x="' + (68 + c * 18) + '" y="' + (30 + r * 15) + '" width="10" height="9"/>'; return t; })() + '</g>' +
-    '<rect x="90" y="88" width="20" height="12" fill="#2c3e50"/><rect x="18" y="86" width="36" height="12" rx="3" fill="#5dade2"/><text x="36" y="80" font-size="8" text-anchor="middle" font-family="sans-serif" fill="#1b4f72">POOL</text>' +
-    '<text x="100" y="15" font-size="11" text-anchor="middle" font-family="sans-serif" fill="#2c3e50">HOTEL</text></svg>';
-
-  var COTTAGE = '<svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg"><rect width="200" height="120" fill="#fef9e7"/><rect y="70" width="200" height="50" fill="#5dade2"/><path d="M0 70 L90 70 L110 120 L0 120z" fill="#7dcea0"/>' +
-    '<rect x="20" y="52" width="60" height="38" fill="#a04000"/><polygon points="14,54 50,30 86,54" fill="#4d5656"/><rect x="44" y="70" width="12" height="20" fill="#3e2723"/><rect x="26" y="60" width="12" height="10" fill="#d6eaf8"/>' +
-    '<rect x="110" y="84" width="50" height="5" fill="#8b5a2b"/><path d="M150 96 Q170 104 190 96 Q170 100 150 96z" fill="#e74c3c"/>' +
-    '<text x="140" y="40" font-size="11" text-anchor="middle" font-family="sans-serif" fill="#7e5109">COTTAGE</text></svg>';
-
-  var ODDGADGET = '<svg viewBox="0 0 640 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="An unusual emergency gadget in a hardware store">' +
-    '<rect width="640" height="400" fill="#eef2f3"/><rect y="320" width="640" height="80" fill="#95a5a6"/><rect x="100" y="312" width="440" height="12" fill="#616a6b"/>' +
-    '<rect x="22" y="24" width="210" height="50" rx="6" fill="#ffffff" stroke="#b2babb"/><text x="127" y="56" text-anchor="middle" font-family="sans-serif" font-size="17" fill="#c0392b">HARDWARE</text>' +
-    /* main body */
-    '<rect x="220" y="150" width="200" height="150" rx="14" fill="#d35400"/><rect x="234" y="168" width="120" height="44" rx="4" fill="#1b2631"/><text x="294" y="196" text-anchor="middle" font-family="sans-serif" font-size="14" fill="#58d68d">FM 98.5</text>' +
-    /* speaker grille */
-    '<g fill="#6e2c00"><circle cx="250" cy="240" r="4"/><circle cx="264" cy="240" r="4"/><circle cx="278" cy="240" r="4"/><circle cx="250" cy="254" r="4"/><circle cx="264" cy="254" r="4"/><circle cx="278" cy="254" r="4"/><circle cx="250" cy="268" r="4"/><circle cx="264" cy="268" r="4"/><circle cx="278" cy="268" r="4"/></g>' +
-    /* phone charging port with a cable */
-    '<rect x="370" y="176" width="34" height="12" rx="3" fill="#1b2631"/><text x="387" y="203" text-anchor="middle" font-family="sans-serif" font-size="9" fill="#ffffff">USB</text>' +
-    /* red siren button */
-    '<circle cx="380" cy="256" r="18" fill="#c0392b" stroke="#7b241c" stroke-width="3"/><text x="380" y="287" text-anchor="middle" font-family="sans-serif" font-size="9" fill="#ffffff">SIREN</text>' +
-    /* solar panel on top */
-    '<rect x="236" y="124" width="120" height="26" fill="#1f3a93" stroke="#aab7b8" stroke-width="2"/><g stroke="#aab7b8" stroke-width="1"><line x1="266" y1="124" x2="266" y2="150"/><line x1="296" y1="124" x2="296" y2="150"/><line x1="326" y1="124" x2="326" y2="150"/></g>' +
-    /* telescopic antenna */
-    '<line x1="400" y1="150" x2="456" y2="54" stroke="#7f8c8d" stroke-width="4"/><circle cx="456" cy="54" r="4" fill="#7f8c8d"/>' +
-    /* flashlight on the left side with a beam */
-    '<rect x="176" y="196" width="44" height="30" rx="4" fill="#566573"/><circle cx="176" cy="211" r="15" fill="#fdfefe" stroke="#566573" stroke-width="3"/><polygon points="162,200 90,170 90,252 162,222" fill="#fff6a8" opacity=".6"/>' +
-    /* hand crank on the right */
-    '<line x1="420" y1="226" x2="462" y2="226" stroke="#7f8c8d" stroke-width="6"/><line x1="462" y1="226" x2="462" y2="262" stroke="#7f8c8d" stroke-width="6"/><circle cx="462" cy="266" r="9" fill="#1b2631"/>' +
-    /* compass on the handle */
-    '<path d="M250 150 Q320 96 390 150" stroke="#1b2631" stroke-width="8" fill="none"/>' +
-    /* price tag */
-    '<line x1="470" y1="210" x2="512" y2="236" stroke="#555" stroke-width="1.5"/><path d="M506 232 L590 232 L590 274 L506 274 L494 253z" fill="#f6d55c" stroke="#b7950b"/><circle cx="506" cy="253" r="3" fill="#eef2f3"/><text x="546" y="260" text-anchor="middle" font-family="sans-serif" font-size="20" fill="#333">$70</text>' +
-    '</svg>';
-
+  /* Speaking pictures are image files in tests/img/U/ (scene, object, opt_A to opt_C). */
   window.MOCK_TESTS.push({
     id: 'U',
     title: 'Mock Test U',
@@ -500,21 +376,21 @@
       tasks: [
         { id: 'S1', title: 'Task 1: Giving Advice', prep: 30, speak: 90, prompt: 'A friend of yours has accepted a teaching job on a small island and will move there in August. The ferry runs only four times a day, the last one leaves the mainland at 8:00 p.m., and she does not know anyone on the island. She also has a tight budget, because her car needs expensive repairs. Give your friend advice on how to prepare for the move and settle into island life.' },
         { id: 'S2', title: 'Task 2: Talking about a Personal Experience', prep: 30, speak: 60, prompt: 'Talk about a time when a job interview or another important meeting did not go the way you expected. What happened, how did you handle it, and what would you do differently now?' },
-        { id: 'S3', title: 'Task 3: Describing a Scene', prep: 30, speak: 60, prompt: 'Describe some things that are happening in the picture below as well as you can. The person you are speaking to cannot see the picture.', image: MARKET },
-        { id: 'S4', title: 'Task 4: Making Predictions', prep: 30, speak: 60, prompt: 'In this picture, what do you think will most probably happen next? Think about the woman carrying the boxes, the dog, and the people waiting at the food truck.', image: MARKET },
+        { id: 'S3', title: 'Task 3: Describing a Scene', prep: 30, speak: 60, prompt: 'Describe some things that are happening in the picture below as well as you can. The person you are speaking to cannot see the picture.', image: '<img src="tests/img/U/scene.jpg" alt="A busy outdoor market with a bakery stall and a food truck">' },
+        { id: 'S4', title: 'Task 4: Making Predictions', prep: 30, speak: 60, prompt: 'In this picture, what do you think will most probably happen next? Think about the woman carrying the boxes, the dog, and the people waiting at the food truck.', image: '<img src="tests/img/U/scene.jpg" alt="A busy outdoor market with a bakery stall and a food truck">' },
         {
           id: 'S5', title: 'Task 5: Comparing and Persuading', type: 'compare', select: 60, prep: 60, speak: 60,
           prompt: 'Your family is planning a two-night stay in a small tourist town to celebrate your parents\' 40th wedding anniversary. Six adults will go. Choose the place to stay that you prefer. In the next section, you will need to persuade a family member that your choice is better.',
           choices: [
-            { key: 'A', title: 'Bed-and-breakfast', image: BANDB, facts: ['$170 per room per night, 3 rooms needed', 'Home-cooked breakfast included', 'Five-minute walk to shops and restaurants', 'Quiet house rules: no guests in common areas after 10:00 p.m.'] },
-            { key: 'B', title: 'Hotel', image: HOTEL, facts: ['$145 per room per night, 3 rooms needed', 'Indoor pool; breakfast $18 per person', 'On the highway, 15-minute drive to town', 'Free parking and 24-hour front desk'] }
+            { key: 'A', title: 'Bed-and-breakfast', image: '<img src="tests/img/U/opt_A.jpg" alt="Photo: Bed-and-breakfast">', facts: ['$170 per room per night, 3 rooms needed', 'Home-cooked breakfast included', 'Five-minute walk to shops and restaurants', 'Quiet house rules: no guests in common areas after 10:00 p.m.'] },
+            { key: 'B', title: 'Hotel', image: '<img src="tests/img/U/opt_B.jpg" alt="Photo: Hotel">', facts: ['$145 per room per night, 3 rooms needed', 'Indoor pool; breakfast $18 per person', 'On the highway, 15-minute drive to town', 'Free parking and 24-hour front desk'] }
           ],
-          third: { key: 'C', title: 'Lakeside cottage', image: COTTAGE, facts: ['$900 for 2 nights, plus $120 cleaning fee', 'Sleeps 6, with a kitchen and a dock', 'Must cook your own meals', '25-minute drive to town on a gravel road'] },
+          third: { key: 'C', title: 'Lakeside cottage', image: '<img src="tests/img/U/opt_C.jpg" alt="Photo: Lakeside cottage">', facts: ['$900 for 2 nights, plus $120 cleaning fee', 'Sleeps 6, with a kitchen and a dock', 'Must cook your own meals', '25-minute drive to town on a gravel road'] },
           persuade: 'A family member thinks the cottage would be better. Persuade this family member that your choice is better. Explain why.'
         },
         { id: 'S6', title: 'Task 6: Dealing with a Difficult Situation', prep: 60, speak: 60, prompt: '<p>Weeks ago, you promised your grandmother that you would go with her this Saturday morning to buy her first smartphone and help her learn to video call her family. She is nervous about the technology and has said she would not go alone. Today, your manager asked you to represent your company at a trade show on Saturday morning, because the coworker who was supposed to go is sick. Your manager mentioned that this would help your chances of a promotion.</p><p><b>Choose ONE:</b></p><p><b>Option A:</b> Talk to your grandmother. Explain why you cannot go with her on Saturday.</p><p><b>Option B:</b> Talk to your manager. Explain why you cannot go to the trade show.</p>' },
         { id: 'S7', title: 'Task 7: Expressing Opinions', prep: 30, speak: 90, prompt: '<p>Your local school board is reviewing its storm policy. At the moment, all schools close whenever a winter storm warning is issued, which happened eleven times last winter. Many working parents say the closures leave them scrambling for child care and cost students too much class time, and they would like schools to stay open and let families decide. Others, including many bus drivers, say safety must come first, especially on icy rural roads.</p><p>The board has asked parents and community members for their views before it decides. Should schools stay open during winter storm warnings? Explain your reasons.</p>' },
-        { id: 'S8', title: 'Task 8: Describing an Unusual Situation', prep: 30, speak: 60, prompt: 'You are in a hardware store and see this unusual emergency gadget for $70. Call your friend, who lives in the country, loses power several times every winter and has only about $80 to spend. The gadget weighs almost two kilograms, and ten minutes of turning the handle gives about thirty minutes of light. Describe the gadget and explain whether you think your friend should buy it.', image: ODDGADGET }
+        { id: 'S8', title: 'Task 8: Describing an Unusual Situation', prep: 30, speak: 60, prompt: 'You are in a hardware store and see this unusual emergency gadget for $70. Call your friend, who lives in the country, loses power several times every winter and has only about $80 to spend. The gadget weighs almost two kilograms, and ten minutes of turning the handle gives about thirty minutes of light. Describe the gadget and explain whether you think your friend should buy it.', image: '<img src="tests/img/U/object.jpg" alt="An unusual emergency gadget in a hardware store">' }
       ]
     }
   });

@@ -1,14 +1,15 @@
 # CELPIP Mock Exam: Lessons Learnt
 
 Folder: `C:\Users\ramne\Documents\Celpip test`
-Last updated: 2026-10-21 (session 1, sixth update: Meta AI Part 5 videos for all 11 tests)
+Last updated: 2026-10-22 (tests L to U added; real-looking Speaking pictures for all 21 tests)
 
 ## What exists
 
 | Item | Full path | Purpose |
 |---|---|---|
-| Exam page | `C:\Users\ramne\Documents\Celpip test\CELPIP_Mock_Exam.html` | Full four-section mock exam. Open in Chrome or Edge. Pick the test (A to K) on the start screen. |
-| Test content | `C:\Users\ramne\Documents\Celpip test\tests\mock_test_A.js` to `mock_test_K.js` | 11 complete tests: questions, transcripts, answer keys, speaking pictures. |
+| Exam page | `C:\Users\ramne\Documents\Celpip test\CELPIP_Mock_Exam.html` | Full four-section mock exam. Open in Chrome or Edge. Pick the test (A to U) on the start screen. |
+| Test content | `C:\Users\ramne\Documents\Celpip test\tests\mock_test_A.js` to `mock_test_U.js` | 21 complete tests: questions, transcripts, answer keys. |
+| Speaking pictures | `C:\Users\ramne\Documents\Celpip test\tests\img\<TEST>\` | scene.jpg (Tasks 3 and 4), opt_A/B/C.jpg (Task 5 photos), object.jpg (Task 8). Made with ChatGPT. |
 | Author tools | `C:\Users\ramne\Documents\Celpip test\tools\` | `AUTHOR_SPEC.md` (rules for writing a test), `validate.js` (structure checker), `blind.js` and `compare.js` (blind answer-key check), `render_svgs.py` (picture check). |
 | Responses | `C:\Users\ramne\Documents\Celpip test\responses\<Name>_<date>_<time>\` | Created by the page. One folder per attempt. |
 | Online copy (GitHub) | `C:\Users\ramne\Documents\GitHub\Storymaps\Pages\Apps\Celpip prep\` | Same app in the Storymaps repo (clenny-r/Storymaps), served at https://twcministries.net/Pages/Apps/Celpip%20prep/ |
@@ -23,7 +24,7 @@ Last updated: 2026-10-21 (session 1, sixth update: Meta AI Part 5 videos for all
 
 ## User requirements (keep applying)
 
-1. Tests B to K are slightly HARDER than the real CELPIP (aimed at CLB 8 to 11). Test A is close to real difficulty.
+1. All tests sit slightly ABOVE real CELPIP difficulty (aimed at CLB 8 to 11). New items follow tools\AUTHOR_SPEC_V2.md.
 2. Every saved file name holds the candidate name, attempt time and save time; nothing is ever overwritten.
 3. Layout must match the official test software (traced from the saved sample page): page never scrolls; grey title strip with title left, "Time remaining" and blue NEXT right; two equal panels that each scroll on their own (left grey #f5f5f5 = instructions and media or passage, right pale blue-green #eef8f9 = questions); instructions bold dark blue #1a578a with key word in #4789ac; grey rounded status boxes with an icon tile and 18 px cyan progress bar; answer list with dotted dividers, light green hover, teal selected and underlined.
 4. Double check everything; no em dashes anywhere.
@@ -110,6 +111,27 @@ Last updated: 2026-10-21 (session 1, sixth update: Meta AI Part 5 videos for all
 4. Only the changed Listening segments were re-recorded with Kokoro, with the same voices (voice assignment depends on the order of the cast objects, so never reorder or add cast). tools\gen_kokoro_audio.py skips files that already exist: delete the changed mp3s first, and keep the manifest's "list" up to date or the page will not play new files.
 5. Checks: blind solvers matched 836 of 836 keys; after the final Reading polish 418 of 418 again; a second independent rating found most parts at target and nothing well above; the full screen test of all 11 tests showed 0 page errors. One bug found and fixed: a stray ",," in F and G speaking lists made an empty task.
 6. Running editors in parallel worked well when each agent owned whole test files and wrote a changes_<T>.json listing which audio segments and spoken questions changed; audio was then regenerated in one queue (2 CPU cores, about 5 minutes per test).
+
+## Ten new tests L to U (2026-10-21 night)
+
+1. Written to tools\AUTHOR_SPEC_V2.md from the start, then the same pipeline as A to K: critical review and fixes, blind answer-key check (760 of 760 matched), Kokoro voices, full screen test (0 page errors), push, live check, Meta AI Part 5 video per test.
+2. Blind-check flags that were real and fixed: N L1.3 key reworded, R R2.6 stem changed; H R1.7 distractor and G R1.8 rule also tightened.
+3. Meta AI video trimmer fix (tools\meta_assemble.py): start detection keeps the strict loudness threshold, but end-point candidates use a lower threshold and must reach 80 percent of the line's word count. The old version cut quiet line endings.
+4. Meta prompt helper (tools\meta_make_prompts.py): grammar of the cast description matters ("in the MIDDLE", "an orange", grey hair only from age 58, "a bald head"). Every prompt ends with "The other two listen. No captions, no subtitles, no music, no text on screen."
+5. Final mean match scores of the U video 0.85, no captions found; S 0.90, T 0.83.
+
+## Real-looking Speaking pictures (2026-10-22)
+
+1. The flat SVG pictures were replaced in all 21 tests by image files in the official style (checked against the official Practice Test A on 2026-10-21):
+   - Tasks 3 and 4 share one detailed hand-drawn full-colour comic illustration with about 14 people, 8 or more separate activities and one clear "what happens next" cue (scene.jpg, 1200 px wide);
+   - Task 5 uses a real-looking PHOTO for each option (opt_A, opt_B, opt_C .jpg, 600 px wide, 3:2);
+   - Task 8 is a hand-coloured pencil drawing of ONE strange object on white (object.jpg, 1000 px wide).
+2. Made with ChatGPT image generation in Chrome (account plan "Go"); 58 generations, no limit was hit. Prompts: tools\img_prompts.json (scenes keep each test's existing S4 cue; objects list every feature named in the S8 task). Original pictures only, never copies of the official ones.
+3. Saving trick: 63 Task 5 photos were asked for as 16 images, each a 2x2 grid of four photos with thin white gutters. tools\img_build.py finds the gutters, cuts the cells, crops to 3:2 and writes all JPEGs. ChatGPT kept the gutters clean every time.
+4. Fast ChatGPT loop: insert the prompt with document.execCommand('insertText') on the ProseMirror box, press Return, wait 50 s, then fetch the newest "Generated image" img src as a blob and save it with a chosen name. ChatGPT virtualises old messages, so never count images; take the last one and skip any src already saved. One JavaScript call may not run longer than 45 s.
+5. A second Claude session drew the 21 objects in its own ChatGPT tab at the same time; this worked well and halved the time. Give it a prompts file and exact file names, and keep all code edits in one session.
+6. tools\validate.js now accepts an image tag and checks that the file exists, so a missing picture shows as an error. Engine CSS: .pic img and .card img fill the panel; card photos are fixed at 3:2.
+7. The start screen example name is now "Jane Doe".
 
 ## Ideas not done yet
 

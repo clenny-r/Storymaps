@@ -5,6 +5,7 @@ const fs = require('fs'), vm = require('vm');
 const SETTINGS = ['office', 'store', 'studio', 'news', 'meeting', 'classroom', 'outdoor'];
 const STYLES = ['short', 'long', 'bun', 'curly', 'bald'];
 let totalErr = 0;
+const PIC = (h) => { h = h || ''; if (/^<svg[\s\S]*<\/svg>$/.test(h)) return true; const m = h.match(/^<img src="(tests\/img\/[A-Z]\/[A-Za-z_]+\.jpg)" alt="[^"]+">$/); return !!m && require('fs').existsSync(require('path').join(__dirname, '..', m[1])); };
 for (const file of process.argv.slice(2)) {
   const err = [], warn = [];
   const E = m => err.push(m), W = m => warn.push(m);
@@ -117,14 +118,14 @@ for (const file of process.argv.slice(2)) {
     if (t.title !== title) E(`${id} title must be "${title}"`);
     if (!t.prompt) E(`${id} needs a prompt`);
   });
-  if (st[2] && !/^<svg[\s\S]*<\/svg>$/.test(st[2].image || '')) E('S3 needs an SVG image');
+  if (st[2] && !PIC(st[2].image)) E('S3 needs a picture (image file that exists, or SVG)');
   if (st[3] && st[3].image !== st[2].image) E('S4 must reuse the S3 image');
-  if (st[7] && !/^<svg[\s\S]*<\/svg>$/.test(st[7].image || '')) E('S8 needs an SVG image');
+  if (st[7] && !PIC(st[7].image)) E('S8 needs a picture (image file that exists, or SVG)');
   if (st[4]) {
     const c = st[4];
     if (c.type !== 'compare' || c.select !== 60) E('S5 must be type compare with select 60');
-    if (!c.choices || c.choices.length !== 2 || c.choices.some(x => !/^<svg/.test(x.image || '') || !x.facts || x.facts.length < 3)) E('S5 needs 2 choices, each with an SVG image and 3 or more facts');
-    if (!c.third || !/^<svg/.test(c.third.image || '') || !c.third.facts) E('S5 needs a third option with image and facts');
+    if (!c.choices || c.choices.length !== 2 || c.choices.some(x => !PIC(x.image) || !x.facts || x.facts.length < 3)) E('S5 needs 2 choices, each with an SVG image and 3 or more facts');
+    if (!c.third || !PIC(c.third.image) || !c.third.facts) E('S5 needs a third option with image and facts');
     if (!c.persuade) E('S5 needs persuade text');
   }
   if (st[5] && !/Option A/.test(st[5].prompt) || st[5] && !/Option B/.test(st[5].prompt)) E('S6 prompt must offer Option A and Option B');

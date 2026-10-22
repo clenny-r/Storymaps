@@ -10,7 +10,7 @@ I am continuing my CELPIP (Canadian English Language Proficiency Index Program) 
 
 Read first: C:\Users\ramne\Documents\Celpip test\LESSONS.md (requirements, decisions, voices, Meta AI videos), then tools\AUTHOR_SPEC.md.
 
-Status: all 11 tests (A to K) were audited and rewritten on 2026-10-21 to sit slightly above real CELPIP difficulty (see celpip_audit.html in the working folder). They are live with natural recorded voices (Kokoro mp3s) for every listening conversation and spoken question, and a Meta AI video for Listening Part 5 of every test. Do NOT change any Listening text: it must match its recordings and videos (regenerate with tools\gen_kokoro_audio.py and tools\META_AI_RUNBOOK.md if a listening line ever changes).
+Status: 21 tests (A to U) are live, all slightly above real CELPIP difficulty (A to K audited 2026-10-21, see celpip_audit.html; L to U written to tools\AUTHOR_SPEC_V2.md). Every test has natural recorded voices (Kokoro mp3s), a Meta AI video for Listening Part 5, and real-looking Speaking pictures made with ChatGPT in tests\img\<TEST>\ (prompts in tools\img_prompts.json, cutter in tools\img_build.py). Do NOT change any Listening text: it must match its recordings and videos (regenerate with tools\gen_kokoro_audio.py and tools\META_AI_RUNBOOK.md if a listening line ever changes).
 
 If a parallel session left files in C:\Users\ramne\Documents\Celpip test\_parallel\, read its README.md, check that Listening sections are byte-for-byte unchanged, run tools\validate.js and the blind check, then copy the changed tests\mock_test_X.js into BOTH folders and push with GitHub Desktop.
 

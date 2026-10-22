@@ -6,99 +6,7 @@
 (function () {
   window.MOCK_TESTS = window.MOCK_TESTS || [];
 
-  /* ---------- small SVG helpers for speaking pictures ---------- */
-  function person(x, y, o) {
-    o = o || {};
-    var s = o.s || 1, skin = o.skin || '#e0b48f', shirt = o.shirt || '#3d7cc9', pants = o.pants || '#38414d', hair = o.hair || '#3b2a20';
-    var arms = o.arms || 'down';
-    var a = arms === 'up' ? '<line x1="-7" y1="-30" x2="-16" y2="-50" /><line x1="7" y1="-30" x2="16" y2="-50" />'
-      : arms === 'right' ? '<line x1="-7" y1="-30" x2="-12" y2="-14" /><line x1="7" y1="-30" x2="24" y2="-36" />'
-      : arms === 'left' ? '<line x1="-7" y1="-30" x2="-24" y2="-36" /><line x1="7" y1="-30" x2="12" y2="-14" />'
-      : '<line x1="-7" y1="-30" x2="-12" y2="-14" /><line x1="7" y1="-30" x2="12" y2="-14" />';
-    var legs = o.sit ? '<line x1="-4" y1="-12" x2="-14" y2="-12" /><line x1="4" y1="-12" x2="-6" y2="-12" /><line x1="-14" y1="-12" x2="-14" y2="0" /><line x1="-6" y1="-12" x2="-6" y2="0" />'
-      : '<line x1="-4" y1="-12" x2="-7" y2="0" /><line x1="4" y1="-12" x2="7" y2="0" />';
-    return '<g transform="translate(' + x + ' ' + y + ') scale(' + s + ')">' +
-      '<g stroke="' + skin + '" stroke-width="4" stroke-linecap="round">' + a + '</g>' +
-      '<g stroke="' + pants + '" stroke-width="5" stroke-linecap="round">' + legs + '</g>' +
-      '<rect x="-8" y="-36" width="16" height="25" rx="5" fill="' + shirt + '"/>' +
-      '<circle cx="0" cy="-45" r="9" fill="' + skin + '"/>' +
-      '<path d="M-9 -46 a9 9 0 0 1 18 0 q-9 -6 -18 0z" fill="' + hair + '"/>' +
-      '</g>';
-  }
-
-  var PARK = (function () {
-    var p = '';
-    p += '<svg viewBox="0 0 640 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A busy city park on a summer afternoon">';
-    p += '<rect width="640" height="400" fill="#bfe3f5"/>';
-    p += '<g fill="#5f6b78" opacity=".85"><ellipse cx="560" cy="60" rx="70" ry="30"/><ellipse cx="610" cy="75" rx="50" ry="25"/><ellipse cx="515" cy="78" rx="45" ry="22"/></g>';
-    p += '<g stroke="#7d8ea0" stroke-width="2" opacity=".8"><line x1="530" y1="105" x2="524" y2="122"/><line x1="560" y1="105" x2="554" y2="122"/><line x1="590" y1="102" x2="584" y2="119"/></g>';
-    p += '<circle cx="90" cy="60" r="28" fill="#f7d35c"/>';
-    p += '<rect y="180" width="640" height="220" fill="#8cc56d"/>';
-    p += '<path d="M0 330 C160 290 330 300 640 255 L640 290 C350 330 170 325 0 365z" fill="#e3d2b0"/>';
-    p += '<ellipse cx="510" cy="215" rx="95" ry="28" fill="#6fb3d9"/>';
-    p += '<g fill="#fff"><ellipse cx="480" cy="212" rx="9" ry="5"/><ellipse cx="505" cy="220" rx="9" ry="5"/></g><g fill="#f0b23a"><circle cx="488" cy="208" r="3"/><circle cx="513" cy="216" r="3"/></g>';
-    p += '<rect x="58" y="120" width="16" height="80" fill="#7a5233"/><circle cx="66" cy="110" r="46" fill="#4f9a45"/><circle cx="40" cy="128" r="30" fill="#5aa84e"/><circle cx="95" cy="125" r="30" fill="#5aa84e"/>';
-    /* kite drifting toward the tree */
-    p += '<polygon points="170,70 186,90 170,112 154,90" fill="#e2543b"/><line x1="170" y1="112" x2="225" y2="250" stroke="#555" stroke-width="1.2"/>';
-    p += '<path d="M170 112 q-6 10 4 16 q-8 8 2 14" stroke="#e2543b" stroke-width="2" fill="none"/>';
-    p += person(225, 262, { shirt: '#f2a33a', s: .9, arms: 'up', skin: '#8d5a3b', hair: '#1d1410' });
-    /* picnic family */
-    p += '<rect x="250" y="275" width="110" height="40" fill="#d9534f" transform="skewX(-12)"/>';
-    p += '<g fill="#fff" opacity=".6"><rect x="262" y="275" width="10" height="40" transform="skewX(-12)"/><rect x="292" y="275" width="10" height="40" transform="skewX(-12)"/><rect x="322" y="275" width="10" height="40" transform="skewX(-12)"/></g>';
-    p += '<rect x="290" y="270" width="26" height="18" rx="3" fill="#a8743e"/>';
-    p += person(270, 298, { shirt: '#6a4fb0', sit: true, skin: '#c98c64', hair: '#2a1b12' });
-    p += person(335, 300, { shirt: '#2f8f83', sit: true, skin: '#f0c9a6', hair: '#c49a42' });
-    /* ice cream cart with a line */
-    p += '<rect x="400" y="262" width="62" height="40" rx="4" fill="#f4f1ea" stroke="#d27aa5" stroke-width="3"/><path d="M396 262 q35 -34 70 0z" fill="#d27aa5"/><circle cx="412" cy="306" r="8" fill="#444"/><circle cx="452" cy="306" r="8" fill="#444"/>';
-    p += '<text x="431" y="287" font-size="10" text-anchor="middle" fill="#9b3d6c" font-family="sans-serif">ICE CREAM</text>';
-    p += person(478, 300, { shirt: '#ffffff', skin: '#e3b28b', hair: '#555' });
-    p += person(498, 302, { shirt: '#3fa3d6', s: .75, skin: '#7a4b31', hair: '#120c08', arms: 'left' });
-    p += '<polygon points="492,268 488,277 496,277" fill="#d9a35b"/><circle cx="492" cy="266" r="4" fill="#f7c2d6"/>';
-    p += person(520, 304, { shirt: '#c64b73', skin: '#f2cfb0', hair: '#7a4a24' });
-    /* man walking a dog toward the pond */
-    p += person(560, 340, { shirt: '#4a6d8c', skin: '#d6a07a', hair: '#333', arms: 'right' });
-    p += '<line x1="582" y1="313" x2="610" y2="330" stroke="#8a2d2d" stroke-width="2"/>';
-    p += '<g fill="#a5713f"><ellipse cx="616" cy="334" rx="14" ry="7"/><circle cx="628" cy="328" r="6"/><rect x="606" y="338" width="3" height="10"/><rect x="622" y="338" width="3" height="10"/></g>';
-    /* bench with older couple */
-    p += '<rect x="110" y="300" width="80" height="8" fill="#7d5a3c"/><rect x="110" y="285" width="80" height="6" fill="#7d5a3c"/><rect x="116" y="308" width="5" height="16" fill="#555"/><rect x="180" y="308" width="5" height="16" fill="#555"/>';
-    p += person(132, 322, { shirt: '#8a9aa8', sit: true, skin: '#f0c9a6', hair: '#d8d8d8' });
-    p += person(165, 322, { shirt: '#b87fb5', sit: true, skin: '#f0c9a6', hair: '#e6e6e6' });
-    /* cyclist on the path */
-    p += '<g transform="translate(330 352)"><circle cx="-18" cy="0" r="12" fill="none" stroke="#333" stroke-width="3"/><circle cx="18" cy="0" r="12" fill="none" stroke="#333" stroke-width="3"/><path d="M-18 0 L-2 -16 L18 0 M-2 -16 L10 -16" stroke="#c0392b" stroke-width="3" fill="none"/></g>';
-    p += person(328, 338, { shirt: '#f4d03f', skin: '#c98c64', hair: '#2a1b12', arms: 'right' });
-    p += '</svg>';
-    return p;
-  })();
-
-  var CAMP = '<svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg"><rect width="200" height="120" fill="#cfeaf7"/><rect y="78" width="200" height="42" fill="#79b86a"/><ellipse cx="150" cy="86" rx="48" ry="12" fill="#5aa6d6"/><polygon points="40,90 75,40 110,90" fill="#e67e22"/><polygon points="75,40 75,90 60,90" fill="#c4661a"/><polygon points="160,78 175,45 190,78" fill="#3f7f3a"/><polygon points="135,78 148,52 161,78" fill="#4a8c44"/><circle cx="30" cy="22" r="10" fill="#f6d55c"/></svg>';
-  var HOTEL = '<svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg"><rect width="200" height="120" fill="#dfe8f2"/><rect x="20" y="50" width="34" height="70" fill="#9aa9ba"/><rect x="146" y="40" width="36" height="80" fill="#9aa9ba"/><rect x="62" y="18" width="76" height="102" fill="#4f6a8a"/><g fill="#f6e7a6">' +
-    (function () { var w = ''; for (var r = 0; r < 6; r++) for (var c = 0; c < 4; c++) w += '<rect x="' + (70 + c * 17) + '" y="' + (26 + r * 14) + '" width="9" height="8"/>'; return w; })() +
-    '</g><rect x="90" y="102" width="20" height="18" fill="#2c3e50"/><text x="100" y="15" font-size="10" text-anchor="middle" font-family="sans-serif" fill="#2c3e50">HOTEL</text></svg>';
-  var WATERPARK = '<svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg"><rect width="200" height="120" fill="#e8f4fb"/><rect x="10" y="30" width="180" height="90" fill="#cfd8e3"/><polygon points="10,30 100,6 190,30" fill="#9fb2c6"/><path d="M40 40 C120 40 40 80 120 80 C160 80 150 104 170 108" stroke="#f39c12" stroke-width="10" fill="none" stroke-linecap="round"/><rect x="24" y="96" width="150" height="20" rx="4" fill="#4fb3e8"/><text x="100" y="24" font-size="9" text-anchor="middle" font-family="sans-serif" fill="#2c3e50">INDOOR WATER PARK</text></svg>';
-
-  var ODDBIKE = '<svg viewBox="0 0 640 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="An unusual bicycle at a garage sale">' +
-    '<rect width="640" height="400" fill="#efe9df"/><rect y="300" width="640" height="100" fill="#b9b2a6"/>' +
-    '<rect x="30" y="40" width="140" height="70" rx="6" fill="#fff" stroke="#c9bfae"/><text x="100" y="72" text-anchor="middle" font-family="sans-serif" font-size="18" fill="#7a4b2a">GARAGE</text><text x="100" y="95" text-anchor="middle" font-family="sans-serif" font-size="18" fill="#7a4b2a">SALE</text>' +
-    '<rect x="470" y="60" width="120" height="44" rx="6" fill="#f6d55c"/><text x="530" y="89" text-anchor="middle" font-family="sans-serif" font-size="20" fill="#333">$75</text>' +
-    /* wheels */
-    '<circle cx="190" cy="300" r="62" fill="none" stroke="#333" stroke-width="8"/><circle cx="430" cy="300" r="62" fill="none" stroke="#333" stroke-width="8"/>' +
-    '<g stroke="#999" stroke-width="2"><line x1="190" y1="238" x2="190" y2="362"/><line x1="128" y1="300" x2="252" y2="300"/><line x1="430" y1="238" x2="430" y2="362"/><line x1="368" y1="300" x2="492" y2="300"/></g>' +
-    /* frame */
-    '<path d="M190 300 L280 210 L400 210 L430 300 M280 210 L310 300 L190 300 M310 300 L400 210" stroke="#2e86c1" stroke-width="9" fill="none" stroke-linejoin="round"/>' +
-    '<path d="M400 210 L392 170 L420 160" stroke="#555" stroke-width="7" fill="none" stroke-linecap="round"/>' +
-    '<rect x="258" y="190" width="46" height="12" rx="6" fill="#222"/>' +
-    /* umbrella over the seat */
-    '<line x1="282" y1="190" x2="300" y2="80" stroke="#555" stroke-width="4"/><path d="M200 95 Q300 10 400 80 Q350 70 300 80 Q250 75 200 95z" fill="#e74c3c"/>' +
-    /* front basket with a cup holder */
-    '<rect x="420" y="165" width="70" height="44" rx="5" fill="#c49a5a" stroke="#8a6331" stroke-width="3"/><g stroke="#8a6331" stroke-width="2"><line x1="440" y1="165" x2="440" y2="209"/><line x1="460" y1="165" x2="460" y2="209"/><line x1="420" y1="187" x2="490" y2="187"/></g>' +
-    '<rect x="372" y="150" width="16" height="22" rx="3" fill="#7f8c8d"/>' +
-    /* side car for a dog */
-    '<rect x="70" y="250" width="90" height="48" rx="18" fill="#27ae60"/><circle cx="96" cy="292" r="16" fill="none" stroke="#333" stroke-width="5"/>' +
-    '<g fill="#a5713f"><circle cx="128" cy="238" r="16"/><ellipse cx="116" cy="230" rx="6" ry="11"/><ellipse cx="140" cy="230" rx="6" ry="11"/></g><circle cx="123" cy="236" r="2" fill="#222"/><circle cx="133" cy="236" r="2" fill="#222"/>' +
-    /* small solar panel on the back rack */
-    '<rect x="212" y="214" width="56" height="10" fill="#555"/><rect x="214" y="196" width="52" height="18" fill="#1f3b73" stroke="#7fa3d6"/>' +
-    '</svg>';
-
+  /* Speaking pictures are image files in tests/img/A/ (scene, object, opt_A to opt_C). */
   window.MOCK_TESTS.push({
     id: 'A',
     title: 'Mock Test A',
@@ -439,21 +347,21 @@
       tasks: [
         { id: 'S1', title: 'Task 1: Giving Advice', prep: 30, speak: 90, prompt: 'A friend of yours has just moved to a new city for work, where he does not know anyone. He works long hours, including some weekends, and he is trying to save money for a car. Give him advice on how to meet people and settle in.' },
         { id: 'S2', title: 'Task 2: Talking about a Personal Experience', prep: 30, speak: 60, prompt: 'Talk about a time when you had to learn something new very quickly, for example for a job, a move or a family situation. What did you have to learn, what made it difficult, and how did you manage?' },
-        { id: 'S3', title: 'Task 3: Describing a Scene', prep: 30, speak: 60, prompt: 'Describe some things that are happening in the picture below as well as you can. The person you are speaking to cannot see the picture.', image: PARK },
-        { id: 'S4', title: 'Task 4: Making Predictions', prep: 30, speak: 60, prompt: 'In this picture, what do you think will most probably happen next?', image: PARK },
+        { id: 'S3', title: 'Task 3: Describing a Scene', prep: 30, speak: 60, prompt: 'Describe some things that are happening in the picture below as well as you can. The person you are speaking to cannot see the picture.', image: '<img src="tests/img/A/scene.jpg" alt="A busy city park on a summer afternoon">' },
+        { id: 'S4', title: 'Task 4: Making Predictions', prep: 30, speak: 60, prompt: 'In this picture, what do you think will most probably happen next?', image: '<img src="tests/img/A/scene.jpg" alt="A busy city park on a summer afternoon">' },
         {
           id: 'S5', title: 'Task 5: Comparing and Persuading', type: 'compare', select: 60, prep: 60, speak: 60,
           prompt: 'Your family is planning a weekend activity. Choose the option you prefer. In the next section, you will need to persuade a family member that your choice is better.',
           choices: [
-            { key: 'A', title: 'Camping at Keji Lake', image: CAMP, facts: ['2 nights in a tent', 'Campsite: $90', '2-hour drive', 'Swimming, hiking, campfire', 'Rain possible on Saturday'] },
-            { key: 'B', title: 'City hotel weekend', image: HOTEL, facts: ['2 nights in a hotel', 'Cost: $320, plus $25 a night for parking', '1-hour drive', 'Museums, restaurants, indoor pool'] }
+            { key: 'A', title: 'Camping at Keji Lake', image: '<img src="tests/img/A/opt_A.jpg" alt="Photo: Camping at Keji Lake">', facts: ['2 nights in a tent', 'Campsite: $90', '2-hour drive', 'Swimming, hiking, campfire', 'Rain possible on Saturday'] },
+            { key: 'B', title: 'City hotel weekend', image: '<img src="tests/img/A/opt_B.jpg" alt="Photo: City hotel weekend">', facts: ['2 nights in a hotel', 'Cost: $320, plus $25 a night for parking', '1-hour drive', 'Museums, restaurants, indoor pool'] }
           ],
-          third: { key: 'C', title: 'Indoor water park', image: WATERPARK, facts: ['1 day only', 'Tickets: $150 for the family', '30-minute drive', 'Water slides, wave pool, arcade'] },
+          third: { key: 'C', title: 'Indoor water park', image: '<img src="tests/img/A/opt_C.jpg" alt="Photo: Indoor water park">', facts: ['1 day only', 'Tickets: $150 for the family', '30-minute drive', 'Water slides, wave pool, arcade'] },
           persuade: 'Your family member suggests the indoor water park instead. Persuade them that your choice is better. Explain why.'
         },
         { id: 'S6', title: 'Task 6: Dealing with a Difficult Situation', prep: 60, speak: 60, prompt: '<p>You promised to help your coworker move to a new apartment this Saturday. Today, your manager asked you to work on Saturday to meet an important client. Doing this could help you get a promotion.</p><p><b>Choose ONE:</b></p><p><b>Option A:</b> Talk to your coworker. Explain why you cannot help on Saturday.</p><p><b>Option B:</b> Talk to your manager. Explain why you cannot work on Saturday.</p>' },
         { id: 'S7', title: 'Task 7: Expressing Opinions', prep: 30, speak: 90, prompt: 'Your company is deciding whether to let all staff work from home two days a week. Some managers say it would save commuting time and help employees with families. Others worry that teamwork would suffer and that new employees would be harder to train. Your manager has asked for your opinion. Should the company allow it? Explain your reasons.' },
-        { id: 'S8', title: 'Task 8: Describing an Unusual Situation', prep: 30, speak: 60, prompt: 'You are at a garage sale and see this unusual bicycle for $75. Your friend collects bicycles, but he has only $100 to spend this month and very little space left in his garage. Call your friend. Describe the bicycle and explain whether you think he should buy it.', image: ODDBIKE }
+        { id: 'S8', title: 'Task 8: Describing an Unusual Situation', prep: 30, speak: 60, prompt: 'You are at a garage sale and see this unusual bicycle for $75. Your friend collects bicycles, but he has only $100 to spend this month and very little space left in his garage. Call your friend. Describe the bicycle and explain whether you think he should buy it.', image: '<img src="tests/img/A/object.jpg" alt="An unusual bicycle at a garage sale">' }
       ]
     }
   });

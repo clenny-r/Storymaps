@@ -7,141 +7,7 @@
 (function () {
   window.MOCK_TESTS = window.MOCK_TESTS || [];
 
-  /* ---------- small SVG helpers for speaking pictures ---------- */
-  function person(x, y, o) {
-    o = o || {};
-    var s = o.s || 1, skin = o.skin || '#e0b48f', shirt = o.shirt || '#3d7cc9', pants = o.pants || '#38414d', hair = o.hair || '#3b2a20';
-    var arms = o.arms || 'down';
-    var a = arms === 'up' ? '<line x1="-7" y1="-30" x2="-16" y2="-50" /><line x1="7" y1="-30" x2="16" y2="-50" />'
-      : arms === 'right' ? '<line x1="-7" y1="-30" x2="-12" y2="-14" /><line x1="7" y1="-30" x2="24" y2="-36" />'
-      : arms === 'left' ? '<line x1="-7" y1="-30" x2="-24" y2="-36" /><line x1="7" y1="-30" x2="12" y2="-14" />'
-      : '<line x1="-7" y1="-30" x2="-12" y2="-14" /><line x1="7" y1="-30" x2="12" y2="-14" />';
-    var legs = o.sit ? '<line x1="-4" y1="-12" x2="-14" y2="-12" /><line x1="4" y1="-12" x2="-6" y2="-12" /><line x1="-14" y1="-12" x2="-14" y2="0" /><line x1="-6" y1="-12" x2="-6" y2="0" />'
-      : '<line x1="-4" y1="-12" x2="-7" y2="0" /><line x1="4" y1="-12" x2="7" y2="0" />';
-    return '<g transform="translate(' + x + ' ' + y + ') scale(' + s + ')">' +
-      '<g stroke="' + skin + '" stroke-width="4" stroke-linecap="round">' + a + '</g>' +
-      '<g stroke="' + pants + '" stroke-width="5" stroke-linecap="round">' + legs + '</g>' +
-      '<rect x="-8" y="-36" width="16" height="25" rx="5" fill="' + shirt + '"/>' +
-      '<circle cx="0" cy="-45" r="9" fill="' + skin + '"/>' +
-      '<path d="M-9 -46 a9 9 0 0 1 18 0 q-9 -6 -18 0z" fill="' + hair + '"/>' +
-      '</g>';
-  }
-
-  function bed(x, y, w, plant) {
-    var t = '<rect x="' + x + '" y="' + y + '" width="' + w + '" height="26" fill="#8b5a2b" stroke="#5b3a1e" stroke-width="2"/>' +
-      '<rect x="' + (x + 4) + '" y="' + (y + 3) + '" width="' + (w - 8) + '" height="8" fill="#4e342e"/>';
-    for (var i = x + 14; i < x + w - 8; i += 22) {
-      t += '<path d="M' + i + ' ' + (y + 4) + ' q-8 -14 -2 -22 q6 8 2 22z" fill="' + (plant || '#2e8b57') + '"/><path d="M' + i + ' ' + (y + 4) + ' q8 -12 10 -18 q-10 2 -10 18z" fill="#3cb371"/>';
-    }
-    return t;
-  }
-
-  var GARDEN = (function () {
-    var p = '';
-    p += '<svg viewBox="0 0 640 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A busy community garden on a Saturday morning as rain clouds approach">';
-    p += '<rect width="640" height="400" fill="#bfe3f5"/>';
-    /* sun on the left, dark rain cloud arriving on the right */
-    p += '<circle cx="70" cy="45" r="24" fill="#ffd54f"/>';
-    p += '<g fill="#6b7280"><ellipse cx="520" cy="42" rx="70" ry="26"/><ellipse cx="585" cy="55" rx="55" ry="24"/><ellipse cx="460" cy="58" rx="45" ry="18"/></g>';
-    p += '<g stroke="#5d7a99" stroke-width="2"><line x1="500" y1="78" x2="494" y2="98"/><line x1="530" y1="80" x2="524" y2="100"/><line x1="560" y1="80" x2="554" y2="100"/><line x1="590" y1="78" x2="584" y2="98"/></g>';
-    /* ground and back fence */
-    p += '<rect y="150" width="640" height="250" fill="#9ccc65"/>';
-    p += '<g fill="#d7b98e" stroke="#a1825a" stroke-width="1">' + (function () { var f = ''; for (var i = 0; i < 640; i += 16) f += '<rect x="' + i + '" y="128" width="12" height="32"/>'; return f; })() + '</g>';
-    p += '<rect y="138" width="640" height="5" fill="#a1825a"/>';
-    /* garden sign */
-    p += '<rect x="150" y="70" width="210" height="34" rx="4" fill="#ffffff" stroke="#2e7d32" stroke-width="2"/><text x="255" y="92" text-anchor="middle" font-family="sans-serif" font-size="13" fill="#2e7d32">COMMUNITY GARDEN</text>';
-    p += '<g stroke="#6d4c2f" stroke-width="4"><line x1="170" y1="104" x2="170" y2="130"/><line x1="340" y1="104" x2="340" y2="130"/></g>';
-    /* tool shed with a person on a ladder fixing the roof */
-    p += '<rect x="540" y="112" width="86" height="76" fill="#b5651d"/><polygon points="532,114 583,84 634,114" fill="#6d4c41"/><rect x="568" y="140" width="26" height="48" fill="#5d4037"/>';
-    p += '<g stroke="#9e9e9e" stroke-width="3"><line x1="518" y1="190" x2="534" y2="104"/><line x1="530" y1="190" x2="546" y2="104"/></g><g stroke="#9e9e9e" stroke-width="2"><line x1="521" y1="174" x2="533" y2="174"/><line x1="524" y1="156" x2="536" y2="156"/><line x1="527" y1="138" x2="539" y2="138"/><line x1="530" y1="120" x2="542" y2="120"/></g>';
-    p += person(536, 140, { s: .75, shirt: '#1565c0', skin: '#8d5a3b', hair: '#120c08', arms: 'up' });
-    p += '<rect x="544" y="96" width="14" height="5" fill="#424242" transform="rotate(-30 551 98)"/>';
-    /* compost bin with a person turning it with a fork */
-    p += '<rect x="440" y="170" width="56" height="40" fill="#5d4037"/><text x="468" y="194" text-anchor="middle" font-family="sans-serif" font-size="9" fill="#ffffff">COMPOST</text>';
-    p += person(420, 214, { s: .85, shirt: '#ef6c00', skin: '#f2cfb0', hair: '#7a4a1d', arms: 'right' });
-    p += '<line x1="436" y1="170" x2="460" y2="160" stroke="#6d4c2f" stroke-width="3"/><path d="M458 156 l8 -2 m-8 6 l9 0 m-8 6 l8 2" stroke="#757575" stroke-width="2"/>';
-    /* raised beds */
-    p += bed(30, 196, 160) + bed(220, 196, 170) + bed(30, 280, 160) + bed(220, 280, 170, '#2e7d32');
-    /* tomatoes on the lower right bed */
-    p += '<g fill="#e53935"><circle cx="300" cy="272" r="4"/><circle cx="318" cy="268" r="4"/><circle cx="340" cy="272" r="4"/><circle cx="362" cy="268" r="4"/></g>';
-    /* woman watering the top left bed */
-    p += person(110, 190, { shirt: '#ad1457', skin: '#c98c64', hair: '#2a1b12', arms: 'right' });
-    p += '<path d="M128 150 l18 0 l0 14 l-18 0z" fill="#2e7d32"/><line x1="146" y1="154" x2="160" y2="146" stroke="#2e7d32" stroke-width="3"/><g stroke="#4fc3f7" stroke-width="1.5"><line x1="160" y1="148" x2="158" y2="190"/><line x1="163" y1="148" x2="164" y2="190"/><line x1="166" y1="148" x2="170" y2="190"/></g>';
-    /* man kneeling to plant seedlings in the top middle bed */
-    p += person(300, 196, { sit: true, shirt: '#00897b', skin: '#e3b28b', hair: '#5d4037', arms: 'right', s: .9 });
-    p += '<rect x="318" y="182" width="22" height="10" fill="#6d4c41"/><path d="M324 182 q-3 -8 0 -12 q3 4 0 12z M334 182 q-3 -8 0 -12 q3 4 0 12z" fill="#43a047"/>';
-    /* woman picking tomatoes into a basket */
-    p += person(378, 276, { shirt: '#fdd835', skin: '#5c3a21', hair: '#120c08', arms: 'left', s: .95 });
-    p += '<path d="M396 252 l22 0 l-4 16 l-14 0z" fill="#c8a165" stroke="#8d6e3f"/><circle cx="403" cy="252" r="3" fill="#e53935"/><circle cx="410" cy="252" r="3" fill="#e53935"/>';
-    /* dog digging in the lower left bed, soil flying */
-    p += '<g><ellipse cx="150" cy="286" rx="22" ry="11" fill="#8d6e63"/><circle cx="130" cy="296" r="9" fill="#8d6e63"/><ellipse cx="124" cy="290" rx="4" ry="7" fill="#5d4037"/><line x1="170" y1="282" x2="182" y2="270" stroke="#8d6e63" stroke-width="4" stroke-linecap="round"/><rect x="134" y="292" width="5" height="12" fill="#8d6e63"/><rect x="160" y="292" width="5" height="10" fill="#8d6e63"/></g>';
-    p += '<g fill="#4e342e"><circle cx="112" cy="276" r="3"/><circle cx="104" cy="268" r="2.5"/><circle cx="116" cy="264" r="2"/><circle cx="98" cy="280" r="2"/></g>';
-    /* child pushing a wheelbarrow of soil */
-    p += person(48, 380, { s: .8, shirt: '#3949ab', skin: '#f2cfb0', hair: '#c49a42', arms: 'right' });
-    p += '<path d="M66 352 l46 0 l-8 18 l-34 0z" fill="#e53935"/><path d="M70 352 q20 -10 38 0z" fill="#4e342e"/><circle cx="104" cy="376" r="7" fill="#212121"/><line x1="66" y1="356" x2="56" y2="352" stroke="#5d4037" stroke-width="3"/>';
-    /* garden hose lying across the path */
-    p += '<path d="M140 400 Q160 360 205 380 Q240 396 262 372 Q280 352 300 360" fill="none" stroke="#2e7d32" stroke-width="5"/>';
-    /* man carrying a tall stack of pots that blocks his view, about to trip on the hose */
-    p += person(240, 368, { shirt: '#6a1b9a', skin: '#d6a07a', hair: '#3b2a20', arms: 'right' });
-    p += '<g fill="#d84315" stroke="#a0300e" stroke-width="1">' + (function () { var t = ''; for (var i = 0; i < 6; i++) t += '<path d="M' + 236 + ' ' + (325 - i * 11) + ' l24 0 l-3 11 l-18 0z"/>'; return t; })() + '</g>';
-    /* seed swap table with a volunteer and a girl choosing packets */
-    p += '<rect x="318" y="330" width="96" height="8" fill="#8d6e63"/><g stroke="#6d4c41" stroke-width="4"><line x1="326" y1="338" x2="326" y2="366"/><line x1="406" y1="338" x2="406" y2="366"/></g>';
-    p += '<rect x="318" y="282" width="72" height="16" rx="3" fill="#ffffff" stroke="#8d6e63"/><text x="354" y="294" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#6d4c41">SEED SWAP</text>';
-    p += '<g><rect x="334" y="322" width="10" height="8" fill="#ffca28"/><rect x="348" y="322" width="10" height="8" fill="#66bb6a"/><rect x="362" y="322" width="10" height="8" fill="#ef5350"/><rect x="376" y="322" width="10" height="8" fill="#ab47bc"/></g>';
-    p += person(404, 330, { s: .8, shirt: '#546e7a', skin: '#ecc9a2', hair: '#9e9e9e', arms: 'left' });
-    p += person(346, 392, { s: .7, shirt: '#f06292', skin: '#a9714b', hair: '#2a1b12', arms: 'up' });
-    /* picnic table with an older man reading a newspaper */
-    p += '<rect x="500" y="318" width="118" height="8" fill="#8b5a2b"/><g stroke="#6d4c2f" stroke-width="5"><line x1="510" y1="326" x2="504" y2="354"/><line x1="608" y1="326" x2="614" y2="354"/></g><rect x="494" y="340" width="130" height="6" fill="#8b5a2b"/>';
-    p += person(566, 342, { sit: true, shirt: '#8e24aa', skin: '#f0c9a6', hair: '#e0e0e0', arms: 'right' });
-    p += '<rect x="578" y="296" width="26" height="20" fill="#fafafa" stroke="#9e9e9e"/><g stroke="#9e9e9e" stroke-width="1"><line x1="582" y1="301" x2="600" y2="301"/><line x1="582" y1="306" x2="600" y2="306"/><line x1="582" y1="311" x2="596" y2="311"/></g>';
-    /* sprinkler turning toward the picnic table */
-    p += '<rect x="452" y="364" width="14" height="6" fill="#424242"/><line x1="459" y1="364" x2="459" y2="352" stroke="#424242" stroke-width="3"/>';
-    p += '<g fill="none" stroke="#29b6f6" stroke-width="2" stroke-dasharray="4 3"><path d="M459 352 Q480 300 520 312"/><path d="M459 352 Q486 316 530 330"/><path d="M459 352 Q470 290 500 296"/></g>';
-    p += '<g fill="#29b6f6"><circle cx="522" cy="314" r="2"/><circle cx="532" cy="332" r="2"/><circle cx="502" cy="298" r="2"/></g>';
-    p += '</svg>';
-    return p;
-  })();
-
-  var HALL = '<svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg"><rect width="200" height="120" fill="#e3f2fd"/><rect y="98" width="200" height="22" fill="#a5d6a7"/>' +
-    '<rect x="40" y="46" width="120" height="54" fill="#d7ccc8" stroke="#8d6e63"/><polygon points="32,48 100,18 168,48" fill="#8d6e63"/><rect x="88" y="70" width="24" height="30" fill="#5d4037"/>' +
-    '<g fill="#fff9c4" stroke="#8d6e63"><rect x="52" y="60" width="22" height="16"/><rect x="126" y="60" width="22" height="16"/></g>' +
-    '<rect x="48" y="28" width="104" height="15" rx="3" fill="#ffffff"/><text x="100" y="39" font-size="9" text-anchor="middle" font-family="sans-serif" fill="#5d4037">COMMUNITY HALL</text></svg>';
-
-  var RESTO = '<svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg"><rect width="200" height="120" fill="#fff3e0"/>' +
-    '<rect x="30" y="70" width="140" height="8" fill="#6d4c41"/><g stroke="#6d4c41" stroke-width="4"><line x1="40" y1="78" x2="40" y2="110"/><line x1="160" y1="78" x2="160" y2="110"/></g>' +
-    '<ellipse cx="100" cy="66" rx="26" ry="7" fill="#ffffff" stroke="#bdbdbd"/><ellipse cx="100" cy="63" rx="14" ry="4" fill="#ef6c00"/>' +
-    '<g stroke="#9e9e9e" stroke-width="3" stroke-linecap="round"><line x1="64" y1="52" x2="64" y2="68"/><line x1="136" y1="52" x2="136" y2="68"/></g>' +
-    '<g fill="#ffd54f"><rect x="54" y="40" width="6" height="16" rx="2"/><rect x="140" y="40" width="6" height="16" rx="2"/></g>' +
-    '<text x="100" y="26" font-size="11" text-anchor="middle" font-family="sans-serif" fill="#bf360c">RESTAURANT ROOM</text></svg>';
-
-  var YARD = '<svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg"><rect width="200" height="120" fill="#e1f5fe"/><rect y="82" width="200" height="38" fill="#7cb342"/>' +
-    '<polygon points="50,82 100,38 150,82" fill="#ffffff" stroke="#90a4ae" stroke-width="2"/><rect x="56" y="82" width="88" height="22" fill="#eceff1" stroke="#90a4ae"/>' +
-    '<g stroke="#ffb300" stroke-width="2"><line x1="10" y1="30" x2="190" y2="30"/></g><g fill="#ffeb3b"><circle cx="30" cy="32" r="3"/><circle cx="60" cy="32" r="3"/><circle cx="90" cy="32" r="3"/><circle cx="120" cy="32" r="3"/><circle cx="150" cy="32" r="3"/><circle cx="180" cy="32" r="3"/></g>' +
-    '<text x="100" y="116" font-size="11" text-anchor="middle" font-family="sans-serif" fill="#1b5e20">BACKYARD</text></svg>';
-
-  var BARROW = '<svg viewBox="0 0 640 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="An unusual wheelbarrow in a hardware store">' +
-    '<rect width="640" height="400" fill="#f1f8e9"/><rect y="320" width="640" height="80" fill="#a1887f"/>' +
-    '<rect x="24" y="24" width="190" height="50" rx="6" fill="#ffffff" stroke="#689f38"/><text x="119" y="56" text-anchor="middle" font-family="sans-serif" font-size="17" fill="#33691e">HARDWARE STORE</text>' +
-    /* solar panel on a pole */
-    '<line x1="300" y1="196" x2="300" y2="104" stroke="#616161" stroke-width="4"/><polygon points="250,104 350,104 338,80 262,80" fill="#1a237e" stroke="#9fa8da" stroke-width="2"/><g stroke="#9fa8da" stroke-width="1"><line x1="282" y1="80" x2="276" y2="104"/><line x1="300" y1="80" x2="300" y2="104"/><line x1="318" y1="80" x2="324" y2="104"/></g>' +
-    /* tub */
-    '<path d="M180 196 L440 196 L410 262 L220 262z" fill="#43a047" stroke="#1b5e20" stroke-width="3"/>' +
-    /* water tank with hose on the front */
-    '<rect x="386" y="150" width="54" height="46" rx="8" fill="#29b6f6" stroke="#0277bd" stroke-width="2"/><text x="413" y="178" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#ffffff">WATER</text>' +
-    '<path d="M440 180 q40 10 30 50 q-6 30 22 34" fill="none" stroke="#2e7d32" stroke-width="5"/><rect x="488" y="258" width="18" height="10" rx="3" fill="#ffb300"/>' +
-    /* fold-out seat */
-    '<rect x="196" y="164" width="60" height="10" rx="4" fill="#ff7043"/><g stroke="#616161" stroke-width="3"><line x1="204" y1="174" x2="210" y2="196"/><line x1="248" y1="174" x2="242" y2="196"/></g>' +
-    /* tool holder with trowel and fork */
-    '<rect x="140" y="200" width="30" height="40" fill="#795548"/><line x1="148" y1="200" x2="148" y2="170" stroke="#5d4037" stroke-width="3"/><path d="M142 170 l12 0 l-6 -18z" fill="#9e9e9e"/><line x1="162" y1="200" x2="162" y2="172" stroke="#5d4037" stroke-width="3"/><path d="M156 172 l0 -14 m6 14 l0 -14 m6 14 l0 -14" stroke="#9e9e9e" stroke-width="2"/>' +
-    /* two wheels */
-    '<circle cx="250" cy="290" r="28" fill="#212121"/><circle cx="250" cy="290" r="10" fill="#bdbdbd"/><circle cx="380" cy="290" r="28" fill="#212121"/><circle cx="380" cy="290" r="10" fill="#bdbdbd"/><g stroke="#616161" stroke-width="4"><line x1="250" y1="262" x2="250" y2="290"/><line x1="380" y1="262" x2="380" y2="290"/></g>' +
-    /* folding handles with a hinge and a cup holder */
-    '<line x1="440" y1="210" x2="520" y2="190" stroke="#616161" stroke-width="7" stroke-linecap="round"/><line x1="520" y1="190" x2="590" y2="210" stroke="#616161" stroke-width="7" stroke-linecap="round"/><circle cx="520" cy="190" r="7" fill="#ffb300"/>' +
-    '<path d="M556 176 l20 0 l-3 22 l-14 0z" fill="#ffffff" stroke="#757575"/><rect x="552" y="196" width="28" height="5" fill="#757575"/>' +
-    /* price tag */
-    '<line x1="200" y1="262" x2="120" y2="300" stroke="#555" stroke-width="1.5"/><path d="M40 286 L110 286 L120 304 L110 322 L40 322z" fill="#fff176" stroke="#f9a825"/><text x="76" y="311" text-anchor="middle" font-family="sans-serif" font-size="20" fill="#333">$179</text>' +
-    '</svg>';
-
+  /* Speaking pictures are image files in tests/img/R/ (scene, object, opt_A to opt_C). */
   window.MOCK_TESTS.push({
     id: 'R',
     title: 'Mock Test R',
@@ -509,21 +375,21 @@
       tasks: [
         { id: 'S1', title: 'Task 1: Giving Advice', prep: 30, speak: 90, prompt: 'A friend of yours has signed up for a 10-kilometre race in eight weeks, but she has never run more than three kilometres at a time. She works twelve-hour shifts at a hospital, including some nights, and she has only about $100 to spend on running gear. Give your friend advice on how to get ready for the race.' },
         { id: 'S2', title: 'Task 2: Talking about a Personal Experience', prep: 30, speak: 60, prompt: 'Talk about a time when your travel plans changed suddenly, for example because of a delayed flight, a cancelled bus or bad weather. What happened, how did you deal with it, and what would you do differently if it happened again?' },
-        { id: 'S3', title: 'Task 3: Describing a Scene', prep: 30, speak: 60, prompt: 'Describe some things that are happening in the picture below as well as you can. The person you are speaking to cannot see the picture.', image: GARDEN },
-        { id: 'S4', title: 'Task 4: Making Predictions', prep: 30, speak: 60, prompt: 'In this picture, what do you think will most probably happen next? Think about the sprinkler, the dog, the man carrying the pots and the sky.', image: GARDEN },
+        { id: 'S3', title: 'Task 3: Describing a Scene', prep: 30, speak: 60, prompt: 'Describe some things that are happening in the picture below as well as you can. The person you are speaking to cannot see the picture.', image: '<img src="tests/img/R/scene.jpg" alt="A busy community garden on a Saturday morning as rain clouds approach">' },
+        { id: 'S4', title: 'Task 4: Making Predictions', prep: 30, speak: 60, prompt: 'In this picture, what do you think will most probably happen next? Think about the sprinkler, the dog, the man carrying the pots and the sky.', image: '<img src="tests/img/R/scene.jpg" alt="A busy community garden on a Saturday morning as rain clouds approach">' },
         {
           id: 'S5', title: 'Task 5: Comparing and Persuading', type: 'compare', select: 60, prep: 60, speak: 60,
           prompt: 'Your best friend turns 40 next month, and you and your partner are planning a surprise party for about 30 guests. Choose the option you prefer. In the next section, you will need to persuade your partner that your choice is better.',
           choices: [
-            { key: 'A', title: 'Community hall', image: HALL, facts: ['Rental: $350 for the evening, plus about $500 for food', 'Kitchen, tables and chairs included', 'You set up and clean up yourselves', 'Everyone must leave by 11:00 p.m.'] },
-            { key: 'B', title: 'Restaurant private room', image: RESTO, facts: ['$40 per guest, food included', 'No setup or cleanup needed', 'Room is next to the busy main dining area', 'Must be booked and paid for 3 weeks ahead'] }
+            { key: 'A', title: 'Community hall', image: '<img src="tests/img/R/opt_A.jpg" alt="Photo: Community hall">', facts: ['Rental: $350 for the evening, plus about $500 for food', 'Kitchen, tables and chairs included', 'You set up and clean up yourselves', 'Everyone must leave by 11:00 p.m.'] },
+            { key: 'B', title: 'Restaurant private room', image: '<img src="tests/img/R/opt_B.jpg" alt="Photo: Restaurant private room">', facts: ['$40 per guest, food included', 'No setup or cleanup needed', 'Room is next to the busy main dining area', 'Must be booked and paid for 3 weeks ahead'] }
           ],
-          third: { key: 'C', title: 'Backyard party', image: YARD, facts: ['Tent rental: $280, plus about $25 per guest for catering', 'Stay as late as you like', 'Hard to keep the party secret from your friend\'s neighbours', 'If it rains, 30 guests move into a small house'] },
+          third: { key: 'C', title: 'Backyard party', image: '<img src="tests/img/R/opt_C.jpg" alt="Photo: Backyard party">', facts: ['Tent rental: $280, plus about $25 per guest for catering', 'Stay as late as you like', 'Hard to keep the party secret from your friend\'s neighbours', 'If it rains, 30 guests move into a small house'] },
           persuade: 'Your partner thinks a backyard party would be better. Persuade your partner that your choice is better. Explain why.'
         },
         { id: 'S6', title: 'Task 6: Dealing with a Difficult Situation', prep: 60, speak: 60, prompt: '<p>Months ago, you agreed to be a pace leader for your running club\'s 10-kilometre race this Sunday morning. Fifteen new runners are counting on you to help them finish in under an hour. Today, the chair of your child\'s parent council called. The volunteer who was going to run Sunday\'s pancake breakfast fundraiser is sick, and you are the only other person trained to use the school kitchen.</p><p><b>Choose ONE:</b></p><p><b>Option A:</b> Talk to the running club organizer. Explain why you cannot lead your group on Sunday.</p><p><b>Option B:</b> Talk to the parent council chair. Explain why you cannot run the breakfast.</p>' },
         { id: 'S7', title: 'Task 7: Expressing Opinions', prep: 30, speak: 90, prompt: '<p>Your city council is considering a rule that every new apartment building must have electric vehicle chargers for at least half of its parking spaces. Supporters say chargers cost far less to install during construction than to add later, and that renters should not be left behind as more people switch to electric cars. Builders reply that the rule would add about $4,000 to the cost of each apartment at a time when rents are already too high, and that most tenants do not own an electric car.</p><p>The council has asked residents for their views before it votes next month. Should the city adopt this rule? Explain your reasons.</p>' },
-        { id: 'S8', title: 'Task 8: Describing an Unusual Situation', prep: 30, speak: 60, prompt: 'You are at a hardware store and see this unusual wheelbarrow. Call your friend, who has just started a plot at a community garden. The garden is a fifteen-minute walk from her apartment, she lives on the third floor of a building with no elevator, and she has said she can spend about $150. Describe the wheelbarrow and explain whether you think your friend should buy it.', image: BARROW }
+        { id: 'S8', title: 'Task 8: Describing an Unusual Situation', prep: 30, speak: 60, prompt: 'You are at a hardware store and see this unusual wheelbarrow. Call your friend, who has just started a plot at a community garden. The garden is a fifteen-minute walk from her apartment, she lives on the third floor of a building with no elevator, and she has said she can spend about $150. Describe the wheelbarrow and explain whether you think your friend should buy it.', image: '<img src="tests/img/R/object.jpg" alt="An unusual wheelbarrow in a hardware store">' }
       ]
     }
   });

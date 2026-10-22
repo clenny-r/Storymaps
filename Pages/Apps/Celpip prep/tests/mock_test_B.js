@@ -7,140 +7,7 @@
 (function () {
   window.MOCK_TESTS = window.MOCK_TESTS || [];
 
-  /* ---------- small SVG helpers for speaking pictures ---------- */
-  function person(x, y, o) {
-    o = o || {};
-    var s = o.s || 1, skin = o.skin || '#e0b48f', shirt = o.shirt || '#3d7cc9', pants = o.pants || '#38414d', hair = o.hair || '#3b2a20';
-    var arms = o.arms || 'down';
-    var a = arms === 'up' ? '<line x1="-7" y1="-30" x2="-16" y2="-50" /><line x1="7" y1="-30" x2="16" y2="-50" />'
-      : arms === 'right' ? '<line x1="-7" y1="-30" x2="-12" y2="-14" /><line x1="7" y1="-30" x2="24" y2="-36" />'
-      : arms === 'left' ? '<line x1="-7" y1="-30" x2="-24" y2="-36" /><line x1="7" y1="-30" x2="12" y2="-14" />'
-      : '<line x1="-7" y1="-30" x2="-12" y2="-14" /><line x1="7" y1="-30" x2="12" y2="-14" />';
-    var legs = o.sit ? '<line x1="-4" y1="-12" x2="-14" y2="-12" /><line x1="4" y1="-12" x2="-6" y2="-12" /><line x1="-14" y1="-12" x2="-14" y2="0" /><line x1="-6" y1="-12" x2="-6" y2="0" />'
-      : '<line x1="-4" y1="-12" x2="-7" y2="0" /><line x1="4" y1="-12" x2="7" y2="0" />';
-    return '<g transform="translate(' + x + ' ' + y + ') scale(' + s + ')">' +
-      '<g stroke="' + skin + '" stroke-width="4" stroke-linecap="round">' + a + '</g>' +
-      '<g stroke="' + pants + '" stroke-width="5" stroke-linecap="round">' + legs + '</g>' +
-      '<rect x="-8" y="-36" width="16" height="25" rx="5" fill="' + shirt + '"/>' +
-      '<circle cx="0" cy="-45" r="9" fill="' + skin + '"/>' +
-      '<path d="M-9 -46 a9 9 0 0 1 18 0 q-9 -6 -18 0z" fill="' + hair + '"/>' +
-      '</g>';
-  }
-
-  /* market stall: posts, striped awning with a label, and a table */
-  function stall(x, w, label, colour) {
-    var s = '';
-    s += '<rect x="' + (x + 2) + '" y="104" width="6" height="128" fill="#6b4f35"/><rect x="' + (x + w - 8) + '" y="104" width="6" height="128" fill="#6b4f35"/>';
-    s += '<rect x="' + (x - 6) + '" y="78" width="' + (w + 12) + '" height="30" fill="' + colour + '"/>';
-    for (var i = 0; i < 6; i++) s += '<rect x="' + (x - 6 + i * (w + 12) / 6) + '" y="78" width="' + ((w + 12) / 12) + '" height="30" fill="#ffffff" opacity=".35"/>';
-    s += '<rect x="' + (x + w / 2 - 44) + '" y="84" width="88" height="20" rx="3" fill="#ffffff"/>';
-    s += '<text x="' + (x + w / 2) + '" y="99" font-size="14" font-weight="bold" text-anchor="middle" fill="#333" font-family="sans-serif">' + label + '</text>';
-    return s;
-  }
-  function table(x, w, cloth) {
-    return '<rect x="' + x + '" y="196" width="' + w + '" height="36" fill="' + cloth + '"/><rect x="' + x + '" y="196" width="' + w + '" height="6" fill="#ffffff" opacity=".4"/>';
-  }
-
-  var MARKET = (function () {
-    var p = '';
-    p += '<svg viewBox="0 0 640 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A busy outdoor farmers market on a sunny morning">';
-    p += '<rect width="640" height="400" fill="#cfe8f7"/>';
-    p += '<circle cx="606" cy="38" r="22" fill="#f7d35c"/>';
-    p += '<g fill="#7fb069"><circle cx="40" cy="70" r="30"/><circle cx="330" cy="62" r="26"/><circle cx="430" cy="66" r="28"/></g>';
-    p += '<rect y="168" width="640" height="232" fill="#d8ccb8"/>';
-    p += '<g stroke="#c4b69f" stroke-width="2"><line x1="0" y1="250" x2="640" y2="250"/><line x1="0" y1="320" x2="640" y2="320"/></g>';
-    p += '<text x="320" y="30" font-size="18" font-weight="bold" text-anchor="middle" fill="#2c5f2d" font-family="sans-serif">FARMERS\' MARKET</text>';
-    /* stall 1: fruit, vendor handing a bag to a customer */
-    p += stall(20, 170, 'FRUIT', '#d9534f');
-    p += person(90, 228, { s: 1.25, shirt: '#2e7d32', skin: '#c98c64', hair: '#1d1410', arms: 'right' });
-    p += table(20, 170, '#8d6e4f');
-    p += '<g><rect x="30" y="176" width="40" height="20" fill="#b07d4a"/><rect x="140" y="176" width="40" height="20" fill="#b07d4a"/></g>';
-    p += '<g fill="#d63c2f"><circle cx="38" cy="174" r="6"/><circle cx="50" cy="172" r="6"/><circle cx="62" cy="174" r="6"/></g>';
-    p += '<g fill="#f39c12"><circle cx="148" cy="174" r="6"/><circle cx="160" cy="172" r="6"/><circle cx="172" cy="174" r="6"/></g>';
-    p += '<rect x="112" y="176" width="18" height="22" rx="2" fill="#e8d3a8" stroke="#a88b5a"/>';
-    p += person(150, 290, { shirt: '#f2a33a', skin: '#f0c9a6', hair: '#7a4a24', arms: 'left' });
-    /* stall 2: bread, customer paying */
-    p += stall(236, 170, 'BREAD', '#e08e2b');
-    p += person(330, 228, { s: 1.25, shirt: '#ffffff', skin: '#f0c9a6', hair: '#d8d8d8', arms: 'left' });
-    p += table(236, 170, '#6d8fb3');
-    p += '<g fill="#c68642"><ellipse cx="258" cy="190" rx="16" ry="7"/><ellipse cx="292" cy="188" rx="14" ry="8"/><ellipse cx="360" cy="190" rx="16" ry="7"/><ellipse cx="390" cy="189" rx="12" ry="7"/></g>';
-    p += person(290, 286, { shirt: '#6a4fb0', skin: '#7a4b31', hair: '#120c08', arms: 'right' });
-    p += '<rect x="310" y="244" width="14" height="8" fill="#5fa55a"/>';
-    /* stall 3: flowers, woman leaving with a bouquet */
-    p += stall(452, 170, 'FLOWERS', '#8e5bb5');
-    p += person(536, 228, { s: 1.25, shirt: '#c64b73', skin: '#d6a07a', hair: '#3b2a20' });
-    p += table(452, 170, '#7d9a5a');
-    p += '<g fill="#5a6d7a"><rect x="466" y="176" width="22" height="20"/><rect x="500" y="176" width="22" height="20"/><rect x="566" y="176" width="22" height="20"/><rect x="598" y="176" width="20" height="20"/></g>';
-    p += '<g fill="#e74c3c"><circle cx="472" cy="170" r="5"/><circle cx="482" cy="168" r="5"/></g><g fill="#f1c40f"><circle cx="506" cy="170" r="5"/><circle cx="516" cy="168" r="5"/></g><g fill="#ec87c0"><circle cx="572" cy="170" r="5"/><circle cx="582" cy="168" r="5"/></g><g fill="#ffffff"><circle cx="603" cy="170" r="5"/><circle cx="613" cy="168" r="5"/></g>';
-    p += person(600, 300, { shirt: '#16a085', skin: '#a9714b', hair: '#1d1410', arms: 'right' });
-    p += '<line x1="624" y1="264" x2="626" y2="250" stroke="#2e7d32" stroke-width="2"/><g fill="#e74c3c"><circle cx="622" cy="248" r="4"/><circle cx="630" cy="250" r="4"/><circle cx="626" cy="242" r="4"/></g>';
-    /* tall stack of crates leaning and about to fall, worker reaching for it */
-    p += '<g transform="rotate(14 430 290)">';
-    for (var c = 0; c < 5; c++) {
-      var cy = 270 - c * 22;
-      p += '<rect x="414" y="' + cy + '" width="36" height="20" fill="#b07d4a" stroke="#7a5233" stroke-width="2"/><line x1="414" y1="' + (cy + 10) + '" x2="450" y2="' + (cy + 10) + '" stroke="#7a5233" stroke-width="2"/>';
-    }
-    p += '</g>';
-    p += '<g fill="#d63c2f"><circle cx="486" cy="196" r="5"/><circle cx="496" cy="214" r="5"/></g>';
-    p += person(410, 300, { shirt: '#4a6d8c', skin: '#8d5a3b', hair: '#120c08', arms: 'up' });
-    /* musician on a stool with an open guitar case, child dancing */
-    p += '<rect x="44" y="350" width="22" height="5" fill="#555"/><line x1="48" y1="355" x2="46" y2="372" stroke="#555" stroke-width="3"/><line x1="62" y1="355" x2="64" y2="372" stroke="#555" stroke-width="3"/>';
-    p += person(60, 368, { shirt: '#943126', sit: true, skin: '#e3b28b', hair: '#555555', arms: 'right' });
-    p += '<ellipse cx="66" cy="344" rx="10" ry="8" fill="#b5651d"/><line x1="70" y1="340" x2="96" y2="326" stroke="#6b3d14" stroke-width="3"/>';
-    p += '<rect x="80" y="372" width="46" height="14" rx="3" fill="#333"/><rect x="84" y="375" width="38" height="8" fill="#8b1e3f"/><g fill="#f1c40f"><circle cx="94" cy="379" r="2.5"/><circle cx="104" cy="378" r="2.5"/><circle cx="112" cy="380" r="2.5"/></g>';
-    p += '<g fill="#555"><text x="100" y="310" font-size="16" font-family="sans-serif">&#9835;</text><text x="116" y="296" font-size="14" font-family="sans-serif">&#9834;</text></g>';
-    p += person(150, 380, { shirt: '#f4d03f', s: .7, skin: '#c98c64', hair: '#2a1b12', arms: 'up' });
-    /* loose dog running toward the fruit stand, leash trailing, owner chasing */
-    p += '<g transform="translate(222 338)"><ellipse cx="0" cy="0" rx="20" ry="8" fill="#a5713f"/><circle cx="-22" cy="-8" r="8" fill="#a5713f"/><ellipse cx="-20" cy="-14" rx="4" ry="6" fill="#7a4f28"/><circle cx="-26" cy="-9" r="1.6" fill="#222"/>';
-    p += '<g stroke="#a5713f" stroke-width="3.5" stroke-linecap="round"><line x1="-12" y1="5" x2="-22" y2="14"/><line x1="-6" y1="5" x2="-2" y2="15"/><line x1="10" y1="5" x2="4" y2="15"/><line x1="15" y1="4" x2="26" y2="12"/><line x1="19" y1="-3" x2="30" y2="-12"/></g></g>';
-    p += '<path d="M206 332 q24 10 44 4 t48 12" stroke="#c0392b" stroke-width="2" fill="none"/>';
-    p += '<g stroke="#9a8f80" stroke-width="2"><line x1="252" y1="330" x2="268" y2="330"/><line x1="254" y1="340" x2="272" y2="340"/></g>';
-    p += person(320, 360, { shirt: '#3fa3d6', skin: '#f2cfb0', hair: '#c49a42', arms: 'left', s: 1.1 });
-    /* woman pushing a stroller */
-    p += '<g><rect x="470" y="330" width="34" height="20" rx="8" fill="#2c3e50"/><path d="M470 330 q4 -18 22 -18 l0 18z" fill="#34495e"/><line x1="504" y1="332" x2="518" y2="318" stroke="#555" stroke-width="3"/><circle cx="476" cy="356" r="6" fill="#333"/><circle cx="498" cy="356" r="6" fill="#333"/></g>';
-    p += person(532, 362, { shirt: '#b87fb5', skin: '#7a4b31', hair: '#1d1410', arms: 'left' });
-    p += '</svg>';
-    return p;
-  })();
-
-  var CAT = '<svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg"><rect width="200" height="120" fill="#f3ead8"/><rect y="92" width="200" height="28" fill="#c9a77c"/>' +
-    '<ellipse cx="100" cy="82" rx="30" ry="22" fill="#7f8c8d"/><circle cx="100" cy="50" r="18" fill="#7f8c8d"/><polygon points="86,40 88,24 98,36" fill="#7f8c8d"/><polygon points="114,40 112,24 102,36" fill="#7f8c8d"/>' +
-    '<circle cx="93" cy="49" r="3" fill="#2ecc71"/><circle cx="107" cy="49" r="3" fill="#2ecc71"/><polygon points="100,55 97,52 103,52" fill="#e0868a"/>' +
-    '<path d="M128 92 q30 -4 24 -34" stroke="#7f8c8d" stroke-width="7" fill="none" stroke-linecap="round"/><text x="30" y="24" font-size="14" font-family="sans-serif" fill="#555">CAT</text></svg>';
-  var DOG = '<svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg"><rect width="200" height="120" fill="#dff0d8"/><rect y="90" width="200" height="30" fill="#8cc56d"/>' +
-    '<ellipse cx="96" cy="70" rx="34" ry="16" fill="#c68642"/><circle cx="136" cy="52" r="15" fill="#c68642"/><ellipse cx="146" cy="58" rx="9" ry="6" fill="#c68642"/><circle cx="154" cy="57" r="3" fill="#222"/><ellipse cx="128" cy="52" rx="6" ry="11" fill="#8a5a2b"/><circle cx="139" cy="48" r="2" fill="#222"/>' +
-    '<g stroke="#c68642" stroke-width="6" stroke-linecap="round"><line x1="72" y1="80" x2="70" y2="98"/><line x1="86" y1="82" x2="86" y2="98"/><line x1="108" y1="82" x2="108" y2="98"/><line x1="120" y1="80" x2="122" y2="98"/><line x1="62" y1="66" x2="48" y2="50"/></g>' +
-    '<circle cx="168" cy="96" r="7" fill="#e74c3c"/><text x="20" y="24" font-size="14" font-family="sans-serif" fill="#2d5016">DOG</text></svg>';
-  var FISH = '<svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg"><rect width="200" height="120" fill="#ece4d4"/><rect x="20" y="96" width="160" height="16" fill="#7a5233"/>' +
-    '<rect x="30" y="22" width="140" height="74" rx="4" fill="#7ec8e3" stroke="#4a6d8c" stroke-width="3"/><rect x="30" y="84" width="140" height="12" fill="#e3c48a"/>' +
-    '<path d="M50 84 q-6 -20 2 -38 M60 84 q6 -22 -2 -42 M150 84 q-6 -18 4 -34" stroke="#2e8b57" stroke-width="4" fill="none"/>' +
-    '<g><ellipse cx="96" cy="50" rx="12" ry="7" fill="#f39c12"/><polygon points="108,50 118,43 118,57" fill="#f39c12"/><circle cx="90" cy="48" r="1.6" fill="#222"/></g>' +
-    '<g><ellipse cx="128" cy="70" rx="10" ry="6" fill="#e74c3c"/><polygon points="138,70 146,64 146,76" fill="#e74c3c"/><circle cx="123" cy="68" r="1.5" fill="#222"/></g>' +
-    '<g fill="#ffffff" opacity=".8"><circle cx="84" cy="36" r="2.5"/><circle cx="80" cy="28" r="2"/></g><text x="100" y="15" font-size="12" text-anchor="middle" font-family="sans-serif" fill="#2c3e50">AQUARIUM</text></svg>';
-
-  var GADGET = '<svg viewBox="0 0 640 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="An unusual kitchen appliance in a store">' +
-    '<rect width="640" height="400" fill="#f4efe6"/><rect y="300" width="640" height="100" fill="#b8a48a"/><rect y="296" width="640" height="8" fill="#9c8669"/>' +
-    '<rect x="20" y="20" width="220" height="40" rx="6" fill="#ffffff" stroke="#c9bfae"/><text x="130" y="47" text-anchor="middle" font-family="sans-serif" font-size="18" fill="#7a4b2a">KITCHEN STORE</text>' +
-    /* radio antenna rising from the back of the toaster */
-    '<line x1="218" y1="186" x2="160" y2="70" stroke="#777" stroke-width="4"/><circle cx="160" cy="68" r="7" fill="#c0392b"/>' +
-    /* toaster body with two slots and toast */
-    '<rect x="190" y="180" width="230" height="118" rx="22" fill="#c8ccd0" stroke="#8f969c" stroke-width="4"/>' +
-    '<rect x="236" y="160" width="36" height="28" rx="3" fill="#e2b062" stroke="#b07d3a" stroke-width="2"/><rect x="300" y="166" width="36" height="22" rx="3" fill="#e2b062" stroke="#b07d3a" stroke-width="2"/>' +
-    '<rect x="230" y="184" width="48" height="6" rx="3" fill="#555"/><rect x="294" y="184" width="48" height="6" rx="3" fill="#555"/>' +
-    /* egg holder on top */
-    '<path d="M366 182 q14 18 28 0z" fill="#f6d55c" stroke="#c9a227" stroke-width="2"/><ellipse cx="380" cy="168" rx="11" ry="15" fill="#fbf4e4" stroke="#d8cbb0"/>' +
-    /* clock face on the front */
-    '<circle cx="270" cy="244" r="30" fill="#ffffff" stroke="#555" stroke-width="3"/><line x1="270" y1="244" x2="270" y2="224" stroke="#222" stroke-width="3"/><line x1="270" y1="244" x2="284" y2="252" stroke="#222" stroke-width="3"/>' +
-    '<g fill="#555" font-size="9" font-family="sans-serif" text-anchor="middle"><text x="270" y="224">12</text><text x="292" y="248">3</text><text x="270" y="270">6</text><text x="248" y="248">9</text></g>' +
-    '<rect x="330" y="230" width="16" height="40" rx="4" fill="#555"/><circle cx="380" cy="248" r="9" fill="#3d3d3d"/>' +
-    /* coffee maker attached to the right side */
-    '<rect x="420" y="130" width="86" height="168" rx="8" fill="#2c3e50"/><rect x="430" y="140" width="66" height="30" rx="4" fill="#3d566e"/>' +
-    '<path d="M436 210 h54 l-6 82 h-42z" fill="#d6eaf8" stroke="#7f8c8d" stroke-width="2" opacity=".9"/><path d="M439 244 h48 l-3 46 h-42z" fill="#6f4e37"/>' +
-    '<path d="M490 220 q20 0 18 24 q-2 16 -20 14" stroke="#7f8c8d" stroke-width="4" fill="none"/><rect x="456" y="190" width="14" height="14" fill="#555"/>' +
-    /* price tag hanging from the antenna */
-    '<line x1="184" y1="118" x2="120" y2="150" stroke="#555" stroke-width="1.5"/><rect x="72" y="146" width="80" height="40" rx="6" fill="#f6d55c" stroke="#c9a227" stroke-width="2"/><circle cx="82" cy="166" r="4" fill="#f4efe6"/><text x="118" y="173" text-anchor="middle" font-family="sans-serif" font-size="20" fill="#333">$89</text>' +
-    '</svg>';
-
+  /* Speaking pictures are image files in tests/img/B/ (scene, object, opt_A to opt_C). */
   window.MOCK_TESTS.push({
     id: 'B',
     title: 'Mock Test B',
@@ -496,21 +363,21 @@
       tasks: [
         { id: 'S1', title: 'Task 1: Giving Advice', prep: 30, speak: 90, prompt: 'Your cousin has received two job offers and must answer both by Friday. One pays $8,000 a year more, but it is a 75-minute bus ride each way, and she does not own a car. The other pays less, but it is a 10-minute walk from home and has flexible hours, which matters because she must pick up her son from daycare by 5:30 p.m. Give your cousin advice on how to choose.' },
         { id: 'S2', title: 'Task 2: Talking about a Personal Experience', prep: 30, speak: 60, prompt: 'Talk about a time when you helped a stranger. What happened, how did you feel afterward, and is there anything you would do differently if it happened again today?' },
-        { id: 'S3', title: 'Task 3: Describing a Scene', prep: 30, speak: 60, prompt: 'Describe some things that are happening in the picture below as well as you can. The person you are speaking to cannot see the picture.', image: MARKET },
-        { id: 'S4', title: 'Task 4: Making Predictions', prep: 30, speak: 60, prompt: 'In this picture, what do you think will most probably happen next?', image: MARKET },
+        { id: 'S3', title: 'Task 3: Describing a Scene', prep: 30, speak: 60, prompt: 'Describe some things that are happening in the picture below as well as you can. The person you are speaking to cannot see the picture.', image: '<img src="tests/img/B/scene.jpg" alt="A busy outdoor farmers market on a sunny morning">' },
+        { id: 'S4', title: 'Task 4: Making Predictions', prep: 30, speak: 60, prompt: 'In this picture, what do you think will most probably happen next?', image: '<img src="tests/img/B/scene.jpg" alt="A busy outdoor farmers market on a sunny morning">' },
         {
           id: 'S5', title: 'Task 5: Comparing and Persuading', type: 'compare', select: 60, prep: 60, speak: 60,
           prompt: 'Your family has decided to get a pet. Choose the option you prefer. In the next section, you will need to persuade a family member that your choice is better.',
           choices: [
-            { key: 'A', title: 'Adopt a cat', image: CAT, facts: ['Adoption fee: $150', 'Food and litter: about $60 a month', 'Can stay alone during a workday', 'One family member has a mild cat allergy'] },
-            { key: 'B', title: 'Adopt a dog', image: DOG, facts: ['Adoption fee: $350', 'Food and care: about $120 a month', 'Needs two 30-minute walks a day', 'Dog walker on long workdays: $20 a day'] }
+            { key: 'A', title: 'Adopt a cat', image: '<img src="tests/img/B/opt_A.jpg" alt="Photo: Adopt a cat">', facts: ['Adoption fee: $150', 'Food and litter: about $60 a month', 'Can stay alone during a workday', 'One family member has a mild cat allergy'] },
+            { key: 'B', title: 'Adopt a dog', image: '<img src="tests/img/B/opt_B.jpg" alt="Photo: Adopt a dog">', facts: ['Adoption fee: $350', 'Food and care: about $120 a month', 'Needs two 30-minute walks a day', 'Dog walker on long workdays: $20 a day'] }
           ],
-          third: { key: 'C', title: 'Aquarium fish', image: FISH, facts: ['Tank and equipment: $250', 'Food and supplies: about $20 a month', 'Tank cleaning: 1 hour a week', 'Quiet and takes little space'] },
+          third: { key: 'C', title: 'Aquarium fish', image: '<img src="tests/img/B/opt_C.jpg" alt="Photo: Aquarium fish">', facts: ['Tank and equipment: $250', 'Food and supplies: about $20 a month', 'Tank cleaning: 1 hour a week', 'Quiet and takes little space'] },
           persuade: 'Your family member suggests getting aquarium fish instead. Persuade them that your choice is better. Explain why.'
         },
         { id: 'S6', title: 'Task 6: Dealing with a Difficult Situation', prep: 60, speak: 60, prompt: '<p>Your best friend is moving overseas for work and is holding a farewell dinner next Saturday evening. You have just learned that your sister has planned a surprise party for your parents\' 35th wedding anniversary on the same evening, and she is counting on you to give a speech.</p><p><b>Choose ONE:</b></p><p><b>Option A:</b> Talk to your friend. Explain why you cannot come to the farewell dinner.</p><p><b>Option B:</b> Talk to your sister. Explain why you cannot come to the anniversary party.</p>' },
         { id: 'S7', title: 'Task 7: Expressing Opinions', prep: 30, speak: 90, prompt: 'Your city council is considering making public transit free for everyone. Supporters say it would reduce traffic and help people with low incomes. Opponents say the cost, about $40 million a year, would mean higher property taxes or cuts to other services such as snow clearing. A local radio show has asked listeners to call in with their views. Should the city make public transit free? Explain your reasons.' },
-        { id: 'S8', title: 'Task 8: Describing an Unusual Situation', prep: 30, speak: 60, prompt: 'You are at a kitchen store and see this unusual appliance. It is the last one, it is a display model, and display models cannot be returned. Call your friend who loves kitchen gadgets but has a very small kitchen with little counter space. Describe the appliance and explain whether you think your friend should buy it.', image: GADGET }
+        { id: 'S8', title: 'Task 8: Describing an Unusual Situation', prep: 30, speak: 60, prompt: 'You are at a kitchen store and see this unusual appliance. It is the last one, it is a display model, and display models cannot be returned. Call your friend who loves kitchen gadgets but has a very small kitchen with little counter space. Describe the appliance and explain whether you think your friend should buy it.', image: '<img src="tests/img/B/object.jpg" alt="An unusual kitchen appliance in a store">' }
       ]
     }
   });

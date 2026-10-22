@@ -129,7 +129,7 @@ textarea.editor{width:100%;min-height:48vh;resize:vertical;padding:12px;border:1
 
 /* Speaking */
 .pic{margin-top:12px;border:1px solid #bbb;background:#fff}
-.pic svg{display:block;width:100%;height:auto}
+.pic svg,.pic img{display:block;width:100%;height:auto}
 .prep{display:flex;gap:16px;align-items:center;background:var(--box);border-radius:10px;max-width:350px;margin:30px auto 0;padding:20px}
 .prep .ico{flex-basis:75px;height:82px;background:#fff;border-radius:10px}
 .prep .txt{flex:1 1 auto;min-width:0;text-align:center;color:#000}
@@ -145,7 +145,7 @@ textarea.editor{width:100%;min-height:48vh;resize:vertical;padding:12px;border:1
 .cards{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:10px;align-items:start;margin-top:12px}
 .cards .or{align-self:center;font-weight:700;color:var(--instr)}
 .card{border:2px solid #bbb;background:#fff;padding:8px;cursor:pointer;text-align:left;color:#222;min-width:0}
-.card svg{display:block;width:100%;height:auto}
+.card svg,.card img{display:block;width:100%;height:auto;aspect-ratio:3/2;object-fit:cover}
 .card h4{margin:8px 0 4px;font-size:16px}
 .card ul{margin:0;padding-left:18px;font-size:14px}
 .card.sel{border-color:var(--btn);background:#d7ecff}
@@ -1115,7 +1115,7 @@ async function renderStart() {
     <h1>CELPIP-style Mock Exam</h1>
     <p class="muted">A full computer-based practice exam in the CELPIP-General format: Listening (with spoken audio and a video discussion), Reading, Writing and Speaking (recorded with your microphone). All questions are original practice material, not official CELPIP content.</p>
     ${saved ? `<div class="panel" style="margin-bottom:16px;border-color:var(--blue)"><div class="label">Unfinished attempt</div><p><b>${esc(saved.name)}</b>, started ${esc(niceTime(new Date(saved.startedAt)))}. Stopped at screen ${saved.idx + 1}.</p><div class="row"><button class="btn-blue" id="resumeAttempt">Resume this attempt</button><button class="btn" id="discardAttempt">Discard it</button></div></div>` : ''}
-    <div class="field"><label for="cName"><b>Candidate name</b> (used in every saved file name)</label><input type="text" id="cName" list="nameList" autocomplete="off" value="${esc(names[0] || '')}" placeholder="For example: Shadene Rowe"><datalist id="nameList">${names.map(n => `<option value="${esc(n)}">`).join('')}</datalist></div>
+    <div class="field"><label for="cName"><b>Candidate name</b> (used in every saved file name)</label><input type="text" id="cName" list="nameList" autocomplete="off" value="${esc(names[0] || '')}" placeholder="For example: Jane Doe"><datalist id="nameList">${names.map(n => `<option value="${esc(n)}">`).join('')}</datalist></div>
     <div class="field"><label for="cTest"><b>Test</b></label><select id="cTest">${tests.map(t => `<option value="${t.id}">${esc(t.title)}</option>`).join('')}</select></div>
     <div class="field"><b>Sections</b><div class="checks">
       <label><input type="checkbox" id="sL" checked> Listening (about 50 min)</label><label><input type="checkbox" id="sR" checked> Reading (about 45 min)</label>

@@ -7,144 +7,7 @@
 (function () {
   window.MOCK_TESTS = window.MOCK_TESTS || [];
 
-  /* ---------- small SVG helpers for speaking pictures ---------- */
-  function person(x, y, o) {
-    o = o || {};
-    var s = o.s || 1, skin = o.skin || '#e0b48f', shirt = o.shirt || '#3d7cc9', pants = o.pants || '#38414d', hair = o.hair || '#3b2a20';
-    var arms = o.arms || 'down';
-    var a = arms === 'up' ? '<line x1="-7" y1="-30" x2="-16" y2="-50" /><line x1="7" y1="-30" x2="16" y2="-50" />'
-      : arms === 'right' ? '<line x1="-7" y1="-30" x2="-12" y2="-14" /><line x1="7" y1="-30" x2="24" y2="-36" />'
-      : arms === 'left' ? '<line x1="-7" y1="-30" x2="-24" y2="-36" /><line x1="7" y1="-30" x2="12" y2="-14" />'
-      : '<line x1="-7" y1="-30" x2="-12" y2="-14" /><line x1="7" y1="-30" x2="12" y2="-14" />';
-    var legs = o.sit ? '<line x1="-4" y1="-12" x2="-14" y2="-12" /><line x1="4" y1="-12" x2="-6" y2="-12" /><line x1="-14" y1="-12" x2="-14" y2="0" /><line x1="-6" y1="-12" x2="-6" y2="0" />'
-      : '<line x1="-4" y1="-12" x2="-7" y2="0" /><line x1="4" y1="-12" x2="7" y2="0" />';
-    return '<g transform="translate(' + x + ' ' + y + ') scale(' + s + ')">' +
-      '<g stroke="' + skin + '" stroke-width="4" stroke-linecap="round">' + a + '</g>' +
-      '<g stroke="' + pants + '" stroke-width="5" stroke-linecap="round">' + legs + '</g>' +
-      '<rect x="-8" y="-36" width="16" height="25" rx="5" fill="' + shirt + '"/>' +
-      '<circle cx="0" cy="-45" r="9" fill="' + skin + '"/>' +
-      '<path d="M-9 -46 a9 9 0 0 1 18 0 q-9 -6 -18 0z" fill="' + hair + '"/>' +
-      '</g>';
-  }
-
-  function house(x, y, w, h, c, door) {
-    return '<rect x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" fill="' + c + '"/>' +
-      '<polygon points="' + (x - 8) + ',' + y + ' ' + (x + w / 2) + ',' + (y - 34) + ' ' + (x + w + 8) + ',' + y + '" fill="#6e4b3a"/>' +
-      '<polygon points="' + (x - 8) + ',' + y + ' ' + (x + w / 2) + ',' + (y - 34) + ' ' + (x + w + 8) + ',' + y + ' ' + (x + w + 2) + ',' + (y - 4) + ' ' + (x + w / 2) + ',' + (y - 28) + ' ' + (x - 2) + ',' + (y - 4) + '" fill="#ffffff"/>' +
-      '<rect x="' + (x + 12) + '" y="' + (y + 14) + '" width="18" height="16" fill="#fdf2c4" stroke="#ffffff" stroke-width="2"/>' +
-      '<rect x="' + (x + w - 30) + '" y="' + (y + 14) + '" width="18" height="16" fill="#fdf2c4" stroke="#ffffff" stroke-width="2"/>' +
-      '<rect x="' + (x + w / 2 - 8 + (door || 0)) + '" y="' + (y + h - 30) + '" width="16" height="30" fill="#5b3a29"/>';
-  }
-
-  var WINTER = (function () {
-    var p = '';
-    p += '<svg viewBox="0 0 640 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A snowy neighbourhood street and park on a winter morning">';
-    p += '<rect width="640" height="400" fill="#cfe6f5"/>';
-    /* light snow falling */
-    p += '<g fill="#ffffff">' + (function () { var t = ''; for (var i = 0; i < 26; i++) t += '<circle cx="' + ((i * 53) % 640 + 8) + '" cy="' + ((i * 37) % 60 + 6) + '" r="2"/>'; return t; })() + '</g>';
-    /* houses along the far side of the street */
-    p += house(30, 70, 100, 50, '#c0504d') + house(170, 72, 96, 48, '#4f81bd') + house(382, 70, 100, 50, '#9bbb59', -26) + house(520, 72, 96, 48, '#8064a2');
-    p += '<rect y="120" width="640" height="32" fill="#f4f8fb"/>';
-    /* driveway of the third house, freshly shovelled */
-    p += '<rect x="420" y="120" width="44" height="32" fill="#8e979e"/>';
-    p += '<path d="M466 152 Q480 132 500 140 Q510 146 506 152z" fill="#ffffff" stroke="#d6e2ea"/>';
-    /* the street */
-    p += '<rect y="152" width="640" height="54" fill="#9aa5ad"/><g fill="#f4f8fb"><rect x="20" y="177" width="30" height="4"/><rect x="90" y="177" width="30" height="4"/><rect x="300" y="177" width="30" height="4"/><rect x="370" y="177" width="30" height="4"/></g>';
-    /* man shovelling at the end of his driveway */
-    p += person(446, 150, { s: .8, shirt: '#2e7d32', skin: '#8d5a3b', hair: '#120c08', arms: 'left' });
-    p += '<line x1="428" y1="128" x2="414" y2="150" stroke="#6d4c2f" stroke-width="3"/><rect x="404" y="146" width="18" height="7" fill="#e74c3c"/>';
-    /* city snowplow moving left toward the driveway, pushing a wave of snow */
-    p += '<path d="M470 204 Q478 176 492 172 Q500 186 500 204z" fill="#ffffff" stroke="#d6e2ea"/>';
-    p += '<polygon points="494,168 506,166 512,204 496,206" fill="#7f8c8d"/>';
-    p += '<rect x="512" y="160" width="40" height="40" rx="4" fill="#f39c12"/><rect x="518" y="166" width="26" height="16" fill="#d6eaf8"/>';
-    p += '<rect x="552" y="168" width="78" height="32" fill="#e67e22"/><text x="591" y="190" font-size="12" text-anchor="middle" font-family="sans-serif" fill="#ffffff">CITY</text>';
-    p += '<rect x="526" y="152" width="14" height="8" fill="#f1c40f"/>';
-    p += '<g fill="#2c3e50"><circle cx="530" cy="204" r="9"/><circle cx="604" cy="204" r="9"/></g>';
-    /* parked car with a woman scraping the frosty windshield */
-    p += '<path d="M140 196 L150 178 Q154 172 164 172 L214 172 Q224 172 230 180 L240 190 L248 192 L248 200 L136 200 L136 196z" fill="#2471a3"/><path d="M156 182 Q159 177 166 177 L188 177 L188 188 L152 188z" fill="#ecf0f1"/><path d="M194 177 L212 177 Q220 177 224 183 L228 188 L194 188z" fill="#ffffff"/>';
-    p += '<rect x="150" y="168" width="70" height="6" rx="3" fill="#ffffff"/>';
-    p += '<g fill="#1b2631"><circle cx="160" cy="202" r="8"/><circle cx="226" cy="202" r="8"/></g>';
-    p += person(268, 206, { s: .8, shirt: '#8e44ad', skin: '#f0c9a6', hair: '#d4a24c', arms: 'left' });
-    p += '<line x1="249" y1="177" x2="240" y2="182" stroke="#1abc9c" stroke-width="3"/>';
-    /* park in the foreground */
-    p += '<rect y="206" width="640" height="194" fill="#f4f8fb"/>';
-    /* outdoor rink with boards */
-    p += '<ellipse cx="160" cy="300" rx="138" ry="64" fill="#7a5a3a"/><ellipse cx="160" cy="300" rx="132" ry="58" fill="#bfe3f2"/>';
-    p += '<g stroke="#ffffff" stroke-width="2" fill="none" opacity=".7"><path d="M60 300 Q110 280 160 300"/><path d="M150 330 Q200 310 250 330"/></g>';
-    /* child skating with a skating aid */
-    p += '<g stroke="#c0392b" stroke-width="3" fill="none"><path d="M86 330 L86 306 L116 306 L116 330"/></g>';
-    p += person(100, 332, { s: .65, shirt: '#f1c40f', skin: '#c98c64', hair: '#1d1410', arms: 'right' });
-    /* skater gliding backwards */
-    p += person(170, 296, { s: .8, shirt: '#16a085', skin: '#e3b28b', hair: '#6b4a2b', arms: 'up' });
-    /* skater losing balance */
-    p += '<g transform="rotate(-28 236 330)">' + person(236, 330, { s: .8, shirt: '#2980b9', skin: '#5c3a21', hair: '#120c08', arms: 'up' }) + '</g>';
-    p += '<g stroke="#5d6d7e" stroke-width="1.5"><line x1="252" y1="300" x2="262" y2="294"/><line x1="254" y1="308" x2="266" y2="304"/></g>';
-    /* child about to throw a snowball at the rink */
-    p += person(40, 392, { s: .75, shirt: '#e91e63', skin: '#f2cfb0', hair: '#5d4037', arms: 'up' });
-    p += '<circle cx="50" cy="350" r="6" fill="#ffffff" stroke="#bdc3c7"/>';
-    /* two children building a snowman that has no head yet */
-    p += '<circle cx="360" cy="344" r="24" fill="#ffffff" stroke="#c9d6df"/><circle cx="360" cy="308" r="17" fill="#ffffff" stroke="#c9d6df"/><g fill="#2c3e50"><circle cx="360" cy="302" r="2"/><circle cx="360" cy="312" r="2"/></g>';
-    p += person(326, 372, { s: .7, shirt: '#d35400', skin: '#e8c3a0', hair: '#a0703a', arms: 'right' });
-    p += '<circle cx="414" cy="372" r="12" fill="#ffffff" stroke="#c9d6df"/>';
-    p += person(436, 384, { s: .7, shirt: '#27ae60', skin: '#a9714b', hair: '#2a1b12', arms: 'left' });
-    /* hot chocolate stand with a volunteer */
-    p += person(522, 288, { shirt: '#c0392b', skin: '#d6a07a', hair: '#3b2a20', arms: 'right' });
-    p += '<rect x="474" y="274" width="100" height="30" fill="#8b5a2b"/><text x="524" y="293" font-size="9" text-anchor="middle" font-family="sans-serif" fill="#ffffff">HOT CHOCOLATE</text>';
-    p += '<g fill="#ecf0f1" stroke="#7f8c8d"><rect x="544" y="265" width="8" height="9"/><rect x="556" y="265" width="8" height="9"/></g><rect x="482" y="259" width="16" height="15" rx="2" fill="#95a5a6"/>';
-    /* woman walking a dog */
-    p += person(452, 300, { s: .85, shirt: '#34495e', skin: '#f0c9a6', hair: '#2a1b12', arms: 'left' });
-    p += '<line x1="432" y1="272" x2="414" y2="284" stroke="#c0392b" stroke-width="1.5"/>';
-    p += '<g fill="#8d6e63"><ellipse cx="402" cy="290" rx="14" ry="7"/><circle cx="388" cy="284" r="6"/><rect x="392" y="294" width="3" height="8"/><rect x="408" y="294" width="3" height="8"/></g><polygon points="384,280 386,274 390,279" fill="#6d4c41"/>';
-    /* parent pulling a child on a sled */
-    p += person(600, 392, { shirt: '#f39c12', skin: '#6b4226', hair: '#120c08', arms: 'left' });
-    p += '<line x1="578" y1="356" x2="530" y2="376" stroke="#555" stroke-width="1.5"/>';
-    p += '<path d="M476 380 L532 380 Q540 380 538 372" stroke="#c0392b" stroke-width="3" fill="none"/><rect x="480" y="370" width="50" height="8" fill="#e74c3c"/>';
-    p += person(506, 372, { s: .6, sit: true, shirt: '#3498db', skin: '#e8c39e', hair: '#151515', arms: 'up' });
-    p += '</svg>';
-    return p;
-  })();
-
-  var TENTSITE = '<svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg"><rect width="200" height="120" fill="#d9eef7"/><path d="M0 70 Q50 50 100 66 Q150 54 200 68 L200 120 L0 120z" fill="#7cb46b"/>' +
-    '<polygon points="20,40 32,12 44,40" fill="#24452e"/><polygon points="160,44 172,14 184,44" fill="#24452e"/><rect x="30" y="40" width="4" height="8" fill="#4a3324"/><rect x="170" y="44" width="4" height="8" fill="#4a3324"/>' +
-    '<polygon points="60,98 100,48 140,98" fill="#e67e22"/><polygon points="100,48 100,98 88,98" fill="#b65f15"/><polygon points="100,98 92,74 108,98" fill="#5a2f0c"/>' +
-    '<g stroke="#6d4c2f" stroke-width="4" stroke-linecap="round"><line x1="150" y1="104" x2="172" y2="98"/><line x1="150" y1="98" x2="172" y2="104"/></g><path d="M154 100 Q158 86 161 82 Q166 90 168 100z" fill="#f39c12"/>' +
-    '<text x="100" y="28" font-size="11" text-anchor="middle" font-family="sans-serif" fill="#1b4f72">PARK CAMPSITE</text></svg>';
-
-  var COTTAGE = '<svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg"><rect width="200" height="120" fill="#dff1fb"/><rect y="80" width="200" height="40" fill="#5dade2"/><path d="M0 80 L90 80 L90 70 L0 70z" fill="#7cb46b"/>' +
-    '<rect x="20" y="40" width="64" height="32" fill="#f5f0e1"/><polygon points="14,40 52,16 90,40" fill="#a04000"/><rect x="30" y="48" width="12" height="10" fill="#aed6f1"/><rect x="62" y="48" width="12" height="10" fill="#aed6f1"/><rect x="47" y="54" width="10" height="18" fill="#6e4b3a"/>' +
-    '<rect x="90" y="76" width="56" height="5" fill="#8b5a2b"/><g stroke="#5b3f26" stroke-width="2"><line x1="96" y1="81" x2="96" y2="92"/><line x1="140" y1="81" x2="140" y2="92"/></g>' +
-    '<path d="M150 92 Q165 100 180 92 Q165 96 150 92z" fill="#c0392b"/>' +
-    '<text x="140" y="30" font-size="11" text-anchor="middle" font-family="sans-serif" fill="#1b4f72">LAKE COTTAGE</text></svg>';
-
-  var CABIN = '<svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg"><rect width="200" height="120" fill="#e8f0e3"/><rect y="88" width="200" height="32" fill="#8fbf74"/>' +
-    '<polygon points="10,90 24,30 38,90" fill="#24452e"/><polygon points="160,90 176,26 192,90" fill="#2b5236"/><polygon points="140,90 150,50 160,90" fill="#24452e"/>' +
-    '<rect x="56" y="54" width="76" height="38" fill="#8b5a2b"/><g stroke="#6d4421" stroke-width="2"><line x1="56" y1="62" x2="132" y2="62"/><line x1="56" y1="70" x2="132" y2="70"/><line x1="56" y1="78" x2="132" y2="78"/><line x1="56" y1="86" x2="132" y2="86"/></g>' +
-    '<polygon points="48,56 94,28 140,56" fill="#4a3324"/><rect x="66" y="64" width="14" height="12" fill="#f9e79f"/><rect x="104" y="66" width="14" height="26" fill="#4a2c17"/>' +
-    '<path d="M0 108 Q60 96 100 104 Q150 112 200 100" stroke="#c8a165" stroke-width="5" fill="none"/>' +
-    '<text x="100" y="20" font-size="11" text-anchor="middle" font-family="sans-serif" fill="#1d5e2a">FOREST CABIN</text></svg>';
-
-  var SHOVEL = '<svg viewBox="0 0 640 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="An unusual snow shovel in a hardware store">' +
-    '<rect width="640" height="400" fill="#eef2f5"/><rect y="320" width="640" height="80" fill="#b8c2cb"/>' +
-    '<rect x="24" y="24" width="190" height="52" rx="6" fill="#ffffff" stroke="#c4cdd5"/><text x="119" y="57" text-anchor="middle" font-family="sans-serif" font-size="18" fill="#34495e">HARDWARE STORE</text>' +
-    /* wide blade */
-    '<path d="M150 250 L330 250 L344 320 L136 320z" fill="#2e86c1" stroke="#1b4f72" stroke-width="3"/><rect x="136" y="314" width="208" height="8" fill="#95a5a6"/>' +
-    /* two wheels behind the blade */
-    '<circle cx="372" cy="306" r="18" fill="#2c3e50"/><circle cx="372" cy="306" r="7" fill="#bdc3c7"/>' +
-    /* salt spreader box with holes */
-    '<rect x="350" y="248" width="56" height="40" rx="4" fill="#ecf0f1" stroke="#7f8c8d" stroke-width="2"/><g fill="#7f8c8d"><circle cx="362" cy="282" r="2"/><circle cx="372" cy="282" r="2"/><circle cx="382" cy="282" r="2"/><circle cx="392" cy="282" r="2"/></g><text x="378" y="270" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#555">SALT</text>' +
-    /* long handle with a bend */
-    '<path d="M330 256 L440 160 L520 110" stroke="#7f8c8d" stroke-width="9" fill="none" stroke-linecap="round"/>' +
-    /* folding hinge */
-    '<circle cx="440" cy="160" r="9" fill="#f1c40f" stroke="#b7950b" stroke-width="2"/>' +
-    /* heated grip with a red glow and a battery pack */
-    '<rect x="506" y="98" width="62" height="20" rx="9" fill="#c0392b" transform="rotate(-32 506 108)"/><path d="M520 82 q6 -10 0 -18 M534 74 q6 -10 0 -18" stroke="#e74c3c" stroke-width="2" fill="none"/>' +
-    '<g transform="rotate(-32 480 136)"><rect x="462" y="124" width="36" height="22" rx="3" fill="#34495e"/><g fill="#2ecc71"><rect x="467" y="129" width="6" height="12"/><rect x="475" y="129" width="6" height="12"/></g></g>' +
-    /* headlamp on the handle */
-    '<rect x="394" y="186" width="28" height="18" rx="4" fill="#555" transform="rotate(-40 408 195)"/><polygon points="392,198 340,190 352,226" fill="#fff6a8" opacity=".7"/>' +
-    /* price tag */
-    '<line x1="520" y1="120" x2="560" y2="200" stroke="#555" stroke-width="1.5"/><path d="M546 200 L612 200 L612 240 L546 240 L536 220z" fill="#f6d55c" stroke="#b7950b"/><circle cx="546" cy="220" r="3" fill="#eef2f5"/><text x="580" y="227" text-anchor="middle" font-family="sans-serif" font-size="18" fill="#333">$189</text>' +
-    '</svg>';
-
+  /* Speaking pictures are image files in tests/img/P/ (scene, object, opt_A to opt_C). */
   window.MOCK_TESTS.push({
     id: 'P',
     title: 'Mock Test P',
@@ -512,21 +375,21 @@
       tasks: [
         { id: 'S1', title: 'Task 1: Giving Advice', prep: 30, speak: 90, prompt: 'A friend of yours and her husband have just had their first baby. For the next year, they will live on one income, and their rent is going up by $150 a month starting next month. They have never followed a budget before. Give your friend advice on how to manage their money during this year.' },
         { id: 'S2', title: 'Task 2: Talking about a Personal Experience', prep: 30, speak: 60, prompt: 'Talk about a time when you were new somewhere, such as a city, a school or a job, and someone helped you settle in. What happened, how did their help make a difference, and what would you do differently if you were in that situation again?' },
-        { id: 'S3', title: 'Task 3: Describing a Scene', prep: 30, speak: 60, prompt: 'Describe some things that are happening in the picture below as well as you can. The person you are speaking to cannot see the picture.', image: WINTER },
-        { id: 'S4', title: 'Task 4: Making Predictions', prep: 30, speak: 60, prompt: 'In this picture, what do you think will most probably happen next? Think about the snowplow and the man who has just shovelled his driveway, the people on the rink, and the children in the park.', image: WINTER },
+        { id: 'S3', title: 'Task 3: Describing a Scene', prep: 30, speak: 60, prompt: 'Describe some things that are happening in the picture below as well as you can. The person you are speaking to cannot see the picture.', image: '<img src="tests/img/P/scene.jpg" alt="A snowy neighbourhood street and park on a winter morning">' },
+        { id: 'S4', title: 'Task 4: Making Predictions', prep: 30, speak: 60, prompt: 'In this picture, what do you think will most probably happen next? Think about the snowplow and the man who has just shovelled his driveway, the people on the rink, and the children in the park.', image: '<img src="tests/img/P/scene.jpg" alt="A snowy neighbourhood street and park on a winter morning">' },
         {
           id: 'S5', title: 'Task 5: Comparing and Persuading', type: 'compare', select: 60, prep: 60, speak: 60,
           prompt: 'You and your sister are planning a two-night getaway with her two young children in late September. Choose the option you prefer. In the next section, you will need to persuade your sister that your choice is better.',
           choices: [
-            { key: 'A', title: 'Tent camping in a provincial park', image: TENTSITE, facts: ['Campsite: $38 per night, firewood $10 a bundle', 'You must bring all the gear: tent, sleeping bags, stove', 'Washrooms and showers are 300 metres from the site', 'Rain is forecast for Saturday afternoon'] },
-            { key: 'B', title: 'Rent a lake cottage', image: COTTAGE, facts: ['$290 per night, plus an $80 cleaning fee', 'Full kitchen, two bedrooms and a private dock', '3.5 hours of driving each way', 'Cancellation is free only up to 30 days before'] }
+            { key: 'A', title: 'Tent camping in a provincial park', image: '<img src="tests/img/P/opt_A.jpg" alt="Photo: Tent camping in a provincial park">', facts: ['Campsite: $38 per night, firewood $10 a bundle', 'You must bring all the gear: tent, sleeping bags, stove', 'Washrooms and showers are 300 metres from the site', 'Rain is forecast for Saturday afternoon'] },
+            { key: 'B', title: 'Rent a lake cottage', image: '<img src="tests/img/P/opt_B.jpg" alt="Photo: Rent a lake cottage">', facts: ['$290 per night, plus an $80 cleaning fee', 'Full kitchen, two bedrooms and a private dock', '3.5 hours of driving each way', 'Cancellation is free only up to 30 days before'] }
           ],
-          third: { key: 'C', title: 'Rustic forest cabin', image: CABIN, facts: ['$110 per night, sleeps four on bunk beds', 'No electricity: wood stove and lanterns', 'Reached by a 1-kilometre walking trail', 'Outhouse only, no running water'] },
+          third: { key: 'C', title: 'Rustic forest cabin', image: '<img src="tests/img/P/opt_C.jpg" alt="Photo: Rustic forest cabin">', facts: ['$110 per night, sleeps four on bunk beds', 'No electricity: wood stove and lanterns', 'Reached by a 1-kilometre walking trail', 'Outhouse only, no running water'] },
           persuade: 'Your sister would prefer the rustic forest cabin. Persuade your sister that your choice is better. Explain why.'
         },
         { id: 'S6', title: 'Task 6: Dealing with a Difficult Situation', prep: 60, speak: 60, prompt: '<p>Every Saturday morning, you volunteer at the help desk of your local public library. Yesterday, the volunteer coordinator asked you to train two new volunteers this Saturday, because the person who usually trains them is sick. However, you had already promised your brother that you would help him move to a new apartment that morning. He has rented a truck from 9:00 a.m. to noon, and you are the only person who can help him lift the heavy furniture.</p><p><b>Choose ONE:</b></p><p><b>Option A:</b> Talk to the volunteer coordinator. Explain why you cannot train the new volunteers this Saturday.</p><p><b>Option B:</b> Talk to your brother. Explain why you cannot help him move on Saturday morning.</p>' },
         { id: 'S7', title: 'Task 7: Expressing Opinions', prep: 30, speak: 90, prompt: '<p>Your province is considering a law that would require large grocery stores to donate unsold food that is still safe to eat to food banks and charities, instead of throwing it away. Supporters say it would reduce waste and help families struggling with high food prices. Store owners reply that sorting, storing and transporting donations costs money that would be passed on to shoppers, and that food banks do not always have room for fresh food.</p><p>A provincial committee is asking residents for their views. Should large grocery stores be required to donate unsold food? Explain your reasons.</p>' },
-        { id: 'S8', title: 'Task 8: Describing an Unusual Situation', prep: 30, speak: 60, prompt: 'You are in a hardware store and see this unusual snow shovel. Call your friend, whose 72-year-old father lives alone and has a short but steep driveway. Your friend wants to buy him something to make winter easier, and has a budget of $200. The battery for the grip and the lamp lasts about 40 minutes, and the shovel weighs 9 kilograms. Describe the shovel and explain whether you think your friend should buy it.', image: SHOVEL }
+        { id: 'S8', title: 'Task 8: Describing an Unusual Situation', prep: 30, speak: 60, prompt: 'You are in a hardware store and see this unusual snow shovel. Call your friend, whose 72-year-old father lives alone and has a short but steep driveway. Your friend wants to buy him something to make winter easier, and has a budget of $200. The battery for the grip and the lamp lasts about 40 minutes, and the shovel weighs 9 kilograms. Describe the shovel and explain whether you think your friend should buy it.', image: '<img src="tests/img/P/object.jpg" alt="An unusual snow shovel in a hardware store">' }
       ]
     }
   });
