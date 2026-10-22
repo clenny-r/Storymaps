@@ -12,7 +12,7 @@ Last updated: 2026-10-22 (tests L to U added; real-looking Speaking pictures for
 | Speaking pictures | `C:\Users\ramne\Documents\Celpip test\tests\img\<TEST>\` | scene.jpg (Tasks 3 and 4), opt_A/B/C.jpg (Task 5 photos), object.jpg (Task 8). Made with ChatGPT. |
 | Author tools | `C:\Users\ramne\Documents\Celpip test\tools\` | `AUTHOR_SPEC.md` (rules for writing a test), `validate.js` (structure checker), `blind.js` and `compare.js` (blind answer-key check), `render_svgs.py` (picture check). |
 | Responses | `C:\Users\ramne\Documents\Celpip test\responses\<Name>_<date>_<time>\` | Created by the page. One folder per attempt. |
-| Online copy (GitHub) | `C:\Users\ramne\Documents\GitHub\Storymaps\Pages\Apps\Celpip prep\` | Same app in the Storymaps repo (clenny-r/Storymaps), served at https://twcministries.net/Pages/Apps/Celpip%20prep/ |
+| Online copy (GitHub) | `C:\Users\ramne\Documents\GitHub\Storymaps\Pages\Apps\CelpipPrep\` | Same app in the Storymaps repo (clenny-r/Storymaps), served at https://twcministries.net/Pages/Apps/CelpipPrep/ |
 | Real recordings | `tests\audio\<TEST>\` | Optional mp3/mp4 files that replace the computer voice (see tests\audio\README.md) |
 | Official sample (saved page) | `C:\Users\ramne\Documents\Celpip test\CELPIP-General Free Online Sample Test.html` | Saved by Clenmar; used only to trace the layout. |
 
@@ -132,6 +132,7 @@ Last updated: 2026-10-22 (tests L to U added; real-looking Speaking pictures for
 5. A second Claude session drew the 21 objects in its own ChatGPT tab at the same time; this worked well and halved the time. Give it a prompts file and exact file names, and keep all code edits in one session.
 6. tools\validate.js now accepts an image tag and checks that the file exists, so a missing picture shows as an error. Engine CSS: .pic img and .card img fill the panel; card photos are fixed at 3:2.
 7. The start screen example name is now "Jane Doe".
+8. The online folder was renamed from "Celpip prep" to CelpipPrep (2026-10-22) so the link has no %20: https://twcministries.net/Pages/Apps/CelpipPrep/ . The old folder keeps only an index.html that redirects there, so old bookmarks still work.
 
 ## Ideas not done yet
 

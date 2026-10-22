@@ -2,7 +2,7 @@
 
 Goal: a real video for Listening Part 5 of Tests B to K, saved as `tests\audio\<TEST>\L5-0.mp4`
 in BOTH folders (`C:\Users\ramne\Documents\Celpip test` and
-`C:\Users\ramne\Documents\GitHub\Storymaps\Pages\Apps\Celpip prep`), then committed and pushed with GitHub Desktop.
+`C:\Users\ramne\Documents\GitHub\Storymaps\Pages\Apps\CelpipPrep`), then committed and pushed with GitHub Desktop.
 Test A is already done (21 clips, 114 s). Prompts for B to K are ready in `/home/claude/meta/prompts_all.json`
 (cloud session; if that is gone, rebuild them from the Part 5 `lines` in `tests\mock_test_<T>.js` using the pattern below).
 
@@ -66,7 +66,7 @@ Keep one clip per tool call (two per call timed out). Record which clip index wa
 3. Concatenate: `ffmpeg -f concat -safe 0 -i list.txt -af loudnorm=I=-18:TP=-1.5:LRA=11 -c:v libx264 -crf 23 -preset fast -c:a aac -b:a 96k L5-0.mp4` (re-encode; clips are 1280x720 h264 but timestamps differ).
 4. Make a frame contact sheet (`ffmpeg -vf fps=1/5,scale=320:-1,tile=6x4`) and look at it: same three people, same seats throughout.
 5. Commit to both folders with `device_commit_files`, then push with GitHub Desktop (computer use: click Summary field, type, "Commit to main", then "Push origin").
-6. Confirm on https://twcministries.net/Pages/Apps/Celpip%20prep/ that `tests/audio/<T>/L5-0.mp4` loads (the page uses the mp4 before the mp3).
+6. Confirm on https://twcministries.net/Pages/Apps/CelpipPrep/ that `tests/audio/<T>/L5-0.mp4` loads (the page uses the mp4 before the mp3).
 
 ## Cost and time
 About 25 clips per test, about 70 s each including download: 30 minutes per test, 5 hours for B to K. Do it in the background one test at a time, pushing after each test so progress is never lost.

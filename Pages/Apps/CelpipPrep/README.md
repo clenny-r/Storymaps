@@ -2,7 +2,7 @@
 
 A computer-based practice exam in the CELPIP-General format, for Clenmar and Shadene Rowe.
 
-**Live:** https://twcministries.net/Pages/Apps/Celpip%20prep/
+**Live:** https://twcministries.net/Pages/Apps/CelpipPrep/
 
 - 11 full tests (A to K). Tests B to K are slightly harder than the real exam.
 - Listening (6 parts, video in Part 5), Reading (4 parts), Writing (2 tasks), Speaking (8 tasks, recorded).

@@ -5,8 +5,8 @@ Copy everything inside the box below into a new Claude session.
 ```text
 I am continuing my CELPIP (Canadian English Language Proficiency Index Program) mock exam project. Link to my laptop.
 - Working copy and my saved answers: C:\Users\ramne\Documents\Celpip test
-- Online copy (repo clenny-r/Storymaps, push with GitHub Desktop): C:\Users\ramne\Documents\GitHub\Storymaps\Pages\Apps\Celpip prep
-- Live: https://twcministries.net/Pages/Apps/Celpip%20prep/
+- Online copy (repo clenny-r/Storymaps, push with GitHub Desktop): C:\Users\ramne\Documents\GitHub\Storymaps\Pages\Apps\CelpipPrep
+- Live: https://twcministries.net/Pages/Apps/CelpipPrep/
 
 Read first: C:\Users\ramne\Documents\Celpip test\LESSONS.md (requirements, decisions, voices, Meta AI videos), then tools\AUTHOR_SPEC.md.
 
