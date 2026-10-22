@@ -1,18 +1,18 @@
 # CELPIP Mock Exam: Lessons Learnt
 
 Folder: `C:\Users\ramne\Documents\Celpip test`
-Last updated: 2026-10-22 (tests L to U added; real-looking Speaking pictures for all 21 tests)
+Last updated: 2026-10-22 (31 tests, shown as Mock Test 1 to 31; real-looking Speaking pictures; folder renamed CelpipPrep)
 
 ## What exists
 
 | Item | Full path | Purpose |
 |---|---|---|
-| Exam page | `C:\Users\ramne\Documents\Celpip test\CELPIP_Mock_Exam.html` | Full four-section mock exam. Open in Chrome or Edge. Pick the test (A to U) on the start screen. |
+| Exam page | `C:\Users\ramne\Documents\Celpip test\CELPIP_Mock_Exam.html` | Full four-section mock exam. Open in Chrome or Edge. Pick the test (Mock Test 1 to 31) on the start screen. |
 | Test content | `C:\Users\ramne\Documents\Celpip test\tests\mock_test_A.js` to `mock_test_U.js` | 21 complete tests: questions, transcripts, answer keys. |
 | Speaking pictures | `C:\Users\ramne\Documents\Celpip test\tests\img\<TEST>\` | scene.jpg (Tasks 3 and 4), opt_A/B/C.jpg (Task 5 photos), object.jpg (Task 8). Made with ChatGPT. |
 | Author tools | `C:\Users\ramne\Documents\Celpip test\tools\` | `AUTHOR_SPEC.md` (rules for writing a test), `validate.js` (structure checker), `blind.js` and `compare.js` (blind answer-key check), `render_svgs.py` (picture check). |
 | Responses | `C:\Users\ramne\Documents\Celpip test\responses\<Name>_<date>_<time>\` | Created by the page. One folder per attempt. |
-| Online copy (GitHub) | `C:\Users\ramne\Documents\GitHub\Storymaps\Pages\Apps\CelpipPrep\` | Same app in the Storymaps repo (clenny-r/Storymaps), served at https://twcministries.net/Pages/Apps/CelpipPrep/ |
+| Online copy (GitHub) | `C:\Users\ramne\Documents\GitHub\Storymaps\Pages\Apps\CelpipPrep\` | Same app in the Storymaps repo (clenny-r/Storymaps), served at https://twcministries.net/Pages/Apps/CelpipPrep/ (the old "Celpip prep" address only redirects here) |
 | Real recordings | `tests\audio\<TEST>\` | Optional mp3/mp4 files that replace the computer voice (see tests\audio\README.md) |
 | Official sample (saved page) | `C:\Users\ramne\Documents\Celpip test\CELPIP-General Free Online Sample Test.html` | Saved by Clenmar; used only to trace the layout. |
 
@@ -132,7 +132,16 @@ Last updated: 2026-10-22 (tests L to U added; real-looking Speaking pictures for
 5. A second Claude session drew the 21 objects in its own ChatGPT tab at the same time; this worked well and halved the time. Give it a prompts file and exact file names, and keep all code edits in one session.
 6. tools\validate.js now accepts an image tag and checks that the file exists, so a missing picture shows as an error. Engine CSS: .pic img and .card img fill the panel; card photos are fixed at 3:2.
 7. The start screen example name is now "Jane Doe".
-8. The online folder was renamed from "Celpip prep" to CelpipPrep (2026-10-22) so the link has no %20: https://twcministries.net/Pages/Apps/CelpipPrep/ . The old folder keeps only an index.html that redirects there, so old bookmarks still work.
+
+## Numbering and ten more tests 22 to 31 (2026-10-22)
+
+1. Display numbering: every test is now titled "Mock Test N" (A to U show as 1 to 21; new files use numeric ids 22 to 31). Internal ids A to U were NOT changed, because the answer-option shuffle is seeded by TEST.id; changing an id would reshuffle options and break saved attempts. validate.js maps letters A to U to 1 to 21 and numeric ids to themselves.
+2. Independent check of tests 12 to 21 before writing more: no wrong keys, nothing below real CELPIP level; one item too hard (test 16 Writing task 1) was fixed. Blind re-check of the edited tests: 456 of 456 keys matched.
+3. New tests 22 to 31: written in parallel by authors that each owned whole files, then a critic pass and a blind key check (760 of 760 matched). Lesson: parallel authors picked the same topics; give each author a fixed topic list and the list of topics already used in tests 1 to 21 (TOPICS_A_U.md) before writing.
+4. Pictures for 22 to 31 came from each test's own "picture" fields (S3/S4 scene, S5 options, S8 object), turned into prompts with make_img_prompts.py (price tags stripped) and cut from 2x2 grids with img_build.py.
+5. Meta AI Part 5 videos, three chats in parallel: one Meta tab per test, one clip per tab per batch (insert prompt, Return, in all three tabs; wait 25 s; then collect). Two clips per tab in one batch exceeds the browser tool time limit (about 100 s). The saver (fin3) matches each video to the first 40 characters of its quoted line, never to the video count, because Meta sometimes generates a clip twice; an index-based saver once saved wrong files for test 22. Re-call the saver when it says NOT READY; it is safe to call twice (a second copy gets a "(1)" name and the tar pattern celpipT_[0-9][0-9].mp4 ignores it).
+6. Assembly checks after each test: mean match score 0.77 to 0.88 for 22 to 31; the pitch check flagged test 27 clip 21 (Lydia at 148 Hz against her usual 161 to 200 Hz and the men at 100 to 123 Hz), accepted as a low female voice. The caption scan flagged test 29 clip 2, but the frame showed only snow and no text (OCR noise).
+7. Never run pkill -f with a pattern that also appears in your own command line: it killed the shell and a running audio job.
 
 ## Ideas not done yet
 

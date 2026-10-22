@@ -10,7 +10,7 @@
   /* Speaking pictures are image files in tests/img/P/ (scene, object, opt_A to opt_C). */
   window.MOCK_TESTS.push({
     id: 'P',
-    title: 'Mock Test P',
+    title: 'Mock Test 16',
     note: 'Original practice content in the CELPIP-General format. Written slightly above real test difficulty.',
 
     /* =================== LISTENING =================== */
@@ -148,7 +148,7 @@
               ['SUNIL', 'That it\'s completely normal. Every new volunteer shadows an experienced one for their first three shifts. And the main skill is listening. You don\'t need any medical knowledge. In fact, you\'re not allowed to give medical advice at all.']
             ],
             questions: [
-              { id: 'L3.1', q: 'What do most of the hospital\'s volunteers do?', o: ['Help people find their way around the building', 'Run the gift shop near the main entrance', 'Keep older patients company at mealtimes', 'Bring the newspaper to patients every single morning'] },
+              { id: 'L3.1', q: 'What does the largest group of volunteers do?', o: ['Help people find their way around the building', 'Run the gift shop near the main entrance', 'Keep older patients company at mealtimes', 'Bring the newspaper to patients every single morning'] },
               { id: 'L3.2', q: 'About how many volunteers does the hospital have now?', o: ['About 460', 'About 400', 'About 340', 'About 60'] },
               { id: 'L3.3', q: 'What scheduling problem does Sunil describe?', o: ['Too few volunteers are available outside regular weekday hours.', 'Many volunteers cancel their Tuesday morning shifts.', 'Volunteers are not allowed to choose their own shifts.', 'Weekend shifts are too long for most volunteers.'] },
               { id: 'L3.4', q: 'Why does Sunil mention what the nurses have noticed?', o: ['To show that the mealtime visits have a real effect', 'To explain why nurses prefer working with volunteers', 'To show that volunteers need some medical training', 'To suggest that older patients dislike hospital food'] },
@@ -252,7 +252,7 @@
               ['NARR', 'For now, both agree on one thing: whatever system a city chooses, residents need to know clearly who is responsible, and by when.']
             ],
             questions: [
-              { id: 'L6.1', q: 'What is the report mainly about?', o: ['Who should be responsible for clearing sidewalks', 'How cities can lower the cost of snow removal', 'Why sidewalk plows are replacing road plows', 'How residents can get help shovelling their driveways'] },
+              { id: 'L6.1', q: 'What is the report mainly about?', o: ['Whose job it should be to keep sidewalks clear', 'How cities can lower the cost of snow removal', 'Why sidewalk plows are replacing road plows', 'How residents can get help shovelling their driveways'] },
               { id: 'L6.2', q: 'What does Boateng mean by a sidewalk\'s "worst stretch"?', o: ['One uncleared section can make a whole route unusable.', 'Some streets are always plowed last after a storm.', 'Older sidewalks are too narrow for wheelchairs.', 'Homeowners usually clear only part of their sidewalk.'] },
               { id: 'L6.3', q: 'What does Boateng concede?', o: ['Crews may take some time to reach every street.', 'Private companies clear sidewalks more cheaply.', 'Most homeowners do not clear their sidewalks.', 'Small plows can damage sidewalks and lawns.'] },
               { id: 'L6.4', q: 'Why does Sandvik question the fifty-dollar figure?', o: ['It comes from places that are easier to serve.', 'It does not include the cost of the new plows.', 'It was calculated by a private company.', 'It applies only to homeowners who use a walker.'] },
@@ -279,12 +279,12 @@
             { id: 'R1.5', q: 'Corinne\'s comment about Rupert suggests that he', o: ['is enjoying the break from being connected more than he admits.', 'is worried about missing important messages from work.', 'plans to drive to Dorset every evening to check his email.', 'would prefer to rent a cottage with internet next year.'] },
             { id: 'R1.6', q: 'Corinne asks Baptiste to', o: ['make sure his children do not expect a boat ride.', 'help her stain the dock and clean the gutters.', 'pay a share of the cost of renting the cottage.', 'bring enough groceries for both families.'] }
           ],
-          reply: '<h3>Reply</h3><p>Hi Corinne,</p><p>What a wonderful invitation! Anouk and I talked it over last night, and we would love to come. We can arrive on the Saturday and stay the full week.</p><p>Of course, we completely understand that your mother will be using [[R1.7]] for the first few nights. Honestly, our boys were thrilled to hear that they might sleep [[R1.8]], so I suspect we will have trouble getting them out of there.</p><p>We actually sold the small car in June, so [[R1.9]] should not be a problem for our new van. I will pack the telescope, of course, and we will fill the back of the van with [[R1.10]] since the lake water is off limits.</p><p>One question: I am supposed to be on call for work that week. Since phones only work at [[R1.11]], I may disappear down there now and then. I hope Rupert will forgive me.</p><p>Thank you again. We cannot wait.</p><p>Baptiste</p>',
+          reply: '<h3>Reply</h3><p>Hi Corinne,</p><p>What a wonderful invitation! Anouk and I talked it over last night, and we would love to come. We can arrive on the Saturday and stay the full week.</p><p>Of course, we completely understand that your mother will be using [[R1.7]] for the first few nights. Honestly, our boys were thrilled to hear that they might sleep [[R1.8]], so I suspect we will have trouble getting them out of there.</p><p>We actually sold the small car in June, so [[R1.9]] should not be a problem for our new van. I will pack the telescope, of course. We will do our grocery shopping in Dorset on the way in on the Saturday rather than the next day, since [[R1.10]].</p><p>One question: I am supposed to be on call for work that week. Since phones only work at [[R1.11]], I may disappear down there now and then. I hope Rupert will forgive me.</p><p>Thank you again. We cannot wait.</p><p>Baptiste</p>',
           blanks: [
             { id: 'R1.7', o: ['one of the bedrooms', 'the only bathroom', 'the small cabin by the lake', 'the canoe and the kayaks'] },
             { id: 'R1.8', o: ['in a little cabin by the lake', 'in the room your mother uses', 'on the motorboat at the dock', 'in a tent beside the cottage'] },
             { id: 'R1.9', o: ['the rough stretch at the end', 'the drive to the store in Dorset', 'the early closing time on Sundays', 'the twenty minutes from the lake'] },
-            { id: 'R1.10', o: ['drinking water', 'groceries from Dorset', 'fuel for the boat', 'bedding and towels'] },
+            { id: 'R1.10', o: ['the store closes early on Sundays', 'the lake water is not for drinking', 'the last stretch of road is rough', 'your mother leaves on the Wednesday'] },
             { id: 'R1.11', o: ['the tip of the dock', 'the store in Dorset', 'the top of the gravel road', 'the bunkie by the water'] }
           ]
         },
@@ -356,7 +356,7 @@
       tasks: [
         {
           id: 'W1', title: 'Task 1: Writing an Email', minutes: 27, minWords: 150, maxWords: 200,
-          prompt: '<p>Your nine-year-old son plays in your local minor hockey association. You paid the $650 registration fee online in August, but your credit card was charged twice. Then, two weeks ago, his team\'s practices were moved from Wednesday evenings to Saturdays at 6:00 a.m. with no explanation. You have sent two emails about the double charge and received no reply. You also volunteer as the team\'s assistant coach and want to keep a good relationship with the association.</p><p>Write an email to the president of the association. In your email, do the following:</p><ul><li>Explain both problems and what you have already done about the payment.</li><li>Describe how the new practice time affects your family and others on the team.</li><li>Say what you would like the association to do, and suggest how you could help.</li></ul><p class="muted">Write 150 to 200 words.</p>'
+          prompt: '<p>Your nine-year-old son plays in your local minor hockey association. Two weeks ago, his team\'s practices were moved from Wednesday evenings to Saturdays at 6:00 a.m. with no explanation, and two emails you sent about it have not been answered. You also volunteer as the team\'s assistant coach and want to keep a good relationship with the association.</p><p>Write an email to the president of the association. In your email, do the following:</p><ul><li>Explain the problem and what you have already done about it.</li><li>Describe how the new practice time affects your family and others on the team.</li><li>Say what you would like the association to do, and suggest how you could help.</li></ul><p class="muted">Write 150 to 200 words.</p>'
         },
         {
           id: 'W2', title: 'Task 2: Responding to Survey Questions', minutes: 26, minWords: 150, maxWords: 200,
@@ -376,7 +376,7 @@
         { id: 'S1', title: 'Task 1: Giving Advice', prep: 30, speak: 90, prompt: 'A friend of yours and her husband have just had their first baby. For the next year, they will live on one income, and their rent is going up by $150 a month starting next month. They have never followed a budget before. Give your friend advice on how to manage their money during this year.' },
         { id: 'S2', title: 'Task 2: Talking about a Personal Experience', prep: 30, speak: 60, prompt: 'Talk about a time when you were new somewhere, such as a city, a school or a job, and someone helped you settle in. What happened, how did their help make a difference, and what would you do differently if you were in that situation again?' },
         { id: 'S3', title: 'Task 3: Describing a Scene', prep: 30, speak: 60, prompt: 'Describe some things that are happening in the picture below as well as you can. The person you are speaking to cannot see the picture.', image: '<img src="tests/img/P/scene.jpg" alt="A snowy neighbourhood street and park on a winter morning">' },
-        { id: 'S4', title: 'Task 4: Making Predictions', prep: 30, speak: 60, prompt: 'In this picture, what do you think will most probably happen next? Think about the snowplow and the man who has just shovelled his driveway, the people on the rink, and the children in the park.', image: '<img src="tests/img/P/scene.jpg" alt="A snowy neighbourhood street and park on a winter morning">' },
+        { id: 'S4', title: 'Task 4: Making Predictions', prep: 30, speak: 60, prompt: 'In this picture, what do you think will most probably happen next? Describe at least two things that will probably happen, and explain what in the picture makes you think so.', image: '<img src="tests/img/P/scene.jpg" alt="A snowy neighbourhood street and park on a winter morning">' },
         {
           id: 'S5', title: 'Task 5: Comparing and Persuading', type: 'compare', select: 60, prep: 60, speak: 60,
           prompt: 'You and your sister are planning a two-night getaway with her two young children in late September. Choose the option you prefer. In the next section, you will need to persuade your sister that your choice is better.',

@@ -10,7 +10,7 @@
   /* Speaking pictures are image files in tests/img/R/ (scene, object, opt_A to opt_C). */
   window.MOCK_TESTS.push({
     id: 'R',
-    title: 'Mock Test R',
+    title: 'Mock Test 18',
     note: 'Original practice content in the CELPIP-General format. Written slightly above real test difficulty.',
 
     /* =================== LISTENING =================== */
@@ -253,7 +253,7 @@
               ['NARR', 'The debate is far from settled. Wetaskiwin\'s council is expected to vote on a three-year trial grant this fall.']
             ],
             questions: [
-              { id: 'L6.1', q: 'What is the report mainly about?', o: ['Whether councils should help pay for local papers', 'Why newspapers have moved their stories online', 'How towns decide where to post public notices', 'Whether council meetings should be filmed'] },
+              { id: 'L6.1', q: 'What do Gauthier and Rahimi both accept?', o: ['Someone needs to keep watch over local councils.', 'An independent board can keep grants free of influence.', 'Co-operatives can work in most small towns.', 'Streamed meetings can replace local reporting.'] },
               { id: 'L6.2', q: 'According to Gauthier, what happens when a town loses its paper?', o: ['Residents take less part in local democracy.', 'Councils stop publishing their yearly budgets.', 'Towns pay more to place public notices.', 'Councils hold more meetings in private.'] },
               { id: 'L6.3', q: 'Why does Gauthier mention public notices?', o: ['Towns already spend money on local papers.', 'Notices are the most widely read pages.', 'Papers charge towns too much to print them.', 'Notices could be moved online to save money.'] },
               { id: 'L6.4', q: 'How does Gauthier respond to the risk that papers will favour council?', o: ['She would keep elected officials out of funding choices.', 'She argues that editors would refuse any money from towns.', 'She suggests that grants be kept confidential.', 'She says the mayor should approve each grant.'] },
@@ -376,7 +376,7 @@
         { id: 'S1', title: 'Task 1: Giving Advice', prep: 30, speak: 90, prompt: 'A friend of yours has signed up for a 10-kilometre race in eight weeks, but she has never run more than three kilometres at a time. She works twelve-hour shifts at a hospital, including some nights, and she has only about $100 to spend on running gear. Give your friend advice on how to get ready for the race.' },
         { id: 'S2', title: 'Task 2: Talking about a Personal Experience', prep: 30, speak: 60, prompt: 'Talk about a time when your travel plans changed suddenly, for example because of a delayed flight, a cancelled bus or bad weather. What happened, how did you deal with it, and what would you do differently if it happened again?' },
         { id: 'S3', title: 'Task 3: Describing a Scene', prep: 30, speak: 60, prompt: 'Describe some things that are happening in the picture below as well as you can. The person you are speaking to cannot see the picture.', image: '<img src="tests/img/R/scene.jpg" alt="A busy community garden on a Saturday morning as rain clouds approach">' },
-        { id: 'S4', title: 'Task 4: Making Predictions', prep: 30, speak: 60, prompt: 'In this picture, what do you think will most probably happen next? Think about the sprinkler, the dog, the man carrying the pots and the sky.', image: '<img src="tests/img/R/scene.jpg" alt="A busy community garden on a Saturday morning as rain clouds approach">' },
+        { id: 'S4', title: 'Task 4: Making Predictions', prep: 30, speak: 60, prompt: 'In this picture, what do you think will most probably happen next? Describe at least two things that will probably happen, and explain what in the picture makes you think so.', image: '<img src="tests/img/R/scene.jpg" alt="A busy community garden on a Saturday morning as rain clouds approach">' },
         {
           id: 'S5', title: 'Task 5: Comparing and Persuading', type: 'compare', select: 60, prep: 60, speak: 60,
           prompt: 'Your best friend turns 40 next month, and you and your partner are planning a surprise party for about 30 guests. Choose the option you prefer. In the next section, you will need to persuade your partner that your choice is better.',

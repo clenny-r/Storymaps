@@ -10,7 +10,7 @@
   /* Speaking pictures are image files in tests/img/B/ (scene, object, opt_A to opt_C). */
   window.MOCK_TESTS.push({
     id: 'B',
-    title: 'Mock Test B',
+    title: 'Mock Test 2',
     note: 'Original practice content in the CELPIP-General format. Written slightly harder than the real test.',
 
     /* =================== LISTENING =================== */
@@ -364,7 +364,7 @@
         { id: 'S1', title: 'Task 1: Giving Advice', prep: 30, speak: 90, prompt: 'Your cousin has received two job offers and must answer both by Friday. One pays $8,000 a year more, but it is a 75-minute bus ride each way, and she does not own a car. The other pays less, but it is a 10-minute walk from home and has flexible hours, which matters because she must pick up her son from daycare by 5:30 p.m. Give your cousin advice on how to choose.' },
         { id: 'S2', title: 'Task 2: Talking about a Personal Experience', prep: 30, speak: 60, prompt: 'Talk about a time when you helped a stranger. What happened, how did you feel afterward, and is there anything you would do differently if it happened again today?' },
         { id: 'S3', title: 'Task 3: Describing a Scene', prep: 30, speak: 60, prompt: 'Describe some things that are happening in the picture below as well as you can. The person you are speaking to cannot see the picture.', image: '<img src="tests/img/B/scene.jpg" alt="A busy outdoor farmers market on a sunny morning">' },
-        { id: 'S4', title: 'Task 4: Making Predictions', prep: 30, speak: 60, prompt: 'In this picture, what do you think will most probably happen next?', image: '<img src="tests/img/B/scene.jpg" alt="A busy outdoor farmers market on a sunny morning">' },
+        { id: 'S4', title: 'Task 4: Making Predictions', prep: 30, speak: 60, prompt: 'In this picture, what do you think will most probably happen next? Describe at least two things that will probably happen, and explain what in the picture makes you think so.', image: '<img src="tests/img/B/scene.jpg" alt="A busy outdoor farmers market on a sunny morning">' },
         {
           id: 'S5', title: 'Task 5: Comparing and Persuading', type: 'compare', select: 60, prep: 60, speak: 60,
           prompt: 'Your family has decided to get a pet. Choose the option you prefer. In the next section, you will need to persuade a family member that your choice is better.',

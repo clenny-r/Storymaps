@@ -10,7 +10,7 @@
   /* Speaking pictures are image files in tests/img/K/ (scene, object, opt_A to opt_C). */
   window.MOCK_TESTS.push({
     id: 'K',
-    title: 'Mock Test K',
+    title: 'Mock Test 11',
     note: 'Original practice content in the CELPIP-General format. Written slightly above real test difficulty.',
 
     /* =================== LISTENING =================== */
@@ -354,7 +354,7 @@
         { id: 'S1', title: 'Task 1: Giving Advice', prep: 30, speak: 90, prompt: 'A friend of yours is starting a new job next week and is feeling nervous about it. The job is in a field she has never worked in, and for the first two weeks she will work from home, meeting her team only on video calls. Give your friend advice on how to make a good start in the new workplace.' },
         { id: 'S2', title: 'Task 2: Talking about a Personal Experience', prep: 30, speak: 60, prompt: 'Talk about a time when you lost something that was important to you. What was it, what happened, how did you feel, and did the experience change how you look after important things?' },
         { id: 'S3', title: 'Task 3: Describing a Scene', prep: 30, speak: 60, prompt: 'Describe some things that are happening in the picture below as well as you can. The person you are speaking to cannot see the picture.', image: '<img src="tests/img/K/scene.jpg" alt="A busy campground by a lake in the evening as a storm moves in">' },
-        { id: 'S4', title: 'Task 4: Making Predictions', prep: 30, speak: 60, prompt: 'In this picture, what do you think will most probably happen next? Think about the sky, the campers who are not ready for the night, and what is going on around the campsite.', image: '<img src="tests/img/K/scene.jpg" alt="A busy campground by a lake in the evening as a storm moves in">' },
+        { id: 'S4', title: 'Task 4: Making Predictions', prep: 30, speak: 60, prompt: 'In this picture, what do you think will most probably happen next? Describe at least two things that will probably happen, and explain what in the picture makes you think so.', image: '<img src="tests/img/K/scene.jpg" alt="A busy campground by a lake in the evening as a storm moves in">' },
         {
           id: 'S5', title: 'Task 5: Comparing and Persuading', type: 'compare', select: 60, prep: 60, speak: 60,
           prompt: 'You and your partner are going to a cousin\'s wedding in another city, about 650 kilometres away, for three days. Choose the way of travelling you prefer. In the next section, you will need to persuade your partner that your choice is better.',

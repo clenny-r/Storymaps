@@ -9,7 +9,7 @@
   /* Speaking pictures are image files in tests/img/G/ (scene, object, opt_A to opt_C). */
   window.MOCK_TESTS.push({
     id: 'G',
-    title: 'Mock Test G',
+    title: 'Mock Test 7',
     note: 'Original practice content in the CELPIP-General format.',
 
     /* =================== LISTENING =================== */
@@ -358,7 +358,7 @@
         { id: 'S1', title: 'Task 1: Giving Advice', prep: 30, speak: 90, prompt: 'A friend of yours is about to move into their first apartment and has never lived alone before. The move is in two weeks, your friend is starting a new job the same week, and after rent there will be only about $400 a month left for everything else. Give your friend advice on how to prepare and manage their new home.' },
         { id: 'S2', title: 'Task 2: Talking about a Personal Experience', prep: 30, speak: 60, prompt: 'Talk about a time when you made a mistake and learned something important from it. What happened, who else was affected, and what did you learn?' },
         { id: 'S3', title: 'Task 3: Describing a Scene', prep: 30, speak: 60, prompt: 'Describe some things that are happening in the picture below as well as you can. The person you are speaking to cannot see the picture.', image: '<img src="tests/img/G/scene.jpg" alt="A children&#x27;s birthday party in a backyard">' },
-        { id: 'S4', title: 'Task 4: Making Predictions', prep: 30, speak: 60, prompt: 'In this picture, what do you think will most probably happen next? Think about the dog, the red balloon, and the cake on the table.', image: '<img src="tests/img/G/scene.jpg" alt="A children&#x27;s birthday party in a backyard">' },
+        { id: 'S4', title: 'Task 4: Making Predictions', prep: 30, speak: 60, prompt: 'In this picture, what do you think will most probably happen next? Describe at least two things that will probably happen, and explain what in the picture makes you think so.', image: '<img src="tests/img/G/scene.jpg" alt="A children&#x27;s birthday party in a backyard">' },
         {
           id: 'S5', title: 'Task 5: Comparing and Persuading', type: 'compare', select: 60, prep: 60, speak: 60,
           prompt: 'You and your partner are looking for a new place to rent. Choose the option you prefer. In the next section, you will need to persuade your partner that your choice is better.',

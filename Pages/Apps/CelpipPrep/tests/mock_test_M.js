@@ -10,7 +10,7 @@
   /* Speaking pictures are image files in tests/img/M/ (scene, object, opt_A to opt_C). */
   window.MOCK_TESTS.push({
     id: 'M',
-    title: 'Mock Test M',
+    title: 'Mock Test 13',
     note: 'Original practice content in the CELPIP-General format. Written slightly above real test difficulty.',
 
     /* =================== LISTENING =================== */
@@ -118,7 +118,7 @@
               { id: 'L2.1', q: 'Why does Yolanda need permission for her new floor?', o: ['Flooring changes can affect the people living below.', 'The building does not normally allow hardwood floors.', 'Her installer has not worked in the building before.', 'The board must approve the cost of every renovation.'] },
               { id: 'L2.2', q: 'What would happen if Yolanda sent the form without the product sheet?', o: ['Her approval would probably be delayed.', 'Her request would be refused permanently.', 'She would have to pay a larger deposit.', 'The board would choose the underlay itself.'] },
               { id: 'L2.3', q: 'Which of these work times would be allowed?', o: ['Saturday from 1:00 to 4:00 p.m.', 'Sunday from 10:00 a.m. to 2:00 p.m.', 'Saturday from 9:00 a.m. to noon', 'Friday from 4:00 to 7:00 p.m.'] },
-              { id: 'L2.4', q: 'What does the manager say about the deposit?', o: ['She gets it back if she follows the elevator rules and nothing is harmed.', 'It must be paid before the board meets next week.', 'It is kept if the work takes longer than two days.', 'It is returned on the same day the work is finished.'] },
+              { id: 'L2.4', q: 'What does the manager say about the deposit?', o: ['It comes back if the elevator is padded and unharmed.', 'It must be paid before the board meets next week.', 'It is kept if the work takes longer than two days.', 'It is returned on the same day that the work is finished.'] },
               { id: 'L2.5', q: 'Why does the manager suggest asking the neighbours about timing?', o: ['Their new baby may need quiet at certain times.', 'The building rules let them choose the work hours.', 'They complained about a renovation in the past.', 'They also need the service elevator that week.'] }
             ]
           }]
@@ -223,7 +223,7 @@
               { id: 'L5.1', q: 'What is the main purpose of the meeting?', o: ['To decide whether to hold a market in the cold months', 'To choose new vendors for next summer\'s market', 'To plan a fundraising event at the local arena', 'To survey customers about their shopping habits'] },
               { id: 'L5.2', q: 'Why is Carmen surprised by the survey result?', o: ['She assumed few vendors would have goods to sell then.', 'She expected the bakers to refuse to take part.', 'She thought more than twenty-two vendors would reply.', 'She did not know that Dennis had already sent out a survey.'] },
               { id: 'L5.3', q: 'Why do Carmen and Margaret lean toward the arena lobby?', o: ['Customers without cars can reach it more easily.', 'It costs less to rent than the old school gym.', 'It can hold every vendor who wants to take part.', 'It is closer to the highway than the gym is.'] },
-              { id: 'L5.4', q: 'How many vendors can the arena lobby hold?', o: ['Twenty', 'Eighteen', 'Twenty-two', 'Forty'] },
+              { id: 'L5.4', q: 'Why is Margaret willing to accept the arena lobby\'s size?', o: ['A few vendors usually cancel in bad weather.', 'The gym is too far for most vendors to reach.', 'Only eighteen vendors have agreed to come.', 'Most vendors prefer to use small tables.'] },
               { id: 'L5.5', q: 'Why is Margaret nervous about raising the stall fee?', o: ['Losing a few vendors could make the market look empty.', 'Customers would have to pay much more for their food.', 'The vendors said they would not pay any more than now.', 'The arena might raise its rent again in February.'] },
               { id: 'L5.6', q: 'Why does Margaret interrupt Dennis?', o: ['She thinks he is taking on too much.', 'She believes the radio spot costs too much.', 'She wants to call the radio station herself.', 'She thinks the arena is already booked.'] },
               { id: 'L5.7', q: 'Why does Carmen offer to handle all the promotion?', o: ['To make sure the information is consistent', 'To save the group money on printing posters', 'Because she already works at the radio station', 'Because Dennis asked her to make the posters'] },
@@ -286,7 +286,7 @@
           ],
           reply: '<h3>Reply</h3><p>Hi Lorna,</p><p>Thank you for all the advice! I had no idea it could get that cold. I have already bought [[R1.7]], just as your neighbour suggested, and my brother is lending me his winter boots.</p><p>You have convinced me about the car. Since your house is [[R1.8]], I will get around on my own during the day and save the money. For the bison, I am more than happy to [[R1.9]], as you had planned.</p><p>If I do end up renting a car for a day, I promise I will [[R1.10]], and I will look for that cord before I drive off the lot.</p><p>And if a big storm comes, I will happily [[R1.11]]. It sounds like the perfect excuse to relax.</p><p>Please tell Graham he does not have to drive me around every evening, either. I would be just as happy staying in with you two, playing cards and catching up.</p><p>See you on the 9th!</p><p>Bea</p>',
           blanks: [
-            { id: 'R1.7', o: ['a pair of warm mittens', 'a pair of thick gloves', 'a brand-new winter coat', 'a hat with a wide brim'] },
+            { id: 'R1.7', o: ['a pair of warm mittens', 'a hat that covers my ears', 'a pair of thick gloves', 'a long, warm winter coat'] },
             { id: 'R1.8', o: ['so close to public transit', 'a short drive from downtown', 'right next to Elk Island Park', 'not far from the airport'] },
             { id: 'R1.9', o: ['ride out there with you on the Saturday', 'rent a car just for that one day', 'take the light rail train out there', 'go on my own during the week'] },
             { id: 'R1.10', o: ['pay extra for the proper tires', 'choose the least expensive model', 'pick it up at the airport counter', 'stay away from all quiet streets'] },
@@ -352,7 +352,7 @@
             { id: 'R4.7', o: ['reject businesses that copy existing ones', 'stop the program for at least three years', 'pay rent for established shops as well', 'cancel the monthly meetings with mentors'] },
             { id: 'R4.8', o: ['what happens when the free rent stops', 'whether his shop will ever make a profit', 'losing customers to a nearby café', 'finding a mentor for his business'] },
             { id: 'R4.9', o: ['long-term survival is the true test', 'filling storefronts quickly matters most', 'such programs never really work', 'only cafés should receive support'] },
-            { id: 'R4.10', o: ['reduce the support in steps over two years', 'pay the full rent for three years instead', 'give each business a single cash payment', 'end the program as soon as possible'] }
+            { id: 'R4.10', o: ['reduce the support in steps over two years', 'shorten the free-rent period to six months', 'give each business a single cash payment', 'end the program as soon as possible'] }
           ]
         }
       ]
@@ -383,7 +383,7 @@
         { id: 'S1', title: 'Task 1: Giving Advice', prep: 30, speak: 90, prompt: 'A friend of yours wants to go back to school to finish a college diploma that she started years ago. She works full time, has two young children, and has only $1,500 saved for tuition and books. The classes she needs are offered in the evenings or online. Give your friend advice on how to make this plan work.' },
         { id: 'S2', title: 'Task 2: Talking about a Personal Experience', prep: 30, speak: 60, prompt: 'Talk about a time when you had a disagreement with a neighbour or a roommate. What was the disagreement about, how was it resolved, and what would you do differently if it happened again?' },
         { id: 'S3', title: 'Task 3: Describing a Scene', prep: 30, speak: 60, prompt: 'Describe some things that are happening in the picture below as well as you can. The person you are speaking to cannot see the picture.', image: '<img src="tests/img/M/scene.jpg" alt="A residential street the morning after a heavy snowfall">' },
-        { id: 'S4', title: 'Task 4: Making Predictions', prep: 30, speak: 60, prompt: 'In this picture, what do you think will most probably happen next? Think about the snowplow, the man who has just cleared his driveway, the roof of the red house, and what the other people are doing.', image: '<img src="tests/img/M/scene.jpg" alt="A residential street the morning after a heavy snowfall">' },
+        { id: 'S4', title: 'Task 4: Making Predictions', prep: 30, speak: 60, prompt: 'In this picture, what do you think will most probably happen next? Describe at least two things that will probably happen, and explain what in the picture makes you think so.', image: '<img src="tests/img/M/scene.jpg" alt="A residential street the morning after a heavy snowfall">' },
         {
           id: 'S5', title: 'Task 5: Comparing and Persuading', type: 'compare', select: 60, prep: 60, speak: 60,
           prompt: 'Your family wants to eat more fresh, local food this summer. Choose the option you prefer. In the next section, you will need to persuade a family member that your choice is better.',

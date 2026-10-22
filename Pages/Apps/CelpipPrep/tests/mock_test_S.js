@@ -10,7 +10,7 @@
   /* Speaking pictures are image files in tests/img/S/ (scene, object, opt_A to opt_C). */
   window.MOCK_TESTS.push({
     id: 'S',
-    title: 'Mock Test S',
+    title: 'Mock Test 19',
     note: 'Original practice content in the CELPIP-General format. Written slightly above real test difficulty.',
 
     /* =================== LISTENING =================== */
@@ -377,7 +377,7 @@
         { id: 'S1', title: 'Task 1: Giving Advice', prep: 30, speak: 90, prompt: 'A friend of yours is getting married in four months. She and her partner have saved $8,000 for the wedding and would like about 50 guests, but her parents want to invite 150 people and expect a large celebration. Give your friend advice on how to plan the wedding and how to handle the disagreement with her parents.' },
         { id: 'S2', title: 'Task 2: Talking about a Personal Experience', prep: 30, speak: 60, prompt: 'Talk about a time when technology let you down at an important moment, for example a computer that crashed, a phone that died or a file that disappeared. What happened, how did you solve the problem, and what would you do differently now?' },
         { id: 'S3', title: 'Task 3: Describing a Scene', prep: 30, speak: 60, prompt: 'Describe some things that are happening in the picture below as well as you can. The person you are speaking to cannot see the picture.', image: '<img src="tests/img/S/scene.jpg" alt="A busy airport departure gate during a flight delay">' },
-        { id: 'S4', title: 'Task 4: Making Predictions', prep: 30, speak: 60, prompt: 'In this picture, what do you think will most probably happen next? Think about the man looking at his phone, the small child near the table and the departures board.', image: '<img src="tests/img/S/scene.jpg" alt="A busy airport departure gate during a flight delay">' },
+        { id: 'S4', title: 'Task 4: Making Predictions', prep: 30, speak: 60, prompt: 'In this picture, what do you think will most probably happen next? Describe at least two things that will probably happen, and explain what in the picture makes you think so.', image: '<img src="tests/img/S/scene.jpg" alt="A busy airport departure gate during a flight delay">' },
         {
           id: 'S5', title: 'Task 5: Comparing and Persuading', type: 'compare', select: 60, prep: 60, speak: 60,
           prompt: 'You are a member of your child\'s parent council, which must choose an end-of-year trip for 60 grade 5 students. Choose the option you prefer. In the next section, you will need to persuade another council member that your choice is better.',

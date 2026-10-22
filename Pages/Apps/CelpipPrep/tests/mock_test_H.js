@@ -10,7 +10,7 @@
   /* Speaking pictures are image files in tests/img/H/ (scene, object, opt_A to opt_C). */
   window.MOCK_TESTS.push({
     id: 'H',
-    title: 'Mock Test H',
+    title: 'Mock Test 8',
     note: 'Original practice content in the CELPIP-General format. Written to be slightly harder than the real test.',
 
     /* =================== LISTENING =================== */
@@ -350,7 +350,7 @@
         { id: 'S1', title: 'Task 1: Giving Advice', prep: 30, speak: 90, prompt: 'A close friend tells you that she has been feeling very stressed at work. She has too many tasks, often stays until eight and is sleeping badly. She cannot afford to quit, and her manager has just asked her to lead a new project starting next month. Give her advice on how to deal with the situation.' },
         { id: 'S2', title: 'Task 2: Talking about a Personal Experience', prep: 30, speak: 60, prompt: 'Talk about a time when you tried a new food or a new activity for the first time. What was it, who or what convinced you to try it, how did you feel, and would you do it again?' },
         { id: 'S3', title: 'Task 3: Describing a Scene', prep: 30, speak: 60, prompt: 'Describe some things that are happening in the picture below as well as you can. The person you are speaking to cannot see the picture.', image: '<img src="tests/img/H/scene.jpg" alt="An outdoor skating rink in a city park on a winter afternoon">' },
-        { id: 'S4', title: 'Task 4: Making Predictions', prep: 30, speak: 60, prompt: 'In this picture, what do you think will most probably happen next?', image: '<img src="tests/img/H/scene.jpg" alt="An outdoor skating rink in a city park on a winter afternoon">' },
+        { id: 'S4', title: 'Task 4: Making Predictions', prep: 30, speak: 60, prompt: 'In this picture, what do you think will most probably happen next? Describe at least two things that will probably happen, and explain what in the picture makes you think so.', image: '<img src="tests/img/H/scene.jpg" alt="An outdoor skating rink in a city park on a winter afternoon">' },
         {
           id: 'S5', title: 'Task 5: Comparing and Persuading', type: 'compare', select: 60, prep: 60, speak: 60,
           prompt: 'You and your partner want to take a weekend course together this winter. Choose the option you prefer. In the next section, you will need to persuade your partner that your choice is better.',

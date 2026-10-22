@@ -10,7 +10,7 @@
   /* Speaking pictures are image files in tests/img/U/ (scene, object, opt_A to opt_C). */
   window.MOCK_TESTS.push({
     id: 'U',
-    title: 'Mock Test U',
+    title: 'Mock Test 21',
     note: 'Original practice content in the CELPIP-General format. Written slightly above real test difficulty.',
 
     /* =================== LISTENING =================== */
@@ -148,7 +148,7 @@
               ['BERNARD', 'The library\'s asked me to run a free conversation group on Wednesday evenings this fall. I said yes, on one condition: no textbooks allowed.']
             ],
             questions: [
-              { id: 'L3.1', q: 'How did Bernard begin tutoring?', o: ['A request from someone he knew led to others.', 'He advertised his lessons soon after retiring.', 'The library hired him to teach adult classes.', 'His former high school students asked him.'] },
+              { id: 'L3.1', q: 'What can be inferred about Bernard\'s retirement?', o: ['It was less restful than he had expected.', 'He retired early so that he could tutor adults.', 'He spent his first months teaching at the library.', 'He struggled to find students at first.'] },
               { id: 'L3.2', q: 'What has surprised Bernard about his students?', o: ['Many want French for family reasons.', 'Most of them are police officers.', 'Few of them need French for work.', 'Older students learn the fastest.'] },
               { id: 'L3.3', q: 'Why does Bernard make mistakes on purpose?', o: ['To ease his students\' fear of speaking up', 'To check whether his students are listening', 'To show how English differs from French', 'To make the homework seem less difficult'] },
               { id: 'L3.4', q: 'How does Bernard handle grammar in his lessons?', o: ['He explains rules only when they come up.', 'He begins every lesson with a short rule.', 'He never discusses grammar with adults.', 'He leaves grammar for the homework.'] },
@@ -326,7 +326,7 @@
             { id: 'R3.6', q: 'Sourdough loaves usually sell for more than ordinary bread.', fixed: true, a: 'E' },
             { id: 'R3.7', q: 'Certain starters have been handed over along with the business.', fixed: true, a: 'C' },
             { id: 'R3.8', q: 'Many small bakeries now offer a smaller variety of products.', fixed: true, a: 'D' },
-            { id: 'R3.9', q: 'Bakery work often starts in the middle of the night.', fixed: true, a: 'A' }
+            { id: 'R3.9', q: 'Some bakeries rent out their ovens to other businesses overnight.', fixed: true, a: 'E' }
           ]
         },
         {
@@ -377,7 +377,7 @@
         { id: 'S1', title: 'Task 1: Giving Advice', prep: 30, speak: 90, prompt: 'A friend of yours has accepted a teaching job on a small island and will move there in August. The ferry runs only four times a day, the last one leaves the mainland at 8:00 p.m., and she does not know anyone on the island. She also has a tight budget, because her car needs expensive repairs. Give your friend advice on how to prepare for the move and settle into island life.' },
         { id: 'S2', title: 'Task 2: Talking about a Personal Experience', prep: 30, speak: 60, prompt: 'Talk about a time when a job interview or another important meeting did not go the way you expected. What happened, how did you handle it, and what would you do differently now?' },
         { id: 'S3', title: 'Task 3: Describing a Scene', prep: 30, speak: 60, prompt: 'Describe some things that are happening in the picture below as well as you can. The person you are speaking to cannot see the picture.', image: '<img src="tests/img/U/scene.jpg" alt="A busy outdoor market with a bakery stall and a food truck">' },
-        { id: 'S4', title: 'Task 4: Making Predictions', prep: 30, speak: 60, prompt: 'In this picture, what do you think will most probably happen next? Think about the woman carrying the boxes, the dog, and the people waiting at the food truck.', image: '<img src="tests/img/U/scene.jpg" alt="A busy outdoor market with a bakery stall and a food truck">' },
+        { id: 'S4', title: 'Task 4: Making Predictions', prep: 30, speak: 60, prompt: 'In this picture, what do you think will most probably happen next? Describe at least two things that will probably happen, and explain what in the picture makes you think so.', image: '<img src="tests/img/U/scene.jpg" alt="A busy outdoor market with a bakery stall and a food truck">' },
         {
           id: 'S5', title: 'Task 5: Comparing and Persuading', type: 'compare', select: 60, prep: 60, speak: 60,
           prompt: 'Your family is planning a two-night stay in a small tourist town to celebrate your parents\' 40th wedding anniversary. Six adults will go. Choose the place to stay that you prefer. In the next section, you will need to persuade a family member that your choice is better.',

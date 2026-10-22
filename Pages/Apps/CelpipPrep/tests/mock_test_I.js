@@ -10,7 +10,7 @@
   /* Speaking pictures are image files in tests/img/I/ (scene, object, opt_A to opt_C). */
   window.MOCK_TESTS.push({
     id: 'I',
-    title: 'Mock Test I',
+    title: 'Mock Test 9',
     note: 'Original practice content in the CELPIP-General format. Written slightly harder than the real test.',
 
     /* =================== LISTENING =================== */
@@ -364,7 +364,7 @@
         { id: 'S1', title: 'Task 1: Giving Advice', prep: 30, speak: 90, prompt: 'A friend of yours wants to buy their first car but does not know much about cars. They have saved $8,000 and need the car within three weeks to start a new job outside the city, where there is no bus service. Give your friend advice on how to choose and buy one.' },
         { id: 'S2', title: 'Task 2: Talking about a Personal Experience', prep: 30, speak: 60, prompt: 'Talk about a time when you met someone who had a strong influence on you. Who was this person, how did they influence you, and what is one thing you do differently today because of them?' },
         { id: 'S3', title: 'Task 3: Describing a Scene', prep: 30, speak: 60, prompt: 'Describe some things that are happening in the picture below as well as you can. The person you are speaking to cannot see the picture.', image: '<img src="tests/img/I/scene.jpg" alt="A busy grocery store on a weekend afternoon">' },
-        { id: 'S4', title: 'Task 4: Making Predictions', prep: 30, speak: 60, prompt: 'In this picture, what do you think will most probably happen next?', image: '<img src="tests/img/I/scene.jpg" alt="A busy grocery store on a weekend afternoon">' },
+        { id: 'S4', title: 'Task 4: Making Predictions', prep: 30, speak: 60, prompt: 'In this picture, what do you think will most probably happen next? Describe at least two things that will probably happen, and explain what in the picture makes you think so.', image: '<img src="tests/img/I/scene.jpg" alt="A busy grocery store on a weekend afternoon">' },
         {
           id: 'S5', title: 'Task 5: Comparing and Persuading', type: 'compare', select: 60, prep: 60, speak: 60,
           prompt: 'Your family is deciding what to do for dinner this Friday. Choose the option you prefer. In the next section, you will need to persuade a family member that your choice is better.',

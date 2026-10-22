@@ -10,7 +10,7 @@
   /* Speaking pictures are image files in tests/img/N/ (scene, object, opt_A to opt_C). */
   window.MOCK_TESTS.push({
     id: 'N',
-    title: 'Mock Test N',
+    title: 'Mock Test 14',
     note: 'Original practice content in the CELPIP-General format. Written slightly above real test difficulty.',
 
     /* =================== LISTENING =================== */
@@ -143,7 +143,7 @@
             questions: [
               { id: 'L3.1', q: 'What does Tessa say about who responds to a call?', o: ['It depends on which members happen to be free.', 'A small team waits at the station during the day.', 'Only members living within ten minutes respond.', 'Members who work in Regina are called first.'] },
               { id: 'L3.2', q: 'Why does Tessa mention members who work in Regina?', o: ['To explain why fewer people can respond on weekdays.', 'To show that employers there support the volunteers.', 'To explain why some calls take forty minutes to reach.', 'To show how large an area the department covers.'] },
-              { id: 'L3.3', q: 'What does Tessa say about most of the department\'s calls?', o: ['They involve road crashes and health emergencies.', 'They are grass fires in the spring and summer.', 'They are house fires in and around the town.', 'They need the whole crew of twenty-two members.'] },
+              { id: 'L3.3', q: 'Why does Tessa say house fires are maybe one call in ten?', o: ['To correct a common belief about their work', 'To show that the town has very few older buildings', 'To explain why six or seven members are not enough', 'To show that grass fires have become more common'] },
               { id: 'L3.4', q: 'What can new members do before their training is finished?', o: ['Help with jobs outside the burning building.', 'Enter buildings with an experienced partner.', 'Respond to medical calls on their own.', 'Train on weekends instead of evenings.'] },
               { id: 'L3.5', q: 'Why did Tessa first decide against joining?', o: ['Her father\'s duties had kept him from family events.', 'She was frightened after seeing a neighbour\'s barn burn.', 'Her employer would not allow her to leave work for calls.', 'The pay for each call was not enough to cover her gas.'] },
               { id: 'L3.6', q: 'What does Tessa hope the open house will do?', o: ['Encourage some visitors to become volunteers.', 'Teach children about fire safety at home.', 'Raise money to replace the department\'s gear.', 'Thank the farmers who served for many years.'] }
@@ -368,7 +368,7 @@
         { id: 'S1', title: 'Task 1: Giving Advice', prep: 30, speak: 90, prompt: 'A friend of yours has had a painful tooth for two weeks but keeps putting off going to the dentist. She is nervous about dental visits, and she has no dental insurance until she starts a new job with benefits in three months. A first visit and X-rays at a nearby clinic would cost about $250. Give your friend advice about what she should do.' },
         { id: 'S2', title: 'Task 2: Talking about a Personal Experience', prep: 30, speak: 60, prompt: 'Talk about a time when you bought something that turned out to be disappointing. What was it, what did you do about it, and what would you do differently if it happened again?' },
         { id: 'S3', title: 'Task 3: Describing a Scene', prep: 30, speak: 60, prompt: 'Describe some things that are happening in the picture below as well as you can. The person you are speaking to cannot see the picture.', image: '<img src="tests/img/N/scene.jpg" alt="A busy city park on a summer afternoon as a rain cloud approaches">' },
-        { id: 'S4', title: 'Task 4: Making Predictions', prep: 30, speak: 60, prompt: 'In this picture, what do you think will most probably happen next? Think about the sky, the kite, the cyclist on the path and the dog near the pond.', image: '<img src="tests/img/N/scene.jpg" alt="A busy city park on a summer afternoon as a rain cloud approaches">' },
+        { id: 'S4', title: 'Task 4: Making Predictions', prep: 30, speak: 60, prompt: 'In this picture, what do you think will most probably happen next? Describe at least two things that will probably happen, and explain what in the picture makes you think so.', image: '<img src="tests/img/N/scene.jpg" alt="A busy city park on a summer afternoon as a rain cloud approaches">' },
         {
           id: 'S5', title: 'Task 5: Comparing and Persuading', type: 'compare', select: 60, prep: 60, speak: 60,
           prompt: 'Your eight-year-old needs care after school this year, from 3:15 p.m. until you or your partner can pick her up, usually around 5:45 p.m. Choose the option you prefer. In the next section, you will need to persuade your partner that your choice is better.',

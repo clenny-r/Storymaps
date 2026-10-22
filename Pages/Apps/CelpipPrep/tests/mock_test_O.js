@@ -10,7 +10,7 @@
   /* Speaking pictures are image files in tests/img/O/ (scene, object, opt_A to opt_C). */
   window.MOCK_TESTS.push({
     id: 'O',
-    title: 'Mock Test O',
+    title: 'Mock Test 15',
     note: 'Original practice content in the CELPIP-General format. Written slightly above real test difficulty.',
 
     /* =================== LISTENING =================== */
@@ -67,7 +67,7 @@
               ],
               questions: [
                 { id: 'L1.4', q: 'What drawback of the exhibition grounds does Bridget point out?', o: ['Visitors would miss one of the main attractions.', 'The site would need lighting for evening events.', 'The lot is too far from the city bus route.', 'The pavement is too uneven for a good rink.'] },
-                { id: 'L1.5', q: 'How long will it take to prepare the rink?', o: ['Three nights', 'Two nights', 'Five nights', 'Seven nights'] },
+                { id: 'L1.5', q: 'What does Sanjay correct about the rink?', o: ['It needs an extra night of flooding to be safe.', 'It can be ready after just two nights of flooding.', 'It will be less flat than the ice on the lake.', 'It will need the fire chief to approve the site.'] },
                 { id: 'L1.6', q: 'What does Bridget suggest about the lake?', o: ['It might still be used later if conditions improve.', 'The sculptures could be moved there for the last weekend.', 'The fire department should flood it again this week.', 'It will be closed to the public for the whole festival.'] }
               ]
             },
@@ -219,7 +219,7 @@
             questions: [
               { id: 'L5.1', q: 'What prompted the meeting?', o: ['A possible change to the building\'s rules on pets', 'A complaint about a new puppy on the fifth floor', 'A request from the manager to hire a dog walker', 'A decision by the owner to remove all dogs'] },
               { id: 'L5.2', q: 'What does Grace say about tenants who already have dogs?', o: ['Their situation could change if problems continue.', 'They must find new homes for their dogs this year.', 'They will need to register their dogs with the manager.', 'They will not be affected by any new rules at all.'] },
-              { id: 'L5.3', q: 'Why does Magnus mention that he owns a dog?', o: ['To show that even owners find the lawn problem serious', 'To explain why he was the one who made the complaint', 'To offer to clean up the front lawn by himself', 'To show that his own dog is not responsible'] },
+              { id: 'L5.3', q: 'Why does Magnus mention that he owns a dog?', o: ['To show that the lawn bothers owners too', 'To explain why he was the one who made the complaint', 'To offer to clean up the front lawn by himself', 'To show that his own dog is not responsible'] },
               { id: 'L5.4', q: 'According to Yvette, why do some owners not clean up properly?', o: ['There is nowhere nearby to throw the waste away.', 'There are no bags available at the front door.', 'Most owners walk their dogs around the back.', 'The manager refuses to pay for a garbage bin.'] },
               { id: 'L5.5', q: 'What does the manager want in return for a waste station?', o: ['Committee members must take charge of emptying it.', 'Tenants must pay for the bin and the supply of bags.', 'Dog owners must use the back door of the building.', 'Yvette must stop using the front elevator for now.'] },
               { id: 'L5.6', q: 'Why does Yvette support a separate elevator for pets?', o: ['Avoiding dogs sometimes makes her late.', 'She was once bitten in the elevator.', 'The service elevator is closer to her unit.', 'Dogs often block the front mailboxes.'] },
@@ -298,12 +298,12 @@
             '<tr><td>Old Mine Road</td><td>11 km return</td><td>150 m</td><td>3.5 hours</td><td>On leash</td><td>Shared with cyclists</td></tr>' +
             '<tr><td>Wolf Lake Trail</td><td>7 km one way</td><td>240 m</td><td>3 hours one way</td><td>On leash</td><td>Ends at Wolf Lake; shuttle back to main lot</td></tr>' +
             '</tbody></table></div><ul class="notes"><li>Vehicle pass: $15 per vehicle per day, or $90 for an annual pass. Passes are not needed for walk-in or cycle-in visitors.</li><li>Wolf Lake shuttle: leaves Wolf Lake for the main lot at 2:00 p.m. and 5:00 p.m. only. $8 per person; children under 12 ride free. Reserve at least 24 hours ahead.</li><li>Ptarmigan Ridge: hikers must start before 10:00 a.m. From July 15 to September 15, groups of four or more people are required.</li><li>Cutbank Canyon closes whenever the river gauge at the trailhead reads above 2 metres. Check the board on the day of your hike.</li><li>Dogs must be on a leash no longer than 2 metres at all times.</li></ul>',
-          reply: '<h3>Email</h3><p>Hi Anders,</p><p>Thanks again for inviting me to join you and your niece at Wapiti Ridge next Saturday. I looked at the trail list, and here are my thoughts.</p><p>Since you are bringing Biscuit, Ptarmigan Ridge is out, which is a shame, because it has the best views. I would love to see a canyon, so [[R2.1]] is my first choice, as long as [[R2.2]] on the day.</p><p>If not, we could hike to Wolf Lake and take the shuttle back. If we start at 10:00, we should reach the lake at about [[R2.3]], in time for the first shuttle. The shuttle would cost us [[R2.4]] altogether, since your niece is only ten. We will all drive up together in your car, so the pass will be [[R2.5]].</p><p>Let me know what you think!</p><p>Jolene</p>',
+          reply: '<h3>Email</h3><p>Hi Anders,</p><p>Thanks again for inviting me to join you and your niece at Wapiti Ridge next Saturday. I looked at the trail list, and here are my thoughts.</p><p>Since you are bringing Biscuit, Ptarmigan Ridge is out, which is a shame, because it has the best views. I would love to see a canyon, so [[R2.1]] is my first choice, as long as [[R2.2]] on the day.</p><p>If not, we could hike to Wolf Lake and take the shuttle back. If we start at 10:00, we should reach the lake at about [[R2.3]], in time for the first shuttle. The shuttle would cost us [[R2.4]] altogether, since your niece turned twelve last month. We will all drive up together in your car, so the pass will be [[R2.5]].</p><p>Let me know what you think!</p><p>Jolene</p>',
           blanks: [
             { id: 'R2.1', o: ['Cutbank Canyon', 'Old Mine Road', 'Wolf Lake Trail', 'Beaver Pond Loop'] },
             { id: 'R2.2', o: ['the river is not running too high', 'we hike in a group of four or more', 'we start the hike before 10:00 a.m.', 'we reserve our places a day ahead'] },
             { id: 'R2.3', o: ['1:00 p.m.', '2:00 p.m.', '11:30 a.m.', '5:00 p.m.'] },
-            { id: 'R2.4', o: ['$16', '$24', '$8', '$31'] },
+            { id: 'R2.4', o: ['$24', '$16', '$8', '$32'] },
             { id: 'R2.5', o: ['$15 for the day', '$45 for the three of us', '$90 for the whole year', 'free for walk-in visitors'] }
           ],
           questions: [
@@ -376,7 +376,7 @@
         { id: 'S1', title: 'Task 1: Giving Advice', prep: 30, speak: 90, prompt: 'A friend of yours wants to adopt a dog from the local animal shelter. He lives alone in a one-bedroom apartment on the sixth floor, works ten-hour shifts four days a week, and says he can spend about $150 a month on a pet. Give your friend advice about whether and how he should adopt a dog.' },
         { id: 'S2', title: 'Task 2: Talking about a Personal Experience', prep: 30, speak: 60, prompt: 'Talk about a time when you helped plan or organize an event, such as a party, a trip or a community activity. What went wrong, how did you deal with it, and what would you do differently next time?' },
         { id: 'S3', title: 'Task 3: Describing a Scene', prep: 30, speak: 60, prompt: 'Describe some things that are happening in the picture below as well as you can. The person you are speaking to cannot see the picture.', image: '<img src="tests/img/O/scene.jpg" alt="A busy open house at a small-town fire hall">' },
-        { id: 'S4', title: 'Task 4: Making Predictions', prep: 30, speak: 60, prompt: 'In this picture, what do you think will most probably happen next? Think about the man carrying the cake, the dog near the barbecue, the balloon and the man on the ladder.', image: '<img src="tests/img/O/scene.jpg" alt="A busy open house at a small-town fire hall">' },
+        { id: 'S4', title: 'Task 4: Making Predictions', prep: 30, speak: 60, prompt: 'In this picture, what do you think will most probably happen next? Describe at least two things that will probably happen, and explain what in the picture makes you think so.', image: '<img src="tests/img/O/scene.jpg" alt="A busy open house at a small-town fire hall">' },
         {
           id: 'S5', title: 'Task 5: Comparing and Persuading', type: 'compare', select: 60, prep: 60, speak: 60,
           prompt: 'You need new glasses before you start a new job in three weeks, where you will spend most of the day at a computer. Your workplace plan will pay up to $200, but not until after your first month. Choose the option you prefer. In the next section, you will need to persuade your partner that your choice is better.',

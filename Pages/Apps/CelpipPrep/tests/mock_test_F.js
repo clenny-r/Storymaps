@@ -10,7 +10,7 @@
   /* Speaking pictures are image files in tests/img/F/ (scene, object, opt_A to opt_C). */
   window.MOCK_TESTS.push({
     id: 'F',
-    title: 'Mock Test F',
+    title: 'Mock Test 6',
     note: 'Original practice content in the CELPIP-General format. Written slightly above real test difficulty (CLB 8 to 11).',
 
     /* =================== LISTENING =================== */
@@ -358,7 +358,7 @@
         { id: 'S1', title: 'Task 1: Giving Advice', prep: 30, speak: 90, prompt: 'A friend of yours has decided to learn how to cook, but has never prepared a full meal before. Your friend works long shifts, gets home around 7:00 p.m., and has only about $60 a week to spend on groceries. Give your friend advice on how to get started.' },
         { id: 'S2', title: 'Task 2: Talking about a Personal Experience', prep: 30, speak: 60, prompt: 'Talk about a time when you had to make a difficult decision. What were your choices, what did you decide, who did you turn to for advice, and how do you feel about the decision now?' },
         { id: 'S3', title: 'Task 3: Describing a Scene', prep: 30, speak: 60, prompt: 'Describe some things that are happening in the picture below as well as you can. The person you are speaking to cannot see the picture.', image: '<img src="tests/img/F/scene.jpg" alt="A residential street on a snowy winter morning">' },
-        { id: 'S4', title: 'Task 4: Making Predictions', prep: 30, speak: 60, prompt: 'In this picture, what do you think will most probably happen next? Think about the icy patch, the stuck car, and the bus that is pulling in.', image: '<img src="tests/img/F/scene.jpg" alt="A residential street on a snowy winter morning">' },
+        { id: 'S4', title: 'Task 4: Making Predictions', prep: 30, speak: 60, prompt: 'In this picture, what do you think will most probably happen next? Describe at least two things that will probably happen, and explain what in the picture makes you think so.', image: '<img src="tests/img/F/scene.jpg" alt="A residential street on a snowy winter morning">' },
         {
           id: 'S5', title: 'Task 5: Comparing and Persuading', type: 'compare', select: 60, prep: 60, speak: 60,
           prompt: 'You and your brother are planning a gift for your parents\' 30th wedding anniversary. Choose the option you prefer. In the next section, you will need to persuade your brother that your choice is better.',

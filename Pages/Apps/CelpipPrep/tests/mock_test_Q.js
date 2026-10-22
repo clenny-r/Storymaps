@@ -10,7 +10,7 @@
   /* Speaking pictures are image files in tests/img/Q/ (scene, object, opt_A to opt_C). */
   window.MOCK_TESTS.push({
     id: 'Q',
-    title: 'Mock Test Q',
+    title: 'Mock Test 17',
     note: 'Original practice content in the CELPIP-General format. Written slightly above real test difficulty.',
 
     /* =================== LISTENING =================== */
@@ -112,9 +112,9 @@
               ['HOST', 'Of course. I\'ll pencil you in until five o\'clock. After that, I\'m afraid I\'ll have to release the room. Friday nights in December go very quickly.']
             ],
             questions: [
-              { id: 'L2.1', q: 'What is the main reason for Rosalie\'s call?', o: ['To reserve a space for a workplace celebration', 'To order a cake for a coworker\'s daughter', 'To ask about the restaurant\'s Friday menu', 'To change the date of an existing booking in December'] },
+              { id: 'L2.1', q: 'What will Rosalie most likely do before five o\'clock?', o: ['Arrange the deposit once her manager is free', 'Send the restaurant the slideshow to test', 'Choose the dishes for the set menu', 'Confirm the cake with the guest of honour\'s daughter'] },
               { id: 'L2.2', q: 'Why does the restaurant require a set menu?', o: ['To help the kitchen keep up with a large group', 'To make sure the group spends at least $1,500', 'To avoid serving dishes that contain nuts', 'To allow guests to bring their own dessert'] },
-              { id: 'L2.3', q: 'How does the host suggest handling the guest\'s allergy?', o: ['By choosing one safe dessert for the whole group', 'By preparing a separate plate just for that guest', 'By asking the pastry chef to avoid almond flour', 'By letting the guest bring a dessert from home'] },
+              { id: 'L2.3', q: 'How does the host suggest handling the guest\'s allergy?', o: ['By choosing one safe dessert for the whole group', 'By preparing a separate plate just for that guest', 'By taking every dessert off the set menu', 'By letting the guest bring a dessert from home'] },
               { id: 'L2.4', q: 'Why does Rosalie decide not to order the restaurant\'s dessert?', o: ['It means the group will not pay to have the cake cut.', 'Several desserts on the menu contain almond flour.', 'The minimum spend can easily be reached without dessert.', 'The guest of honour does not like sweet food.'] },
               { id: 'L2.5', q: 'Why does the host mention Friday nights in December?', o: ['To explain why he cannot hold the room for long', 'To suggest that Rosalie choose another night', 'To explain why the minimum spend is so high', 'To warn her that the restaurant may be noisy'] }
             ]
@@ -173,11 +173,11 @@
               ['NEWS', 'The province says it will decide on a second overpass, closer to Moncton, after studying three years of collision data. If crashes on this stretch fall by at least half, the next one is expected to go ahead.']
             ],
             questions: [
-              { id: 'L4.1', q: 'What is the news item mainly about?', o: ['A new structure meant to make a highway safer', 'A plan to lower the speed limit near Sussex', 'A study of moose populations in the province', 'A new bridge for walkers and cyclists'] },
+              { id: 'L4.1', q: 'What does Thibodeau suggest about warning signs?', o: ['Drivers soon begin to ignore them.', 'They would cost more than the overpass.', 'They have only recently been tried.', 'They work well for smaller animals.'] },
               { id: 'L4.2', q: 'What is the purpose of the fencing?', o: ['To direct animals toward a safe place to cross', 'To protect the young trees planted on the bridge', 'To keep drivers from stopping to watch wildlife', 'To hold cameras that record passing animals'] },
               { id: 'L4.3', q: 'What does the biologist say about the first recordings?', o: ['Big animals are often slow to start using it.', 'Foxes are the animals most often hit by cars.', 'The cameras were placed in the wrong spot.', 'Moose avoid any structure covered in plants.'] },
               { id: 'L4.4', q: 'What do some drivers\' groups believe?', o: ['Simpler measures aimed at drivers would have cost less.', 'The overpass should have been built closer to Moncton.', 'Warning signs have caused more collisions than before.', 'The fencing should be extended for another twelve kilometres.'] },
-              { id: 'L4.5', q: 'What will decide whether a second overpass is built?', o: ['How much crashes on this stretch decline', 'How quickly moose begin to use the bridge', 'How many drivers support the project', 'How much the first overpass finally costs'] }
+              { id: 'L4.5', q: 'What will decide whether a second overpass is built?', o: ['How far accidents on that road go down', 'How quickly moose begin to use the bridge', 'How many drivers support the project', 'How much the first overpass finally costs'] }
             ]
           }]
         },
@@ -252,7 +252,7 @@
               ['NARR', 'For now, most cities are trying to find a middle path between speed and caution, and the debate is far from over.']
             ],
             questions: [
-              { id: 'L6.1', q: 'What is the report mainly about?', o: ['Whether it should be easier to build homes in backyards', 'Whether old sewer pipes should be replaced citywide', 'How short-term rentals affect city neighbourhoods', 'How homeowners can lower their mortgage payments'] },
+              { id: 'L6.1', q: 'On which point would Rao and Szabo both agree?', o: ['More housing is genuinely needed in Canadian cities.', 'Each suite should be reviewed with input from neighbours.', 'Older sewer pipes may not cope with more homes.', 'Faster approval has been a clear success.'] },
               { id: 'L6.2', q: 'Why does Rao mention streets, bus routes and water lines?', o: ['To show that suites rely on services already in place', 'To argue that cities must improve public transit first', 'To explain why garden suites are expensive to build', 'To list the costs owners pay when they apply'] },
               { id: 'L6.3', q: 'What does Rao concede?', o: ['Some suites have housed visitors instead of residents.', 'Garden suites are too small for most families.', 'Building permits should include a review by neighbours.', 'Older neighbourhoods need new sewer pipes first.'] },
               { id: 'L6.4', q: 'What worries Szabo about older neighbourhoods?', o: ['Their underground systems may not cope with more homes.', 'Their mature trees make it hard to find room to build suites.', 'Their residents are mostly against new housing.', 'Their streets are too narrow for more traffic.'] },
@@ -279,13 +279,13 @@
             { id: 'R1.5', q: 'Philippa mentions the porter\'s remark to show that', o: ['getting lost in the building was nothing unusual.', 'the hospital staff were not very welcoming.', 'she should have attended more of the training.', 'porters are the best people to ask for help.'] },
             { id: 'R1.6', q: 'When she compares volunteering with teaching, Philippa suggests that she', o: ['no longer feels she must know everything.', 'misses being the person in charge of a room.', 'finds volunteering harder than teaching was.', 'wants to train new volunteers in the future.'] }
           ],
-          reply: '<h3>Reply</h3><p>Dear Aunt Philippa,</p><p>What wonderful news! I can already picture you and your cart. I laughed out loud when I read that Doreen never mentioned [[R1.7]]. Given how you feel about needles, it is probably a good thing that you are [[R1.8]] and not helping in the treatment rooms.</p><p>You asked what people in a waiting room really want. From my placements, I would say they mostly want to feel that someone has noticed them. Even though you cannot tell them how long they will wait, you can [[R1.9]]. That small thing makes a huge difference.</p><p>Also, your habit of [[R1.10]] is exactly what our instructors teach us. A confident wrong answer in a hospital can cause real harm.</p><p>Finally, thank you for arranging cover for your [[R1.11]] so early. Mom and I have already planned your week in Vancouver, and we are not letting anything get in the way.</p><p>Love,<br>Rohan</p>',
+          reply: '<h3>Reply</h3><p>Dear Aunt Philippa,</p><p>What wonderful news! I can already picture you and your cart. I laughed out loud when I read that Doreen never mentioned [[R1.7]]. Given how you feel about needles, it is probably a good thing that you are [[R1.8]] and not helping in the treatment rooms.</p><p>You asked what people in a waiting room really want. From my placements, I would say they mostly want to feel that someone has noticed them. Even though you cannot tell them how long they will wait, you can [[R1.9]]. That small thing makes a huge difference.</p><p>Also, your habit of [[R1.10]] is exactly what our instructors teach us. A confident wrong answer in a hospital can cause real harm.</p><p>Finally, thank you for arranging cover for [[R1.11]] so early. Mom and I have already planned your week in Vancouver, and we are not letting anything get in the way.</p><p>Love,<br>Rohan</p>',
           blanks: [
             { id: 'R1.7', o: ['the flu shot', 'the privacy rules', 'the supply room', 'the hand washing'] },
             { id: 'R1.8', o: ['out with the people who are waiting', 'in the supply room for most shifts', 'working beside Doreen every morning', 'in the hospital only on weekends'] },
             { id: 'R1.9', o: ['check on them every so often', 'explain why others were seen first', 'tell them which doctor they will see', 'bring them their test results early'] },
             { id: 'R1.10', o: ['admitting when you are unsure', 'always having the right answer', 'walking people to the supply room', 'telling patients how long they will wait'] },
-            { id: 'R1.11', o: ['Tuesday and Friday mornings', 'weekend afternoon shifts', 'first week of training', 'Monday and Thursday mornings'] }
+            { id: 'R1.11', o: ['the two mornings you work each week', 'your weekend shifts at the hospital', 'your first week of training', 'the mornings you spend with Doreen'] }
           ]
         },
         {
@@ -376,7 +376,7 @@
         { id: 'S1', title: 'Task 1: Giving Advice', prep: 30, speak: 90, prompt: 'A friend of yours is moving to Canada next month with his wife and young son. His new job starts three weeks after they arrive, and they have about $2,000 to live on until his first paycheque. He has asked you what they should do first. Give your friend advice on how to settle in during those first weeks.' },
         { id: 'S2', title: 'Task 2: Talking about a Personal Experience', prep: 30, speak: 60, prompt: 'Talk about a time when you had to save money for something important. What were you saving for, how did you manage it, and what would you do differently if you had to do it again?' },
         { id: 'S3', title: 'Task 3: Describing a Scene', prep: 30, speak: 60, prompt: 'Describe some things that are happening in the picture below as well as you can. The person you are speaking to cannot see the picture.', image: '<img src="tests/img/Q/scene.jpg" alt="A busy café patio on a city sidewalk as rain clouds arrive">' },
-        { id: 'S4', title: 'Task 4: Making Predictions', prep: 30, speak: 60, prompt: 'In this picture, what do you think will most probably happen next? Think about the waiter and what is on the ground in front of him, the dog near the table, and the sky.', image: '<img src="tests/img/Q/scene.jpg" alt="A busy café patio on a city sidewalk as rain clouds arrive">' },
+        { id: 'S4', title: 'Task 4: Making Predictions', prep: 30, speak: 60, prompt: 'In this picture, what do you think will most probably happen next? Describe at least two things that will probably happen, and explain what in the picture makes you think so.', image: '<img src="tests/img/Q/scene.jpg" alt="A busy café patio on a city sidewalk as rain clouds arrive">' },
         {
           id: 'S5', title: 'Task 5: Comparing and Persuading', type: 'compare', select: 60, prep: 60, speak: 60,
           prompt: 'Your eight-year-old daughter wants to try a new winter activity, and you can afford only one. Choose the option you prefer. In the next section, you will need to persuade your partner that your choice is better.',

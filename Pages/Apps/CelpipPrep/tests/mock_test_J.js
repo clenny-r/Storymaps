@@ -9,7 +9,7 @@
   /* Speaking pictures are image files in tests/img/J/ (scene, object, opt_A to opt_C). */
   window.MOCK_TESTS.push({
     id: 'J',
-    title: 'Mock Test J',
+    title: 'Mock Test 10',
     note: 'Original practice content in the CELPIP-General format.',
 
     /* =================== LISTENING =================== */
@@ -352,7 +352,7 @@
         { id: 'S1', title: 'Task 1: Giving Advice', prep: 30, speak: 90, prompt: 'A friend of yours often feels tired because she does not get enough sleep. She works until 11 p.m. three nights a week, has to be up at 6:30 a.m. to take her son to school, and says she cannot afford to see a sleep specialist. Give her advice on how to get more and better sleep.' },
         { id: 'S2', title: 'Task 2: Talking about a Personal Experience', prep: 30, speak: 60, prompt: 'Talk about a time when you had to work as part of a team. What was the task, what was your role, how did the team work together, and what would you change if you did it again?' },
         { id: 'S3', title: 'Task 3: Describing a Scene', prep: 30, speak: 60, prompt: 'Describe some things that are happening in the picture below as well as you can. The person you are speaking to cannot see the picture.', image: '<img src="tests/img/J/scene.jpg" alt="A busy train station platform as a train arrives">' },
-        { id: 'S4', title: 'Task 4: Making Predictions', prep: 30, speak: 60, prompt: 'In this picture, what do you think will most probably happen next? Think about the child near the edge of the platform, the arriving train, and the ticket in the air.', image: '<img src="tests/img/J/scene.jpg" alt="A busy train station platform as a train arrives">' },
+        { id: 'S4', title: 'Task 4: Making Predictions', prep: 30, speak: 60, prompt: 'In this picture, what do you think will most probably happen next? Describe at least two things that will probably happen, and explain what in the picture makes you think so.', image: '<img src="tests/img/J/scene.jpg" alt="A busy train station platform as a train arrives">' },
         {
           id: 'S5', title: 'Task 5: Comparing and Persuading', type: 'compare', select: 60, prep: 60, speak: 60,
           prompt: 'Your family has saved money for one home improvement project this year. Choose the option you prefer. In the next section, you will need to persuade a family member that your choice is better.',

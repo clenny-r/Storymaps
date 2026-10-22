@@ -9,7 +9,7 @@
   /* Speaking pictures are image files in tests/img/E/ (scene, object, opt_A to opt_C). */
   window.MOCK_TESTS.push({
     id: 'E',
-    title: 'Mock Test E',
+    title: 'Mock Test 5',
     note: 'Original practice content in the CELPIP-General format. Written slightly above real test difficulty (about CLB 8 to 11).',
 
     /* =================== LISTENING =================== */
@@ -369,7 +369,7 @@
         { id: 'S1', title: 'Task 1: Giving Advice', prep: 30, speak: 90, prompt: 'A friend of yours wants to save $3,000 by next summer for a trip home to see her family, but by the end of every month she has nothing left. She already works full time and does not want to give up her weekly dinner with friends. Give her advice on how she can reach her goal.' },
         { id: 'S2', title: 'Task 2: Talking about a Personal Experience', prep: 30, speak: 60, prompt: 'Talk about a time when you felt proud of yourself. What did you do, what was the hardest part, and why did it make you feel proud?' },
         { id: 'S3', title: 'Task 3: Describing a Scene', prep: 30, speak: 60, prompt: 'Describe some things that are happening in the picture below as well as you can. The person you are speaking to cannot see the picture.', image: '<img src="tests/img/E/scene.jpg" alt="Moving day on a residential street">' },
-        { id: 'S4', title: 'Task 4: Making Predictions', prep: 30, speak: 60, prompt: 'In this picture, what do you think will most probably happen next? Think about the mover\'s stack of boxes, the couch, and the people and animals on the sidewalk.', image: '<img src="tests/img/E/scene.jpg" alt="Moving day on a residential street">' },
+        { id: 'S4', title: 'Task 4: Making Predictions', prep: 30, speak: 60, prompt: 'In this picture, what do you think will most probably happen next? Describe at least two things that will probably happen, and explain what in the picture makes you think so.', image: '<img src="tests/img/E/scene.jpg" alt="Moving day on a residential street">' },
         {
           id: 'S5', title: 'Task 5: Comparing and Persuading', type: 'compare', select: 60, prep: 60, speak: 60,
           prompt: 'Your family is planning a one-week summer vacation. Choose the option you prefer. In the next section, you will need to persuade a family member that your choice is better.',

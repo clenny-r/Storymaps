@@ -9,7 +9,7 @@
   /* Speaking pictures are image files in tests/img/C/ (scene, object, opt_A to opt_C). */
   window.MOCK_TESTS.push({
     id: 'C',
-    title: 'Mock Test C',
+    title: 'Mock Test 3',
     note: 'Original practice content in the CELPIP-General format. Pitched slightly above the real test (about CLB 8 to 11).',
 
     /* =================== LISTENING =================== */
@@ -359,7 +359,7 @@
         { id: 'S1', title: 'Task 1: Giving Advice', prep: 30, speak: 90, prompt: 'A friend of yours wants to start running so she can join her coworkers in a 5-kilometre charity run in eight weeks. She has never exercised regularly, she works long shifts at a hospital, and one of her knees still bothers her after an old injury. Give her advice on how to get ready safely and how to stay motivated.' },
         { id: 'S2', title: 'Task 2: Talking about a Personal Experience', prep: 30, speak: 60, prompt: 'Talk about a time when something did not go as planned while you were on a trip. What happened, how did you deal with it, and what would you plan differently on your next trip?' },
         { id: 'S3', title: 'Task 3: Describing a Scene', prep: 30, speak: 60, prompt: 'Describe some things that are happening in the picture below as well as you can. The person you are speaking to cannot see the picture.', image: '<img src="tests/img/C/scene.jpg" alt="A busy airport departure area with a flight delay">' },
-        { id: 'S4', title: 'Task 4: Making Predictions', prep: 30, speak: 60, prompt: 'In this picture, what do you think will most probably happen next?', image: '<img src="tests/img/C/scene.jpg" alt="A busy airport departure area with a flight delay">' },
+        { id: 'S4', title: 'Task 4: Making Predictions', prep: 30, speak: 60, prompt: 'In this picture, what do you think will most probably happen next? Describe at least two things that will probably happen, and explain what in the picture makes you think so.', image: '<img src="tests/img/C/scene.jpg" alt="A busy airport departure area with a flight delay">' },
         {
           id: 'S5', title: 'Task 5: Comparing and Persuading', type: 'compare', select: 60, prep: 60, speak: 60,
           prompt: 'Your family is planning how to celebrate your father\'s 60th birthday. Choose the option you prefer. In the next section, you will need to persuade a family member that your choice is better.',

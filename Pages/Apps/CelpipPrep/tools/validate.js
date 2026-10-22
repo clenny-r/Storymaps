@@ -5,7 +5,7 @@ const fs = require('fs'), vm = require('vm');
 const SETTINGS = ['office', 'store', 'studio', 'news', 'meeting', 'classroom', 'outdoor'];
 const STYLES = ['short', 'long', 'bun', 'curly', 'bald'];
 let totalErr = 0;
-const PIC = (h) => { h = h || ''; if (/^<svg[\s\S]*<\/svg>$/.test(h)) return true; const m = h.match(/^<img src="(tests\/img\/[A-Z]\/[A-Za-z_]+\.jpg)" alt="[^"]+">$/); return !!m && require('fs').existsSync(require('path').join(__dirname, '..', m[1])); };
+const PIC = (h) => { h = h || ''; if (/^<svg[\s\S]*<\/svg>$/.test(h)) return true; const m = h.match(/^<img src="(tests\/img\/[A-Z0-9]+\/[A-Za-z_]+\.jpg)" alt="[^"]+">$/); return !!m && (process.env.CELPIP_SKIP_IMG === '1' || require('fs').existsSync(require('path').join(__dirname, '..', m[1]))); };
 for (const file of process.argv.slice(2)) {
   const err = [], warn = [];
   const E = m => err.push(m), W = m => warn.push(m);
@@ -18,7 +18,7 @@ for (const file of process.argv.slice(2)) {
   const T = (ctx.window.MOCK_TESTS || [])[0];
   if (!T) { console.log(`\n=== ${file}\nFATAL: no test pushed`); totalErr++; continue; }
   if (expectId && T.id !== expectId) E(`id is "${T.id}", expected "${expectId}"`);
-  if (T.title !== `Mock Test ${T.id}`) E(`title should be "Mock Test ${T.id}"`);
+  const NUM = /^[A-Z]$/.test(T.id) ? T.id.charCodeAt(0) - 64 : Number(T.id); if (T.title !== `Mock Test ${NUM}`) E(`title should be "Mock Test ${NUM}" (letters A to U are tests 1 to 21; new tests use their number as id)`);
   const ids = new Set();
   const optStats = { longest: 0, n: 0 };
   const checkQ = (q, wantId, needText) => {
