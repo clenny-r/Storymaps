@@ -456,15 +456,103 @@
     return t;
   }
 
+  /* ── Pre-recorded clips (Oct 2026) ──────────────────────────────────────
+   * Building speech on the phone was slow: a second or more per new sentence,
+   * a few seconds to load the 63 MB model on every page, and a 63 MB download
+   * before a natural voice could be used at all. Every sentence the games say
+   * is now recorded ONCE, ahead of time, in Grace's voice (Piper
+   * en_US-hfc_female-medium) and served as a small MP3 from voice/grace/.
+   * A sentence plays instantly from its clip; only text that has no clip
+   * falls back to live speech. Clip name = FNV-1a hash of the sentence key.
+   *   key = sentence after fixText(), emoji removed, lower case, single spaces */
+  var CLIP_DIR = "voice/grace/";
+  var CLIP_V = "20261027";
+  var clipSet = null, clipLoading = null, clipBuf = {};
+  function loadClipIndex() {
+    if (clipSet) return Promise.resolve(clipSet);
+    if (clipLoading) return clipLoading;
+    clipLoading = fetch(CLIP_DIR + "index.json?v=" + CLIP_V).then(function (r) { return r.ok ? r.json() : []; })
+      .then(function (list) { clipSet = {}; (list || []).forEach(function (h) { clipSet[h] = 1; }); return clipSet; })
+      .catch(function () { clipSet = {}; return clipSet; });
+    return clipLoading;
+  }
+  function hash(str) {
+    var h = 0x811c9dc5;
+    for (var i = 0; i < str.length; i++) { h ^= str.charCodeAt(i); h = Math.imul(h, 0x01000193) >>> 0; }
+    return ("0000000" + h.toString(16)).slice(-8);
+  }
+  function stripEmoji(t) { return t.replace(/[^\x20-\x7E\u00C0-\u024F\u2019]/g, "").replace(/\s+/g, " ").trim(); }
+  function sentences(text) {
+    var t = stripEmoji(fixText(text)).replace(/\u2019/g, "'");
+    var out = t.match(/[^.!?]+[.!?]+/g) || (t ? [t] : []);
+    return out.map(function (x) { return x.trim(); }).filter(Boolean);
+  }
+  function clipKey(sentence) { return sentence.toLowerCase().replace(/\s+/g, " ").trim(); }
+  function useClips() {
+    if (mode === "clips") return true;
+    if (getStr(PICKED_KEY, "") !== "1") return true;            // nobody chose: clips
+    return mode === "natural" && piperId === DEFAULT_PIPER;     // chose Grace: same voice, faster
+  }
+  function getClip(h) {
+    if (clipBuf[h]) return clipBuf[h];
+    var c = ensureCtx();
+    clipBuf[h] = fetch(CLIP_DIR + h + ".mp3?v=" + CLIP_V)
+      .then(function (r) { if (!r.ok) throw new Error("clip"); return r.arrayBuffer(); })
+      .then(function (ab) { return new Promise(function (ok, no) { c.decodeAudioData(ab, ok, no); }); })
+      .catch(function (e) { delete clipBuf[h]; throw e; });
+    return clipBuf[h];
+  }
+  function playClips(hashes, cb, my, fallbackText) {
+    var c = ensureCtx();
+    if (!c) { speakSystem(fallbackText, cb); return; }
+    Promise.all(hashes.map(getClip)).then(function (bufs) {
+      if (my !== ticket) { if (cb) cb(); return; }
+      var rate = bufs[0].sampleRate, gap = Math.round(rate * 0.12), lead = Math.round(rate * 0.12);
+      var len = lead;
+      bufs.forEach(function (b, i) { len += b.length + (i ? gap : 0); });
+      var out = c.createBuffer(1, len, rate), data = out.getChannelData(0), pos = lead;
+      bufs.forEach(function (b, i) { if (i) pos += gap; data.set(b.getChannelData(0), pos); pos += b.length; });
+      try { if (curSrc) curSrc.stop(); } catch (e) {}
+      var src = c.createBufferSource(); src.buffer = out; src.connect(c.destination); curSrc = src;
+      if (cb) { src.onended = cb; setTimeout(cb, Math.min(12000, out.duration * 1000 + 700)); }
+      var go = function () { try { src.start(c.currentTime + 0.03); } catch (e) { if (cb) cb(); } };
+      if (c.state !== "running") { try { c.resume().then(go, go); } catch (e) { go(); } } else go();
+    }).catch(function () {
+      if (my !== ticket) { if (cb) cb(); return; }
+      speakSystem(fallbackText, cb);                    // offline or missing: phone voice
+    });
+  }
+  // Fetch and decode clips ahead of time (games call this for the next screen)
+  function preload(texts) {
+    loadClipIndex().then(function (set) {
+      (texts || []).forEach(function (t) {
+        sentences(t).forEach(function (s) { var h = hash(clipKey(s)); if (set[h]) getClip(h).catch(function () {}); });
+      });
+    });
+  }
+
   var migrating = false;
   function say(text, cb) {
+    var raw = text;
     text = fixText(text);
     cb = cb ? once(cb) : null;              // one call per phrase, always
     var my = ++ticket;
     try { if (curSrc) curSrc.stop(); } catch (e) {}     // never talk over itself
+    try { speechSynthesis.cancel(); } catch (e) {}
+    if (useClips()) {
+      var go = function (set) {
+        var hs = sentences(raw).map(function (x) { return hash(clipKey(x)); });
+        if (hs.length && hs.every(function (h) { return set[h]; })) { playClips(hs, cb, my, text); return; }
+        if (mode === "natural" && piperId && !naturalFailed) { speakNatural(text, cb, my); return; }
+        speakSystem(text, cb);
+      };
+      if (clipSet) go(clipSet); else loadClipIndex().then(function (set) { if (my === ticket) go(set); else if (cb) cb(); });
+      return;
+    }
     if (mode === "natural" && piperId && !naturalFailed && !migrating) { speakNatural(text, cb, my); return; }
     speakSystem(text, cb);
   }
+  loadClipIndex();
 
   // ── Voice picker (parent-facing) ────────────────────────────────────────
   function openPicker() {
@@ -485,11 +573,21 @@
       box.innerHTML = "";
       box.appendChild(el("div", "font-weight:800;font-size:21px;color:#3a1d6e;", "Voice"));
 
+      var on0 = useClips();
+      var grace = el("button", "display:block;width:100%;text-align:left;padding:14px 15px;margin:6px 0 4px;border-radius:14px;border:2px solid " + (on0 ? "#7c3aed" : "#eee") + ";background:" + (on0 ? "#f3ecff" : "#faf7ff") + ";font-size:15px;font-weight:800;color:#3a1d6e;cursor:pointer;",
+        (on0 ? "✓ " : "") + "Grace ✨  built in, instant (recommended)");
+      grace.onclick = function () {
+        mode = "clips"; setStr(MODE_KEY, "clips"); setStr(PICKED_KEY, "1");
+        render(); say("Hi! Let's play together!");
+      };
+      box.appendChild(grace);
+      box.appendChild(el("div", "font-size:12px;color:#888;margin:2px 0 12px;line-height:1.4;", "Every word in the games is already recorded in Grace's voice, so she answers straight away with nothing to download. Or pick another voice below."));
+
       var row = el("div", "display:flex;gap:8px;margin:6px 0 14px;");
       ["system", "natural"].forEach(function (m) {
-        var on = mode === m;
-        var b = el("button", "flex:1;padding:11px;border-radius:12px;border:2px solid " + (on ? "#7c3aed" : "#eee") + ";background:" + (on ? "#f3ecff" : "#faf7ff") + ";font-weight:800;font-size:14px;color:#3a1d6e;cursor:pointer;", m === "system" ? "Phone voice" : "Natural ✨");
-        b.onclick = function () { mode = m; setStr(MODE_KEY, m); render(); };
+        var on = mode === m && !on0;
+        var b = el("button", "flex:1;padding:11px;border-radius:12px;border:2px solid " + (on ? "#7c3aed" : "#eee") + ";background:" + (on ? "#f3ecff" : "#faf7ff") + ";font-weight:800;font-size:14px;color:#3a1d6e;cursor:pointer;", m === "system" ? "Phone voice" : "Other natural voices");
+        b.onclick = function () { mode = m; setStr(MODE_KEY, m); setStr(PICKED_KEY, "1"); render(); };
         row.appendChild(b);
       });
       box.appendChild(row);
@@ -600,6 +698,11 @@
 
   function autoSetup(chip, chipHide) {
     healOnce();
+    // Oct 2026: Grace's pre-recorded clips are the default voice, so nothing is
+    // downloaded or built in the background any more (that was the lag).
+    loadClipIndex();
+    return;
+    /* eslint-disable no-unreachable */
     if (getStr(PICKED_KEY, "") === "1") return;                 // grown-up chose already
 
     function startAutoDownload() {
@@ -681,6 +784,8 @@
     probeWorkerWrite: probeWorkerWrite,
     say: say,
     stop: stop,
+    preload: preload,
+    _sentences: function (t) { return sentences(t).map(function (x) { return { s: x, key: clipKey(x), h: hash(clipKey(x)) }; }); },
     openPicker: openPicker,
     autoSetup: autoSetup,
     hasNaturalSystemVoice: hasNaturalSystemVoice,

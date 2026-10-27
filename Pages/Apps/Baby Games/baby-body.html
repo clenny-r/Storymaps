@@ -43,9 +43,9 @@
   <div id="stage"><div id="photo"><img id="pic" alt="A smiling little girl"></div></div>
   <div id="start"><span>Tap to start! 👆</span></div>
 </div>
-<script src="voice.js?v=20261026b"></script>
-<script src="photos.js?v=20261026b"></script>
-<script src="kit.js?v=20261026b"></script>
+<script src="voice.js?v=20261027a"></script>
+<script src="photos.js?v=20261027a"></script>
+<script src="kit.js?v=20261027a"></script>
 <script>
 /* Two real photos of a smiling little girl (made for TWC with ChatGPT,
  * Oct 2026), replacing the old cartoon face that frightened some little ones.
@@ -153,6 +153,7 @@ function toggleSound(){ soundOn=!soundOn; if(!soundOn){ try{speechSynthesis.canc
 document.addEventListener('contextmenu', function(e){ e.preventDefault(); });
 document.addEventListener('touchmove', function(e){ e.preventDefault(); }, { passive:false });
 showScene('face');
+if(BabyVoice.preload) BabyVoice.preload(pool().map(function(p){ return 'Where '+verb(p)+' '+the(p)+'?'; }).concat(['Yes!','Well done!']));
 </script>
 </body>
 </html>

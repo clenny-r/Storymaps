@@ -14,7 +14,8 @@ Apps landing page links straight to it, and each game's ← button comes back he
 | `kit.js` | **Shared top bar** — back, sound, voice, full screen, day/night. Loaded by every page |
 | `photos.js` | **Realistic photos** from `photo/`, then the Twemoji in `img/`, then the emoji |
 | `photo/` | 72 realistic photos (512 px .webp) made with ChatGPT, Oct 2026, checked by eye |
-| `voice.js` | Shared speech: system voices plus optional Piper neural voices |
+| `voice.js` | Shared speech: pre-recorded Grace clips first, then system voices or optional Piper voices |
+| `voice/grace/` | 741 pre-recorded sentences (MP3) + `index.json`; see "Pre-recorded voice" below |
 | `baby-squish-game.html` | Tap anywhere, bubbles pop |
 | `baby-bible-squish.html` | Bible squish, with letters and numbers modes |
 | `baby-draw.html` | Finger painting with worship songs |
@@ -221,3 +222,24 @@ body parts"; by 4 years a child "draws a person with three or more body parts".
   installed automatically switch once, quietly, off a metered line; a voice a
   grown-up chose by hand is never changed. The phone-voice ranking now
   prefers en-CA, then en-US, then en-GB.
+
+## Pre-recorded voice (27 Oct 2026)
+
+Every sentence the games say is recorded once in Grace's voice (Piper
+`en_US-hfc_female-medium`) and served from `voice/grace/<hash>.mp3`, so the
+phone plays it instantly. Before this, the natural voice built each sentence on
+the phone (1 to 3 s each), loaded a 63 MB model on every page, and needed a
+63 MB download before switching, which felt like lag and like "the voice
+doesn't change when I tap it".
+
+- `BabyVoice.say(text)` splits the text into sentences. If every sentence has a
+  clip, the clips are joined and played; otherwise it falls back to the live voice.
+- Clip name = FNV-1a hash (8 hex) of the sentence key: text after `fixText()`,
+  emoji removed, lower case, single spaces. `BabyVoice._sentences(text)` shows the keys.
+- Grace is the default and the first choice in the Voice menu. A grown-up who
+  picks another voice gets live speech as before.
+- **Adding or changing any spoken line means recording its clip.** Run the
+  harvest (every sentence the games can say), record the missing ones with
+  piper-tts-web in Chrome on the live site, convert WAV to MP3 (trim silence,
+  mono, 22 kHz, 40 kbps), rebuild `index.json`, and bump `CLIP_V` in `voice.js`.
+  The scripts used are described in LESSONS.md.

@@ -2,6 +2,24 @@
 
 Newest first. Read this before changing anything in this folder.
 
+## 27 Oct 2026 (late night): pre-recorded voice, First Words tap fix
+
+### What was done
+1. All 741 sentences the games can say were recorded once in Grace's voice and ship as MP3 clips in `voice/grace/` (5.7 MB). `BabyVoice.say` plays the clips instantly; the live voice is only a fallback. Grace is the default and the first choice in the Voice menu.
+2. No more automatic 63 MB voice download or migration in the background.
+3. God's Rainbow: removed a browser call to an AI service that always failed and delayed every encouragement.
+4. Fixed English in spoken lines: "like a orange", "Where is the grapes?", "Which one we kick...", milk riddle.
+5. First Words: the name sits on the card (Safari's toolbar hid it at the bottom); tapping the picture moves on again; `100dvh` used so nothing hides under the toolbar.
+
+### Lessons
+1. **Lag on phones came from building speech on the device**: about 1 second per sentence even on the laptop, slower on a phone, plus model loading on every page. Pre-recorded clips are the fix; keep them in step with the text.
+2. **Clip names are hashes of the exact sentence.** Changing any spoken word (even punctuation that changes the sentence) needs a new clip, or that sentence silently falls back to the phone voice. Run `tools/harvest.js` after any text change and check "missing 0".
+3. **Recording**: `tools/record_in_chrome.js` on the live baby-words page. Four Chrome tabs sharing a localStorage claim list record about 100 sentences a minute; one tab alone takes about 40 minutes for 741.
+4. **Reading every sentence out as a list finds grammar bugs** nobody notices while playing. Do it before recording.
+5. **Piper is a little fast for toddlers**; `atempo=0.9` in the converter slows it without changing pitch.
+6. **iPhone Safari**: anything at the bottom of a `100vh` page sits under the toolbar. Use `100dvh` and keep key text off the bottom edge.
+7. **Do not change a tap's meaning** in an update (First Words tap used to mean "next"); families notice at once.
+
 ## 26 Oct 2026 (evening): First Words levels, uncropped photos, clearer voice
 
 ### What was done

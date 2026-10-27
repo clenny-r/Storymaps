@@ -75,6 +75,8 @@
     /* keep game titles clear of the bar */
     'body.kit-pad #title{padding-top:calc(env(safe-area-inset-top,0px) + 58px)!important}',
     '#voice-btn,#fs-btn,#back-btn,#sound-btn,#sound-indicator{display:none!important}',
+    /* iPhone Safari: 100vh runs under the bottom toolbar; use the visible height */
+    '@supports (height:100dvh){#game{height:100dvh!important}}',
 
     /* age-level picker */
     '#kitlevel{position:fixed;inset:0;z-index:99995;background:rgba(30,20,60,.55);display:flex;align-items:center;',

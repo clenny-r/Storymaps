@@ -40,20 +40,20 @@
   <div id="choices"></div>
   <button id="fs-btn" class="btn" onclick="goFullscreen()">⛶ Full Screen</button>
 </div>
-<script src="voice.js?v=20261026b"></script>
-<script src="photos.js?v=20261026b"></script>
-<script src="kit.js?v=20261026b"></script>
+<script src="voice.js?v=20261027a"></script>
+<script src="photos.js?v=20261027a"></script>
+<script src="kit.js?v=20261027a"></script>
 <script>
 var COLORS = [
-  {name:"red",    bg:"#ff4757", thing:"strawberry", emo:"🍓"},
-  {name:"orange", bg:"#ff9f2e", thing:"orange",     emo:"🍊"},
-  {name:"yellow", bg:"#ffd93a", thing:"banana",     emo:"🍌"},
-  {name:"green",  bg:"#3ddc84", thing:"grass",      emo:"🌿"},
-  {name:"blue",   bg:"#3aa0ff", thing:"sky",        emo:"🌤️"},
-  {name:"purple", bg:"#a86bff", thing:"eggplant",   emo:"🍆"},
-  {name:"pink",   bg:"#ff6fc7", thing:"rose",       emo:"🌷"},
-  {name:"brown",  bg:"#b5793a", thing:"chocolate",  emo:"🍫"},
-  {name:"white",  bg:"#f4f4f8", thing:"snow",       emo:"❄️"}
+  {name:"red",    bg:"#ff4757", thing:"strawberry", like:"a strawberry", emo:"🍓"},
+  {name:"orange", bg:"#ff9f2e", thing:"orange",     like:"an orange", emo:"🍊"},
+  {name:"yellow", bg:"#ffd93a", thing:"banana",     like:"a banana", emo:"🍌"},
+  {name:"green",  bg:"#3ddc84", thing:"grass",      like:"the grass", emo:"🌿"},
+  {name:"blue",   bg:"#3aa0ff", thing:"sky",        like:"the sky", emo:"🌤️"},
+  {name:"purple", bg:"#a86bff", thing:"eggplant",   like:"an eggplant", emo:"🍆"},
+  {name:"pink",   bg:"#ff6fc7", thing:"rose",       like:"a rose", emo:"🌷"},
+  {name:"brown",  bg:"#b5793a", thing:"chocolate",  like:"chocolate", emo:"🍫"},
+  {name:"white",  bg:"#f4f4f8", thing:"snow",       like:"snow", emo:"❄️"}
 ];
 var lastTarget = null;
 var soundOn=true, target=null, started=false, actx=null;
@@ -65,6 +65,7 @@ function boing(){ if(!soundOn) return; try{ var c=ctx(),o=c.createOscillator(),g
   o.type='sine'; o.frequency.setValueAtTime(300,c.currentTime); o.frequency.exponentialRampToValueAtTime(160,c.currentTime+.25);
   g.gain.setValueAtTime(.3,c.currentTime); g.gain.exponentialRampToValueAtTime(.001,c.currentTime+.3); o.start(); o.stop(c.currentTime+.3);}catch(e){} }
 function say(t,cb){ if(!soundOn){ if(cb)setTimeout(cb,500); return; } BabyVoice.say(t,cb); }
+function cap(x){ return x.charAt(0).toUpperCase()+x.slice(1); }
 function shuffle(a){ a=a.slice(); for(var i=a.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)); var t=a[i]; a[i]=a[j]; a[j]=t; } return a; }
 
 /* One question at a time: the voice callback and the safety timer used to both
@@ -107,7 +108,7 @@ function pick(col, node){
     var rw = document.getElementById('reward');
     rw.style.cssText = 'display:inline-block;width:1.5em;height:1.5em;border-radius:12px;overflow:hidden;vertical-align:-.35em';
     BabyPhotos.fill(rw, target.thing, target.emo, {alt:target.thing});
-    say("Yes! " + target.name + ", like a " + target.thing);
+    say("Yes! " + cap(target.name) + ", like " + (target.like || ("a " + target.thing)) + "!");
     scheduleNext("", 1500);
   } else {
     node.classList.add('wiggle'); boing(); setTimeout(function(){ node.classList.remove('wiggle'); }, 400);

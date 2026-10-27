@@ -589,22 +589,8 @@ async function speakAffirmation(sayText){
   isSpeaking=true;dots.classList.add('active');
   try{
     let final=sayText;
-    try{
-      const res=await fetch('https://api.anthropic.com/v1/messages',{
-        method:'POST',
-        headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({
-          model:'claude-sonnet-4-20250514',max_tokens:80,
-          messages:[{role:'user',content:`You are a warm, joyful narrator speaking to a baby or toddler.
-Rephrase this affirmation so it sounds like a loving parent saying it out loud — natural, tender, full of warmth. Under 10 words. Return ONLY the rephrased text.
-
-Affirmation: "${sayText}"`}]
-        })
-      });
-      const data=await res.json();
-      const r=data?.content?.[0]?.text?.trim();
-      if(r&&r.length>2)final=r;
-    }catch(e){}
+    // (Oct 2026) The AI rephrasing call that used to sit here never worked from
+    // a browser and only delayed every encouragement; the fixed lines are used.
     await speakText(final);
   }finally{
     isSpeaking=false;dots.classList.remove('active');
@@ -855,7 +841,7 @@ document.getElementById('startBtn').addEventListener('click',()=>{
   },900);
 });
 </script>
-<script src="voice.js?v=20261026b"></script>
-<script src="kit.js?v=20261026b"></script>
+<script src="voice.js?v=20261027a"></script>
+<script src="kit.js?v=20261027a"></script>
 </body>
 </html>
