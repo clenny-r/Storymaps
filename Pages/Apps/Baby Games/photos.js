@@ -2,8 +2,10 @@
  *
  * Every subject is resolved to a HAND-PICKED, self-hosted image:
  *   1. a photo the parent chose themselves  (localStorage — e.g. real Mummy)
- *   2. a vetted local Twemoji graphic in ./img/  (chosen per subject)
- *   3. the original emoji glyph, if a subject isn't in the set
+ *   2. a realistic photo in ./photo/ (made for TWC with ChatGPT, Oct 2026,
+ *      each one checked by eye before it went in)
+ *   3. a vetted local Twemoji graphic in ./img/  (chosen per subject)
+ *   4. the original emoji glyph, if a subject isn't in the set
  *
  * There is deliberately NO network image lookup, so a game can never show a
  * wrong or random picture. Same public API as before (fill / warm / resolve /
@@ -16,13 +18,16 @@
 
   var OWN_KEY = "babyPhotoOwn_v1";     // { term: dataURL }  — parent's own photos
   var IMG_DIR = "img/";
+  var PHOTO_DIR = "photo/";
+  var PHOTO_V = "20261026";             // bump when a photo is replaced
 
   // Terms whose word differs from the file name.
   var ALIAS = {
     mommy: "woman", mummy: "woman", mom: "woman", mum: "woman",
     daddy: "man", dad: "man",
     doggy: "dog", puppy: "dog", kitty: "cat", kitten: "cat",
-    brother: "boy", sister: "girl",
+    sister: "girl", "big brother": "brother",
+    hippopotamus: "hippo", "doctor bird": "hummingbird", cockerel: "rooster",
     "ice cream": "icecream", icecream: "icecream",
     chicken: "hen", rabbit: "bunny"
   };
@@ -36,10 +41,28 @@
    "strawberry orange grass sky eggplant rose chocolate snow").split(/\s+/)
     .forEach(function (n) { FILES[n] = 1; });
 
+  // Realistic photos in ./photo/ (.webp, 512 px square, white background).
+  var PHOTOS = {};
+  ("woman man baby grandma grandpa boy girl brother " +
+   "dog cat cow pig sheep horse hen duck lion monkey owl wolf elephant bear bunny frog " +
+   "fish bee butterfly teddy apple banana grapes orange strawberry eggplant cookie cake " +
+   "chocolate icecream milk shoe car bus train ball balloon star moon sun flower rose tree grass " +
+   "sky snow hummingbird rooster giraffe zebra tiger turtle goat donkey mouse penguin " +
+   "parrot dolphin whale camel kangaroo hippo crab squirrel bodyface").split(/\s+/)
+    .forEach(function (n) { PHOTOS[n] = 1; });
+
   function key(term) { return String(term || "").trim().toLowerCase(); }
   function fileFor(term) {
     var t = key(term);
     if (ALIAS[t]) t = ALIAS[t];
+    if (PHOTOS[t]) return PHOTO_DIR + t + ".webp?v=" + PHOTO_V;
+    if (t === "brother") t = "boy";
+    return FILES[t] ? (IMG_DIR + t + ".png") : null;
+  }
+  function iconFor(term) {                 // the old Twemoji, used if a photo fails
+    var t = key(term);
+    if (ALIAS[t]) t = ALIAS[t];
+    if (t === "brother") t = "boy";
     return FILES[t] ? (IMG_DIR + t + ".png") : null;
   }
 
@@ -67,6 +90,8 @@
       "opacity:0;transition:opacity .3s ease}",
       ".bp>img.on{opacity:1}",
       ".bp>img.own{object-fit:cover;padding:0}",     // a real uploaded photo fills the frame
+      ".bp>img.photo{object-fit:cover;padding:0;background:#fff}",  // realistic photo fills the card
+      ".bp.bpround>img.photo{object-position:50% 30%}",
       ".bp .bpemo{line-height:1}",
       ".bpround{border-radius:50%}"
     ].join("");
@@ -88,13 +113,18 @@
 
     var img = document.createElement("img");
     if (own) img.className = "own";
+    else if (url.indexOf(PHOTO_DIR) === 0) img.className = "photo";
     img.alt = opts.alt || String(term);
     img.decoding = "async";
     img.addEventListener("load", function () {
       if (emoNode && emoNode.parentNode) emoNode.parentNode.removeChild(emoNode);
       img.classList.add("on");
     });
-    img.addEventListener("error", function () { if (img.parentNode) img.parentNode.removeChild(img); });
+    img.addEventListener("error", function () {
+      var icon = iconFor(term);
+      if (img.className === "photo" && icon) { img.className = ""; img.src = icon; return; }
+      if (img.parentNode) img.parentNode.removeChild(img);
+    });
     img.src = url;
     node.appendChild(img);
   }

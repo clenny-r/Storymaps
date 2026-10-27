@@ -93,7 +93,10 @@
       if (chosen) u.voice = chosen;
       if (cb) u.onend = cb;
       speechSynthesis.speak(u);
-      if (cb) setTimeout(cb, 3000);
+      // Safety net in case onend never fires (it often doesn't on iOS). It
+      // used to be a flat 3 s, which cut longer verses off mid-sentence when
+      // the game moved on; allow roughly the time the words need.
+      if (cb) setTimeout(cb, Math.max(3000, String(text).split(/\s+/).length * 520 + 1200));
     } catch (e) { if (cb) setTimeout(cb, 600); }
   }
 
@@ -383,19 +386,39 @@
     });
   }
 
-  function speakNatural(text, cb) {
+  /* Each say() gets a ticket. A natural-voice phrase can take a second to
+   * build the first time, so a toddler tapping fast used to hear old phrases
+   * arrive late and out of order ("cow" after "duck"). Only the newest
+   * ticket is allowed to play. */
+  var ticket = 0;
+  function stop() {
+    ticket++;
+    try { speechSynthesis.cancel(); } catch (e) {}
+    try { if (curSrc) curSrc.stop(); } catch (e) {}
+    curSrc = null;
+  }
+
+  function speakNatural(text, cb, my) {
+    if (my == null) my = ++ticket;
     ensureSession().then(function (s) {
       if (!s) throw new Error("no session");
       var key = piperId + "::" + text;
       if (blobCache[key]) return blobCache[key];
       return s.predict(text).then(function (blob) { blobCache[key] = blob; return blob; });
-    }).then(function (blob) { playBlob(blob, cb); })
-      .catch(function () { speakSystem(text, cb); });   // graceful fallback
+    }).then(function (blob) {
+      if (my !== ticket) { if (cb) cb(); return; }      // a newer phrase won
+      playBlob(blob, cb);
+    }).catch(function () {
+      if (my !== ticket) { if (cb) cb(); return; }
+      speakSystem(text, cb);                            // graceful fallback
+    });
   }
 
   function say(text, cb) {
     cb = cb ? once(cb) : null;              // one call per phrase, always
-    if (mode === "natural" && piperId && !naturalFailed) { speakNatural(text, cb); return; }
+    var my = ++ticket;
+    try { if (curSrc) curSrc.stop(); } catch (e) {}     // never talk over itself
+    if (mode === "natural" && piperId && !naturalFailed) { speakNatural(text, cb, my); return; }
     speakSystem(text, cb);
   }
 
@@ -603,6 +626,7 @@
     sweepCache: sweepCache,
     probeWorkerWrite: probeWorkerWrite,
     say: say,
+    stop: stop,
     openPicker: openPicker,
     autoSetup: autoSetup,
     hasNaturalSystemVoice: hasNaturalSystemVoice,

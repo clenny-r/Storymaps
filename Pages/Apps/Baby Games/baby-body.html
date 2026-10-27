@@ -15,141 +15,144 @@
   html,body { width:100%; height:100%; overflow:hidden; font-family:'Fredoka One','Comic Sans MS',cursive; touch-action:none; }
   #game { width:100vw; height:100vh; position:relative; display:flex; flex-direction:column; align-items:center;
           background:radial-gradient(ellipse at 25% 20%,#ffe1b0 0%,transparent 55%),radial-gradient(ellipse at 80% 80%,#c8b5ff 0%,transparent 55%),linear-gradient(160deg,#ffb0d0,#66c0ff); }
-  #prompt { margin-top:5vh; font-size:clamp(1.5rem,6vw,3rem); color:#fff; text-shadow:0 4px 14px rgba(0,0,0,.35); text-align:center; padding:0 70px; min-height:2.4em; }
-  #stage { flex:1; display:flex; align-items:center; justify-content:center; width:100%; padding:0 6vw 14vh; }
-  svg#face { width:min(84vw,60vh); height:auto; filter:drop-shadow(0 16px 34px rgba(0,0,0,.28)); }
-  svg#face.wig { animation:wig .45s; }
-  @keyframes wig { 0%,100%{transform:rotate(0)} 25%{transform:rotate(-4deg)} 75%{transform:rotate(4deg)} }
-  .tap { fill:transparent; stroke:transparent; cursor:pointer; }
-  .tap.flash { animation:ringflash .6s ease-out; }
-  @keyframes ringflash { 0%{stroke:#ffe45e; stroke-width:2; opacity:1} 100%{stroke:#ffe45e; stroke-width:26; opacity:0} }
-  .btn { position:absolute; z-index:100; background:rgba(255,255,255,.22); border:2px solid rgba(255,255,255,.4); color:#fff;
-         border-radius:50px; padding:8px 16px; font-family:inherit; font-size:1rem; cursor:pointer; backdrop-filter:blur(6px); text-decoration:none; }
-  #fs-btn{bottom:18px;right:18px} #sound-btn{top:14px;right:14px;padding:8px 12px;font-size:1.3rem} #back-btn{top:14px;left:14px}
-  #voice-btn{bottom:20px;left:50%;transform:translateX(-50%);padding:7px 14px;font-size:.9rem}
+  #prompt { margin-top:2vh; font-size:clamp(1.5rem,6vw,3rem); color:#fff; text-shadow:0 4px 14px rgba(0,0,0,.35); text-align:center; padding:0 20px; min-height:2.4em; display:flex; align-items:center; }
+  #hear { border:0; border-radius:999px; padding:8px 18px; font:inherit; font-size:1.05rem; color:#b4236b; background:#fff; cursor:pointer; box-shadow:0 4px 12px rgba(0,0,0,.15); visibility:hidden; }
+  #stage { flex:1; display:flex; align-items:center; justify-content:center; width:100%; padding:2vh 4vw 4vh; min-height:0; }
+  #photo { position:relative; height:100%; max-height:min(92vw,70vh); aspect-ratio:1; border-radius:34px; overflow:hidden; background:#fff;
+           box-shadow:0 18px 40px rgba(0,0,0,.25); border:6px solid #fff; }
+  #photo img { width:100%; height:100%; object-fit:cover; display:block; pointer-events:none; }
+  #photo.wig { animation:wig .45s; }
+  @keyframes wig { 0%,100%{transform:rotate(0)} 25%{transform:rotate(-2deg)} 75%{transform:rotate(2deg)} }
+  .ring { position:absolute; border-radius:50%; border:5px solid #ffe45e; box-shadow:0 0 0 4px rgba(255,255,255,.7),0 0 26px #ffd400;
+          transform:translate(-50%,-50%); pointer-events:none; animation:ring 1.4s ease-out forwards; }
+  @keyframes ring { 0%{opacity:0;scale:.4} 20%{opacity:1;scale:1.08} 70%{opacity:1;scale:1} 100%{opacity:0;scale:1.1} }
   .confetti { position:absolute; font-size:2rem; pointer-events:none; z-index:60; animation:fall 1.1s ease-out forwards; }
   @keyframes fall { 0%{opacity:1;transform:translateY(0) rotate(0)} 100%{opacity:0;transform:translateY(55vh) rotate(280deg)} }
+  #start { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; z-index:40; }
+  #start span { background:#fff; color:#b4236b; border-radius:999px; padding:16px 30px; font-size:clamp(1.4rem,6vw,2.4rem); box-shadow:0 10px 30px rgba(0,0,0,.25); }
+  .btn { position:absolute; z-index:100; background:rgba(255,255,255,.22); border:2px solid rgba(255,255,255,.4); color:#fff;
+         border-radius:50px; padding:8px 16px; font-family:inherit; font-size:1rem; cursor:pointer; text-decoration:none; }
 </style>
 </head>
-<body>
+<body data-kit-levels="1">
 <div id="game">
   <a id="back-btn" class="btn" href="../index.html">←</a>
   <div id="sound-btn" class="btn" onclick="toggleSound()">🔊</div>
-  <div id="voice-btn" class="btn" onclick="BabyVoice.openPicker()">🗣️ Voice</div>
-  <div id="prompt">Tap to start! 👆</div>
-  <div id="stage">
-    <!-- Friendly face drawn as original artwork. Invisible .tap zones catch touches. -->
-    <svg id="face" viewBox="0 0 220 250" xmlns="http://www.w3.org/2000/svg">
-      <!-- hair (back) -->
-      <path d="M110 24 C58 24 30 64 30 118 C30 96 44 84 60 84 L160 84 C176 84 190 96 190 118 C190 64 162 24 110 24 Z" fill="#6b4423"/>
-      <!-- neck + shoulders hint -->
-      <rect x="92" y="196" width="36" height="34" rx="14" fill="#f4c39a"/>
-      <!-- head -->
-      <ellipse cx="110" cy="132" rx="84" ry="88" fill="#ffd9b0" stroke="#eeb488" stroke-width="3"/>
-      <!-- ears -->
-      <ellipse class="feat-ear" cx="27" cy="140" rx="15" ry="22" fill="#ffd0a0" stroke="#eeb488" stroke-width="3"/>
-      <ellipse class="feat-ear" cx="193" cy="140" rx="15" ry="22" fill="#ffd0a0" stroke="#eeb488" stroke-width="3"/>
-      <!-- hair fringe (front) -->
-      <path d="M34 116 C34 66 66 40 110 40 C154 40 186 66 186 116 C170 92 150 86 128 92 C120 78 100 78 92 92 C70 86 50 92 34 116 Z" fill="#7a4e28"/>
-      <!-- eyebrows -->
-      <path d="M58 108 Q78 98 98 108" fill="none" stroke="#6b4423" stroke-width="6" stroke-linecap="round"/>
-      <path d="M122 108 Q142 98 162 108" fill="none" stroke="#6b4423" stroke-width="6" stroke-linecap="round"/>
-      <!-- eyes -->
-      <g class="feat-eyes">
-        <ellipse cx="78" cy="126" rx="17" ry="19" fill="#fff" stroke="#e2b892" stroke-width="2"/>
-        <ellipse cx="142" cy="126" rx="17" ry="19" fill="#fff" stroke="#e2b892" stroke-width="2"/>
-        <circle cx="80" cy="128" r="8.5" fill="#5a3b22"/><circle cx="144" cy="128" r="8.5" fill="#5a3b22"/>
-        <circle cx="76.5" cy="124.5" r="2.6" fill="#fff"/><circle cx="140.5" cy="124.5" r="2.6" fill="#fff"/>
-      </g>
-      <!-- cheeks -->
-      <circle class="feat-cheek" cx="64" cy="168" r="14" fill="#ff9ab0" opacity=".55"/>
-      <circle class="feat-cheek" cx="156" cy="168" r="14" fill="#ff9ab0" opacity=".55"/>
-      <!-- nose -->
-      <path class="feat-nose" d="M110 138 Q101 158 110 162 Q119 158 110 138 Z" fill="#f3b483"/>
-      <!-- mouth -->
-      <path class="feat-mouth" d="M84 182 Q110 208 136 182 Q110 196 84 182 Z" fill="#e0556a"/>
-      <path d="M84 182 Q110 196 136 182" fill="none" stroke="#b23b52" stroke-width="3" stroke-linecap="round"/>
-
-      <!-- ── invisible tap targets (on top) ── -->
-      <ellipse class="tap" data-part="hair"   data-cx="110" data-cy="66"  cx="110" cy="66"  rx="88" ry="34"/>
-      <ellipse class="tap" data-part="eyes"   data-cx="110" data-cy="126" cx="110" cy="126" rx="64" ry="24"/>
-      <ellipse class="tap" data-part="nose"   data-cx="110" data-cy="150" cx="110" cy="150" rx="20" ry="20"/>
-      <ellipse class="tap" data-part="mouth"  data-cx="110" data-cy="188" cx="110" cy="188" rx="34" ry="18"/>
-      <ellipse class="tap" data-part="cheeks" data-cx="64"  data-cy="168" cx="64"  cy="168" rx="20" ry="18"/>
-      <ellipse class="tap" data-part="cheeks" data-cx="156" data-cy="168" cx="156" cy="168" rx="20" ry="18"/>
-      <ellipse class="tap" data-part="ears"   data-cx="27"  data-cy="140" cx="27"  cy="140" rx="18" ry="26"/>
-      <ellipse class="tap" data-part="ears"   data-cx="193" data-cy="140" cx="193" cy="140" rx="18" ry="26"/>
-    </svg>
-  </div>
-  <button id="fs-btn" class="btn" onclick="goFullscreen()">⛶ Full Screen</button>
+  <div id="prompt">Point to… 👆</div>
+  <button id="hear">🔁 Say it again</button>
+  <div id="stage"><div id="photo"><img id="pic" alt="A smiling little girl"></div></div>
+  <div id="start"><span>Tap to start! 👆</span></div>
 </div>
-<script src="voice.js?v=20260820a"></script>
-<script src="photos.js?v=20260820a"></script>
-<script src="kit.js?v=20260820a"></script>
+<script src="voice.js?v=20261026a"></script>
+<script src="photos.js?v=20261026a"></script>
+<script src="kit.js?v=20261026a"></script>
 <script>
+/* Two real photos of a smiling little girl (made for TWC with ChatGPT,
+ * Oct 2026), replacing the old cartoon face that frightened some little ones.
+ * Each part is one or more circles in PERCENT of the square photo
+ * [x, y, radius]. Taps are generous: anywhere inside a circle counts.
+ * lv = first age level that asks for the part (see kit.js for the levels). */
+var SCENES = {
+  face: "photo/bodyface.webp?v=20261026",
+  full: "photo/bodyfull.webp?v=20261026"
+};
 var PARTS = [
-  { id:"eyes",   label:"eyes",   say:"the eyes" },
-  { id:"nose",   label:"nose",   say:"the nose" },
-  { id:"mouth",  label:"mouth",  say:"the mouth" },
-  { id:"ears",   label:"ears",   say:"the ears" },
-  { id:"hair",   label:"hair",   say:"the hair" },
-  { id:"cheeks", label:"cheeks", say:"the cheeks" }
+  // face photo
+  { id:"eyes",     word:"eyes",      many:1, lv:1, scene:"face", at:[[41,47,5.5],[60,47,5.5]] },
+  { id:"nose",     word:"nose",              lv:1, scene:"face", at:[[51,55,5]] },
+  { id:"mouth",    word:"mouth",             lv:1, scene:"face", at:[[51,65,6.5]] },
+  { id:"ears",     word:"ears",      many:1, lv:1, scene:"face", at:[[25,53,5.5],[79,52,5.5]] },
+  { id:"hair",     word:"hair",              lv:2, scene:"face", at:[[30,18,13],[72,18,13],[51,14,8]] },
+  { id:"cheeks",   word:"cheeks",    many:1, lv:3, scene:"face", at:[[37,61,5],[66,61,5]] },
+  { id:"chin",     word:"chin",              lv:3, scene:"face", at:[[51,76,5]] },
+  { id:"eyebrows", word:"eyebrows",  many:1, lv:3, scene:"face", at:[[41,40,3.5],[60,40,3.5]] },
+  // full body photo (toes sit before feet so a precise tap on the toes counts)
+  { id:"toes",     word:"toes",      many:1, lv:3, scene:"full", at:[[40,97.5,3],[59,97.5,3]] },
+  { id:"hands",    word:"hands",     many:1, lv:2, scene:"full", at:[[24,56,6.5],[74,56,6.5]] },
+  { id:"tummy",    word:"tummy",             lv:2, scene:"full", at:[[49,43,7.5]] },
+  { id:"feet",     word:"feet",      many:1, lv:2, scene:"full", at:[[41,94,5],[58,94,5]] },
+  { id:"head",     word:"head",              lv:3, scene:"full", at:[[49,15,9]] },
+  { id:"neck",     word:"neck",              lv:3, scene:"full", at:[[49,26.5,2.8]] },
+  { id:"shoulders",word:"shoulders", many:1, lv:3, scene:"full", at:[[36,30,4],[62,30,4]] },
+  { id:"arms",     word:"arms",      many:1, lv:3, scene:"full", at:[[31,44,4.5],[67,44,4.5]] },
+  { id:"knees",    word:"knees",     many:1, lv:3, scene:"full", at:[[42,80,3.5],[55,80,3.5]] },
+  { id:"legs",     word:"legs",      many:1, lv:3, scene:"full", at:[[42,71,4],[55,71,4],[42,87,3],[56,87,3]] }
 ];
-var soundOn=true, target=null, started=false, actx=null;
+
+var soundOn=true, actx=null, started=false, busy=false, target=null, scene="", last=null, lvl=BabyKit.level();
 function ctx(){ if(!actx) actx=new (window.AudioContext||window.webkitAudioContext)(); return actx; }
 function chime(){ if(!soundOn) return; try{ var c=ctx(); [523,659,784,1047].forEach(function(f,i){ var o=c.createOscillator(),g=c.createGain(); o.connect(g); g.connect(c.destination);
-  o.type='sine'; o.frequency.value=f; g.gain.setValueAtTime(.0001,c.currentTime+i*.09); g.gain.exponentialRampToValueAtTime(.3,c.currentTime+i*.09+.02);
+  o.type='sine'; o.frequency.value=f; g.gain.setValueAtTime(.0001,c.currentTime+i*.09); g.gain.exponentialRampToValueAtTime(.25,c.currentTime+i*.09+.02);
   g.gain.exponentialRampToValueAtTime(.0001,c.currentTime+i*.09+.35); o.start(c.currentTime+i*.09); o.stop(c.currentTime+i*.09+.4); }); }catch(e){} }
-function boing(){ if(!soundOn) return; try{ var c=ctx(),o=c.createOscillator(),g=c.createGain(); o.connect(g); g.connect(c.destination);
-  o.type='sine'; o.frequency.setValueAtTime(300,c.currentTime); o.frequency.exponentialRampToValueAtTime(160,c.currentTime+.25);
-  g.gain.setValueAtTime(.3,c.currentTime); g.gain.exponentialRampToValueAtTime(.001,c.currentTime+.3); o.start(); o.stop(c.currentTime+.3);}catch(e){} }
-function say(t,cb){ if(!soundOn){ if(cb)setTimeout(cb,500); return; } BabyVoice.say(t,cb); }
+function boop(){ if(!soundOn) return; try{ var c=ctx(),o=c.createOscillator(),g=c.createGain(); o.connect(g); g.connect(c.destination);
+  o.type='sine'; o.frequency.setValueAtTime(330,c.currentTime); o.frequency.exponentialRampToValueAtTime(220,c.currentTime+.2);
+  g.gain.setValueAtTime(.2,c.currentTime); g.gain.exponentialRampToValueAtTime(.001,c.currentTime+.25); o.start(); o.stop(c.currentTime+.26);}catch(e){} }
+function say(t,cb){ if(!soundOn){ if(cb) setTimeout(cb,400); return; } BabyVoice.say(t,cb); }
+function the(p){ return 'your ' + p.word; }
+function verb(p){ return p.many ? 'are' : 'is'; }
 
-// One question at a time (voice callback + safety timer must not double-fire).
-var advLock=false;
-function scheduleNext(text, minMs){
-  if(advLock) return; advLock=true; var fired=false;
-  function go(){ if(fired) return; fired=true; advLock=false; round(); }
-  if(text){ say(text, function(){ setTimeout(go, minMs||600); }); setTimeout(go, 4500); }
-  else setTimeout(go, minMs||1200);
-}
+var photo=document.getElementById('photo'), pic=document.getElementById('pic'), prompt=document.getElementById('prompt'), hear=document.getElementById('hear');
+function showScene(s){ if(scene===s) return; scene=s; pic.src=SCENES[s]; }
+function pool(){ return PARTS.filter(function(p){ return p.lv<=lvl; }); }
+
+function ask(){ prompt.innerHTML='Where '+verb(target)+' your <b>&nbsp;'+target.word+'&nbsp;</b>? 👉'; say('Where '+verb(target)+' '+the(target)+'?'); }
 function round(){
-  advLock=false;
-  target = PARTS[Math.floor(Math.random()*PARTS.length)];
-  document.getElementById('prompt').innerHTML = "Where " + (target.id==='eyes'||target.id==='ears'||target.id==='cheeks' ? "are" : "is") + " the <b>"+target.label+"</b>? 👉";
-  setTimeout(function(){ say("Can you find " + target.say + "?"); }, 250);
+  busy=false; hear.style.visibility='visible';
+  var p=pool().filter(function(x){ return x!==last; });
+  target=p[Math.floor(Math.random()*p.length)]; last=target;
+  showScene(target.scene);
+  ask();
 }
-function pick(part, node){
-  if(!started) return;
-  if(part === target.id){
-    node.classList.remove('flash'); void node.getBBox; node.classList.add('flash');
-    chime(); confetti();
-    document.getElementById('prompt').innerHTML = "Yay! That's the <b>"+target.label+"</b>! 🎉";
-    setTimeout(function(){ node.classList.remove('flash'); }, 650);
-    scheduleNext("Yes! That's " + target.say + "!", 900);
+function hit(x,y){            // x,y in percent of the photo
+  var found=null;
+  pool().forEach(function(p){              // only name parts at this age level
+    if(p.scene!==scene || found) return;
+    p.at.forEach(function(c){ var dx=x-c[0], dy=y-c[1]; if(dx*dx+dy*dy <= c[2]*c[2]*1.3) found=found||p; });
+  });
+  return found;
+}
+function ring(p){
+  p.at.forEach(function(c){
+    var r=document.createElement('div'); r.className='ring';
+    r.style.left=c[0]+'%'; r.style.top=c[1]+'%'; r.style.width=r.style.height=(c[2]*2.4)+'%';
+    photo.appendChild(r); setTimeout(function(){ r.remove(); },1500);
+  });
+}
+photo.addEventListener('click', function(e){
+  if(!started || busy) return;
+  var b=photo.getBoundingClientRect();
+  var x=(e.clientX-b.left)/b.width*100, y=(e.clientY-b.top)/b.height*100;
+  var p=hit(x,y);
+  // close neighbours count: knees are part of the legs, toes part of the feet
+  var PART_OF={ knees:'legs', toes:'feet' };
+  if(p===target || (p && PART_OF[p.id]===target.id)){
+    busy=true; ring(target); chime(); confetti();
+    prompt.innerHTML='Yes! '+(target.many?'Those are':'That is')+' your <b>&nbsp;'+target.word+'&nbsp;</b>! 🎉';
+    var moved=false; function next(){ if(moved) return; moved=true; round(); }
+    say('Yes! '+cap(the(target))+'! Well done!', function(){ setTimeout(next,700); });
+    setTimeout(next,6000);
+  } else if(p){
+    // name what they touched: a near miss still teaches a word
+    ring(p); boop();
+    say((p.many?'Those are ':'That is ')+the(p)+'. Where '+verb(target)+' '+the(target)+'?');
   } else {
-    var f=document.getElementById('face'); f.classList.remove('wig'); void f.getBBox; f.classList.add('wig');
-    setTimeout(function(){ f.classList.remove('wig'); }, 450);
-    boing(); say("Try again. Where is " + target.say + "?");
+    photo.classList.remove('wig'); void photo.offsetWidth; photo.classList.add('wig'); boop();
   }
-}
-Array.prototype.forEach.call(document.querySelectorAll('.tap'), function(z){
-  z.addEventListener('click', function(){ pick(z.getAttribute('data-part'), z); });
 });
+function cap(s){ return s.charAt(0).toUpperCase()+s.slice(1); }
 function confetti(){ var g=document.getElementById('game'), ce="🎉🎈⭐🌟✨".split('');
   for(var i=0;i<14;i++){ var el=document.createElement('div'); el.className='confetti'; el.textContent=ce[Math.floor(Math.random()*ce.length)];
     el.style.left=(Math.random()*100)+'vw'; el.style.top='-8vh'; el.style.animationDelay=(Math.random()*.3)+'s'; g.appendChild(el);
     el.addEventListener('animationend', function(){ this.remove(); }); } }
-function toggleSound(){ soundOn=!soundOn; document.getElementById('sound-btn').textContent=soundOn?'🔊':'🔇'; if(!soundOn){try{speechSynthesis.cancel();}catch(e){}} }
-function goFullscreen(){ var el=document.documentElement,r=el.requestFullscreen||el.webkitRequestFullscreen; if(r)r.call(el);
-  setTimeout(function(){ var b=document.getElementById('fs-btn'); b.style.opacity='0'; b.style.pointerEvents='none'; },1000); }
-document.addEventListener('fullscreenchange', function(){ if(!document.fullscreenElement){ var b=document.getElementById('fs-btn'); b.style.opacity='1'; b.style.pointerEvents='auto'; } });
+hear.addEventListener('click', function(e){ e.stopPropagation(); if(target) ask(); });
+document.getElementById('start').addEventListener('click', function(){
+  this.remove(); started=true; try{ ctx().resume(); }catch(e){} round();
+});
+document.addEventListener('babylevel', function(e){ lvl=e.detail; last=null; if(started) round(); });
+function toggleSound(){ soundOn=!soundOn; if(!soundOn){ try{speechSynthesis.cancel();}catch(e){} } }
 document.addEventListener('contextmenu', function(e){ e.preventDefault(); });
 document.addEventListener('touchmove', function(e){ e.preventDefault(); }, { passive:false });
-document.getElementById('game').addEventListener('click', function(){
-  if(started) return; started=true; try{ctx().resume();}catch(e){}
-  round();
-});
+showScene('face');
 </script>
 </body>
 </html>

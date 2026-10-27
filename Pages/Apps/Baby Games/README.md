@@ -12,15 +12,16 @@ Apps landing page links straight to it, and each game's ← button comes back he
 |---|---|
 | `index.html` | Sub-landing page: game cards, filter chips, grown-up notes |
 | `kit.js` | **Shared top bar** — back, sound, voice, full screen, day/night. Loaded by every page |
-| `photos.js` | **Real photographs** instead of emoji, with emoji as the fallback |
+| `photos.js` | **Realistic photos** from `photo/`, then the Twemoji in `img/`, then the emoji |
+| `photo/` | 72 realistic photos (512 px .webp) made with ChatGPT, Oct 2026, checked by eye |
 | `voice.js` | Shared speech: system voices plus optional Piper neural voices |
 | `baby-squish-game.html` | Tap anywhere, bubbles pop |
 | `baby-bible-squish.html` | Bible squish, with letters and numbers modes |
 | `baby-draw.html` | Finger painting with worship songs |
-| `baby-animals.html` | Fifteen animals with names and sounds |
+| `baby-animals.html` | Animal Sounds: 3 age levels (6 / 16 / 37 animals), Look & listen and Find it! |
 | `baby-colors.html` | Colour blocks that say their names |
 | `baby-words.html` | First words, one picture at a time |
-| `baby-body.html` | Point to the nose, eyes, ears… |
+| `baby-body.html` | Point To…: real photos of a smiling girl, 3 age levels (4 / 8 / 18 parts) |
 | `baby-family.html` | Mommy, Daddy, Grandma, baby |
 | `tutorial.html` | Video walkthrough |
 
@@ -165,3 +166,40 @@ cd "Pages/Apps/Baby Games"
 OLD=20260820a; NEW=20260821a
 sed -i "s/?v=$OLD/?v=$NEW/g" *.html
 ```
+
+
+## Age levels (Oct 2026)
+
+Pages with `<body data-kit-levels="1">` get an **Age** button in the top bar and
+ask "How old is our player?" on first visit. One shared setting
+(`babyLevel_v1`) for every game. Read it with `BabyKit.level()` (1, 2 or 3) and
+listen for the `babylevel` event.
+
+| Level | Age | Animal Sounds | Point To… |
+|---|---|---|---|
+| 1 Little one | under 2 | 6 farm animals, 2 big pictures in Find it! | eyes, nose, mouth, ears |
+| 2 Toddler | 2 to 3 | 16 animals, 3 pictures | adds hair, hands, tummy, feet |
+| 3 Big kid | 3 to 5 | 37 animals, 4 pictures, "Who says moo?" | adds cheeks, chin, eyebrows, head, neck, shoulders, arms, legs, knees, toes |
+
+Grounded in the CDC "Learn the Signs. Act Early." checklists: by 2 years a
+child "points to things in a book when you ask" and "points to at least two
+body parts"; by 4 years a child "draws a person with three or more body parts".
+
+## Audio rules (Oct 2026 audit)
+
+- `kit.js` keeps a list of every AudioContext a page makes and resumes all of
+  them on **every** tap and when the app comes back from the background. iOS
+  ignores `touchstart` as an unlocking gesture, so the old one-shot
+  `touchstart` resume left some games silent on iPhone.
+- `navigator.audioSession.type = "playback"` (Safari 16.4+) so tones and the
+  natural voice play with the ring switch on silent, like the phone voice does.
+- The 🔊 choice is remembered and **applied to the game on load**. Before, the
+  bar could show 🔇 while the game still played, and the next tap put them out
+  of step.
+- `BabyVoice.say` gives each phrase a ticket; only the newest plays, so fast
+  tapping no longer queues up late phrases. `BabyVoice.stop()` silences both
+  voices (used by mute).
+- God's Rainbow: two song links were missing the comma in the file name
+  (`Little Stone, Big Win!`, `Two By Two, They Boarded The Boat!`) and were
+  silently skipped. A song that fails now skips to the next one, and 🔊 mutes
+  the music too.

@@ -472,13 +472,13 @@ const SONGS = [
   { title: "Gumballs Can Wait",                 src: BASE + "Gumballs%20Can%20Wait.mp3" },
   { title: "Jelly's Not The End",               src: BASE + "Jelly's%20Not%20The%20End.mp3" },
   { title: "Jesus Loves Me",                    src: BASE + "Jesus%20Loves%20Me.mp3" },
-  { title: "Little Stone Big Win!",             src: BASE + "Little%20Stone%20Big%20Win!.mp3" },
+  { title: "Little Stone Big Win!",             src: BASE + "Little%20Stone%2C%20Big%20Win!.mp3" },
   { title: "Macaroni for the Lord",             src: BASE + "Macaroni%20for%20the%20Lord.mp3" },
   { title: "Muffins Can't Pray (But I Can!)",   src: BASE + "Muffins%20Can't%20Pray%20(But%20I%20Can!).mp3" },
   { title: "Pass The Picnic",                   src: BASE + "Pass%20The%20Picnic.mp3" },
   { title: "The Taco Tumble",                   src: BASE + "The%20Taco%20Tumble.mp3" },
   { title: "This Tiny Light Of Mine",           src: BASE + "This%20Tiny%20Light%20Of%20Mine.mp3" },
-  { title: "Two By Two They Boarded The Boat!", src: BASE + "Two%20By%20Two%20They%20Boarded%20The%20Boat!.mp3" },
+  { title: "Two By Two They Boarded The Boat!", src: BASE + "Two%20By%20Two%2C%20They%20Boarded%20The%20Boat!.mp3" },
   { title: "Wait For The Sandwich",             src: BASE + "Wait%20For%20The%20Sandwich.mp3" },
 ];
 
@@ -504,6 +504,26 @@ function startSongScheduler(idx){
   document.getElementById('musicHud').classList.add('visible');
   songAudio.play().catch(()=>{});
 }
+
+// A song that will not load (bad link, no signal) used to leave the music
+// silent for good. Skip to the next one instead, but give up after a full lap.
+let songFails = 0;
+songAudio.addEventListener('error', ()=>{
+  if(!songPlaying) return;
+  if(++songFails >= SONGS.length){ stopSong(); return; }
+  startSongScheduler((songIndex + 1) % SONGS.length);
+});
+songAudio.addEventListener('playing', ()=>{ songFails = 0; });
+
+// The 🔊 button in the top bar: mute pauses the worship song and the voice,
+// and un-mute picks the song up where it stopped.
+let drawMuted = false;
+window.toggleSound = function(){
+  drawMuted = !drawMuted;
+  songAudio.muted = drawMuted;
+  if(drawMuted){ try{ speechSynthesis.cancel(); }catch(e){} if(audioCtx) try{ audioCtx.suspend(); }catch(e){} }
+  else if(audioCtx){ try{ audioCtx.resume(); }catch(e){} }
+};
 
 // Auto-advance to next song when current one ends
 songAudio.addEventListener('ended', ()=>{
@@ -553,6 +573,7 @@ function getBestVoice(){
 }
 function speakText(text){
   return new Promise(res=>{
+    if(typeof drawMuted!=='undefined' && drawMuted){ setTimeout(res,400); return; }
     if(window.BabyVoice && BabyVoice.say){ BabyVoice.say(text, res); return; }
     if(!window.speechSynthesis){res();return;}
     speechSynthesis.cancel();
@@ -834,7 +855,7 @@ document.getElementById('startBtn').addEventListener('click',()=>{
   },900);
 });
 </script>
-<script src="voice.js?v=20260820a"></script>
-<script src="kit.js?v=20260820a"></script>
+<script src="voice.js?v=20261026a"></script>
+<script src="kit.js?v=20261026a"></script>
 </body>
 </html>
