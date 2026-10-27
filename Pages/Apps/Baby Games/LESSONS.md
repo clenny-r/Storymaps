@@ -16,7 +16,7 @@ Newest first. Read this before changing anything in this folder.
 4. **Check for brand logos** on cars and products; the first car had a real maker's badge.
 5. **Hugging Face is blocked** from both the cloud and the laptop background shell, so the actual Piper voices cannot be run there; the phonemizer is the next best check.
 6. **Three choice cards on a phone** need their own size (`min(28vw,30vh)`), or the row runs off the screen.
-7. **GitHub Desktop push via Ctrl+P** worked once and silently did nothing the second time (another window was in front). Always confirm with `git ls-remote`, and ask Clenmar to press Push origin if it did not go.
+7. **GitHub Desktop updates itself** (3.6.6 to 3.6.7 on 26 Oct 2026). Computer-use access is granted per version folder (`app-3.6.x\githubdesktop.exe`), so after an update the window is hidden from screenshots and key presses silently miss it. Fix: `computer_resolve_access` with `githubdesktop.exe` again, approve the new version, then click **Push origin** on screen (top bar, right of "Current branch"). Always confirm with `git ls-remote`.
 
 ## 26 Oct 2026: photos, age levels, Point To redesign, audio audit
 
