@@ -19,14 +19,14 @@
   var OWN_KEY = "babyPhotoOwn_v1";     // { term: dataURL }  — parent's own photos
   var IMG_DIR = "img/";
   var PHOTO_DIR = "photo/";
-  var PHOTO_V = "20261026";             // bump when a photo is replaced
+  var PHOTO_V = "20261026b";             // bump when a photo is replaced
 
   // Terms whose word differs from the file name.
   var ALIAS = {
     mommy: "woman", mummy: "woman", mom: "woman", mum: "woman",
     daddy: "man", dad: "man",
     doggy: "dog", puppy: "dog", kitty: "cat", kitten: "cat",
-    sister: "girl", "big brother": "brother",
+    sister: "girl", plane: "airplane", bike: "bicycle", "big brother": "brother",
     hippopotamus: "hippo", "doctor bird": "hummingbird", cockerel: "rooster",
     "ice cream": "icecream", icecream: "icecream",
     chicken: "hen", rabbit: "bunny"
@@ -48,7 +48,8 @@
    "fish bee butterfly teddy apple banana grapes orange strawberry eggplant cookie cake " +
    "chocolate icecream milk shoe car bus train ball balloon star moon sun flower rose tree grass " +
    "sky snow hummingbird rooster giraffe zebra tiger turtle goat donkey mouse penguin " +
-   "parrot dolphin whale camel kangaroo hippo crab squirrel bodyface").split(/\s+/)
+   "parrot dolphin whale camel kangaroo hippo crab squirrel bodyface " +
+   "boat airplane bicycle cup hat").split(/\s+/)
     .forEach(function (n) { PHOTOS[n] = 1; });
 
   function key(term) { return String(term || "").trim().toLowerCase(); }
@@ -90,8 +91,9 @@
       "opacity:0;transition:opacity .3s ease}",
       ".bp>img.on{opacity:1}",
       ".bp>img.own{object-fit:cover;padding:0}",     // a real uploaded photo fills the frame
-      ".bp>img.photo{object-fit:cover;padding:0;background:#fff}",  // realistic photo fills the card
-      ".bp.bpround>img.photo{object-position:50% 30%}",
+      // never crop a photo: the whole animal or bus stays in view (Oct 2026)
+      ".bp>img.photo{object-fit:contain;padding:0;background:#fff}",
+      ".bp.bpround>img.photo{object-fit:cover;object-position:50% 30%}",  // round faces fill the circle
       ".bp .bpemo{line-height:1}",
       ".bpround{border-radius:50%}"
     ].join("");

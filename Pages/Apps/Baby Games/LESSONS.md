@@ -2,6 +2,22 @@
 
 Newest first. Read this before changing anything in this folder.
 
+## 26 Oct 2026 (evening): First Words levels, uncropped photos, clearer voice
+
+### What was done
+1. First Words: three age levels (12 / 41 / 61 words), Look & say plus Find it! (2 / 3 / 4 pictures), "Which one...?" riddles and "B is for ball" for 3 to 5.
+2. Photos are never cropped any more (`object-fit: contain`); round family faces still fill their circle. Car, bus, train, boat and airplane were regenerated whole, plus new bicycle, cup and hat.
+3. Voice: clipped first sounds fixed, misread animal sounds respelled, default natural voice switched to American (Grace).
+
+### Lessons
+1. **"cat" heard as "at" is a playback problem, not spelling.** The espeak phonemizer (pip `piper-tts`, works offline in the cloud) showed k-a-t correctly. Pad the audio with silence and do not speak straight after `cancel()` on iOS.
+2. **Use the phonemizer to audit spoken text.** `EspeakPhonemizer().phonemize('en-us', text)` revealed "grrr" read as the letters G-R-R-R. Run it on any new animal sound before shipping.
+3. **ChatGPT ignores "leave margin" in 2x2 grids for long subjects.** Vehicles came out cut at the cell edges twice. Ask for long things (vehicles, planes) as SINGLE images with "about 60% of the width, wide white space on all sides, no logos".
+4. **Check for brand logos** on cars and products; the first car had a real maker's badge.
+5. **Hugging Face is blocked** from both the cloud and the laptop background shell, so the actual Piper voices cannot be run there; the phonemizer is the next best check.
+6. **Three choice cards on a phone** need their own size (`min(28vw,30vh)`), or the row runs off the screen.
+7. **GitHub Desktop push via Ctrl+P** worked once and silently did nothing the second time (another window was in front). Always confirm with `git ls-remote`, and ask Clenmar to press Push origin if it did not go.
+
 ## 26 Oct 2026: photos, age levels, Point To redesign, audio audit
 
 ### What was done

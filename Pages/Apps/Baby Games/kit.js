@@ -59,6 +59,8 @@
     '-webkit-backdrop-filter:blur(8px);min-height:40px}',
     '#kitbar .kb:active{transform:translateY(1px)}',
     '#kitbar .kb.round{padding:9px 11px;font-size:17px}',
+    '#kitbar #kbLevel{white-space:nowrap}',
+    '@media (max-width:430px){#kitbar .kb{padding:8px 10px;font-size:13px}#kitbar #kbVoice span{display:none}}',
     '#kitbar .spacer{flex:1}',
     'html[data-theme="dark"] #kitbar .kb{background:rgba(38,33,62,.9);color:#F3EEFF;box-shadow:0 4px 14px rgba(0,0,0,.45)}',
     '#kitbar.hidden{opacity:0;pointer-events:none;transition:opacity .4s}',

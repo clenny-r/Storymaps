@@ -26,7 +26,12 @@
   var FAIL_KEY   = "babyVoiceAutoFail_v1"; // how many times the auto fetch failed
   var WW_KEY     = "babyVoiceWorkerWrite_v1"; // 'yes'|'no': can a worker write OPFS?
   var HEAL_KEY   = "babyVoiceHealed_v2";  // the one-time repair below has run
-  var DEFAULT_PIPER = "en_GB-jenny_dioco-medium";   // Jenny — British, gentle
+  // Oct 2026: the default moved from Jenny (British) to Grace (American) —
+  // the family is in Canada and asked for a North American accent. There is
+  // no Canadian Piper voice; US English is the closest.
+  var DEFAULT_PIPER = "en_US-hfc_female-medium";    // Grace — American, clear
+  var OLD_DEFAULT   = "en_GB-jenny_dioco-medium";
+  var NA_KEY        = "babyVoiceNA_v1";   // 'done' once an auto-installed Jenny was swapped
   var PIPER_URL = "https://cdn.jsdelivr.net/npm/@mintplex-labs/piper-tts-web@1.0.4/dist/piper-tts-web.js";
 
   function getStr(k, d) { try { return localStorage.getItem(k) || d; } catch (e) { return d; } }
@@ -37,9 +42,9 @@
 
   // Verified voice IDs (all English Piper voices are ~63 MB — no small tier).
   var PIPER_VOICES = [
-    { id: "en_GB-jenny_dioco-medium", label: "Jenny — British, gentle", size: "~63 MB" },
+    { id: "en_US-hfc_female-medium",  label: "Grace — American, clear (best)", size: "~63 MB" },
     { id: "en_US-amy-medium",         label: "Amy — American, warm",    size: "~63 MB" },
-    { id: "en_US-hfc_female-medium",  label: "Grace — American, clear", size: "~63 MB" },
+    { id: "en_GB-jenny_dioco-medium", label: "Jenny — British, gentle", size: "~63 MB" },
     { id: "en_GB-cori-medium",        label: "Cori — British, lively",  size: "~63 MB" },
     { id: "en_US-hfc_male-medium",    label: "Sam — American, male",    size: "~63 MB" },
     { id: "en_GB-alan-medium",        label: "Alan — British, male",    size: "~63 MB" }
@@ -59,9 +64,10 @@
     if (GOOD.test(n)) s += 30;
     if (FEMALE.test(n)) s += 14;
     if (v.localService === false) s += 12;
-    if (/^en[-_]?GB/i.test(v.lang)) s += 8;
-    else if (/^en[-_]?AU/i.test(v.lang)) s += 7;
-    else if (/^en[-_]?US/i.test(v.lang)) s += 6;
+    if (/^en[-_]?CA/i.test(v.lang)) s += 10;          // Canadian first,
+    else if (/^en[-_]?US/i.test(v.lang)) s += 8;      // then American,
+    else if (/^en[-_]?GB/i.test(v.lang)) s += 5;      // then British
+    else if (/^en[-_]?AU/i.test(v.lang)) s += 4;
     else if (/^en/i.test(v.lang)) s += 3;
     else s -= 50;
     return s;
@@ -81,14 +87,26 @@
     return function () { if (done || !fn) return; done = true; try { fn(); } catch (e) {} };
   }
 
+  /* Clipped first sounds ("cat" heard as "at"), Oct 2026:
+   *  - iOS Safari cuts the start of an utterance spoken straight after
+   *    cancel(); when something was still talking we wait a moment first.
+   *  - the natural voice's audio is started a little in the future, with a
+   *    short silence in front, so the speaker (or Bluetooth headset) is awake
+   *    before the first consonant arrives.  */
   function speakSystem(text, cb) {
     cb = cb ? once(cb) : null;
     if (typeof speechSynthesis === "undefined") { if (cb) setTimeout(cb, 500); return; }
+    var busy = false;
+    try { busy = speechSynthesis.speaking || speechSynthesis.pending; } catch (e) {}
+    try { speechSynthesis.cancel(); } catch (e) {}
+    if (busy) { setTimeout(function () { speakSystemNow(text, cb); }, 140); return; }
+    speakSystemNow(text, cb);
+  }
+  function speakSystemNow(text, cb) {
     try {
       if (!chosen) refreshSystem();
-      speechSynthesis.cancel();
       var u = new SpeechSynthesisUtterance(text);
-      u.lang = (chosen && chosen.lang) || "en-GB";
+      u.lang = (chosen && chosen.lang) || "en-US";
       u.rate = 0.85; u.pitch = 1.06; u.volume = 1;
       if (chosen) u.voice = chosen;
       if (cb) u.onend = cb;
@@ -115,10 +133,14 @@
     }
     blob.arrayBuffer().then(function (ab) { return c.decodeAudioData(ab); }).then(function (buf) {
       try { if (curSrc) curSrc.stop(); } catch (e) {}
-      var src = c.createBufferSource(); src.buffer = buf; src.connect(c.destination); curSrc = src;
-      if (cb) { src.onended = cb; setTimeout(cb, Math.min(9000, buf.duration * 1000 + 500)); }
-      try { c.resume(); } catch (e) {}
-      src.start();
+      // 0.15 s of silence in front of the voice, then start 0.08 s ahead.
+      var lead = Math.round(buf.sampleRate * 0.15);
+      var padded = c.createBuffer(buf.numberOfChannels, buf.length + lead, buf.sampleRate);
+      for (var ch = 0; ch < buf.numberOfChannels; ch++) padded.getChannelData(ch).set(buf.getChannelData(ch), lead);
+      var src = c.createBufferSource(); src.buffer = padded; src.connect(c.destination); curSrc = src;
+      if (cb) { src.onended = cb; setTimeout(cb, Math.min(9500, padded.duration * 1000 + 700)); }
+      var go = function () { try { src.start(c.currentTime + 0.08); } catch (e) { if (cb) cb(); } };
+      if (c.state !== "running") { try { c.resume().then(go, go); } catch (e) { go(); } } else go();
     }).catch(function () { if (cb) cb(); });
   }
 
@@ -414,11 +436,33 @@
     });
   }
 
+  /* Spellings the speech engines get wrong. Checked against the espeak
+   * phonemizer the natural voice uses (Oct 2026): "grrr" was read as the
+   * letters G-R-R-R, "hrrumph" as "H-rumph", "aaooo" as "ah-roo-oh". */
+  var SAYFIX = [
+    [/\bg+r+r+\b/gi, "gurrr"],
+    [/\bhrrumph\b/gi, "harrumph"],
+    [/\baaooo\b/gi, "ah-woooo"],
+    [/\bo{3,}\b/gi, "oooo"],
+    [/\beee\b/gi, "eek eek"],
+    [/\bcock a doodle doo\b/gi, "cock-a-doodle-doo"],
+    [/\bhmmm+\b/gi, "hmm"]
+  ];
+  function fixText(t) {
+    t = String(t == null ? "" : t);
+    SAYFIX.forEach(function (r) { t = t.replace(r[0], r[1]); });
+    // A lone word with no full stop is said abruptly by both engines.
+    if (!/[.!?]\s*$/.test(t)) t += ".";
+    return t;
+  }
+
+  var migrating = false;
   function say(text, cb) {
+    text = fixText(text);
     cb = cb ? once(cb) : null;              // one call per phrase, always
     var my = ++ticket;
     try { if (curSrc) curSrc.stop(); } catch (e) {}     // never talk over itself
-    if (mode === "natural" && piperId && !naturalFailed) { speakNatural(text, cb, my); return; }
+    if (mode === "natural" && piperId && !naturalFailed && !migrating) { speakNatural(text, cb, my); return; }
     speakSystem(text, cb);
   }
 
@@ -585,6 +629,16 @@
       // earlier build downgraded it, put it back.)
       if (piperId) {
         if (mode !== "natural") { mode = "natural"; setStr(MODE_KEY, "natural"); }
+        // Jenny was installed automatically (not chosen by a grown-up): swap
+        // her for the North American default once, quietly, off a metered line.
+        if (piperId === OLD_DEFAULT && getStr(NA_KEY, "") !== "done" && !metered()) {
+          setStr(NA_KEY, "done");
+          migrating = true;                 // phone voice talks meanwhile; the
+          downloadVoice(DEFAULT_PIPER, null).then(function () {   // engine is a singleton
+            piperId = DEFAULT_PIPER; setStr(PIP_KEY, DEFAULT_PIPER); migrating = false;
+            if (chip) chip("New voice ready ✨", 2400);
+          }).catch(function () { migrating = false; session = null; sessionVoice = ""; });
+        }
         return;
       }
       // We used to stop here when the phone had an "extra natural" system voice.

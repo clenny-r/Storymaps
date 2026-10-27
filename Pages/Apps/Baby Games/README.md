@@ -20,7 +20,7 @@ Apps landing page links straight to it, and each game's ← button comes back he
 | `baby-draw.html` | Finger painting with worship songs |
 | `baby-animals.html` | Animal Sounds: 3 age levels (6 / 16 / 37 animals), Look & listen and Find it! |
 | `baby-colors.html` | Colour blocks that say their names |
-| `baby-words.html` | First words, one picture at a time |
+| `baby-words.html` | First Words: 3 age levels (12 / 41 / 61 words), Look & say, Find it!, riddles for 3 to 5 |
 | `baby-body.html` | Point To…: real photos of a smiling girl, 3 age levels (4 / 8 / 18 parts) |
 | `baby-family.html` | Mommy, Daddy, Grandma, baby |
 | `tutorial.html` | Video walkthrough |
@@ -203,3 +203,21 @@ body parts"; by 4 years a child "draws a person with three or more body parts".
   (`Little Stone, Big Win!`, `Two By Two, They Boarded The Boat!`) and were
   silently skipped. A song that fails now skips to the next one, and 🔊 mutes
   the music too.
+
+## Voice clarity (Oct 2026, second pass)
+
+- Short words were heard with their first sound missing ("cat" as "at").
+  The text was fine (checked with the espeak phonemizer the natural voice
+  uses), so the cause was playback: the speaker wakes a moment late, and iOS
+  clips speech started straight after `cancel()`. The natural voice now gets
+  0.15 s of silence in front and starts 0.08 s ahead; the phone voice waits
+  0.14 s after cancelling anything still talking.
+- First Words says the word on its own, then in a short phrase ("Cat! A cat."),
+  so it is heard twice and never only as the very first sound.
+- `SAYFIX` in `voice.js` respells sounds the engines mangle: "grrr" was read
+  as the letters G-R-R-R, "hrrumph" as "H-rumph", "aaooo" as "ah-roo-oh".
+- Accent: the default natural voice is now **Grace (American)**, not Jenny
+  (British). There is no Canadian Piper voice. Phones that had Jenny
+  installed automatically switch once, quietly, off a metered line; a voice a
+  grown-up chose by hand is never changed. The phone-voice ranking now
+  prefers en-CA, then en-US, then en-GB.
