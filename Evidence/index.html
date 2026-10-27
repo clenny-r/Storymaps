@@ -271,6 +271,7 @@
       <button class="chip" data-f="ready">Watch now</button>
       <button class="chip" data-f="1">Season 1</button>
       <button class="chip" data-f="2">Season 2</button>
+      <button class="chip" data-f="3">Season 3</button>
     </div>
   </div>
   <section class="resume" id="resume" hidden><h2>Continue watching</h2><div class="grid" id="resumegrid"></div></section>
@@ -391,7 +392,7 @@
   var filter="all", query="";
   function render(){
     var box=$("seasons"); box.innerHTML=""; var shown=0;
-    [1,2].forEach(function(season){
+    [1,2,3].forEach(function(season){
       if(filter!=="all" && filter!=="ready" && String(season)!==filter) return;
       var eps=E.filter(function(e){
         if(e.season!==season) return false;
@@ -404,7 +405,7 @@
       shown+=eps.length;
       var sec=document.createElement("section"); sec.className="season";
       var avail=eps.filter(ready).length;
-      sec.innerHTML='<h2>Season '+season+(avail<eps.length?' <small>'+avail+' ready, more coming</small>':'')+'</h2><p class="lead">'+(season===1?"Thirteen questions, thirteen Jamaican places.":"The next thirteen, as the episodes are released.")+'</p><div class="grid"></div>';
+      sec.innerHTML='<h2>Season '+season+(avail<eps.length?' <small>'+avail+' ready, more coming</small>':'')+'</h2><p class="lead">'+(season===1?"Thirteen questions, thirteen Jamaican places.":season===2?"The next thirteen, as the episodes are released.":"Marriage and life: the questions that come home.")+'</p><div class="grid"></div>';
       var grid=sec.querySelector(".grid");
       eps.forEach(function(e){
         var p=e.parts.find(function(x){return x.file;});
@@ -455,7 +456,7 @@
   function buildNav(){ // season drop-downs with a grid of episode buttons; the season of the playing episode stays open
     var nav=$("epnav"), wasOpen={}; Array.prototype.forEach.call(nav.children,function(d){wasOpen[d.getAttribute("data-s")]=d.open;});
     var first=!nav.children.length; nav.innerHTML="";
-    [1,2].forEach(function(season){
+    [1,2,3].forEach(function(season){
       var eps=E.filter(function(x){return x.season===season;}); if(!eps.length) return;
       var d=document.createElement("details"); d.className="epmenu"; d.setAttribute("data-s",season);
       d.open = first ? false : !!wasOpen[season];
