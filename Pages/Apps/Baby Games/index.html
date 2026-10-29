@@ -145,13 +145,19 @@ a{text-decoration:none;color:inherit}
 
   <div class="grid" id="grid"></div>
 
+  <section class="notes" id="plane">
+    <h2>✈️ Plane mode</h2>
+    <p style="font-size:14.5px;font-weight:700;color:var(--soft);line-height:1.5;margin-bottom:12px">Save every game, photo and voice clip on this phone once, on Wi-Fi. After that the games work in Airplane Mode, with no internet at all.</p>
+    <button id="saveOffline" class="play" style="border:0;width:100%;cursor:pointer;background:linear-gradient(135deg,#38BDF8,#2563EB)">Save for the plane</button>
+    <p id="saveStatus" style="margin-top:10px;font-size:14px;font-weight:800;color:var(--soft);min-height:1.4em"></p>
+  </section>
+
   <section class="notes">
     <h2>For the grown-up 👋</h2>
     <ul>
-      <li><span class="ico">🗣️</span><span><b>The voice sets itself up.</b> If the phone already has an extra-natural
-        voice we use it. If it only has the flat robot one — which is what a new iPhone gives you — the games quietly
-        fetch <b>Jenny, British and gentle</b> once (about 63 MB, then it works offline). On mobile data we skip the
-        download and leave it to you: tap <b>🗣️ Voice</b> any time to change or install one.</span></li>
+      <li><span class="ico">🗣️</span><span><b>Grace's voice is built in.</b> Every word in the games is recorded
+        ahead of time, so she answers straight away with nothing to download. Tap <b>🗣️ Voice</b> if you would
+        rather use the phone's own voice.</span></li>
       <li><span class="ico">⛶</span><span><b>Full screen and Voice live at the top</b> of every game, never at the
         bottom where Safari's toolbar hides them. On an iPhone, <b>Share → Add to Home Screen</b> gives a true full
         screen with no address bar at all.</span></li>
@@ -169,13 +175,56 @@ a{text-decoration:none;color:inherit}
   </p>
 </div>
 
-<script src="voice.js?v=20261027a"></script>
-<script src="photos.js?v=20261027a"></script>
-<script src="kit.js?v=20261027a"></script>
+<script src="voice.js?v=20261028a"></script>
+<script src="photos.js?v=20261028a"></script>
+<script src="kit.js?v=20261028a"></script>
 <script>
+/* Plane mode: ask the service worker (sw.js) to save every file for offline use */
+(function(){
+  var btn=document.getElementById('saveOffline'), st=document.getElementById('saveStatus');
+  function saved(){ try{ return localStorage.getItem('babyOffline_v1'); }catch(e){ return null; } }
+  if(saved()) st.textContent='✓ Saved on this phone on '+saved()+'. Tap again after updates.';
+  if(!('serviceWorker' in navigator)){ btn.disabled=true; st.textContent='This browser cannot save games for offline use.'; return; }
+  navigator.serviceWorker.addEventListener('message', function(e){
+    var d=e.data||{}; if(d.type!=='progress') return;
+    if(!d.total){ st.textContent='Could not reach the website. Check the Wi-Fi and try again.'; btn.disabled=false; return; }
+    var pct=Math.round(d.done*100/d.total);
+    st.textContent = d.done<d.total ? 'Saving… '+pct+'%' : (d.failed ? 'Saved, but '+d.failed+' files were missed. Tap again on Wi-Fi.' : '✓ All saved. Ready for Airplane Mode.');
+    if(d.done>=d.total){ btn.disabled=false; if(!d.failed){ try{ localStorage.setItem('babyOffline_v1', new Date().toLocaleDateString()); }catch(e){} } }
+  });
+  btn.addEventListener('click', function(){
+    btn.disabled=true; st.textContent='Getting ready…';
+    navigator.serviceWorker.register('sw.js').then(function(){ return navigator.serviceWorker.ready; })
+      .then(function(reg){ (reg.active||navigator.serviceWorker.controller).postMessage({type:'precache'}); })
+      .catch(function(){ btn.disabled=false; st.textContent='Could not start the download. Try again.'; });
+  });
+})();
 (function(){
   "use strict";
   var GAMES = [
+    { f:"galilee-village.html", n:"Little Village of Galilee", art:"village", e:"🏡", g:"linear-gradient(135deg,#FDE68A,#F59E0B)", btn:"linear-gradient(135deg,#F59E0B,#B45309)",
+      d:"A calm village by the sea to explore. Tap the oven, the well, the boat, the doves. No winning, no end. Made for long flights.",
+      tags:["calm","bible","tap"], chip:"✈️ Plane favourite" },
+    { f:"noah-ark.html", n:"Noah's Ark", art:"ark", e:"🚢", g:"linear-gradient(135deg,#BAE6FD,#38BDF8)", btn:"linear-gradient(135deg,#38BDF8,#0369A1)",
+      d:"Find two the same and walk them into the ark, two by two. Then rain, and God's rainbow.", tags:["bible","learn"], chip:"Genesis 6 to 9" },
+    { f:"creation-days.html", n:"Seven Days of Creation", art:"day4", e:"🌍", g:"linear-gradient(135deg,#C7D2FE,#6366F1)", btn:"linear-gradient(135deg,#818CF8,#4338CA)",
+      d:"Tap through the days God made light, sky, land, sun and stars, fish and birds, animals and people.", tags:["bible","learn"], chip:"Genesis 1" },
+    { f:"lost-sheep.html", n:"The Lost Sheep", art:"hill", e:"🐑", g:"linear-gradient(135deg,#BBF7D0,#22C55E)", btn:"linear-gradient(135deg,#22C55E,#15803D)",
+      d:"A gentle hide and seek on the hillside. Find the little lost sheep and take it home.", tags:["bible","tap"], chip:"Luke 15" },
+    { f:"loaves-fishes.html", n:"Five Loaves, Two Fish", art:"picnic", e:"🍞", g:"linear-gradient(135deg,#FEF3C7,#F59E0B)", btn:"linear-gradient(135deg,#F59E0B,#C2410C)",
+      d:"Share the boy's lunch with everyone and count as you go. There is always enough.", tags:["bible","learn"], chip:"John 6" },
+    { f:"wise-builder.html", n:"The Wise Builder", art:"builders", e:"🏠", g:"linear-gradient(135deg,#E5E7EB,#9CA3AF)", btn:"linear-gradient(135deg,#6B7280,#374151)",
+      d:"Build a house on the rock or on the sand, then watch what the rain does.", tags:["bible","tap"], chip:"Matthew 7" },
+    { f:"joseph-coat.html", n:"Joseph's Colourful Coat", e:"🧥", ph:"", g:"linear-gradient(135deg,#FBCFE8,#F97316)", btn:"linear-gradient(135deg,#F97316,#BE185D)",
+      d:"Paint Joseph's coat of many colours. Grace names every colour; big kids copy a pattern.", tags:["bible","learn"], chip:"Colours" },
+    { f:"david-harp.html", n:"David's Harp", art:"harp", e:"🎵", g:"linear-gradient(135deg,#FED7AA,#FB923C)", btn:"linear-gradient(135deg,#FB923C,#C2410C)",
+      d:"Strum a harp that always sounds sweet, or follow the light to play Jesus Loves Me.", tags:["bible","calm"], chip:"Music" },
+    { f:"fruit-garden.html", n:"Fruit of the Spirit Garden", art:"garden", e:"🍎", g:"linear-gradient(135deg,#D9F99D,#65A30D)", btn:"linear-gradient(135deg,#84CC16,#3F6212)",
+      d:"Plant, water and grow trees of love, joy, peace and more, each with a simple example.", tags:["bible","learn"], chip:"Galatians 5" },
+    { f:"count-stars.html", n:"Count the Stars", art:"night", e:"⭐", g:"linear-gradient(135deg,#312E81,#1E1B4B)", btn:"linear-gradient(135deg,#6366F1,#312E81)",
+      d:"A calm bedtime game: tap stars into the sky and count them, then a goodnight prayer.", tags:["calm","bible","learn"], chip:"Bedtime" },
+    { f:"bible-memory.html", n:"Bible Animals Memory", e:"🦁", ph:"lion", g:"linear-gradient(135deg,#FDE68A,#F472B6)", btn:"linear-gradient(135deg,#F472B6,#9D174D)",
+      d:"Turn the cards and find matching animals, each with its own Bible story.", tags:["bible","learn"], chip:"Memory" },
     { f:"baby-squish-game.html", n:"Squish!", ph:"bubbles",  e:"🫧", g:"linear-gradient(135deg,#6EE7F9,#3B82F6)", btn:"linear-gradient(135deg,#38BDF8,#2563EB)",
       d:"Tap anywhere and colourful bubbles pop with a happy sound. The very first game to try.",
       tags:["tap","calm"], chip:"Ages 0–2" },
@@ -206,7 +255,8 @@ a{text-decoration:none;color:inherit}
   function draw(tag){
     grid.innerHTML = GAMES.filter(function(g){ return tag==="all" || g.tags.indexOf(tag)>-1; }).map(function(g){
       return '<a class="gm" href="'+g.f+'">'+
-        '<span class="tile" data-photo="'+(g.ph||'')+'" data-emo="'+g.e+'" style="background:'+g.g+'">'+g.e+'</span>'+
+        (g.art ? '<span class="tile" style="background:'+g.g+';background-image:url(art/'+g.art+'.webp?v=20261028);background-size:cover;background-position:center"></span>'
+               : '<span class="tile" data-photo="'+(g.ph||'')+'" data-emo="'+g.e+'" style="background:'+g.g+'">'+g.e+'</span>')+
         '<span class="gm-name">'+g.n+'</span>'+
         '<span class="gm-desc">'+g.d+'</span>'+
         '<span class="row"><span class="chip">'+g.chip+'</span></span>'+

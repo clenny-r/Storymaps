@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<title>Bible Animals Memory</title>
+<script type="importmap">
+{ "imports": { "onnxruntime-web": "https://cdn.jsdelivr.net/npm/onnxruntime-web@1.18.0/+esm" } }
+</script>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; -webkit-user-select:none; user-select:none; -webkit-touch-callout:none; }
+  html,body { width:100%; height:100%; overflow:hidden; font-family:'Fredoka One','Comic Sans MS',cursive; touch-action:none; }
+  #game { position:relative; width:100vw; height:100vh; height:100dvh; overflow:hidden; display:flex; flex-direction:column;
+          background:radial-gradient(ellipse at 20% 15%,#fff2c4 0%,transparent 55%),radial-gradient(ellipse at 85% 85%,#c9f2d6 0%,transparent 55%),linear-gradient(160deg,#f6b26b,#8e6fd8); }
+  #board { flex:1; display:grid; gap:clamp(8px,2.4vw,18px); align-content:center; justify-content:center; padding:8px 14px calc(env(safe-area-inset-bottom,0px) + 18px);
+           grid-template-columns:repeat(var(--cols,2), var(--size,40vw)); }
+  .card { aspect-ratio:1; perspective:900px; cursor:pointer; }
+  .in { position:relative; width:100%; height:100%; transition:transform .45s; transform-style:preserve-3d; }
+  .card.up .in { transform:rotateY(180deg); }
+  .face { position:absolute; inset:0; border-radius:22px; backface-visibility:hidden; -webkit-backface-visibility:hidden; box-shadow:0 8px 20px rgba(0,0,0,.22); }
+  .back { background:linear-gradient(135deg,#ffd76e,#f59e0b); display:flex; align-items:center; justify-content:center; font-size:min(14vw,9vh); color:#fff; border:5px solid #fff; }
+  .front { transform:rotateY(180deg); background:#fff; padding:6%; }
+  .front .bp { width:100%; height:100%; border-radius:14px; font-size:min(16vw,10vh); }
+  .card.done .front { box-shadow:0 0 0 6px #ffe45e,0 8px 20px rgba(0,0,0,.22); }
+  #again { display:none; position:absolute; left:50%; bottom:calc(env(safe-area-inset-bottom,0px) + 24px); transform:translateX(-50%); z-index:20; }
+</style>
+</head>
+<body data-kit-levels="1">
+<div id="game">
+  <a id="back-btn" href="index.html"></a>
+  <div class="pl-title" id="title">Find two the same! 🐑</div>
+  <div id="board"></div>
+  <button class="pl-btn" id="again">Play again 🔁</button>
+</div>
+<script src="voice.js?v=20261028a"></script>
+<script src="photos.js?v=20261028a"></script>
+<script src="kit.js?v=20261028a"></script>
+<script src="play.js?v=20261028a"></script>
+<script>
+/* Animals with a Bible story each (said when a pair is found). */
+var ANIMALS = [
+  {t:"sheep", e:"🐑", line:"Sheep! Jesus is our Good Shepherd."},
+  {t:"lion", e:"🦁", line:"Lions! God kept Daniel safe from the lions."},
+  {t:"donkey", e:"🫏", line:"Donkeys! Jesus rode a little donkey."},
+  {t:"dove", e:"🕊️", line:"Doves! A dove brought Noah a green leaf."},
+  {t:"fish", e:"🐟", line:"Fish! Jesus fed many people with fish and bread."},
+  {t:"camel", e:"🐫", line:"Camels! Rebekah gave water to the thirsty camels."},
+  {t:"bear", e:"🐻", line:"Bears! David kept his sheep safe from a bear."},
+  {t:"whale", e:"🐋", line:"Whales! A big fish swallowed Jonah."}
+];
+var PAIRS = {1:2, 2:4, 3:8};
+var first=null, busy=false, found=0, lvl=Play.level();
+var board=document.getElementById('board'), title=document.getElementById('title'), again=document.getElementById('again');
+
+function layout(n){
+  var cards=n*2, cols = cards<=4 ? 2 : (cards<=8 ? (innerWidth>innerHeight?4:2) : 4);
+  var rows=Math.ceil(cards/cols);
+  board.style.setProperty('--cols', cols);
+  board.style.setProperty('--size', 'min('+Math.floor(88/cols)+'vw, '+Math.floor(66/rows)+'dvh)');
+}
+function start(){
+  var n=PAIRS[lvl]; found=0; first=null; busy=false; again.style.display='none';
+  title.textContent='Find two the same! 🐑';
+  var pick=Play.shuffle(ANIMALS).slice(0,n), deck=Play.shuffle(pick.concat(pick));
+  layout(n); board.innerHTML='';
+  deck.forEach(function(a){
+    var c=document.createElement('div'); c.className='card';
+    c.innerHTML='<div class="in"><div class="face back">✝</div><div class="face front"><div></div></div></div>';
+    BabyPhotos.fill(c.querySelector('.front div'), a.t, a.e, {alt:a.t});
+    c._a=a; c.addEventListener('click', function(){ flip(c); });
+    board.appendChild(c);
+  });
+  // little ones see the cards first, then they turn over
+  if(lvl===1){ busy=true; Array.prototype.forEach.call(board.children,function(c){ c.classList.add('up'); });
+    setTimeout(function(){ Array.prototype.forEach.call(board.children,function(c){ c.classList.remove('up'); }); busy=false; }, 2600); }
+  Play.say('Find two the same!');
+}
+function flip(c){
+  if(busy || c.classList.contains('up')) return;
+  c.classList.add('up'); Play.pop(560);
+  if(!first){ first=c; Play.say(Play.cap(c._a.t==='sheep'?'a sheep':(/^[aeiou]/.test(c._a.t)?'an ':'a ')+c._a.t)+'.'); return; }
+  busy=true;
+  if(first._a===c._a){
+    var a=c._a; first.classList.add('done'); c.classList.add('done'); first=null; found++;
+    Play.chime(); Play.bump(c);
+    var allDone = found===PAIRS[lvl];
+    Play.say(a.line, function(){ busy=false; if(allDone) finish(); });
+    if(!allDone) setTimeout(function(){ busy=false; }, 900);
+  } else {
+    var f=first; first=null; Play.boop();
+    setTimeout(function(){ f.classList.remove('up'); c.classList.remove('up'); busy=false; }, 1100);
+  }
+}
+function finish(){
+  title.textContent='You found them all! 🎉'; Play.confetti(18);
+  Play.say('You found them all! God made every animal.');
+  again.style.display='block';
+}
+again.addEventListener('click', start);
+Play.onLevel(function(n){ lvl=n; start(); });
+addEventListener('resize', function(){ layout(PAIRS[lvl]); });
+start();
+</script>
+</body>
+</html>

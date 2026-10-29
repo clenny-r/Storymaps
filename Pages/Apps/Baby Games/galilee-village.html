@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<title>Little Village of Galilee</title>
+<script type="importmap">
+{ "imports": { "onnxruntime-web": "https://cdn.jsdelivr.net/npm/onnxruntime-web@1.18.0/+esm" } }
+</script>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; -webkit-user-select:none; user-select:none; -webkit-touch-callout:none; }
+  html,body { width:100%; height:100%; overflow:hidden; font-family:'Fredoka One','Comic Sans MS',cursive; touch-action:none; background:#e7c48a; }
+  #game { position:relative; width:100vw; height:100vh; height:100dvh; overflow:hidden; background:linear-gradient(#f4b979,#f8d59b); }
+  #night { position:absolute; inset:0; z-index:2; pointer-events:none; opacity:0; transition:opacity 1.6s;
+           background:radial-gradient(circle at var(--lx,12%) var(--ly,42%), rgba(255,200,90,.35) 0, rgba(255,170,60,.12) 7%, rgba(10,16,48,.72) 22%); }
+  .pl-scene.dark ~ #night, #game.dark #night { opacity:1; }
+  .star { position:absolute; z-index:3; width:6px; height:6px; border-radius:50%; background:#fff6c8; box-shadow:0 0 8px #fff6c8; opacity:0; transition:opacity 1.5s; pointer-events:none; animation:tw 2.4s ease-in-out infinite; }
+  #game.dark .star { opacity:1; }
+  @keyframes tw { 0%,100%{transform:scale(1)} 50%{transform:scale(.5)} }
+  .drop { position:absolute; z-index:4; width:7%; aspect-ratio:1; border-radius:50%; overflow:hidden; background:#fff; border:3px solid #fff; box-shadow:0 4px 10px rgba(0,0,0,.25); transform:translate(-50%,-50%); pointer-events:none; transition:top .9s cubic-bezier(.5,0,.8,1); }
+  .ring { position:absolute; z-index:4; width:10%; aspect-ratio:1; border-radius:50%; border:4px solid rgba(255,255,255,.85); transform:translate(-50%,-50%) scale(.3); pointer-events:none; animation:ring 1s ease-out forwards; }
+  @keyframes ring { 100%{transform:translate(-50%,-50%) scale(1.6); opacity:0} }
+  .flyer { position:absolute; z-index:4; font-size:7vmin; pointer-events:none; transition:left 4s linear, top 4s ease-in-out; }
+  #hint { position:absolute; z-index:5; left:0; right:0; bottom:calc(env(safe-area-inset-bottom,0px) + 10px); text-align:center; color:#fff; text-shadow:0 2px 6px rgba(0,0,0,.6); font-size:1rem; pointer-events:none; transition:opacity 1s; }
+</style>
+</head>
+<body>
+<div id="game">
+  <a id="back-btn" href="index.html"></a>
+  <div id="night"></div>
+  <div id="hint">Tap anything! 👆 Slide to look around 👈👉</div>
+</div>
+<script src="voice.js?v=20261028a"></script>
+<script src="photos.js?v=20261028a"></script>
+<script src="kit.js?v=20261028a"></script>
+<script src="play.js?v=20261028a"></script>
+<script>
+/* "Let the little children come to me" (Matthew 19:14). A calm open world in
+ * the style of Pok Pok: no goals, no winning, no end. Everything in the
+ * village does something gentle when tapped. Built to keep a little one busy
+ * on a plane: it works offline once Plane mode has saved it. */
+var game=document.getElementById('game'), hint=document.getElementById('hint');
+var dark=false, figs=0, fish=0;
+var sc=Play.scene(game,'art/village.webp?v=20261028',{focus:.45, onTap:tap});
+var night=document.getElementById('night'); game.appendChild(night);
+
+// stars for the night sky
+for(var i=0;i<26;i++){ var s=document.createElement('div'); s.className='star'; s.style.left=(Math.random()*100)+'%'; s.style.top=(Math.random()*28)+'%'; s.style.animationDelay=(-Math.random()*2.4)+'s'; sc.el.appendChild(s); }
+
+function at(x,y){ return sc.pt(x,y); }
+function ring(x,y){ var r=document.createElement('div'); r.className='ring'; r.style.left=x+'%'; r.style.top=y+'%'; sc.el.appendChild(r); setTimeout(function(){ r.remove(); },1100); }
+function up(x,y,term,emoji,n){ for(var k=0;k<(n||1);k++){ (function(k){ setTimeout(function(){ var p=at(x+(Math.random()*6-3),y); Play.floatUp(p.x,p.y,term,emoji,Math.min(innerWidth,innerHeight)*0.14); }, k*160); })(k); } }
+function dropFrom(x,y,term,emoji,toY){ var d=document.createElement('div'); d.className='drop'; d.style.left=x+'%'; d.style.top=y+'%'; sc.el.appendChild(d); BabyPhotos.fill(d,term,emoji,{round:true});
+  requestAnimationFrame(function(){ requestAnimationFrame(function(){ d.style.top=toY+'%'; }); }); setTimeout(function(){ d.style.transition='opacity .8s'; d.style.opacity=0; setTimeout(function(){ d.remove(); },800); }, 2200); }
+function flyAcross(emoji, y){ var f=document.createElement('div'); f.className='flyer'; f.textContent=emoji; f.style.left='-8%'; f.style.top=y+'%'; sc.el.appendChild(f);
+  requestAnimationFrame(function(){ requestAnimationFrame(function(){ f.style.left='108%'; f.style.top=(y-8+Math.random()*16)+'%'; }); }); setTimeout(function(){ f.remove(); },4200); }
+
+/* [x, y, r] in percent of the picture, and what happens */
+var SPOTS = [
+  {s:[12,42,5], f:function(){ dark=!dark; game.classList.toggle('dark',dark); Play.chime();
+      Play.say(dark ? 'The lamp is shining in the night. Jesus is the light of the world.' : 'The Rooster says cock-a-doodle-doo! Good morning!'); }},
+  {s:[10,9,6], f:function(){ Play.tone(520,.25,'sine',.12); Play.tone(440,.3,'sine',.1,.25); up(10,9,'dove','🕊️',2); flyAcross('🕊️',8); Play.say('Coo, coo! A dove brought Noah a green leaf.'); }},
+  {s:[33,15,12], f:function(){ figs++; dropFrom(28+Math.random()*12,18,'fig','🟣',62); Play.pop(500);
+      Play.say(figs<5 ? Play.num(figs)+(figs===1?' fig!':' figs!') : 'Yum! Figs are sweet. Thank you God for good food.'); if(figs>=5) figs=0; }},
+  {s:[26,46,7], f:function(){ up(26,44,'bread','🍞',3); Play.tone(700,.12,'triangle',.15); Play.say('Fresh bread! Thank you God for our daily bread.'); }},
+  {s:[55,8,10], f:function(){ up(55,10,null,'🌿',3); Play.tone(600,.2,'triangle',.12); Play.say('Hosanna! People waved palm branches for Jesus.'); }},
+  {s:[52,61,9], f:function(){ ring(52,64); up(52,60,null,'💧',3); Play.tone(880,.12,'sine',.12); Play.tone(1180,.1,'sine',.1,.1); Play.say('Splash! Cool water from the well.'); }},
+  {s:[30,72,10], f:function(){ ring(30,72); Play.tone(340,.4,'triangle',.18); Play.say('The Sheep says baa!'); }},
+  {s:[17,68,5], f:function(){ ring(30,72); Play.tone(340,.4,'triangle',.18); Play.say('Feeding the sheep. Jesus is our Good Shepherd.'); }},
+  {s:[66,81,8], f:function(){ ring(66,81); Play.tone(420,.35,'triangle',.18); Play.say('The Goat says maa!'); }},
+  {s:[89,68,9], f:function(){ fish++; up(88,70,'fish','🐟',1); Play.pop(560+fish*40);
+      Play.say(fish<5 ? Play.num(fish)+' fish!' : 'So many fish! Jesus helped His friends catch lots of fish.'); if(fish>=5) fish=0; }},
+  {s:[75,48,8], f:function(){ ring(75,50); ring(78,52); Play.tone(300,.5,'sine',.08); Play.say('The Sea of Galilee. Jesus walked on the water!'); }},
+  {s:[60,32,7], f:function(){ ring(60,32); Play.say('A little town by the sea.'); }},
+  {s:[5,76,7], f:function(){ up(5,72,null,'🦋',2); Play.tone(990,.15,'sine',.1); Play.say('A butterfly!'); }},
+  {s:[78,14,12], f:function(){ flyAcross('🐦',14); Play.tone(1300,.08,'sine',.08); Play.tone(1500,.08,'sine',.08,.1); Play.say('A little bird. God feeds the birds, and God takes care of you.'); }}
+];
+function tap(x,y){
+  hint.style.opacity=0;
+  for(var i=0;i<SPOTS.length;i++){ if(Play.inSpot(x,y,SPOTS[i].s)){ SPOTS[i].f(); return; } }
+  ring(x,y); Play.tone(500+Math.random()*300,.1,'sine',.08);       // every tap does something
+}
+// a bird or butterfly drifts by now and then, so the scene feels alive
+setInterval(function(){ if(document.hidden) return; flyAcross(Math.random()<.5?'🐦':'🦋', 6+Math.random()*20); }, 14000);
+setTimeout(function(){ Play.say('Welcome to the little village by the Sea of Galilee! Tap anything.'); }, 400);
+</script>
+</body>
+</html>

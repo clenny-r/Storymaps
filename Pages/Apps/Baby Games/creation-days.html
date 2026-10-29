@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<title>Seven Days of Creation</title>
+<script type="importmap">
+{ "imports": { "onnxruntime-web": "https://cdn.jsdelivr.net/npm/onnxruntime-web@1.18.0/+esm" } }
+</script>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; -webkit-user-select:none; user-select:none; -webkit-touch-callout:none; }
+  html,body { width:100%; height:100%; overflow:hidden; font-family:'Fredoka One','Comic Sans MS',cursive; touch-action:none; background:#101828; }
+  #game { position:relative; width:100vw; height:100vh; height:100dvh; overflow:hidden; display:flex; flex-direction:column; }
+  .bg { position:absolute; inset:0; background:#0b0b18 center/cover no-repeat; transition:opacity .8s; z-index:0; }
+  .bg.hide { opacity:0; }
+  #dots { position:relative; z-index:3; display:flex; gap:8px; justify-content:center; padding-top:6px; }
+  .dot { width:34px; height:34px; border-radius:50%; background:rgba(255,255,255,.35); color:#fff; display:flex; align-items:center; justify-content:center; font-size:16px; }
+  .dot.on { background:#ffd23f; color:#5b3a00; transform:scale(1.15); }
+  #tap { position:absolute; inset:0; z-index:2; cursor:pointer; }
+  #order { position:absolute; z-index:4; left:0; right:0; bottom:calc(env(safe-area-inset-bottom,0px) + 18px); display:none; gap:12px; justify-content:center; padding:0 12px; }
+  #order.show { display:flex; }
+  .pick { width:min(28vw,24dvh); aspect-ratio:3/2; border-radius:16px; border:5px solid #fff; background:center/cover; box-shadow:0 8px 20px rgba(0,0,0,.35); cursor:pointer; }
+  #hint { position:absolute; z-index:3; left:0; right:0; bottom:calc(env(safe-area-inset-bottom,0px) + 22px); text-align:center; color:#fff; font-size:1.1rem; text-shadow:0 2px 8px rgba(0,0,0,.6); }
+  .pl-title { z-index:3; }
+</style>
+</head>
+<body data-kit-levels="1">
+<div id="game">
+  <div class="bg" id="bgA"></div><div class="bg hide" id="bgB"></div>
+  <a id="back-btn" href="index.html"></a>
+  <div class="pl-title" id="title">In the beginning… ✨</div>
+  <div id="dots"></div>
+  <div id="tap"></div>
+  <div id="hint">Tap to see what God made 👆</div>
+  <div id="order"></div>
+</div>
+<script src="voice.js?v=20261028a"></script>
+<script src="photos.js?v=20261028a"></script>
+<script src="kit.js?v=20261028a"></script>
+<script src="play.js?v=20261028a"></script>
+<script>
+/* Genesis 1:1 to 2:3. Under 2 and 2 to 3: tap through the seven days.
+ * 3 to 5: after watching, put three days in order ("What came first?"). */
+var DAYS = [
+  {img:"day1", t:"Day 1: light", s:"In the beginning, God made the heavens and the earth. On day one, God made light."},
+  {img:"day2", t:"Day 2: sky and sea", s:"On day two, God made the sky and the sea."},
+  {img:"day3", t:"Day 3: land and plants", s:"On day three, God made the land, and trees and flowers."},
+  {img:"day4", t:"Day 4: sun, moon and stars", s:"On day four, God made the sun, the moon and the stars."},
+  {img:"day5", t:"Day 5: fish and birds", s:"On day five, God made the fish and the birds."},
+  {img:"day6", t:"Day 6: animals and people", s:"On day six, God made the animals, and people too."},
+  {img:"day7", t:"Day 7: rest", s:"On day seven, God rested."}
+];
+var lvl=Play.level(), day=-1, showA=true, quiz=null, busy=false;
+var title=document.getElementById('title'), dots=document.getElementById('dots'), hint=document.getElementById('hint'), order=document.getElementById('order');
+DAYS.forEach(function(d,i){ var e=document.createElement('div'); e.className='dot'; e.textContent=i+1; dots.appendChild(e); });
+function url(d){ return 'url(art/'+d.img+'.webp?v=20261028)'; }
+function show(i){
+  var a=document.getElementById(showA?'bgB':'bgA'), b=document.getElementById(showA?'bgA':'bgB');
+  a.style.backgroundImage=url(DAYS[i]); a.classList.remove('hide'); b.classList.add('hide'); showA=!showA;
+  Array.prototype.forEach.call(dots.children,function(e,k){ e.classList.toggle('on', k===i); });
+  title.textContent=DAYS[i].t; Play.chime();
+}
+function next(){
+  if(busy || quiz) return;
+  day++;
+  if(day>=DAYS.length){ finish(); return; }
+  busy=true; show(day); hint.textContent='';
+  Play.say(DAYS[day].s + (day<6 ? ' And God saw that it was good.' : ''), function(){ busy=false; hint.textContent= day<6 ? 'Tap for the next day 👆' : 'Tap to finish 👆'; });
+  setTimeout(function(){ busy=false; }, 6000);
+}
+function finish(){
+  if(lvl===3){ startQuiz(); return; }
+  day=-1; title.textContent='God made everything! 🌍'; Play.confetti(16);
+  Play.say('God made everything, and God made you!');
+  hint.textContent='Tap to start again 👆';
+}
+function startQuiz(){
+  var picks=Play.shuffle([0,1,2,3,4,5,6]).slice(0,3).sort(function(a,b){return a-b;});
+  quiz={want:picks.slice(), left:picks.slice()};
+  title.textContent='What did God make first? 🤔'; hint.textContent='';
+  order.innerHTML=''; order.classList.add('show');
+  Play.shuffle(picks).forEach(function(i){
+    var p=document.createElement('div'); p.className='pick'; p.style.backgroundImage=url(DAYS[i]); p._i=i;
+    p.addEventListener('click', function(){ choose(p); }); order.appendChild(p);
+  });
+  Play.say('What did God make first?');
+}
+function choose(p){
+  if(p._i===quiz.left[0]){
+    quiz.left.shift(); p.style.visibility='hidden'; Play.chime(); show(p._i);
+    if(!quiz.left.length){ order.classList.remove('show'); quiz=null; day=-1; Play.confetti(18); title.textContent='You put them in order! 🎉';
+      Play.say('Yes! You put them in order. God made everything!'); hint.textContent='Tap to start again 👆'; }
+    else Play.say(DAYS[p._i].s+' What came next?');
+  } else { Play.bump(p,'pl-wig'); Play.boop(); Play.say('Try again. What came first?'); }
+}
+document.getElementById('tap').addEventListener('click', function(e){ Play.floatUp(e.clientX, e.clientY, null, ['✨','⭐','🌟'][Math.floor(Math.random()*3)], 50); next(); });
+document.getElementById('bgA').style.backgroundImage='radial-gradient(circle at 50% 45%,#3b3b6a,#0b0b18)';
+Play.onLevel(function(n){ lvl=n; quiz=null; order.classList.remove('show'); day=-1; hint.textContent='Tap to see what God made 👆'; });
+title.textContent='In the beginning… ✨';
+</script>
+</body>
+</html>

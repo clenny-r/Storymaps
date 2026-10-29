@@ -49,7 +49,7 @@
    "chocolate icecream milk shoe car bus train ball balloon star moon sun flower rose tree grass " +
    "sky snow hummingbird rooster giraffe zebra tiger turtle goat donkey mouse penguin " +
    "parrot dolphin whale camel kangaroo hippo crab squirrel bodyface " +
-   "boat airplane bicycle cup hat").split(/\s+/)
+   "boat airplane bicycle cup hat bread basket dove pear cherries pomegranate fig olive").split(/\s+/)
     .forEach(function (n) { PHOTOS[n] = 1; });
 
   function key(term) { return String(term || "").trim().toLowerCase(); }

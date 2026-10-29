@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<title>Five Loaves, Two Fish</title>
+<script type="importmap">
+{ "imports": { "onnxruntime-web": "https://cdn.jsdelivr.net/npm/onnxruntime-web@1.18.0/+esm" } }
+</script>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; -webkit-user-select:none; user-select:none; -webkit-touch-callout:none; }
+  html,body { width:100%; height:100%; overflow:hidden; font-family:'Fredoka One','Comic Sans MS',cursive; touch-action:none; background:#a6d36b; }
+  #game { position:relative; width:100vw; height:100vh; height:100dvh; overflow:hidden; display:flex; flex-direction:column; }
+  .bg { position:absolute; inset:0; background:url(art/picnic.webp?v=20261028) center/cover, linear-gradient(#9fd3f0 35%,#8cc56a 35%); z-index:0; }
+  #mats { position:relative; z-index:2; flex:1; display:grid; grid-template-columns:repeat(var(--cols,3),1fr); gap:2vmin; align-content:center; padding:2vh 4vw 0; }
+  .mat { position:relative; aspect-ratio:1.5; border-radius:18px; background:repeating-linear-gradient(45deg,var(--c) 0 12px,rgba(255,255,255,.35) 12px 24px); border:4px solid #fff; box-shadow:0 6px 14px rgba(0,0,0,.18); display:flex; align-items:center; justify-content:center; gap:4%; }
+  .mat .food { width:36%; aspect-ratio:1; border-radius:50%; overflow:hidden; background:#fff; border:3px solid #fff; box-shadow:0 3px 8px rgba(0,0,0,.2); font-size:5vmin; animation:land .45s cubic-bezier(.34,1.56,.64,1); }
+  @keyframes land { 0%{transform:scale(0)} 100%{transform:scale(1)} }
+  .mat .heart { position:absolute; top:-12px; right:-6px; font-size:6vmin; animation:land .5s; }
+  #basket { position:relative; z-index:3; align-self:center; width:min(30vw,22dvh); aspect-ratio:1; margin:1vh 0 calc(env(safe-area-inset-bottom,0px) + 2vh); border-radius:50%; overflow:hidden; background:#fff; border:6px solid #fff; box-shadow:0 10px 24px rgba(0,0,0,.3); cursor:pointer; font-size:12vmin; animation:glow 1.6s ease-in-out infinite; }
+  @keyframes glow { 0%,100%{box-shadow:0 10px 24px rgba(0,0,0,.3)} 50%{box-shadow:0 0 0 8px rgba(255,228,94,.8),0 10px 24px rgba(0,0,0,.3)} }
+  .fly { position:fixed; z-index:9; width:12vmin; height:12vmin; border-radius:50%; overflow:hidden; background:#fff; transition:all .6s cubic-bezier(.5,0,.3,1); pointer-events:none; font-size:7vmin; }
+  #baskets { position:absolute; z-index:4; inset:0; display:none; flex-wrap:wrap; align-content:center; justify-content:center; gap:3vmin; padding:14vh 6vw; background:rgba(255,248,225,.75); }
+  #baskets.show { display:flex; }
+  .bk { width:min(18vw,14dvh); aspect-ratio:1; border-radius:50%; overflow:hidden; background:#fff; border:5px solid #fff; box-shadow:0 6px 14px rgba(0,0,0,.25); cursor:pointer; font-size:9vmin; position:relative; }
+  .bk.counted { box-shadow:0 0 0 5px #ffe45e,0 6px 14px rgba(0,0,0,.25); }
+  .bk b { position:absolute; inset:auto 0 4px 0; text-align:center; color:#6b3a10; font-weight:normal; font-size:1.2rem; text-shadow:0 0 4px #fff; }
+  .pl-title { z-index:5; }
+  #again { display:none; position:absolute; z-index:6; left:50%; bottom:calc(env(safe-area-inset-bottom,0px) + 22px); transform:translateX(-50%); }
+</style>
+</head>
+<body data-kit-levels="1">
+<div id="game">
+  <div class="bg"></div>
+  <a id="back-btn" href="index.html"></a>
+  <div class="pl-title" id="title">A little boy shared his lunch 🍞🐟</div>
+  <div id="mats"></div>
+  <div id="basket"></div>
+  <div id="baskets"></div>
+  <button class="pl-btn" id="again">Play again 🔁</button>
+</div>
+<script src="voice.js?v=20261028a"></script>
+<script src="photos.js?v=20261028a"></script>
+<script src="kit.js?v=20261028a"></script>
+<script src="play.js?v=20261028a"></script>
+<script>
+/* John 6:1 to 14. A boy shares five loaves and two fish; Jesus makes it
+ * enough for everyone. Tap the basket to give each picnic blanket bread and
+ * fish while Grace counts. 3 to 5: count the twelve baskets left over. */
+var MATS = {1:3, 2:5, 3:10};
+var COLS = ["#f4a259","#5b8e7d","#bc4b51","#8cb369","#7d5ba6","#f4e285","#4ea8de","#e07a5f","#81b29a","#f2cc8f"];
+var lvl=Play.level(), fed=0, busy=false, counted=0;
+var mats=document.getElementById('mats'), basket=document.getElementById('basket'), title=document.getElementById('title'), again=document.getElementById('again'), baskets=document.getElementById('baskets');
+BabyPhotos.fill(basket,'basket','🧺',{round:true});
+
+function start(){
+  var n=MATS[lvl]; fed=0; busy=false; counted=0; again.style.display='none'; baskets.classList.remove('show'); baskets.innerHTML='';
+  mats.style.setProperty('--cols', n<=3?3:(n<=6?3:(innerWidth>innerHeight?5:2)));
+  mats.innerHTML='';
+  for(var i=0;i<n;i++){ var m=document.createElement('div'); m.className='mat'; m.style.setProperty('--c',COLS[i%COLS.length]); mats.appendChild(m); }
+  title.textContent='Tap the basket to share! 🧺';
+  Play.say('A little boy shared his lunch with Jesus: five loaves of bread and two fish. Tap the basket to share it!');
+}
+function fly(term, emoji, from, to, cb){
+  var f=document.createElement('div'); f.className='fly'; document.body.appendChild(f);
+  BabyPhotos.fill(f, term, emoji, {round:true});
+  f.style.left=(from.left+from.width/2-f.offsetWidth/2)+'px'; f.style.top=(from.top+from.height/2-f.offsetHeight/2)+'px';
+  requestAnimationFrame(function(){ requestAnimationFrame(function(){ f.style.left=(to.left+to.width/2-f.offsetWidth/2)+'px'; f.style.top=(to.top+to.height/2-f.offsetHeight/2)+'px'; f.style.transform='scale(.7)'; }); });
+  setTimeout(function(){ f.remove(); if(cb) cb(); }, 650);
+}
+basket.addEventListener('click', function(){
+  if(busy || fed>=MATS[lvl]) return;
+  busy=true; var m=mats.children[fed], br=basket.getBoundingClientRect(), mr=m.getBoundingClientRect();
+  Play.bump(basket); Play.pop(520+fed*30);
+  fly('bread','🍞',br,mr,function(){
+    var a=document.createElement('div'); a.className='food'; BabyPhotos.fill(a,'bread','🍞',{round:true}); m.appendChild(a);
+  });
+  setTimeout(function(){ fly('fish','🐟',br,mr,function(){
+    var b=document.createElement('div'); b.className='food'; BabyPhotos.fill(b,'fish','🐟',{round:true}); m.appendChild(b);
+    var h=document.createElement('div'); h.className='heart'; h.textContent='💛'; m.appendChild(h);
+    fed++; Play.tone(660+fed*20,.2,'triangle',.15);
+    if(fed===MATS[lvl]) done(); else { Play.say(Play.num(fed)+'!'); busy=false; }
+  }); }, 220);
+});
+function done(){
+  Play.chime(); Play.confetti(16,'🍞🐟💛✨');
+  title.textContent='Everyone had enough! 💛';
+  Play.say(Play.num(fed)+'! Everyone had enough to eat! Jesus made a little lunch enough for everyone.', function(){
+    if(lvl<3){ again.style.display='block'; busy=false; return; }
+    leftovers();
+  });
+}
+function leftovers(){
+  baskets.classList.add('show'); title.textContent='Count the baskets left over! 🧺';
+  for(var i=0;i<12;i++){ var b=document.createElement('div'); b.className='bk'; BabyPhotos.fill(b,'basket','🧺',{round:true}); b.addEventListener('click', countBasket); baskets.appendChild(b); }
+  Play.say('And there was food left over! Count the baskets.');
+}
+function countBasket(){
+  if(this.classList.contains('counted')) { Play.bump(this,'pl-wig'); return; }
+  counted++; this.classList.add('counted'); var t=document.createElement('b'); t.textContent=counted; this.appendChild(t);
+  Play.bump(this); Play.pop(500+counted*25);
+  if(counted===12){ Play.confetti(18); title.textContent='Twelve baskets! 🎉'; Play.say('Twelve baskets left over! God gives us more than enough.', function(){ again.style.display='block'; }); }
+  else Play.say(Play.num(counted)+'!');
+}
+again.addEventListener('click', start);
+Play.onLevel(function(n){ lvl=n; start(); });
+start();
+</script>
+</body>
+</html>

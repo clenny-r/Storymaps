@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<title>Noah's Ark</title>
+<script type="importmap">
+{ "imports": { "onnxruntime-web": "https://cdn.jsdelivr.net/npm/onnxruntime-web@1.18.0/+esm" } }
+</script>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; -webkit-user-select:none; user-select:none; -webkit-touch-callout:none; }
+  html,body { width:100%; height:100%; overflow:hidden; font-family:'Fredoka One','Comic Sans MS',cursive; touch-action:none; background:#8fc9ec; }
+  #game { position:relative; width:100vw; height:100vh; height:100dvh; overflow:hidden; background:#8fc9ec; }
+  .pl-scene { transition:filter 1.2s; }
+  #game.storm .pl-scene { filter:brightness(.6) saturate(.7); }
+  .ani { position:absolute; width:11%; aspect-ratio:1; transform:translate(-50%,-50%); border-radius:50%; overflow:hidden; background:#fff; border:4px solid #fff;
+         box-shadow:0 8px 18px rgba(0,0,0,.3); z-index:3; transition:left 1s ease-in-out, top 1s ease-in-out, width 1s, opacity .6s, box-shadow .2s; animation:idle 2.4s ease-in-out infinite; }
+  .ani:nth-child(odd) { animation-delay:-1.2s; }
+  @keyframes idle { 0%,100%{margin-top:0} 50%{margin-top:-6px} }
+  .ani.sel { box-shadow:0 0 0 6px #ffe45e,0 8px 18px rgba(0,0,0,.3); }
+  .ani.hop { animation:hop .45s cubic-bezier(.34,1.56,.64,1); }
+  @keyframes hop { 0%{margin-top:0} 40%{margin-top:-30px} 100%{margin-top:0} }
+  .ani.no { animation:shake .45s; }
+  @keyframes shake { 0%,100%{margin-left:0} 25%{margin-left:-8px} 75%{margin-left:8px} }
+  #water { position:absolute; left:0; right:0; bottom:0; height:0; z-index:2; background:linear-gradient(rgba(70,150,220,.6),rgba(30,90,170,.85)); transition:height 3s ease-in-out; pointer-events:none; }
+  #game.flood #water { height:42%; }
+  #game.flood .pl-scene { animation:rock 3s ease-in-out infinite; }
+  @keyframes rock { 0%,100%{margin-top:0} 50%{margin-top:-14px} }
+  #rain { position:absolute; inset:0; z-index:4; pointer-events:none; display:none; background-image:repeating-linear-gradient(100deg,transparent 0 14px,rgba(220,235,255,.55) 14px 16px); background-size:200px 200px; animation:rainy .35s linear infinite; }
+  #game.storm #rain { display:block; }
+  @keyframes rainy { 0%{background-position:0 0} 100%{background-position:-40px 200px} }
+  #rainbow { position:absolute; z-index:4; left:50%; top:4%; width:min(110vw,120dvh); transform:translateX(-50%) scale(.2); opacity:0; transition:all 1.6s ease-out; pointer-events:none; }
+  #game.bow #rainbow { opacity:.92; transform:translateX(-50%) scale(1); }
+  #count { position:absolute; z-index:5; right:14px; bottom:calc(env(safe-area-inset-bottom,0px) + 14px); background:#fff; color:#6b3a10; border-radius:999px; padding:6px 14px; font-size:1.2rem; box-shadow:0 4px 10px rgba(0,0,0,.2); }
+  .pl-title { position:absolute; left:0; right:0; z-index:5; pointer-events:none; }
+  #again { display:none; position:absolute; z-index:6; left:50%; bottom:calc(env(safe-area-inset-bottom,0px) + 70px); transform:translateX(-50%); }
+</style>
+</head>
+<body data-kit-levels="1">
+<div id="game">
+  <a id="back-btn" href="index.html"></a>
+  <div class="pl-title" id="title">Help the animals into the ark! 🚢</div>
+  <div id="water"></div>
+  <div id="rain"></div>
+  <svg id="rainbow" viewBox="0 0 400 200" aria-hidden="true">
+    <g fill="none" stroke-width="16" stroke-linecap="round">
+      <path d="M20 200 A180 180 0 0 1 380 200" stroke="#e63946"/><path d="M36 200 A164 164 0 0 1 364 200" stroke="#f4892a"/>
+      <path d="M52 200 A148 148 0 0 1 348 200" stroke="#ffd23f"/><path d="M68 200 A132 132 0 0 1 332 200" stroke="#3bb273"/>
+      <path d="M84 200 A116 116 0 0 1 316 200" stroke="#3a86ff"/><path d="M100 200 A100 100 0 0 1 300 200" stroke="#8e5bd8"/>
+    </g>
+  </svg>
+  <div id="count"></div>
+  <button class="pl-btn" id="again">Play again 🔁</button>
+</div>
+<script src="voice.js?v=20261028a"></script>
+<script src="photos.js?v=20261028a"></script>
+<script src="kit.js?v=20261028a"></script>
+<script src="play.js?v=20261028a"></script>
+<script>
+/* Genesis 6 to 9. Tap two animals that are the same and they walk up the
+ * ramp into the ark, two by two. Then rain, the ark floats, and God's rainbow. */
+var ANIMALS = [
+  {t:"lion",p:"lions",e:"🦁",f:110},{t:"elephant",p:"elephants",e:"🐘",f:130},{t:"giraffe",p:"giraffes",e:"🦒",f:240},
+  {t:"zebra",p:"zebras",e:"🦓",f:420},{t:"sheep",p:"sheep",e:"🐑",f:340},{t:"cow",p:"cows",e:"🐮",f:150},
+  {t:"horse",p:"horses",e:"🐴",f:400},{t:"monkey",p:"monkeys",e:"🐵",f:560},{t:"bear",p:"bears",e:"🐻",f:140},
+  {t:"bunny",p:"bunnies",e:"🐰",f:620},{t:"duck",p:"ducks",e:"🦆",f:520},{t:"camel",p:"camels",e:"🐫",f:180},
+  {t:"donkey",p:"donkeys",e:"🫏",f:330},{t:"goat",p:"goats",e:"🐐",f:420},{t:"kangaroo",p:"kangaroos",e:"🦘",f:500},{t:"tiger",p:"tigers",e:"🐯",f:120}
+];
+var PAIRS = {1:2, 2:4, 3:6};
+var RAMP = {x:78,y:70}, DOOR = {x:53,y:42};
+var lvl=Play.level(), sel=null, inArk=0, busy=false;
+var game=document.getElementById('game'), title=document.getElementById('title'), count=document.getElementById('count'), again=document.getElementById('again');
+var sc=Play.scene(game,'art/ark.webp?v=20261028',{focus:.64, onTap:function(x,y,e){
+  Play.floatUp(e.clientX,e.clientY,null,'✨',44); Play.tone(700+Math.random()*200,.1,'sine',.08);
+  if(!busy && Play.inSpot(x,y,[52,30,16])) Play.say('Noah built a big ark, just like God told him.');
+}});
+
+function start(){
+  Array.prototype.slice.call(sc.el.querySelectorAll('.ani')).forEach(function(e){ e.remove(); });
+  game.className=''; again.style.display='none'; sel=null; inArk=0; busy=false;
+  var n=PAIRS[lvl], pick=Play.shuffle(ANIMALS).slice(0,n), deck=Play.shuffle(pick.concat(pick));
+  // keep every animal inside the part of the picture on screen
+  var v=sc.view(), x0=Math.max(4,v.from+4), x1=Math.min(96,v.to-4), span=x1-x0;
+  var rows = span<40 ? 3 : 2, cols=Math.ceil(deck.length/rows), i;
+  var size=Math.min(10, span/cols*0.75);
+  for(i=0;i<deck.length;i++){
+    var row=i%rows, col=Math.floor(i/rows);
+    var x=x0+(col+.5)*(span/cols)+(row%2?span/cols*0.18:0), y=[68,78,88][row];
+    var d=document.createElement('div'); d.className='ani'; d.style.left=x+'%'; d.style.top=y+'%'; d.style.width=size+'%';
+    BabyPhotos.fill(d, deck[i].t, deck[i].e, {round:true});
+    d._a=deck[i]; d.addEventListener('pointerup', function(e){ e.stopPropagation(); tapAni(this); });
+    sc.el.appendChild(d);
+  }
+  count.textContent='🚢 0 / '+n;
+  title.textContent='Find two the same! 🐾';
+  Play.say('Help the animals into the ark! Find two the same.');
+}
+function tapAni(d){
+  if(busy || d._in) return;
+  Play.tone(d._a.f,.25,'triangle',.18); Play.bump(d,'hop');
+  if(!sel){ sel=d; d.classList.add('sel'); Play.say((d._a.t==='sheep'?'A sheep':Play.cap(/^[aeiou]/.test(d._a.t)?'an '+d._a.t:'a '+d._a.t))+'!'); return; }
+  if(sel===d){ return; }
+  if(sel._a===d._a){
+    var a=sel, b=d; sel=null; a.classList.remove('sel'); a._in=b._in=true; busy=true; inArk++;
+    Play.chime();
+    Play.say('Two '+d._a.p+'! Into the ark!');
+    [a,b].forEach(function(e,k){ setTimeout(function(){ e.style.left=(RAMP.x+k*3)+'%'; e.style.top=RAMP.y+'%'; e.style.width='8%'; }, k*200); });
+    setTimeout(function(){ [a,b].forEach(function(e){ e.style.left=DOOR.x+'%'; e.style.top=DOOR.y+'%'; e.style.width='5%'; }); }, 1150);
+    setTimeout(function(){ [a,b].forEach(function(e){ e.style.opacity=0; }); }, 2100);
+    setTimeout(function(){
+      busy=false; count.textContent='🚢 '+inArk+' / '+PAIRS[lvl];
+      if(inArk===PAIRS[lvl]) flood();
+    }, 2600);
+  } else {
+    var s=sel; sel=null; s.classList.remove('sel');
+    Play.bump(s,'no'); Play.bump(d,'no'); Play.boop();
+    Play.say('Those are not the same. Try again!');
+  }
+}
+function flood(){
+  busy=true; title.textContent='All safe inside! 🌧️';
+  Play.say('Everyone is safe inside. God closed the door. Here comes the rain!', function(){
+    game.classList.add('storm');
+    for(var i=0;i<8;i++) Play.tone(70+Math.random()*40,.7,'sawtooth',.035,i*.45);
+    setTimeout(function(){ game.classList.add('flood'); }, 1200);
+    setTimeout(function(){
+      game.classList.remove('storm'); game.classList.add('bow'); Play.chime(); Play.confetti(16,'🌈✨🕊️⭐');
+      title.textContent='God\'s promise! 🌈';
+      Play.say('The rain stopped, and God put a rainbow in the sky. A rainbow is God\'s promise. God always keeps His promises!', function(){ again.style.display='block'; busy=false; });
+    }, 5200);
+  });
+}
+again.addEventListener('click', start);
+Play.onLevel(function(n){ lvl=n; start(); });
+start();
+</script>
+</body>
+</html>

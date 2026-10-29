@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<title>Joseph's Colourful Coat</title>
+<script type="importmap">
+{ "imports": { "onnxruntime-web": "https://cdn.jsdelivr.net/npm/onnxruntime-web@1.18.0/+esm" } }
+</script>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; -webkit-user-select:none; user-select:none; -webkit-touch-callout:none; }
+  html,body { width:100%; height:100%; overflow:hidden; font-family:'Fredoka One','Comic Sans MS',cursive; touch-action:none; }
+  #game { position:relative; width:100vw; height:100vh; height:100dvh; overflow:hidden; display:flex; flex-direction:column; align-items:center;
+          background:radial-gradient(ellipse at 50% 20%,#fff6dc 0%,transparent 60%),linear-gradient(180deg,#f9d9a4,#e9a96b); }
+  #stage { flex:1; min-height:0; display:flex; align-items:center; justify-content:center; gap:4vw; width:100%; padding:0 3vw; }
+  svg#coat { height:100%; max-height:min(60dvh,82vw); width:auto; filter:drop-shadow(0 14px 26px rgba(80,40,0,.3)); }
+  .stripe { cursor:pointer; transition:fill .25s; stroke:rgba(0,0,0,.08); stroke-width:1; }
+  #target { display:none; height:30%; max-height:22dvh; width:auto; filter:drop-shadow(0 6px 12px rgba(0,0,0,.2)); }
+  #target.show { display:block; }
+  #tlabel { display:none; position:absolute; font-size:.95rem; color:#7a4a12; }
+  #paints { display:flex; flex-wrap:wrap; gap:clamp(8px,2vw,14px); justify-content:center; padding:10px 12px calc(env(safe-area-inset-bottom,0px) + 20px); max-width:760px; }
+  .pot { width:clamp(46px,11vw,70px); aspect-ratio:1; border-radius:50%; border:5px solid #fff; box-shadow:0 6px 14px rgba(0,0,0,.2); cursor:pointer; }
+  .pot.on { outline:5px solid #5b3fb8; outline-offset:2px; }
+  #paints.hide { display:none; }
+  #again { display:none; margin:0 auto calc(env(safe-area-inset-bottom,0px) + 20px); }
+</style>
+</head>
+<body data-kit-levels="1">
+<div id="game">
+  <a id="back-btn" href="index.html"></a>
+  <div class="pl-title" id="title">Tap the coat to colour it! 🎨</div>
+  <div id="stage">
+    <svg id="target" viewBox="0 0 300 340" aria-label="Colour pattern to copy"></svg>
+    <svg id="coat" viewBox="0 0 300 340" aria-label="Joseph's coat"></svg>
+  </div>
+  <div id="paints"></div>
+  <button class="pl-btn" id="again">New coat 🔁</button>
+</div>
+<script src="voice.js?v=20261028a"></script>
+<script src="photos.js?v=20261028a"></script>
+<script src="kit.js?v=20261028a"></script>
+<script src="play.js?v=20261028a"></script>
+<script>
+/* Genesis 37:3. Under 2: each tap on a stripe paints the next colour and
+ * Grace names it. 2 to 3: pick a paint pot, then a stripe. 3 to 5: copy the
+ * small coat's pattern. */
+var COLORS = [
+  {n:"red",c:"#e63946"},{n:"orange",c:"#f4892a"},{n:"yellow",c:"#ffd23f"},{n:"green",c:"#3bb273"},
+  {n:"blue",c:"#3a86ff"},{n:"purple",c:"#8e5bd8"},{n:"pink",c:"#ff7eb6"},{n:"brown",c:"#9a6337"}
+];
+var STRIPES = 7;
+var COAT = "M110 18 Q150 34 190 18 L268 58 Q284 66 280 84 L262 150 L224 138 L232 322 Q150 336 68 322 L76 138 L38 150 L20 84 Q16 66 32 58 Z";
+var lvl=Play.level(), cur=0, autoIdx=0, painted=[], pattern=null, done=false;
+var svg=document.getElementById('coat'), tsvg=document.getElementById('target'), paints=document.getElementById('paints'), title=document.getElementById('title'), again=document.getElementById('again');
+
+function drawCoat(el, fills, interactive){
+  var h=322/STRIPES, s='<defs><clipPath id="cl'+el.id+'"><path d="'+COAT+'"/></clipPath></defs><g clip-path="url(#cl'+el.id+')">';
+  for(var i=0;i<STRIPES;i++) s+='<rect class="'+(interactive?'stripe':'')+'" data-i="'+i+'" x="0" y="'+(14+i*h)+'" width="300" height="'+(h+1)+'" fill="'+(fills[i]||'#fffaf0')+'"/>';
+  s+='</g><path d="'+COAT+'" fill="none" stroke="#7a4a12" stroke-width="5" stroke-linejoin="round"/>'+
+     '<path d="M110 18 Q150 70 190 18" fill="none" stroke="#7a4a12" stroke-width="5"/>';
+  el.innerHTML=s;
+}
+function start(){
+  painted=new Array(STRIPES).fill(null); autoIdx=0; done=false; again.style.display='none';
+  paints.classList.toggle('hide', lvl===1);
+  tsvg.classList.toggle('show', lvl===3);
+  if(lvl===3){
+    var set=Play.shuffle(COLORS).slice(0,3); pattern=[]; for(var i=0;i<STRIPES;i++) pattern.push(set[i%3]);
+    drawCoat(tsvg, pattern.map(function(x){return x.c;}), false);
+    title.textContent='Make your coat like the little one! 🎨';
+  } else { pattern=null; title.textContent = lvl===1 ? 'Tap the coat to colour it! 🎨' : 'Pick a colour, then tap the coat! 🎨'; }
+  drawCoat(svg, [], true);
+  buildPaints();
+  Play.say(lvl===3 ? 'Make your coat like the little one!' : 'Jacob gave Joseph a beautiful coat of many colours.');
+}
+function buildPaints(){
+  paints.innerHTML='';
+  COLORS.forEach(function(col,i){
+    var p=document.createElement('div'); p.className='pot'+(i===cur?' on':''); p.style.background=col.c;
+    p.addEventListener('click', function(){ cur=i; buildPaints(); Play.pop(500+i*40); Play.say(Play.cap(col.n)+'.'); });
+    paints.appendChild(p);
+  });
+}
+svg.addEventListener('click', function(e){
+  var r=e.target.closest('.stripe'); if(!r || done) return;
+  var i=+r.getAttribute('data-i'), col;
+  if(lvl===1){ col=COLORS[autoIdx % COLORS.length]; autoIdx++; } else col=COLORS[cur];
+  painted[i]=col; r.setAttribute('fill', col.c); Play.pop(440+i*50); Play.bump(svg);
+  Play.floatUp(e.clientX, e.clientY, null, '✨', 46);
+  if(lvl===3){
+    var ok=painted.every(function(p,k){ return p && p.n===pattern[k].n; });
+    if(ok){ finish(); return; }
+    Play.say(Play.cap(col.n)+'.');
+    return;
+  }
+  if(painted.every(Boolean)){ finish(); return; }
+  Play.say(Play.cap(col.n)+'.');
+});
+function finish(){
+  done=true; Play.chime(); Play.confetti(18); title.textContent='What a beautiful coat! 🌈';
+  Play.say('What a beautiful coat! God loves you, just like Jacob loved Joseph.');
+  again.style.display='block';
+}
+again.addEventListener('click', start);
+Play.onLevel(function(n){ lvl=n; start(); });
+start();
+</script>
+</body>
+</html>

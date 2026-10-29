@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<title>David's Harp</title>
+<script type="importmap">
+{ "imports": { "onnxruntime-web": "https://cdn.jsdelivr.net/npm/onnxruntime-web@1.18.0/+esm" } }
+</script>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; -webkit-user-select:none; user-select:none; -webkit-touch-callout:none; }
+  html,body { width:100%; height:100%; overflow:hidden; font-family:'Fredoka One','Comic Sans MS',cursive; touch-action:none; background:#f3b27a; }
+  #game { position:relative; width:100vw; height:100vh; height:100dvh; overflow:hidden; display:flex; flex-direction:column; }
+  .bg { position:absolute; inset:0; background:url(art/harp.webp?v=20261028) center/cover, linear-gradient(#f9c98d,#8fc77a); z-index:0; }
+  #stage { position:relative; z-index:2; flex:1; min-height:0; display:flex; align-items:center; justify-content:center; padding:0 3vw calc(env(safe-area-inset-bottom,0px) + 16px); }
+  svg#harp { height:100%; max-height:min(72dvh,96vw); width:auto; filter:drop-shadow(0 16px 26px rgba(60,30,0,.35)); touch-action:none; }
+  .str { stroke-linecap:round; transition:stroke .2s; }
+  .hit { stroke:transparent; stroke-width:34; cursor:pointer; }
+  .str.glow { stroke:#ffe45e !important; filter:drop-shadow(0 0 8px #ffd400); }
+  .str.twang { animation:tw .35s; }
+  @keyframes tw { 0%,100%{transform:translateX(0)} 25%{transform:translateX(3px)} 50%{transform:translateX(-3px)} 75%{transform:translateX(2px)} }
+  #modes { position:relative; z-index:3; display:flex; gap:10px; justify-content:center; }
+  .mode { border:0; border-radius:999px; padding:9px 18px; font:inherit; font-size:clamp(.95rem,3.6vw,1.15rem); color:#7a3e10; background:rgba(255,255,255,.6); cursor:pointer; }
+  .mode.on { background:#fff; }
+</style>
+</head>
+<body data-kit-levels="1">
+<div id="game">
+  <div class="bg"></div>
+  <a id="back-btn" href="index.html"></a>
+  <div class="pl-title" id="title">Play the harp like David! 🎵</div>
+  <div id="modes"><button class="mode on" id="mFree">🎵 Play</button><button class="mode" id="mSong">⭐ Follow the light</button></div>
+  <div id="stage"><svg id="harp" viewBox="0 0 320 400" aria-label="Harp"></svg></div>
+</div>
+<script src="voice.js?v=20261028a"></script>
+<script src="photos.js?v=20261028a"></script>
+<script src="kit.js?v=20261028a"></script>
+<script src="play.js?v=20261028a"></script>
+<script>
+/* 1 Samuel 16:23. Eight strings tuned to a C major pentatonic set, so any
+ * strum sounds sweet. "Follow the light" plays Jesus Loves Me (William
+ * Bradbury, 1862, public domain): line 1 for 2 to 3, the whole verse for 3 to 5. */
+var NOTES = [["C4",261.63],["D4",293.66],["E4",329.63],["G4",392.00],["A4",440.00],["C5",523.25],["D5",587.33],["E5",659.25]];
+var IDX = {}; NOTES.forEach(function(n,i){ IDX[n[0]]=i; });
+var VERSE = [
+  "G4 E4 E4 D4 E4 G4 G4", "A4 A4 C5 A4 A4 G4 G4",
+  "G4 E4 E4 D4 E4 G4 G4", "A4 A4 G4 C4 E4 D4 C4"
+].map(function(l){ return l.split(" "); });
+var COLORS = ["#e63946","#f4892a","#ffd23f","#3bb273","#3a86ff","#8e5bd8","#ff7eb6","#9a6337"];
+var svg=document.getElementById('harp'), title=document.getElementById('title');
+var lvl=Play.level(), mode='free', song=[], pos=0, lastStr=-1;
+
+(function draw(){
+  var s='<path d="M40 380 Q20 200 70 40 Q150 10 290 70 L270 110 Q170 80 110 90 L120 360 Z" fill="#b5651d" stroke="#6b3a10" stroke-width="6" stroke-linejoin="round"/>'+
+        '<path d="M70 40 Q150 10 290 70" fill="none" stroke="#e7b06a" stroke-width="5"/>'+
+        '<rect x="40" y="356" width="250" height="26" rx="12" fill="#8a4a16" stroke="#6b3a10" stroke-width="5"/>';
+  NOTES.forEach(function(n,i){
+    var x=128+i*20, top=92+i*3.6;
+    s+='<line class="str" id="s'+i+'" x1="'+x+'" y1="'+top+'" x2="'+x+'" y2="358" stroke="'+COLORS[i]+'" stroke-width="5"/>'+
+       '<line class="hit" data-i="'+i+'" x1="'+x+'" y1="'+top+'" x2="'+x+'" y2="358"/>';
+  });
+  svg.innerHTML=s;
+})();
+
+function strike(i){
+  var n=NOTES[i]; Play.pluck(n[1], .55);
+  var el=document.getElementById('s'+i); el.classList.remove('twang'); void el.getBBox; el.classList.add('twang');
+  if(mode==='song') check(i);
+  var r=el.getBoundingClientRect(); Play.floatUp(r.left+r.width/2, r.top+r.height*0.3, null, ['🎵','🎶','✨','💛'][i%4], 44);
+}
+function stringAt(e){
+  var pt=svg.createSVGPoint(); pt.x=e.clientX; pt.y=e.clientY;
+  var p=pt.matrixTransform(svg.getScreenCTM().inverse());
+  if(p.y<80||p.y>365) return -1;
+  var i=Math.round((p.x-128)/20); return (i>=0&&i<NOTES.length&&Math.abs(p.x-(128+i*20))<10)?i:-1;
+}
+svg.addEventListener('pointerdown', function(e){ lastStr=stringAt(e); if(lastStr>=0) strike(lastStr); });
+svg.addEventListener('pointermove', function(e){ if(!e.buttons && e.pointerType==='mouse') return; var i=stringAt(e); if(i>=0 && i!==lastStr){ lastStr=i; strike(i); } });
+addEventListener('pointerup', function(){ lastStr=-1; });
+
+function glow(){
+  Array.prototype.forEach.call(svg.querySelectorAll('.str'), function(s){ s.classList.remove('glow'); });
+  if(mode!=='song' || pos>=song.length) return;
+  document.getElementById('s'+IDX[song[pos]]).classList.add('glow');
+}
+function check(i){
+  if(pos>=song.length) return;
+  if(i===IDX[song[pos]]){ pos++; glow(); if(pos===song.length) done(); }
+}
+function done(){
+  title.textContent='You played Jesus Loves Me! 🎉'; Play.confetti(16);
+  setTimeout(function(){ Play.say('You played Jesus Loves Me! David played his harp for God too.'); }, 600);
+  setTimeout(function(){ if(mode==='song') startSong(); }, 7000);
+}
+function startSong(){
+  mode='song'; pos=0;
+  song = lvl===3 ? [].concat.apply([], VERSE) : VERSE[0].slice();
+  if(lvl===1) song = VERSE[0].slice(0,4);
+  title.textContent='Tap the string that shines ✨'; glow();
+  Play.say('Tap the string that shines.');
+}
+function setMode(m){
+  document.getElementById('mFree').classList.toggle('on', m==='free');
+  document.getElementById('mSong').classList.toggle('on', m==='song');
+  if(m==='free'){ mode='free'; glow(); title.textContent='Play the harp like David! 🎵'; Play.say('David played his harp and sang to God.'); }
+  else startSong();
+}
+document.getElementById('mFree').addEventListener('click', function(){ setMode('free'); });
+document.getElementById('mSong').addEventListener('click', function(){ setMode('song'); });
+Play.onLevel(function(n){ lvl=n; if(mode==='song') startSong(); });
+setTimeout(function(){ Play.say('David played his harp and sang to God.'); }, 500);
+</script>
+</body>
+</html>

@@ -2,6 +2,22 @@
 
 Newest first. Read this before changing anything in this folder.
 
+## 28 Oct 2026: eleven Bible story games and Plane mode
+
+### What was done
+1. Eleven new games (see README): Little Village of Galilee (Pok Pok-style open play for flights), Noah's Ark, Seven Days of Creation, The Lost Sheep, Five Loaves Two Fish, The Wise Builder, Joseph's Coat, David's Harp, Fruit of the Spirit Garden, Count the Stars, Bible Animals Memory. All use the Age button and Grace's recorded voice.
+2. 15 painted scenes in `art/` and 8 new photos (bread, basket, dove, pear, cherries, pomegranate, fig, olive).
+3. Plane mode (`sw.js`, Save for the plane button), tested offline.
+
+### Lessons
+1. **Clenmar picked "show no faces" and then "various races"**: people are children of different races seen from behind or the side; Adam and Eve (day 6) from behind, modestly dressed. Check every scene with people up close.
+2. **Two art examples looked alike to him**: the "storybook" prompt came out as a realistic painting. Use that painted look; if a simpler cartoon is ever wanted, say so explicitly in the prompt.
+3. **Landscape scenes on upright phones**: fill the height but cap the width at 2x the screen so half the scene shows; anchor the ground to the bottom and paint the sky colour above. Keep starting pieces inside `sc.view()`.
+4. **Fun pass**: every tap must do something (sparkle, sound, critter), not only right answers. Clenmar asked "are the games fun?"; his daughter is the real test.
+5. **Read the sentence list before recording**: caught "Two fig!" and 48 count lines that could never be said.
+6. **The ChatGPT tab froze once** (renderer unresponsive); the queued downloads had already finished. Check Downloads before assuming work was lost.
+7. "Jesus Loves Me" melody (Bradbury 1862, public domain) verse: G E E D E G G / A A C A A G G / G E E D E G G / A A G C E D C (C major, low C at the end).
+
 ## 27 Oct 2026 (late night): pre-recorded voice, First Words tap fix
 
 ### What was done

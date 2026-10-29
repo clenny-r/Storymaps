@@ -302,6 +302,9 @@
     };
   }
 
+  /* ── offline (Plane mode): every Baby Games page keeps itself saved ───── */
+  try { if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(function () {}); } catch (e) {}
+
   /* ── boot ────────────────────────────────────────────────────────────── */
   applyTheme();
   function boot() {

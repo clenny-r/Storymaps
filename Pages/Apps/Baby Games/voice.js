@@ -466,7 +466,7 @@
    * falls back to live speech. Clip name = FNV-1a hash of the sentence key.
    *   key = sentence after fixText(), emoji removed, lower case, single spaces */
   var CLIP_DIR = "voice/grace/";
-  var CLIP_V = "20261027";
+  var CLIP_V = "20261028";
   var clipSet = null, clipLoading = null, clipBuf = {};
   function loadClipIndex() {
     if (clipSet) return Promise.resolve(clipSet);

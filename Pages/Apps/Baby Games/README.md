@@ -25,6 +25,20 @@ Apps landing page links straight to it, and each game's ← button comes back he
 | `baby-body.html` | Point To…: real photos of a smiling girl, 3 age levels (4 / 8 / 18 parts) |
 | `baby-family.html` | Mommy, Daddy, Grandma, baby |
 | `tutorial.html` | Video walkthrough |
+| `galilee-village.html` | ★ Little Village of Galilee: open play, no goals; made for flights |
+| `noah-ark.html` | Noah's Ark: pairs walk into the ark, rain, rainbow (Genesis 6 to 9) |
+| `creation-days.html` | Seven Days of Creation; 3 to 5 put days in order (Genesis 1) |
+| `lost-sheep.html` | The Lost Sheep: hide and seek on a hillside (Luke 15) |
+| `loaves-fishes.html` | Five Loaves, Two Fish: share and count; 12 baskets (John 6) |
+| `wise-builder.html` | The Wise Builder: rock or sand, then the rain (Matthew 7) |
+| `joseph-coat.html` | Joseph's Colourful Coat: colours and patterns (Genesis 37) |
+| `david-harp.html` | David's Harp: free play or follow the light to Jesus Loves Me |
+| `fruit-garden.html` | Fruit of the Spirit Garden: plant, water, grow (Galatians 5) |
+| `count-stars.html` | Count the Stars: bedtime counting and prayer (Genesis 15) |
+| `bible-memory.html` | Bible Animals Memory: matching pairs with Bible stories |
+| `play.js` | Shared engine for the story games: sounds, harp pluck, counting, celebrations, pannable scenes |
+| `art/` | Painted storybook scenes (ChatGPT, Oct 2026), 1280 px .webp |
+| `sw.js`, `offline-files.json` | Plane mode: "Save for the plane" stores every file for offline use |
 
 ## The shared kit
 
@@ -243,3 +257,16 @@ doesn't change when I tap it".
   piper-tts-web in Chrome on the live site, convert WAV to MP3 (trim silence,
   mono, 22 kHz, 40 kbps), rebuild `index.json`, and bump `CLIP_V` in `voice.js`.
   The scripts used are described in LESSONS.md.
+
+## Story games and Plane mode (28 Oct 2026)
+
+- Eleven Bible story games share `play.js`. Scene games (`noah-ark`, `lost-sheep`,
+  `galilee-village`) use `Play.scene()`: the 3:2 picture fills the height and pans
+  sideways with a finger; on an upright phone at least half of it shows, with the
+  sky colour above. Tap spots are `[x, y, r]` in percent of the picture.
+- People in scenes are seen from behind or at a distance, children of different
+  races; animals and objects are real photos from `photo/`.
+- **Plane mode**: `sw.js` keeps every page saved (pages network-first, everything
+  else saved-copy-first). The "Save for the plane" button on `index.html` saves the
+  whole list in `offline-files.json`. **Re-run `python3 tools/make_offline_list.py`
+  whenever files are added**, and bump `CACHE` in `sw.js` if the layout changes.

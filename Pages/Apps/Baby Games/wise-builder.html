@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<title>The Wise Builder</title>
+<script type="importmap">
+{ "imports": { "onnxruntime-web": "https://cdn.jsdelivr.net/npm/onnxruntime-web@1.18.0/+esm" } }
+</script>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; -webkit-user-select:none; user-select:none; -webkit-touch-callout:none; }
+  html,body { width:100%; height:100%; overflow:hidden; font-family:'Fredoka One','Comic Sans MS',cursive; touch-action:none; background:#a8d4ef; }
+  #game { position:relative; width:100vw; height:100vh; height:100dvh; overflow:hidden; display:flex; flex-direction:column; }
+  .bg { position:absolute; inset:0; background:url(art/builders.webp?v=20261028) center bottom/cover, linear-gradient(90deg,#9a9a9a 50%,#e8cf96 50%); z-index:0; transition:filter 1s; }
+  #game.storm .bg { filter:brightness(.55) saturate(.7); }
+  .side { position:absolute; z-index:2; top:0; bottom:0; width:50%; cursor:pointer; }
+  #rock { left:0; } #sand { right:0; }
+  .tag { position:absolute; bottom:calc(env(safe-area-inset-bottom,0px) + 14px); left:50%; transform:translateX(-50%); background:#fff; color:#5a3a12; border-radius:999px; padding:8px 18px; font-size:clamp(1rem,4vw,1.4rem); box-shadow:0 6px 14px rgba(0,0,0,.2); white-space:nowrap; }
+  #house { position:absolute; z-index:3; bottom:var(--ground,26dvh); width:min(34vw,30dvh); transform:translateX(-50%); display:flex; flex-direction:column-reverse; align-items:center; pointer-events:none; }
+  .row { display:flex; width:100%; }
+  .blk { flex:1; height:min(7vw,6dvh); margin:1px; border-radius:6px; background:linear-gradient(#f0c27a,#c98d3f); border:2px solid #8a5a20; animation:drop .35s cubic-bezier(.34,1.56,.64,1); }
+  .blk.win { background:linear-gradient(#8fd3ff,#3a86ff); }
+  .blk.door { background:linear-gradient(#a0612c,#6b3a12); }
+  .roof { width:0; height:0; border-left:calc(min(34vw,30dvh)/2 + 10px) solid transparent; border-right:calc(min(34vw,30dvh)/2 + 10px) solid transparent; border-bottom:min(10vw,9dvh) solid #c0392b; animation:drop .35s cubic-bezier(.34,1.56,.64,1); }
+  @keyframes drop { 0%{transform:translateY(-40px);opacity:0} 100%{transform:translateY(0);opacity:1} }
+  #house.fall > * { animation:fall 1.2s ease-in forwards; }
+  @keyframes fall { 0%{transform:translate(0,0) rotate(0)} 100%{transform:translate(var(--dx),40dvh) rotate(var(--rot));opacity:.0} }
+  #rain { position:absolute; inset:0; z-index:4; pointer-events:none; display:none; background-image:repeating-linear-gradient(105deg,rgba(255,255,255,.0) 0 14px,rgba(220,235,255,.55) 14px 16px); background-size:200px 200px; animation:rainy .35s linear infinite; }
+  #game.storm #rain { display:block; }
+  @keyframes rainy { 0%{background-position:0 0} 100%{background-position:-40px 200px} }
+  #again { display:none; position:absolute; z-index:6; left:50%; top:45%; transform:translate(-50%,-50%); }
+  .pl-title { z-index:5; }
+</style>
+</head>
+<body data-kit-levels="1">
+<div id="game">
+  <div class="bg"></div>
+  <a id="back-btn" href="index.html"></a>
+  <div class="pl-title" id="title">Where will you build? 🏠</div>
+  <div class="side" id="rock"><span class="tag">On the rock 🪨</span></div>
+  <div class="side" id="sand"><span class="tag">On the sand 🏖️</span></div>
+  <div id="house"></div>
+  <div id="rain"></div>
+  <button class="pl-btn" id="again">Build again 🔨</button>
+</div>
+<script src="voice.js?v=20261028a"></script>
+<script src="photos.js?v=20261028a"></script>
+<script src="kit.js?v=20261028a"></script>
+<script src="play.js?v=20261028a"></script>
+<script>
+/* Matthew 7:24 to 27. Choose the rock or the sand, tap to build the house
+ * one piece at a time, then the rain comes. On the rock it stands. */
+var PIECES = {1:3, 2:5, 3:7};      // rows of wall before the roof
+var lvl=Play.level(), place=null, rows=0, stage='choose';
+var game=document.getElementById('game'), house=document.getElementById('house'), title=document.getElementById('title'), again=document.getElementById('again');
+
+function start(){
+  stage='choose'; place=null; rows=0; house.innerHTML=''; house.className='';
+  game.classList.remove('storm'); again.style.display='none';
+  document.querySelectorAll('.tag').forEach(function(t){ t.style.display=''; });
+  title.textContent='Where will you build? 🏠';
+  Play.say('Where will you build your house? On the rock, or on the sand?');
+}
+function choose(where){
+  place=where; stage='build';
+  document.querySelectorAll('.tag').forEach(function(t){ t.style.display='none'; });
+  house.style.left = where==='rock' ? '25%' : '75%';
+  title.textContent='Tap to build your house! 🔨';
+  Play.say(where==='rock' ? 'On the rock! Tap to build your house.' : 'On the sand! Tap to build your house.');
+}
+function addRow(){
+  var r=document.createElement('div'); r.className='row';
+  var n=PIECES[lvl], i;
+  for(i=0;i<3;i++){ var b=document.createElement('div'); b.className='blk';
+    if(rows===0 && i===1) b.className+=' door';
+    if(rows===n-2 && i!==1 && n>2) b.className+=' win';
+    r.appendChild(b); }
+  house.appendChild(r); rows++;
+  Play.tone(300+rows*40,.12,'square',.08); Play.tone(200+rows*40,.1,'square',.06,.06);
+  if(rows===n){ setTimeout(roof, 350); }
+  else Play.say(Play.num(rows)+'!');
+}
+function roof(){
+  var r=document.createElement('div'); r.className='roof'; house.appendChild(r);
+  Play.chime(); stage='rain'; title.textContent='Here comes the rain! 🌧️';
+  Play.say('What a nice house! Oh, here comes the rain!', function(){ storm(); });
+}
+function storm(){
+  game.classList.add('storm');
+  for(var i=0;i<6;i++) Play.tone(80+Math.random()*40, .6, 'sawtooth', .04, i*.4);
+  setTimeout(function(){
+    if(place==='rock'){
+      game.classList.remove('storm'); Play.confetti(16); title.textContent='It stood strong! 🎉';
+      Play.say('The rain came, and the wind blew, but the house on the rock stood strong! When we listen to Jesus, we are like the wise builder.');
+    } else {
+      Array.prototype.forEach.call(house.children, function(c,i){ c.style.setProperty('--dx',(Math.random()*120-60)+'px'); c.style.setProperty('--rot',(Math.random()*120-60)+'deg'); });
+      house.classList.add('fall'); Play.tone(140,.8,'sawtooth',.06); Play.boop();
+      setTimeout(function(){ game.classList.remove('storm'); }, 1400);
+      title.textContent='Oh no! It fell down! 🌊';
+      Play.say('Oh no! The house on the sand fell down. Let\'s build on the rock!');
+    }
+    again.style.display='block';
+  }, 2600);
+}
+document.getElementById('rock').addEventListener('click', function(){ if(stage==='choose') choose('rock'); else if(stage==='build') addRow(); });
+document.getElementById('sand').addEventListener('click', function(){ if(stage==='choose') choose('sand'); else if(stage==='build') addRow(); });
+again.addEventListener('click', start);
+Play.onLevel(function(n){ lvl=n; start(); });
+start();
+</script>
+</body>
+</html>

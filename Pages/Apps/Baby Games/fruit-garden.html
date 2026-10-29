@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<title>Fruit of the Spirit Garden</title>
+<script type="importmap">
+{ "imports": { "onnxruntime-web": "https://cdn.jsdelivr.net/npm/onnxruntime-web@1.18.0/+esm" } }
+</script>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; -webkit-user-select:none; user-select:none; -webkit-touch-callout:none; }
+  html,body { width:100%; height:100%; overflow:hidden; font-family:'Fredoka One','Comic Sans MS',cursive; touch-action:none; background:#9fd3f0; }
+  #game { position:relative; width:100vw; height:100vh; height:100dvh; overflow:hidden; display:flex; flex-direction:column; }
+  .bg { position:absolute; inset:0; background:url(art/garden.webp?v=20261028) center bottom/cover, linear-gradient(#9fd3f0 60%,#8a5a34 60%); z-index:0; }
+  #plots { position:absolute; z-index:2; left:2vw; right:2vw; bottom:calc(env(safe-area-inset-bottom,0px) + 4dvh); top:22dvh; display:grid; grid-template-columns:repeat(var(--cols,3),1fr); align-items:end; gap:1vw; }
+  .plot { position:relative; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:flex-end; cursor:pointer; }
+  .soil { width:70%; max-width:120px; height:22px; border-radius:50%; background:#6b3f1f; box-shadow:inset 0 4px 8px rgba(0,0,0,.4); }
+  .seed { position:absolute; bottom:12px; width:16px; height:12px; border-radius:50%; background:#d9a441; display:none; }
+  .plot.seeded .seed { display:block; }
+  .tree { position:absolute; bottom:10px; width:100%; max-width:min(30vw,26dvh); aspect-ratio:3/4; transform-origin:50% 100%; transform:scale(0); transition:transform 1.4s cubic-bezier(.34,1.3,.64,1); pointer-events:none; }
+  .plot.grown .tree { transform:scale(1); }
+  .trunk { position:absolute; left:44%; width:12%; bottom:0; height:46%; background:#7a4a24; border-radius:6px; }
+  .crown { position:absolute; left:4%; right:4%; top:0; height:66%; border-radius:50%; background:radial-gradient(circle at 40% 35%,#7fd36b,#3d9a3a); box-shadow:0 8px 16px rgba(0,0,0,.2); }
+  .fruit { position:absolute; width:30%; aspect-ratio:1; border-radius:50%; overflow:hidden; background:#fff; border:3px solid #fff; box-shadow:0 3px 8px rgba(0,0,0,.25); font-size:5vmin; }
+  .label { position:absolute; bottom:-6px; left:50%; transform:translateX(-50%); background:#fff; color:#3d6b1f; border-radius:999px; padding:2px 10px; font-size:clamp(.7rem,2.6vw,1rem); white-space:nowrap; opacity:0; transition:opacity .5s 1.2s; }
+  .plot.grown .label { opacity:1; }
+  .drops { position:absolute; bottom:40px; font-size:28px; animation:rain 1s ease-in forwards; pointer-events:none; }
+  @keyframes rain { 0%{transform:translateY(-60px);opacity:1} 100%{transform:translateY(0);opacity:0} }
+  .plot.want .crown { box-shadow:0 0 0 6px #ffe45e,0 8px 16px rgba(0,0,0,.2); }
+  .pl-title { z-index:3; }
+</style>
+</head>
+<body data-kit-levels="1">
+<div id="game">
+  <div class="bg"></div>
+  <a id="back-btn" href="index.html"></a>
+  <div class="pl-title" id="title">Tap the soil to plant a seed 🌱</div>
+  <div id="plots"></div>
+</div>
+<script src="voice.js?v=20261028a"></script>
+<script src="photos.js?v=20261028a"></script>
+<script src="kit.js?v=20261028a"></script>
+<script src="play.js?v=20261028a"></script>
+<script>
+/* Galatians 5:22 to 23. Tap once to plant, tap again to water, and a tree
+ * grows with one of the nine fruits of the Spirit and a simple example of it.
+ * 3 to 5: when the garden is full, find the fruit that matches a kind act. */
+var FRUITS = [
+  {f:"apple", e:"🍎", v:"love", ex:"Love is giving a big hug."},
+  {f:"orange", e:"🍊", v:"joy", ex:"Joy is singing a happy song to God."},
+  {f:"grapes", e:"🍇", v:"peace", ex:"Peace is being calm and quiet."},
+  {f:"pear", e:"🍐", v:"patience", ex:"Patience is waiting for your turn."},
+  {f:"strawberry", e:"🍓", v:"kindness", ex:"Kindness is sharing your toys."},
+  {f:"banana", e:"🍌", v:"goodness", ex:"Goodness is helping Mommy and Daddy."},
+  {f:"cherries", e:"🍒", v:"faithfulness", ex:"Faithfulness is keeping your promise."},
+  {f:"pomegranate", e:"🔴", v:"gentleness", ex:"Gentleness is soft hands with the baby."},
+  {f:"fig", e:"🟣", v:"self-control", ex:"Self-control is using kind words when you feel upset."}
+];
+var COUNT = {1:3, 2:5, 3:9};
+var lvl=Play.level(), grown=0, quiz=null, waiting=false;
+var plots=document.getElementById('plots'), title=document.getElementById('title');
+
+function start(){
+  var n=COUNT[lvl]; grown=0; quiz=null;
+  plots.style.setProperty('--cols', n<=3?3:(n<=5?5:9));
+  if(n===9 && innerWidth<innerHeight){ plots.style.setProperty('--cols',5); }
+  plots.innerHTML='';
+  FRUITS.slice(0,n).forEach(function(fr,i){
+    var p=document.createElement('div'); p.className='plot'; p._fr=fr;
+    p.innerHTML='<div class="tree"><div class="trunk"></div><div class="crown"></div></div><div class="seed"></div><div class="soil"></div><div class="label">'+fr.v+'</div>';
+    var crown=p.querySelector('.crown');
+    [[18,22],[52,14],[34,48]].forEach(function(xy){ var d=document.createElement('div'); d.className='fruit'; d.style.left=xy[0]+'%'; d.style.top=xy[1]+'%'; crown.appendChild(d); BabyPhotos.fill(d, fr.f, fr.e, {round:true}); });
+    p.addEventListener('click', function(){ tapPlot(p); });
+    plots.appendChild(p);
+  });
+  title.textContent='Tap the soil to plant a seed 🌱';
+  Play.say('Let\'s grow the fruit of the Spirit! Tap the soil to plant a seed.');
+}
+function tapPlot(p){
+  if(quiz){ answer(p); return; }
+  if(p.classList.contains('grown')){ Play.bump(p.querySelector('.tree')); var rr=p.getBoundingClientRect(); Play.floatUp(rr.left+rr.width/2, rr.top+rr.height*0.5, p._fr.f, p._fr.e, 64); Play.pop(600); Play.say('The fruit of '+p._fr.v+'. '+p._fr.ex); return; }
+  if(!p.classList.contains('seeded')){ p.classList.add('seeded'); Play.pop(520); Play.say('A little seed. Tap again to water it.'); return; }
+  var d=document.createElement('div'); d.className='drops'; d.textContent='💧💧'; p.appendChild(d); setTimeout(function(){ d.remove(); },1000);
+  Play.tone(880,.15,'sine',.12); Play.tone(990,.15,'sine',.12,.15);
+  setTimeout(function(){
+    p.classList.add('grown'); Play.chime(); grown++;
+    var all = grown===COUNT[lvl];
+    Play.say('This is the fruit of '+p._fr.v+'. '+p._fr.ex, function(){ if(all) setTimeout(full, 500); });
+  }, 700);
+}
+function full(){
+  Play.confetti(16,'🍎🍇🍊🍓🌸✨'); title.textContent='Your garden is full of good fruit! 🌳';
+  if(lvl<3){ Play.say('Your garden is full of good fruit! God helps us to love and be kind.'); return; }
+  Play.say('Your garden is full of good fruit!', function(){ setTimeout(ask, 600); });
+}
+function ask(){
+  var trees=Array.prototype.slice.call(plots.children); trees.forEach(function(t){ t.classList.remove('want'); });
+  quiz=trees[Math.floor(Math.random()*trees.length)]; waiting=false;
+  title.textContent='Which fruit is it? 🤔';
+  Play.say(quiz._fr.ex+' Which fruit is that?');
+}
+function answer(p){
+  if(waiting) return;
+  if(p===quiz){ waiting=true; p.classList.add('want'); Play.chime(); Play.say('Yes! That is '+p._fr.v+'!', function(){ setTimeout(ask, 900); }); }
+  else { Play.bump(p,'pl-wig'); Play.boop(); Play.say('That is '+p._fr.v+'. Try again.'); }
+}
+Play.onLevel(function(n){ lvl=n; start(); });
+start();
+</script>
+</body>
+</html>
