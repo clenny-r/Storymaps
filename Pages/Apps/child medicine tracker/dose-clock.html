@@ -688,6 +688,16 @@ table.rpt td.num{text-align:right;font-variant-numeric:tabular-nums;white-space:
           <select id="lWUnit"><option value="kg" selected>kg</option><option value="lb">lb</option></select>
         </div>
       </div>
+      <div class="row">
+        <div class="field" style="flex:1 1 110px">
+          <label for="lSpo2">Oxygen (SpO₂) <span class="hint">%</span></label>
+          <input id="lSpo2" type="number" step="1" min="50" max="100" inputmode="numeric" placeholder="97" />
+        </div>
+        <div class="field" style="flex:1 1 110px">
+          <label for="lPulse">Pulse <span class="hint">beats per minute</span></label>
+          <input id="lPulse" type="number" step="1" min="30" max="250" inputmode="numeric" placeholder="120" />
+        </div>
+      </div>
       <button class="btn sky wide" id="btnLogAdd">Save reading</button>
       <ul class="log-list" id="logList"></ul>
       <button class="link-btn no-print" id="btnMoreLog" hidden>Show more entries</button>
@@ -1057,7 +1067,7 @@ var DEFAULT_API_BASE = "https://twc-dose-clock.kd7bgn7q2z.workers.dev";
 // Bump this whenever the file changes. It is printed on the sign-in card and in
 // Settings, so it is easy to tell whether a phone is running the current build
 // or a copy Safari kept in its cache.
-var APP_VERSION = "3.8 · 25 Jul 2026";
+var APP_VERSION = "3.9 · 29 Oct 2026";
 
 // EmailJS — same service and template the Family Tasks app uses. The public key
 // is safe to ship in a page; it can only send through this one template.
@@ -1739,6 +1749,9 @@ function renderStats(){
   ];
   if (adh != null) cards.push({ k:"On time", v:adh+"%" });
   if (lastTemp) cards.push({ k:"Last temp"+(lastTemp.person?" · "+lastTemp.person:""), v:trimNum(lastTemp.temp)+"°"+lastTemp.unit });
+  var vit = liveLogs().filter(function(l){ return logType(l)==="vitals"; }).sort(function(a,b){ return a.at-b.at; });
+  var lastV = vit.length ? vit[vit.length-1] : null;
+  if (lastV) cards.push({ k:"Last oxygen & pulse"+(lastV.person?" · "+lastV.person:""), v:vitalsTxt(lastV) });
   el("stats").innerHTML = cards.map(function(c){
     return '<div class="stat"><div class="v">'+esc(String(c.v))+'</div><div class="k">'+esc(c.k)+'</div></div>';
   }).join("");
@@ -1841,13 +1854,23 @@ function renderMeds(){
 /* ═══════════════════════════════════════════════════════════════════════════
    8. Rendering — logs
    ═══════════════════════════════════════════════════════════════════════════ */
-var LOG_ICON = { wet:"💧", dirty:"💩", both:"💧💩", temp:"🌡", weight:"⚖️", note:"📝" };
-var LOG_WORD = { wet:"Wet nappy", dirty:"Dirty nappy", both:"Wet & dirty", temp:"Temperature", weight:"Weight", note:"Note" };
+var LOG_ICON = { wet:"💧", dirty:"💩", both:"💧💩", temp:"🌡", weight:"⚖️", vitals:"🫀", note:"📝" };
+var LOG_WORD = { wet:"Wet nappy", dirty:"Dirty nappy", both:"Wet & dirty", temp:"Temperature", weight:"Weight", vitals:"Oxygen & pulse", note:"Note" };
+/* Oxygen saturation (SpO2) and pulse from a home pulse oximeter. Added 29 Oct 2026
+   as a new, optional log type: older entries are never changed. */
+function vitalsTxt(l){
+  var parts = [];
+  if (l.spo2 != null) parts.push("SpO₂ "+trimNum(l.spo2)+"%");
+  if (l.pulse != null) parts.push(trimNum(l.pulse)+" bpm");
+  return parts.join(" · ");
+}
+function vitalsLow(l){ return l.spo2 != null && l.spo2 < 92; }
 
 function logType(l){
   if (l.type) return l.type;
   if (l.temp != null) return "temp";
   if (l.weight != null) return "weight";
+  if (l.spo2 != null || l.pulse != null) return "vitals";
   return "note";
 }
 function liveLogs(){
@@ -1893,9 +1916,10 @@ function renderLogs(){
   el("btnMoreLog").textContent = state.ui.logExpanded ? "Show fewer" : "Show all "+Math.min(all.length,40)+" entries";
   el("logList").innerHTML = all.slice(0,limit).map(function(l){
     var t = logType(l);
-    var hot = l.temp != null && ((l.unit==="F" && l.temp>=100.4) || (l.unit==="C" && l.temp>=38));
+    var hot = (l.temp != null && ((l.unit==="F" && l.temp>=100.4) || (l.unit==="C" && l.temp>=38))) || vitalsLow(l);
     var big = t==="temp" ? trimNum(l.temp)+"°"+l.unit
             : t==="weight" ? showWeight(l)
+            : t==="vitals" ? vitalsTxt(l)
             : LOG_ICON[t];
     return '<li><span class="log-temp'+(hot?" hot":"")+'">'+esc(big)+'</span>'+
       '<span class="log-when">'+fmtTime(l.at)+' '+fmtDay(l.at)+'</span>'+
@@ -1914,7 +1938,7 @@ function renderLogs(){
   el("btnBin").textContent = state.ui.showBin ? "Hide recently deleted" : "Recently deleted ("+bin.length+")";
   el("binList").innerHTML = (state.ui.showBin ? bin : []).map(function(l){
     var tt = logType(l);
-    var big = tt==="temp" ? trimNum(l.temp)+"°"+l.unit : tt==="weight" ? showWeight(l) : LOG_ICON[tt];
+    var big = tt==="temp" ? trimNum(l.temp)+"°"+l.unit : tt==="weight" ? showWeight(l) : tt==="vitals" ? vitalsTxt(l) : LOG_ICON[tt];
     return '<li style="opacity:.7"><span class="log-temp">'+esc(big)+'</span>'+
       '<span class="log-when">'+fmtTime(l.at)+' '+fmtDay(l.at)+'</span>'+
       '<span class="log-note">'+esc([LOG_WORD[tt], l.person, l.note].filter(Boolean).join(" · "))+'</span>'+
@@ -1971,6 +1995,12 @@ function openLogSheet(id){
       '<div class="field" style="flex:0 0 92px"><label for="lgUnit">Unit</label>'+
       '<select id="lgUnit"><option value="kg"'+((l.wunit||"kg")==="kg"?" selected":"")+'>kg</option>'+
       '<option value="lb"'+(l.wunit==="lb"?" selected":"")+'>lb</option></select></div></div>';
+  } else if (t === "vitals"){
+    valueField = '<div class="row"><div class="field" style="flex:1 1 110px">'+
+      '<label for="lgSpo2">Oxygen (SpO₂) %</label>'+
+      '<input id="lgSpo2" type="number" step="1" inputmode="numeric" value="'+esc(l.spo2==null?"":l.spo2)+'" /></div>'+
+      '<div class="field" style="flex:1 1 110px"><label for="lgPulse">Pulse (bpm)</label>'+
+      '<input id="lgPulse" type="number" step="1" inputmode="numeric" value="'+esc(l.pulse==null?"":l.pulse)+'" /></div></div>';
   } else if (isDiaper(t)){
     valueField = '<div class="field"><label for="lgKind">What it was</label><select id="lgKind">'+
       '<option value="wet"'+(t==="wet"?" selected":"")+'>💧 Wet</option>'+
@@ -2060,6 +2090,14 @@ function openLogSheet(id){
           if (wv<=0 || (wu==="lb"&&wv>400) || (wu==="kg"&&wv>200)){ toast("That weight looks off — check it"); return; }
           l.weight = wv; l.wunit = wu;
         }
+      }
+      if (logType(l) === "vitals" && el("lgSpo2")){
+        var sRaw = el("lgSpo2").value.trim(), pRaw = el("lgPulse").value.trim();
+        var sv = sRaw ? parseFloat(sRaw) : null, pv = pRaw ? parseFloat(pRaw) : null;
+        if (sv != null && (isNaN(sv) || sv<50 || sv>100)){ toast("That oxygen reading looks off — check it"); return; }
+        if (pv != null && (isNaN(pv) || pv<30 || pv>250)){ toast("That pulse looks off — check it"); return; }
+        if (sv == null && pv == null){ toast("Keep an oxygen or pulse reading, or delete the entry"); return; }
+        l.spo2 = sv; l.pulse = pv;
       }
       l.person = el("lgPerson").value.trim();
       l.note = el("lgNote").value.trim();
@@ -2655,13 +2693,18 @@ document.addEventListener("click", function(ev){
 el("btnLogAdd").addEventListener("click", function(){
   var t = el("lTemp").value.trim();
   var wRaw = el("lWeight").value.trim();
+  var sRaw = el("lSpo2").value.trim(), pRaw = el("lPulse").value.trim();
   var note = el("lNote").value.trim();
-  if (!t && !wRaw && !note){ toast("Add a temperature, a weight or a note first"); return; }
+  if (!t && !wRaw && !sRaw && !pRaw && !note){ toast("Add a temperature, weight, oxygen, pulse or a note first"); return; }
 
   var unit = el("lUnit").value, wunit = el("lWUnit").value;
   var person = logPerson();
   var temp = t ? parseFloat(t) : null;
   var weight = wRaw ? parseFloat(wRaw) : null;
+  var spo2 = sRaw ? parseFloat(sRaw) : null;
+  var pulse = pRaw ? parseFloat(pRaw) : null;
+  if (spo2 != null && (isNaN(spo2) || spo2<50 || spo2>100)){ toast("That oxygen reading looks off — it should be a % from 50 to 100"); return; }
+  if (pulse != null && (isNaN(pulse) || pulse<30 || pulse>250)){ toast("That pulse looks off — check it"); return; }
 
   if (temp != null){
     if (unit==="F" && (temp<90 || temp>112)){ toast("That temperature looks off for °F — check it"); return; }
@@ -2673,19 +2716,24 @@ el("btnLogAdd").addEventListener("click", function(){
     }
   }
 
-  // Temperature and weight are separate readings, so they get separate entries.
-  var at = logWhen();
-  if (temp != null) addLog({ type:"temp", at:at, person:person, temp:temp, unit:unit, note:note });
-  if (weight != null) addLog({ type:"weight", at:at, person:person, weight:weight, wunit:wunit, note:temp!=null?"":note });
-  if (temp == null && weight == null) addLog({ type:"note", at:at, person:person, note:note });
+  // Temperature, weight and oxygen/pulse are separate readings, so they get separate
+  // entries. The note goes on the first one only.
+  var at = logWhen(), noteLeft = note;
+  function takeNote(){ var n = noteLeft; noteLeft = ""; return n; }
+  if (temp != null) addLog({ type:"temp", at:at, person:person, temp:temp, unit:unit, note:takeNote() });
+  if (weight != null) addLog({ type:"weight", at:at, person:person, weight:weight, wunit:wunit, note:takeNote() });
+  if (spo2 != null || pulse != null) addLog({ type:"vitals", at:at, person:person, spo2:spo2, pulse:pulse, note:takeNote() });
+  if (temp == null && weight == null && spo2 == null && pulse == null) addLog({ type:"note", at:at, person:person, note:note });
 
   state.ui.unit = unit; state.ui.wunit = wunit;
   save({push:false});
-  el("lTemp").value=""; el("lWeight").value=""; el("lNote").value="";
+  el("lTemp").value=""; el("lWeight").value=""; el("lSpo2").value=""; el("lPulse").value=""; el("lNote").value="";
   resetLogWhen();
 
   var hot = temp!=null && ((unit==="F"&&temp>=104)||(unit==="C"&&temp>=40));
-  toast(hot ? "Saved — a temperature that high needs a call to your doctor or nurse line"
+  var lowO2 = spo2 != null && spo2 < 92;
+  toast(lowO2 ? "Saved — oxygen under 92% needs urgent medical help: call 911 or go to emergency"
+      : hot ? "Saved — a temperature that high needs a call to your doctor or nurse line"
             : "Reading saved"+(Date.now()-at > 3*MIN ? " at "+fmtTime(at)+" "+fmtDay(at) : ""));
 });
 
@@ -3226,6 +3274,15 @@ function scheduleText(){
     });
     lines.push("");
   }
+  var vts = liveLogs().filter(function(l){ return logType(l)==="vitals"; }).sort(function(a,b){ return a.at-b.at; }).slice(-10);
+  if (vts.length){
+    lines.push("OXYGEN & PULSE");
+    vts.forEach(function(l){
+      lines.push("  "+fmtDay(l.at)+" "+fmtTime(l.at)+" — "+vitalsTxt(l)+
+        (l.person?" ("+l.person+")":"")+(l.note?" "+l.note:""));
+    });
+    lines.push("");
+  }
   var t0 = new Date(); t0.setHours(0,0,0,0);
   var dc = countDiapers(liveLogs(), t0.getTime(), t0.getTime()+DAY);
   var yc = countDiapers(liveLogs(), t0.getTime()-DAY, t0.getTime());
@@ -3267,6 +3324,12 @@ function printSheet(){
     (temps.length? '<p style="font-size:13px"><b>Recent temperatures:</b> '+temps.map(function(l){
       return trimNum(l.temp)+"°"+l.unit+" at "+fmtTime(l.at);
     }).join(" · ")+'</p>' : '')+
+    (function(){
+      var v = liveLogs().filter(function(l){ return logType(l)==="vitals"; }).sort(function(a,b){ return a.at-b.at; }).slice(-6);
+      return v.length ? '<p style="font-size:13px"><b>Recent oxygen &amp; pulse:</b> '+v.map(function(l){
+        return esc(vitalsTxt(l))+" at "+fmtTime(l.at);
+      }).join(" · ")+'</p>' : '';
+    })()+
     '<p style="font-size:13px"><b>Nappies today:</b> '+dc.wet+' wet, '+dc.dirty+' dirty'+
       (dc.last? ' (last change '+fmtTime(dc.last)+')' : '')+
       (lastW? ' &nbsp;·&nbsp; <b>Weight:</b> '+esc(showWeight(lastW))+' on '+fmtDay(lastW.at) : '')+'</p>';
@@ -3303,6 +3366,10 @@ function shortDate(ms){
 }
 function rptTemps(from,to){
   return liveLogs().filter(function(l){ return logType(l)==="temp" && l.temp!=null && l.at>=from && l.at<=to; })
+                   .sort(function(a,b){ return a.at-b.at; });
+}
+function rptVitals(from,to){
+  return liveLogs().filter(function(l){ return logType(l)==="vitals" && l.at>=from && l.at<=to; })
                    .sort(function(a,b){ return a.at-b.at; });
 }
 function rptWeights(from,to){
@@ -3455,7 +3522,7 @@ function buildReport(days){
   var R = rptRange(days), from=R.from, to=R.to;
   var unit = state.ui.unit || "C";
   var kids = people2();
-  var temps = rptTemps(from,to), ws = rptWeights(from,to), given = rptGiven(from,to);
+  var temps = rptTemps(from,to), ws = rptWeights(from,to), given = rptGiven(from,to), vitals = rptVitals(from,to);
   var meds = activeMedsAll();
   var periodTxt = days ? "the last "+days+" days" : "the whole record";
   var pages = [];
@@ -3516,6 +3583,10 @@ function buildReport(days){
     if (!worstDay || c.wet < worstDay.wet) worstDay = { at:t3, wet:c.wet };
   }
   if (worstDay && worstDay.wet < 6) flags.push({ warn:true, t:"Low wet nappies on one day", b:"Only "+worstDay.wet+" wet nappies on "+shortDate(worstDay.at)+"." });
+  var lowest = vitals.filter(function(l){ return l.spo2 != null; })
+                     .reduce(function(a,l){ return (!a || l.spo2 < a.spo2) ? l : a; }, null);
+  if (lowest && lowest.spo2 < 92)
+    flags.push({ warn:true, t:"Oxygen (SpO₂) under 92%", b:"Lowest "+trimNum(lowest.spo2)+"% at "+fmtTime(lowest.at)+" "+fmtDay(lowest.at)+"." });
   if (hottest && tempToUnit(hottest,unit) >= (unit==="F"?102.2:39))
     flags.push({ warn:true, t:"Temperature at or above "+(unit==="F"?"102.2°F":"39°C"), b:trimNum(tempToUnit(hottest,unit))+"°"+unit+" at "+fmtTime(hottest.at)+" "+fmtDay(hottest.at)+"." });
   if (wDelta != null){
@@ -3591,7 +3662,17 @@ function buildReport(days){
       }).join("")+'</tbody></table>'
     : '<p class="rpt-empty">No temperatures recorded in this period.</p>';
 
-  var notes = liveLogs().filter(function(l){ return l.at>=from && l.at<=to && l.note && logType(l)!=="temp"; })
+  obs += '<h2>Oxygen (SpO₂) and pulse</h2>';
+  obs += vitals.length ? '<table class="rpt"><thead><tr><th>When</th><th class="num">SpO₂</th><th class="num">Pulse</th><th>Person</th><th>Note</th><th>By</th></tr></thead><tbody>'+
+      vitals.slice().reverse().map(function(l){
+        return '<tr><td>'+fmtTime(l.at)+' '+shortDate(l.at)+'</td>'+
+          '<td class="num"'+(vitalsLow(l)?' style="font-weight:700"':'')+'>'+(l.spo2!=null?trimNum(l.spo2)+'%':'—')+'</td>'+
+          '<td class="num">'+(l.pulse!=null?trimNum(l.pulse)+' bpm':'—')+'</td>'+
+          '<td>'+esc(l.person||'—')+'</td><td>'+esc(l.note||'')+'</td><td>'+esc(l.by||'')+'</td></tr>';
+      }).join("")+'</tbody></table>'
+    : '<p class="rpt-empty">No oxygen or pulse readings in this period.</p>';
+
+  var notes = liveLogs().filter(function(l){ return l.at>=from && l.at<=to && l.note && logType(l)!=="temp" && logType(l)!=="vitals"; })
                         .sort(function(a,b){ return b.at-a.at; });
   obs += '<h2>Notes</h2>';
   obs += notes.length ? '<table class="rpt"><thead><tr><th>When</th><th>Entry</th><th>Note</th><th>By</th></tr></thead><tbody>'+
