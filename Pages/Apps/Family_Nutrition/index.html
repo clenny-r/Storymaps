@@ -1,0 +1,1299 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Family Nutrition | TWC Apps</title>
+<meta name="description" content="Log what each person in the family eats, see what is missing from their diet, and get food ideas." />
+<meta name="theme-color" content="#22B08C" />
+<link rel="icon" type="image/x-icon" href="https://www.twcministries.net/favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --cream:#FFFCF6; --paper:#FFFFFF; --ink:#2A3348; --soft:#6E7A96; --faint:#98A2BC;
+  --line:#ECE6DA; --line-2:#F5F1E8;
+  --mint:#22B08C; --mint-l:#E2F7F0;
+  --sky:#3C8FEF;  --sky-l:#E8F2FF;
+  --peach:#FF8A5B;--peach-l:#FFEDE3;
+  --grape:#8A6BF2;--grape-l:#EFEAFF;
+  --rose:#EF5570; --rose-l:#FFE9ED;
+  --sun:#FFB43D;  --sun-l:#FFF4DE;
+  --vf:#22B08C; --pr:#FF8A5B; --wg:#C98A2B; --rg:#F2C46B; --x:#C9C3D6;
+  --display:"Baloo 2",system-ui,sans-serif;
+  --body:"Nunito Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --r:20px; --r-s:14px;
+  --shadow:0 6px 22px rgba(42,51,72,.07);
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+[hidden]{display:none!important}
+body{background:var(--cream);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.5;
+  -webkit-text-size-adjust:100%;padding:0 0 calc(96px + env(safe-area-inset-bottom));overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background:radial-gradient(700px 420px at 10% -8%,rgba(34,176,140,.14),transparent 62%),
+             radial-gradient(620px 420px at 95% 0%,rgba(255,180,61,.16),transparent 60%)}
+.wrap{max-width:760px;margin:0 auto;padding:0 16px}
+h1,h2,h3,h4{font-family:var(--display);font-weight:700;margin:0;letter-spacing:-.01em}
+button{font:inherit;color:inherit}
+a{color:var(--sky)}
+
+/* top bar */
+.topbar{display:flex;align-items:center;gap:10px;padding:16px 0 6px}
+.badge{width:44px;height:44px;border-radius:14px;display:grid;place-items:center;font-size:24px;
+  background:linear-gradient(135deg,var(--mint),var(--sky));box-shadow:0 6px 16px rgba(34,176,140,.3);flex:0 0 auto}
+.brand{margin-right:auto;min-width:0}
+.brand b{display:block;font-family:var(--display);font-size:23px;line-height:1.05;font-weight:800}
+.brand span{font-size:12px;color:var(--soft);font-weight:700}
+.sync{border:1px solid var(--line);background:var(--paper);border-radius:999px;padding:7px 12px;font-size:12.5px;
+  font-weight:800;display:inline-flex;gap:6px;align-items:center;cursor:pointer;white-space:nowrap}
+.sync i{width:8px;height:8px;border-radius:50%;background:var(--faint)}
+.sync.ok i{background:var(--mint)} .sync.bad i{background:var(--rose)} .sync.busy i{background:var(--sun)}
+
+/* people */
+.people{display:flex;gap:8px;overflow-x:auto;padding:8px 0 10px;scrollbar-width:none}
+.people::-webkit-scrollbar{display:none}
+.pchip{flex:0 0 auto;display:flex;align-items:center;gap:8px;padding:6px 14px 6px 6px;border-radius:999px;cursor:pointer;
+  background:var(--paper);border:2px solid var(--line);font-weight:800;font-size:14px}
+.pchip .av{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-size:20px;background:var(--line-2)}
+.pchip small{display:block;font-size:11px;color:var(--soft);font-weight:700;line-height:1}
+.pchip[aria-pressed=true]{border-color:var(--mint);background:var(--mint-l)}
+.pchip.add{padding:6px 14px;color:var(--soft)}
+
+/* cards */
+.card{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);padding:16px;margin:12px 0;box-shadow:var(--shadow)}
+.card h3{font-size:19px;display:flex;align-items:center;gap:8px}
+.card h3 .sp{margin-left:auto}
+.muted{color:var(--soft);font-size:13.5px}
+.tiny{font-size:12px;color:var(--soft)}
+
+/* day nav */
+.daynav{display:flex;align-items:center;gap:8px;margin-top:4px}
+.daynav .d{font-family:var(--display);font-weight:800;font-size:20px;margin-right:auto}
+.iconbtn{width:40px;height:40px;border-radius:12px;border:1px solid var(--line);background:var(--paper);cursor:pointer;
+  font-size:18px;font-weight:800;display:grid;place-items:center}
+.seg{display:inline-flex;background:var(--line-2);border-radius:12px;padding:3px}
+.seg button{border:0;background:none;padding:7px 12px;border-radius:10px;font-weight:800;font-size:13px;cursor:pointer;color:var(--soft)}
+.seg button[aria-pressed=true]{background:var(--paper);color:var(--ink);box-shadow:0 2px 6px rgba(42,51,72,.1)}
+
+/* plate */
+.plate-wrap{display:grid;grid-template-columns:170px 1fr;gap:14px;align-items:center}
+.plate-wrap svg{width:170px;height:170px;display:block}
+.legend{display:grid;gap:7px}
+.lg{display:flex;align-items:center;gap:8px;font-weight:700;font-size:14px}
+.lg i{width:14px;height:14px;border-radius:4px;flex:0 0 auto}
+.lg .n{margin-left:auto;font-weight:800}
+.lg .goal{font-size:11.5px;color:var(--soft);font-weight:700}
+.plate-msg{margin-top:10px;padding:10px 12px;border-radius:12px;background:var(--mint-l);font-weight:700;font-size:14px}
+.plate-msg.warn{background:var(--sun-l)}
+@media (max-width:420px){ .plate-wrap{grid-template-columns:140px 1fr} .plate-wrap svg{width:140px;height:140px} }
+
+/* nutrient tiles */
+.tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(98px,1fr));gap:10px;margin-top:12px}
+.tile{border:1px solid var(--line);border-radius:16px;padding:10px 6px 8px;text-align:center;cursor:pointer;background:var(--paper)}
+.tile svg{width:62px;height:62px;display:block;margin:0 auto}
+.tile .nm{font-weight:800;font-size:13px;line-height:1.15;margin-top:4px}
+.tile .am{font-size:11.5px;color:var(--soft);font-weight:700}
+.tile.low{background:var(--rose-l);border-color:#f7c6cf} .tile.mid{background:var(--sun-l);border-color:#f8dfae} .tile.ok{background:var(--mint-l);border-color:#bfe9dc}
+.key{display:flex;gap:12px;flex-wrap:wrap;margin-top:10px;font-size:12px;font-weight:700;color:var(--soft)}
+.key span{display:inline-flex;gap:5px;align-items:center}.key i{width:10px;height:10px;border-radius:50%}
+
+/* suggestions */
+.gap{border-radius:16px;padding:12px;margin-top:10px;background:var(--line-2)}
+.gap .hd{font-weight:800;display:flex;gap:8px;align-items:center}
+.gap .hd .em{font-size:22px}
+.gap p{margin:4px 0 8px;font-size:13.5px;color:var(--soft)}
+.ideas{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;scrollbar-width:thin}
+.idea{flex:0 0 auto;width:118px;border:1px solid var(--line);background:var(--paper);border-radius:14px;padding:8px;cursor:pointer;text-align:center}
+.idea .pic{font-size:30px;line-height:1.1}
+.idea b{display:block;font-size:12.5px;line-height:1.2;margin-top:3px}
+.idea small{display:block;font-size:11px;color:var(--soft);font-weight:700;margin-top:2px}
+.idea .pct{display:inline-block;margin-top:4px;background:var(--mint-l);color:#0f7a5f;border-radius:999px;padding:1px 8px;font-size:11.5px;font-weight:800}
+.tipline{font-size:12.5px;color:var(--soft);margin-top:6px}
+
+/* warnings */
+.warn{display:flex;gap:10px;padding:10px 12px;border-radius:12px;background:var(--sun-l);margin-top:8px;font-size:14px}
+.warn.red{background:var(--rose-l)}
+.warn .em{font-size:20px;line-height:1.2}
+
+/* meals */
+.meal{margin-top:12px}
+.meal h4{font-size:15px;color:var(--soft);display:flex;align-items:center;gap:6px}
+.meal h4 button{margin-left:auto}
+.entry{display:flex;align-items:center;gap:10px;padding:9px 4px;border-bottom:1px solid var(--line-2);cursor:pointer}
+.entry:last-child{border-bottom:0}
+.entry .pic{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;font-size:24px;background:var(--line-2);flex:0 0 auto}
+.entry .tx{min-width:0;flex:1}
+.entry .tx b{display:block;font-size:14.5px;line-height:1.2}
+.entry .tx span{font-size:12.5px;color:var(--soft)}
+.entry .tg{font-size:11px;font-weight:800;border-radius:999px;padding:2px 8px;background:var(--sun-l);color:#9a6400}
+.empty{text-align:center;padding:18px 8px;color:var(--soft)}
+.empty .big{font-size:46px}
+
+/* buttons */
+.btn{border:0;border-radius:14px;padding:12px 18px;font-weight:800;cursor:pointer;background:var(--mint);color:#fff;font-size:15px}
+.btn.ghost{background:var(--paper);color:var(--ink);border:1px solid var(--line)}
+.btn.small{padding:7px 12px;font-size:13px;border-radius:11px}
+.btn.wide{width:100%}
+.btn.sky{background:var(--sky)} .btn.danger{background:var(--rose-l);color:var(--rose);border:0}
+.link{border:0;background:none;color:var(--sky);font-weight:800;cursor:pointer;padding:4px}
+.fab{position:fixed;right:16px;bottom:calc(84px + env(safe-area-inset-bottom));z-index:30;border:0;border-radius:999px;
+  padding:15px 22px;font-weight:800;font-size:16px;background:linear-gradient(135deg,var(--mint),var(--sky));color:#fff;
+  box-shadow:0 12px 28px rgba(34,176,140,.4);cursor:pointer;display:flex;gap:8px;align-items:center}
+.fab span{font-size:22px;line-height:1}
+
+/* bottom nav */
+.nav{position:fixed;left:0;right:0;bottom:0;z-index:40;background:rgba(255,255,255,.96);backdrop-filter:blur(8px);
+  border-top:1px solid var(--line);display:flex;justify-content:center;padding-bottom:env(safe-area-inset-bottom)}
+.nav button{flex:1;max-width:160px;border:0;background:none;padding:9px 4px 8px;cursor:pointer;font-weight:800;font-size:11.5px;color:var(--soft)}
+.nav button div{font-size:22px;line-height:1.1}
+.nav button[aria-current=true]{color:var(--mint)}
+
+/* sheets */
+.back{position:fixed;inset:0;background:rgba(42,51,72,.42);z-index:60;display:flex;align-items:flex-end;justify-content:center}
+.sheet{background:var(--cream);width:100%;max-width:640px;max-height:92vh;overflow:auto;border-radius:24px 24px 0 0;
+  padding:16px 16px calc(20px + env(safe-area-inset-bottom));position:relative;animation:up .22s ease-out}
+@keyframes up{from{transform:translateY(40px);opacity:.4}to{transform:none;opacity:1}}
+.sheet .x{position:absolute;right:12px;top:10px;width:38px;height:38px;border-radius:50%;border:0;background:var(--line-2);font-size:20px;cursor:pointer}
+.sheet h3{font-size:21px;margin:2px 44px 10px 0}
+.search{width:100%;padding:13px 14px 13px 42px;border:2px solid var(--line);border-radius:14px;font:inherit;font-size:16px;background:var(--paper)
+  url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%236E7A96' stroke-width='2.4' stroke-linecap='round'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cpath d='m20 20-3.5-3.5'/%3E%3C/svg%3E") 13px 50% no-repeat}
+.search:focus{outline:none;border-color:var(--mint)}
+.cats{display:flex;gap:8px;overflow-x:auto;padding:10px 0;scrollbar-width:none}
+.cats::-webkit-scrollbar{display:none}
+.cat{flex:0 0 auto;border:1px solid var(--line);background:var(--paper);border-radius:999px;padding:7px 12px;font-weight:800;font-size:13px;cursor:pointer}
+.cat[aria-pressed=true]{background:var(--ink);color:#fff;border-color:var(--ink)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:8px}
+.fd{border:1px solid var(--line);background:var(--paper);border-radius:16px;padding:10px 6px;text-align:center;cursor:pointer;min-height:96px}
+.fd .pic{font-size:32px;line-height:1.15}
+.fd b{display:block;font-size:12.5px;line-height:1.2;margin-top:4px}
+.fd small{font-size:10.5px;color:var(--soft);font-weight:700}
+.sec{font-weight:800;font-size:13px;color:var(--soft);margin:14px 0 6px;text-transform:uppercase;letter-spacing:.05em}
+.hero{display:flex;gap:14px;align-items:center;margin-bottom:8px}
+.hero .pic{width:72px;height:72px;border-radius:20px;background:var(--paper);border:1px solid var(--line);display:grid;place-items:center;font-size:42px;flex:0 0 auto}
+.who{border:1px solid var(--line);background:var(--paper);border-radius:16px;padding:10px 12px;margin-top:8px}
+.who .top{display:flex;align-items:center;gap:8px;font-weight:800}
+.who .top .av{font-size:22px}
+.who .top input{margin-left:auto;width:22px;height:22px;accent-color:var(--mint)}
+.who.off{opacity:.55}
+.por{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.por button{border:1px solid var(--line);background:var(--cream);border-radius:12px;padding:7px 10px;font-weight:800;font-size:13px;cursor:pointer}
+.por button[aria-pressed=true]{background:var(--mint);color:#fff;border-color:var(--mint)}
+.amt{display:flex;align-items:center;gap:8px;margin-top:8px}
+.amt button{width:38px;height:38px;border-radius:12px;border:1px solid var(--line);background:var(--paper);font-size:20px;font-weight:800;cursor:pointer}
+.amt output{min-width:58px;text-align:center;font-weight:800;font-size:17px}
+.amt .g{margin-left:auto;font-size:12.5px;color:var(--soft);font-weight:700}
+.hands{display:flex;gap:10px;flex-wrap:wrap;font-size:12.5px;color:var(--soft);font-weight:700;margin-top:6px}
+.field{display:flex;flex-direction:column;gap:4px;margin-top:10px}
+.field label{font-weight:800;font-size:13.5px}
+.field input,.field select,.field textarea{padding:11px 12px;border:2px solid var(--line);border-radius:12px;font:inherit;background:var(--paper)}
+.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--mint)}
+.row{display:flex;gap:10px;flex-wrap:wrap}.row>.field{flex:1 1 140px}
+.emojis{display:flex;gap:6px;flex-wrap:wrap}
+.emojis button{width:44px;height:44px;border-radius:12px;border:2px solid var(--line);background:var(--paper);font-size:24px;cursor:pointer}
+.emojis button[aria-pressed=true]{border-color:var(--mint);background:var(--mint-l)}
+.nbar{display:grid;grid-template-columns:30px 1fr 118px;gap:8px;align-items:center;margin:7px 0;font-size:13.5px}
+.nbar .em{font-size:19px;text-align:center}
+.nbar .tr{height:10px;background:var(--line-2);border-radius:99px;overflow:hidden;margin-top:3px}
+.nbar .tr i{display:block;height:100%;border-radius:99px;background:var(--mint)}
+.nbar b{font-size:13px}
+.nbar .v{font-weight:800;font-size:12.5px;text-align:right;white-space:nowrap}
+.note{padding:10px 12px;border-radius:12px;background:var(--sky-l);font-size:13.5px;margin-top:10px}
+.note.sun{background:var(--sun-l)}
+.listrow{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--line-2)}
+.listrow:last-child{border-bottom:0}
+.listrow .pic{font-size:26px}
+.listrow .tx{flex:1;min-width:0}
+.listrow .tx b{display:block;font-size:14.5px}
+.listrow .tx span{font-size:12.5px;color:var(--soft)}
+.pill{font-size:11px;font-weight:800;border-radius:999px;padding:3px 9px;background:var(--line-2);color:var(--soft);white-space:nowrap}
+.pill.ok{background:var(--mint-l);color:#0f7a5f}.pill.wait{background:var(--sun-l);color:#9a6400}
+.heat{display:grid;gap:3px;margin-top:10px;font-size:11.5px}
+.heat .c{height:28px;border-radius:7px;display:grid;place-items:center;font-weight:800;color:#2A3348}
+.heat .h{font-weight:800;color:var(--soft);text-align:center}
+.heat .rl{font-weight:800;display:flex;align-items:center;gap:4px;white-space:nowrap}
+.toast{position:fixed;left:50%;bottom:calc(150px + env(safe-area-inset-bottom));transform:translateX(-50%);background:var(--ink);color:#fff;
+  padding:11px 16px;border-radius:14px;font-weight:700;font-size:14px;z-index:90;max-width:92vw;box-shadow:0 10px 30px rgba(0,0,0,.25);display:flex;gap:12px;align-items:center}
+.toast button{border:0;background:none;color:var(--sun);font-weight:800;cursor:pointer}
+.welcome{text-align:center;padding:26px 16px}
+.welcome .big{font-size:60px}
+.welcome h2{font-size:26px;margin:6px 0}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="topbar">
+    <div class="badge" aria-hidden="true">🥗</div>
+    <div class="brand"><b>Family Nutrition</b><span>What we ate, what we need</span></div>
+    <button class="sync" id="syncChip" type="button"><i></i><span id="syncTxt">On this phone</span></button>
+  </header>
+  <nav class="people" id="people" aria-label="Choose a person"></nav>
+
+  <!-- TODAY -->
+  <main id="tab-today" data-tab="today">
+    <div class="daynav">
+      <button class="iconbtn" id="dPrev" aria-label="Previous day">‹</button>
+      <div class="d" id="dLabel">Today</div>
+      <button class="iconbtn" id="dNext" aria-label="Next day">›</button>
+    </div>
+    <div style="display:flex;gap:8px;align-items:center;margin-top:8px;flex-wrap:wrap">
+      <div class="seg" id="rangeSeg" role="group" aria-label="Period">
+        <button data-r="day" aria-pressed="true">This day</button>
+        <button data-r="week" aria-pressed="false">Last 7 days</button>
+      </div>
+      <button class="link" id="dToday" hidden>Back to today</button>
+    </div>
+    <div id="todayBody"></div>
+  </main>
+
+  <!-- WEEK -->
+  <main id="tab-week" data-tab="week" hidden><div id="weekBody"></div></main>
+
+  <!-- FOODS -->
+  <main id="tab-foods" data-tab="foods" hidden>
+    <div class="card">
+      <h3>🔎 Food guide</h3>
+      <p class="muted" style="margin:4px 0 10px">Look up any food, or pick a nutrient to see the best sources for the person selected above.</p>
+      <input class="search" id="fgSearch" placeholder="Search foods, e.g. callaloo" autocomplete="off" />
+      <div class="cats" id="fgBest"></div>
+      <div id="fgList"></div>
+    </div>
+  </main>
+
+  <!-- FAMILY -->
+  <main id="tab-family" data-tab="family" hidden><div id="familyBody"></div></main>
+</div>
+
+<button class="fab" id="fab" type="button"><span>＋</span> Add food</button>
+
+<nav class="nav" id="nav">
+  <button data-go="today" aria-current="true"><div>🍽️</div>Day</button>
+  <button data-go="week"><div>📅</div>Week</button>
+  <button data-go="foods"><div>🔎</div>Foods</button>
+  <button data-go="family"><div>👨‍👩‍👧</div>Family</button>
+</nav>
+
+<script src="foods.js"></script>
+<script>
+(function(){
+"use strict";
+var APP_VERSION = "1.0 · 29 Oct 2026";
+var API_DEFAULT = "https://twc-family-nutrition.kd7bgn7q2z.workers.dev";
+var STORE_KEY = "twc-nutrition-v1";
+var DAY = 86400000;
+
+/* ═══ 1. Nutrients and Health Canada reference values ═════════════════════════
+   Dietary Reference Intakes (DRIs) from Health Canada's tables (checked Oct 2026):
+   canada.ca ... dietary-reference-intakes/tables (vitamins, elements, macronutrients).
+   Values are RDA (Recommended Dietary Allowance) or AI (Adequate Intake) per day.
+   Sodium uses the CDRR (Chronic Disease Risk Reduction intake), a "keep under" amount. */
+var K = window.NUTRIENT_KEYS;            // order of values inside each food
+var IX = {}; K.forEach(function(k,i){ IX[k]=i; });
+var NUTS = [
+  { k:"pro", n:"Protein",     e:"💪", u:"g",  why:"growth and repair" },
+  { k:"fe",  n:"Iron",        e:"🩸", u:"mg", why:"healthy blood and a growing brain" },
+  { k:"ca",  n:"Calcium",     e:"🦴", u:"mg", why:"strong bones and teeth" },
+  { k:"vd",  n:"Vitamin D",   e:"☀️", u:"µg", why:"bones, with calcium" },
+  { k:"vc",  n:"Vitamin C",   e:"🍊", u:"mg", why:"immunity, and it helps the body take in iron" },
+  { k:"va",  n:"Vitamin A",   e:"🥕", u:"µg", why:"eyes, skin and immunity" },
+  { k:"zn",  n:"Zinc",        e:"🛡️", u:"mg", why:"growth and fighting infections" },
+  { k:"fol", n:"Folate",      e:"🥬", u:"µg", why:"making new cells" },
+  { k:"b12", n:"Vitamin B12", e:"🔋", u:"µg", why:"nerves and blood" },
+  { k:"fib", n:"Fibre",       e:"🌾", u:"g",  why:"a happy tummy and regular poops" },
+  { k:"k",   n:"Potassium",   e:"🍌", u:"mg", why:"heart and muscles" }
+];
+var NUTMAP = {}; NUTS.forEach(function(n){ NUTMAP[n.k]=n; });
+// how much each gap matters when ranking ideas (iron, calcium and vitamin D first for children)
+var PRIORITY = { fe:1.3, ca:1.2, vd:1.0, pro:1.15, vc:1, zn:1, fol:.95, b12:.95, va:.9, fib:.7, k:.6 };
+
+function ageYears(born, onMs){
+  if (!born) return null;
+  var b = new Date(born+"T12:00:00"), d = new Date(onMs||Date.now());
+  var a = d.getFullYear()-b.getFullYear();
+  if (d.getMonth()<b.getMonth() || (d.getMonth()===b.getMonth() && d.getDate()<b.getDate())) a--;
+  return a;
+}
+function ageText(p){
+  var a = ageYears(p.born);
+  if (a == null) return "";
+  if (a >= 2) return a+" yrs";
+  var b = new Date(p.born+"T12:00:00"), d = new Date();
+  var m = (d.getFullYear()-b.getFullYear())*12 + d.getMonth()-b.getMonth() - (d.getDate()<b.getDate()?1:0);
+  return m+" mo";
+}
+function targets(p, onMs){
+  var a = ageYears(p.born, onMs);
+  if (a == null || a < 1) return null;
+  var f = p.sex === "f", st = (f && a >= 14) ? (p.stage||"") : "", teen = a <= 18;
+  var t = {};
+  function pick(v13, v48, v913, mf1418, mf19, mf51, mf71){
+    if (a<=3) return v13; if (a<=8) return v48; if (a<=13) return Array.isArray(v913)?(f?v913[1]:v913[0]):v913;
+    if (a<=18) return f?mf1418[1]:mf1418[0];
+    if (a<=50) return f?mf19[1]:mf19[0];
+    if (a<=70) return f?mf51[1]:mf51[0];
+    return f?mf71[1]:mf71[0];
+  }
+  t.pro = pick(13,19,34,[52,46],[56,46],[56,46],[56,46]);
+  t.fib = pick(19,25,[31,26],[38,26],[38,25],[30,21],[30,21]);
+  t.ca  = pick(700,1000,1300,[1300,1300],[1000,1000],[1000,1200],[1200,1200]);
+  t.fe  = pick(7,10,8,[11,15],[8,18],[8,8],[8,8]);
+  t.zn  = pick(3,5,8,[11,9],[11,8],[11,8],[11,8]);
+  t.k   = pick(2000,2300,[2500,2300],[3000,2300],[3400,2600],[3400,2600],[3400,2600]);
+  t.vc  = pick(15,25,45,[75,65],[90,75],[90,75],[90,75]);
+  t.va  = pick(300,400,600,[900,700],[900,700],[900,700],[900,700]);
+  t.vd  = a > 70 ? 20 : 15;
+  t.fol = pick(150,200,300,[400,400],[400,400],[400,400],[400,400]);
+  t.b12 = pick(0.9,1.2,1.8,[2.4,2.4],[2.4,2.4],[2.4,2.4],[2.4,2.4]);
+  var na = a<=3?1200 : a<=8?1500 : a<=13?1800 : 2300;
+  if (st === "preg"){
+    t.pro=71; t.fib=28; t.fe=27; t.zn=teen?12:11; t.k=teen?2600:2900; t.vc=teen?80:85; t.va=teen?750:770; t.fol=600; t.b12=2.6; t.ca=teen?1300:1000;
+  } else if (st === "lact"){
+    t.pro=71; t.fib=29; t.fe=teen?10:9; t.zn=teen?13:12; t.k=teen?2500:2800; t.vc=teen?115:120; t.va=teen?1200:1300; t.fol=500; t.b12=2.8; t.ca=teen?1300:1000;
+  }
+  return { need:t, naMax:na, age:a };
+}
+
+/* ═══ 2. Storage and state ═════════════════════════════════════════════════ */
+function uid(){ return Date.now().toString(36)+Math.random().toString(36).slice(2,7); }
+var mem = {};
+var store = {
+  get:function(k){ try{ return localStorage.getItem(k); }catch(e){ return mem[k]||null; } },
+  set:function(k,v){ try{ localStorage.setItem(k,v); }catch(e){ mem[k]=v; } }
+};
+function blank(){
+  return { v:1, people:[], logs:[], custom:[], requests:[],
+    sync:{ api:API_DEFAULT, code:"", name:"", rev:0, lastAt:0 },
+    ui:{ pid:null, tab:"today", range:"day", day:null, me:"" } };
+}
+var S = blank();
+(function load(){
+  try{
+    var d = JSON.parse(store.get(STORE_KEY)||"null");
+    if (d && d.v === 1){ S = Object.assign(blank(), d); S.sync = Object.assign(blank().sync, d.sync||{}); S.ui = Object.assign(blank().ui, d.ui||{}); }
+  }catch(e){}
+})();
+var dirty = false, pushTimer = null;
+function save(changed){
+  store.set(STORE_KEY, JSON.stringify(S));
+  if (changed){ dirty = true; schedulePush(); }
+}
+function live(arr){ return arr.filter(function(x){ return x && !x.deleted; }); }
+function people(){ return live(S.people); }
+function person(id){ return people().filter(function(p){ return p.id===id; })[0] || people()[0] || null; }
+function curPerson(){ var p = person(S.ui.pid); if (p) S.ui.pid = p.id; return p; }
+
+/* ═══ 3. Foods ═════════════════════════════════════════════════════════════ */
+var FOODS = window.FOODS || [];
+var FMAP = {}; FOODS.forEach(function(f){ FMAP[f.id]=f; });
+var REQ_TO_FOOD = {};            // request ids that have since been researched and added
+FOODS.forEach(function(f){ (f.r||[]).forEach(function(r){ REQ_TO_FOOD[r]=f.id; }); });
+var CATS = window.FOOD_CATS || [];
+function food(id){
+  if (REQ_TO_FOOD[id] && FMAP[REQ_TO_FOOD[id]]) return FMAP[REQ_TO_FOOD[id]];
+  if (FMAP[id]) return FMAP[id];
+  var c = live(S.custom).filter(function(x){ return x.id===id; })[0];
+  return c || { id:id, n:"Unknown food", e:"❓", c:"custom", p:{}, v:K.map(function(){ return null; }), pt:[["1 portion",100]], s:"" };
+}
+function allFoods(){ return FOODS.concat(live(S.custom)); }
+function isPending(f){ return f.c === "custom" && f.v.every(function(v){ return v==null; }); }
+function amountOf(f, k, g){ var v = f.v[IX[k]]; return v == null ? null : v*g/100; }
+function kidPortion(f){ for (var i=0;i<f.pt.length;i++){ if (f.pt[i][0].indexOf("🧒")>=0) return i; } return -1; }
+function cleanLabel(s){ return String(s).replace("🧒","").trim(); }
+
+/* ═══ 4. Dates ═════════════════════════════════════════════════════════════ */
+function dayKey(ms){ var d=new Date(ms); return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0"); }
+function keyMs(k){ return new Date(k+"T12:00:00").getTime(); }
+function today(){ return dayKey(Date.now()); }
+function curDay(){ return S.ui.day || today(); }
+function dayLabel(k){
+  var t = today();
+  if (k === t) return "Today";
+  if (k === dayKey(Date.now()-DAY)) return "Yesterday";
+  return new Date(keyMs(k)).toLocaleDateString(undefined,{ weekday:"short", day:"numeric", month:"short" });
+}
+function mealNow(){ var h=new Date().getHours(); return h<10.5?"b": h<15?"l": h<21?"d":"s"; }
+var MEALS = [["b","Breakfast","🌅"],["l","Lunch","☀️"],["d","Dinner","🌙"],["s","Snacks","🍎"]];
+
+/* ═══ 5. Totals ════════════════════════════════════════════════════════════ */
+function logsFor(pid, fromKey, toKey){
+  return live(S.logs).filter(function(l){ return l.pid===pid && l.day>=fromKey && l.day<=toKey; });
+}
+function sum(logs){
+  var t = {}, miss = {}, plate = { vf:0, pr:0, wg:0, rg:0 }, treats = 0, pending = 0;
+  K.forEach(function(k){ t[k]=0; });
+  logs.forEach(function(l){
+    var f = food(l.fid);
+    if (isPending(f)){ pending++; return; }
+    K.forEach(function(k){
+      var v = amountOf(f,k,l.g);
+      if (v == null) miss[k] = (miss[k]||0)+1; else t[k] += v;
+    });
+    if (f.sv){
+      ["vf","pr","wg","rg"].forEach(function(g){ if (f.p[g]) plate[g] += l.g/f.sv*f.p[g]; });
+    }
+    if (f.p.x && f.p.x >= .5) treats++;
+  });
+  return { t:t, miss:miss, plate:plate, treats:treats, pending:pending, n:logs.length };
+}
+function periodFor(pid){
+  var end = curDay();
+  if (S.ui.range === "day") return { from:end, to:end, days:1, label:dayLabel(end) };
+  var from = dayKey(keyMs(end)-6*DAY);
+  var logs = logsFor(pid, from, end);
+  var seen = {}; logs.forEach(function(l){ seen[l.day]=1; });
+  var n = Math.max(1, Object.keys(seen).length);
+  return { from:from, to:end, days:n, label:"Daily average, "+n+" day"+(n===1?"":"s")+" with food logged" };
+}
+function pctClass(p){ return p >= 100 ? "ok" : p >= 66 ? "mid" : "low"; }
+var COL = { ok:"#22B08C", mid:"#FFB43D", low:"#EF5570" };
+
+/* ═══ 6. Rendering helpers ═════════════════════════════════════════════════ */
+function el(id){ return document.getElementById(id); }
+function esc(s){ return String(s==null?"":s).replace(/[&<>"']/g,function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c]; }); }
+function fmt(v, u){
+  if (v == null) return "?";
+  var d = v >= 100 ? 0 : v >= 10 ? 0 : 1;
+  return (Math.round(v*Math.pow(10,d))/Math.pow(10,d)).toLocaleString()+" "+u;
+}
+function ring(p, cls, emoji){
+  var r = 25, c = 2*Math.PI*r, v = Math.max(0, Math.min(100, p));
+  return '<svg viewBox="0 0 62 62" aria-hidden="true"><circle cx="31" cy="31" r="'+r+'" fill="none" stroke="#fff" stroke-width="7"/>'+
+    '<circle cx="31" cy="31" r="'+r+'" fill="none" stroke="'+COL[cls]+'" stroke-width="7" stroke-linecap="round" '+
+    'stroke-dasharray="'+(c*v/100).toFixed(1)+' '+c.toFixed(1)+'" transform="rotate(-90 31 31)"/>'+
+    '<text x="31" y="37" text-anchor="middle" font-size="19">'+emoji+'</text></svg>';
+}
+var toastT = null;
+function toast(msg, act){
+  var old = document.querySelector(".toast"); if (old) old.remove();
+  var t = document.createElement("div"); t.className = "toast"; t.innerHTML = "<span>"+esc(msg)+"</span>";
+  if (act){ var b = document.createElement("button"); b.textContent = act.label; b.onclick = function(){ act.fn(); t.remove(); }; t.appendChild(b); }
+  document.body.appendChild(t);
+  clearTimeout(toastT); toastT = setTimeout(function(){ t.remove(); }, act?6000:2600);
+}
+function sheet(html, onClick){
+  closeSheet();
+  var tt = document.querySelector(".toast"); if (tt) tt.remove();
+  var b = document.createElement("div"); b.className = "back"; b.id = "sheet";
+  b.innerHTML = '<div class="sheet" role="dialog"><button class="x" data-close aria-label="Close">×</button>'+html+'</div>';
+  b.addEventListener("click", function(e){
+    if (e.target === b || e.target.closest("[data-close]")){ closeSheet(); return; }
+    if (onClick) onClick(e, b);
+  });
+  document.body.appendChild(b);
+  document.body.style.overflow = "hidden";
+  return b;
+}
+function closeSheet(){ var s = el("sheet"); if (s) s.remove(); document.body.style.overflow = ""; }
+
+/* ═══ 7. People bar ════════════════════════════════════════════════════════ */
+function renderPeople(){
+  var p = curPerson();
+  el("people").innerHTML = people().map(function(x){
+    return '<button class="pchip" data-pid="'+x.id+'" aria-pressed="'+(p&&p.id===x.id)+'"><span class="av">'+esc(x.emoji||"🙂")+'</span>'+
+      '<span>'+esc(x.name)+'<small>'+esc(ageText(x))+'</small></span></button>';
+  }).join("") + '<button class="pchip add" data-addperson>＋ Person</button>';
+}
+document.addEventListener("click", function(e){
+  var c = e.target.closest && e.target.closest(".pchip[data-pid]");
+  if (c){ S.ui.pid = c.getAttribute("data-pid"); save(); renderAll(); return; }
+  if (e.target.closest && e.target.closest("[data-addperson]")) openPerson(null);
+});
+
+/* ═══ 8. Day tab ═══════════════════════════════════════════════════════════ */
+function renderToday(){
+  var p = curPerson(), box = el("todayBody");
+  var k = curDay();
+  el("dLabel").textContent = dayLabel(k);
+  el("dToday").hidden = k === today();
+  el("dNext").disabled = k >= today(); el("dNext").style.opacity = k >= today() ? .35 : 1;
+  Array.prototype.forEach.call(el("rangeSeg").children, function(b){ b.setAttribute("aria-pressed", String(b.getAttribute("data-r")===S.ui.range)); });
+  if (!p){
+    box.innerHTML = '<div class="card welcome"><div class="big">👨‍👩‍👧</div><h2>Who is in your family?</h2>'+
+      '<p class="muted">Add each person with their birthday. The app uses Health Canada\'s daily needs for their age to show what is missing.</p>'+
+      '<button class="btn" data-addperson>＋ Add the first person</button></div>';
+    el("fab").hidden = true; return;
+  }
+  el("fab").hidden = false;
+  var per = periodFor(p.id);
+  var logs = logsFor(p.id, per.from, per.to);
+  var s = sum(logs), T = targets(p, keyMs(k));
+  var html = "";
+
+  /* plate */
+  var pl = s.plate, d = per.days;
+  var vf = pl.vf/d, pr = pl.pr/d, gr = (pl.wg+pl.rg)/d, wg = pl.wg/d, tot = vf+pr+gr;
+  html += '<div class="card"><h3>🍽️ The plate <span class="sp tiny">'+esc(S.ui.range==="day"?"servings":"servings per day")+'</span></h3>';
+  if (!logs.length){
+    html += '<div class="empty"><div class="big">🍽️</div><b>Nothing logged '+(S.ui.range==="day"?"for this day":"in these 7 days")+' yet.</b><br>'+
+      '<span class="muted">Tap <b>＋ Add food</b> to log what '+esc(p.name)+' ate.</span></div>';
+  } else {
+    html += '<div class="plate-wrap">'+plateSvg(vf,pr,gr,wg)+'<div class="legend">'+
+      lg("var(--vf)","🥦 Veg & fruit",vf,"aim for half")+
+      lg("var(--pr)","🍗 Protein",pr,"about a quarter")+
+      lg("var(--wg)","🌾 Grains",gr,"a quarter, mostly whole")+
+      (s.treats? '<div class="lg"><i style="background:var(--x)"></i>🍪 Treats and sugary drinks<span class="n">'+s.treats+'</span></div>':'')+
+      '</div></div>';
+    var msg = plateMessage(vf,pr,gr,wg,tot,p);
+    html += '<div class="plate-msg'+(msg.warn?" warn":"")+'">'+msg.t+'</div>';
+    if (s.pending) html += '<p class="tiny" style="margin:8px 0 0">❓ '+s.pending+' food'+(s.pending>1?"s are":" is")+' waiting to be researched, so '+(s.pending>1?"they are":"it is")+' not counted yet.</p>';
+  }
+  html += '</div>';
+
+  /* nutrients */
+  if (!T){
+    html += '<div class="card"><h3>🧪 Nutrients</h3><div class="note sun">For babies under 1 year, breast milk or formula supplies most nutrition. '+
+      'This app tracks foods only for them; ask your doctor or public health nurse about their needs. '+(p.born?"":"Add a birthday in Family settings to see targets.")+'</div></div>';
+  } else if (logs.length){
+    var tiles = NUTS.map(function(n){
+      var have = s.t[n.k]/d, need = T.need[n.k], pc = Math.round(have/need*100), cls = pctClass(pc);
+      return '<div class="tile '+cls+'" data-nut="'+n.k+'">'+ring(pc,cls,n.e)+'<div class="nm">'+n.n+'</div>'+
+        '<div class="am">'+pc+'%'+(s.miss[n.k]?' <span title="Some foods have no value for this">*</span>':'')+'</div></div>';
+    }).join("");
+    var na = s.t.na/d, sodiumHigh = na > T.naMax;
+    html += '<div class="card"><h3>🧪 Nutrients <span class="sp tiny">'+esc(per.label)+'</span></h3>'+
+      '<p class="muted" style="margin:4px 0 0">Share of '+esc(p.name)+'\'s daily need ('+T.age+(T.age===1?" year":" years")+' old'+
+      (p.stage==="preg"?", pregnant":p.stage==="lact"?", breastfeeding":"")+'). Tap a circle for detail and ideas.</p>'+
+      '<div class="tiles">'+tiles+
+      '<div class="tile '+(sodiumHigh?"low":"ok")+'" data-nut="na">'+ring(Math.min(100,na/T.naMax*100),sodiumHigh?"low":"ok","🧂")+
+      '<div class="nm">Salt (sodium)</div><div class="am">'+(sodiumHigh?"Over limit":"Under limit")+'</div></div></div>'+
+      '<div class="key"><span><i style="background:'+COL.ok+'"></i>Enough</span><span><i style="background:'+COL.mid+'"></i>Getting there</span>'+
+      '<span><i style="background:'+COL.low+'"></i>Low</span>'+(Object.keys(s.miss).length?'<span>* some foods missing this value</span>':'')+'</div>'+
+      (S.ui.range==="day" && k===today() && new Date().getHours()<17 ? '<p class="tiny" style="margin:8px 0 0">The day is not over yet, so low numbers are normal before dinner.</p>':'')+
+      '</div>';
+
+    /* gaps and ideas */
+    html += gapsCard(p, s, T, d);
+  }
+
+  /* watch outs */
+  var w = watchOuts(p, logs, s, T, d);
+  if (w.length) html += '<div class="card"><h3>👀 Watch outs</h3>'+w.join("")+'</div>';
+
+  /* meals (only for single day) */
+  if (S.ui.range === "day"){
+    html += '<div class="card"><h3>🧾 What '+esc(p.name)+' ate</h3>';
+    MEALS.forEach(function(m){
+      var ls = logs.filter(function(l){ return l.meal===m[0]; }).sort(function(a,b){ return a.at-b.at; });
+      html += '<div class="meal"><h4>'+m[2]+' '+m[1]+' <button class="link" data-addmeal="'+m[0]+'">＋ Add</button></h4>';
+      html += ls.length ? ls.map(entryRow).join("") : '<div class="tiny" style="padding:4px 4px 6px">Nothing yet</div>';
+      html += '</div>';
+    });
+    if (k !== today() && logs.length) html += '<button class="btn ghost small" data-copyday style="margin-top:10px">⟳ Copy this day\'s food to today</button>';
+    html += '</div>';
+  }
+  box.innerHTML = html;
+}
+function lg(c, name, v, goal){
+  return '<div class="lg"><i style="background:'+c+'"></i><span>'+name+'<br><span class="goal">'+goal+'</span></span><span class="n">'+(Math.round(v*10)/10)+'</span></div>';
+}
+function plateSvg(vf, pr, gr, wg){
+  var tot = vf+pr+gr, cx=85, cy=85, R=64;
+  var out = '<svg viewBox="0 0 170 170" role="img" aria-label="Plate showing the mix of food groups">'+
+    '<circle cx="85" cy="85" r="82" fill="#fff" stroke="#ECE6DA" stroke-width="2"/><circle cx="85" cy="85" r="70" fill="#FBF8F2"/>';
+  if (tot <= 0) return out + '<text x="85" y="95" text-anchor="middle" font-size="34">🍽️</text></svg>';
+  var parts = [["vf",vf,"#22B08C","🥦"],["pr",pr,"#FF8A5B","🍗"],["wg",wg,"#C98A2B","🌾"],["rg",gr-wg,"#F2C46B","🍚"]];
+  var a0 = -Math.PI/2;
+  parts.forEach(function(q){
+    if (q[1] <= 0) return;
+    var a1 = a0 + q[1]/tot*2*Math.PI, large = (a1-a0) > Math.PI ? 1 : 0;
+    if (q[1]/tot > .999){ out += '<circle cx="85" cy="85" r="'+R+'" fill="'+q[2]+'"/>'; }
+    else out += '<path d="M'+cx+','+cy+' L'+(cx+R*Math.cos(a0)).toFixed(1)+','+(cy+R*Math.sin(a0)).toFixed(1)+
+      ' A'+R+','+R+' 0 '+large+' 1 '+(cx+R*Math.cos(a1)).toFixed(1)+','+(cy+R*Math.sin(a1)).toFixed(1)+' Z" fill="'+q[2]+'" stroke="#fff" stroke-width="2"/>';
+    if (q[1]/tot > .09){
+      var am = (a0+a1)/2;
+      out += '<text x="'+(cx+R*.6*Math.cos(am)).toFixed(1)+'" y="'+(cy+R*.6*Math.sin(am)+7).toFixed(1)+'" text-anchor="middle" font-size="19">'+q[3]+'</text>';
+    }
+    a0 = a1;
+  });
+  // the goal: half veg and fruit (dashed line from top to bottom)
+  out += '<line x1="85" y1="15" x2="85" y2="155" stroke="#2A3348" stroke-width="1.5" stroke-dasharray="4 4" opacity=".35"/>'+
+         '<line x1="85" y1="85" x2="15" y2="85" stroke="#2A3348" stroke-width="1.5" stroke-dasharray="4 4" opacity=".35"/>';
+  return out+'</svg>';
+}
+function plateMessage(vf, pr, gr, wg, tot, p){
+  if (tot <= 0) return { t:"Only drinks or extras so far. Add a meal to see the plate.", warn:true };
+  var sv = vf/tot, sp = pr/tot, sg = gr/tot;
+  if (sv < .35) return { t:"🥦 Add more vegetables and fruit. They should fill about half the plate (Canada's food guide).", warn:true };
+  if (sp < .15) return { t:"🍗 Add a protein food: beans or peas, eggs, fish, chicken, milk or yogurt.", warn:true };
+  if (gr > 0 && wg/gr < .5) return { t:"🌾 Good mix. Try swapping some white grains for whole grains: oatmeal, brown rice, whole wheat bread.", warn:false };
+  return { t:"🎉 Nice balanced plate. Keep it up!", warn:false };
+}
+function entryRow(l){
+  var f = food(l.fid), pend = isPending(f);
+  return '<div class="entry" data-log="'+l.id+'"><div class="pic">'+esc(f.e)+'</div><div class="tx"><b>'+esc(f.n)+'</b>'+
+    '<span>'+esc(portionText(l))+(l.by?' · logged by '+esc(l.by):'')+'</span></div>'+
+    (pend?'<span class="tg">researching</span>':'')+'</div>';
+}
+function portionText(l){
+  var q = l.q && l.q !== 1 ? fracTxt(l.q)+" × " : "";
+  return q+cleanLabel(l.pl||"")+" ("+Math.round(l.g)+" g)";
+}
+function fracTxt(q){
+  var m = {0.25:"¼",0.5:"½",0.75:"¾",1.5:"1½",2.5:"2½"};
+  return m[q] || String(q);
+}
+
+/* gaps and food ideas */
+function gapsCard(p, s, T, d){
+  var gaps = NUTS.map(function(n){
+    var have = s.t[n.k]/d, need = T.need[n.k];
+    return { n:n, pc: have/need*100, need:need, have:have };
+  }).filter(function(g){ return g.pc < 80; })
+    .sort(function(a,b){ return (a.pc/PRIORITY[a.n.k]) - (b.pc/PRIORITY[b.n.k]); });
+  if (!gaps.length) return '<div class="card"><h3>✅ What is missing</h3><p class="muted" style="margin:6px 0 0">Nothing is low right now. Well done!</p></div>';
+  var html = '<div class="card"><h3>💡 What is missing, and ideas</h3>';
+  gaps.slice(0,4).forEach(function(g){
+    var ideas = bestSources(p, g.n.k, 6);
+    html += '<div class="gap"><div class="hd"><span class="em">'+g.n.e+'</span><span>'+g.n.n+' is '+(g.pc<50?"low":"a bit low")+
+      ': '+Math.round(g.pc)+'% of '+fmt(g.need,g.n.u)+'</span></div>'+
+      '<p>Needed for '+g.n.why+'.</p><div class="ideas">'+ideas.map(function(i){ return ideaCard(i, g.n, g.need); }).join("")+'</div>'+
+      (TIPS[g.n.k] ? '<div class="tipline">'+TIPS[g.n.k](p)+'</div>' : '')+'</div>';
+  });
+  return html + '<p class="tiny" style="margin:10px 0 0">Tap an idea to log it. Ideas favour foods your family already eats.</p></div>';
+}
+var TIPS = {
+  fe: function(){ return "🍊 Tip: serve iron foods with a vitamin C food (orange, tomato, sweet pepper, callaloo) so the body takes in more iron."; },
+  vd: function(p){ return "☀️ Few foods have much vitamin D. Milk, eggs and fish help. Ask your doctor whether "+esc(p.name)+" should take vitamin D drops."; },
+  ca: function(){ return "🥛 Milk, yogurt, cheese, calcium-set tofu, canned salmon with soft bones and callaloo are good sources."; },
+  fib: function(p){ return ageYears(p.born)<4 ? "🌾 Young children often fall short of the fibre target. Add fruit, beans and whole grains, with plenty of water." : "🌾 Fruit, vegetables, beans and whole grains all add fibre. Drink water too."; }
+};
+var familyCounts = null;
+function familyFreq(){
+  if (familyCounts) return familyCounts;
+  familyCounts = {};
+  live(S.logs).forEach(function(l){ familyCounts[l.fid] = (familyCounts[l.fid]||0)+1; });
+  return familyCounts;
+}
+function portionFor(p, f){
+  var a = ageYears(p.born);
+  var i = (a != null && a < 6) ? kidPortion(f) : -1;
+  if (i < 0) i = 0;
+  return { i:i, label:f.pt[i][0], g:f.pt[i][1] };
+}
+function bestSources(p, k, n){
+  var avoid = p.avoid || [], a = ageYears(p.born), freq = familyFreq();
+  var list = allFoods().filter(function(f){
+    if (f.c === "supp" || isPending(f) || avoid.indexOf(f.id) >= 0) return false;
+    if ((f.p.x||0) >= .5) return false;
+    var t = f.t || [];
+    if (t.indexOf("sugary")>=0 || t.indexOf("salty")>=0) return false;
+    if (a != null && a < 1 && t.indexOf("honey")>=0) return false;
+    if (a != null && a < 4 && (t.indexOf("nuts")>=0 || t.indexOf("popcorn")>=0)) return false;
+    if (k !== "va" && t.indexOf("liver")>=0 && a != null && a < 4) return false;
+    return f.v[IX[k]] != null && f.v[IX[k]] > 0;
+  }).map(function(f){
+    var por = portionFor(p, f), amt = f.v[IX[k]]*por.g/100;
+    var score = amt * (1 + Math.min(freq[f.id]||0, 6)*.12) * (f.c==="jam"?1.1:1);
+    return { f:f, por:por, amt:amt, score:score };
+  }).sort(function(a,b){ return b.score-a.score; });
+  var out = [], seen = {};
+  for (var i=0;i<list.length && out.length<n;i++){
+    var base = list[i].f.n.split(/[,(]/)[0].trim();
+    if (seen[base]) continue; seen[base] = 1; out.push(list[i]);
+  }
+  return out;
+}
+function ideaCard(i, n, need){
+  return '<button class="idea" data-quick="'+i.f.id+'" data-qp="'+i.por.i+'"><div class="pic">'+esc(i.f.e)+'</div><b>'+esc(i.f.n)+'</b>'+
+    '<small>'+esc(cleanLabel(i.por.label))+'</small><span class="pct">+'+Math.round(i.amt/need*100)+'%</span></button>';
+}
+
+/* watch outs: Health Canada, Canadian Paediatric Society (AboutKidsHealth) advice for young children */
+function watchOuts(p, logs, s, T, d){
+  var out = [], a = ageYears(p.born, keyMs(curDay()));
+  if (!logs.length) return out;
+  function w(em, txt, red){ out.push('<div class="warn'+(red?" red":"")+'"><span class="em">'+em+'</span><span>'+txt+'</span></div>'); }
+  var milkMl = 0, juice = 0, sugary = 0, plantMilk = false, twoPct = false, albacore = 0, liver = false, choke = {};
+  logs.forEach(function(l){
+    var f = food(l.fid), t = f.t || [];
+    if (t.indexOf("milk")>=0){ milkMl += l.g/1.03; if (f.id === "milk_2") twoPct = true; }
+    if (t.indexOf("juice")>=0) juice++;
+    if (t.indexOf("sugary")>=0) sugary++;
+    if (f.id === "almond_milk") plantMilk = true;
+    if (t.indexOf("liver")>=0) liver = true;
+    t.forEach(function(x){ if (CHOKE[x]) choke[x] = f.n; });
+  });
+  if (T && s.t.na/d > T.naMax) w("🧂", "Salt (sodium) is over the daily limit of "+T.naMax.toLocaleString()+" mg. Salted meats, soups, crackers and seasoning cubes add up quickly.", true);
+  if (a != null && a >= 1 && a <= 5){
+    if (milkMl/d > 500) w("🥛", "About "+Math.round(milkMl/d)+" mL of milk"+(d>1?" a day":"")+". Children over 1 need no more than 500 mL (2 cups) a day; more can fill them up and lower iron.", true);
+    if (a < 2 && twoPct) w("🥛", "Whole milk (3.25%) is advised until age 2, then 2% or 1% is fine.");
+    if (juice) w("🧃", "Water and milk are the best drinks. Keep juice as an occasional treat, and dilute it with water.");
+    if (plantMilk && a < 2) w("🌱", "Almond and most plant drinks are low in protein and fat, so they do not replace milk for young children. Ask your doctor before switching.");
+    if (s.t.zn/d > 7 && a <= 3) w("🛡️", "Zinc is above 7 mg a day, the upper limit for ages 1 to 3. This usually comes from fortified cereals or supplements.", true);
+    if (liver && a <= 3) w("🫀", "Liver is very rich in vitamin A, which can build up. Offer small amounts, not every day.");
+  }
+  if (a != null && a >= 1 && a <= 4){
+    var weekFrom = dayKey(keyMs(curDay())-6*DAY);
+    logsFor(p.id, weekFrom, curDay()).forEach(function(l){ if ((food(l.fid).t||[]).indexOf("albacore")>=0) albacore += l.g; });
+    if (albacore > 75) w("🐟", "White (albacore) tuna: "+Math.round(albacore)+" g in 7 days. Health Canada advises no more than 75 g a week for ages 1 to 4. Light tuna is lower in mercury.", true);
+  }
+  if (sugary/d >= 2) w("🍬", "Several sugary foods or drinks. Try water, milk or fruit instead.");
+  if (a != null && a < 4){
+    Object.keys(choke).forEach(function(k){ w("⚠️", "<b>"+esc(choke[k])+":</b> "+CHOKE[k]); });
+  }
+  return out;
+}
+// choking prevention for children under 4 (Government of Newfoundland and Labrador / Health Canada guidance)
+var CHOKE = {
+  grapes:"Cut grapes into quarters lengthwise, then into smaller pieces.",
+  round:"Cut round foods (cherry tomatoes, blueberries, peas, chickpeas) into small pieces, or squish them.",
+  rawhard:"Grate hard raw fruit and vegetables, or cook them until soft. Thin slices only.",
+  nuts:"Whole nuts and seeds are a choking risk under age 4. Use them ground or as a thin spread.",
+  pb:"Spread peanut butter thinly. Never give it on a spoon or in a lump.",
+  popcorn:"Popcorn is a choking risk under age 4.",
+  sausage:"Cut wieners into quarters lengthwise, then into small pieces.",
+  cheese:"Grate cheese or cut it into thin strips.",
+  bones:"Remove all bones from fish, chicken and meat, then cut into small pieces.",
+  pits:"Remove pits and large seeds, then cut small.",
+  seeds:"Remove large seeds before serving.",
+  stringy:"Chop stringy foods like pineapple finely.",
+  tough:"Tough meat is hard to chew: cut very small or shred.",
+  chia:"Soak chia seeds in milk, yogurt or porridge first. Dry seeds swell and can stick in the throat."
+};
+
+/* ═══ 9. Add food flow ═════════════════════════════════════════════════════ */
+var addState = null;
+function openAdd(meal, quickFid, quickPi){
+  addState = { meal: meal || (curDay()===today()? mealNow() : "l"), cat:null, q:"" };
+  if (quickFid){ openPortion(quickFid, quickPi); return; }
+  var b = sheet('<h3>Add food</h3><input class="search" id="aSearch" placeholder="Type a food, e.g. rice and peas" autocomplete="off" />'+
+    '<div class="cats" id="aCats"></div><div id="aList"></div>', function(e){
+      var c = e.target.closest("[data-cat]");
+      if (c){ addState.cat = addState.cat===c.getAttribute("data-cat") ? null : c.getAttribute("data-cat"); renderAddList(); return; }
+      var f = e.target.closest("[data-pick]");
+      if (f){ openPortion(f.getAttribute("data-pick")); return; }
+      if (e.target.closest("[data-request]")) openRequest(el("aSearch").value.trim());
+    });
+  el("aSearch").addEventListener("input", function(){ addState.q = this.value; renderAddList(); });
+  renderAddList();
+  setTimeout(function(){ if (window.innerWidth > 700) el("aSearch").focus(); }, 60);
+}
+function norm(s){ return String(s).toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,""); }
+function searchFoods(q, cat){
+  q = norm(q.trim());
+  var words = q.split(/\s+/).filter(Boolean);
+  return allFoods().filter(function(f){
+    if (cat && f.c !== cat) return false;
+    if (!words.length) return true;
+    var hay = norm(f.n+" "+(f.a||[]).join(" "));
+    return words.every(function(w){ return hay.indexOf(w) >= 0; });
+  });
+}
+function renderAddList(){
+  el("aCats").innerHTML = CATS.map(function(c){
+    return '<button class="cat" data-cat="'+c[0]+'" aria-pressed="'+(addState.cat===c[0])+'">'+c[2]+' '+esc(c[1])+'</button>';
+  }).join("") + (live(S.custom).length ? '<button class="cat" data-cat="custom" aria-pressed="'+(addState.cat==="custom")+'">⭐ Our foods</button>' : '');
+  var html = "";
+  if (!addState.q && !addState.cat){
+    var p = curPerson(), recent = [], seen = {};
+    live(S.logs).filter(function(l){ return !p || l.pid===p.id; }).sort(function(a,b){ return b.at-a.at; }).forEach(function(l){
+      if (!seen[l.fid] && recent.length < 12){ seen[l.fid]=1; recent.push(food(l.fid)); }
+    });
+    if (recent.length) html += '<div class="sec">Recently eaten</div><div class="grid">'+recent.map(fdBtn).join("")+'</div>';
+    html += '<div class="sec">Popular</div><div class="grid">'+["rice_peas","banana","milk_whole","egg_scrambled","callaloo","oatmeal","chicken_breast","apple","yogurt_plain","cornmeal_porridge","red_peas","bread_ww"]
+      .map(function(i){ return FMAP[i]; }).filter(Boolean).map(fdBtn).join("")+'</div>';
+  } else {
+    var list = searchFoods(addState.q, addState.cat);
+    html += list.length ? '<div class="grid" style="margin-top:4px">'+list.slice(0,80).map(fdBtn).join("")+'</div>'
+                        : '<div class="empty"><div class="big">🤔</div>No food matches "'+esc(addState.q)+'".</div>';
+  }
+  html += '<div class="note" style="margin-top:14px">Can\'t find it? <button class="link" data-request>➕ Ask for "'+esc(addState.q||"a new food")+'" to be added</button><br>'+
+    '<span class="tiny">You can log it straight away. It is sent to the TWC team to research and add to the list.</span></div>';
+  el("aList").innerHTML = html;
+}
+function fdBtn(f){
+  return '<button class="fd" data-pick="'+esc(f.id)+'"><div class="pic">'+esc(f.e)+'</div><b>'+esc(f.n)+'</b>'+
+    (isPending(f)?'<small>researching</small>':(f.t||[]).indexOf("partial")>=0?'<small>partly known</small>':'')+'</button>';
+}
+var AMTS = [0.25,0.5,0.75,1,1.5,2,2.5,3,4];
+function openPortion(fid, startPi){
+  var f = food(fid), p0 = curPerson();
+  var rows = people().map(function(p){
+    var por = (startPi != null && p.id===p0.id) ? { i:+startPi } : portionFor(p, f);
+    return { pid:p.id, on: p.id===p0.id, pi: por.i, q:1 };
+  });
+  addState.f = f; addState.rows = rows;
+  var b = sheet('', function(e){
+    var t;
+    if ((t = e.target.closest("[data-meal]"))){ addState.meal = t.getAttribute("data-meal"); draw(); return; }
+    if ((t = e.target.closest("[data-on]"))){ var r = rows[+t.getAttribute("data-on")]; r.on = !r.on; draw(); return; }
+    if ((t = e.target.closest("[data-pi]"))){ var r2 = rows[+t.getAttribute("data-row")]; r2.pi = +t.getAttribute("data-pi"); r2.on = true; draw(); return; }
+    if ((t = e.target.closest("[data-step]"))){
+      var r3 = rows[+t.getAttribute("data-row")], i = AMTS.indexOf(r3.q) + (+t.getAttribute("data-step"));
+      r3.q = AMTS[Math.max(0, Math.min(AMTS.length-1, i))]; r3.on = true; draw(); return;
+    }
+    if (e.target.closest("[data-save]")) saveAdd();
+    if (e.target.closest("[data-info]")) openFood(f.id);
+  });
+  function draw(){
+    var html = '<div class="hero"><div class="pic">'+esc(f.e)+'</div><div><h3 style="margin:0">'+esc(f.n)+'</h3>'+
+      '<button class="link" data-info style="padding:0">ⓘ What is in it</button></div></div>';
+    html += '<div class="seg" role="group" aria-label="Meal">'+MEALS.map(function(m){
+      return '<button data-meal="'+m[0]+'" aria-pressed="'+(addState.meal===m[0])+'">'+m[2]+' '+m[1]+'</button>'; }).join("")+'</div>';
+    html += '<div class="sec">Who ate it, and how much?</div>';
+    rows.forEach(function(r, ri){
+      var p = person(r.pid), g = f.pt[r.pi][1]*r.q;
+      html += '<div class="who'+(r.on?"":" off")+'"><div class="top"><span class="av">'+esc(p.emoji||"🙂")+'</span>'+esc(p.name)+
+        '<span class="tiny">'+esc(ageText(p))+'</span><input type="checkbox" data-on="'+ri+'" '+(r.on?"checked":"")+' aria-label="'+esc(p.name)+' ate this"></div>'+
+        '<div class="por">'+f.pt.map(function(pt, pi){
+          return '<button data-row="'+ri+'" data-pi="'+pi+'" aria-pressed="'+(r.pi===pi)+'">'+esc(pt[0])+'</button>'; }).join("")+'</div>'+
+        '<div class="amt"><button data-row="'+ri+'" data-step="-1" aria-label="Less">−</button><output>'+fracTxt(r.q)+' ×</output>'+
+        '<button data-row="'+ri+'" data-step="1" aria-label="More">＋</button><span class="g">≈ '+Math.round(g)+' g</span></div></div>';
+    });
+    html += '<div class="hands"><span>✊ Fist ≈ 1 cup</span><span>✋ Palm ≈ 3 oz meat</span><span>👍 Thumb ≈ 1 tbsp</span><span>🧒 = child-size portion</span></div>';
+    if (f.note) html += '<div class="note sun">'+esc(f.note)+'</div>';
+    var n = rows.filter(function(r){ return r.on; }).length;
+    html += '<button class="btn wide" data-save style="margin-top:14px"'+(n?"":" disabled")+'>Save for '+n+' '+(n===1?"person":"people")+'</button>';
+    b.querySelector(".sheet").innerHTML = '<button class="x" data-close aria-label="Close">×</button>'+html;
+  }
+  draw();
+}
+function saveAdd(){
+  var f = addState.f, day = curDay(), at = day===today() ? Date.now() : keyMs(day), added = [];
+  addState.rows.forEach(function(r){
+    if (!r.on) return;
+    var pt = f.pt[r.pi];
+    var l = { id:uid(), pid:r.pid, day:day, meal:addState.meal, fid:f.id, pl:pt[0], q:r.q, g:Math.round(pt[1]*r.q*10)/10,
+      at:at, by:S.ui.me||"", editedAt:Date.now() };
+    S.logs.push(l); added.push(l.id);
+  });
+  familyCounts = null;
+  save(true); closeSheet(); renderAll();
+  toast(f.e+" "+f.n+" saved", { label:"Undo", fn:function(){
+    S.logs.forEach(function(l){ if (added.indexOf(l.id)>=0){ l.deleted=true; l.editedAt=Date.now(); } });
+    save(true); renderAll();
+  }});
+}
+
+/* edit a logged entry */
+function openLog(id){
+  var l = S.logs.filter(function(x){ return x.id===id; })[0]; if (!l) return;
+  var f = food(l.fid), pi = Math.max(0, f.pt.map(function(p){ return p[0]; }).indexOf(l.pl)), q = l.q || 1, meal = l.meal;
+  var b = sheet('', function(e){
+    var t;
+    if ((t = e.target.closest("[data-pi]"))){ pi = +t.getAttribute("data-pi"); draw(); return; }
+    if ((t = e.target.closest("[data-step]"))){ var i = AMTS.indexOf(q)+(+t.getAttribute("data-step")); q = AMTS[Math.max(0,Math.min(AMTS.length-1,i))]; draw(); return; }
+    if ((t = e.target.closest("[data-meal]"))){ meal = t.getAttribute("data-meal"); draw(); return; }
+    if (e.target.closest("[data-save]")){
+      l.pl = f.pt[pi][0]; l.q = q; l.g = Math.round(f.pt[pi][1]*q*10)/10; l.meal = meal; l.editedAt = Date.now();
+      save(true); closeSheet(); renderAll(); toast("Changed");
+    }
+    if (e.target.closest("[data-del]")){
+      l.deleted = true; l.editedAt = Date.now(); familyCounts = null; save(true); closeSheet(); renderAll();
+      toast(f.n+" removed", { label:"Undo", fn:function(){ l.deleted=false; l.editedAt=Date.now(); save(true); renderAll(); } });
+    }
+    if (e.target.closest("[data-info]")) openFood(f.id);
+  });
+  function draw(){
+    b.querySelector(".sheet").innerHTML = '<button class="x" data-close aria-label="Close">×</button>'+
+      '<div class="hero"><div class="pic">'+esc(f.e)+'</div><div><h3 style="margin:0">'+esc(f.n)+'</h3>'+
+      '<span class="tiny">'+esc(person(l.pid).name)+' · '+esc(dayLabel(l.day))+'</span><br><button class="link" data-info style="padding:0">ⓘ What is in it</button></div></div>'+
+      '<div class="seg">'+MEALS.map(function(m){ return '<button data-meal="'+m[0]+'" aria-pressed="'+(meal===m[0])+'">'+m[2]+' '+m[1]+'</button>'; }).join("")+'</div>'+
+      '<div class="por" style="margin-top:12px">'+f.pt.map(function(pt,i){ return '<button data-pi="'+i+'" aria-pressed="'+(pi===i)+'">'+esc(pt[0])+'</button>'; }).join("")+'</div>'+
+      '<div class="amt"><button data-step="-1">−</button><output>'+fracTxt(q)+' ×</output><button data-step="1">＋</button><span class="g">≈ '+Math.round(f.pt[pi][1]*q)+' g</span></div>'+
+      '<button class="btn wide" data-save style="margin-top:14px">Save change</button>'+
+      '<button class="btn wide danger" data-del style="margin-top:8px">Remove this food</button>';
+  }
+  draw();
+}
+
+/* ═══ 10. Food detail ══════════════════════════════════════════════════════ */
+function openFood(fid){
+  var f = food(fid), p = curPerson(), T = p ? targets(p) : null, por = p ? portionFor(p, f) : { i:0 };
+  var pi = por.i;
+  var b = sheet('', function(e){
+    var t = e.target.closest("[data-pi]");
+    if (t){ pi = +t.getAttribute("data-pi"); draw(); return; }
+    if (e.target.closest("[data-logthis]")){ closeSheet(); openAdd(null, f.id, pi); }
+  });
+  function draw(){
+    var g = f.pt[pi][1];
+    var bars = NUTS.map(function(n){
+      var v = amountOf(f, n.k, g), need = T ? T.need[n.k] : null, pc = (v!=null && need) ? v/need*100 : null;
+      return '<div class="nbar"><span class="em">'+n.e+'</span><div><b>'+n.n+'</b><div class="tr"><i style="width:'+(pc==null?0:Math.min(100,pc))+'%;background:'+(pc==null?"#ddd":COL[pctClass(pc>=33?100:pc>=15?70:10)])+'"></i></div></div>'+
+        '<span class="v">'+(v==null?"not known":fmt(v,n.u)+(pc!=null?" · "+Math.round(pc)+"%":""))+'</span></div>';
+    }).join("");
+    var tips = (f.t||[]).filter(function(t){ return CHOKE[t]; }).map(function(t){ return '<div class="warn"><span class="em">⚠️</span><span><b>Under 4:</b> '+CHOKE[t]+'</span></div>'; }).join("");
+    b.querySelector(".sheet").innerHTML = '<button class="x" data-close aria-label="Close">×</button>'+
+      '<div class="hero"><div class="pic">'+esc(f.e)+'</div><div><h3 style="margin:0">'+esc(f.n)+'</h3>'+
+      '<span class="tiny">'+esc(catName(f.c))+'</span></div></div>'+
+      '<div class="por">'+f.pt.map(function(pt,i){ return '<button data-pi="'+i+'" aria-pressed="'+(pi===i)+'">'+esc(pt[0])+'</button>'; }).join("")+'</div>'+
+      '<p class="tiny" style="margin:8px 0 2px">In '+esc(cleanLabel(f.pt[pi][0]))+' ('+g+' g)'+(T?', as a share of '+esc(p.name)+'\'s daily need':'')+':</p>'+bars+
+      '<div class="nbar"><span class="em">⚡</span><div><b>Energy</b></div><span class="v">'+fmt(amountOf(f,"kcal",g),"Cal")+'</span></div>'+
+      '<div class="nbar"><span class="em">🧂</span><div><b>Sodium</b></div><span class="v">'+fmt(amountOf(f,"na",g),"mg")+'</span></div>'+
+      '<div class="nbar"><span class="em">🍬</span><div><b>Sugars</b></div><span class="v">'+fmt(amountOf(f,"sug",g),"g")+'</span></div>'+
+      tips + ((f.t||[]).indexOf("uscereal")>=0?'<div class="note">Values are for the United States recipe. Canadian boxes can differ, especially in vitamins, so check the label.</div>':'')+(f.note?'<div class="note sun">'+esc(f.note)+'</div>':'')+
+      '<p class="tiny" style="margin-top:10px">Source: '+esc(f.s||"Family entry")+'</p>'+
+      (p?'<button class="btn wide" data-logthis>＋ Log this</button>':'');
+  }
+  draw();
+}
+function catName(c){ var m = CATS.filter(function(x){ return x[0]===c; })[0]; return m ? m[2]+" "+m[1] : c==="custom" ? "⭐ Our foods" : ""; }
+
+/* ═══ 11. New food requests ════════════════════════════════════════════════ */
+function openRequest(name){
+  var p = curPerson();
+  var b = sheet('<h3>Ask for a new food</h3>'+
+    '<p class="muted" style="margin-top:0">It is saved to the family log now and sent to TWC to research. Once added, its nutrients are counted automatically.</p>'+
+    '<div class="field"><label for="rqName">Food name</label><input id="rqName" value="'+esc(name||"")+'" placeholder="e.g. Peanut porridge" /></div>'+
+    '<div class="field"><label for="rqDesc">How is it made, or what brand? <span class="tiny">Optional</span></label>'+
+    '<textarea id="rqDesc" rows="2" placeholder="Peanuts, oats, milk, nutmeg. Or: Grace Tropical Rhythms"></textarea></div>'+
+    '<details style="margin-top:10px"><summary style="font-weight:800;cursor:pointer">🏷️ I have the Nutrition Facts label <span class="tiny">(counts it right away)</span></summary>'+
+    '<div class="row"><div class="field"><label for="rqSv">Serving size (g or mL)</label><input id="rqSv" type="number" inputmode="decimal" placeholder="250"></div>'+
+    '<div class="field"><label for="rqCal">Calories</label><input id="rqCal" type="number" inputmode="decimal"></div></div>'+
+    '<div class="row">'+[["rqPro","Protein (g)"],["rqFib","Fibre (g)"],["rqSug","Sugars (g)"],["rqNa","Sodium (mg)"],["rqCa","Calcium (mg)"],["rqFe","Iron (mg)"],["rqK","Potassium (mg)"]]
+      .map(function(x){ return '<div class="field"><label for="'+x[0]+'">'+x[1]+'</label><input id="'+x[0]+'" type="number" inputmode="decimal"></div>'; }).join("")+'</div>'+
+    '<p class="tiny">Leave blank anything not on the label. Canadian labels now show calcium, iron and potassium in mg.</p></details>'+
+    '<div class="field"><label>Picture</label><div class="emojis" id="rqEmo">'+["🍲","🥣","🍛","🥘","🍞","🥤","🍪","🍰","🥗","🍖","🐟","🍎"].map(function(e,i){
+      return '<button data-emo="'+e+'" aria-pressed="'+(i===0)+'">'+e+'</button>'; }).join("")+'</div></div>'+
+    '<button class="btn wide" data-send style="margin-top:14px">Save and send</button>', function(e){
+      var t = e.target.closest("[data-emo]");
+      if (t){ Array.prototype.forEach.call(el("rqEmo").children, function(x){ x.setAttribute("aria-pressed", String(x===t)); }); return; }
+      if (e.target.closest("[data-send]")) sendRequest();
+    });
+  setTimeout(function(){ el("rqName").focus(); }, 60);
+}
+function num(id){ var v = parseFloat(el(id).value); return isNaN(v) ? null : v; }
+function sendRequest(){
+  var name = el("rqName").value.trim();
+  if (!name){ toast("Type the food's name first"); return; }
+  var emo = (document.querySelector("#rqEmo [aria-pressed=true]")||{}).getAttribute ? document.querySelector("#rqEmo [aria-pressed=true]").getAttribute("data-emo") : "🍲";
+  var id = "req_"+uid();
+  var sv = num("rqSv"), v = K.map(function(){ return null; });
+  var label = null;
+  if (sv && sv > 0){
+    label = { sv:sv, kcal:num("rqCal"), pro:num("rqPro"), fib:num("rqFib"), sug:num("rqSug"), na:num("rqNa"), ca:num("rqCa"), fe:num("rqFe"), k:num("rqK") };
+    Object.keys(label).forEach(function(k){ if (k!=="sv" && label[k]!=null && IX[k]!=null) v[IX[k]] = label[k]*100/sv; });
+  }
+  var pts = sv ? [["1 serving ("+sv+")", sv],["½ serving 🧒", sv/2]] : [["1 cup",240],["½ cup",120],["¼ cup 🧒",60]];
+  var cf = { id:id, n:name, e:emo, c:"custom", p:{}, v:v, pt:pts, s: label ? "Family entry from the Nutrition Facts label (TWC will check it)" : "Waiting for TWC to research",
+    t: label ? ["partial"] : [], editedAt:Date.now() };
+  S.custom.push(cf);
+  S.requests.push({ id:id, name:name, details:el("rqDesc").value.trim(), label:label, emoji:emo, by:S.ui.me||"", at:Date.now(), sent:false, status:"waiting" });
+  save(true); sendQueued();
+  closeSheet();
+  openAdd(addState && addState.meal); openPortion(id);
+  toast("Saved. Now pick who ate it.");
+}
+function sendQueued(){
+  if (!canSync()) return Promise.resolve();
+  var q = S.requests.filter(function(r){ return !r.sent; });
+  return q.reduce(function(pr, r){
+    return pr.then(function(){
+      return api("/api/food-request", { method:"POST", body:{ id:r.id, name:r.name, details:r.details, label:r.label, emoji:r.emoji, by:r.by } })
+        .then(function(){ r.sent = true; r.status = "sent"; save(); });
+    });
+  }, Promise.resolve()).catch(function(){});
+}
+
+/* ═══ 12. Week tab ═════════════════════════════════════════════════════════ */
+function renderWeek(){
+  var p = curPerson(), box = el("weekBody");
+  if (!p){ box.innerHTML = '<div class="card empty">Add a person first.</div>'; return; }
+  var end = today(), days = [];
+  for (var i=6;i>=0;i--) days.push(dayKey(keyMs(end)-i*DAY));
+  var T = targets(p);
+  var html = '<div class="card"><h3>📅 '+esc(p.name)+'\'s week</h3><p class="muted" style="margin:4px 0 0">Each square is a day. Green means enough, yellow getting there, red low, grey nothing logged.</p>';
+  if (!T){ box.innerHTML = html + '<div class="note sun" style="margin-top:10px">Targets start from age 1. Add a birthday in Family settings.</div></div>'; return; }
+  var per = days.map(function(d){ var ls = logsFor(p.id, d, d); return { d:d, s:sum(ls), n:ls.length }; });
+  html += '<div class="heat" style="grid-template-columns:96px repeat(7,1fr)"><span></span>'+per.map(function(x){
+    return '<span class="h">'+new Date(keyMs(x.d)).toLocaleDateString(undefined,{weekday:"narrow"})+'<br>'+new Date(keyMs(x.d)).getDate()+'</span>'; }).join("");
+  html += '<span class="rl">🍽️ Plate</span>'+per.map(function(x){
+    if (!x.n) return '<span class="c" style="background:#F1EEE8"></span>';
+    var t = x.s.plate.vf+x.s.plate.pr+x.s.plate.wg+x.s.plate.rg, sv = t? x.s.plate.vf/t : 0;
+    return '<span class="c" style="background:'+(sv>=.4?"#BFE9DC":sv>=.25?"#F8DFAE":"#F7C6CF")+'" title="Veg and fruit share">'+Math.round(sv*100)+'</span>';
+  }).join("");
+  NUTS.forEach(function(n){
+    html += '<span class="rl">'+n.e+' '+n.n+'</span>'+per.map(function(x){
+      if (!x.n) return '<span class="c" style="background:#F1EEE8"></span>';
+      var pc = x.s.t[n.k]/T.need[n.k]*100, c = pctClass(pc);
+      return '<span class="c" style="background:'+(c==="ok"?"#BFE9DC":c==="mid"?"#F8DFAE":"#F7C6CF")+'">'+Math.min(999,Math.round(pc))+'</span>';
+    }).join("");
+  });
+  html += '</div><p class="tiny" style="margin:8px 0 0">Numbers are % of the daily need. The 🍽️ row shows the % of the plate that was vegetables and fruit (aim for 50).</p></div>';
+  // most eaten foods this week
+  var cnt = {};
+  logsFor(p.id, days[0], end).forEach(function(l){ cnt[l.fid] = (cnt[l.fid]||0)+1; });
+  var top = Object.keys(cnt).sort(function(a,b){ return cnt[b]-cnt[a]; }).slice(0,8);
+  if (top.length) html += '<div class="card"><h3>⭐ Most eaten this week</h3><div class="grid" style="margin-top:10px">'+top.map(function(id){
+    var f = food(id); return '<button class="fd" data-food="'+esc(id)+'"><div class="pic">'+esc(f.e)+'</div><b>'+esc(f.n)+'</b><small>'+(cnt[id]===1?"once":cnt[id]+" times")+'</small></button>'; }).join("")+'</div></div>';
+  // family snapshot
+  if (people().length > 1){
+    html += '<div class="card"><h3>👨‍👩‍👧 Family this week</h3>'+people().map(function(q){
+      var Tq = targets(q), lw = logsFor(q.id, days[0], end), sd = {}; lw.forEach(function(l){ sd[l.day]=1; });
+      var nd = Object.keys(sd).length;
+      if (!Tq || !nd) return '<div class="listrow"><span class="pic">'+esc(q.emoji)+'</span><div class="tx"><b>'+esc(q.name)+'</b><span>'+(Tq?"Nothing logged this week":"Targets start at age 1")+'</span></div></div>';
+      var s = sum(lw), low = NUTS.filter(function(n){ return s.t[n.k]/nd/Tq.need[n.k] < .66; }).map(function(n){ return n.e+" "+n.n; });
+      return '<div class="listrow"><span class="pic">'+esc(q.emoji)+'</span><div class="tx"><b>'+esc(q.name)+'</b><span>'+
+        (low.length? "Often low: "+low.slice(0,4).join(", ") : "✅ Nothing often low")+' · '+nd+' day'+(nd>1?"s":"")+' logged</span></div></div>';
+    }).join("")+'</div>';
+  }
+  box.innerHTML = html;
+}
+
+/* ═══ 13. Foods tab ════════════════════════════════════════════════════════ */
+var fgNut = null;
+function renderFoods(){
+  el("fgBest").innerHTML = '<span class="tiny" style="align-self:center;font-weight:800">Best for:</span>'+NUTS.map(function(n){
+    return '<button class="cat" data-best="'+n.k+'" aria-pressed="'+(fgNut===n.k)+'">'+n.e+' '+n.n+'</button>'; }).join("");
+  var p = curPerson(), q = el("fgSearch").value, html = "";
+  if (fgNut && p){
+    var n = NUTMAP[fgNut], T = targets(p), list = bestSources(p, fgNut, 18);
+    html += '<p class="muted">Best sources of '+n.e+' '+n.n+' for '+esc(p.name)+' in a usual portion'+(T?" (need "+fmt(T.need[fgNut],n.u)+" a day)":"")+':</p><div class="grid">'+
+      list.map(function(i){ return '<button class="fd" data-food="'+i.f.id+'"><div class="pic">'+esc(i.f.e)+'</div><b>'+esc(i.f.n)+'</b><small>'+esc(cleanLabel(i.por.label))+' · '+fmt(i.amt,n.u)+'</small></button>'; }).join("")+'</div>';
+  } else {
+    var list2 = searchFoods(q, null);
+    html += '<div class="grid">'+list2.slice(0,120).map(function(f){ return '<button class="fd" data-food="'+esc(f.id)+'"><div class="pic">'+esc(f.e)+'</div><b>'+esc(f.n)+'</b></button>'; }).join("")+'</div>';
+    if (!list2.length) html += '<div class="empty"><div class="big">🤔</div>Not in the list yet. <button class="link" data-request>Ask for it to be added</button></div>';
+  }
+  el("fgList").innerHTML = html;
+}
+el("fgSearch").addEventListener("input", function(){ fgNut = null; renderFoods(); });
+document.addEventListener("click", function(e){
+  var t = e.target.closest && e.target.closest("[data-best]");
+  if (t){ fgNut = fgNut===t.getAttribute("data-best") ? null : t.getAttribute("data-best"); renderFoods(); return; }
+  var f = e.target.closest && e.target.closest("[data-food]");
+  if (f && !el("sheet")){ openFood(f.getAttribute("data-food")); return; }
+  if (e.target.closest && e.target.closest("#tab-foods [data-request]")) openRequest(el("fgSearch").value.trim());
+});
+
+/* ═══ 14. Family tab ═══════════════════════════════════════════════════════ */
+function renderFamily(){
+  var html = '<div class="card"><h3>👨‍👩‍👧 People <span class="sp"><button class="btn small" data-addperson>＋ Add</button></span></h3>';
+  html += people().length ? people().map(function(p){
+    var st = p.stage==="preg"?" · pregnant":p.stage==="lact"?" · breastfeeding":"";
+    return '<div class="listrow"><span class="pic">'+esc(p.emoji)+'</span><div class="tx"><b>'+esc(p.name)+'</b><span>'+esc(ageText(p)||"no birthday")+(p.sex==="f"?" · female":p.sex==="m"?" · male":"")+st+
+      ((p.avoid||[]).length?' · avoids '+p.avoid.length+' food'+(p.avoid.length>1?"s":""):'')+'</span></div><button class="btn ghost small" data-editp="'+p.id+'">Edit</button></div>';
+  }).join("") : '<p class="muted">No one yet.</p>';
+  html += '<div class="field"><label for="meName">Your name on this phone <span class="tiny">(shows who logged each food)</span></label>'+
+    '<input id="meName" value="'+esc(S.ui.me||"")+'" placeholder="e.g. Dad" /></div></div>';
+
+  // sync
+  html += '<div class="card"><h3>🔗 Share between phones</h3>';
+  if (S.sync.code){
+    html += '<p class="muted" style="margin:6px 0">Signed in to <b>'+esc(S.sync.name||"your family")+'</b>. Everything logged on any signed-in phone appears on all of them.</p>'+
+      '<p class="tiny">Last saved: '+(S.sync.lastAt? new Date(S.sync.lastAt).toLocaleString() : "not yet")+'</p>'+
+      '<div class="row"><button class="btn ghost small" data-syncnow>⟳ Sync now</button><button class="btn ghost small" data-logout>Sign out</button></div>';
+  } else {
+    html += '<p class="muted" style="margin:6px 0">Right now everything stays on this phone. Type your family code to share with the other parent. Data is kept in TWC\'s private storage.</p>'+
+      '<div class="field"><label for="famCode">Family code</label><input id="famCode" type="password" autocomplete="current-password" placeholder="Family code" /></div>'+
+      '<button class="btn sky" data-login style="margin-top:10px">Connect</button>';
+  }
+  html += '<details style="margin-top:10px"><summary class="tiny" style="cursor:pointer">Advanced</summary><div class="field"><label for="apiUrl">Server address</label><input id="apiUrl" value="'+esc(S.sync.api)+'"></div>'+
+    '<button class="btn ghost small" data-saveapi style="margin-top:8px">Save address</button></details></div>';
+
+  // requests
+  var reqs = S.requests.slice().sort(function(a,b){ return b.at-a.at; });
+  html += '<div class="card"><h3>🧪 New food requests</h3>';
+  html += reqs.length ? reqs.map(function(r){
+    var done = !!REQ_TO_FOOD[r.id];
+    return '<div class="listrow"><span class="pic">'+esc(r.emoji||"🍲")+'</span><div class="tx"><b>'+esc(r.name)+'</b><span>'+new Date(r.at).toLocaleDateString()+(r.details?" · "+esc(r.details):"")+'</span></div>'+
+      '<span class="pill '+(done?"ok":"wait")+'">'+(done?"Added":r.sent?"Sent to TWC":"Waiting to send")+'</span></div>';
+  }).join("") : '<p class="muted" style="margin:6px 0 0">None yet. If a food is missing, tap ➕ in Add food.</p>';
+  html += '<button class="btn ghost small" data-request style="margin-top:10px">➕ Ask for a new food</button></div>';
+
+  // backup and about
+  html += '<div class="card"><h3>💾 Backup</h3><p class="muted" style="margin:6px 0">Download everything as a file, or restore one.</p>'+
+    '<div class="row"><button class="btn ghost small" data-export>⬇️ Download backup</button><label class="btn ghost small" style="display:inline-block">⬆️ Restore<input type="file" id="importFile" accept=".json" hidden></label></div></div>';
+  html += '<div class="card"><h3>ℹ️ About the numbers</h3><div class="muted" style="font-size:13.5px">'+
+    '<p>Daily needs are Health Canada\'s Dietary Reference Intakes (DRIs) for each age, plus pregnancy and breastfeeding. Food values come from the United States Department of Agriculture (USDA) National Nutrient Database (Release 26); Jamaican dishes are estimated from typical recipes and are marked as estimates. Values not yet known are shown as "not known", never as zero.</p>'+
+    '<p>Portions are approximate, so treat the numbers as a guide. A single day can look low; the 7-day view is a better picture.</p>'+
+    '<p><b>This is not medical advice.</b> For concerns about growth, eating or a special diet, talk to your doctor, a registered dietitian, or call 811 in Nova Scotia.</p>'+
+    '<p class="tiny">Version '+APP_VERSION+' · '+FOODS.length+' foods (list of '+esc(window.FOOD_DB_VERSION||"")+')</p></div></div>';
+  el("familyBody").innerHTML = html;
+  el("meName").addEventListener("change", function(){ S.ui.me = this.value.trim(); save(); });
+  var imp = el("importFile");
+  if (imp) imp.addEventListener("change", function(){
+    var file = this.files[0]; if (!file) return;
+    var rd = new FileReader();
+    rd.onload = function(){
+      try{
+        var d = JSON.parse(rd.result);
+        if (!d || !Array.isArray(d.logs)) throw new Error("bad");
+        mergeIn(d); save(true); renderAll(); toast("Backup restored (merged with what is here)");
+      }catch(e){ toast("That file is not a Family Nutrition backup"); }
+    };
+    rd.readAsText(file);
+  });
+}
+document.addEventListener("click", function(e){
+  if (!e.target.closest) return;
+  var t;
+  if ((t = e.target.closest("[data-editp]"))) openPerson(t.getAttribute("data-editp"));
+  if (e.target.closest("#tab-family [data-request]")) openRequest("");
+  if (e.target.closest("[data-login]")) login(el("famCode").value.trim());
+  if (e.target.closest("[data-logout]")){ if (confirm("Sign out on this phone? What is logged here stays here.")){ S.sync.code=""; S.sync.name=""; S.sync.rev=0; save(); renderAll(); syncChip(); } }
+  if (e.target.closest("[data-syncnow]")) pull(false).then(pushNow);
+  if (e.target.closest("[data-saveapi]")){ S.sync.api = el("apiUrl").value.trim() || API_DEFAULT; save(); toast("Saved"); }
+  if (e.target.closest("[data-export]")){
+    var blob = new Blob([JSON.stringify({ app:"twc-family-nutrition", version:APP_VERSION, people:S.people, logs:S.logs, custom:S.custom, requests:S.requests }, null, 1)], { type:"application/json" });
+    var a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = "family-nutrition-"+today()+".json"; document.body.appendChild(a); a.click(); a.remove();
+  }
+});
+
+/* person editor */
+var EMO = ["👶","👧","👦","🧒","👩🏾","👨🏾","👵🏾","👴🏾","👩","👨","🙂","⭐"];
+function openPerson(id){
+  var p = id ? S.people.filter(function(x){ return x.id===id; })[0] : { id:uid(), name:"", emoji:"🧒", born:"", sex:"", stage:"", avoid:[] };
+  var isNew = !id;
+  var b = sheet('<h3>'+(isNew?"Add a person":"Edit "+esc(p.name))+'</h3>'+
+    '<div class="field"><label>Picture</label><div class="emojis" id="pEmo">'+EMO.map(function(e){ return '<button data-pe="'+e+'" aria-pressed="'+(p.emoji===e)+'">'+e+'</button>'; }).join("")+'</div></div>'+
+    '<div class="row"><div class="field"><label for="pName">Name</label><input id="pName" value="'+esc(p.name)+'" placeholder="e.g. Mommy"></div>'+
+    '<div class="field"><label for="pBorn">Birthday</label><input id="pBorn" type="date" value="'+esc(p.born)+'" max="'+today()+'"></div></div>'+
+    '<div class="field"><label for="pSex">Sex <span class="tiny">(needs change from age 9)</span></label><select id="pSex"><option value="">Choose</option>'+
+      '<option value="f"'+(p.sex==="f"?" selected":"")+'>Female</option><option value="m"'+(p.sex==="m"?" selected":"")+'>Male</option></select></div>'+
+    '<div class="field" id="pStageF"><label for="pStage">Pregnant or breastfeeding? <span class="tiny">(raises iron, folate and other needs)</span></label><select id="pStage">'+
+      '<option value="">No</option><option value="preg"'+(p.stage==="preg"?" selected":"")+'>Pregnant</option><option value="lact"'+(p.stage==="lact"?" selected":"")+'>Breastfeeding</option></select></div>'+
+    '<div class="field"><label>Foods to leave out of ideas <span class="tiny">(allergies or dislikes)</span></label>'+
+      '<input id="pAvoidQ" placeholder="Type to find a food" autocomplete="off"><div class="por" id="pAvoid"></div></div>'+
+    '<button class="btn wide" data-psave style="margin-top:14px">Save</button>'+
+    (isNew?'':'<button class="btn wide danger" data-pdel style="margin-top:8px">Remove this person</button>'), function(e){
+      var t;
+      if ((t = e.target.closest("[data-pe]"))){ p.emoji = t.getAttribute("data-pe"); Array.prototype.forEach.call(el("pEmo").children, function(x){ x.setAttribute("aria-pressed", String(x===t)); }); return; }
+      if ((t = e.target.closest("[data-av]"))){
+        var fid = t.getAttribute("data-av"), i = avoid.indexOf(fid);
+        if (i>=0) avoid.splice(i,1); else avoid.push(fid);
+        el("pAvoidQ").value = ""; drawAvoid(); return;
+      }
+      if (e.target.closest("[data-psave]")){
+        var name = el("pName").value.trim();
+        if (!name){ toast("Add a name"); return; }
+        p.name = name; p.born = el("pBorn").value; p.sex = el("pSex").value; p.stage = p.sex==="f" ? el("pStage").value : ""; p.avoid = avoid; p.editedAt = Date.now();
+        if (isNew){ S.people.push(p); S.ui.pid = p.id; }
+        save(true); closeSheet(); renderAll(); toast(isNew? p.name+" added" : "Saved");
+      }
+      if (e.target.closest("[data-pdel]") && confirm("Remove "+p.name+"? Their food log is hidden too.")){
+        p.deleted = true; p.editedAt = Date.now(); save(true); closeSheet(); renderAll();
+      }
+    });
+  var avoid = (p.avoid||[]).slice();
+  function drawAvoid(){
+    var q = el("pAvoidQ").value.trim(), hits = q ? searchFoods(q, null).slice(0,6) : [];
+    el("pAvoid").innerHTML = avoid.map(function(id){ var f = food(id); return '<button data-av="'+id+'" aria-pressed="true">'+esc(f.e+" "+f.n)+' ✕</button>'; }).join("")+
+      hits.filter(function(f){ return avoid.indexOf(f.id)<0; }).map(function(f){ return '<button data-av="'+f.id+'">＋ '+esc(f.e+" "+f.n)+'</button>'; }).join("");
+  }
+  el("pAvoidQ").addEventListener("input", drawAvoid);
+  function stageVis(){ el("pStageF").hidden = el("pSex").value !== "f"; }
+  el("pSex").addEventListener("change", stageVis); stageVis(); drawAvoid();
+}
+
+/* ═══ 15. Sync with the TWC Cloudflare Worker ══════════════════════════════
+   The Worker keeps each family's data in the private Twc_private_data repository.
+   Merging is by item id: the newest edit wins, deletions are kept as tombstones,
+   so two phones can log at the same time without losing anything. */
+function canSync(){ return !!(S.sync.api && S.sync.code); }
+function api(path, opts){
+  opts = opts || {};
+  return fetch(S.sync.api.replace(/\/+$/,"")+path, {
+    method: opts.method || "GET",
+    headers: { "Content-Type":"application/json", "Authorization":"Bearer "+S.sync.code },
+    body: opts.body ? JSON.stringify(opts.body) : undefined
+  }).then(function(r){
+    return r.json().catch(function(){ return {}; }).then(function(j){ if (!r.ok) throw new Error(j.error || ("HTTP "+r.status)); return j; });
+  });
+}
+function syncChip(kind, txt){
+  var c = el("syncChip");
+  c.className = "sync"+(kind?" "+kind:"");
+  el("syncTxt").textContent = txt || (S.sync.code ? (S.sync.name || "Synced") : "On this phone");
+}
+function mergeArr(a, b){
+  var m = {};
+  (a||[]).forEach(function(x){ if (x && x.id) m[x.id] = x; });
+  (b||[]).forEach(function(x){ if (!x || !x.id) return; var o = m[x.id]; if (!o || (x.editedAt||0) >= (o.editedAt||0)) m[x.id] = x; });
+  return Object.keys(m).map(function(k){ return m[k]; });
+}
+function mergeIn(d){
+  S.people = mergeArr(S.people, d.people);
+  S.logs = mergeArr(S.logs, d.logs);
+  S.custom = mergeArr(S.custom, d.custom);
+  if (Array.isArray(d.requests)) S.requests = mergeArr(S.requests, d.requests);
+  familyCounts = null;
+}
+function login(code){
+  if (!code){ toast("Type the family code"); return; }
+  S.sync.code = code; syncChip("busy","Connecting…");
+  api("/api/auth", { method:"POST", body:{ password:code } }).then(function(j){
+    S.sync.name = j.name || "Family"; save();
+    toast("Connected to "+S.sync.name);
+    return pull(false).then(function(){ dirty = true; return pushNow(); }).then(sendQueued);
+  }).catch(function(e){
+    S.sync.code = ""; save(); syncChip("bad","Not connected");
+    toast(/401|Invalid/.test(e.message) ? "That family code was not recognised" : "Could not reach the TWC server. Your data is safe on this phone.");
+  }).then(function(){ renderAll(); });
+}
+function pull(silent){
+  if (!canSync()) return Promise.resolve();
+  if (!silent) syncChip("busy","Checking…");
+  return api("/api/data").then(function(d){
+    mergeIn(d); S.sync.rev = d.rev||0; S.sync.lastAt = Date.now(); save(); renderAll(); syncChip("ok");
+    return api("/api/food-requests").then(function(j){
+      (j.requests||[]).forEach(function(r){
+        if (!S.requests.some(function(x){ return x.id===r.id; }))
+          S.requests.push({ id:r.id, name:r.name, details:r.details, emoji:r.emoji, by:r.by, at:r.at, sent:true, status:"sent" });
+      });
+      save(); if (S.ui.tab==="family") renderFamily();
+    }).catch(function(){});
+  }).catch(function(){ syncChip("bad","Offline"); });
+}
+function schedulePush(){ if (!canSync()) return; clearTimeout(pushTimer); pushTimer = setTimeout(pushNow, 1500); }
+function pushNow(){
+  if (!canSync() || !dirty) return Promise.resolve();
+  dirty = false; syncChip("busy","Saving…");
+  return api("/api/data", { method:"PUT", body:{ people:S.people, logs:S.logs, custom:S.custom } }).then(function(d){
+    mergeIn(d); S.sync.rev = d.rev||0; S.sync.lastAt = Date.now(); save(); syncChip("ok","Saved"); renderAll();
+  }).catch(function(){ dirty = true; syncChip("bad","Not saved yet"); });
+}
+el("syncChip").addEventListener("click", function(){ go("family"); });
+setInterval(function(){ if (canSync() && !document.hidden){ pull(true).then(pushNow).then(sendQueued); } }, 60000);
+document.addEventListener("visibilitychange", function(){ if (!document.hidden && canSync()) pull(true).then(pushNow); });
+window.addEventListener("online", function(){ if (canSync()) pushNow().then(sendQueued); });
+
+/* ═══ 16. Navigation and wiring ════════════════════════════════════════════ */
+function go(tab){
+  S.ui.tab = tab; save();
+  Array.prototype.forEach.call(document.querySelectorAll("main[data-tab]"), function(m){ m.hidden = m.getAttribute("data-tab") !== tab; });
+  Array.prototype.forEach.call(el("nav").children, function(b){ b.setAttribute("aria-current", String(b.getAttribute("data-go")===tab)); });
+  el("fab").hidden = tab !== "today" || !curPerson();
+  renderAll(); window.scrollTo(0,0);
+}
+el("nav").addEventListener("click", function(e){ var b = e.target.closest("[data-go]"); if (b) go(b.getAttribute("data-go")); });
+el("fab").addEventListener("click", function(){ openAdd(); });
+el("dPrev").addEventListener("click", function(){ S.ui.day = dayKey(keyMs(curDay())-DAY); save(); renderAll(); });
+el("dNext").addEventListener("click", function(){ if (curDay() < today()){ var n = dayKey(keyMs(curDay())+DAY); S.ui.day = n===today()?null:n; save(); renderAll(); } });
+el("dToday").addEventListener("click", function(){ S.ui.day = null; save(); renderAll(); });
+el("rangeSeg").addEventListener("click", function(e){ var b = e.target.closest("[data-r]"); if (b){ S.ui.range = b.getAttribute("data-r"); save(); renderAll(); } });
+el("todayBody").addEventListener("click", function(e){
+  var t;
+  if ((t = e.target.closest("[data-log]"))){ openLog(t.getAttribute("data-log")); return; }
+  if ((t = e.target.closest("[data-addmeal]"))){ openAdd(t.getAttribute("data-addmeal")); return; }
+  if ((t = e.target.closest("[data-quick]"))){ openAdd(null, t.getAttribute("data-quick"), t.getAttribute("data-qp")); return; }
+  if ((t = e.target.closest("[data-nut]"))){ var k = t.getAttribute("data-nut"); if (NUTMAP[k]){ fgNut = k; go("foods"); } return; }
+  if (e.target.closest("[data-copyday]")){
+    var p = curPerson(), src = logsFor(p.id, curDay(), curDay()), n = 0;
+    src.forEach(function(l){ S.logs.push(Object.assign({}, l, { id:uid(), day:today(), at:Date.now(), editedAt:Date.now(), by:S.ui.me||"" })); n++; });
+    S.ui.day = null; save(true); renderAll(); toast(n+" foods copied to today");
+  }
+});
+function renderAll(){
+  renderPeople();
+  if (S.ui.tab === "today") renderToday();
+  if (S.ui.tab === "week") renderWeek();
+  if (S.ui.tab === "foods") renderFoods();
+  if (S.ui.tab === "family") renderFamily();
+}
+// roll over to the new day at midnight
+var lastDay = today();
+setInterval(function(){ if (today() !== lastDay){ lastDay = today(); renderAll(); } }, 60000);
+
+go(S.ui.tab || "today");
+syncChip();
+if (canSync()) pull(true).then(pushNow).then(sendQueued);
+
+// for testing
+window.__nutri = { S:S, sum:sum, targets:targets, food:food, bestSources:bestSources, logsFor:logsFor, mergeArr:mergeArr };
+})();
+</script>
+</body>
+</html>
