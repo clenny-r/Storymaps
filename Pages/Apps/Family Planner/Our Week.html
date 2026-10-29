@@ -49,7 +49,16 @@
   header { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; flex-wrap: wrap; border-bottom: 2px solid var(--indigo); padding-bottom: 14px; margin-bottom: 16px; }
   .title h1 { font-family: Georgia, "Times New Roman", serif; font-size: 30px; font-weight: 600; color: var(--indigo); letter-spacing: 0.3px; }
   .title .sub { font-size: 13.5px; color: var(--muted); margin-top: 3px; }
-  .tools { display: flex; gap: 8px; flex-wrap: wrap; }
+  .tools { display: flex; gap: 8px; flex-wrap: wrap; position: relative; }
+  .more-menu {
+    display: none; position: absolute; right: 0; top: calc(100% + 6px); z-index: 120; min-width: 210px;
+    background: var(--paper); border: 1px solid var(--rule); border-radius: 10px; padding: 6px;
+    box-shadow: 0 14px 34px var(--shadow); flex-direction: column; gap: 2px;
+  }
+  .more-menu.open { display: flex; }
+  .more-menu button { border: 0; text-align: left; padding: 10px 12px; color: var(--ink); font-weight: 500; font-size: 14px; border-radius: 7px; }
+  .more-menu button:hover { background: var(--indigo-soft); color: var(--ink); }
+  .more-menu hr { border: 0; border-top: 1px solid var(--rule); margin: 4px 6px; }
 
   button {
     font-family: inherit; font-size: 13px; font-weight: 600; cursor: pointer;
@@ -252,12 +261,13 @@
 
   /* ── toast ────────────────────────────────────────────────────────── */
   #toast {
-    position: fixed; left: 50%; bottom: 22px; transform: translateX(-50%) translateY(140%);
+    position: fixed; left: 50%; bottom: calc(22px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%) translateY(calc(100% + 60px));
+    visibility: hidden;
     background: var(--indigo); color: var(--paper); border-radius: 10px; padding: 11px 14px;
     display: flex; align-items: center; gap: 14px; font-size: 13.5px; z-index: 190;
-    box-shadow: 0 12px 34px var(--shadow); transition: transform 0.25s cubic-bezier(.4,0,.2,1); max-width: calc(100% - 32px);
+    box-shadow: 0 12px 34px var(--shadow); transition: transform 0.25s cubic-bezier(.4,0,.2,1), visibility 0s linear 0.25s; max-width: calc(100% - 32px);
   }
-  #toast.show { transform: translateX(-50%) translateY(0); }
+  #toast.show { transform: translateX(-50%) translateY(0); visibility: visible; transition: transform 0.25s cubic-bezier(.4,0,.2,1), visibility 0s; }
   #toast button { border-color: currentColor; color: inherit; padding: 5px 11px; font-size: 12px; }
   #toast button:hover { background: var(--paper); color: var(--indigo); }
 
@@ -269,7 +279,14 @@
     .weekbar { justify-content: center; text-align: center; }
     .sync { text-align: center; min-width: 0; }
     .tools { width: 100%; }
-    .tools button { flex: 1; }
+    .tools > button { flex: 1; }
+    .more-menu { left: 0; right: 0; }
+    .day { min-height: 0; }
+    .day.is-empty ul.items { display: none; }
+    .day.is-empty .day-head { border-bottom: 0; }
+    .day.is-empty .add { border-top: 0; padding-top: 0; }
+    .title .sub { display: none; }
+    body.dragging .day.is-empty ul.items { display: block; }
   }
 
   @media print {
@@ -323,20 +340,25 @@
   <header>
     <div class="title">
       <h1>Our Week</h1>
-      <div class="sub">Drag items between days. Tap any item to open its notes page.</div>
+      <div class="sub">Drag items between days. Tap any item to open its notes page. Quick add: &ldquo;Dentist Tuesday 3pm @Mom #Appointment&rdquo;.</div>
     </div>
     <div class="tools">
-      <button class="plain" id="themeBtn" title="Light or dark">Dark</button>
-      <button class="plain" id="repeatBtn" title="Items that appear every week">Repeating</button>
       <button class="plain" id="peopleBtn" title="Who is in this family">People</button>
       <button class="plain" id="flagsBtn" title="Edit your flags and their colours">Flags</button>
-      <button class="plain" id="tidyBtn" title="Sort each day by time">Tidy by time</button>
-      <button class="plain" id="printBtn">Print</button>
-      <button class="plain" id="exportBtn">Export</button>
-      <button class="plain" id="importBtn">Import</button>
-      <button class="plain" id="clearDoneBtn">Clear done</button>
-      <button class="plain" id="adminBtn" style="display:none;">Families</button>
-      <button class="plain" id="signOutBtn">Sign out</button>
+      <button class="plain" id="moreBtn" aria-haspopup="true" aria-expanded="false" aria-controls="moreMenu">More &#9662;</button>
+      <div class="more-menu" id="moreMenu" role="menu">
+        <button id="repeatBtn" role="menuitem">Repeating items</button>
+        <button id="tidyBtn" role="menuitem">Tidy each day by time</button>
+        <button id="clearDoneBtn" role="menuitem">Clear done items</button>
+        <hr>
+        <button id="printBtn" role="menuitem">Print this week</button>
+        <button id="exportBtn" role="menuitem">Export (save a copy)</button>
+        <button id="importBtn" role="menuitem">Import a saved copy</button>
+        <hr>
+        <button id="themeBtn" role="menuitem">Dark mode</button>
+        <button id="adminBtn" role="menuitem" style="display:none;">Families (admin)</button>
+        <button id="signOutBtn" role="menuitem">Sign out</button>
+      </div>
     </div>
   </header>
 
@@ -430,7 +452,7 @@
       </div>
       <label class="switch" for="editUrgent">
         <input type="checkbox" id="editUrgent">
-        <span>URGENT!! &#128680; &mdash; emails the assignee once its time has passed</span>
+        <span>URGENT!! &#128680; Emails the person it is for once its time has passed (set to Anyone: emails everyone)</span>
       </label>
       <div class="hint" id="noteMeta"></div>
     </div>
@@ -696,16 +718,22 @@
 
   function pushSave() {
     if (offline || !dirty) return;
-    var wk = iso(week);
-    api("PUT", "/api/week?week=" + wk, { days: state.days }).then(function (r) {
+    clearTimeout(saveTimer);
+    pushWeek(iso(week), state.days);
+  }
+  // Save one week's days. A failed save is retried for that same week, even if
+  // the family has moved on to another week in the meantime.
+  function pushWeek(wk, days) {
+    api("PUT", "/api/week?week=" + wk, { days: days }).then(function (r) {
+      if (wk !== iso(week)) return;          // an older week finished saving
       dirty = false;
       lastUpdatedAt = r.updatedAt || lastUpdatedAt;
       setSync("Saved");
     }).catch(function (e) {
-      setSync("Not saved — retrying", true);
-      clearTimeout(saveTimer);
-      saveTimer = setTimeout(pushSave, 4000);
-      if (/Invalid password|Authorization/.test(e.message)) signOut();
+      if (/Invalid password|Authorization/.test(e.message)) { signOut(); return; }
+      setSync("Not saved, retrying", true);
+      if (wk === iso(week)) { clearTimeout(saveTimer); saveTimer = setTimeout(pushSave, 4000); }
+      else setTimeout(function () { pushWeek(wk, days); }, 4000);
     });
   }
 
@@ -760,14 +788,14 @@
     var tags = "";
     var over = it.urgent && !it.done && isOverdue(day, it);
     if (it.urgent && !it.done) tags += '<span class="chip urgent' + (over ? " over" : "") + '">URGENT!! &#128680;</span>';
-    flags.forEach(function (f) { tags += '<span class="chip flag" style="background:' + catColour(f) + '">' + esc(f) + '</span>'; });
+    flags.forEach(function (f) { tags += '<span class="chip flag" style="background:' + esc(catColour(f)) + '">' + esc(f) + '</span>'; });
     if (it.time)       tags += '<span class="chip time">' + esc(fmtTime(it.time)) + '</span>';
     if (it.assignedTo) tags += '<span class="chip person" style="background:' + personColour(it.assignedTo) + '">' + esc(it.assignedTo) + '</span>';
     if (it.repeating || it.freq) tags += '<span class="chip rep">&#8635; ' + (freqLabel(it.freq) || 'weekly') + '</span>';
     else if (it.addedBy) tags += '<span class="chip">' + esc(it.addedBy) + '</span>';
 
     return '<li class="item' + (it.done ? " done" : "") + (flags.length ? " flagged" : "") + (over ? " overdue" : "") + '" data-day="' + day + '" data-id="' + esc(it.id) + '"' +
-      (flags.length ? ' style="--flagc:' + catColour(flags[0]) + '"' : '') + '>' +
+      (flags.length ? ' style="--flagc:' + esc(catColour(flags[0])) + '"' : '') + '>' +
       '<span class="grip" title="Drag to move">&#8942;&#8942;</span>' +
       '<span class="box' + (it.done ? " checked" : "") + '" role="checkbox" aria-checked="' + (it.done ? "true" : "false") + '" tabindex="0">' + CHECK + '</span>' +
       '<span class="txt">' + esc(it.title) + (tags ? '<span class="tags">' + tags + '</span>' : '') + '</span>' +
@@ -791,7 +819,7 @@
       allDone += done; allTotal += items.length;
 
       var card = document.createElement("div");
-      card.className = "day" + (day === "Saturday" || day === "Sunday" ? " weekend" : "") + (day === tName ? " today" : "");
+      card.className = "day" + (day === "Saturday" || day === "Sunday" ? " weekend" : "") + (day === tName ? " today" : "") + (all.length ? "" : " is-empty");
       card.setAttribute("data-day", day);
 
       var head = '<div class="day-head">' + ring(done, items.length) +
@@ -820,7 +848,16 @@
       + (hidden ? " · " + hidden + " hidden" : "");
 
     wire();
+    if (wantToday) {
+      wantToday = false;
+      var tc = document.querySelector(".day.today");
+      // only on phones, where the days stack in one column
+      if (tc && window.matchMedia("(max-width: 560px)").matches) {
+        setTimeout(function () { tc.scrollIntoView({ block: "start", behavior: "auto" }); window.scrollBy(0, -8); }, 30);
+      }
+    }
   }
+  var wantToday = true;   // jump to today on first open and on "This week"
 
   // ── Flag bar: the "several calendars in one" switcher ──────────────────
   function renderFlagbar() {
@@ -842,7 +879,7 @@
       '<button class="flagchip all' + (filterTags.length ? "" : " on") + '" data-flag="">Everything</button>';
 
     names.forEach(function (n) {
-      var on = filterTags.indexOf(n) >= 0, c = catColour(n), n2 = counts[n] || 0;
+      var on = filterTags.indexOf(n) >= 0, c = esc(catColour(n)), n2 = counts[n] || 0;
       html += '<button class="flagchip' + (on ? " on" : "") + (n2 ? "" : " zero") + '" data-flag="' + esc(n) + '"' +
         (on ? ' style="background:' + c + '"' : '') + '>' +
         '<span class="dot"' + (on ? '' : ' style="background:' + c + '"') + '></span>' +
@@ -901,16 +938,12 @@
   }
 
   function addItem(day, title) {
+    var fromDay = day;
     title = (title || "").trim();
     if (!title) return;
-    // "7pm dentist" / "19:00 dentist" -> pull the time out of the front
-    var time = "", m = title.match(/^(\d{1,2})(?::(\d{2}))?\s*(am|pm)\b\s*(.+)$/i) || title.match(/^(\d{1,2}):(\d{2})\s+(.+)$/);
-    if (m && m[3] && /am|pm/i.test(m[3])) {
-      var h = parseInt(m[1], 10) % 12; if (/pm/i.test(m[3])) h += 12;
-      time = String(h).padStart(2, "0") + ":" + (m[2] || "00"); title = m[4].trim();
-    } else if (m && !m[4]) {
-      time = String(parseInt(m[1], 10)).padStart(2, "0") + ":" + m[2]; title = m[3].trim();
-    }
+    var q = parseQuick(title);
+    title = q.title; var time = q.time;
+    if (q.day) day = q.day;
 
     // "#exercise run 5k" -> flag it as Exercise
     var tags = [];
@@ -926,12 +959,66 @@
 
     state.days[day].push({
       id: newId(), title: title, done: false, note: "", time: time, tags: tags,
-      assignedTo: (filterWho.length === 1 ? filterWho[0] : ""), addedBy: (auth && auth.who) || "",
+      assignedTo: q.who || (filterWho.length === 1 ? filterWho[0] : ""), addedBy: (auth && auth.who) || "",
       repeating: false, freq: "", urgent: false, urgentNotified: false, createdAt: new Date().toISOString()
     });
     queueSave(); render();
-    var inp = document.querySelector('.add input[data-day="' + day + '"]');
+    var inp = document.querySelector('.add input[data-day="' + fromDay + '"]');
     if (inp) { inp.value = ""; inp.focus(); }
+    if (day !== fromDay) showToast('Added "' + (title.length > 24 ? title.slice(0, 24) + "…" : title) + '" to ' + day, false);
+  }
+
+  // Quick add: pull a time ("3pm", "3:30 pm", "15:30"), a day ("Tuesday", "tomorrow",
+  // or "Tue" next to a time) and a person ("@Mom") out of the text, wherever they are.
+  var DAY_ABBR = { mon: 0, tue: 1, tues: 1, wed: 2, thu: 3, thur: 3, thurs: 3, fri: 4, sat: 5, sun: 6 };
+  function parseQuick(text) {
+    var out = { title: text, time: "", day: "", who: "" };
+    var t = " " + text + " ", m;
+    // time with am/pm
+    m = t.match(/\s(\d{1,2})(?::([0-5]\d))?\s?(am|pm|a\.m\.|p\.m\.)(?=[\s,.!?])/i);
+    if (m && +m[1] >= 1 && +m[1] <= 12) {
+      var h = (+m[1]) % 12; if (/^p/i.test(m[3])) h += 12;
+      out.time = String(h).padStart(2, "0") + ":" + (m[2] || "00");
+    } else {
+      m = t.match(/\s([01]?\d|2[0-3]):([0-5]\d)(?=[\s,.!?])/);
+      if (m) out.time = String(+m[1]).padStart(2, "0") + ":" + m[2];
+      else m = null;
+    }
+    var timeAt = -1, timeEnd = -1;
+    if (m) { timeAt = m.index; timeEnd = m.index + m[0].length; t = t.slice(0, timeAt) + " " + t.slice(timeEnd); }
+    // full day names, or "tomorrow" while looking at this week
+    var dm = t.match(/\s(on\s+)?(monday|tuesday|wednesday|thursday|friday|saturday|sunday)(?=[\s,.!?])/i);
+    if (dm) {
+      out.day = DAYS[["monday","tuesday","wednesday","thursday","friday","saturday","sunday"].indexOf(dm[2].toLowerCase())];
+      t = t.slice(0, dm.index) + " " + t.slice(dm.index + dm[0].length);
+    } else if (isCurrentWeek() && (dm = t.match(/\s(tomorrow|tmrw)(?=[\s,.!?])/i)) && todayName() !== "Sunday") {
+      out.day = DAYS[DAYS.indexOf(todayName()) + 1];
+      t = t.slice(0, dm.index) + " " + t.slice(dm.index + dm[0].length);
+    } else if (isCurrentWeek() && (dm = t.match(/\s(today)(?=[\s,.!?])/i))) {
+      out.day = todayName();
+      t = t.slice(0, dm.index) + " " + t.slice(dm.index + dm[0].length);
+    } else if (timeAt >= 0) {
+      // short day names count only right beside the time ("Tue 3pm", "3pm Tue"), so "sun cream" stays text
+      var near = t.slice(Math.max(0, timeAt - 8), timeAt + 9);
+      var am = near.match(/(^|\s)(mon|tues?|wed|thur?s?|fri|sat|sun)\.?(?=[\s,]|$)/i);
+      if (am && DAY_ABBR[am[2].toLowerCase()] !== undefined) {
+        out.day = DAYS[DAY_ABBR[am[2].toLowerCase()]];
+        var abs = Math.max(0, timeAt - 8) + am.index;
+        t = t.slice(0, abs) + " " + t.slice(abs + am[0].length);
+      }
+    }
+    // @Name -> assign to that family member
+    if (members.length) {
+      t = t.replace(/\s@([^\s,]+)/g, function (all, nm) {
+        var hit = members.filter(function (x) { return x.toLowerCase().replace(/\s+/g, "") === nm.toLowerCase(); })[0];
+        if (hit && !out.who) { out.who = hit; return " "; }
+        return all;
+      });
+    }
+    out.title = t.replace(/\s{2,}/g, " ").replace(/\s+([,.!?])/g, "$1").replace(/^[\s,]+|[\s,]+$/g, "").trim();
+    if (out.time || out.day) out.title = out.title.replace(/\s+(at|on|by)$/i, "").replace(/\s+(at|on)\s+(?=[,.!?]|$)/i, " ").trim();
+    if (!out.title) out.title = text.trim();   // never lose the text completely
+    return out;
   }
   function findItem(day, id) { return (state.days[day] || []).filter(function (i) { return i.id === id; })[0]; }
 
@@ -966,6 +1053,7 @@
     var it = findItem(day, id); if (!it) return;
 
     dragging = { day: day, id: id, item: it, from: li };
+    document.body.classList.add("dragging");
     li.classList.add("lifting");
 
     ghost = document.createElement("div");
@@ -1028,6 +1116,7 @@
     document.removeEventListener("pointerup", endDrag);
     document.removeEventListener("pointercancel", endDrag);
     clearInterval(scrollTimer);
+    document.body.classList.remove("dragging");
     if (!dragging) return;
 
     var target = ph.parentNode ? ph.closest(".day") : null;
@@ -1071,6 +1160,7 @@
     $("sheetDay").textContent = day;
     $("sheetTitle").textContent = it.title;
     $("editTitle").value = it.title;
+    openTitle = it.title;
     $("editWho").value = it.assignedTo || "";
     $("editTime").value = it.time || "";
     $("editDay").value = day;
@@ -1082,6 +1172,7 @@
     $("noteMeta").textContent = it.addedBy ? "Added by " + it.addedBy : "";
     $("scrim").classList.add("open");
   }
+  var openTitle = "";
   function closeNote() { $("scrim").classList.remove("open"); active = null; }
 
   function renderTagPicker(it) {
@@ -1092,7 +1183,7 @@
     if (!names.length) { box.innerHTML = '<span class="hint" style="margin:0">No flags yet — add some under “Flags”.</span>'; return; }
 
     box.innerHTML = names.map(function (n) {
-      var on = own.indexOf(n) >= 0, c = catColour(n);
+      var on = own.indexOf(n) >= 0, c = esc(catColour(n));
       return '<button class="flagchip' + (on ? " on" : "") + '" data-tag="' + esc(n) + '"' + (on ? ' style="background:' + c + '"' : '') + '>' +
         '<span class="dot"' + (on ? '' : ' style="background:' + c + '"') + '></span>' + esc(n) + '</button>';
     }).join("");
@@ -1117,6 +1208,12 @@
     fn(it); queueSave();
   }
   $("noteArea").addEventListener("input", function () { editField(function (it) { it.note = $("noteArea").value; }); });
+  // when a repeating item is renamed, move its repeat to the new name
+  $("editTitle").addEventListener("change", function () {
+    var it = active && findItem(active.day, active.id);
+    if (it && it.freq && !offline && openTitle && it.title !== openTitle) updateTemplate(active.day, it, it.freq, openTitle);
+    if (it) openTitle = it.title;
+  });
   $("editTitle").addEventListener("input", function () {
     editField(function (it) { it.title = $("editTitle").value; });
     $("sheetTitle").textContent = $("editTitle").value;
@@ -1131,6 +1228,7 @@
     state.days[to].push(it);
     active.day = to;
     $("sheetDay").textContent = to;
+    if (it.freq && !offline) updateTemplate(to, it, it.freq);
     queueSave(); render();
   });
   $("editRecur").addEventListener("change", function () {
@@ -1147,7 +1245,8 @@
     var it = active && findItem(active.day, active.id);
     if (it && it.freq && !offline) updateTemplate(active.day, it, it.freq); // mirror into the repeat template
     render();
-    if (on) showToast("Marked urgent — the assignee will be emailed if its time passes", false);
+    if (on) showToast(it && it.assignedTo ? "Marked urgent. " + it.assignedTo + " will be emailed if its time passes"
+                                         : "Marked urgent. Everyone with an email will be emailed if its time passes", false);
   });
   $("copyBtn").addEventListener("click", function () {
     if (!active) return;
@@ -1169,7 +1268,7 @@
     if (idx < 0) return;
     var removed = state.days[day][idx];
     state.days[day].splice(idx, 1);
-    undoBuf = { day: day, index: idx, item: removed };
+    undoBuf = { day: day, index: idx, item: removed, week: iso(week) };
     queueSave(); closeNote(); render();
     showToast('Deleted "' + (removed.title.length > 28 ? removed.title.slice(0, 28) + "…" : removed.title) + '"', true);
   });
@@ -1177,7 +1276,8 @@
 
   document.addEventListener("keydown", function (e) {
     if (e.key !== "Escape") return;
-    ["scrim", "adminScrim", "repScrim", "peopleScrim"].forEach(function (idn) {
+    setMenu(false);
+    ["scrim", "adminScrim", "repScrim", "peopleScrim", "flagScrim"].forEach(function (idn) {
       if ($(idn).classList.contains("open")) { $(idn).classList.remove("open"); if (idn === "scrim") { active = null; render(); } }
     });
   });
@@ -1192,6 +1292,7 @@
   }
   $("toastBtn").addEventListener("click", function () {
     if (!undoBuf) return;
+    if (undoBuf.week !== iso(week)) { undoBuf = null; $("toast").classList.remove("show"); return; }
     state.days[undoBuf.day].splice(Math.min(undoBuf.index, state.days[undoBuf.day].length), 0, undoBuf.item);
     undoBuf = null;
     $("toast").classList.remove("show");
@@ -1200,11 +1301,12 @@
 
   // ── Repeating items (template) ─────────────────────────────────────────
   // freq: "" removes it; otherwise weekly / biweekly / every3 / every4 / monthly.
-  function updateTemplate(day, it, freq) {
+  function updateTemplate(day, it, freq, oldTitle) {
     api("GET", "/api/template").then(function (r) {
       var tpl = r.days || {};
       DAYS.forEach(function (d) { if (!tpl[d]) tpl[d] = []; });
-      var same = function (x) { return x.title.trim().toLowerCase() === it.title.trim().toLowerCase(); };
+      var key = function (x) { return String(x || "").trim().toLowerCase(); };
+      var same = function (x) { return key(x.title) === key(it.title) || (oldTitle && key(x.title) === key(oldTitle)); };
       // remove any existing copy across all days first
       DAYS.forEach(function (d) { tpl[d] = tpl[d].filter(function (x) { return !same(x); }); });
       if (freq) {
@@ -1258,7 +1360,7 @@
 
   // ── Flags (categories) ─────────────────────────────────────────────────
   function saveCategories() {
-    if (offline) { renderFlagEdit(); render(); return Promise.resolve(); }
+    if (offline) { setPref("offlineFlags", categories); renderFlagEdit(); render(); return Promise.resolve(); }
     return api("PUT", "/api/categories", { categories: categories }).then(function (r) {
       categories = r.categories; renderFlagEdit(); render();
     }).catch(function (e) { $("flagMsg").className = "msg bad"; $("flagMsg").textContent = e.message; });
@@ -1336,7 +1438,11 @@
 
   $("peopleSave").addEventListener("click", function () {
     var parsed = parsePeople($("peopleList").value);
-    if (offline) { members = parsed.names; memberEmails = parsed.emails; fillPeople(); render(); $("peopleScrim").classList.remove("open"); return; }
+    if (offline) {
+      members = parsed.names; memberEmails = parsed.emails;
+      setPref("offlineMembers", members); setPref("offlineEmails", memberEmails);
+      fillPeople(); render(); $("peopleScrim").classList.remove("open"); return;
+    }
     var m = $("peopleMsg"); m.className = "msg"; m.textContent = "Saving…";
     api("PUT", "/api/members", { members: parsed.names }).then(function (r) {
       members = r.members;
@@ -1356,13 +1462,13 @@
       var moved = 0;
       DAYS.forEach(function (d) {
         (days[d] || []).forEach(function (it) {
-          if (it.done || it.repeating) return;
+          if (it.done || it.repeating || it.freq) return;
           var dup = (state.days[d] || []).some(function (x) { return x.title.trim().toLowerCase() === it.title.trim().toLowerCase(); });
           if (dup) return;
           state.days[d].push({
             id: newId(), title: it.title, done: false, note: it.note || "", time: it.time || "",
             tags: (it.tags || []).slice(), assignedTo: it.assignedTo || "", addedBy: it.addedBy || "",
-            repeating: false, createdAt: new Date().toISOString()
+            urgent: !!it.urgent, urgentNotified: false, repeating: false, freq: "", createdAt: new Date().toISOString()
           });
           moved++;
         });
@@ -1381,6 +1487,15 @@
       .catch(function (e) { setSync("Can't load", true); showToast(e.message, false); });
   });
 
+  // ── More menu ──────────────────────────────────────────────────────────
+  function setMenu(open) {
+    $("moreMenu").classList.toggle("open", open);
+    $("moreBtn").setAttribute("aria-expanded", open ? "true" : "false");
+  }
+  $("moreBtn").addEventListener("click", function (e) { e.stopPropagation(); setMenu(!$("moreMenu").classList.contains("open")); });
+  $("moreMenu").addEventListener("click", function (e) { if (e.target.tagName === "BUTTON") setMenu(false); });
+  document.addEventListener("click", function (e) { if (!e.target.closest || !e.target.closest(".tools")) setMenu(false); });
+
   // ── Toolbar ────────────────────────────────────────────────────────────
   $("tidyBtn").addEventListener("click", function () {
     DAYS.forEach(function (d) {
@@ -1388,7 +1503,7 @@
         if (!a.time && !b.time) return 0;
         if (!a.time) return 1;
         if (!b.time) return -1;
-        return a.time < b.time ? -1 : 1;
+        return a.time < b.time ? -1 : (a.time > b.time ? 1 : 0);
       });
     });
     queueSave(); render();
@@ -1398,7 +1513,7 @@
   $("themeBtn").addEventListener("click", function () {
     var dark = !document.documentElement.classList.contains("dark");
     document.documentElement.classList.toggle("dark", dark);
-    $("themeBtn").textContent = dark ? "Light" : "Dark";
+    $("themeBtn").textContent = dark ? "Light mode" : "Dark mode";
     setPref("dark", dark);
   });
 
@@ -1417,8 +1532,9 @@
     var payload = { week: iso(week), family: (auth && auth.family) || "Offline", days: state.days };
     var blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
     var a = document.createElement("a");
-    a.href = URL.createObjectURL(blob); a.download = "our-week-" + iso(week) + ".json"; a.click();
-    URL.revokeObjectURL(a.href);
+    a.href = URL.createObjectURL(blob); a.download = "our-week-" + iso(week) + ".json";
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(function () { URL.revokeObjectURL(a.href); }, 4000);
   });
   $("importBtn").addEventListener("click", function () { $("importFile").click(); });
   $("importFile").addEventListener("change", function (ev) {
@@ -1427,7 +1543,10 @@
     r.onload = function () {
       try {
         var p = JSON.parse(r.result);
-        if (p && p.days) { state = normalise(p.days); queueSave(); render(); }
+        if (p && p.days) {
+          if (!confirm("Replace everything in " + fmtRange(week) + " with the saved copy" + (p.week ? " from the week of " + p.week : "") + "?")) return;
+          state = normalise(p.days); queueSave(); render(); showToast("Week replaced from the saved copy", false);
+        }
         else alert("That file is not a week export.");
       } catch (e) { alert("That file could not be read."); }
     };
@@ -1436,10 +1555,15 @@
   });
 
   // ── Week navigation ────────────────────────────────────────────────────
-  function goWeek(d) { pushSave(); week = mondayOf(d); loadWeek(); }
+  function goWeek(d) {
+    if (dirty && !offline) { clearTimeout(saveTimer); pushWeek(iso(week), state.days); }
+    dirty = false;
+    undoBuf = null;
+    week = mondayOf(d); loadWeek();
+  }
   $("prevWeek").addEventListener("click", function () { goWeek(addDays(week, -7)); });
   $("nextWeek").addEventListener("click", function () { goWeek(addDays(week, 7)); });
-  $("thisWeek").addEventListener("click", function () { goWeek(new Date()); });
+  $("thisWeek").addEventListener("click", function () { wantToday = true; goWeek(new Date()); });
   document.addEventListener("keydown", function (e) {
     if (e.target.matches("input, textarea, select")) return;
     if (e.key === "[") goWeek(addDays(week, -7));
@@ -1454,6 +1578,12 @@
       ? "Offline — saved on this device only"
       : (auth.family || "Your family") + (auth.who ? " · signed in as " + auth.who : "");
     members = (auth && auth.members) || [];
+    if (offline) {
+      var pf = prefs();
+      if (Array.isArray(pf.offlineMembers)) members = pf.offlineMembers;
+      if (pf.offlineEmails) memberEmails = pf.offlineEmails;
+      if (Array.isArray(pf.offlineFlags)) categories = pf.offlineFlags;
+    }
     if (offline && !categories.length) categories = [
       { name: "House task", colour: "#2a6f97" }, { name: "Reminder", colour: "#c2922b" },
       { name: "Exercise", colour: "#2f8f5b" }, { name: "Routine", colour: "#7b5ea7" },
@@ -1515,7 +1645,8 @@
   $("gateName").addEventListener("keydown", function (e) { if (e.key === "Enter") doSignIn(); });
   $("gateLocal").addEventListener("click", function () {
     offline = true;
-    auth = { who: $("gateName").value.trim(), family: "This device", members: [] };
+    auth = { who: $("gateName").value.trim(), family: "This device", members: [], offline: true };
+    if ($("gateRemember").checked) lsSet(AUTH_KEY, JSON.stringify(auth));
     showApp();
   });
 
@@ -1561,11 +1692,12 @@
 
   // ── Boot ───────────────────────────────────────────────────────────────
   (function boot() {
-    if (prefs().dark) { document.documentElement.classList.add("dark"); $("themeBtn").textContent = "Light"; }
+    if (prefs().dark) { document.documentElement.classList.add("dark"); $("themeBtn").textContent = "Light mode"; }
     var saved = lsGet(AUTH_KEY);
     if (saved) {
       try {
         auth = JSON.parse(saved);
+        offline = !!auth.offline;
         $("gateName").value = auth.who || "";
         showApp();
         return;

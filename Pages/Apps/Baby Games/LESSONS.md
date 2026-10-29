@@ -2,6 +2,17 @@
 
 Newest first. Read this before changing anything in this folder.
 
+## 29 Oct 2026: original games back on top; new games feedback
+
+### What was done
+1. Home page order: the 8 original games first, then the 11 Bible story games (commit 97a4baf, live).
+2. Wrote a ranked upgrade plan for the other TWC apps (artifact "TWC Apps Upgrade Plan"). Best pick: one family sign-in plus install and offline for every app. Planner first fixes: open on today, collapse empty days, fold 10 toolbar buttons into a More menu, fix the hidden Undo bar peeking at the bottom (#toast uses translateY(140%) only).
+
+### Lessons
+1. **Clenmar said "some of the new ones are kinda lame"** and wants the originals first. New games are not proven until his daughter likes them; ask which ones before polishing more.
+2. Do not reorder or bury games families already know when adding new ones.
+3. Pushing at night: GitHub Desktop opened with `computer_open_application("Githubdesktop")` (taskbar clicks are refused without File Explorer access).
+
 ## 28 Oct 2026: eleven Bible story games and Plane mode
 
 ### What was done
