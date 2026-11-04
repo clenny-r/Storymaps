@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>QA pass | Weh Di Evidence Seh?</title>
+<meta name="theme-color" content="#1c0d2e">
+<link rel="icon" href="../../assets/twc-mark.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#1c0d2e;--panel:#2a1742;--panel2:#35204f;--ink:#fbf5e6;--ink2:#d9cfe6;--muted:#a596b8;--gold:#f5b82e;--green:#2fa866;--red:#ff5a6e;
+    --display:"Bricolage Grotesque",ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+  .wrap{max-width:680px;margin:0 auto;padding:0 14px 60px}
+  h1{font-family:var(--display);font-weight:800;font-size:26px;line-height:1.05;margin:16px 0 4px;color:var(--gold)}
+  p.lead{margin:0 0 10px;color:var(--ink2);font-size:15px}
+  .bar{position:sticky;top:0;z-index:5;background:rgba(28,13,46,.97);border-bottom:1px solid rgba(251,245,230,.12);padding:8px 0}
+  .row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  .count{font-family:var(--display);font-weight:700;font-size:15px;flex:1 1 auto}
+  .meter{height:6px;background:rgba(251,245,230,.15);border-radius:3px;margin-top:6px;overflow:hidden}.meter b{display:block;height:100%;background:var(--gold);width:0}
+  button,select,textarea,input{font:inherit}
+  .btn{border:1px solid rgba(251,245,230,.28);background:transparent;color:var(--ink);border-radius:10px;padding:9px 13px;font-size:14px;cursor:pointer}
+  .btn.primary{background:var(--gold);border-color:var(--gold);color:#1c0d2e;font-weight:700}
+  .btn.on{background:var(--gold);border-color:var(--gold);color:#1c0d2e;font-weight:700}
+  .chips{display:flex;gap:6px;overflow-x:auto;padding:6px 0 2px}
+  .chip{white-space:nowrap;border:1px solid rgba(251,245,230,.22);background:transparent;color:var(--ink);border-radius:999px;padding:6px 12px;font-size:13px;cursor:pointer}
+  .chip.on{background:var(--gold);border-color:var(--gold);color:#1c0d2e;font-weight:700}
+  select{background:var(--panel2);color:var(--ink);border:1px solid rgba(251,245,230,.25);border-radius:10px;padding:8px 10px;max-width:100%}
+  .vid{margin:20px 0 10px}
+  .vid h2{font-family:var(--display);font-weight:800;font-size:20px;margin:0 0 6px;display:flex;align-items:center;gap:10px}
+  .vid h2 small{font-weight:600;font-size:13px;color:var(--muted)}
+  video{width:100%;max-height:60vh;background:#000;border-radius:12px;display:block;margin:0 0 8px}
+  .card{background:var(--panel);border-radius:12px;padding:12px;margin:0 0 10px;border-left:4px solid var(--muted);scroll-margin-top:140px}
+  .card.s3{border-left-color:var(--red)} .card.s2{border-left-color:var(--gold)} .card.done{opacity:.72}
+  .where{font-size:13px;color:var(--gold);font-weight:700;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  .where .k{color:var(--ink);background:var(--panel2);border-radius:6px;padding:1px 7px}
+  .txt{margin:6px 0 10px;color:var(--ink2);font-size:15px}
+  .opts{display:flex;gap:6px;flex-wrap:wrap}
+  textarea{width:100%;min-height:40px;margin-top:8px;background:var(--panel2);color:var(--ink);border:1px solid rgba(251,245,230,.2);border-radius:10px;padding:8px}
+  .listen{font-size:14px;color:var(--muted);margin:4px 0 10px}.listen span{display:inline-block;margin:2px 6px 2px 0;cursor:pointer;text-decoration:underline dotted}
+  .state{font-size:13px;color:var(--muted);margin-top:4px}.state.ok{color:var(--green)}.state.bad{color:var(--red)}
+  .hint{font-size:13px;color:var(--muted);margin:6px 0 0}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>QA pass, every flagged moment</h1>
+  <p class="lead">Tap <b>Play</b> to hear the moment in the real video, then answer. Red needs a decision, gold probably needs a fix, grey is advisory. Answers save on this phone and are sent to the reports store.</p>
+  <div class="bar">
+    <div class="row"><div class="count" id="count"></div><select id="pick"></select></div>
+    <div class="chips" id="sev"><button class="chip on" data-s="23">Red + gold</button><button class="chip" data-s="3">Red only</button><button class="chip" data-s="1">Advisory</button><button class="chip" data-s="123">All</button></div>
+    <div class="chips" id="kinds"></div>
+    <div class="row"><button class="chip on" id="fopen">Open</button><button class="chip" id="fall">Answered too</button><span class="state" id="setupstate"></span></div>
+    <div class="meter"><b id="meter"></b></div>
+  </div>
+  <div id="list"></div>
+  <p class="hint">Run: <span id="run"></span>. The video seeks to 1.5 s before the flag and stops about 6 s after it. Each video loads only when its group is open.</p>
+</div>
+<script src="items.js"></script>
+<script>
+(function(){
+  var API="https://twc-evidence-reports.kd7bgn7q2z.workers.dev";
+  var ITEMS=window.QA_ITEMS||[], RUN=window.QA_RUN||"qa", LISTEN=window.QA_LISTEN||{}, SUM=window.QA_SUMMARY||[];
+  var $=function(id){return document.getElementById(id);};
+  var LS="evidence_qa_answers_"+RUN;
+  function load(){try{return JSON.parse(localStorage.getItem(LS)||"{}")||{};}catch(e){return {};}}
+  function store(o){try{localStorage.setItem(LS,JSON.stringify(o));}catch(e){}}
+  var A=load(), sev="23", kind="", onlyOpen=true, pick="";
+  function fmt(s){s=Math.round(s);return Math.floor(s/60)+":"+String(s%60).padStart(2,"0");}
+  function vname(it){return "e"+String(it.ep).padStart(2,"0")+"-p"+it.part;}
+  function el(t,c,x){var e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e;}
+  $("run").textContent=RUN;
+  var names=[];ITEMS.forEach(function(it){var n=vname(it);if(names.indexOf(n)<0)names.push(n);});
+  var ps=$("pick");ps.appendChild(new Option("All videos",""));names.forEach(function(n){var c=ITEMS.filter(function(i){return vname(i)===n&&!A[i.id]&&i.sev>=2;}).length;ps.appendChild(new Option(n+(c?"  ("+c+" open)":""),n));});
+  ps.onchange=function(){pick=ps.value;render();};
+  var kinds={};ITEMS.forEach(function(i){kinds[i.kind]=i.label;});
+  var kb=$("kinds");var all=el("button","chip on","All types");all.onclick=function(){kind="";render();};kb.appendChild(all);
+  Object.keys(kinds).sort().forEach(function(k){var b=el("button","chip",kinds[k]);b.onclick=function(){kind=k;render();};b.dataset.k=k;kb.appendChild(b);});
+  $("sev").querySelectorAll(".chip").forEach(function(b){b.onclick=function(){sev=b.dataset.s;render();};});
+  $("fopen").onclick=function(){onlyOpen=true;render();};$("fall").onclick=function(){onlyOpen=false;render();};
+  function vis(it){if(sev.indexOf(String(it.sev))<0)return false;if(kind&&it.kind!==kind)return false;if(pick&&vname(it)!==pick)return false;if(onlyOpen&&A[it.id])return false;return true;}
+  function progress(){var tot=ITEMS.filter(function(i){return i.sev>=2;}).length,done=ITEMS.filter(function(i){return i.sev>=2&&A[i.id];}).length;$("count").textContent=done+" of "+tot+" red and gold answered";$("meter").style.width=(tot?100*done/tot:0)+"%";}
+  var current=null,stopAt=null;
+  function play(v,it){current=v;stopAt=it.b;v.currentTime=it.a;v.play();v.scrollIntoView({block:"start",behavior:"smooth"});}
+  function render(){
+    document.querySelectorAll(".chip[data-s]").forEach(function(b){b.classList.toggle("on",b.dataset.s===sev);});
+    kb.querySelectorAll(".chip").forEach(function(b){b.classList.toggle("on",(b.dataset.k||"")===kind);});
+    $("fopen").classList.toggle("on",onlyOpen);$("fall").classList.toggle("on",!onlyOpen);
+    var list=$("list");list.innerHTML="";var shown=0;
+    names.forEach(function(n){
+      var its=ITEMS.filter(function(i){return vname(i)===n&&vis(i);});if(!its.length)return;
+      var s=SUM.filter(function(x){return x.name===n;})[0]||{};
+      var g=el("div","vid");var h=el("h2",null,"Episode "+its[0].ep+", Part "+its[0].part+" ");var sm=el("small",null,(s.dur?fmt(s.dur)+" long, ":"")+its.length+" shown");h.appendChild(sm);g.appendChild(h);
+      var v=document.createElement("video");v.preload="none";v.controls=true;v.playsInline=true;v.src="../../videos/"+n+".mp4";v.poster="../../posters/"+n+".jpg";
+      v.addEventListener("timeupdate",function(){if(current===v&&stopAt!=null&&v.currentTime>=stopAt){v.pause();stopAt=null;}});g.appendChild(v);
+      var L=LISTEN[n]||[];if(L.length){var ld=el("div","listen","Listen for: ");L.forEach(function(x){var sp=el("span",null,x[1]+" "+fmt(x[0]));sp.onclick=function(){play(v,{a:x[0],b:x[0]+8});};ld.appendChild(sp);});g.appendChild(ld);}
+      its.forEach(function(it){
+        var a=A[it.id];var c=el("div","card s"+it.sev+(a?" done":""));c.id=it.id;
+        var w=el("div","where");w.appendChild(el("span","k",it.label));w.appendChild(el("span",null,fmt(it.t)));
+        var pb=el("button","btn primary","Play");pb.onclick=function(){play(v,it);};w.appendChild(pb);c.appendChild(w);
+        c.appendChild(el("div","txt",it.text));
+        var o=el("div","opts");it.options.forEach(function(op){var b=el("button","btn"+(a&&a.choice===op?" on":""),op);b.onclick=function(){A[it.id]={choice:op,comment:(A[it.id]||{}).comment||"",at:new Date().toISOString(),sent:false};store(A);sendSoon();render();};o.appendChild(b);});c.appendChild(o);
+        var ta=document.createElement("textarea");ta.placeholder="Note (optional)";ta.value=a&&a.comment||"";ta.onchange=function(){A[it.id]=A[it.id]||{choice:"",at:new Date().toISOString(),sent:false};A[it.id].comment=ta.value;A[it.id].sent=false;store(A);sendSoon();};c.appendChild(ta);
+        g.appendChild(c);shown++;
+      });
+      list.appendChild(g);
+    });
+    if(!shown)list.appendChild(el("p","lead","Nothing to show with these filters."));
+    progress();
+  }
+  function pack(ids){var head="[QA "+RUN+"] ",msgs=[],cur=[],len=0;
+    ids.forEach(function(id){var it=ITEMS.filter(function(x){return x.id===id;})[0],a=A[id];if(!it||!a)return;
+      var n=it.options.indexOf(a.choice)+1,s=id+"="+n+(a.comment?"|"+a.comment.replace(/;;/g,";").slice(0,300):"");
+      if(cur.length&&len+s.length+4>900){msgs.push({ids:cur.map(function(c){return c[0];}),text:head+cur.map(function(c){return c[1];}).join(" ;; ")});cur=[];len=0;}
+      cur.push([id,s]);len+=s.length+4;});
+    if(cur.length)msgs.push({ids:cur.map(function(c){return c[0];}),text:head+cur.map(function(c){return c[1];}).join(" ;; ")});return msgs;}
+  var sending=false,timer=null,retry=null;
+  function send(ids){if(!ids.length||sending)return Promise.resolve(false);sending=true;var msgs=pack(ids),ok=true,chain=Promise.resolve();
+    msgs.forEach(function(m){chain=chain.then(function(){return fetch(API+"/api/report",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({episode:97,part:1,time:0,type:"other",text:m.text,name:"Clenmar QA",page:location.href})})
+      .then(function(r){if(!r.ok)throw new Error(r.status===429?"too many sends this hour; they will go later":"error "+r.status);m.ids.forEach(function(id){if(A[id])A[id].sent=true;});store(A);});});});
+    return chain.then(function(){$("setupstate").className="state ok";$("setupstate").textContent="Sent.";})
+      .catch(function(e){ok=false;$("setupstate").className="state bad";$("setupstate").textContent="Not sent ("+e.message+"). Kept on this device; retry in 10 min.";clearTimeout(retry);retry=setTimeout(function(){send(unsent());},600000);})
+      .then(function(){sending=false;return ok;});}
+  function unsent(){return ITEMS.map(function(i){return i.id;}).filter(function(id){return A[id]&&!A[id].sent;});}
+  function sendSoon(){clearTimeout(timer);timer=setTimeout(function(){send(unsent());},120000);}
+  setTimeout(function(){if(unsent().length)send(unsent());},5000);
+  document.addEventListener("visibilitychange",function(){if(document.visibilityState==="hidden"&&unsent().length){clearTimeout(timer);send(unsent());}});
+  render();
+})();
+</script>
+</body>
+</html>
