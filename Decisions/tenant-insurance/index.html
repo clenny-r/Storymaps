@@ -113,5 +113,34 @@
   <div class="step"><b>Recommendation:</b> TD at $12.84 per pay. It is the cheapest at full cover, gives six weeks of hotel instead of one, and gets cheaper if we ever add a car.</div>
   <div class="step"><b>If we want the bare minimum:</b> see the <a href="options-10k.html">$10,000 options</a>. The floor is $8.38 per pay with no water cover; $11.36 per pay with it. Only $1.48 per pay separates the cheapest safe option from TD's full cover.</div>
 </div>
+
+<div class="section" id="finalize">
+  <h2>Finalize the decision</h2>
+  <div class="step">Pick the option we agree on, then press the button. It opens a GitHub issue in the Storymaps repo titled with the decision (that is where Claude reads it back), and copies a one-line summary you can paste into Claude. Once Claude logs it, this folder gets deleted.</div>
+  <div class="step">
+    <label><input type="radio" name="pick" value="TD Insurance, $12.84 per pay ($27.83/month), $30k contents, $2M liability, $1,000 deductible, extended water" checked> TD Insurance, $12.84 per pay</label><br>
+    <label><input type="radio" name="pick" value="Westland Express full cover, $15.28 per pay ($33.10/month), $30k contents, $2M liability, $1,000 deductible, extended water"> Westland full cover, $15.28 per pay</label><br>
+    <label><input type="radio" name="pick" value="Westland Express low limits + extended water, $11.36 per pay ($24.61/month), $10k contents, $2,000 deductible"> Westland low limits + water, $11.36 per pay</label><br>
+    <label><input type="radio" name="pick" value="Westland Express bare-bones Basic, $8.38 per pay ($18.16/month), $10k contents, $2,000 deductible, no water cover"> Westland bare-bones, $8.38 per pay</label><br>
+    <label><input type="radio" name="pick" value="Other (see notes)"> Other</label>
+    <div style="margin-top:10px"><input id="who" placeholder="Decided by (names)" style="padding:8px;border:1px solid #e3e7ec;border-radius:8px;width:60%;max-width:320px"></div>
+    <button id="finalBtn" style="margin-top:12px;background:#0a7f5a;color:#fff;border:0;border-radius:10px;padding:12px 18px;font-size:15px;font-weight:700;cursor:pointer">Finalize decision</button>
+    <div id="done" class="note" style="margin-top:8px"></div>
+  </div>
+</div>
+<script>
+document.getElementById('finalBtn').onclick=function(){
+  var pick=document.querySelector('input[name=pick]:checked').value;
+  var who=document.getElementById('who').value||'Clenmar and Shadene';
+  var date=new Date().toISOString().slice(0,10);
+  var title='DECISION tenant-insurance: '+pick.split(',')[0];
+  var body='Decision folder: Decisions/tenant-insurance\nDecided: '+date+' by '+who+'\nChosen: '+pick+'\n\nNext for Claude: log this in tenant_insurance_lessons.md (policy number and renewal date once bought), confirm proof of insurance sent to the landlord, then delete Decisions/tenant-insurance from the Storymaps repo and close this issue.';
+  var summary='Decision made ('+date+', '+who+'): '+pick+'. Please log it, confirm proof went to the landlord, then delete Decisions/tenant-insurance from the Storymaps repo.';
+  if(navigator.clipboard){navigator.clipboard.writeText(summary).catch(function(){});}
+  var url='https://github.com/clenny-r/Storymaps/issues/new?title='+encodeURIComponent(title)+'&body='+encodeURIComponent(body)+'&labels=decision';
+  window.open(url,'_blank');
+  document.getElementById('done').textContent='Opened the GitHub issue (press Submit there). Summary copied to clipboard: paste it to Claude to close the loop.';
+};
+</script>
 </body>
 </html>
