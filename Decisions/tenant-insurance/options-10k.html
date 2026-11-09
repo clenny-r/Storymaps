@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>$10,000 Contents: Side by Side</title>
+<style>
+  :root { --bg:#f6f7f9; --card:#fff; --ink:#1b2430; --muted:#5b6675; --best:#0a7f5a; --mid:#3a5a8c; --warn:#b26a00; --bad:#9a2a2a; --line:#e3e7ec; }
+  body { margin:0; font-family: Segoe UI, Arial, sans-serif; background:var(--bg); color:var(--ink); padding:16px; max-width:1100px; margin:auto; }
+  h1 { font-size:21px; margin:0 0 4px; }
+  .sub { color:var(--muted); font-size:14px; margin-bottom:16px; }
+  .nav a { display:inline-block; margin:0 10px 14px 0; font-size:14px; color:var(--mid); }
+  .grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap:14px; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:16px; position:relative; }
+  .card.best { border:2px solid var(--best); }
+  .badge { position:absolute; top:-12px; left:16px; color:#fff; font-size:12px; font-weight:700; padding:4px 10px; border-radius:999px; background:var(--muted); }
+  .badge.best { background:var(--best); } .badge.mid { background:var(--mid); } .badge.warn { background:var(--warn); } .badge.bad { background:var(--bad); }
+  .name { font-size:16px; font-weight:700; margin-top:6px; }
+  .price { font-size:32px; font-weight:800; margin:8px 0 0; }
+  .price small { font-size:13px; font-weight:500; color:var(--muted); }
+  .year { color:var(--muted); font-size:13px; margin-bottom:8px; }
+  .note { font-size:13px; color:var(--muted); }
+  table { width:100%; border-collapse:collapse; background:var(--card); font-size:14px; margin-top:22px; }
+  th, td { padding:9px 10px; border-bottom:1px solid var(--line); text-align:left; vertical-align:top; }
+  th { background:#eef2f6; }
+  td.yes { color:var(--best); font-weight:700; } td.no { color:var(--bad); font-weight:700; } td.part { color:var(--warn); font-weight:700; }
+  .section { margin-top:22px; } .section h2 { font-size:17px; margin-bottom:8px; }
+  .step { background:var(--card); border:1px solid var(--line); border-radius:10px; padding:12px 14px; margin-bottom:8px; font-size:14px; }
+  .step b { color:var(--best); }
+</style>
+</head>
+<body>
+<h1>$10,000 contents: what each insurer charges per pay</h1>
+<div class="sub">Biweekly cost (26 pays a year). All options carry at least $1,000,000 liability. TD Insurance will not quote below $30,000 contents, so its cheapest policy is shown for reference.</div>
+<div class="nav"><a href="index.html">Main comparison</a><a href="westland-options.html">Westland three tiers</a></div>
+
+<div class="grid">
+  <div class="card">
+    <div class="badge bad">CHEAPEST, NO WATER</div>
+    <div class="name">Westland Basic, $2,000 deductible</div>
+    <div class="price">$8.38 <small>/ pay</small></div>
+    <div class="year">$18.16 a month, about $218 a year</div>
+    <div class="note">$10k contents, $2k living expenses, $2M liability. No sewer backup or outside-water cover.</div>
+  </div>
+  <div class="card">
+    <div class="badge warn">BASIC, LOWER DEDUCTIBLE</div>
+    <div class="name">Westland Basic, $1,000 deductible</div>
+    <div class="price">$9.78 <small>/ pay</small></div>
+    <div class="year">$21.18 a month, about $254 a year</div>
+    <div class="note">A $1,500 claim pays $500 instead of nothing. Still no water cover.</div>
+  </div>
+  <div class="card best">
+    <div class="badge best">BEST AT $10K</div>
+    <div class="name">Westland + Extended Water, $2,000 deductible</div>
+    <div class="price">$11.36 <small>/ pay</small></div>
+    <div class="year">$24.61 a month, about $295 a year</div>
+    <div class="note">$10k contents, $2k living expenses, $2M liability, sewer backup and overland water included. $12.11 per pay with a $1,000 deductible.</div>
+  </div>
+  <div class="card">
+    <div class="badge warn">APOLLO</div>
+    <div class="name">APOLLO, $10,000 contents</div>
+    <div class="price">$11.52 <small>/ pay</small></div>
+    <div class="year">$24.96 a month without water, about $12.32 per pay with it</div>
+    <div class="note">$1M liability only, $1,000 deductible, $5k living expenses. Not better than Westland on any line.</div>
+  </div>
+  <div class="card">
+    <div class="badge mid">TD (MINIMUM IS $30K)</div>
+    <div class="name">TD Insurance, cheapest possible</div>
+    <div class="price">$12.84 <small>/ pay</small></div>
+    <div class="year">$27.83 a month plus taxes and fees. $30k contents is their floor</div>
+    <div class="note">For $1.48 per pay more than Westland's best $10k option: 3x the contents, $15k living expenses and a $1,000 deductible.</div>
+  </div>
+</div>
+
+<table>
+  <tr><th>Item</th><th>Westland $8.38</th><th>Westland $9.78</th><th>Westland $11.36</th><th>APOLLO $11.52</th><th>TD $12.84</th></tr>
+  <tr><td>Per month</td><td>$18.16</td><td>$21.18</td><td>$24.61</td><td>$24.96</td><td>$27.83</td></tr>
+  <tr><td>Contents</td><td>$10,000</td><td>$10,000</td><td>$10,000</td><td>$10,000</td><td class="yes">$30,000</td></tr>
+  <tr><td>Deductible</td><td>$2,000</td><td>$1,000</td><td>$2,000</td><td>$1,000</td><td>$1,000</td></tr>
+  <tr><td>Living expenses</td><td>$2,000</td><td>$2,000</td><td>$2,000</td><td>$5,000</td><td class="yes">$15,000</td></tr>
+  <tr><td>Liability</td><td>$2M</td><td>$2M</td><td>$2M</td><td class="part">$1M</td><td>$2M</td></tr>
+  <tr><td>Sewer backup / outside water</td><td class="no">No</td><td class="no">No</td><td class="yes">Yes</td><td class="no">No (extra)</td><td class="yes">Yes</td></tr>
+  <tr><td>Stolen $1,500 laptop pays</td><td class="no">$0</td><td class="part">$500</td><td class="no">$0</td><td class="part">$500</td><td class="part">$500</td></tr>
+  <tr><td>Yearly cost</td><td>$218</td><td>$254</td><td>$295</td><td>$300</td><td>$334 + fees</td></tr>
+</table>
+
+<div class="section">
+  <h2>Reading it</h2>
+  <div class="step"><b>Cheapest safe option at $10k:</b> Westland with extended water at $11.36 per pay. Below that we are betting the building never floods.</div>
+  <div class="step"><b>Best value overall:</b> TD at $12.84 per pay is only $1.48 more per pay than the best $10k option, and covers $20,000 more belongings plus six weeks of hotel instead of one.</div>
+  <div class="step"><b>Nothing reaches $10 a month</b> ($4.62 per pay) at this address; $8.38 per pay is the floor and it leaves out the most likely Halifax claim.</div>
+</div>
+</body>
+</html>

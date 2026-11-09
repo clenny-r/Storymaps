@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Westland Express: Three Options</title>
+<style>
+  :root { --bg:#f6f7f9; --card:#fff; --ink:#1b2430; --muted:#5b6675; --best:#0a7f5a; --mid:#b26a00; --low:#9a2a2a; --line:#e3e7ec; }
+  body { margin:0; font-family: Segoe UI, Arial, sans-serif; background:var(--bg); color:var(--ink); padding:16px; max-width:1100px; margin:auto; }
+  h1 { font-size:21px; margin:0 0 4px; }
+  .sub { color:var(--muted); font-size:14px; margin-bottom:16px; }
+  .nav a { display:inline-block; margin:0 10px 14px 0; font-size:14px; color:#3a5a8c; }
+  .grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap:14px; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:16px; position:relative; }
+  .card.best { border:2px solid var(--best); }
+  .badge { position:absolute; top:-12px; left:16px; color:#fff; font-size:12px; font-weight:700; padding:4px 10px; border-radius:999px; background:var(--muted); }
+  .badge.best { background:var(--best); } .badge.mid { background:var(--mid); } .badge.low { background:var(--low); }
+  .name { font-size:17px; font-weight:700; margin-top:6px; }
+  .price { font-size:34px; font-weight:800; margin:8px 0 0; }
+  .price small { font-size:14px; font-weight:500; color:var(--muted); }
+  .year { color:var(--muted); font-size:13px; margin-bottom:10px; }
+  .note { font-size:13px; color:var(--muted); margin-top:8px; }
+  table { width:100%; border-collapse:collapse; background:var(--card); font-size:14px; margin-top:22px; }
+  th, td { padding:9px 10px; border-bottom:1px solid var(--line); text-align:left; vertical-align:top; }
+  th { background:#eef2f6; }
+  td.yes { color:var(--best); font-weight:700; } td.no { color:var(--low); font-weight:700; } td.part { color:var(--mid); font-weight:700; }
+  .section { margin-top:22px; } .section h2 { font-size:17px; margin-bottom:8px; }
+  .step { background:var(--card); border:1px solid var(--line); border-radius:10px; padding:12px 14px; margin-bottom:8px; font-size:14px; }
+</style>
+</head>
+<body>
+<h1>Westland Express (CAPREIT rate): three ways to buy</h1>
+<div class="sub">Cost per pay (biweekly). All three carry $2,000,000 personal liability and $100,000 tenants legal liability. Prices include the $1 monthly processing fee. A 5% discount applies for the first six months if bought promptly.</div>
+<div class="nav"><a href="index.html">Main comparison</a><a href="options-10k.html">Cheaper $10,000 options</a></div>
+
+<div class="grid">
+  <div class="card">
+    <div class="badge low">CHEAPEST</div>
+    <div class="name">A. Bare-bones Basic</div>
+    <div class="price">$8.38 <small>/ pay</small></div>
+    <div class="year">$18.16 a month, about $218 a year</div>
+    <div class="note">Covers fire, theft, burst pipes, wind, vandalism, liability. No protection from outside water. Small claims not worth filing because of the $2,000 deductible.</div>
+  </div>
+  <div class="card best">
+    <div class="badge best">BEST VALUE</div>
+    <div class="name">B. Low limits + Extended Water</div>
+    <div class="price">$11.36 <small>/ pay</small></div>
+    <div class="year">$24.61 a month, about $295 a year</div>
+    <div class="note">Same low limits as A but adds sewer backup and overland water, the most likely Halifax claim. $2.98 more per pay for the coverage that matters here.</div>
+  </div>
+  <div class="card">
+    <div class="badge mid">FULL COVER</div>
+    <div class="name">C. Full cover (saved quote)</div>
+    <div class="price">$15.28 <small>/ pay</small></div>
+    <div class="year">$33.10 a month, about $397 a year</div>
+    <div class="note">Replaces everything after a total loss and keeps us housed for weeks, not days. $3.92 more per pay than B.</div>
+  </div>
+</div>
+
+<table>
+  <tr><th>Item</th><th>A. $8.38</th><th>B. $11.36</th><th>C. $15.28</th></tr>
+  <tr><td>Per month</td><td>$18.16</td><td>$24.61</td><td>$33.10</td></tr>
+  <tr><td>Package</td><td>Basic</td><td>Enhanced + Extended Water</td><td>Enhanced + Extended Water</td></tr>
+  <tr><td>Contents limit</td><td>$10,000</td><td>$10,000</td><td>$30,000</td></tr>
+  <tr><td>Deductible per claim</td><td>$2,000</td><td>$2,000</td><td>$1,000</td></tr>
+  <tr><td>Additional living expenses</td><td>$2,000</td><td>$2,000</td><td>$5,000</td></tr>
+  <tr><td>Personal liability</td><td>$2,000,000</td><td>$2,000,000</td><td>$2,000,000</td></tr>
+  <tr><td>Fire, smoke, theft, vandalism, wind</td><td class="yes">Yes</td><td class="yes">Yes</td><td class="yes">Yes</td></tr>
+  <tr><td>Burst pipes</td><td class="yes">Yes</td><td class="yes">Yes</td><td class="yes">Yes</td></tr>
+  <tr><td>Sewer backup</td><td class="part">Limited or none</td><td class="yes">Yes</td><td class="yes">Yes</td></tr>
+  <tr><td>Overland / outside water</td><td class="no">No</td><td class="yes">Yes</td><td class="yes">Yes</td></tr>
+  <tr><td>Total-loss payout vs $30k of belongings</td><td class="no">1/3</td><td class="no">1/3</td><td class="yes">Full</td></tr>
+  <tr><td>Hotel time for 3 people after a fire</td><td class="part">1 to 2 weeks</td><td class="part">1 to 2 weeks</td><td class="yes">4 to 6 weeks</td></tr>
+  <tr><td>Stolen $1,500 laptop claim</td><td class="no">Pays $0</td><td class="no">Pays $0</td><td class="yes">Pays $500</td></tr>
+  <tr><td>Transfers if we move</td><td colspan="3">All three: same rate at another CAPREIT building; re-priced at market elsewhere. Cancel any time, pay to date.</td></tr>
+</table>
+
+<div class="section">
+  <h2>Pick by how we'd answer one question</h2>
+  <div class="step"><b>"If a storm floods the building, could we replace what we lose from savings?"</b> If yes, A. If no, we need water cover: B. If we also could not absorb replacing most of the furniture and electronics at once, C (or TD on the main page, which is cheaper than C).</div>
+</div>
+</body>
+</html>

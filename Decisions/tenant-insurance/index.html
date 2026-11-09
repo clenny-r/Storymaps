@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tenant Insurance Decision</title>
+<style>
+  :root { --bg:#f6f7f9; --card:#fff; --ink:#1b2430; --muted:#5b6675; --best:#0a7f5a; --mid:#3a5a8c; --warn:#b26a00; --bad:#9a2a2a; --line:#e3e7ec; }
+  body { margin:0; font-family: Segoe UI, Arial, sans-serif; background:var(--bg); color:var(--ink); padding:16px; max-width:1100px; margin:auto; }
+  h1 { font-size:22px; margin:0 0 4px; }
+  .sub { color:var(--muted); font-size:14px; margin-bottom:16px; }
+  .nav a { display:inline-block; margin:0 10px 14px 0; font-size:14px; color:var(--mid); }
+  .grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap:14px; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:16px; position:relative; }
+  .card.best { border:2px solid var(--best); }
+  .badge { position:absolute; top:-12px; left:16px; color:#fff; font-size:12px; font-weight:700; padding:4px 10px; border-radius:999px; background:var(--muted); }
+  .badge.best { background:var(--best); } .badge.mid { background:var(--mid); } .badge.warn { background:var(--warn); } .badge.bad { background:var(--bad); }
+  .name { font-size:17px; font-weight:700; margin-top:6px; }
+  .price { font-size:34px; font-weight:800; margin:8px 0 0; }
+  .price small { font-size:14px; font-weight:500; color:var(--muted); }
+  .year { color:var(--muted); font-size:13px; margin-bottom:10px; }
+  ul { padding-left:18px; margin:8px 0; font-size:14px; } li { margin:3px 0; }
+  .note { font-size:13px; color:var(--muted); }
+  table { width:100%; border-collapse:collapse; background:var(--card); font-size:14px; margin-top:22px; }
+  th, td { padding:9px 10px; border-bottom:1px solid var(--line); text-align:left; vertical-align:top; }
+  th { background:#eef2f6; }
+  td.win { color:var(--best); font-weight:700; }
+  .section { margin-top:22px; } .section h2 { font-size:17px; margin-bottom:8px; }
+  .step { background:var(--card); border:1px solid var(--line); border-radius:10px; padding:12px 14px; margin-bottom:8px; font-size:14px; }
+  .step b { color:var(--best); }
+</style>
+</head>
+<body>
+<h1>Tenant insurance for our apartment</h1>
+<div class="sub">Costs shown per pay (biweekly, 26 pays a year). Like-for-like basis: $30,000 contents, $2,000,000 liability, $1,000 deductible, extended water cover, family of 3. Quoted 9 Nov 2026.</div>
+<div class="nav"><a href="options-10k.html">Cheaper $10,000 options</a><a href="westland-options.html">Westland three tiers</a></div>
+
+<div class="grid">
+  <div class="card best">
+    <div class="badge best">BEST PICK</div>
+    <div class="name">TD Insurance (Engineers Nova Scotia rate)</div>
+    <div class="price">$12.84 <small>/ pay</small></div>
+    <div class="year">$27.83 a month, about $334 a year, plus taxes and fees. Quote valid to 7 Feb 2027</div>
+    <ul>
+      <li>$30,000 contents</li>
+      <li><b>$15,000</b> additional living expenses (3x Westland)</li>
+      <li>$2,000,000 liability, $1,000 deductible</li>
+      <li>Extended water damage, $45,000 limit, included</li>
+      <li>Engineers NS preferred pricing + buy-online discount applied</li>
+      <li>Drops to about $11.65 per pay if we add a TD car policy later</li>
+      <li>Purchase is by phone</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <div class="badge mid">RUNNER UP</div>
+    <div class="name">Westland Express (CAPREIT rate)</div>
+    <div class="price">$15.28 <small>/ pay</small></div>
+    <div class="year">$33.10 a month, about $397 a year, fee included. Quote saved</div>
+    <ul>
+      <li>$30,000 contents, $5,000 living expenses</li>
+      <li>$2,000,000 liability, $1,000 deductible</li>
+      <li>Extended water included</li>
+      <li>5% off first 6 months if bought promptly</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <div class="badge warn">THIRD</div>
+    <div class="name">APOLLO Insurance</div>
+    <div class="price">$16.81 <small>/ pay</small></div>
+    <div class="year">$36.43 a month, $437 a year</div>
+    <ul>
+      <li>$30,000 contents, $5,000 living expenses</li>
+      <li>Only $1,000,000 liability</li>
+      <li>Enhanced water included</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <div class="badge bad">NOT USABLE</div>
+    <div class="name">Square One / Duuo</div>
+    <div class="price">n/a</div>
+    <div class="year">Square One does not serve Nova Scotia. Duuo session expired before pricing.</div>
+  </div>
+</div>
+
+<table>
+  <tr><th>Item</th><th>TD Insurance</th><th>Westland Express</th><th>APOLLO</th></tr>
+  <tr><td>Per pay (biweekly)</td><td class="win">$12.84 + taxes/fees</td><td>$15.28</td><td>$16.81</td></tr>
+  <tr><td>Per month</td><td class="win">$27.83</td><td>$33.10</td><td>$36.43</td></tr>
+  <tr><td>Per year</td><td class="win">about $334</td><td>about $397</td><td>$437</td></tr>
+  <tr><td>Contents</td><td>$30,000</td><td>$30,000</td><td>$30,000</td></tr>
+  <tr><td>Living expenses</td><td class="win">$15,000</td><td>$5,000</td><td>$5,000</td></tr>
+  <tr><td>Liability</td><td>$2,000,000</td><td>$2,000,000</td><td>$1,000,000</td></tr>
+  <tr><td>Deductible</td><td>$1,000</td><td>$1,000</td><td>$1,000</td></tr>
+  <tr><td>Extended water</td><td>Yes, $45,000 limit</td><td>Yes</td><td>Yes</td></tr>
+  <tr><td>How to buy</td><td>Phone call</td><td>Online</td><td>Online</td></tr>
+  <tr><td>Car bundle later</td><td class="win">About $11.65 per pay</td><td>No</td><td>No</td></tr>
+  <tr><td>Moves with us</td><td>Yes, any address</td><td>Yes, re-priced outside CAPREIT</td><td>Yes</td></tr>
+</table>
+
+<div class="section">
+  <h2>Plain-language glossary</h2>
+  <div class="step"><b>Deductible:</b> the first slice of any claim we pay ourselves. $1,000 deductible on a $6,000 loss means we pay $1,000 and the insurer pays $5,000. It applies per claim.</div>
+  <div class="step"><b>Sewer backup:</b> water or sewage coming back up drains and toilets when the city sewer or building drains are overwhelmed in heavy rain.</div>
+  <div class="step"><b>Extended (overland) water:</b> rain, snowmelt or street flooding coming in from outside. Standard policies only cover sudden internal water like a burst pipe.</div>
+  <div class="step"><b>Additional living expenses:</b> hotel, meals and storage if the apartment becomes unlivable after a covered event.</div>
+</div>
+
+<div class="section">
+  <h2>Decision</h2>
+  <div class="step"><b>Recommendation:</b> TD at $12.84 per pay. It is the cheapest at full cover, gives six weeks of hotel instead of one, and gets cheaper if we ever add a car.</div>
+  <div class="step"><b>If we want the bare minimum:</b> see the <a href="options-10k.html">$10,000 options</a>. The floor is $8.38 per pay with no water cover; $11.36 per pay with it. Only $1.48 per pay separates the cheapest safe option from TD's full cover.</div>
+</div>
+</body>
+</html>
