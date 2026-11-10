@@ -20,9 +20,12 @@ Repository folder: C:\Users\ramne\Documents\GitHub\Storymaps\Decisions (repo cle
    4. A head-to-head table of the features that actually differ.
    5. A plain-language glossary of any jargon (e.g. deductible).
    6. The decision and next steps.
-   7. The **Finalize decision** block (radio options, "decided by" box, green button). Copy it from the template;
-      it opens a prefilled GitHub issue in clenny-r/Storymaps titled `DECISION <short-name>: <choice>` with label
-      `decision`, and copies a summary to the clipboard to paste to Claude.
+   7. The **Finalize decision** block (radio options, "decided by" box, optional note, green button). Copy it from
+      `tenant-insurance/index.html` and change `ID` and the options. **No sign-in needed (anyone can press it).** It POSTs to the
+      Cloudflare Worker `twc-evidence-reports` (`/api/report`, the same no-sign-in endpoint the Evidence page uses) with
+      `episode: 98`, `type: "other"` and text starting `[DECISION] <id> | chosen: ... | decided by: ... | date: ...`.
+      The worker saves it privately in `C:\Users\ramne\Documents\GitHub\Twc_private_data\User_Data\evidence_data\reports.json`.
+      Do NOT use GitHub issues for this: GitHub makes people sign in.
 4. **Money is shown per pay (biweekly)**: monthly x 12 / 26, yearly x 1/26. Also show the monthly or yearly figure as secondary text.
 5. **Privacy: the site is public.** No addresses, account or quote numbers, phone numbers, emails, policy numbers, or
    client names and fees from CBCL work. Use generic wording ("our apartment", "the client"). Add `<meta name="robots" content="noindex">`.
@@ -36,9 +39,10 @@ Repository folder: C:\Users\ramne\Documents\GitHub\Storymaps\Decisions (repo cle
 
 ## When a decision is finalized
 
-1. Read the GitHub issue labelled `decision` (or his pasted summary).
+1. Read the `[DECISION]` entries (episode 98) in `Twc_private_data\User_Data\evidence_data\reports.json`
+   (or his message). Set that entry's status to `fixed` once logged.
 2. Log the outcome where the project keeps its notes (for example the task's lessons file).
-3. Remove the entry from `decisions.js`, delete the subfolder, commit, push, close the issue.
+3. Remove the entry from `decisions.js`, delete the subfolder, commit, push.
 
 ## Current pages
 

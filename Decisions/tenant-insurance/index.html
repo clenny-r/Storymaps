@@ -47,7 +47,7 @@
     <div><b>Recommended</b>TD Insurance, $12.84 per pay. Full cover, 6 weeks of hotel if we must leave, water damage included.</div>
     <div><b>If money is tight</b>Westland low limits + water, $11.36 per pay. Only $1.48 less, but covers a third of our belongings.</div>
     <div><b>Main risk if we wait</b>A fire, theft or flood before we buy would not be covered at all.</div>
-    <div><b>What happens next</b>Pick below and press Finalize. TD is bought by phone; Westland and APOLLO online. Then send proof to the landlord.</div>
+    <div><b>What happens next</b>Pick below and press Finalize (no sign-in needed). TD is bought by phone; Westland and APOLLO online. Then send proof to the landlord.</div>
   </div>
 </div>
 
@@ -132,31 +132,40 @@
 
 <div class="section" id="finalize">
   <h2>Finalize the decision</h2>
-  <div class="step">Pick the option we agree on, then press the button. It opens a GitHub issue in the Storymaps repo titled with the decision (that is where Claude reads it back), and copies a one-line summary you can paste into Claude. Once Claude logs it, this folder gets deleted.</div>
+  <div class="step">Pick the option we agree on and press the button. No sign-in needed: it saves the choice privately for Claude, who logs it and clears this page.</div>
   <div class="step">
     <label><input type="radio" name="pick" value="TD Insurance, $12.84 per pay ($27.83/month), $30k contents, $2M liability, $1,000 deductible, extended water" checked> TD Insurance, $12.84 per pay</label><br>
     <label><input type="radio" name="pick" value="Westland Express full cover, $15.28 per pay ($33.10/month), $30k contents, $2M liability, $1,000 deductible, extended water"> Westland full cover, $15.28 per pay</label><br>
     <label><input type="radio" name="pick" value="Westland Express low limits + extended water, $11.36 per pay ($24.61/month), $10k contents, $2,000 deductible"> Westland low limits + water, $11.36 per pay</label><br>
     <label><input type="radio" name="pick" value="Westland Express bare-bones Basic, $8.38 per pay ($18.16/month), $10k contents, $2,000 deductible, no water cover"> Westland bare-bones, $8.38 per pay</label><br>
-    <label><input type="radio" name="pick" value="Other (see notes)"> Other</label>
-    <div style="margin-top:10px"><input id="who" placeholder="Decided by (names)" style="padding:8px;border:1px solid #e3e7ec;border-radius:8px;width:60%;max-width:320px"></div>
+    <label><input type="radio" name="pick" value="Other (see note)"> Other</label>
+    <div style="margin-top:10px"><input id="who" placeholder="Decided by (names)" style="padding:8px;border:1px solid #e3e7ec;border-radius:8px;width:100%;max-width:320px"></div>
+    <div style="margin-top:8px"><textarea id="note" rows="2" placeholder="Note (optional)" style="padding:8px;border:1px solid #e3e7ec;border-radius:8px;width:100%;max-width:520px"></textarea></div>
+    <input id="website" type="text" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" aria-hidden="true">
     <button id="finalBtn" style="margin-top:12px;background:#0a7f5a;color:#fff;border:0;border-radius:10px;padding:12px 18px;font-size:15px;font-weight:700;cursor:pointer">Finalize decision</button>
-    <div id="done" class="note" style="margin-top:8px"></div>
+    <div id="done" class="note" style="margin-top:8px;font-size:14px"></div>
   </div>
 </div>
 <script>
-document.getElementById('finalBtn').onclick=function(){
-  var pick=document.querySelector('input[name=pick]:checked').value;
-  var who=document.getElementById('who').value||'Clenmar and Shadene';
-  var date=new Date().toISOString().slice(0,10);
-  var title='DECISION tenant-insurance: '+pick.split(',')[0];
-  var body='Decision folder: Decisions/tenant-insurance\nDecided: '+date+' by '+who+'\nChosen: '+pick+'\n\nNext for Claude: log this in tenant_insurance_lessons.md (policy number and renewal date once bought), confirm proof of insurance sent to the landlord, then delete Decisions/tenant-insurance from the Storymaps repo and close this issue.';
-  var summary='Decision made ('+date+', '+who+'): '+pick+'. Please log it, confirm proof went to the landlord, then delete Decisions/tenant-insurance from the Storymaps repo.';
-  if(navigator.clipboard){navigator.clipboard.writeText(summary).catch(function(){});}
-  var url='https://github.com/clenny-r/Storymaps/issues/new?title='+encodeURIComponent(title)+'&body='+encodeURIComponent(body)+'&labels=decision';
-  window.open(url,'_blank');
-  document.getElementById('done').textContent='Opened the GitHub issue (press Submit there). Summary copied to clipboard: paste it to Claude to close the loop.';
-};
+(function(){
+  var API="https://twc-evidence-reports.kd7bgn7q2z.workers.dev/api/report"; // same no-sign-in worker as the Evidence page; saved privately in Twc_private_data
+  var ID="tenant-insurance";
+  var btn=document.getElementById('finalBtn'), st=document.getElementById('done');
+  try{ var w0=localStorage.getItem('decision_who'); if(w0) document.getElementById('who').value=w0; }catch(e){}
+  btn.onclick=function(){
+    var pick=document.querySelector('input[name=pick]:checked').value;
+    var who=document.getElementById('who').value.trim();
+    var note=document.getElementById('note').value.trim();
+    if(!who){ st.textContent='Please type who decided (for example "Clenmar and Shadene").'; document.getElementById('who').focus(); return; }
+    var date=new Date().toISOString().slice(0,10);
+    var text='[DECISION] '+ID+' | chosen: '+pick+' | decided by: '+who+' | date: '+date+(note?' | note: '+note:'');
+    btn.disabled=true; st.textContent='Saving\u2026';
+    fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({episode:98, part:1, time:0, type:'other', text:text, name:who, website:document.getElementById('website').value, page:location.href})})
+      .then(function(r){ return r.json().catch(function(){return {};}).then(function(d){ if(!r.ok) throw new Error((d&&d.error)||('status '+r.status)); }); })
+      .then(function(){ try{localStorage.setItem('decision_who',who);}catch(e){} st.innerHTML='<b style="color:#0a7f5a">Decision saved \u2713</b> Claude will log it and clear this page next session. Next step: buy the chosen policy, then send proof to the landlord.'; })
+      .catch(function(e){ btn.disabled=false; st.textContent='Could not save ('+e.message+'). Please try again, or just tell Claude: '+pick; });
+  };
+})();
 </script>
 </body>
 </html>
