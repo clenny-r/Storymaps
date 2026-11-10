@@ -82,3 +82,6 @@ build/
 !/Pages/IH2VOF_examples/Dominica_story/
 !/Pages/IH2VOF_examples/How_it_works/
 /Pages/IH2VOF_examples/Dominica_story/_to_delete/
+
+# Evidence videos live on Cloudflare R2 (media.twcministries.net/evidence/) since 2026-11-09; local copies are a backup only
+/Evidence/videos/

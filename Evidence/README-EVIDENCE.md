@@ -6,27 +6,26 @@ Folder: `C:\Users\ramne\Documents\GitHub\Storymaps\Pages\Weh di evidence seh`
 
 - `index.html`: the page (no outside scripts or fonts; works offline and on GitHub Pages).
 - `episodes.js`: the episode list the page reads (questions, settings, cast, summaries, which videos exist).
-- `videos\eNN-pP.mp4`: one file per episode and part, named by number only (`e04-p1.mp4` is Episode 4, Part 1).
+- Videos: NOT in this repository. Since 9 Nov 2026 they live on Cloudflare R2 (bucket `twc-media`, folder `evidence`), served at `https://media.twcministries.net/evidence/eNN-pP.mp4` (`e04-p1.mp4` is Episode 4, Part 1). They were moved because GitHub Pages refuses sites over 1 GB. Your local `videos\` folder is kept as a backup and is ignored by Git.
 - `posters\eNN-pP.jpg`: the thumbnail for each video (a frame of the question card).
 - `assets\`: the TWC logo.
 - `worker\`: the Cloudflare Worker that stores viewers' issue reports in the private repository, and how to set it up (see `worker\README.md`). Reports go to `Twc_private_data\User_Data\evidence_reports.json`.
 
 ## To replace a video
 
-1. Copy the new MP4 over the old file in `videos\`, keeping the same name (for example `videos\e04-p1.mp4`).
-2. Open GitHub Desktop, write a one line summary, Commit, Push.
+1. Open dash.cloudflare.com, R2 Object Storage, bucket `twc-media`, folder `evidence`.
+2. Drag the new MP4 in with the same name (for example `e04-p1.mp4`); it overwrites the old one. Do not reload the tab until the upload finishes (a reload cancels it). The dashboard takes at most 100 files per drop.
 
-Nothing else changes. Keep files under 20 MB each (GitHub refuses files over 100 MB and warns over 50 MB).
+Nothing else changes, and nothing goes to GitHub.
 
 ## To add a new video
 
-1. Copy it in as `videos\eNN-pP.mp4`.
-2. Make a poster `posters\eNN-pP.jpg` (any 9:16 JPEG, about 540 by 960; a screenshot of the question card is best). If there is no poster the card shows a dark tile with the question.
+1. Upload it to R2 as above, named `eNN-pP.mp4`.
+2. Make a poster `posters\eNN-pP.jpg` (any 9:16 JPEG, about 540 by 960; a screenshot of the question card is best). Posters stay in this repository. If there is no poster the card shows a dark tile with the question.
 3. In `episodes.js`, find the episode and change its part line from `{ part: 1 }` to
-   `{ part: 1, file: "videos/e16-p1.mp4", poster: "posters/e16-p1.jpg", duration: 150 }`
-   (duration in seconds). For a Part 2, add a second entry inside `parts`: `{ part: 2, file: "videos/e16-p2.mp4", poster: "posters/e16-p2.jpg", duration: 140 }`.
-   Change the `summary` from "Coming soon." to one sentence. Update the `updated` date at the top.
-4. Commit and push.
+   `{ part: 1, file: "https://media.twcministries.net/evidence/e16-p1.mp4", poster: "posters/e16-p1.jpg", duration: 150 }`
+   (duration in seconds). For a Part 2, add a second entry inside `parts`. Change the `summary` from "Coming soon." to one sentence. Update the `updated` date at the top.
+4. Commit and push (only the small text and poster files go to GitHub).
 
 ## Issue reports
 

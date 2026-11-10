@@ -94,7 +94,7 @@
       var its=ITEMS.filter(function(i){return vname(i)===n&&vis(i);});if(!its.length)return;
       var s=SUM.filter(function(x){return x.name===n;})[0]||{};
       var g=el("div","vid");var h=el("h2",null,"Episode "+its[0].ep+", Part "+its[0].part+" ");var sm=el("small",null,(s.dur?fmt(s.dur)+" long, ":"")+its.length+" shown");h.appendChild(sm);g.appendChild(h);
-      var v=document.createElement("video");v.preload="none";v.controls=true;v.playsInline=true;v.src="../../videos/"+n+".mp4";v.poster="../../posters/"+n+".jpg";
+      var v=document.createElement("video");v.preload="none";v.controls=true;v.playsInline=true;v.src="https://media.twcministries.net/evidence/"+n+".mp4";v.poster="../../posters/"+n+".jpg";
       v.addEventListener("timeupdate",function(){if(current===v&&stopAt!=null&&v.currentTime>=stopAt){v.pause();stopAt=null;}});g.appendChild(v);
       var L=LISTEN[n]||[];if(L.length){var ld=el("div","listen","Listen for: ");L.forEach(function(x){var sp=el("span",null,x[1]+" "+fmt(x[0]));sp.onclick=function(){play(v,{a:x[0],b:x[0]+8});};ld.appendChild(sp);});g.appendChild(ld);}
       its.forEach(function(it){
