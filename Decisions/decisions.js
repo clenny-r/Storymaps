@@ -4,20 +4,35 @@
 window.DECISIONS = [
   {
     id: "immigration-costs-cbcl",
-    title: "Immigration costs: reimbursement talks with my manager",
+    title: "Immigration costs so far: reimbursement (talk 1 with my manager)",
     who: "work",
     decideBy: "Clenmar and his manager",
     created: "2026-11-10",
     deadline: "2026-11-12",
-    deadlineWhy: "Work permits are filed and paid Fri 13 Nov ($510); talk 2 on the PR fees by about 18 Dec, before the 29 Dec payment",
-    bestPick: "Reimburse all $1,747.74 now; support both PR applications ($4,500) after the first draw",
+    deadlineWhy: "Work permits are filed and paid Fri 13 Nov ($510); flag it before then",
+    bestPick: "Reimburse all family costs, $1,747.74",
     critical: [
       "Spent so far: $1,237.74 (tests, police certificates, spouse's assessment); receipts ready",
       "Friday 13 Nov: $510 in work permit fees for the family",
-      "Each PR application is $2,250 (AIP 29 Dec; CEC within 60 days of an invitation)",
-      "Talk 2 after the first CEC draw, from about 17 Nov"
+      "Fallbacks: my own costs $700.98, or the work permits only $510"
     ],
     url: "immigration-costs-cbcl/"
+  },
+  {
+    id: "immigration-pr-fees-cbcl",
+    title: "PR application fees: company support (talk 2 with my manager)",
+    who: "work",
+    decideBy: "Clenmar and his manager",
+    created: "2026-11-10",
+    deadline: "2026-12-18",
+    deadlineWhy: "AIP PR application is paid 29 Dec; agree before the holidays. Talk after the first CEC draw (from about 17 Nov)",
+    bestPick: "Support both PR applications, $4,500",
+    critical: [
+      "Each PR application is $2,250 for the family of three",
+      "AIP on 29 Dec; CEC within 60 days of an invitation",
+      "Fallback: AIP only, $2,250 (the employer-linked program)"
+    ],
+    url: "immigration-pr-fees-cbcl/"
   },
   {
     id: "car-share-or-buy",
