@@ -3,6 +3,23 @@
 // deadline: YYYY-MM-DD (the real last safe date, with the reason in deadlineWhy). who: "home" or "work".
 window.DECISIONS = [
   {
+    id: "immigration-costs-cbcl",
+    title: "Immigration costs: reimbursement talks with my manager",
+    who: "work",
+    decideBy: "Clenmar and his manager",
+    created: "2026-11-10",
+    deadline: "2026-11-12",
+    deadlineWhy: "Work permits are filed and paid Fri 13 Nov ($510); talk 2 on the PR fees by about 18 Dec, before the 29 Dec payment",
+    bestPick: "Reimburse all $1,747.74 now; support both PR applications ($4,500) after the first draw",
+    critical: [
+      "Spent so far: $1,237.74 (tests, police certificates, spouse's assessment); receipts ready",
+      "Friday 13 Nov: $510 in work permit fees for the family",
+      "Each PR application is $2,250 (AIP 29 Dec; CEC within 60 days of an invitation)",
+      "Talk 2 after the first CEC draw, from about 17 Nov"
+    ],
+    url: "immigration-costs-cbcl/"
+  },
+  {
     id: "car-share-or-buy",
     title: "Car sharing or buy a used car",
     who: "home",

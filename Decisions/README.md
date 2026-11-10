@@ -44,3 +44,4 @@ Repository folder: C:\Users\ramne\Documents\GitHub\Storymaps\Decisions (repo cle
 
 - tenant-insurance/ : apartment tenant insurance (Nov 2026), deadline 9 Dec 2026.
 - car-share-or-buy/ : keep Communauto car sharing (which plan) or buy a used car (Nov 2026), deadline 30 Nov 2026. Extra page: calculator.html.
+- immigration-costs-cbcl/ : reimbursement talks with Clenmar's manager (Nov 2026): talk 1 by 12 Nov (costs to date + Friday work permits), talk 2 after the first CEC draw (PR fees, by about 18 Dec).
