@@ -1,0 +1,275 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Car Share or Buy Calculator</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;800&family=Source+Sans+3:wght@400;600&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* Layout: verdict strip on top, then controls (left) and results (right) that stack on phones. */
+:root{
+  --bg:#f6f7f3; --surface:#ffffff; --fg:#1d2420; --muted:#5d6a62; --line:#dde3dc;
+  --share:#4f8a1e; --share-soft:#e7f1dc; --own:#b5651d; --own-soft:#f8ead9;
+  --display:"Archivo",system-ui,sans-serif; --body:"Source Sans 3",system-ui,sans-serif; --mono:"IBM Plex Mono",ui-monospace,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#131815; --surface:#1b221d; --fg:#e6ece7; --muted:#9aa89f; --line:#2c3630;
+  --share:#8fcb55; --share-soft:#24331a; --own:#e3a062; --own-soft:#3a2a1a; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#131815; --surface:#1b221d; --fg:#e6ece7; --muted:#9aa89f; --line:#2c3630;
+  --share:#8fcb55; --share-soft:#24331a; --own:#e3a062; --own-soft:#3a2a1a; color-scheme:dark}
+body{background:var(--bg);color:var(--fg);font:16px/1.5 var(--body);padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:24px 48px}
+main{max-width:980px;margin:0 auto;display:flex;flex-direction:column;gap:20px}
+h1{font:800 1.7rem var(--display);margin:0;text-wrap:balance}
+h2{font:600 1rem var(--display);margin:0}
+.muted{color:var(--muted);font-size:.9rem}
+.presets{display:flex;flex-wrap:wrap;gap:8px}
+.presets button{font:600 .9rem var(--body);padding:8px 14px;border-radius:99px;border:1px solid var(--line);background:var(--surface);color:var(--fg);cursor:pointer}
+.presets button[aria-pressed="true"]{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+.presets button:focus-visible,input:focus-visible{outline:3px solid var(--share);outline-offset:2px}
+#verdict{border-radius:14px;padding:18px 20px;border:2px solid;display:flex;flex-direction:column;gap:4px}
+#verdict.share{background:var(--share-soft);border-color:var(--share)}
+#verdict.own{background:var(--own-soft);border-color:var(--own)}
+#verdict .big{font:800 1.6rem var(--display)}
+#verdict.share .big{color:var(--share)} #verdict.own .big{color:var(--own)}
+.grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:20px}
+@media (max-width:760px){.grid{grid-template-columns:1fr}}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px;display:flex;flex-direction:column;gap:14px;min-width:0}
+fieldset{border:0;padding:0;margin:0;display:flex;flex-direction:column;gap:12px}
+legend{font:600 .75rem var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.ctl{display:flex;flex-direction:column;gap:2px}
+.ctl label{display:flex;justify-content:space-between;gap:12px;font-size:.95rem}
+.ctl output{font:500 .95rem var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+input[type=range]{width:100%;accent-color:var(--fg)}
+.bars{display:flex;flex-direction:column;gap:12px}
+.bar .top{display:flex;justify-content:space-between;font-size:.95rem}
+.bar .top b{font-family:var(--mono)}
+.track{height:20px;background:var(--line);border-radius:5px;overflow:hidden}
+.fill{height:100%;border-radius:5px;transition:width .25s}
+@media (prefers-reduced-motion:reduce){.fill{transition:none}}
+table{border-collapse:collapse;width:100%;font-size:.9rem}
+td,th{padding:6px 8px;border-bottom:1px solid var(--line);text-align:right;font-variant-numeric:tabular-nums}
+td:first-child,th:first-child{text-align:left}
+th{font:600 .7rem var(--mono);text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+.w-share{color:var(--share);font-weight:600} .w-own{color:var(--own);font-weight:600}
+tr.now td{background:var(--share-soft)}
+tr.now.ownrow td{background:var(--own-soft)}
+details summary{cursor:pointer;font-weight:600}
+
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{font:600 .8rem var(--mono);padding:4px 10px;border-radius:99px;border:1px solid var(--line);background:var(--surface)}
+.chip.due{border-color:var(--own);color:var(--own)}
+.facts{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px}
+.facts ul{margin:8px 0 0;padding-left:1.2em;display:flex;flex-direction:column;gap:4px}
+.perpay{font:500 .85rem var(--mono);color:var(--muted)}
+.final{background:var(--surface);border:2px solid var(--fg);border-radius:12px;padding:16px;display:flex;flex-direction:column;gap:12px}
+.final label.opt{display:flex;gap:10px;align-items:flex-start;padding:10px;border:1px solid var(--line);border-radius:8px;cursor:pointer}
+.final label.opt:has(input:checked){border-color:var(--share);background:var(--share-soft)}
+.final textarea{font:inherit;width:100%;min-height:60px;padding:8px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--fg);box-sizing:border-box}
+.final button{font:700 1rem var(--display);padding:12px 18px;border-radius:8px;border:0;background:var(--fg);color:var(--bg);cursor:pointer;align-self:flex-start}
+.final button:disabled{opacity:.4;cursor:not-allowed}
+#sumBox{white-space:pre-wrap;font:.85rem var(--mono);background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:10px}
+</style>
+</head>
+<body>
+
+<main>
+  <header style="display:flex;flex-direction:column;gap:6px">
+    <p class="muted"><a href="../">&larr; All pending decisions</a> &nbsp; <a href="index.html">Back to the decision page</a></p>
+    <h1>Car share or buy a car?</h1>
+    <div class="chips"><span class="chip due">Decide by Monday, November 30, 2026</span><span class="chip">For Clenmar and Shadene</span><span class="chip">Data as of November 8, 2026</span></div>
+    <p class="muted">Move the sliders to match your family's routine. Costs include 14% HST (Harmonized Sales Tax) and are shown per year and per biweekly pay (26 pays a year). Starting values come from your real Communauto trips and Halifax prices.</p>
+  </header>
+
+  <section class="facts" aria-label="What you need to know">
+    <h2>What you need to know</h2>
+    <ul>
+      <li><b>Today:</b> about 45 Communauto trips a year (about 3 hours and 22 km each). Car sharing costs about <b>$58 per pay</b>; owning a used car about <b>$308 per pay</b> (with a loan).</li>
+      <li><b>The deadline:</b> plan changes start on the 1st of a month. To move to Value Plus from December 1, request it by November 30. Value Plus saves about $110 a year at today's usage; each plan change restarts a 12-month commitment.</li>
+      <li><b>What tips the scale:</b> school runs alone do not. With school runs, owning becomes cheaper once Shadene drives to work <b>5 days a week</b> with a car loan, or <b>4 days</b> if you pay cash.</li>
+      <li><b>If you buy:</b> 2020 to 2021 Kia Forte in Halifax lists for <b>$14,000 to $19,000</b>; add 14% HST on private sales. Get a real insurance quote and a loan pre-approval first; both are estimates here.</li>
+      <li><b>The $500 Communauto bond</b> is refundable once you leave, after December 10, 2026 and 3 months' written notice.</li>
+    </ul>
+  </section>
+
+  <div class="presets" role="group" aria-label="Scenarios">
+    <button type="button" data-p="today" aria-pressed="true">Today</button>
+    <button type="button" data-p="school">Daughter in school</button>
+    <button type="button" data-p="commute">School + wife commuting</button>
+  </div>
+
+  <div id="verdict" class="share" aria-live="polite"><span class="big" id="vBig">Keep Communauto</span><span id="vSub"></span></div>
+
+  <div class="grid">
+    <div class="panel">
+      <fieldset><legend>Everyday trips</legend>
+        <div class="ctl"><label for="err">Errands and outings per month <output id="err_o"></output></label><input type="range" id="err" min="0" max="20" step="0.25" value="3.75"></div>
+      </fieldset>
+      <fieldset><legend>School runs (your daughter)</legend>
+        <div class="ctl"><label for="sch">Car trips per week <output id="sch_o"></output></label><input type="range" id="sch" min="0" max="10" step="1" value="0"></div>
+        <div class="ctl"><label for="schkm">Round trip distance <output id="schkm_o"></output></label><input type="range" id="schkm" min="1" max="30" step="1" value="5"></div>
+      </fieldset>
+      <fieldset><legend>Your wife's commute</legend>
+        <div class="ctl"><label for="com">Days per week by car <output id="com_o"></output></label><input type="range" id="com" min="0" max="5" step="1" value="0"></div>
+        <div class="ctl"><label for="comkm">Round trip distance <output id="comkm_o"></output></label><input type="range" id="comkm" min="2" max="80" step="1" value="20"></div>
+        <div class="ctl"><label for="comh">Hours away each day <output id="comh_o"></output></label><input type="range" id="comh" min="6" max="12" step="0.5" value="9.5"></div>
+      </fieldset>
+      <fieldset><legend>Owning a car</legend>
+        <div class="ctl"><label for="pick">Car to buy (Halifax listings, Nov 8, 2026)</label>
+          <select id="pick" style="font:inherit;padding:6px 8px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--fg);max-width:100%">
+            <option value="">Custom price (use slider)</option>
+            <option value="13900">2020 Kia Forte LX, $13,900</option>
+            <option value="13988">2020 Kia Forte EX, $13,988</option>
+            <option value="15495">2021 Kia Forte, $15,495</option>
+            <option value="15995">2021 Kia Forte EX, $15,995</option>
+            <option value="17550">2021 Kia Forte EX Premium (winter tires incl.), $17,550</option>
+            <option value="18990">2021 Kia Forte EX, $18,990</option>
+            <option value="18800">2024 Kia Forte, $18,800</option>
+            <option value="20990">2023 Kia Forte, $20,990</option>
+            <option value="11500">2019 Toyota Corolla, $11,500</option>
+            <option value="10900">2018 Honda Civic, $10,900</option>
+          </select></div>
+        <div class="ctl"><label for="price">Purchase price <output id="price_o"></output></label><input type="range" id="price" min="5000" max="25000" step="100" value="16500"></div>
+      </fieldset>
+      <fieldset><legend>Paying for the car</legend>
+        <div class="ctl"><label for="down">Down payment <output id="down_o"></output></label><input type="range" id="down" min="0" max="25000" step="500" value="3000"></div>
+        <div class="ctl"><label for="apr">Loan interest rate (APR) <output id="apr_o"></output></label><input type="range" id="apr" min="0" max="20" step="0.25" value="10"></div>
+        <div class="ctl"><label for="term">Loan term <output id="term_o"></output></label><input type="range" id="term" min="12" max="84" step="12" value="60"></div>
+        <div class="ctl"><label for="start">First payment month</label><input type="month" id="start" value="2026-12" style="font:inherit;padding:6px 8px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--fg)"></div>
+      </fieldset>
+      <fieldset><legend>Running costs</legend>
+        <div class="ctl"><label for="ins">Insurance per year <output id="ins_o"></output></label><input type="range" id="ins" min="1000" max="4000" step="100" value="2200"></div>
+        <div class="ctl"><label for="park">Parking per month <output id="park_o"></output></label><input type="range" id="park" min="0" max="250" step="10" value="150"></div>
+        <div class="ctl"><label for="gas">Gas price per litre <output id="gas_o"></output></label><input type="range" id="gas" min="1.2" max="2.2" step="0.05" value="1.55"></div>
+      </fieldset>
+    </div>
+
+    <div class="panel">
+      <h2>Cost per year (and per pay)</h2>
+      <div class="bars">
+        <div class="bar"><div class="top"><span id="csLabel">Communauto</span><b><span id="csVal"></span> <span class="perpay" id="csPay"></span></b></div><div class="track"><div class="fill" id="csFill" style="background:var(--share)"></div></div></div>
+        <div class="bar"><div class="top"><span>Own a used car</span><b><span id="carVal"></span> <span class="perpay" id="carPay"></span></b></div><div class="track"><div class="fill" id="carFill" style="background:var(--own)"></div></div></div>
+      </div>
+      <p class="muted" id="kmLine"></p>
+
+      <h2>The car loan</h2>
+      <table aria-label="Loan summary"><tbody id="loanRows"></tbody></table>
+
+      <h2>Money out each pay</h2>
+      <table aria-label="Cash per pay comparison"><thead><tr><th></th><th>Per biweekly pay</th><th>Per month</th></tr></thead><tbody id="cashRows"></tbody></table>
+
+      <h2>What tips the scale</h2>
+      <table aria-label="Winner by commute days">
+        <thead><tr><th>Commute days a week</th><th>Communauto</th><th>Own</th><th>Cheaper</th></tr></thead>
+        <tbody id="tipRows"></tbody>
+      </table>
+      <p class="muted">Rows use your other slider settings. Highlighted row is your current setting.</p>
+
+      <details>
+        <summary>Where the numbers come from</summary>
+        <ul class="muted">
+          <li>Errand trips: your 41 real trips (about 3 hours, 22 km each). Average before tax $18.19 on Value Extra, $20.72 on Value Plus.</li>
+          <li>School runs and commutes use Halifax weekday rates: Value Plus $3.65/hour (max $29/day) + 43¢/km; Value Extra $3.35/hour (max $26/day) + 34¢/km, or the $25 Workday rate (up to 10 hours, 40 km included, then 39¢/km).</li>
+          <li>The calculator picks the cheaper of Value Plus and Value Extra, and adds $0-deductible damage protection ($19.50/month).</li>
+          <li>Loan: standard monthly payment on price plus 14% HST minus your down payment. The yearly cost counts the average yearly loan interest plus 3% lost interest on your down payment. Default 10% APR (annual percentage rate): Canadian car loans are roughly 7% to 12% with good credit (loanscanada.ca); a short Canadian credit history can mean the higher end. Get a real pre-approval.</li>
+          <li>Owning: 11% yearly depreciation, $800 maintenance, $200 winter tires, $118 registration and inspection, 7 L/100 km, 5¢/km extra wear.</li>
+          <li>Your $500 Communauto bond is refundable, so it is not counted as a cost.</li>
+        </ul>
+      </details>
+    </div>
+  </div>
+
+</main>
+
+<script>
+const $=id=>document.getElementById(id);
+const ids=["err","sch","schkm","com","comkm","comh","price","ins","park","gas","down","apr","term"];
+const MONTHS=["January","February","March","April","May","June","July","August","September","October","November","December"];
+function loan(v){
+  const cost=v.price*1.14, down=Math.min(v.down,cost), P=cost-down, n=v.term, r=v.apr/100/12;
+  const pmt=P<=0?0:(r===0?P/n:P*r/(1-Math.pow(1+r,-n)));
+  const interest=Math.max(pmt*n-P,0);
+  const s=($("start").value||"2026-12").split("-").map(Number);
+  const endIdx=s[0]*12+(s[1]-1)+n-1, end=MONTHS[endIdx%12]+" "+Math.floor(endIdx/12);
+  return {cost,down,P,pmt,interest,n,end,yearlyInterest:P>0?interest/(n/12):0};
+}
+const fmt=n=>"$"+Math.round(n).toLocaleString("en-CA");
+const PRESETS={
+  today:{err:3.75,sch:0,com:0},
+  school:{err:3.75,sch:10,com:0},
+  commute:{err:3.75,sch:10,com:5}
+};
+const HST=0.14,DP=19.5,SCHOOL_WEEKS=38,WORK_WEEKS=48;
+const vpKm=k=>Math.min(k,50)*0.43+Math.max(k-50,0)*0.34;
+function trip(plan,h,km,commute){
+  if(plan==="VP") return Math.min(h*3.65,29)+vpKm(km);
+  if(commute&&h<=10) return 25+Math.max(km-40,0)*0.39;
+  return Math.min(h*3.35,26)+km*0.34;
+}
+function calc(v,comOverride){
+  const com=comOverride??v.com;
+  const errY=v.err*12, schY=v.sch*SCHOOL_WEEKS, comY=com*WORK_WEEKS;
+  const plan=p=>((p==="VP"?12.5:30)+DP)*12*(1+HST)+(errY*(p==="VP"?20.72:18.19)+schY*trip(p,0.5,v.schkm,false)+comY*trip(p,v.comh,v.comkm,true))*(1+HST);
+  const vp=plan("VP"),ve=plan("VE");
+  const km=errY*22.4+schY*v.schkm+comY*v.comkm;
+  const L=loan(v);
+  const running=v.ins+v.park*12+800+200+88.45+30+km*0.07*v.gas+Math.max(km-1008,0)*0.05;
+  const car=v.price*0.11+L.down*0.03+L.yearlyInterest+running;
+  return {cs:Math.min(vp,ve),plan:vp<=ve?"Value Plus":"Value Extra",car,km,running,L};
+}
+const read=()=>Object.fromEntries(ids.map(i=>[i,parseFloat($(i).value)]));
+function labels(v){
+  $("err_o").textContent=v.err+" trips";
+  $("sch_o").textContent=v.sch+" trips";
+  $("schkm_o").textContent=v.schkm+" km";
+  $("com_o").textContent=v.com+" days";
+  $("comkm_o").textContent=v.comkm+" km";
+  $("comh_o").textContent=v.comh+" h";
+  $("price_o").textContent=fmt(v.price);
+  $("ins_o").textContent=fmt(v.ins);
+  $("park_o").textContent=fmt(v.park);
+  $("gas_o").textContent="$"+v.gas.toFixed(2);
+  $("down_o").textContent=fmt(v.down);
+  $("apr_o").textContent=v.apr.toFixed(2)+"%";
+  $("term_o").textContent=v.term+" months ("+(v.term/12)+" yr)";
+}
+function render(){
+  const v=read(); labels(v);
+  const r=calc(v), max=Math.max(r.cs,r.car,1);
+  $("csLabel").textContent="Communauto ("+r.plan+")";
+  $("csVal").textContent=fmt(r.cs)+"/yr"; $("carVal").textContent=fmt(r.car)+"/yr";
+  $("csPay").textContent="("+fmt(r.cs/26)+"/pay)"; $("carPay").textContent="("+fmt(r.car/26)+"/pay)";
+  window.__last={v,r};
+  $("csFill").style.width=(r.cs/max*100)+"%"; $("carFill").style.width=(r.car/max*100)+"%";
+  const share=r.cs<=r.car, diff=Math.abs(r.car-r.cs);
+  $("verdict").className=share?"share":"own";
+  $("vBig").textContent=share?"Keep Communauto":"Buy a car";
+  $("vSub").textContent=share?`Car sharing saves about ${fmt(diff/26)} per pay (${fmt(diff)} a year) on ${r.plan}.`:`Owning saves about ${fmt(diff/26)} per pay (${fmt(diff)} a year). Budget about ${fmt(v.price*1.14)} up front.`;
+  $("kmLine").textContent=`About ${Math.round(r.km).toLocaleString("en-CA")} km of driving a year.`;
+  const L=r.L;
+  $("loanRows").innerHTML=L.P<=0?`<tr><td>Paid in full with cash</td><td>${fmt(L.cost)}</td></tr><tr><td>Loan end date</td><td>No loan</td></tr>`:
+    `<tr><td>Price plus 14% HST</td><td>${fmt(L.cost)}</td></tr><tr><td>Down payment</td><td>${fmt(L.down)}</td></tr><tr><td>Amount borrowed</td><td>${fmt(L.P)}</td></tr><tr><td><b>Monthly payment</b></td><td><b>${fmt(L.pmt)}</b></td></tr><tr><td>Total interest paid</td><td>${fmt(L.interest)}</td></tr><tr><td>Total paid for the car</td><td>${fmt(L.down+L.pmt*L.n)}</td></tr><tr><td><b>Last payment</b></td><td><b>${L.end}</b></td></tr>`;
+  const csM=r.cs/12, runM=r.running/12;
+  const P=m=>fmt(m*12/26);
+  $("cashRows").innerHTML=`<tr><td>Communauto (${r.plan})</td><td class="w-share">${P(csM)}</td><td>${fmt(csM)}</td></tr><tr><td>Car, while paying the loan${L.P>0?" (until "+L.end+")":""}</td><td class="w-own">${P(L.pmt+runM)}</td><td>${fmt(L.pmt+runM)}</td></tr><tr><td>Car, after the loan is paid off</td><td class="w-own">${P(runM)}</td><td>${fmt(runM)}</td></tr>`;
+  let rows="";
+  for(let d=0;d<=5;d++){const x=calc(v,d),w=x.cs<=x.car;
+    rows+=`<tr class="${d===v.com?"now"+(w?"":" ownrow"):""}"><td>${d}</td><td>${fmt(x.cs)}</td><td>${fmt(x.car)}</td><td class="${w?"w-share":"w-own"}">${w?"Communauto":"Own"}</td></tr>`;}
+  $("tipRows").innerHTML=rows;
+  try{localStorage.setItem("rowe-car-decision",JSON.stringify(v))}catch(e){}
+}
+document.querySelectorAll(".presets button").forEach(b=>b.addEventListener("click",()=>{
+  const p=PRESETS[b.dataset.p]; for(const k in p) $(k).value=p[k];
+  document.querySelectorAll(".presets button").forEach(x=>x.setAttribute("aria-pressed",x===b));
+  render();
+}));
+$("pick").addEventListener("change",e=>{if(e.target.value){$("price").value=e.target.value;render();}});
+$("price").addEventListener("input",()=>{$("pick").value="";});
+$("start").addEventListener("input",render);
+ids.forEach(i=>$(i).addEventListener("input",()=>{document.querySelectorAll(".presets button").forEach(x=>x.setAttribute("aria-pressed","false"));render();}));
+try{const s=JSON.parse(localStorage.getItem("rowe-car-decision")||"null"); if(s) for(const k in s) if($(k)) $(k).value=s[k];}catch(e){}
+render();
+</script>
+</body>
+</html>

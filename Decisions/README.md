@@ -43,3 +43,4 @@ Repository folder: C:\Users\ramne\Documents\GitHub\Storymaps\Decisions (repo cle
 ## Current pages
 
 - tenant-insurance/ : apartment tenant insurance (Nov 2026), deadline 9 Dec 2026.
+- car-share-or-buy/ : keep Communauto car sharing (which plan) or buy a used car (Nov 2026), deadline 30 Nov 2026. Extra page: calculator.html.

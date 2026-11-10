@@ -3,6 +3,23 @@
 // deadline: YYYY-MM-DD (the real last safe date, with the reason in deadlineWhy). who: "home" or "work".
 window.DECISIONS = [
   {
+    id: "car-share-or-buy",
+    title: "Car sharing or buy a used car",
+    who: "home",
+    decideBy: "Clenmar and Shadene",
+    created: "2026-11-10",
+    deadline: "2026-11-30",
+    deadlineWhy: "Communauto plan changes start on the 1st; request by 30 Nov to have Value Plus from 1 Dec",
+    bestPick: "Keep Communauto on Value Plus, $58 per pay",
+    critical: [
+      "Car sharing costs $58 per pay; owning a used car about $300 per pay",
+      "Value Plus saves about $110 a year vs our current Value Extra",
+      "Buying only wins once Shadene would drive to work 5 days a week",
+      "The $500 Communauto bond is refundable when we leave"
+    ],
+    url: "car-share-or-buy/"
+  },
+  {
     id: "tenant-insurance",
     title: "Tenant insurance for our apartment",
     who: "home",

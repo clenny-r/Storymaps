@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Car Share or Buy Decision</title>
+<style>
+  :root { --bg:#f6f7f9; --card:#fff; --ink:#1b2430; --muted:#5b6675; --best:#0a7f5a; --mid:#3a5a8c; --warn:#b26a00; --bad:#9a2a2a; --line:#e3e7ec; }
+  body { margin:0; font-family: Segoe UI, Arial, sans-serif; background:var(--bg); color:var(--ink); padding:16px; max-width:1100px; margin:auto; }
+  h1 { font-size:22px; margin:0 0 4px; }
+  .sub { color:var(--muted); font-size:14px; margin-bottom:16px; }
+  .nav a { display:inline-block; margin:0 10px 14px 0; font-size:14px; color:var(--mid); }
+  .grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap:14px; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:16px; position:relative; }
+  .card.best { border:2px solid var(--best); }
+  .badge { position:absolute; top:-12px; left:16px; color:#fff; font-size:12px; font-weight:700; padding:4px 10px; border-radius:999px; background:var(--muted); }
+  .badge.best { background:var(--best); } .badge.mid { background:var(--mid); } .badge.warn { background:var(--warn); } .badge.bad { background:var(--bad); }
+  .name { font-size:17px; font-weight:700; margin-top:6px; }
+  .price { font-size:34px; font-weight:800; margin:8px 0 0; }
+  .price small { font-size:14px; font-weight:500; color:var(--muted); }
+  .year { color:var(--muted); font-size:13px; margin-bottom:10px; }
+  ul { padding-left:18px; margin:8px 0; font-size:14px; } li { margin:3px 0; }
+  .note { font-size:13px; color:var(--muted); }
+  .tablewrap { overflow-x:auto; margin-top:22px; }
+  table { width:100%; border-collapse:collapse; background:var(--card); font-size:14px; min-width:640px; }
+  th, td { padding:9px 10px; border-bottom:1px solid var(--line); text-align:left; vertical-align:top; }
+  th { background:#eef2f6; }
+  td.win { color:var(--best); font-weight:700; }
+  .section { margin-top:22px; } .section h2 { font-size:17px; margin-bottom:8px; }
+  .step { background:var(--card); border:1px solid var(--line); border-radius:10px; padding:12px 14px; margin-bottom:8px; font-size:14px; }
+  .step b { color:var(--best); }
+  .crit { background:#fff8e6; border:1px solid #f0d58a; border-radius:12px; padding:14px 16px; margin-bottom:18px; }
+  .crit h2 { font-size:17px; margin:0 0 10px; }
+  .critgrid { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:10px; font-size:14px; }
+  .critgrid b { display:block; font-size:12px; text-transform:uppercase; letter-spacing:.04em; color:#8a6a10; margin-bottom:2px; }
+  .cta { display:inline-block; margin-top:6px; background:var(--mid); color:#fff; text-decoration:none; padding:10px 14px; border-radius:8px; font-weight:700; font-size:14px; }
+</style>
+</head>
+<body>
+<h1>Car sharing or buy a used car?</h1>
+<div class="sub">Costs shown per pay (biweekly, 26 pays a year), including 14% HST (Harmonized Sales Tax). Based on our 41 real Communauto trips (Dec 2025 to Oct 2026, about 45 trips a year, 3 hours and 22 km each) and Halifax used-car listings checked 8 Nov 2026.</div>
+<div class="nav"><a href="../">&larr; All pending decisions</a><a href="calculator.html">Interactive calculator (school runs, commute, loan)</a></div>
+
+<div class="crit">
+  <h2>What you need to decide</h2>
+  <div class="critgrid">
+    <div><b>The question</b>Do we keep car sharing with Communauto, and on which plan, or buy a used car?</div>
+    <div><b>Deadline</b>30 Nov 2026. Plan changes only start on the 1st of a month, so this is the last day to have Value Plus from 1 Dec. Each plan change restarts a 12-month commitment.</div>
+    <div><b>Recommended</b>Keep Communauto and switch to Value Plus: $58 per pay ($125 a month). Owning a used car costs about $300 per pay.</div>
+    <div><b>If money or time is tight</b>Do nothing and stay on Value Extra: $62 per pay. Only about $4 per pay more.</div>
+    <div><b>Main risk if we wait</b>Small: about $9 a month extra on Value Extra. Buying a car too early costs about $240 per pay more than car sharing.</div>
+    <div><b>What happens next</b>Pick below and press Finalize. Claude switches the plan with Clenmar logged in. Revisit buying when Shadene would drive to work 5 days a week (4 if we pay cash).</div>
+  </div>
+</div>
+
+<div class="grid">
+  <div class="card best">
+    <div class="badge best">BEST PICK</div>
+    <div class="name">Communauto, switch to Value Plus</div>
+    <div class="price">$58 <small>/ pay</small></div>
+    <div class="year">$125 a month, about $1,500 a year</div>
+    <ul>
+      <li>$12.50 monthly fee instead of $30</li>
+      <li>Trips cost a bit more per hour and km, but we drive little</li>
+      <li>Saves about $110 a year vs Value Extra</li>
+      <li>Gas, insurance, repairs, winter tires included</li>
+      <li>$500 bond kept on account; refundable when we leave</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <div class="badge mid">RUNNER UP</div>
+    <div class="name">Communauto, stay on Value Extra</div>
+    <div class="price">$62 <small>/ pay</small></div>
+    <div class="year">$134 a month, about $1,610 a year</div>
+    <ul>
+      <li>No action needed</li>
+      <li>Cheapest trips and the $25 weekday Workday rate</li>
+      <li>Becomes the better plan if car school runs start ($118 vs $124 per pay)</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <div class="badge warn">THIRD</div>
+    <div class="name">Buy a used 2021 Kia Forte, pay cash</div>
+    <div class="price">$293 <small>/ pay</small></div>
+    <div class="year">About $7,600 a year, plus $18,810 cash up front (price plus HST)</div>
+    <ul>
+      <li>Car always available, car seat stays in</li>
+      <li>Insurance about $2,200 a year (estimate, get a quote)</li>
+      <li>Parking about $150 a month downtown</li>
+      <li>Loses about $1,800 of value a year</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <div class="badge bad">NOT NOW</div>
+    <div class="name">Buy a used 2021 Kia Forte with a loan</div>
+    <div class="price">$308 <small>/ pay</small></div>
+    <div class="year">About $8,000 a year. $3,000 down, 10% over 5 years: $336 a month loan payment until Nov 2031</div>
+    <ul>
+      <li>Cash out while paying the loan: about $356 per pay</li>
+      <li>About $4,345 of loan interest in total</li>
+      <li>Only worth it once Shadene drives to work 5 days a week</li>
+    </ul>
+  </div>
+</div>
+
+<div class="tablewrap">
+<table>
+  <tr><th>Item</th><th>Value Plus</th><th>Value Extra</th><th>Own, cash</th><th>Own, loan</th></tr>
+  <tr><td>Per pay, today</td><td class="win">$58</td><td>$62</td><td>$293</td><td>$308</td></tr>
+  <tr><td>Per month, today</td><td class="win">$125</td><td>$134</td><td>$634</td><td>$667</td></tr>
+  <tr><td>Cash up front</td><td class="win">None ($500 bond already paid)</td><td class="win">None</td><td>$18,810</td><td>$3,000 down</td></tr>
+  <tr><td>Per pay if car school runs start (10 a week)</td><td>$124</td><td class="win">$118</td><td>$304</td><td>$319</td></tr>
+  <tr><td>Per pay with school runs + Shadene driving to work 5 days</td><td>$520</td><td>$381</td><td class="win">$333</td><td>$349</td></tr>
+  <tr><td>Commitment</td><td>12 months from 1 Dec 2026</td><td>Already running</td><td>Selling the car later</td><td>Loan to Nov 2031</td></tr>
+  <tr><td>Who handles insurance, repairs, tires</td><td class="win">Communauto</td><td class="win">Communauto</td><td>Us</td><td>Us</td></tr>
+  <tr><td>Car available any time</td><td>Book ahead</td><td>Book ahead</td><td class="win">Yes</td><td class="win">Yes</td></tr>
+</table>
+</div>
+<div class="note" style="margin-top:6px">Car figures use a $16,500 2021 Kia Forte (Halifax listings $13,900 to $18,990), $2,200 insurance, $150 a month parking, 11% yearly depreciation, $800 maintenance, $200 winter tires. Try your own numbers in the <a href="calculator.html">calculator</a>.</div>
+
+<div class="section">
+  <h2>Plain-language glossary</h2>
+  <div class="step"><b>Value Plus / Value Extra:</b> Communauto plans. A higher monthly fee buys cheaper hourly and per-km rates. Value Extra is $30 a month; Value Plus is $12.50.</div>
+  <div class="step"><b>Workday rate:</b> a Value Extra perk: $25 for up to 10 hours on a weekday, 40 km included. Useful for a daily car commute.</div>
+  <div class="step"><b>Depreciation:</b> the value a car loses each year just by getting older. We never see it as a bill, but it is lost when we sell.</div>
+  <div class="step"><b>APR (annual percentage rate):</b> the yearly interest rate on a car loan. Canadian used-car loans run roughly 7% to 12% with good credit.</div>
+  <div class="step"><b>Bond:</b> the $500 deposit Communauto holds. It is not a cost; it comes back when we leave, after one year and 3 months' notice.</div>
+  <div class="step"><b>Tipping point:</b> how much driving makes owning cheaper. For us it is Shadene driving to work 5 days a week (with school runs), not school runs alone.</div>
+</div>
+
+<div class="section">
+  <h2>Decision</h2>
+  <div class="step"><b>Recommendation:</b> keep Communauto and move to Value Plus from 1 Dec 2026. At our current driving, car sharing costs about $250 per pay less than owning.</div>
+  <div class="step"><b>When to revisit:</b> if car school runs start, Value Extra becomes slightly cheaper. If Shadene will drive to work most days, buying a used car wins: give Communauto 3 months' notice so the bond comes back around the time we buy.</div>
+</div>
+
+<div class="section" id="finalize">
+  <h2>Finalize the decision</h2>
+  <div class="step">Pick the option we agree on, then press the button. It opens a GitHub issue in the Storymaps repo titled with the decision (that is where Claude reads it back), and copies a one-line summary you can paste into Claude. Once Claude logs it, this folder gets deleted.</div>
+  <div class="step">
+    <label><input type="radio" name="pick" value="Keep Communauto, switch to Value Plus from 1 Dec 2026, $58 per pay ($125/month)" checked> Keep Communauto, switch to Value Plus, $58 per pay</label><br>
+    <label><input type="radio" name="pick" value="Keep Communauto, stay on Value Extra, $62 per pay ($134/month)"> Keep Communauto, stay on Value Extra, $62 per pay</label><br>
+    <label><input type="radio" name="pick" value="Buy a used car, pay cash, about $293 per pay plus $18,810 up front"> Buy a used car, pay cash, about $293 per pay</label><br>
+    <label><input type="radio" name="pick" value="Buy a used car with a loan, about $308 per pay"> Buy a used car with a loan, about $308 per pay</label><br>
+    <label><input type="radio" name="pick" value="Other (see notes)"> Other</label>
+    <div style="margin-top:10px"><input id="who" placeholder="Decided by (names)" style="padding:8px;border:1px solid #e3e7ec;border-radius:8px;width:60%;max-width:320px"></div>
+    <button id="finalBtn" style="margin-top:12px;background:#0a7f5a;color:#fff;border:0;border-radius:10px;padding:12px 18px;font-size:15px;font-weight:700;cursor:pointer">Finalize decision</button>
+    <div id="done" class="note" style="margin-top:8px"></div>
+  </div>
+</div>
+<script>
+document.getElementById('finalBtn').onclick=function(){
+  var pick=document.querySelector('input[name=pick]:checked').value;
+  var who=document.getElementById('who').value||'Clenmar and Shadene';
+  var date=new Date().toISOString().slice(0,10);
+  var title='DECISION car-share-or-buy: '+pick.split(',').slice(0,2).join(',');
+  var body='Decision folder: Decisions/car-share-or-buy\nDecided: '+date+' by '+who+'\nChosen: '+pick+'\n\nNext for Claude: log this in the Communauto lessons file; if Value Plus, switch the Communauto plan from 1 Dec 2026 with Clenmar logged in (screenshot before the final click); if buying, start insurance quotes and loan pre-approval. Then delete Decisions/car-share-or-buy from the Storymaps repo, remove it from decisions.js and close this issue.';
+  var summary='Decision made ('+date+', '+who+'): '+pick+'. Please log it, act on it, then delete Decisions/car-share-or-buy from the Storymaps repo.';
+  if(navigator.clipboard){navigator.clipboard.writeText(summary).catch(function(){});}
+  var url='https://github.com/clenny-r/Storymaps/issues/new?title='+encodeURIComponent(title)+'&body='+encodeURIComponent(body)+'&labels=decision';
+  window.open(url,'_blank');
+  document.getElementById('done').textContent='Opened the GitHub issue (press Submit there). Summary copied to clipboard: paste it to Claude to close the loop.';
+};
+</script>
+</body>
+</html>
