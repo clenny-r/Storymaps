@@ -11,10 +11,11 @@ The public page for the Coast Explained series, served at https://twcministries.
 
 Every episode has a "Log an edit" panel: pause, press Mark time, pick a type, describe the change, Send. It posts to the same Cloudflare Worker as Weh Di Evidence Seh (`twc-evidence-reports`), so edits land in `Twc_private_data\User_Data\evidence_data\reports.json`. Coast entries are told apart by:
 
-- `episode` = 200 + release number (201 is release 1, 218 is release 18),
+- `episode` = 99 (the worker only accepts 1 to 99; Decisions uses 98),
+- `part` = release number (1 to 18),
 - `text` starting with `[COAST] ENN Title | `.
 
-A Claude session reads them from `https://twc-evidence-reports.kd7bgn7q2z.workers.dev/api/reports` (filter episode 201 and up, or text starting with [COAST]), fixes the episode, re-renders, replaces the R2 video under the same name, and sets the report status by hand.
+A Claude session reads them from `https://twc-evidence-reports.kd7bgn7q2z.workers.dev/api/reports` (filter episode 99 with text starting [COAST]), fixes the episode, re-renders, replaces the R2 video under the same name, and sets the report status by hand.
 
 ## To replace a video
 

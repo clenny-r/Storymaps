@@ -93,7 +93,7 @@
 <script src="episodes.js?v=20261110"></script>
 <script>
 (function(){
-  /* Edits go to the same Cloudflare Worker as Weh Di Evidence Seh (twc-evidence-reports). Coast episodes are logged as episode 200 + n with "[COAST]" in front of the text. */
+  /* Edits go to the same Cloudflare Worker as Weh Di Evidence Seh (twc-evidence-reports). Coast edits are logged as episode 99 (the worker accepts 1 to 99) with part = release number and "[COAST] ENN Title | " in front of the text. */
   var REPORT_API = "https://twc-evidence-reports.kd7bgn7q2z.workers.dev";
   var E = window.COAST_EPISODES || [], cur = 0, rtime = 0;
   var $ = function(id){ return document.getElementById(id); }, v = $("v");
@@ -123,7 +123,7 @@
   $("rsend").addEventListener("click", function(){
     var e = E[cur], text = $("rtext").value.trim(), name = $("rname").value.trim(), st = $("rstatus");
     if (text.length < 3) { st.textContent = "Please say what should change."; $("rtext").focus(); return; }
-    var payload = { episode: 200 + e.n, part: 1, time: Math.round(rtime * 10) / 10, timecode: fmt(rtime), type: $("rtype").value,
+    var payload = { episode: 99, part: e.n, time: Math.round(rtime * 10) / 10, timecode: fmt(rtime), type: $("rtype").value,
       text: "[COAST] E" + ("0" + e.n).slice(-2) + " " + e.title + " | " + text, name: name, website: $("rweb").value, page: location.href };
     $("rsend").disabled = true; st.textContent = "Sending…";
     fetch(REPORT_API + "/api/report", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) })
