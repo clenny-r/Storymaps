@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Coast Explained | Coastal Engineering</title>
+<meta name="description" content="Why the sea does what it does. Short 3D explainers by a coastal engineer (P.Eng.) and Revetment Rasta.">
+<meta property="og:title" content="Coast Explained">
+<meta property="og:description" content="Why the sea does what it does. Short 3D explainers by a coastal engineer and Revetment Rasta.">
+<meta property="og:image" content="https://twcministries.net/Coast/posters/ce01.jpg">
+<link rel="icon" href="../favicon-32x32.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#06263a;--bg2:#0b3a55;--card:#0f4766;--ink:#f3fbff;--ink2:#a9d3e6;--sun:#f7d046;--sand:#f2d6a2;--red:#e84a3b;--line:rgba(255,255,255,.12)}
+  *{box-sizing:border-box}
+  body{margin:0;background:linear-gradient(180deg,#0b3a55 0,#06263a 420px);background-color:var(--bg);color:var(--ink);font:16px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+  h1,h2,.f{font-family:Fredoka,-apple-system,"Segoe UI",sans-serif}
+  header{max-width:1100px;margin:0 auto;padding:28px 16px 8px}
+  .top{display:flex;align-items:center;gap:12px;color:var(--ink2);font-size:13px;letter-spacing:.4px;text-transform:uppercase}
+  .top a{color:var(--ink2);text-decoration:none}
+  h1{font-size:clamp(34px,7vw,58px);line-height:1.02;margin:14px 0 8px;font-weight:700}
+  h1 span{color:var(--sun)}
+  .lead{max-width:640px;color:var(--ink2);margin:0 0 6px}
+  .ig{display:inline-block;margin-top:10px;color:var(--bg);background:var(--sun);padding:8px 14px;border-radius:999px;font-weight:700;text-decoration:none;font-family:Fredoka,sans-serif}
+  main{max-width:1100px;margin:0 auto;padding:12px 16px 60px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:14px}
+  .card{background:var(--card);border-radius:14px;overflow:hidden;cursor:pointer;border:1px solid var(--line);transition:transform .15s}
+  .card:hover{transform:translateY(-3px)}
+  .card img{width:100%;aspect-ratio:9/16;object-fit:cover;display:block;background:#0a3047}
+  .card .t{padding:8px 10px 10px;font-size:14px;line-height:1.3}
+  .card .n{color:var(--sun);font-family:Fredoka,sans-serif;font-size:12px;letter-spacing:.5px}
+  .card .d{color:var(--ink2);font-size:12px}
+  /* player */
+  .pl{position:fixed;inset:0;background:rgba(2,15,24,.96);display:none;z-index:20;overflow-y:auto}
+  .pl.show{display:block}
+  .pw{max-width:1000px;margin:0 auto;padding:12px 16px 40px;display:grid;grid-template-columns:minmax(0,420px) 1fr;gap:20px}
+  @media(max-width:760px){.pw{grid-template-columns:1fr}}
+  .close{position:sticky;top:0;display:flex;justify-content:flex-end;max-width:1000px;margin:0 auto;padding:10px 16px 0}
+  .close button{background:none;border:1px solid var(--line);color:var(--ink);border-radius:999px;padding:6px 14px;font-size:15px;cursor:pointer}
+  video{width:100%;aspect-ratio:9/16;background:#000;border-radius:14px;display:block}
+  .meta h2{margin:4px 0 6px;font-size:26px;line-height:1.15}
+  .meta p{color:var(--ink2);margin:0 0 12px}
+  .nav{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+  .btn{background:var(--bg2);color:var(--ink);border:1px solid var(--line);border-radius:10px;padding:8px 12px;font-size:14px;cursor:pointer}
+  .btn.y{background:var(--sun);color:#06263a;border-color:var(--sun);font-weight:700}
+  .rep{background:var(--bg2);border:1px solid var(--line);border-radius:14px;padding:14px}
+  .rep h3{margin:0 0 4px;font-family:Fredoka,sans-serif;font-size:18px}
+  .rep .hint{color:var(--ink2);font-size:13px;margin:0 0 10px}
+  .row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:8px}
+  .stamp{font-family:Fredoka,sans-serif;font-size:22px;color:var(--sun);min-width:64px}
+  select,textarea,input{width:100%;background:#06263a;color:var(--ink);border:1px solid var(--line);border-radius:10px;padding:9px 10px;font:inherit}
+  textarea{min-height:90px;resize:vertical}
+  .hp{position:absolute;left:-9999px}
+  #rstatus{font-size:13px;color:var(--ink2);margin-top:8px;min-height:18px}
+  footer{max-width:1100px;margin:0 auto;padding:0 16px 30px;color:var(--ink2);font-size:13px}
+</style>
+</head>
+<body>
+<header>
+  <div class="top"><a href="../">TWC Ministries</a> <span>·</span> <span>Coast Explained</span></div>
+  <h1>Why the sea does <span>what it does</span></h1>
+  <p class="lead">Short 3D explainers by a coastal engineer (P.Eng.) and Revetment Rasta, from Jamaica to Halifax. Every number is checked against a named source.</p>
+  <a class="ig" href="https://www.instagram.com/coast.explained/" target="_blank" rel="noopener">Follow @coast.explained</a>
+</header>
+<main><div class="grid" id="grid"></div></main>
+<footer id="foot"></footer>
+
+<div class="pl" id="pl">
+  <div class="close"><button id="cls">Close ✕</button></div>
+  <div class="pw">
+    <div><video id="v" controls playsinline preload="metadata"></video></div>
+    <div class="meta">
+      <div class="n f" id="mn" style="color:var(--sun);letter-spacing:.5px"></div>
+      <h2 id="mt"></h2>
+      <p id="ms"></p>
+      <div class="nav"><button class="btn" id="prev">‹ Previous</button><button class="btn" id="next">Next ›</button><button class="btn" id="copy">Copy link</button></div>
+      <div class="rep">
+        <h3>Log an edit</h3>
+        <p class="hint">Pause where the change is needed, press Mark time, say what to change, then Send.</p>
+        <div class="row"><button class="btn y" id="mark">Mark time</button><span class="stamp" id="rtime">0:00</span><button class="btn" id="goto">Play from here</button></div>
+        <div class="row"><select id="rtype"><option value="picture">Picture or animation</option><option value="words">Narration (words)</option><option value="captions">Captions or labels</option><option value="facts">Facts or numbers</option><option value="sound">Sound or music</option><option value="other">Other</option></select></div>
+        <textarea id="rtext" placeholder="What should change?"></textarea>
+        <div class="row" style="margin-top:8px"><input id="rname" placeholder="Your name (optional)"></div>
+        <input class="hp" id="rweb" tabindex="-1" autocomplete="off">
+        <button class="btn y" id="rsend" style="width:100%">Send</button>
+        <div id="rstatus"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="episodes.js?v=20261110"></script>
+<script>
+(function(){
+  /* Edits go to the same Cloudflare Worker as Weh Di Evidence Seh (twc-evidence-reports). Coast episodes are logged as episode 200 + n with "[COAST]" in front of the text. */
+  var REPORT_API = "https://twc-evidence-reports.kd7bgn7q2z.workers.dev";
+  var E = window.COAST_EPISODES || [], cur = 0, rtime = 0;
+  var $ = function(id){ return document.getElementById(id); }, v = $("v");
+  function fmt(t){ t = Math.max(0, Math.round(t||0)); return Math.floor(t/60) + ":" + ("0"+(t%60)).slice(-2); }
+  $("foot").textContent = "Updated " + (window.COAST_UPDATED || "") + ". Coast Explained is a TWC Ministries project.";
+  E.forEach(function(e, i){
+    var c = document.createElement("div"); c.className = "card";
+    c.innerHTML = '<img loading="lazy" alt="" src="' + e.poster + '"><div class="t"><div class="n">EPISODE ' + e.n + '</div>' + e.title + '<div class="d">' + fmt(e.duration) + '</div></div>';
+    c.addEventListener("click", function(){ open(i, true); });
+    $("grid").appendChild(c);
+  });
+  function open(i, play){
+    cur = (i + E.length) % E.length; var e = E[cur];
+    $("mn").textContent = "EPISODE " + e.n; $("mt").textContent = e.title; $("ms").textContent = e.summary;
+    v.poster = e.poster; v.src = e.file; rtime = 0; $("rtime").textContent = "0:00"; $("rstatus").textContent = "";
+    $("pl").classList.add("show"); document.body.style.overflow = "hidden";
+    history.replaceState(null, "", "#ce" + ("0" + e.n).slice(-2));
+    if (play) { var p = v.play(); if (p && p.catch) p.catch(function(){}); }
+  }
+  function shut(){ v.pause(); $("pl").classList.remove("show"); document.body.style.overflow = ""; history.replaceState(null, "", location.pathname); }
+  $("cls").addEventListener("click", shut);
+  $("prev").addEventListener("click", function(){ open(cur - 1, true); });
+  $("next").addEventListener("click", function(){ open(cur + 1, true); });
+  $("copy").addEventListener("click", function(){ var u = location.origin + location.pathname + "#ce" + ("0" + E[cur].n).slice(-2); if (navigator.clipboard) navigator.clipboard.writeText(u); $("copy").textContent = "Copied"; setTimeout(function(){ $("copy").textContent = "Copy link"; }, 1500); });
+  $("mark").addEventListener("click", function(){ rtime = v.currentTime || 0; $("rtime").textContent = fmt(rtime); if (!v.paused) v.pause(); });
+  $("goto").addEventListener("click", function(){ v.currentTime = rtime; var p = v.play(); if (p && p.catch) p.catch(function(){}); });
+  $("rsend").addEventListener("click", function(){
+    var e = E[cur], text = $("rtext").value.trim(), name = $("rname").value.trim(), st = $("rstatus");
+    if (text.length < 3) { st.textContent = "Please say what should change."; $("rtext").focus(); return; }
+    var payload = { episode: 200 + e.n, part: 1, time: Math.round(rtime * 10) / 10, timecode: fmt(rtime), type: $("rtype").value,
+      text: "[COAST] E" + ("0" + e.n).slice(-2) + " " + e.title + " | " + text, name: name, website: $("rweb").value, page: location.href };
+    $("rsend").disabled = true; st.textContent = "Sending…";
+    fetch(REPORT_API + "/api/report", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) })
+      .then(function(r){ return r.json().then(function(d){ return { ok: r.ok, d: d }; }); })
+      .then(function(x){ if (!x.ok) throw new Error(x.d.error || "failed"); st.textContent = "Logged at " + (x.d.timecode || fmt(rtime)) + ". Thank you."; $("rtext").value = ""; try { localStorage.setItem("coast_name", name); } catch (err) {} })
+      .catch(function(err){ st.textContent = "Could not send (" + err.message + "). Try again in a moment."; })
+      .then(function(){ $("rsend").disabled = false; });
+  });
+  try { var nm = localStorage.getItem("coast_name"); if (nm) $("rname").value = nm; } catch (err) {}
+  document.addEventListener("keydown", function(ev){ if (ev.key === "Escape") shut(); });
+  var m = location.hash.match(/^#ce(\d+)/); if (m) { var k = E.findIndex(function(e){ return e.n === +m[1]; }); if (k >= 0) open(k, false); }
+})();
+</script>
+</body>
+</html>
