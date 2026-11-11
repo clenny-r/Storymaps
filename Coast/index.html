@@ -85,6 +85,7 @@
         <input class="hp" id="rweb" tabindex="-1" autocomplete="off">
         <button class="btn y" id="rsend" style="width:100%">Send</button>
         <div id="rstatus"></div>
+        <div id="rqueue" style="font-size:13px;color:var(--sun);margin-top:4px"></div>
       </div>
     </div>
   </div>
@@ -120,18 +121,44 @@
   $("copy").addEventListener("click", function(){ var u = location.origin + location.pathname + "#ce" + ("0" + E[cur].n).slice(-2); if (navigator.clipboard) navigator.clipboard.writeText(u); $("copy").textContent = "Copied"; setTimeout(function(){ $("copy").textContent = "Copy link"; }, 1500); });
   $("mark").addEventListener("click", function(){ rtime = v.currentTime || 0; $("rtime").textContent = fmt(rtime); if (!v.paused) v.pause(); });
   $("goto").addEventListener("click", function(){ v.currentTime = rtime; var p = v.play(); if (p && p.catch) p.catch(function(){}); });
+  /* Notes that cannot be sent (no signal, or the worker's limit of 20 per hour per connection) wait in a queue on this device and are re-sent automatically. */
+  var QK = "coast_queue";
+  function qget(){ try { return JSON.parse(localStorage.getItem(QK) || "[]"); } catch (err) { return []; } }
+  function qset(q){ try { localStorage.setItem(QK, JSON.stringify(q)); } catch (err) {} }
+  function post(payload){
+    return fetch(REPORT_API + "/api/report", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) })
+      .then(function(r){ return r.json().catch(function(){ return {}; }).then(function(d){ return { ok: r.ok, status: r.status, d: d }; }); });
+  }
+  function qnote(){ var n = qget().length; $("rqueue").textContent = n ? n + (n === 1 ? " note is" : " notes are") + " waiting on this device and will send automatically." : ""; }
+  var flushing = false;
+  function flush(){
+    var q = qget(); if (!q.length || flushing) { qnote(); return; }
+    flushing = true;
+    post(q[0]).then(function(x){
+      if (x.ok) { q.shift(); qset(q); flushing = false; qnote(); if (q.length) setTimeout(flush, 1500); }
+      else if (x.status === 400) { q.shift(); qset(q); flushing = false; qnote(); }
+      else { flushing = false; qnote(); }
+    }).catch(function(){ flushing = false; qnote(); });
+  }
   $("rsend").addEventListener("click", function(){
     var e = E[cur], text = $("rtext").value.trim(), name = $("rname").value.trim(), st = $("rstatus");
     if (text.length < 3) { st.textContent = "Please say what should change."; $("rtext").focus(); return; }
     var payload = { episode: 99, part: e.n, time: Math.round(rtime * 10) / 10, timecode: fmt(rtime), type: $("rtype").value,
       text: "[COAST] E" + ("0" + e.n).slice(-2) + " " + e.title + " | " + text, name: name, website: $("rweb").value, page: location.href };
+    try { localStorage.setItem("coast_name", name); } catch (err) {}
     $("rsend").disabled = true; st.textContent = "Sending…";
-    fetch(REPORT_API + "/api/report", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) })
-      .then(function(r){ return r.json().then(function(d){ return { ok: r.ok, d: d }; }); })
-      .then(function(x){ if (!x.ok) throw new Error(x.d.error || "failed"); st.textContent = "Logged at " + (x.d.timecode || fmt(rtime)) + ". Thank you."; $("rtext").value = ""; try { localStorage.setItem("coast_name", name); } catch (err) {} })
-      .catch(function(err){ st.textContent = "Could not send (" + err.message + "). Try again in a moment."; })
+    var keep = function(why){ var q = qget(); q.push(payload); qset(q); $("rtext").value = ""; st.textContent = "Saved at " + fmt(rtime) + ". " + why + " It will send by itself, keep going."; qnote(); };
+    if (qget().length) { keep("Earlier notes are still waiting, so this one joins the queue."); $("rsend").disabled = false; flush(); return; }
+    post(payload)
+      .then(function(x){
+        if (x.ok) { st.textContent = "Logged at " + (x.d.timecode || fmt(rtime)) + ". Thank you."; $("rtext").value = ""; }
+        else if (x.status === 400) { st.textContent = "Could not send (" + (x.d.error || "rejected") + ")."; }
+        else { keep("The edit log is busy (limit of 20 notes an hour)."); }
+      })
+      .catch(function(){ keep("No connection right now."); })
       .then(function(){ $("rsend").disabled = false; });
   });
+  setInterval(flush, 5 * 60 * 1000); setTimeout(flush, 3000);
   try { var nm = localStorage.getItem("coast_name"); if (nm) $("rname").value = nm; } catch (err) {}
   document.addEventListener("keydown", function(ev){ if (ev.key === "Escape") shut(); });
   var m = location.hash.match(/^#ce(\d+)/); if (m) { var k = E.findIndex(function(e){ return e.n === +m[1]; }); if (k >= 0) open(k, false); }
