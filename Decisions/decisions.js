@@ -30,7 +30,8 @@ window.DECISIONS = [
     critical: [
       "Each PR application is $2,250 for the family of three",
       "AIP on 29 Dec; CEC within 60 days of an invitation",
-      "Fallback: AIP only, $2,250 (the employer-linked program)"
+      "Fallback: AIP only, $2,250 (the employer-linked program)",
+      "Possible extra: travel visas $300 in 2027 if we travel before PR (visas expire 12 Mar 2027)"
     ],
     url: "immigration-pr-fees-cbcl/"
   },

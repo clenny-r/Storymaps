@@ -142,7 +142,7 @@
 </div>
 <div class="section" id="finalize">
   <h2>Finalize the decision</h2>
-  <div class="step">Pick what was agreed, then press the button. It opens a GitHub issue (where Claude reads it back) and copies a summary to paste into Claude.</div>
+  <div class="step">Pick what was agreed, then press the button. No sign-in needed: it saves the choice privately for Claude, who logs it and clears this page.</div>
   <div class="step">
     <label><input type="radio" name="p" value="Reimburse all family costs, $1,747.74" checked> Reimburse all family costs, $1,747.74</label><br>
     <label><input type="radio" name="p" value="My own costs only, $700.98"> My own costs only, $700.98</label><br>
@@ -151,23 +151,31 @@
     <label><input type="radio" name="p" value="Other (see notes)"> Other (see notes)</label><br>
     <div style="margin-top:10px"><input id="who" placeholder="Agreed with (names)" style="padding:8px;border:1px solid #e3e7ec;border-radius:8px;width:60%;max-width:320px"></div>
     <div style="margin-top:8px"><input id="notes" placeholder="Notes (conditions, how to claim)" style="padding:8px;border:1px solid #e3e7ec;border-radius:8px;width:90%;max-width:600px"></div>
+    <input id="website" type="text" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" aria-hidden="true">
     <button id="finalBtn" style="margin-top:12px;background:#0a7f5a;color:#fff;border:0;border-radius:10px;padding:12px 18px;font-size:15px;font-weight:700;cursor:pointer">Finalize decision</button>
     <div id="done" class="note" style="margin-top:8px"></div>
   </div>
 </div>
 <script>
-document.getElementById('finalBtn').onclick=function(){
-  var p=document.querySelector('input[name=p]:checked').value;
-  var who=document.getElementById('who').value||'Clenmar and his manager';
-  var notes=document.getElementById('notes').value||'none';
-  var date=new Date().toISOString().slice(0,10);
-  var title='DECISION immigration-costs-cbcl: '+p;
-  var body='Decision folder: Decisions/immigration-costs-cbcl\nDecided: '+date+' with '+who+'\nChosen: '+p+'\nNotes: '+notes+'\n\nNext for Claude: log this in LESSONS.md (04_Immigration part 2/00_Planning), update the Forecast tab of the expense workbook, draft the claim email with the receipt PDFs. Then delete Decisions/immigration-costs-cbcl, remove it from decisions.js, push, and close this issue.';
-  var summary='Decision immigration-costs-cbcl ('+date+', '+who+'): '+p+'. Notes: '+notes+'. Please log it and follow up.';
-  if(navigator.clipboard){navigator.clipboard.writeText(summary).catch(function(){});}
-  window.open('https://github.com/clenny-r/Storymaps/issues/new?title='+encodeURIComponent(title)+'&body='+encodeURIComponent(body)+'&labels=decision','_blank');
-  document.getElementById('done').textContent='Opened the GitHub issue (press Submit there). Summary copied to clipboard: paste it to Claude.';
-};
+(function(){
+  var API="https://twc-evidence-reports.kd7bgn7q2z.workers.dev/api/report"; // same no-sign-in worker as the Evidence page; saved privately in Twc_private_data
+  var ID="immigration-costs-cbcl";
+  var btn=document.getElementById('finalBtn'), st=document.getElementById('done');
+  try{ var w0=localStorage.getItem('decision_who'); if(w0) document.getElementById('who').value=w0; }catch(e){}
+  btn.onclick=function(){
+    var pick=document.querySelector('input[name=p]:checked').value;
+    var who=document.getElementById('who').value.trim();
+    var note=document.getElementById('notes').value.trim();
+    if(!who){ st.textContent='Please type who agreed (for example "Clenmar and his manager").'; document.getElementById('who').focus(); return; }
+    var date=new Date().toISOString().slice(0,10);
+    var text='[DECISION] '+ID+' | chosen: '+pick+' | decided by: '+who+' | date: '+date+(note?' | note: '+note:'');
+    btn.disabled=true; st.textContent='Saving\u2026';
+    fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({episode:98, part:1, time:0, type:'other', text:text, name:who, website:document.getElementById('website').value, page:location.href})})
+      .then(function(r){ return r.json().catch(function(){return {};}).then(function(d){ if(!r.ok) throw new Error((d&&d.error)||('status '+r.status)); }); })
+      .then(function(){ try{localStorage.setItem('decision_who',who);}catch(e){} st.innerHTML='<b style="color:#0a7f5a">Decision saved \u2713</b> Claude will log it, update the expense workbook and draft the claim email and clear this page next session.'; })
+      .catch(function(e){ btn.disabled=false; st.textContent='Could not save ('+e.message+'). Please try again, or just tell Claude: '+pick; });
+  };
+})();
 </script>
 </body>
 </html>
